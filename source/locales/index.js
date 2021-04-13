@@ -1,4 +1,4 @@
-import en from './en/translation.json'
+import en from './en/translation.json';
 
 export default {
   resources: {
@@ -7,4 +7,4 @@ export default {
   lng: 'en',
   fallbackLng: 'en',
   interpolation: { escapeValue: false },
-}
+};
