@@ -1,13 +1,13 @@
 {
-  "name": "web-extension-starter",
-  "version": "3.0.0",
-  "description": "Web extension starter using react and javascript",
+  "name": "plug",
+  "version": "0.0.0",
+  "description": "Your plug into the Internet Computer",
   "private": true,
-  "repository": "https://github.com/abhijithvijayan/web-extension-starter.git",
+  "repository": "https://github.com/FleekHQ/plug-extension",
   "author": {
-    "name": "abhijithvijayan",
-    "email": "email@abhijithvijayan.in",
-    "url": "https://abhijithvijayan.in"
+    "name": "Christian Laino",
+    "email": "christian@fleek.co",
+    "url": "https://github.com/ChriLnth"
   },
   "license": "MIT",
   "engines": {
@@ -29,8 +29,10 @@
     "@babel/runtime": "^7.12.5",
     "advanced-css-reset": "^1.2.2",
     "emoji-log": "^1.0.2",
+    "i18next": "^20.2.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-i18next": "^11.8.13",
     "webext-base-css": "^1.2.0",
     "webextension-polyfill": "^0.7.0"
   },
