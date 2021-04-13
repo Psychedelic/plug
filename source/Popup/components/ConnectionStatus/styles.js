@@ -11,6 +11,7 @@ export default makeStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    fontWeight: 500
   },
   active: {
     background: '#04CD95',
@@ -18,4 +19,7 @@ export default makeStyles({
   inactive: {
     background: 'linear-gradient(90.55deg, #D1D5DB 6.97%, #D1D5DB 100.15%)',
   },
+  web: {
+    fontWeight: 700
+  }
 });

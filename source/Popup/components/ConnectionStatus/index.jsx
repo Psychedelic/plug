@@ -36,10 +36,10 @@ const ConnectionStatus = ({ status, web }) => {
   return (
     <div className={clsx(classes.root, classes[className])}>
       {icon}
-      {label}
+      <span>{label}</span>
       {
         web
-        && <b>&nbsp;{web}</b>
+        && <span className={classes.web}>&nbsp;{web}</span>
       }
     </div>
   );
