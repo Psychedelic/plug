@@ -1,3 +1,8 @@
 {
-    "test": "Translate me!"
+  "test": "Translate me!",
+  "connectionStatus": {
+    "plugged": "You're plugged into",
+    "notPlugged": "You're not plugged in",
+    "incomingConnection": "Incoming connection!"
+  }
 }
