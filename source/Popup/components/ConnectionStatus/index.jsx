@@ -6,9 +6,9 @@ import clsx from 'clsx';
 import useStyles from './styles';
 
 const CONNECTION_CONFIG = {
-  plugged: (t, web) => ({
+  plugged: (t) => ({
     icon: <CheckCircleIcon style={{ fontSize: 16, marginRight: 2 }} />,
-    label: t('connectionStatus.plugged', { web: web }),
+    label: t('connectionStatus.plugged'),
     className: 'active',
   }),
   notPlugged: (t) => ({
@@ -31,12 +31,16 @@ const ConnectionStatus = ({ status, web }) => {
     icon,
     label,
     className,
-  } = CONNECTION_CONFIG[status](t, web);
+  } = CONNECTION_CONFIG[status](t);
 
   return (
     <div className={clsx(classes.root, classes[className])}>
       {icon}
       {label}
+      {
+        web &&
+        <b>&nbsp;{web}</b>
+      }
     </div>
   );
 };
