@@ -38,8 +38,8 @@ const ConnectionStatus = ({ status, web }) => {
       {icon}
       {label}
       {
-        web &&
-        <b>&nbsp;{web}</b>
+        web
+        && <b>&nbsp;{web}</b>
       }
     </div>
   );
