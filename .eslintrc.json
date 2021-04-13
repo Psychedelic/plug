@@ -1,27 +1,29 @@
 {
-	"extends": [
-		"@abhijithvijayan/eslint-config",
-		"@abhijithvijayan/eslint-config/node",
-		"@abhijithvijayan/eslint-config/react"
-	],
-	"parserOptions": {
-		"sourceType": "module"
-	},
-	"rules": {
-		"no-console": "off",
-		"no-extend-native": "off",
-		"react/jsx-props-no-spreading": "off",
-		"jsx-a11y/label-has-associated-control": "off",
-		"class-methods-use-this": "off",
-		"max-classes-per-file": "off",
-		"node/no-unpublished-require": "off",
-		"node/no-missing-import": "off",
-		"node/no-unpublished-import": "off",
-		"node/no-unsupported-features/es-syntax": ["error", {
-			"ignores": ["modules"]
-		}]
-	},
-	"env": {
-		"webextensions": true
-	}
+  "env": {
+    "webextensions": true,
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "plugin:react/recommended",
+    "airbnb"
+  ],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react"
+  ],
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "import/no-extraneous-dependencies": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "react/jsx-filename-extension": [1, { "extensions": [".js"] }],
+    "react/jsx-props-no-spreading": "off"
+  }
 }
