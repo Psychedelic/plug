@@ -7,9 +7,7 @@ import ConnectionStatus from './components/ConnectionStatus';
 } */
 
 const Popup = () => (
-  <div>
-    <ConnectionStatus status="plugged" web="fleek.ooo" />
-  </div>
+  <ConnectionStatus status="plugged" web="fleek.ooo" />
 );
 
 export default Popup;
