@@ -31,24 +31,22 @@ const WalletInfo = ({ name, address }) => {
   };
 
   return (
-    <>
-      <Tooltip
-        title={tooltipText}
-        arrow
-        open={showTooltip || copied}
-        placement="bottom"
+    <Tooltip
+      title={tooltipText}
+      arrow
+      open={showTooltip || copied}
+      placement="bottom"
+    >
+      <div
+        className={classes.root}
+        onClick={() => handleWalletClick()}
+        onMouseOver={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
       >
-        <div
-          className={classes.root}
-          onClick={() => handleWalletClick()}
-          onMouseOver={() => setShowTooltip(true)}
-          onMouseLeave={() => setShowTooltip(false)}
-        >
-          <span className={classes.title}>{name}</span>
-          <span className={classes.subtitle}>{shortenString(address)}</span>
-        </div>
-      </Tooltip>
-    </>
+        <span className={classes.title}>{name}</span>
+        <span className={classes.subtitle}>{shortenString(address)}</span>
+      </div>
+    </Tooltip>
   );
 };
 
