@@ -1,2 +1,2 @@
-/* eslint-disable import/prefer-default-export */
 export { default as ConnectionStatus } from './ConnectionStatus';
+export { default as Plug } from './Plug';
