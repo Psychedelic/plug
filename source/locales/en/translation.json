@@ -4,5 +4,9 @@
     "plugged": "You're plugged into",
     "notPlugged": "You're not plugged in",
     "incomingConnection": "Incoming connection!"
+  },
+  "walletInfo": {
+    "copyText": "Copy to clipboard",
+    "copiedText": "Copied!"
   }
 }
