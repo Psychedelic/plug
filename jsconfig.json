@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@ui": ["source/ui"],
+      "@ui/*": ["source/ui/*"],
+      "@components": ["source/components"],
+      "@components/*": ["source/components/*"]
+    }
+  },
+  "exclude": ["node_modules"]
+}
