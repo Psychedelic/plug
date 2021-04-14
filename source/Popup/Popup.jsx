@@ -1,7 +1,7 @@
 import * as React from 'react';
 // import browser from 'webextension-polyfill'
-import ConnectionStatus from './components/ConnectionStatus'
-import NavBar from './components/NavBar'
+import ConnectionStatus from './components/ConnectionStatus';
+import NavBar from './components/NavBar';
 
 /* function openWebPage(url) {
   return browser.tabs.create({ url })

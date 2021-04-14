@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
 import PropTypes from 'prop-types';
-import useStyles from './styles';
 import { useTranslation } from 'react-i18next';
+import useStyles from './styles';
 import { shortenString } from '../../../../shared/helpers/stringHelper';
 
 const WalletInfo = ({ name, address }) => {
