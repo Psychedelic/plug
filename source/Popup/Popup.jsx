@@ -1,6 +1,6 @@
 import * as React from 'react';
 // import browser from 'webextension-polyfill'
-import ConnectionStatus from './components/ConnectionStatus';
+import { ConnectionStatus } from '@components';
 import NavBar from './components/NavBar';
 
 /* function openWebPage(url) {

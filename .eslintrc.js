@@ -30,4 +30,14 @@ module.exports = {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'react/jsx-props-no-spreading': 'off',
   },
+  settings: {
+    'import/resolver': {
+      alias: {
+        map: [
+          ['@ui', './source/ui'],
+          ['@components', './source/components'],
+        ],
+      },
+    },
+  },
 };
