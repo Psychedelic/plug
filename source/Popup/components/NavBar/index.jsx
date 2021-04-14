@@ -1,4 +1,5 @@
 import React from 'react';
+import { Plug } from '@components';
 import WalletInfo from './WalletInfo';
 import useStyles from './styles';
 
@@ -11,7 +12,7 @@ const NavBar = () => {
   return (
     <div className={classes.root}>
       <div className={classes.flex}>
-        Plug icon
+        <Plug size="small" />
       </div>
       <div className={classes.walletContainer}>
         <WalletInfo name={walletName} address={walletAddress} />

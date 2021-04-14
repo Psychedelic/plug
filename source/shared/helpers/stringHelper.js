@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 export const shortenString = (str) => {
   if (!str) return str;
   if (str.length > 23) {
@@ -5,5 +6,3 @@ export const shortenString = (str) => {
   }
   return str;
 };
-
-export default {};
