@@ -1,5 +1,10 @@
-const a11yOff = Object.keys(require('eslint-plugin-jsx-a11y').rules)
-  .reduce((acc, rule) => { acc[`jsx-a11y/${rule}`] = 'off'; return acc; }, {});
+const a11yOff = Object.keys(require('eslint-plugin-jsx-a11y').rules).reduce(
+  (acc, rule) => {
+    acc[`jsx-a11y/${rule}`] = 'off';
+    return acc;
+  },
+  {},
+);
 
 module.exports = {
   env: {
@@ -8,10 +13,7 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: [
-    'plugin:react/recommended',
-    'airbnb',
-  ],
+  extends: ['plugin:react/recommended', 'airbnb'],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -19,9 +21,7 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: [
-    'react',
-  ],
+  plugins: ['react'],
   rules: {
     ...a11yOff,
     'react/react-in-jsx-scope': 'off',
@@ -36,6 +36,7 @@ module.exports = {
         map: [
           ['@ui', './source/ui'],
           ['@components', './source/components'],
+          ['@assets', './source/assets'],
         ],
       },
     },

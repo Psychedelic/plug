@@ -5,7 +5,9 @@
       "@ui": ["source/ui"],
       "@ui/*": ["source/ui/*"],
       "@components": ["source/components"],
-      "@components/*": ["source/components/*"]
+      "@components/*": ["source/components/*"],
+      "@assets": ["source/assets"],
+      "@assets/*": ["source/assets/*"],
     }
   },
   "exclude": ["node_modules"]

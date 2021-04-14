@@ -73,6 +73,7 @@ module.exports = {
     alias: {
       '@ui': path.join(path.resolve(__dirname, './source/ui')),
       '@components': path.join(path.resolve(__dirname, './source/components')),
+      '@assets': path.join(path.resolve(__dirname, './source/assets')),
       'webextension-polyfill': path.resolve(
         path.join(__dirname, 'node_modules', 'webextension-polyfill'),
       ),
