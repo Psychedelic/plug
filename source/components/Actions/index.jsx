@@ -24,7 +24,7 @@ const Actions = () => {
     <div className={classes.root}>
       {
         ACTIONS.map((action) => (
-          <ActionButton type={action.type} onClick={action.onClick} />
+          <ActionButton key={action.type} type={action.type} onClick={action.onClick} />
         ))
       }
     </div>
