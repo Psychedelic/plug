@@ -70,7 +70,7 @@ const Profile = () => {
       >
         {({ TransitionProps }) => (
           <Grow {...TransitionProps}>
-            <Paper>
+            <Paper className={classes.paper}>
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList className={classes.menu}>
                   {

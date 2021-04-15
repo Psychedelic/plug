@@ -28,12 +28,7 @@ export default makeStyles({
   menu: {
     zIndex: 1,
   },
-  icon: {
-    minWidth: 40,
-  },
-  text: {
-    fontSize: 16,
-    color: '#000000',
-    fontWeight: 500,
+  paper: {
+    borderRadius: 10,
   },
 });
