@@ -1,6 +1,7 @@
 import React from 'react';
-import { Plug } from '@components';
-import WalletInfo from './WalletInfo';
+import Plug from '../Plug';
+import Profile from '../Profile';
+import WalletInfo from '../WalletInfo';
 import useStyles from './styles';
 
 const NavBar = () => {
@@ -18,7 +19,7 @@ const NavBar = () => {
         <WalletInfo name={walletName} address={walletAddress} />
       </div>
       <div className={classes.flex}>
-        Profile
+        <Profile />
       </div>
     </div>
   );

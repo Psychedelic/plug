@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from '../../assets/icons/plug.svg';
+import Icon from '@assets/icons/plug.svg';
 import useStyles from './styles';
 
 const Plug = ({ size }) => {

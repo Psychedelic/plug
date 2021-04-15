@@ -8,4 +8,7 @@ export default {
 const Template = (args) => <ConnectionStatus {...args} />;
 
 export const Default = Template.bind({});
-Default.args = {};
+Default.args = {
+  status: 'plugged',
+  web: 'fleek.ooo',
+};
