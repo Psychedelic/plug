@@ -1,6 +1,7 @@
 import * as React from 'react';
 // import browser from 'webextension-polyfill'
-import { Layout, Actions } from '@components';
+import { Layout } from '@components';
+import Home from './Views/Home';
 
 /* function openWebPage(url) {
   return browser.tabs.create({ url })
@@ -8,7 +9,7 @@ import { Layout, Actions } from '@components';
 
 const Popup = () => (
   <Layout>
-    <Actions />
+    <Home />
   </Layout>
 );
 
