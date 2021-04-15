@@ -8,5 +8,9 @@
   "walletInfo": {
     "copyText": "Copy to clipboard",
     "copiedText": "Copied!"
+  },
+  "profile": {
+    "settings": "Settings",
+    "help": "Help"
   }
 }

@@ -6,29 +6,17 @@ import Popper from '@material-ui/core/Popper';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import MenuList from '@material-ui/core/MenuList';
 import Button from '@material-ui/core/Button';
-import HelpIcon from '@assets/icons/help.png';
-import SettingsIcon from '@assets/icons/settings.png';
 import { HoverAnimation, MenuItem } from '@ui';
 import useStyles from './styles';
-
-const menuItems = [
-  {
-    image: SettingsIcon,
-    name: 'Settings',
-    onClick: (() => null),
-  },
-  {
-    image: HelpIcon,
-    name: 'Help',
-    onClick: (() => null),
-  },
-];
+import useMenuItems from '../../hooks/useMenuItems';
 
 const Profile = () => {
   const classes = useStyles();
 
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
+
+  const { menuItems } = useMenuItems();
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
