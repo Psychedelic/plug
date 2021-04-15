@@ -5,3 +5,4 @@ export { default as WalletInfo } from './WalletInfo';
 export { default as NavBar } from './NavBar';
 export { default as Layout } from './Layout';
 export { default as Actions } from './Actions';
+export { default as Assets } from './Assets';

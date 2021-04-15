@@ -1,11 +1,11 @@
 import React from 'react';
-import { Actions } from '@components';
+import { Actions, Assets } from '@components';
 import { Tabs } from '@ui';
 
 const TABS = [
   {
     label: 'Assets',
-    component: <div>assets</div>,
+    component: <Assets />,
   },
   {
     label: 'Activity',
