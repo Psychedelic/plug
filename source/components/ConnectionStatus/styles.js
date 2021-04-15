@@ -5,7 +5,6 @@ export default makeStyles({
     height: 40,
     width: '100%',
     color: '#FFFFFF',
-    fontFamily: 'Inter',
     fontSize: 14,
     lineHeight: '14px',
     display: 'flex',
