@@ -56,6 +56,6 @@ const ActionButton = ({ type, onClick }) => {
 export default ActionButton;
 
 ActionButton.propTypes = {
-  type: PropTypes.string.isRequired,
+  type: PropTypes.oneOf(['deposit', 'send', 'swap']).isRequired,
   onClick: PropTypes.func.isRequired,
 };
