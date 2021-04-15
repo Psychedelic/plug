@@ -1,2 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 export { default as theme } from './theme';
+export { default as HoverAnimation } from './HoverAnimation';
+export { default as MenuItem } from './MenuItem';

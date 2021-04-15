@@ -37,6 +37,7 @@ module.exports = {
           ['@ui', './source/ui'],
           ['@components', './source/components'],
           ['@assets', './source/assets'],
+          ['@shared', './source/shared'],
         ],
       },
     },

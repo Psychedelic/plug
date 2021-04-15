@@ -8,6 +8,8 @@
       "@components/*": ["source/components/*"],
       "@assets": ["source/assets"],
       "@assets/*": ["source/assets/*"],
+      "@shared": ["source/shared"],
+      "@shared/*": ["source/shared/*"],
     }
   },
   "exclude": ["node_modules"]
