@@ -12,7 +12,7 @@ const AssetItem = ({
   return (
     <div className={classes.root}>
 
-      <img className={classes.image} src={image} alt="" />
+      <img className={classes.image} src={image} alt={name} />
 
       <div className={classes.leftContainer}>
         <span className={classes.title}>{name}</span>
