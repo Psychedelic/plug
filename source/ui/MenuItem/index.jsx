@@ -12,7 +12,7 @@ const MenuItem = ({ name, image, onClick }) => {
       onClick={onClick}
     >
       <ListItemIcon className={classes.icon}>
-        <img src={image} alt="" />
+        <img src={image} alt={name} />
       </ListItemIcon>
       <span className={classes.text}>{name}</span>
     </MuiMenuItem>

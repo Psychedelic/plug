@@ -1,12 +1,12 @@
 import React from 'react';
-import { Actions } from '@components';
+import { Actions, Assets } from '@components';
 import { Tabs } from '@ui';
 import { useTranslation } from 'react-i18next';
 
 const getTabs = (t) => [
   {
     label: t('tabs.assets'),
-    component: <div>assets</div>,
+    component: <Assets />,
   },
   {
     label: t('tabs.activity'),
