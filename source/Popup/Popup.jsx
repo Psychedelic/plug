@@ -1,14 +1,10 @@
 import * as React from 'react';
-// import browser from 'webextension-polyfill'
-import { Layout, Actions } from '@components';
-
-/* function openWebPage(url) {
-  return browser.tabs.create({ url })
-} */
+import { Layout } from '@components';
+import Home from './Views/Home';
 
 const Popup = () => (
   <Layout>
-    <Actions />
+    <Home />
   </Layout>
 );
 
