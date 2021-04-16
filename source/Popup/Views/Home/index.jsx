@@ -1,27 +1,31 @@
 import React from 'react';
 import { Actions, Assets } from '@components';
 import { Tabs } from '@ui';
+import { useTranslation } from 'react-i18next';
 
-const TABS = [
+const getTabs = (t) => [
   {
-    label: 'Assets',
+    label: t('tabs.assets'),
     component: <Assets />,
   },
   {
-    label: 'Activity',
+    label: t('tabs.activity'),
     component: <div>activity</div>,
   },
   {
-    label: 'Apps',
+    label: t('tabs.apps'),
     component: <div>apps</div>,
   },
 ];
 
-const Home = () => (
-  <>
-    <Actions />
-    <Tabs tabs={TABS} />
-  </>
-);
+const Home = () => {
+  const { t } = useTranslation();
+  return (
+    <>
+      <Actions />
+      <Tabs tabs={getTabs(t)} />
+    </>
+  );
+};
 
 export default Home;

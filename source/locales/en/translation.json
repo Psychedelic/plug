@@ -12,5 +12,10 @@
   "profile": {
     "settings": "Settings",
     "help": "Help"
+  },
+  "tabs": {
+    "assets": "Assets",
+    "activity": "Activity",
+    "apps": "Apps"
   }
 }

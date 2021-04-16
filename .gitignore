@@ -79,7 +79,7 @@ typings/
 # nuxt.js build output
 .nuxt
 
-# react / gatsby 
+# react / gatsby
 public/
 
 # vuepress build output
@@ -111,3 +111,5 @@ dist/
 !.yarn/releases
 !.yarn/plugins
 .pnp.*
+
+storybook-static
