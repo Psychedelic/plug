@@ -18,43 +18,43 @@ export type Error = {
 };
 
 export type Req = {
-	jsonrpc: '2.0',
-	method: string,
-	params: any[],
-	id?: string | number,
+  jsonrpc: '2.0',
+  method: string,
+  params: any[],
+  id?: string | number,
 };
 
 export type Res = {
-	jsonrpc: '2.0',
-	result?: any,
-	error?: Error,
-	id: string | number,
+  jsonrpc: '2.0',
+  result?: any,
+  error?: Error,
+  id: string | number,
 };
 
 type Controller = (req: Req) => null | Res;
 
 export const sendMessage = (method: string, params: any[]): Promise<Res> => new Promise((resolve, reject) => {
-	const messageId: number = createUniqueID();
-	const req: Req = {
-		id: messageId,
-		method,
-		params,
-		jsonrpc: '2.0',
-	};
+  const messageId: number = createUniqueID();
+  const req: Req = {
+    id: messageId,
+    method,
+    params,
+    jsonrpc: '2.0',
+  };
 
-	// Custom logic ...
+  // Custom logic ...
 
-	window.postMessage(req, '*');
-	window.addEventListener('message', (event: { data: Res }) => {
-		const { data } = event;
-		if (data.id === messageId) {
-			if (data.error) {
-				return reject(error);
-			}
+  window.postMessage(req, '*');
+  window.addEventListener('message', (event: { data: Res }) => {
+    const { data } = event;
+    if (data.id === messageId) {
+      if (data.error) {
+        return reject(error);
+      }
 
-			resolve(data.result);
-		}
-	});
+      resolve(data.result);
+    }
+  });
 });
 
 export const sendResponse (res: Res): void => {
