@@ -2,45 +2,46 @@ import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { ACTIVITY_TYPES, ACTIVITY_STATUS } from '@shared/constants/activity';
 import { currencyPropTypes } from '@shared/constants/currencies';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import GenericIcon from '../GenericIcon';
 import SwapIcon from './SwapIcon';
 import useStyles from './styles';
 
-const getTitle = (type, currency, swapData, plug) => {
+const getTitle = (type, currency, swapData, plug, t) => {
   switch (type) {
     case ACTIVITY_TYPES.SEND:
-      return `Send ${currency.name}`;
+      return `${t('activity.title.send')} ${currency.name}`;
     case ACTIVITY_TYPES.RECEIVE:
-      return `Receive ${currency.name}`;
+      return `${t('activity.title.receive')} ${currency.name}`;
     case ACTIVITY_TYPES.SWAP:
-      return `Swap ${currency.name} for ${swapData.currency.name}`;
+      return `${t('activity.title.swap')} ${currency.name} ${t('activity.title.for')} ${swapData.currency.name}`;
     case ACTIVITY_TYPES.PLUG:
-      return `Plugged into ${plug.name}`;
+      return `${t('activity.title.pluggedInto')} ${plug.name}`;
     default:
       return '';
   }
 };
 
-const getStatus = (status, classes) => {
+const getStatus = (status, classes, t) => {
   switch (status) {
     case ACTIVITY_STATUS.PENDING:
-      return <span className={classes.pending}>Pending</span>;
+      return <span className={classes.pending}>{t('activity.status.pending')}</span>;
     case ACTIVITY_STATUS.FAILED:
-      return <span className={classes.failed}>Failed</span>;
+      return <span className={classes.failed}>{t('activity.status.failed')}</span>;
     default:
       return null;
   }
 };
 
-const getSubtitle = (type, status, date, wallet) => {
+const getSubtitle = (type, status, date, wallet, t) => {
   let subtitle = '';
 
   if (status === ACTIVITY_STATUS.DONE) subtitle += date;
 
-  if (type === ACTIVITY_TYPES.SEND) subtitle += ` · To: ${wallet}`;
+  if (type === ACTIVITY_TYPES.SEND) subtitle += ` · ${t('activity.subtitle.to')}: ${wallet}`;
 
-  if (type === ACTIVITY_TYPES.RECEIVE) subtitle += ` · From: ${wallet}`;
+  if (type === ACTIVITY_TYPES.RECEIVE) subtitle += ` · ${t('activity.subtitle.from')}: ${wallet}`;
 
   return subtitle;
 };
@@ -56,6 +57,7 @@ const ActivityItem = ({
   plug,
   swapData,
 }) => {
+  const { t } = useTranslation();
   const [showSwap, setShowSwap] = useState(false);
 
   const handleShowSwap = (show) => { setShowSwap(show); };
@@ -84,10 +86,10 @@ const ActivityItem = ({
 
       <div className={classes.leftContainer}>
         <span className={classes.title}>
-          {getTitle(type, currency, swapData, plug)}
+          {getTitle(type, currency, swapData, plug, t)}
         </span>
         <span className={classes.subtitle}>
-          {getStatus(status, classes)}{getSubtitle(type, status, date, wallet)}
+          {getStatus(status, classes, t)}{getSubtitle(type, status, date, wallet, t)}
         </span>
       </div>
 
