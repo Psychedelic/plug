@@ -17,5 +17,25 @@
     "assets": "Assets",
     "activity": "Activity",
     "apps": "Apps"
+  },
+  "activity": {
+    "title": {
+      "send": "Send",
+      "receive": "Receive",
+      "swap": "Swap",
+      "for": "for",
+      "pluggedInto": "Plugged into"
+    },
+    "subtitle": {
+      "to": "To",
+      "from": "From"
+    },
+    "status": {
+      "pending": "Pending",
+      "failed": "Failed"
+    }
+  },
+  "common": {
+    "to": "to"
   }
 }
