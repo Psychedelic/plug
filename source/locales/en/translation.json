@@ -36,6 +36,11 @@
     }
   },
   "common": {
-    "to": "to"
+    "to": "to",
+    "delete": "delete"
+  },
+  "apps": {
+    "title": "Connected Apps",
+    "subtitle": "Main IC Wallet is connected to these sites."
   }
 }
