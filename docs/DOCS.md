@@ -107,7 +107,7 @@ window.plug.signTransaction('my-tx')
 
 ## Browser Extension
 
-- `Content Script`: Implements the web `browser message handler` to listen for calls and send the responses back to the provider. This is script is also responsible for inject the provider into the webpage:
+- `Content Script`: Implements the web `browser message handler` to listen for calls and send the responses back to the provider. This script is also responsible for injecting the provider into the webpage:
 
 ```typescript
 // Provider Injector Draft
@@ -125,13 +125,13 @@ const injectScript = (filePath: string, tag: string): void => {
 injectScript(chrome.extension.getURL("provider-script.js"), "body");
 ```
 
-- `Background Script`: It contains the logic of the controllers (used to resolve the requests from the provider) and the logic for to open **Extension Pages** related with the requests
+- `Background Script`: It contains the logic of the controllers (used to resolve the requests from the provider) and the logic to open **Extension Pages** related with the requests
 
-  - `Controllers`: Functions that receive a `Req` object type and return (or not) a `Res` object type. If the response is handled in a different place (Extension Page), the req has to be passed to the response emitter to generate the `Res` object based on the ID. `void` controllers delegate the response to another resources that use `sendResponse` method to emmit the res message.
+  - `Controllers`: Functions that receive a `Req` object type and return (or not) a `Res` object type. If the response is handled in a different place (Extension Page), the req has to be passed to the response emitter to generate the `Res` object based on the ID. `void` controllers delegate the response to another resources that use `sendResponse` method to emit the res message.
   - `Extension Pages Handler`: A controller can open a popup window to confirm user actions. In this case the response is handled by the Popup Page or delegated back to a controller.
 
 - `In Memory State`: It keeps the app state, used to handle the UI interactions. It can be a simple `Redux` store
-- `Persisted State`: It keeps information that is persisted, like user information. This info can be loaded into the `In Memory State` as part of the initialization script for the extension. Options to use here can be `localStorage` or something similar
+- `Persisted State`: It keeps information persisted, like user information. This info can be loaded into the `In Memory State` as part of the initialization script for the extension. Options to use here can be `localStorage` or something similar
 - `Extension Pages`: Pages that are included into the extension and can be opened dynamically for ask user actions (like notifications). Extension pages can be connected to the `In Memory State` and the `Persisted State` to trigger changes and trigger response messages using `sendResponse` from the Message Handler Lib
 
 # Key Points
