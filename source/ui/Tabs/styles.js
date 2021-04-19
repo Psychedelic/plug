@@ -1,10 +1,13 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles({
+export default makeStyles((theme) => ({
   root: {
-    borderBottom: '1px solid #E5E7EB',
+    borderBottom: `1px solid ${theme.palette.common.lightGray}`,
   },
   indicator: {
-    backgroundColor: '#3574F4',
+    backgroundColor: theme.palette.info.main,
   },
-});
+  tabPanel: {
+    padding: `${theme.spacing(2)}px 0`,
+  },
+}));

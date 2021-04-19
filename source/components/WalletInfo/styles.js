@@ -14,13 +14,4 @@ export default makeStyles({
       background: '#F3F4F6',
     },
   },
-  title: {
-    fontSize: 16,
-    color: '#111827',
-    fontWeight: 500,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: '#6B7280',
-  },
 });

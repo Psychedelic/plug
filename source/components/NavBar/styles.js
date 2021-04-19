@@ -20,27 +20,6 @@ export default makeStyles({
     alignItems: 'center',
     flexDirection: 'column',
   },
-  wallet: {
-    height: 61,
-    width: 195,
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'column',
-    borderRadius: '10px',
-    cursor: 'pointer',
-    '&:hover': {
-      background: '#F3F4F6',
-    },
-  },
-  walletTitle: {
-    fontSize: 16,
-    color: '#111827',
-    fontWeight: 500,
-  },
-  walletSubtitle: {
-    fontSize: 14,
-    color: '#6B7280',
-  },
   flex: {
     flex: 1,
     display: 'flex',

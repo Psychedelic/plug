@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles({
+export default makeStyles((theme) => ({
   root: {
     height: 40,
     width: '100%',
@@ -13,12 +13,12 @@ export default makeStyles({
     fontWeight: 500,
   },
   active: {
-    background: '#04CD95',
+    background: theme.palette.success.main,
   },
   inactive: {
-    background: 'linear-gradient(90.55deg, #D1D5DB 6.97%, #D1D5DB 100.15%)',
+    background: '#D1D5DB',
   },
   web: {
     fontWeight: 700,
   },
-});
+}));

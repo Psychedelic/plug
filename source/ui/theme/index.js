@@ -10,6 +10,29 @@ const theme = createMuiTheme({
       },
     },
   },
+  palette: {
+    common: {
+      gray: '#6B7280',
+      lightGray: '#E5E7EB',
+    },
+    primary: {
+      main: '#FFFFFF',
+      lightGradient:
+        'linear-gradient(94.95deg, rgba(255, 231, 1, 0.5) -1.41%, rgba(250, 81, 211, 0.5) 34.12%, rgba(16, 217, 237, 0.5) 70.19%, rgba(82, 255, 83, 0.5) 101.95%)',
+      mainGradient:
+        'linear-gradient(94.95deg, #FFE701 -1.41%, #FA51D3 34.12%, #10D9ED 70.19%, #52FF53 101.95%)',
+    },
+    error: {
+      light: 'rgba(220, 38, 38, 0.5)',
+      main: 'rgb(220, 38, 38)',
+    },
+    success: {
+      main: '#04CD95',
+    },
+    info: {
+      main: '#006EFF',
+    },
+  },
   spacing: 12,
   typography: {
     fontFamily: 'Inter',
