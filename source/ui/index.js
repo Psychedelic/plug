@@ -7,3 +7,4 @@ export { default as Tab } from './Tab';
 export { default as AssetItem } from './AssetItem';
 export { default as ActivityItem } from './ActivityItem';
 export { default as GenericIcon } from './GenericIcon';
+export { default as AppItem } from './AppItem';

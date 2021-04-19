@@ -18,7 +18,7 @@ export default makeStyles({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    marginLeft: 8,
+    marginLeft: 12,
   },
   title: {
     fontSize: 16,
