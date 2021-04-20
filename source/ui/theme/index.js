@@ -92,7 +92,7 @@ const theme = createMuiTheme({
       fontWeight: 400,
       fontSize: 12,
       lineHeight: '14.4px',
-      color: secondaryFontColor,
+      color: primaryFontColor,
     },
   },
 });
