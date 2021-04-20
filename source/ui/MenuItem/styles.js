@@ -7,4 +7,8 @@ export default makeStyles((theme) => ({
   text: {
     paddingRight: theme.spacing(1),
   },
+  big: {
+    minHeight: 42,
+    paddingLeft: theme.spacing(2),
+  },
 }));

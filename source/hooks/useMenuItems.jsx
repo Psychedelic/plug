@@ -2,8 +2,11 @@ import { useState, useEffect } from 'react';
 import HelpIcon from '@assets/icons/help.png';
 import SettingsIcon from '@assets/icons/settings.png';
 import { useTranslation } from 'react-i18next';
+import { useRouter } from '@components/Router';
 
 const useMenuItems = () => {
+  const { navigator } = useRouter();
+
   const [menuItems, setMenuItems] = useState([]);
   const { t } = useTranslation();
 
@@ -17,7 +20,7 @@ const useMenuItems = () => {
       {
         image: HelpIcon,
         name: t('profile.help'),
-        onClick: (() => null),
+        onClick: () => navigator.navigate('help'),
       },
     ]);
   }, []);

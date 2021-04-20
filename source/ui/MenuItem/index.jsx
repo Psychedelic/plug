@@ -5,12 +5,15 @@ import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import useStyles from './styles';
 
-const MenuItem = ({ name, image, onClick }) => {
+const MenuItem = ({
+  name, image, onClick, isBig,
+}) => {
   const classes = useStyles();
   return (
     <MuiMenuItem
       key={name}
       onClick={onClick}
+      className={isBig && classes.big}
     >
       <ListItemIcon className={classes.icon}>
         <img src={image} alt={name} />
@@ -22,8 +25,13 @@ const MenuItem = ({ name, image, onClick }) => {
 
 export default MenuItem;
 
+MenuItem.defaultProps = {
+  isBig: false,
+};
+
 MenuItem.propTypes = {
   name: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
+  isBig: PropTypes.bool,
 };
