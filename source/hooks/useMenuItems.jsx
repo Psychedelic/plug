@@ -6,7 +6,6 @@ import { useRouter } from '@components/Router';
 
 const useMenuItems = () => {
   const { navigator } = useRouter();
-
   const [menuItems, setMenuItems] = useState([]);
   const { t } = useTranslation();
 
