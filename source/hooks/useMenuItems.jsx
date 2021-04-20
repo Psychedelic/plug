@@ -14,7 +14,7 @@ const useMenuItems = () => {
       {
         image: SettingsIcon,
         name: t('profile.settings'),
-        onClick: (() => null),
+        onClick: () => navigator.navigate('settings'),
       },
       {
         image: HelpIcon,

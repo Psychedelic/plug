@@ -8,11 +8,13 @@ import {
 } from '@components';
 import Home from './Views/Home';
 import Help from './Views/Help';
+import Settings from './Views/Settings';
 
 const Popup = ({ storage }) => (
   <Router initialRouteName="home" storage={storage}>
     <Route name="home" component={Home} />
     <Route name="help" component={Help} />
+    <Route name="settings" component={Settings} />
   </Router>
 );
 
