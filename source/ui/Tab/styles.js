@@ -5,18 +5,18 @@ export default makeStyles((theme) => ({
     textTransform: 'none',
     fontSize: 16,
     color: theme.palette.common.gray,
-    marginLeft: 16,
+    marginLeft: theme.spacing(2),
     minWidth: 72,
 
     '&:hover': {
-      color: theme.palette.info.main,
+      color: theme.palette.primary.main,
       opacity: 1,
     },
     '&$selected': {
-      color: theme.palette.info.main,
+      color: theme.palette.primary.main,
     },
     '&:focus': {
-      color: theme.palette.info.main,
+      color: theme.palette.primary.main,
     },
   },
   selected: {},

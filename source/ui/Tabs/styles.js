@@ -5,7 +5,7 @@ export default makeStyles((theme) => ({
     borderBottom: `1px solid ${theme.palette.common.lightGray}`,
   },
   indicator: {
-    backgroundColor: theme.palette.info.main,
+    backgroundColor: theme.palette.primary.main,
   },
   tabPanel: {
     padding: `${theme.spacing(2)}px 0`,
