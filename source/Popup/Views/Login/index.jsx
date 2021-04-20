@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { useTranslation } from 'react-i18next';
 import { Plug } from '@components';
@@ -11,15 +11,10 @@ const Login = () => {
   const { t } = useTranslation();
 
   const [password, setPassword] = useState('');
-  const [disableButton, setDisableButton] = useState(true);
 
   const handleChangePassword = (e) => {
     setPassword(e.target.value);
   };
-
-  useEffect(() => {
-    setDisableButton(password === '');
-  }, [password]);
 
   return (
     <div className={classes.root}>
@@ -42,7 +37,7 @@ const Login = () => {
           value={t('login.unlock')}
           variant="rainbow"
           fullWidth
-          disabled={disableButton}
+          disabled={password === ''}
         />
       </div>
 
