@@ -36,7 +36,7 @@ const Tabs = ({ tabs }) => {
       >
         {
           tabs.map((tab, i) => (
-            <TabPanel key={tab.label} value={value} index={i}>
+            <TabPanel key={tab.label} value={value} index={i} classes={classes}>
               {tab.component}
             </TabPanel>
           ))
@@ -46,8 +46,10 @@ const Tabs = ({ tabs }) => {
   );
 };
 
-const TabPanel = ({ children, value, index }) => (
-  <div hidden={value !== index}>
+const TabPanel = ({
+  children, value, index, classes,
+}) => (
+  <div hidden={value !== index} className={classes.tabPanel}>
     {
       (value === index) && children
     }
@@ -67,4 +69,5 @@ TabPanel.propTypes = {
   children: PropTypes.node.isRequired,
   value: PropTypes.number.isRequired,
   index: PropTypes.number.isRequired,
+  classes: PropTypes.objectOf(PropTypes.object).isRequired,
 };

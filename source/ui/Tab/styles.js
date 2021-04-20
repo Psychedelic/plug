@@ -1,23 +1,23 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles({
+export default makeStyles((theme) => ({
   root: {
     textTransform: 'none',
     fontSize: 16,
-    color: '#6B7280',
+    color: theme.palette.common.gray,
     marginLeft: 16,
     minWidth: 72,
 
     '&:hover': {
-      color: '#3574F4',
+      color: theme.palette.info.main,
       opacity: 1,
     },
     '&$selected': {
-      color: '#3574F4',
+      color: theme.palette.info.main,
     },
     '&:focus': {
-      color: '#3574F4',
+      color: theme.palette.info.main,
     },
   },
   selected: {},
-});
+}));

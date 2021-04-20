@@ -4,6 +4,5 @@ export default makeStyles({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    padding: '16px 0',
   },
 });

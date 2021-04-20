@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles({
+export default makeStyles((theme) => ({
   root: {
     position: 'relative',
     height: 41,
@@ -23,7 +23,7 @@ export default makeStyles({
     bottom: -3,
     cursor: 'pointer',
     '&:hover': {
-      boxShadow: '0 0 0 1px #3574f4',
+      boxShadow: `0 0 0 1px ${theme.palette.info.main}`,
     },
   },
   swapImage: {
@@ -31,4 +31,4 @@ export default makeStyles({
     left: 7,
     bottom: 5,
   },
-});
+}));

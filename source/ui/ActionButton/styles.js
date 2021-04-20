@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles({
+export default makeStyles((theme) => ({
   root: {
     width: 70,
     height: 70,
@@ -12,7 +12,7 @@ export default makeStyles({
   },
   icon: {
     color: 'white',
-    padding: 6,
+    padding: theme.spacing(0.5),
   },
   iconDeposit: {
     background:
@@ -45,4 +45,4 @@ export default makeStyles({
     fontWeight: 600,
     marginTop: 4,
   },
-});
+}));

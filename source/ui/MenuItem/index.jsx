@@ -1,6 +1,7 @@
 import React from 'react';
 import MuiMenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import useStyles from './styles';
 
@@ -14,7 +15,7 @@ const MenuItem = ({ name, image, onClick }) => {
       <ListItemIcon className={classes.icon}>
         <img src={image} alt={name} />
       </ListItemIcon>
-      <span className={classes.text}>{name}</span>
+      <Typography variant="h5" className={classes.text}>{name}</Typography>
     </MuiMenuItem>
   );
 };

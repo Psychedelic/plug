@@ -1,20 +1,17 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles({
+export default makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    padding: '12px 24px',
+    padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
     alignItems: 'center',
   },
   icon: {
     marginLeft: 'auto',
   },
   title: {
-    fontSize: 16,
-    color: '#111827',
-    fontWeight: 500,
-    marginLeft: 12,
+    marginLeft: theme.spacing(1),
   },
-});
+}));

@@ -4,6 +4,7 @@ import { ACTIVITY_TYPES, ACTIVITY_STATUS } from '@shared/constants/activity';
 import { currencyPropTypes } from '@shared/constants/currencies';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import Typography from '@material-ui/core/Typography';
 import GenericIcon from '../GenericIcon';
 import SwapIcon from './SwapIcon';
 import useStyles from './styles';
@@ -85,24 +86,24 @@ const ActivityItem = ({
       }
 
       <div className={classes.leftContainer}>
-        <span className={classes.title}>
+        <Typography variant="h5">
           {getTitle(type, currency, swapData, plug, t)}
-        </span>
-        <span className={classes.subtitle}>
+        </Typography>
+        <Typography variant="subtitle2">
           {getStatus(status, classes, t)}{getSubtitle(type, status, date, wallet, t)}
-        </span>
+        </Typography>
       </div>
 
       {
         type !== ACTIVITY_TYPES.PLUG
         && (
           <div className={classes.rightContainer}>
-            <span className={classes.title}>
+            <Typography variant="h5">
               <NumberFormat value={showSwap ? swapData.amount : amount} displayType="text" thousandSeparator="," suffix={` ${showSwap ? swapData.currency.value : currency.value}`} />
-            </span>
-            <span className={classes.subtitle}>
+            </Typography>
+            <Typography variant="subtitle2">
               <NumberFormat value={showSwap ? swapData.value : value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" />
-            </span>
+            </Typography>
           </div>
         )
       }

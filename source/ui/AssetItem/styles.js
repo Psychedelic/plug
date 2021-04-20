@@ -1,12 +1,11 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles({
+export default makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    padding: '12px 24px',
-    alignItems: 'center',
+    padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
   },
   image: {
     height: 41,
@@ -18,20 +17,11 @@ export default makeStyles({
   leftContainer: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between',
-    marginLeft: 12,
-  },
-  title: {
-    fontSize: 16,
-    color: '#111827',
-    fontWeight: 500,
-  },
-  amount: {
-    color: '#4F5561',
-    fontSize: 16,
+    justifyContent: 'space-evenly',
+    marginLeft: theme.spacing(1),
   },
   value: {
     marginLeft: 'auto',
     alignSelf: 'flex-start',
   },
-});
+}));

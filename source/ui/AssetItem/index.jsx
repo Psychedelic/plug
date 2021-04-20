@@ -1,7 +1,7 @@
 import React from 'react';
 import NumberFormat from 'react-number-format';
-import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import Typography from '@material-ui/core/Typography';
 import useStyles from './styles';
 
 const AssetItem = ({
@@ -15,13 +15,13 @@ const AssetItem = ({
       <img className={classes.image} src={image} alt={name} />
 
       <div className={classes.leftContainer}>
-        <span className={classes.title}>{name}</span>
-        <span className={classes.amount}>{amount} {currency}</span>
+        <Typography variant="h5">{name}</Typography>
+        <Typography variant="subtitle2">{amount} {currency}</Typography>
       </div>
 
-      <span className={clsx(classes.title, classes.value)}>
+      <Typography variant="h5" className={classes.value}>
         <NumberFormat value={value} displayType="text" decimalScale={2} fixedDecimalScale thousandSeparator="," prefix="$" />
-      </span>
+      </Typography>
 
     </div>
   );

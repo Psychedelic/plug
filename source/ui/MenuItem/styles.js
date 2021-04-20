@@ -1,13 +1,10 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles({
+export default makeStyles((theme) => ({
   icon: {
     minWidth: 40,
   },
   text: {
-    fontWeight: 500,
-    color: '#000000',
-    fontSize: 16,
-    paddingRight: 16,
+    paddingRight: theme.spacing(1),
   },
-});
+}));

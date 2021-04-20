@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import FleekImg from '@assets/icons/Fleek.svg';
 import DfinityImg from '@assets/icons/Dfinity.svg';
 import { useTranslation } from 'react-i18next';
+import Typography from '@material-ui/core/Typography';
 import { AppItem } from '@ui';
 import DeleteImg from '@assets/icons/delete.svg';
 import useStyles from './styles';
@@ -29,8 +30,8 @@ const Apps = () => {
   return (
     <div className={classes.root}>
       <div className={classes.textContainer}>
-        <span className={classes.title}>{t('apps.title')}</span>
-        <span className={classes.subtitle}>{t('apps.subtitle')}</span>
+        <Typography variant="h5">{t('apps.title')}</Typography>
+        <Typography variant="subtitle2">{t('apps.subtitle')}</Typography>
       </div>
       {
         apps.map((app) => (
