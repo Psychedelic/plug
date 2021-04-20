@@ -11,6 +11,9 @@ export default makeStyles((theme) => ({
       'linear-gradient(122.45deg, rgba(255, 231, 1, 0.2) 15.68%, rgba(250, 81, 211, 0.2) 39.58%, rgba(16, 217, 237, 0.2) 63.84%, rgba(82, 255, 83, 0.2) 85.21%)',
     padding: theme.spacing(2),
   },
+  title: {
+    paddingTop: theme.spacing(1),
+  },
   formLabel: {
     transform: 'translate(0, 1.5px) scale(1) !important',
   },

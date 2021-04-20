@@ -26,7 +26,7 @@ const Login = () => {
 
       <div className={clsx(classes.flex, classes.textContainer)}>
         <Plug size="big" />
-        <Typography variant="h1" style={{ paddingTop: 12 }}>{t('login.title')}</Typography>
+        <Typography variant="h1" className={classes.title}>{t('login.title')}</Typography>
         <Typography variant="subtitle1">{t('login.subtitle')}</Typography>
       </div>
 
