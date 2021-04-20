@@ -23,7 +23,7 @@ export default makeStyles((theme) => ({
     bottom: -3,
     cursor: 'pointer',
     '&:hover': {
-      boxShadow: `0 0 0 1px ${theme.palette.info.main}`,
+      boxShadow: `0 0 0 1px ${theme.palette.primary.main}`,
     },
   },
   swapImage: {

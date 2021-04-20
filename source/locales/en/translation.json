@@ -42,5 +42,13 @@
   "apps": {
     "title": "Connected Apps",
     "subtitle": "Main IC Wallet is connected to these sites."
+  },
+  "login": {
+    "title": "Welcome Back!",
+    "subtitle": "Plug into the Internet Computer",
+    "password": "Password",
+    "unlock": "Unlock",
+    "restore": "Restore account?",
+    "import": "Import account using your seed phrase"
   }
 }
