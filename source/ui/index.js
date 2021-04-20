@@ -12,3 +12,4 @@ export { default as LinkButton } from './LinkButton';
 export { default as Button } from './Button';
 export { default as TextInput } from './TextInput';
 export { default as FormInput } from './FormInput';
+export { default as Header } from './Header';

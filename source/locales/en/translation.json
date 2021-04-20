@@ -37,7 +37,9 @@
   },
   "common": {
     "to": "to",
-    "delete": "delete"
+    "delete": "delete",
+    "close": "Close",
+    "back": "Back"
   },
   "apps": {
     "title": "Connected Apps",
@@ -50,5 +52,12 @@
     "unlock": "Unlock",
     "restore": "Restore account?",
     "import": "Import account using your seed phrase"
+  },
+  "help": {
+    "title": "Help",
+    "documentation": "Documentation",
+    "blog": "Blog",
+    "followUs": "Follow us on Twitter",
+    "review": "Review Plug"
   }
 }
