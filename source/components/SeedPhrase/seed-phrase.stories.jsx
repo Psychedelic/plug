@@ -5,7 +5,7 @@ export default {
   component: SeedPhrase,
 };
 
-const Template = (args) => <SeedPhrase {...args} />;
+const Template = (args) => <div style={{ height: 178, width: 370 }}><SeedPhrase {...args} /></div>;
 
 export const Default = Template.bind({});
 Default.args = {

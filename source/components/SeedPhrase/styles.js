@@ -9,7 +9,8 @@ export default makeStyles((theme) => ({
     padding: 2,
     position: 'relative',
     cursor: 'pointer',
-
+    width: '100%',
+    height: '100%',
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
