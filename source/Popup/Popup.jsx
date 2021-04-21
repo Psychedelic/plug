@@ -9,12 +9,14 @@ import {
 import Home from './Views/Home';
 import Help from './Views/Help';
 import Settings from './Views/Settings';
+import WalletName from './Views/WalletName';
 
 const Popup = ({ storage }) => (
   <Router initialRouteName="home" storage={storage}>
     <Route name="home" component={Home} />
     <Route name="help" component={Help} />
     <Route name="settings" component={Settings} />
+    <Route name="wallet-name" component={WalletName} />
   </Router>
 );
 

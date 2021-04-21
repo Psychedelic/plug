@@ -39,7 +39,8 @@
     "to": "to",
     "delete": "delete",
     "close": "Close",
-    "back": "Back"
+    "back": "Back",
+    "save": "Save"
   },
   "apps": {
     "title": "Connected Apps",
@@ -68,5 +69,9 @@
     "seedPhraseDescription": "View your seed phrase & backup.",
     "resetAccount": "Reset Account",
     "resetAccountDescription": "Reset all Transactions and Linked Apps."
+  },
+  "walletName": {
+    "title": "Wallet Name",
+    "label": "Name"
   }
 }

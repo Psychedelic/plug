@@ -15,6 +15,7 @@ export default makeStyles((theme) => ({
   image: {
     height: 18,
     width: 18,
+    paddingRight: theme.spacing(0.75),
   },
   text: {
     fontSize: 16,

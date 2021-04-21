@@ -12,7 +12,7 @@ const FormInput = ({
   const classes = useStyles();
 
   return (
-    <FormControl fullWidth>
+    <FormControl fullWidth className={classes.root}>
       <InputLabel shrink htmlFor={id} className={classes.formLabel}>
         <Typography variant="h6">{label}</Typography>
       </InputLabel>
