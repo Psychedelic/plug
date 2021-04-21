@@ -11,8 +11,8 @@ const WalletInfo = ({ name, address }) => {
   const [copied, setCopied] = useState(false);
 
   const { t } = useTranslation();
-  const copyText = t('walletInfo.copyText');
-  const copiedText = t('walletInfo.copiedText');
+  const copyText = t('copy.copyText');
+  const copiedText = t('copy.copiedText');
 
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipText, setTooltipText] = useState(copyText);
