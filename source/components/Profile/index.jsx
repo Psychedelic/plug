@@ -16,7 +16,7 @@ const Profile = () => {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
 
-  const { menuItems } = useMenuItems();
+  const menuItems = useMenuItems();
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
