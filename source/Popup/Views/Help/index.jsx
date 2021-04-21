@@ -10,7 +10,7 @@ const Help = () => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { navigator } = useRouter();
-  const { helpItems } = useHelpItems();
+  const helpItems = useHelpItems();
   return (
     <Layout>
       <Header value={t('help.title')} right={<LinkButton value={t('common.close')} onClick={() => navigator.navigate('home')} />} />

@@ -30,7 +30,7 @@ export default makeStyles((theme) => ({
     height: 44,
   },
   formContainer: {
-    height: 130,
+    height: 131,
     width: '100%',
     marginBottom: theme.spacing(2),
     justifyContent: 'space-between',

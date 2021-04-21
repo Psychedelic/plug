@@ -6,7 +6,7 @@ import { MenuItemDetailed, Header, LinkButton } from '@ui';
 import useSettingsItems from '../../../hooks/useSettingsItems';
 
 const Settings = () => {
-  const { settingsItems } = useSettingsItems();
+  const settingsItems = useSettingsItems();
   const { navigator } = useRouter();
   const { t } = useTranslation();
 
