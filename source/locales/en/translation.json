@@ -59,5 +59,14 @@
     "blog": "Blog",
     "followUs": "Follow us on Twitter",
     "review": "Review Plug"
+  },
+  "settings": {
+    "title": "Settings",
+    "walletName": "Wallet Name",
+    "walletNameDescription": "Change the name of your wallet.",
+    "seedPhrase": "Seed Phrase",
+    "seedPhraseDescription": "View your seed phrase & backup.",
+    "resetAccount": "Reset Account",
+    "resetAccountDescription": "Reset all Transactions and Linked Apps."
   }
 }
