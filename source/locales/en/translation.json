@@ -42,7 +42,9 @@
     "back": "Back",
     "save": "Save",
     "done": "Done",
-    "password": "Enter Password"
+    "password": "Enter Password",
+    "decline": "Decline",
+    "allow": "Allow"
   },
   "apps": {
     "title": "Connected Apps",
@@ -79,5 +81,8 @@
     "title": "Seed Phrase",
     "reveal": "Reveal Seed Phrase",
     "checkbox": "I will be safe with my seed phrase."
+  },
+  "appConnection": {
+    "connect": "wants to connect to your wallet"
   }
 }
