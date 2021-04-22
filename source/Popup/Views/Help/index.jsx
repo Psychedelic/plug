@@ -17,7 +17,7 @@ const Help = () => {
       <div className={classes.menuContainer}>
         {
           helpItems.map((item) => (
-            <MenuItem {...item} isBig />
+            <MenuItem {...item} big />
           ))
         }
       </div>

@@ -17,3 +17,4 @@ export { default as MenuItemDetailed } from './MenuItemDetailed';
 export { default as Container } from './Container';
 export { default as ListItem } from './ListItem';
 export { default as Checkbox } from './Checkbox';
+export { default as Dialog } from './Dialog';
