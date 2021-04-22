@@ -26,7 +26,6 @@ const Dialog = ({
       onClose={handleClose}
       open={open}
       PaperProps={{ className: classes.paper }}
-      disableBackdropClick
     >
       <DialogTitle disableTypography>
         <span className={classes.title}>{title}</span>
