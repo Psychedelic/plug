@@ -32,7 +32,7 @@ const Login = () => {
 
       <div className={clsx(classes.flex, classes.formContainer)}>
         <FormInput
-          label={t('login.password')}
+          label={t('common.password')}
           value={password}
           onChange={handleChangePassword}
           type="password"
