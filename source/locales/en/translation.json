@@ -5,7 +5,7 @@
     "notPlugged": "You're not plugged in",
     "incomingConnection": "Incoming connection!"
   },
-  "walletInfo": {
+  "copy": {
     "copyText": "Copy to clipboard",
     "copiedText": "Copied!"
   },
@@ -73,5 +73,9 @@
   "walletName": {
     "title": "Wallet Name",
     "label": "Name"
+  },
+  "seedPhrase": {
+    "title": "Seed Phrase",
+    "reveal": "Reveal Seed Phrase"
   }
 }

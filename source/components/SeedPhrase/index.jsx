@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { ListItem } from '@ui';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import useStyles from './styles';
 
 const SeedPhrase = ({ words }) => {
   const classes = useStyles();
-
+  const { t } = useTranslation();
   const [showCopy, setShowCopy] = useState(false);
 
   return (
@@ -26,7 +27,7 @@ const SeedPhrase = ({ words }) => {
         showCopy
         && (
         <div className={classes.layer}>
-          <span className={classes.copy}>Copy to clipboard</span>
+          <span className={classes.copy}>{t('copy.copyText')}</span>
         </div>
         )
       }
