@@ -40,7 +40,9 @@
     "delete": "delete",
     "close": "Close",
     "back": "Back",
-    "save": "Save"
+    "save": "Save",
+    "done": "Done",
+    "password": "Enter Password"
   },
   "apps": {
     "title": "Connected Apps",
@@ -49,7 +51,6 @@
   "login": {
     "title": "Welcome Back!",
     "subtitle": "Plug into the Internet Computer",
-    "password": "Password",
     "unlock": "Unlock",
     "restore": "Restore account?",
     "import": "Import account using your seed phrase"
@@ -76,6 +77,7 @@
   },
   "seedPhrase": {
     "title": "Seed Phrase",
-    "reveal": "Reveal Seed Phrase"
+    "reveal": "Reveal Seed Phrase",
+    "checkbox": "I will be safe with my seed phrase."
   }
 }

@@ -6,7 +6,7 @@ export default makeStyles((theme) => ({
     height: 114,
     position: 'relative',
     cursor: 'pointer',
-    transition: 'all 0.3s',
+    transition: 'transform 0.3s',
 
     '&:hover': {
       transform: 'scale(1.03)',

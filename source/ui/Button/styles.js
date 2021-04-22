@@ -10,7 +10,7 @@ export default makeStyles((theme) => ({
     lineHeight: '16px',
     borderRadius: '10px',
     textTransform: 'none',
-    transition: 'all 0.3s',
+    transition: 'transform 0.3s',
     height: 42,
     '&:hover, &:active': {
       transform: 'scale(1.03)',
