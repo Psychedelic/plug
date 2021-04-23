@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
+    "@fleekhq/browser-rpc": "^1.0.0",
     "@fortawesome/fontawesome-pro": "^5.15.3",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/pro-regular-svg-icons": "^5.15.3",
