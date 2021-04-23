@@ -37,6 +37,7 @@
     "emoji-log": "^1.0.2",
     "extensionizer": "^1.0.1",
     "i18next": "^20.2.1",
+    "qrcode": "^1.4.4",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-i18next": "^11.8.13",
