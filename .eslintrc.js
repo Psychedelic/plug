@@ -13,6 +13,9 @@ module.exports = {
     es2021: true,
     node: true,
   },
+  globals: {
+    INPAGE_SCRIPT: 'readonly',
+  },
   extends: ['plugin:react/recommended', 'airbnb'],
   parserOptions: {
     ecmaFeatures: {

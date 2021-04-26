@@ -15,13 +15,14 @@
     "yarn": ">= 1.0.0"
   },
   "scripts": {
-    "dev:chrome": "cross-env NODE_ENV=development cross-env TARGET_BROWSER=chrome webpack --watch",
-    "dev:firefox": "cross-env NODE_ENV=development cross-env TARGET_BROWSER=firefox webpack --watch",
-    "dev:opera": "cross-env NODE_ENV=development cross-env TARGET_BROWSER=opera webpack --watch",
+    "dev:chrome": "yarn build:inpage && cross-env NODE_ENV=development cross-env TARGET_BROWSER=chrome webpack --watch",
+    "dev:firefox": "yarn build:inpage && cross-env NODE_ENV=development cross-env TARGET_BROWSER=firefox webpack --watch",
+    "dev:opera": "yarn build:inpage && cross-env NODE_ENV=development cross-env TARGET_BROWSER=opera webpack --watch",
     "build:chrome": "cross-env NODE_ENV=production cross-env TARGET_BROWSER=chrome webpack",
     "build:firefox": "cross-env NODE_ENV=production cross-env TARGET_BROWSER=firefox webpack",
     "build:opera": "cross-env NODE_ENV=production cross-env TARGET_BROWSER=opera webpack",
-    "build": "yarn run build:chrome && yarn run build:firefox && yarn run build:opera",
+    "build": "yarn build:inpage && yarn run build:chrome && yarn run build:firefox && yarn run build:opera",
+    "build:inpage": "webpack --config ./webpack.inpage.js",
     "lint": "eslint . --ext .js,.jsx",
     "lint:fix": "eslint . --ext .js,.jsx --fix",
     "storybook": "start-storybook -p 6006",
@@ -31,6 +32,7 @@
   "dependencies": {
     "@babel/runtime": "^7.12.5",
     "@fleekhq/browser-rpc": "^1.0.0",
+    "@fleekhq/plug-inpage-provider": "^1.0.0",
     "@fortawesome/fontawesome-pro": "^5.15.3",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/pro-regular-svg-icons": "^5.15.3",

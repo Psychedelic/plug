@@ -64,6 +64,8 @@
   },
 
   "content_scripts": [{
+    "run_at": "document_start",
+    "all_frames": true,
     "matches": [
       "http://*/*",
       "https://*/*"
@@ -71,5 +73,7 @@
     "js": [
       "js/contentScript.bundle.js"
     ]
-  }]
+  }],
+
+  "web_accessible_resources": ["js/inpage.bundle.js"]
 }

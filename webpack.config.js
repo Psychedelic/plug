@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const FilemanagerPlugin = require('filemanager-webpack-plugin');
@@ -15,6 +16,11 @@ const sourcePath = path.join(__dirname, 'source');
 const destPath = path.join(__dirname, 'extension');
 const nodeEnv = process.env.NODE_ENV || 'development';
 const targetBrowser = process.env.TARGET_BROWSER;
+
+const inpageScript = fs.readFileSync(
+  path.join(__dirname, 'dist', 'inpage.js'),
+  'utf8',
+);
 
 const extensionReloaderPlugin = nodeEnv === 'development'
   ? new ExtensionReloader({
@@ -61,6 +67,7 @@ module.exports = {
     contentScript: path.join(sourcePath, 'ContentScript', 'index.js'),
     popup: path.join(sourcePath, 'Popup', 'index.jsx'),
     options: path.join(sourcePath, 'Options', 'index.jsx'),
+    inpage: path.join(sourcePath, 'Inpage', 'index.js'),
   },
 
   output: {
@@ -146,6 +153,9 @@ module.exports = {
     // Plugin to not generate js bundle for manifest entry
     new WextManifestWebpackPlugin(),
     // Generate sourcemaps
+    new webpack.DefinePlugin({
+      INPAGE_SCRIPT: JSON.stringify(inpageScript),
+    }),
     new webpack.SourceMapDevToolPlugin({ filename: false }),
     // environmental variables
     new webpack.EnvironmentPlugin(['NODE_ENV', 'TARGET_BROWSER']),
