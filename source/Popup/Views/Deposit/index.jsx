@@ -1,25 +1,22 @@
 import React from 'react';
 import { Layout } from '@components';
 import { Header } from '@ui';
-import { useTranslation } from 'react-i18next';
 import useSteps from './hooks/useSteps';
 
-const SeedPhrase = () => {
-  const { t } = useTranslation();
+const Deposit = () => {
   const {
     component,
     left,
     right,
+    center,
   } = useSteps();
 
   return (
     <Layout>
-      <Header left={left} right={right} center={t('seedPhrase.title')} />
-      {
-        component
-      }
+      <Header left={left} center={center} right={right} />
+      {component}
     </Layout>
   );
 };
 
-export default SeedPhrase;
+export default Deposit;

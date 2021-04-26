@@ -44,7 +44,8 @@
     "done": "Done",
     "password": "Enter Password",
     "decline": "Decline",
-    "allow": "Allow"
+    "allow": "Allow",
+    "continue": "Continue"
   },
   "apps": {
     "title": "Connected Apps",
@@ -84,5 +85,17 @@
   },
   "appConnection": {
     "connect": "wants to connect to your wallet"
+  },
+  "deposit": {
+    "title": "Deposit",
+    "copyAddress": "Copy Address",
+    "asset": "Asset",
+    "depositingFrom": "Depositing from",
+    "learnMore": "Learn more about buying",
+    "selectAsset": "Select asset your depositing",
+    "selectDeposit": "Select where your depositing from",
+    "runCommandTitle": "Run the following command",
+    "runCommandSubtitle": "To deposit Cycles from a Cycles Wallet you need to run a DFX CLI command.",
+    "runCommandButton": "Ok, I ran the command."
   }
 }

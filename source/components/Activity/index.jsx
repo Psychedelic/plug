@@ -8,7 +8,7 @@ import useStyles from './styles';
 const ACTIVITIES = [
   {
     type: ACTIVITY_TYPES.SEND,
-    currency: CURRENCIES.ICP,
+    currency: CURRENCIES.get('ICP'),
     wallet: 'rwlgt...ii-cai',
     amount: -182.27,
     value: 2129.12,
@@ -18,7 +18,7 @@ const ACTIVITIES = [
   },
   {
     type: ACTIVITY_TYPES.RECEIVE,
-    currency: CURRENCIES.ICP,
+    currency: CURRENCIES.get('ICP'),
     wallet: 'rwlgt...ii-cai',
     amount: 182.27,
     value: 2129.12,
@@ -28,7 +28,7 @@ const ACTIVITIES = [
   },
   {
     type: ACTIVITY_TYPES.SWAP,
-    currency: CURRENCIES.ICP,
+    currency: CURRENCIES.get('ICP'),
     wallet: null,
     amount: -182.27,
     value: -2129.12,
@@ -36,7 +36,7 @@ const ACTIVITIES = [
     date: 'Apr 12',
     plug: null,
     swapData: {
-      currency: CURRENCIES.CYCLES,
+      currency: CURRENCIES.get('CYCLES'),
       amount: 1337420.69,
       value: 2129.12,
       status: ACTIVITY_STATUS.DONE,
@@ -58,7 +58,7 @@ const ACTIVITIES = [
   },
   {
     type: ACTIVITY_TYPES.SEND,
-    currency: CURRENCIES.ICP,
+    currency: CURRENCIES.get('ICP'),
     wallet: 'rwlgt...ii-cai',
     amount: -182.27,
     value: 2129.12,
@@ -68,7 +68,7 @@ const ACTIVITIES = [
   },
   {
     type: ACTIVITY_TYPES.SEND,
-    currency: CURRENCIES.ICP,
+    currency: CURRENCIES.get('ICP'),
     wallet: 'rwlgt...ii-cai',
     amount: -182.27,
     value: 2129.12,

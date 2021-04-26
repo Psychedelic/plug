@@ -150,6 +150,9 @@ module.exports = {
   },
 
   plugins: [
+    new webpack.ProvidePlugin({
+      React: 'react',
+    }),
     // Plugin to not generate js bundle for manifest entry
     new WextManifestWebpackPlugin(),
     // Generate sourcemaps

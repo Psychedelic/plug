@@ -47,8 +47,8 @@ const QRCode = ({
           <rect
             fill={i % 2 !== 0 ? 'white' : 'black'}
             height={cellSize * (7 - i * 2)}
-            rx={(i - 3) * -4 + (i === 0 ? 2 : 0)} // calculated border radius for corner squares
-            ry={(i - 3) * -4 + (i === 0 ? 2 : 0)} // calculated border radius for corner squares
+            rx={(i - 3) * -2 + (i === 0 ? 2 : 0)} // calculated border radius for corner squares
+            ry={(i - 3) * -2 + (i === 0 ? 2 : 0)} // calculated border radius for corner squares
             width={cellSize * (7 - i * 2)}
             x={x1 + cellSize * i}
             y={y1 + cellSize * i}
@@ -145,9 +145,9 @@ QRCode.defaultProps = {
   logo: PlugImage,
   logoBackgroundColor: 'white',
   logoMargin: 0,
-  logoSize: 76,
-  size: 250,
-  value: 'https://fleek.co',
+  logoSize: 53,
+  size: 190,
+  value: '0xc6e8e3897dac52a68428020463484257222a3e5f',
 };
 
 QRCode.propTypes = {

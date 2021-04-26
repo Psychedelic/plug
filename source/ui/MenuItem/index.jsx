@@ -7,17 +7,17 @@ import clsx from 'clsx';
 import useStyles from './styles';
 
 const MenuItem = ({
-  name, image, onClick, big, border,
+  name, image, onClick, size, border,
 }) => {
   const classes = useStyles();
   return (
     <MuiMenuItem
       key={name}
       onClick={onClick}
-      className={clsx(big && classes.big, border && classes.border)}
+      className={clsx(size !== 'small' && classes.big, border && classes.border)}
     >
       <ListItemIcon className={classes.icon}>
-        <img src={image} alt={name} />
+        <img src={image} className={size === 'large' ? classes.bigImage : classes.smallImage} />
       </ListItemIcon>
       <Typography variant="h5" className={classes.text}>{name}</Typography>
     </MuiMenuItem>
@@ -28,13 +28,13 @@ export default MenuItem;
 
 MenuItem.defaultProps = {
   border: false,
-  big: false,
+  size: 'medium',
 };
 
 MenuItem.propTypes = {
   name: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
-  big: PropTypes.bool,
+  size: PropTypes.oneOf(['small', 'medium', 'large']),
   border: PropTypes.bool,
 };
