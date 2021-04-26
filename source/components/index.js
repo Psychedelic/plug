@@ -10,5 +10,6 @@ export { default as Activity } from './Activity';
 export { default as Apps } from './Apps';
 export { default as RevealSeedPhrase } from './RevealSeedPhrase';
 export { default as SeedPhrase } from './SeedPhrase';
+export { default as QRCode } from './QRCode';
 
 export * from './Router';

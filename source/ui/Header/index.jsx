@@ -3,7 +3,7 @@ import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import useStyles from './styles';
 
-const Header = ({ value, left, right }) => {
+const Header = ({ center, left, right }) => {
   const classes = useStyles();
 
   return (
@@ -12,7 +12,7 @@ const Header = ({ value, left, right }) => {
         left
         && <div className={classes.left}>{left}</div>
       }
-      <Typography variant="h3" className={classes.center}>{value}</Typography>
+      <Typography variant="h3" className={classes.center}>{center}</Typography>
       {
         right
         && <div className={classes.right}>{right}</div>
@@ -29,7 +29,7 @@ Header.defaultProps = {
 };
 
 Header.propTypes = {
-  value: PropTypes.string.isRequired,
+  center: PropTypes.string.isRequired,
   left: PropTypes.node,
   right: PropTypes.node,
 };

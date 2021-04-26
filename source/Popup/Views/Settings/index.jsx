@@ -12,7 +12,7 @@ const Settings = () => {
 
   return (
     <Layout>
-      <Header value={t('settings.title')} right={<LinkButton value={t('common.close')} onClick={() => navigator.navigate('home')} />} />
+      <Header center={t('settings.title')} right={<LinkButton value={t('common.close')} onClick={() => navigator.navigate('home')} />} />
       <div>
         {
           settingsItems.map((item) => (

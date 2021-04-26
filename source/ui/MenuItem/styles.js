@@ -13,6 +13,14 @@ export default makeStyles((theme) => ({
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
+  smallImage: {
+    width: 22,
+    height: 22,
+  },
+  bigImage: {
+    width: 41,
+    height: 41,
+  },
   border: {
     '&:before': {
       content: '""',
