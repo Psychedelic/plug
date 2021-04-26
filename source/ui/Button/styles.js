@@ -16,6 +16,23 @@ export default makeStyles((theme) => ({
       transform: 'scale(1.03)',
     },
   },
+  primary: {
+    fontWeight: 700,
+    color: 'white',
+    background: theme.palette.primary.main,
+    boxShadow,
+    '&:hover': {
+      opacity: 0.9,
+      boxShadow,
+      background: theme.palette.primary.main,
+    },
+    '&:disabled': {
+      opacity: 0.6,
+      color: 'white',
+      boxShadow,
+      background: theme.palette.primary.main,
+    },
+  },
   rainbow: {
     fontWeight: 700,
     color: 'white',

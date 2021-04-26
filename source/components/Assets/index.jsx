@@ -5,18 +5,18 @@ import useStyles from './styles';
 
 const ASSETS = [
   {
-    image: CURRENCIES.ICP.image,
-    name: CURRENCIES.ICP.displayName,
+    image: CURRENCIES.get('ICP').image,
+    name: CURRENCIES.get('ICP').displayName,
     amount: 152.28,
     value: 12183.29,
-    currency: CURRENCIES.ICP.value,
+    currency: CURRENCIES.get('ICP').value,
   },
   {
-    image: CURRENCIES.CYCLES.image,
-    name: CURRENCIES.CYCLES.displayName,
+    image: CURRENCIES.get('CYCLES').image,
+    name: CURRENCIES.get('CYCLES').displayName,
     amount: 102.2913,
     value: 102.30,
-    currency: CURRENCIES.CYCLES.value,
+    currency: CURRENCIES.get('CYCLES').value,
   },
 ];
 

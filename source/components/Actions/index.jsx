@@ -1,29 +1,31 @@
 import React from 'react';
+import { useRouter } from '@components/Router';
 import { ActionButton } from '@ui';
 import useStyles from './styles';
 
-const ACTIONS = [
+const ACTIONS = (navigator) => [
   {
     type: 'deposit',
-    onClick: (() => null),
+    onClick: (() => navigator.navigate('deposit')),
   },
   {
     type: 'send',
-    onClick: (() => null),
+    onClick: (() => navigator.navigate('send')),
   },
   {
     type: 'swap',
-    onClick: (() => null),
+    onClick: (() => navigator.navigate('swap')),
   },
 ];
 
 const Actions = () => {
   const classes = useStyles();
+  const { navigator } = useRouter();
 
   return (
     <div className={classes.root}>
       {
-        ACTIONS.map((action) => (
+        ACTIONS(navigator).map((action) => (
           <ActionButton key={action.type} type={action.type} onClick={action.onClick} />
         ))
       }

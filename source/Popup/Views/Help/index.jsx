@@ -11,13 +11,14 @@ const Help = () => {
   const { t } = useTranslation();
   const { navigator } = useRouter();
   const helpItems = useHelpItems();
+
   return (
     <Layout>
-      <Header value={t('help.title')} right={<LinkButton value={t('common.close')} onClick={() => navigator.navigate('home')} />} />
+      <Header center={t('help.title')} right={<LinkButton value={t('common.close')} onClick={() => navigator.navigate('home')} />} />
       <div className={classes.menuContainer}>
         {
           helpItems.map((item) => (
-            <MenuItem {...item} big />
+            <MenuItem {...item} size="medium" />
           ))
         }
       </div>
