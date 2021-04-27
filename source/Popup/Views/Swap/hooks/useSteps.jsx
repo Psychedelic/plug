@@ -6,15 +6,15 @@ import BackIcon from '@assets/icons/back.svg';
 import Step1 from '../Steps/Step1';
 import Step2 from '../Steps/Step2';
 import Step3 from '../Steps/Step3';
-// import { CURRENCIES } from '../../../../shared/constants/currencies';
+import { CURRENCIES } from '../../../../shared/constants/currencies';
 
 const useSteps = () => {
   const [step, setStep] = useState(0);
   const { navigator } = useRouter();
   const { t } = useTranslation();
 
-  // const [selectedFromAsset, setSelectedFromAsset] = useState(CURRENCIES.get('ICP'));
-  // const [selectedToAsset, setSelectedToAsset] = useState(CURRENCIES.get('CYCLES'));
+  const [selectedFromAsset, setSelectedFromAsset] = useState(CURRENCIES.get('ICP'));
+  const [selectedToAsset, setSelectedToAsset] = useState(CURRENCIES.get('CYCLES'));
 
   const handleChangeStep = (index) => setStep(index);
 
@@ -23,13 +23,21 @@ const useSteps = () => {
 
   const steps = [
     {
-      component: <Step1 />,
+      component: <Step1 
+      handleChangeStep={() => handleChangeStep(1)}
+      fromAssets={[selectedFromAsset]}
+      toAssets={[selectedToAsset]}
+      selectedFromAsset={selectedFromAsset}
+      selectedToAsset={selectedToAsset}
+      />,
       left: null,
       right: rightButton,
       center: t('swap.title'),
     },
     {
-      component: <Step2 />,
+      component: <Step2 
+      handleChangeStep={() => handleChangeStep(2)}
+      />,
       left: leftButton,
       right: rightButton,
       center: `${t('swap.reviewSwap')}`,
