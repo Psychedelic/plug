@@ -6,7 +6,7 @@ const injectScript = (filePath, content) => {
   script.setAttribute('type', 'text/javascript');
 
   if (content) {
-    script.textContent = INPAGE_SCRIPT;
+    script.textContent = content;
   }
 
   if (filePath) {
