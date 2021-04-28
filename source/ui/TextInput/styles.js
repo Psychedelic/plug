@@ -15,11 +15,21 @@ export default makeStyles((theme) => ({
     width: '100%',
     padding: '10px 12px',
     boxShadow: '0px 1px 2px rgb(0 0 0 / 5%)',
-    transition: 'border-color 0.15s linear',
 
+    '&:hover': {
+      border: 'double 1px transparent',
+      backgroundImage:
+        'linear-gradient(white, white), radial-gradient(circle at top left,#FFE701,#FA51D3,#10D9ED,#53FF54)',
+      backgroundOrigin: 'border-box',
+      backgroundClip: 'padding-box, border-box',
+    },
     '&:focus': {
-      border: '2px solid #111827',
       padding: '9px 11px',
+      border: 'double 2px transparent',
+      backgroundImage:
+        'linear-gradient(white, white), radial-gradient(circle at top left,#FFE701,#FA51D3,#10D9ED,#53FF54)',
+      backgroundOrigin: 'border-box',
+      backgroundClip: 'padding-box, border-box',
     },
   },
 }));

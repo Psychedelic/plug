@@ -11,7 +11,7 @@ export const CURRENCIES = new Map([
       value: 'ICP',
       displayName: 'Dfinity',
       image: DfinityImg,
-      price: 10,
+      price: 120,
     },
   ],
   [

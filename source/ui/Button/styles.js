@@ -80,4 +80,23 @@ export default makeStyles((theme) => ({
       boxShadow: defaultBoxShadow,
     },
   },
+  primaryOutlined: {
+    padding: '4px 12px',
+    minWidth: 'auto',
+    height: 'auto',
+    borderRadius: 8,
+    fontWeight: 500,
+    fontSize: 14,
+    color: '#3775F4',
+    border: '1px solid #3775F4',
+    boxShadow: 'none',
+    '&:hover': {
+      opacity: 0.9,
+      boxShadow: 'none',
+    },
+    '&:disabled': {
+      opacity: 0.6,
+      boxShadow: 'none',
+    },
+  },
 }));

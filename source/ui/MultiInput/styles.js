@@ -8,14 +8,25 @@ export default makeStyles((theme) => ({
     justifyContent: 'flex-start',
     cursor: 'pointer',
     transition: 'background 0.2s',
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
 
     '&:hover': {
       background: '#F3F4F6',
     },
   },
+  swapIcon: {
+    position: 'absolute',
+    right: 6,
+    bottom: 0,
+    top: 0,
+    height: 30,
+    margin: 'auto',
+    width: 30,
+  },
   icon: {
-    height: 41,
-    width: 41,
+    height: 29,
+    width: 29,
     marginRight: theme.spacing(1),
     borderRadius: 26,
     boxShadow:
@@ -23,49 +34,65 @@ export default makeStyles((theme) => ({
   },
   alignRight: {
     marginLeft: theme.spacing(1),
-    width: 14,
-    height: 14,
   },
   rightContainer: {
     display: 'inline-flex',
     width: '100%',
     position: 'relative',
   },
-
   estimatedTotal: {
+    pointerEvents: 'none',
     position: 'absolute',
-    bottom: theme.spacing(0.3),
-    right: theme.spacing(0.5),
+    bottom: 8,
+    left: 12,
+    margin: 'auto',
+    height: 'fit-content',
+    right: theme.spacing(1),
     color: theme.palette.common.gray,
     fontSize: 12,
   },
-
   input: {
     width: '100%',
+
     '& .MuiInputBase-input': {
       fontWeight: 600,
       fontSize: 18,
+      zIndex: 1,
+      padding: 12,
     },
     '& .MuiInputBase-root': {
       height: '100%',
+      alignItems: 'flex-start',
+      zIndex: 0,
     },
     '& .MuiOutlinedInput-root': {
       '& fieldset': {
         border: 'none',
-        borderLeft: '1px solid #EDEFF2',
+        borderLeft: '1px solid #D1D5DB',
+        margin: -1,
         borderRadius: 0,
       },
       '&:hover fieldset': {
-        border: `1px solid ${theme.palette.common.primaryBlack}`,
+        margin: -1,
         borderRadius: 10,
         borderTopLeftRadius: 0,
         borderBottomLeftRadius: 0,
+        border: 'double 1px transparent',
+        backgroundImage:
+          'linear-gradient(white, white), radial-gradient(circle at top left,#FFE701,#FA51D3,#10D9ED,#53FF54)',
+        backgroundOrigin: 'border-box',
+        backgroundClip: 'padding-box, border-box',
       },
       '&.Mui-focused fieldset': {
-        border: `2px solid ${theme.palette.common.primaryBlack}`,
+        margin: -1,
         borderRadius: 10,
         borderTopLeftRadius: 0,
         borderBottomLeftRadius: 0,
+        border: 'double 2px transparent',
+        backgroundImage:
+          'linear-gradient(white, white), radial-gradient(circle at top left,#FFE701,#FA51D3,#10D9ED,#53FF54)',
+        backgroundOrigin: 'border-box',
+        backgroundClip: 'padding-box, border-box',
       },
     },
   },
