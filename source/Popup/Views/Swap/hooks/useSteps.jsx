@@ -71,7 +71,7 @@ const useSteps = () => {
     setPrimaryValue(temp);
   };
 
-  const conversionPrice = amount * secondaryValue.conversionRate;
+  const conversionPrice = amount / secondaryValue.price;
 
   const rightButton = <LinkButton value={t('common.cancel')} onClick={() => navigator.navigate('home')} />;
   const leftButton = <LinkButton value={t('common.back')} onClick={() => handleChangeStep(0)} startIcon={BackIcon} />;
