@@ -12,6 +12,7 @@ import Settings from './Views/Settings';
 import WalletName from './Views/WalletName';
 import SeedPhrase from './Views/SeedPhrase';
 import Deposit from './Views/Deposit';
+import Swap from './Views/Swap';
 
 const Popup = ({ storage }) => (
   <Router initialRouteName="home" storage={storage}>
@@ -21,6 +22,7 @@ const Popup = ({ storage }) => (
     <Route name="wallet-name" component={WalletName} />
     <Route name="seed-phrase" component={SeedPhrase} />
     <Route name="deposit" component={Deposit} />
+    <Route name="swap" component={Swap} />
   </Router>
 );
 

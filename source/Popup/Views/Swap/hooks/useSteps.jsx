@@ -100,11 +100,14 @@ const useSteps = () => {
     },
     {
       component: <Step2
+        fromAsset={selectedFromAsset}
+        fromAmount={amount}
+        toAsset={selectedToAsset}
         handleChangeStep={() => handleChangeStep(2)}
       />,
       left: leftButton,
       right: rightButton,
-      center: `${t('swap.reviewSwap')}`,
+      center: `${t('swap.review')}`,
     },
     {
       component: <Step3 />,

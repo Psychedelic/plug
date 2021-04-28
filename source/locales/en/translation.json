@@ -111,6 +111,8 @@
     "review": "Review swap",
     "confirm": "Confirm swap",
     "comingSoonTitle": "More swaps coming soon!",
-    "comingSoonSubtitle": "Currently you can only swap from ICP to Cycles within the Plug Wallet."
+    "comingSoonSubtitle": "Currently you can only swap from ICP to Cycles within the Plug Wallet.",
+    "swappingVia": "Swapping via",
+    "cycleMinter": "Cycle Minter"
   }
 }

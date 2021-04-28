@@ -22,7 +22,7 @@ export const CURRENCIES = new Map([
       value: 'T Cycles',
       displayName: 'Cycles',
       image: CyclesImg,
-      price: 0.008,
+      price: 0.6,
     },
   ],
 ]);

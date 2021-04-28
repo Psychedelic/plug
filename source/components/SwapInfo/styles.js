@@ -4,14 +4,25 @@ export default makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    width: '100%',
+    position: 'relative',
+    height: theme.spacing(11),
   },
   assetInfo: {
+    width: 170,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-evenly',
+  },
+  arrows: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: theme.spacing(3),
+    margin: 'auto',
   },
   icon: {
     height: 41,
