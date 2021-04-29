@@ -71,10 +71,20 @@ const useSteps = () => {
     setPrimaryValue(temp);
   };
 
+  // when seeing asset as USD,
+  // we need to convert back the amount to the correct rate when going to review
+  const convertToPrimaryAsset = () => {
+    setAmount(amount / primaryValue.conversionRate);
+  };
+
+  // when coming back from review we need to view amount with the correct rate
+  const convertToSecondaryAsset = () => {
+    setAmount(amount * primaryValue.conversionRate);
+  };
+
   const conversionPrice = amount / secondaryValue.price;
 
   const rightButton = <LinkButton value={t('common.cancel')} onClick={() => navigator.navigate('home')} />;
-  const leftButton = <LinkButton value={t('common.back')} onClick={() => handleChangeStep(0)} startIcon={BackIcon} />;
 
   const steps = [
     {
@@ -85,7 +95,7 @@ const useSteps = () => {
         handleSwapValues={handleSwapValues}
         amount={amount}
         handleChangeAmount={handleChangeAmount}
-        handleChangeStep={() => handleChangeStep(1)}
+        handleChangeStep={() => { convertToPrimaryAsset(); handleChangeStep(1); }}
         // fromAssets={[selectedFromAsset]}
         // toAssets={[selectedToAsset]}
         selectedFromAsset={selectedFromAsset}
@@ -105,13 +115,13 @@ const useSteps = () => {
         toAsset={selectedToAsset}
         handleChangeStep={() => handleChangeStep(2)}
       />,
-      left: leftButton,
+      left: <LinkButton value={t('common.back')} onClick={() => { convertToSecondaryAsset(); handleChangeStep(0); }} startIcon={BackIcon} />,
       right: rightButton,
       center: `${t('swap.review')}`,
     },
     {
       component: <Step3 />,
-      left: leftButton,
+      left: <LinkButton value={t('common.back')} onClick={() => handleChangeStep(1)} startIcon={BackIcon} />,
       right: rightButton,
       center: `${t('swap.title')}`,
     },

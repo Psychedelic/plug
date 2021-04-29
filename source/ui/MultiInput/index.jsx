@@ -14,10 +14,9 @@ const NumberFormatCustom = (props) => {
     inputRef, onChange, prefix, suffix, availableAmount, ...other
   } = props;
 
-  // eslint-disable-next-line consistent-return
   const withValueLimit = (input) => {
     const { value } = input;
-    if (value <= availableAmount) return input;
+    return value <= availableAmount;
   };
 
   return (
