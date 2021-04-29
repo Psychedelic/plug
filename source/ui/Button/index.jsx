@@ -16,6 +16,9 @@ const VARIANTS = {
   primary: {
     variant: 'contained',
   },
+  primaryOutlined: {
+    variant: 'outlined',
+  },
 };
 
 const Button = ({

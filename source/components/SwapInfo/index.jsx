@@ -25,7 +25,7 @@ const SwapInfo = ({
   return (
     <div className={classes.root}>
       <AssetInfo asset={fromAsset} amount={fromAmount} classes={classes} />
-      <img src={DoubleArrowImg} />
+      <img src={DoubleArrowImg} className={classes.arrows} />
       <AssetInfo asset={toAsset} amount={toAmount} classes={classes} />
     </div>
   );

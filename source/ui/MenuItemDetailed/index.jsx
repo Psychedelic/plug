@@ -2,7 +2,7 @@ import React from 'react';
 import MuiMenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import ChevronRight from '@assets/icons/chevron-right.svg';
+import ChevronDown from '@assets/icons/chevron-down.svg';
 import useStyles from './styles';
 
 const MenuItemDetailed = ({
@@ -24,7 +24,7 @@ const MenuItemDetailed = ({
         <Typography variant="subtitle1">{description}</Typography>
       </div>
 
-      <img src={ChevronRight} className={classes.chevron} />
+      <img src={ChevronDown} className={classes.chevron} />
 
     </MuiMenuItem>
   );

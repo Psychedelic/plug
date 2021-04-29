@@ -45,7 +45,12 @@
     "password": "Enter Password",
     "decline": "Decline",
     "allow": "Allow",
-    "continue": "Continue"
+    "continue": "Continue",
+    "max": "Max",
+    "taxFee": "Tx fee",
+    "rate": "Rate",
+    "total": "Total",
+    "cancel": "Cancel"
   },
   "apps": {
     "title": "Connected Apps",
@@ -97,5 +102,17 @@
     "runCommandTitle": "Run the following command",
     "runCommandSubtitle": "To deposit Cycles from a Cycles Wallet you need to run a DFX CLI command.",
     "runCommandButton": "Ok, I ran the command."
+  },
+  "swap": {
+    "title": "Swap",
+    "swapFrom": "Swap from",
+    "swapTo": "Swap  to",
+    "available": "available to swap",
+    "review": "Review swap",
+    "confirm": "Confirm swap",
+    "comingSoonTitle": "More swaps coming soon!",
+    "comingSoonSubtitle": "Currently you can only swap from ICP to Cycles within the Plug Wallet.",
+    "swappingVia": "Swapping via",
+    "cycleMinter": "Cycle Minter"
   }
 }

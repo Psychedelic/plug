@@ -11,7 +11,7 @@ export const CURRENCIES = new Map([
       value: 'ICP',
       displayName: 'Dfinity',
       image: DfinityImg,
-      price: 10,
+      price: 120,
     },
   ],
   [
@@ -22,7 +22,7 @@ export const CURRENCIES = new Map([
       value: 'T Cycles',
       displayName: 'Cycles',
       image: CyclesImg,
-      price: 0.008,
+      price: 0.6,
     },
   ],
 ]);
