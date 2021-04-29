@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { TextInput } from '@ui';
+import InputBase from '@material-ui/core/InputBase';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinnerThird } from '@fortawesome/pro-regular-svg-icons/faSpinnerThird';
 import ErrorImg from '@assets/icons/error.svg';
@@ -40,7 +40,10 @@ const IDInput = ({ value, onChange }) => {
 
   return (
     <div className={classes.root}>
-      <TextInput
+      <InputBase
+        classes={{
+          input: classes.input,
+        }}
         fullWidth
         value={value}
         type="text"
