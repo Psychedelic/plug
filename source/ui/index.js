@@ -22,3 +22,4 @@ export { default as FormItem } from './FormItem';
 export { default as Select } from './Select';
 export { default as CodeBox } from './CodeBox';
 export { default as MultiInput } from './MultiInput';
+export { default as InputBase } from './InputBase';

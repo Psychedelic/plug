@@ -114,5 +114,8 @@
     "comingSoonSubtitle": "Currently you can only swap from ICP to Cycles within the Plug Wallet.",
     "swappingVia": "Swapping via",
     "cycleMinter": "Cycle Minter"
+  },
+  "send": {
+    "inputId": "Enter Principal ID or Canister ID"
   }
 }

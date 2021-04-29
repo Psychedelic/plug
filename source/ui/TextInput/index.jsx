@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import useStyles from './styles';
 
 const TextInput = ({
-  value, type, onChange, ...other
+  value, type, onChange, customPlaceholder, ...other
 }) => {
   const classes = useStyles();
 
@@ -18,14 +18,24 @@ const TextInput = ({
       type={type}
       onChange={onChange}
       {...other}
-    />
+    >
+      {
+        (customPlaceholder && value !== null && value !== '')
+        && <span className={classes.placholder}>{customPlaceholder}</span>
+      }
+    </InputBase>
   );
 };
 
 export default TextInput;
 
+TextInput.defaultProps = {
+  customPlaceholder: null,
+};
+
 TextInput.propTypes = {
   value: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
+  customPlaceholder: PropTypes.string,
 };

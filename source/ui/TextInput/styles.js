@@ -32,4 +32,15 @@ export default makeStyles((theme) => ({
       backgroundClip: 'padding-box, border-box',
     },
   },
+  placeholder: {
+    position: 'absolute',
+    display: 'flex',
+    left: theme.spacing(1),
+    top: 0,
+    bottom: 0,
+    margin: 'auto',
+    fontWeight: 500,
+    fontSize: 18,
+    color: '#B5B8C0',
+  },
 }));
