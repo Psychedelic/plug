@@ -12,7 +12,7 @@ const SelectButton = ({
   return (
     <div className={clsx(classes.root, selected && classes.selected)} onClick={onClick}>
       <img src={startImage} className={classes.iconLeft} />
-      <Typography variant="h3">{value}</Typography>
+      <Typography variant="h4">{value}</Typography>
       <img src={endImage} className={classes.iconRight} onClick={onEndImageClick} />
     </div>
   );
