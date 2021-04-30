@@ -1,10 +1,8 @@
 import React from 'react';
 import { SwapInfo } from '@components';
-import { Container, Button } from '@ui';
-import { Typography } from '@material-ui/core';
+import { Container, Button, InfoRow } from '@ui';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
-import useStyles from '../styles';
 
 const calculateRate = (fromPrice, toPrice) => fromPrice / toPrice;
 
@@ -49,19 +47,4 @@ Step2.propTypes = {
   fromAmount: PropTypes.number.isRequired,
   toAsset: PropTypes.objectOf(PropTypes.object).isRequired,
   handleChangeStep: PropTypes.func.isRequired,
-};
-
-const InfoRow = ({ name, value }) => {
-  const classes = useStyles();
-  return (
-    <div className={classes.infoRow}>
-      <Typography variant="subtitle1">{name}</Typography>
-      <Typography variant="h5">{value}</Typography>
-    </div>
-  );
-};
-
-InfoRow.propTypes = {
-  name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
 };

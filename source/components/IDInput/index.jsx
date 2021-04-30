@@ -9,34 +9,38 @@ import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import useStyles from './styles';
 
-const IDInput = ({ value, onChange }) => {
+const IDInput = ({
+  value, onChange, addressInfo, handleChangeAddressInfo,
+}) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState(null);
 
-  useEffect(async () => {
-    const debounce = setTimeout(async () => {
+  useEffect(() => {
+    const debounce = setTimeout(() => {
       if (value !== null) {
         setLoading(true);
+        setTimeout(() => { setLoading(false); }, 1000);
 
-        setStatus(value === 'valid id' ? 'success' : 'error');
+        const isValid = value.includes('valid id') && (value.includes('dank') || value.includes('canister'));
 
-        await new Promise((r) => setTimeout(r, 1500));
+        let type = null;
+        if (value.includes('dank')) type = 'dank';
+        else if (value.includes('canister')) type = 'canister';
 
-        setLoading(false);
+        handleChangeAddressInfo({ isValid, type });
       }
-    }, 3000);
+    }, 1000);
 
     return () => clearTimeout(debounce);
   }, [value]);
 
   let image;
 
-  if (status === 'success') image = SuccessImg;
-  else if (status === 'error') image = ErrorImg;
-  else image = null;
+  if (addressInfo.isValid === null) image = null;
+  else if (addressInfo.isValid) image = SuccessImg;
+  else image = ErrorImg;
 
   return (
     <div className={classes.root}>
@@ -47,7 +51,7 @@ const IDInput = ({ value, onChange }) => {
         fullWidth
         value={value}
         type="text"
-        onChange={onChange}
+        onChange={(e) => onChange(e.target.value)}
         placeholder={t('send.inputId')}
       />
       <div className={classes.iconContainer}>
@@ -60,7 +64,7 @@ const IDInput = ({ value, onChange }) => {
                 className={clsx(classes.icon, classes.spinner)}
               />
             )
-            : (status !== null
+            : (image !== null
               && <img src={image} className={classes.icon} />
             )
         }
@@ -74,4 +78,6 @@ export default IDInput;
 IDInput.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
+  addressInfo: PropTypes.objectOf(PropTypes.object).isRequired,
+  handleChangeAddressInfo: PropTypes.func.isRequired,
 };

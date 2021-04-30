@@ -47,9 +47,9 @@
     "allow": "Allow",
     "continue": "Continue",
     "max": "Max",
-    "taxFee": "Tx fee",
-    "rate": "Rate",
-    "total": "Total",
+    "taxFee": "Tx fee:",
+    "rate": "Rate:",
+    "total": "Total:",
     "cancel": "Cancel"
   },
   "apps": {
@@ -112,10 +112,22 @@
     "confirm": "Confirm swap",
     "comingSoonTitle": "More swaps coming soon!",
     "comingSoonSubtitle": "Currently you can only swap from ICP to Cycles within the Plug Wallet.",
-    "swappingVia": "Swapping via",
+    "swappingVia": "Swapping via:",
     "cycleMinter": "Cycle Minter"
   },
   "send": {
-    "inputId": "Enter Principal ID or Canister ID"
+    "title": "Send",
+    "asset": "Asset",
+    "to": "To:",
+    "inputId": "Enter Principal ID or Canister ID",
+    "available": "available to send",
+    "selectAsset": "Select asset your sending",
+    "moreComingSoon": "MORE COMING SOON",
+    "payWith": "Pay with:",
+    "review": "Review Send",
+    "canisterDetected": "We detected the recipient ID you entered is a Canister, please choose where you want the cycles to go.",
+    "keepDank": "Keep in Dank",
+    "withdrawCanister": "Withdraw to Canister",
+    "help": "Which option should I choose?"
   }
 }
