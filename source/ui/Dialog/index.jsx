@@ -42,7 +42,7 @@ const Dialog = ({
                 image={item.image}
                 onClick={() => handleItemClick(item)}
                 border={index !== items.length - 1}
-                size="large"
+                size="medium"
               />
             ))
             : component

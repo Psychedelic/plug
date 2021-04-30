@@ -9,7 +9,6 @@ export const CURRENCIES = new Map([
       id: 'ICP',
       name: 'ICP',
       value: 'ICP',
-      displayName: 'Dfinity',
       image: DfinityImg,
       price: 120,
     },
@@ -19,8 +18,7 @@ export const CURRENCIES = new Map([
     {
       id: 'CYCLES',
       name: 'Cycles',
-      value: 'T Cycles',
-      displayName: 'Cycles',
+      value: 'TC',
       image: CyclesImg,
       price: 0.6,
     },
@@ -31,6 +29,5 @@ export const currencyPropTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
-  displayName: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
 };
