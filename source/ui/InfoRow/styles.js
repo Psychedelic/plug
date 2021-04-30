@@ -5,12 +5,14 @@ export default makeStyles((theme) => ({
     padding: '8px 0',
     width: '100%',
     display: 'flex',
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
   total: {
     color: theme.palette.common.blue,
     fontWeight: 600,
     fontSize: 26,
+    lineHeight: '31.2px',
   },
   border: {
     borderBottom: `1px solid ${theme.palette.common.lightGray}`,
