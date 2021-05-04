@@ -9,7 +9,7 @@ import MenuItem from '../MenuItem';
 import useStyles from './styles';
 
 const Dialog = ({
-  title, items, onClose, selectedValue, open,
+  title, items, onClose, selectedValue, open, component,
 }) => {
   const classes = useStyles();
 
@@ -34,21 +34,29 @@ const Dialog = ({
         </IconButton>
       </DialogTitle>
       <MenuList>
-        {items.map((item, index) => (
-          <MenuItem
-            name={item.name}
-            image={item.image}
-            onClick={() => handleItemClick(item)}
-            border={index !== items.length - 1}
-            size="large"
-          />
-        ))}
+        {
+          (items && items.length > 0)
+            ? items.map((item, index) => (
+              <MenuItem
+                name={item.name}
+                image={item.image}
+                onClick={() => handleItemClick(item)}
+                border={index !== items.length - 1}
+                size="medium"
+              />
+            ))
+            : component
+        }
       </MenuList>
     </MuiDialog>
   );
 };
 
 export default Dialog;
+
+Dialog.defaultProps = {
+  component: null,
+};
 
 Dialog.propTypes = {
   title: PropTypes.string.isRequired,
@@ -59,4 +67,5 @@ Dialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   selectedValue: PropTypes.string.isRequired,
+  component: PropTypes.node,
 };

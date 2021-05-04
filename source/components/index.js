@@ -11,5 +11,7 @@ export { default as Apps } from './Apps';
 export { default as RevealSeedPhrase } from './RevealSeedPhrase';
 export { default as SeedPhrase } from './SeedPhrase';
 export { default as QRCode } from './QRCode';
+export { default as SwapInfo } from './SwapInfo';
+export { default as IDInput } from './IDInput';
 
 export * from './Router';

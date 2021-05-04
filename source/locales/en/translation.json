@@ -45,7 +45,13 @@
     "password": "Enter Password",
     "decline": "Decline",
     "allow": "Allow",
-    "continue": "Continue"
+    "continue": "Continue",
+    "max": "Max",
+    "taxFee": "Tx fee:",
+    "rate": "Rate:",
+    "total": "Total:",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "apps": {
     "title": "Connected Apps",
@@ -97,5 +103,49 @@
     "runCommandTitle": "Run the following command",
     "runCommandSubtitle": "To deposit Cycles from a Cycles Wallet you need to run a DFX CLI command.",
     "runCommandButton": "Ok, I ran the command."
+  },
+  "swap": {
+    "title": "Swap",
+    "swapFrom": "Swap from",
+    "swapTo": "Swap  to",
+    "available": "available to swap",
+    "review": "Review swap",
+    "confirm": "Confirm swap",
+    "comingSoonTitle": "More swaps coming soon!",
+    "comingSoonSubtitle": "Currently you can only swap from ICP to Cycles within the Plug Wallet.",
+    "swappingVia": "Swapping via:",
+    "cycleMinter": "Cycle Minter"
+  },
+  "send": {
+    "title": "Send",
+    "asset": "Asset",
+    "to": "To:",
+    "inputId": "Enter Principal ID or Canister ID",
+    "available": "available to send",
+    "selectAsset": "Select asset your sending",
+    "moreComingSoon": "MORE COMING SOON",
+    "payWith": "Pay with:",
+    "review": "Review Send",
+    "canisterDetected": "We detected the recipient ID you entered is a Canister, please choose where you want the cycles to go.",
+    "keepDank": "Keep in Dank",
+    "withdrawCanister": "Withdraw to Canister",
+    "help": "Which option should I choose?"
+  },
+  "cycleTransactions": {
+    "details": "Details",
+    "data": "Data",
+    "withdraw": "wants to withdraw from your wallet",
+    "amount": "Amount of Cycles",
+    "canisterId": "Canister ID",
+    "methodName": "Method Name",
+    "parameters": "Parameters",
+    "decline": "Decline",
+    "transactions": "transactions",
+    "notEnoughTitle": "Not enough Cycles",
+    "notEnoughText": "You don't have enough Cycles in your wallet to process this transaction. Please get more cycles to continue.",
+    "of": "of",
+    "requests": "requests",
+    "next": "Next →",
+    "previous": "← Previous"
   }
 }

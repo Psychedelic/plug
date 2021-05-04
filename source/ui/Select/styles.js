@@ -8,14 +8,16 @@ export default makeStyles((theme) => ({
     justifyContent: 'flex-start',
     cursor: 'pointer',
     transition: 'background 0.2s',
+    width: '100%',
+    borderRadius: 10,
 
     '&:hover': {
       background: '#F3F4F6',
     },
   },
   icon: {
-    height: 41,
-    width: 41,
+    height: 29,
+    width: 29,
     marginRight: theme.spacing(1),
   },
   iconShadow: {

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Typography } from '@material-ui/core';
 import clsx from 'clsx';
-import ChevronRight from '@assets/icons/chevron-right.svg';
+import ChevronDown from '@assets/icons/chevron-down.svg';
 import InputBase from '../InputBase';
 import useStyles from './styles';
 
@@ -18,7 +18,7 @@ const Select = ({
         {
           text
             ? <Typography variant="subtitle2" className={classes.alignRight}>{text}</Typography>
-            : <img src={ChevronRight} className={classes.alignRight} />
+            : <img src={ChevronDown} className={classes.alignRight} />
         }
       </div>
     </InputBase>

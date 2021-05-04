@@ -21,7 +21,4 @@ export default makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
   },
-  button: {
-    width: '48%',
-  },
 }));
