@@ -147,5 +147,11 @@
     "requests": "requests",
     "next": "Next →",
     "previous": "← Previous"
+  },
+  "welcome":{
+    "createWallet": "Create Wallet",
+    "importWallet": "Import Wallet",
+    "createText": "Create a new wallet and seed phrase.",
+    "importText": "Import using 12 word seed phrase or private key."
   }
 }
