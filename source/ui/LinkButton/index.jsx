@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import useStyles from './styles';
 
-const LinkButton = ({ value, onClick, startIcon }) => {
+const LinkButton = ({
+  value, onClick, startIcon, ...other
+}) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root} onClick={onClick}>
+    <div className={classes.root} onClick={onClick} {...other}>
       {
         startIcon
         && <img className={classes.image} src={startIcon} alt={value} />

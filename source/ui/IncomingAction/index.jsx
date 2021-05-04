@@ -1,4 +1,5 @@
-/* import React from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './styles';
 
@@ -15,4 +16,9 @@ const IncomingAction = ({ image, url, action }) => {
 };
 
 export default IncomingAction;
-*/
+
+IncomingAction.propTypes = {
+  image: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  action: PropTypes.string.isRequired,
+};

@@ -9,12 +9,14 @@ export default makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginTop: `-${theme.spacing(2)}px`,
   },
   cyclesContainer: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginBottom: theme.spacing(2),
   },
   amountContainer: {
     display: 'flex',
@@ -31,5 +33,34 @@ export default makeStyles((theme) => ({
   },
   trillion: {
     color: theme.palette.common.blue,
+    fontSize: 20,
+    marginLeft: 3,
+  },
+  requestHandler: {
+    width: '100%',
+    height: 40,
+    background: '#FFFBEB',
+    color: '#92400E',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  arrow: {
+    fontWeight: 500,
+    color: '#B45309',
+    cursor: 'pointer',
+    position: 'absolute',
+  },
+  requestCenter: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    margin: 'auto',
+    width: 'fit-content',
+  },
+  left: {
+    left: theme.spacing(2),
+  },
+  right: {
+    right: theme.spacing(2),
   },
 }));

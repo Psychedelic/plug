@@ -140,8 +140,12 @@
     "methodName": "Method Name",
     "parameters": "Parameters",
     "decline": "Decline",
-    "transactions": "Transactions",
+    "transactions": "transactions",
     "notEnoughTitle": "Not enough Cycles",
-    "notEnoughText": "You don't have enough Cycles in your wallet to process this transaction. Please get more cycles to continue."
+    "notEnoughText": "You don't have enough Cycles in your wallet to process this transaction. Please get more cycles to continue.",
+    "of": "of",
+    "requests": "requests",
+    "next": "Next →",
+    "previous": "← Previous"
   }
 }
