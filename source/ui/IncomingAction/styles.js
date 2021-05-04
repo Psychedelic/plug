@@ -16,9 +16,4 @@ export default makeStyles((theme) => ({
     height: 120,
     margin: `${theme.spacing(2.5)}px 0 `,
   },
-  buttonContainer: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
 }));

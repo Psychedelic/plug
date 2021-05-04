@@ -50,7 +50,8 @@
     "taxFee": "Tx fee:",
     "rate": "Rate:",
     "total": "Total:",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "apps": {
     "title": "Connected Apps",
@@ -129,5 +130,22 @@
     "keepDank": "Keep in Dank",
     "withdrawCanister": "Withdraw to Canister",
     "help": "Which option should I choose?"
+  },
+  "cycleTransactions": {
+    "details": "Details",
+    "data": "Data",
+    "withdraw": "wants to withdraw from your wallet",
+    "amount": "Amount of Cycles",
+    "canisterId": "Canister ID",
+    "methodName": "Method Name",
+    "parameters": "Parameters",
+    "decline": "Decline",
+    "transactions": "transactions",
+    "notEnoughTitle": "Not enough Cycles",
+    "notEnoughText": "You don't have enough Cycles in your wallet to process this transaction. Please get more cycles to continue.",
+    "of": "of",
+    "requests": "requests",
+    "next": "Next →",
+    "previous": "← Previous"
   }
 }
