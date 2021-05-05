@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Typography } from '@material-ui/core';
-import { Button } from '@ui';
+import Button from '../Button';
 import useStyles from './styles';
 
 const ActionCard = ({

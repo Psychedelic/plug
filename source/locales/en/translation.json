@@ -1,5 +1,4 @@
 {
-  "test": "Translate me!",
   "connectionStatus": {
     "plugged": "You're plugged into",
     "notPlugged": "You're not plugged in",
@@ -148,10 +147,21 @@
     "next": "Next →",
     "previous": "← Previous"
   },
-  "welcome":{
+  "welcome": {
+    "welcomeTitle": "Welcome to Plug.",
+    "welcomeSubtitle": "Choose if you want to import or create a wallet (Principal ID).",
+    "passwordTitle": "Create Password for Plug",
+    "passwordSubtitle": "Please create a password to access your Plug extension.",
+    "seedTitle": "Seed Phrase Backup",
+    "seedSubtitle": "Below is the seed phrase for your new wallet, write it down.",
     "createWallet": "Create Wallet",
     "importWallet": "Import Wallet",
     "createText": "Create a new wallet and seed phrase.",
-    "importText": "Import using 12 word seed phrase or private key."
+    "importText": "Import using 12 word seed phrase or private key.",
+    "plug1": "What’s good!",
+    "plug2": "Paste that sh*t",
+    "plug3": "Make that pw secure frfr",
+    "plug4": "Let’s Gooo!!!",
+    "plug5": "Keep this sh*t safe, forreal."
   }
 }
