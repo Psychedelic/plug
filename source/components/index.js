@@ -13,5 +13,6 @@ export { default as SeedPhrase } from './SeedPhrase';
 export { default as QRCode } from './QRCode';
 export { default as SwapInfo } from './SwapInfo';
 export { default as IDInput } from './IDInput';
+export { default as MadeBy } from './MadeBy';
 
 export * from './Router';
