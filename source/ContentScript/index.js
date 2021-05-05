@@ -1,15 +1,16 @@
-import { BrowserRPC } from '@fleekhq/browser-rpc';
+import { ProxyRPC } from '@fleekhq/browser-rpc';
 
 import { injectScript } from './utils';
 
-const serverRPC = new BrowserRPC(window, {
+const serverRPC = new ProxyRPC(window, {
   name: 'plug-content-script',
   target: 'plug-inpage-provider',
 });
 
-serverRPC.exposeHandler('test', (cb, name) => {
+serverRPC.exposeHandler('test', (props, name) => {
+  const { callback } = props;
   const result = `hello ${name}!!!`;
-  cb(null, result);
+  callback(null, result);
 });
 
 serverRPC.start();

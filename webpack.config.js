@@ -68,6 +68,7 @@ module.exports = {
     popup: path.join(sourcePath, 'Popup', 'index.jsx'),
     options: path.join(sourcePath, 'Options', 'index.jsx'),
     inpage: path.join(sourcePath, 'Inpage', 'index.js'),
+    notification: path.join(sourcePath, 'Pages', 'Notification', 'index.js'),
   },
 
   output: {
@@ -187,6 +188,13 @@ module.exports = {
       chunks: ['options'],
       hash: true,
       filename: 'options.html',
+    }),
+    new HtmlWebpackPlugin({
+      template: path.join(viewsPath, 'notification.html'),
+      inject: 'body',
+      chunks: ['notification'],
+      hash: true,
+      filename: 'notification.html',
     }),
     // write css file(s) to build folder
     new MiniCssExtractPlugin({ filename: 'css/[name].css' }),

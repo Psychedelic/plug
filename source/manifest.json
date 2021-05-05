@@ -75,5 +75,7 @@
     ]
   }],
 
-  "web_accessible_resources": ["js/inpage.bundle.js"]
+  "web_accessible_resources": [
+    "js/inpage.bundle.js"
+  ]
 }
