@@ -13,11 +13,6 @@ serverRPC.exposeHandler('test', (props, name) => {
   callback(null, result);
 });
 
-// serverRPC.exposeHandler('requestAccess', (props) => {
-//   const { callback } = props;
-//   callback(null, 'yeah!');
-// });
-
 serverRPC.start();
 
 injectScript(null, INPAGE_SCRIPT);
