@@ -9,6 +9,7 @@ export default makeStyles((theme) => ({
   },
   label: {
     fontWeight: 700,
+    textAlign: 'left',
   },
   componentContainer: {
     marginTop: theme.spacing(1),

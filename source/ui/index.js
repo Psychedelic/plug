@@ -32,3 +32,4 @@ export { default as IncomingAction } from './IncomingAction';
 export { default as DataDisplay } from './DataDisplay';
 export { default as FullscreenContainer } from './FullscreenContainer';
 export { default as ActionCard } from './ActionCard';
+export { default as Alert } from './Alert';

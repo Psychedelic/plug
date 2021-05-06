@@ -26,6 +26,7 @@ export default makeStyles((theme) => ({
     bottom: 0,
     left: 0,
     right: 0,
+    flexDirection: 'column',
     margin: 'auto',
     display: 'flex',
     flexDirection: 'column',

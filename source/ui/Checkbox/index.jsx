@@ -6,7 +6,9 @@ import { Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import useStyles from './styles';
 
-const Checkbox = ({ checked, handleChange, label }) => {
+const Checkbox = ({
+  checked, handleChange, label, ...other
+}) => {
   const classes = useStyles();
 
   return (
@@ -23,6 +25,7 @@ const Checkbox = ({ checked, handleChange, label }) => {
         />
       )}
       label={<Typography variant="h6">{label}</Typography>}
+      {...other}
     />
   );
 };

@@ -148,20 +148,36 @@
     "previous": "← Previous"
   },
   "welcome": {
+    "goBack": "Go Back",
+    "createWallet": "Create Wallet",
+    "createText": "Create a new wallet and seed phrase.",
+    "importWallet": "Import Wallet",
+    "importText": "Import using 12 word seed phrase or private key.",
+
     "welcomeTitle": "Welcome to Plug.",
     "welcomeSubtitle": "Choose if you want to import or create a wallet (Principal ID).",
+    "welcomeMessage": "What’s good!",
+
     "passwordTitle": "Create Password for Plug",
     "passwordSubtitle": "Please create a password to access your Plug extension.",
+    "passwordMessage":"Make that pw secure frfr",
+    "passwordLabel":"New Password (min. 12 characters)",
+    "passwordConfirmLabel": "Confirm Password",
+    "passwordButton": "I made a secure password",
+    "passwordWarning": "Don't forget your password, otherwise you'll need to reimport your wallet using your seed phrase.",
+
+    "importSubtitle": "Please enter your 12 word seed phrase or private key.",
+    "importMessage": "Paste that sh*t",
+    "importLabel": "Seed Phrase or Private Key",
+    "importButton": "Okay, I entered it.",
+
+    "memeTitle": "You're good to go!",
+    "memeSubtitle": "Peep your extensions and Plug should be there.",
+    "memeMessage": "Let’s Gooo!!!",
+
     "seedTitle": "Seed Phrase Backup",
     "seedSubtitle": "Below is the seed phrase for your new wallet, write it down.",
-    "createWallet": "Create Wallet",
-    "importWallet": "Import Wallet",
-    "createText": "Create a new wallet and seed phrase.",
-    "importText": "Import using 12 word seed phrase or private key.",
-    "plug1": "What’s good!",
-    "plug2": "Paste that sh*t",
-    "plug3": "Make that pw secure frfr",
-    "plug4": "Let’s Gooo!!!",
-    "plug5": "Keep this sh*t safe, forreal."
+    "seedMessage": "Keep this sh*t safe, forreal.",
+    "seedCheckbox": "I wrote down the seed phrase and put it somewhere safe."
   }
 }
