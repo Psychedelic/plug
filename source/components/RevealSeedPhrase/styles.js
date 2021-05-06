@@ -26,6 +26,7 @@ export default makeStyles((theme) => ({
     bottom: 0,
     left: 0,
     right: 0,
+    flexDirection: 'column',
     margin: 'auto',
     display: 'flex',
     alignItems: 'center',
@@ -35,6 +36,6 @@ export default makeStyles((theme) => ({
     fontWeight: 700,
     fontSize: 16,
     color: theme.palette.common.white,
-    paddingLeft: theme.spacing(0.75),
+    paddingTop: theme.spacing(0.75),
   },
 }));

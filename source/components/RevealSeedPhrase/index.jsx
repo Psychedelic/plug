@@ -4,13 +4,14 @@ import PropTypes from 'prop-types';
 import WhiteKeyImage from '@assets/icons/white-key.svg';
 import useStyles from './styles';
 
-const RevealSeedPhrase = ({ onClick }) => {
+const RevealSeedPhrase = ({ onClick, ...other }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   return (
     <div
       className={classes.root}
       onClick={onClick}
+      {...other}
     >
       <div className={classes.blur} />
       <div className={classes.center}>
