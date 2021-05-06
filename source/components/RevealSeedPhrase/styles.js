@@ -29,6 +29,7 @@ export default makeStyles((theme) => ({
     flexDirection: 'column',
     margin: 'auto',
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
   },

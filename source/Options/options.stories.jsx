@@ -7,7 +7,7 @@ export default {
   component: Options,
 };
 
-const Template = (args) => <div><Options {...args} /></div>;
+const Template = (args) => <Options {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
