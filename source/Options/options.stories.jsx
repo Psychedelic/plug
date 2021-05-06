@@ -7,7 +7,7 @@ export default {
   component: Options,
 };
 
-const Template = (args) => <div style={{ width: 420, margin: 20, boxShadow: '0 0 10px' }}><Options {...args} /></div>;
+const Template = (args) => <div><Options {...args} /></div>;
 
 export const Default = Template.bind({});
 Default.args = {

@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './styles';
 
-const FormItem = ({ label, component, subtitle }) => {
+const FormItem = ({
+  label, component, subtitle, ...other
+}) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} {...other}>
       <Typography variant="h5" className={classes.label}>{label}</Typography>
       <div className={classes.componentContainer}>
         {component}

@@ -1,37 +1,41 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import { Plug } from '@components';
-import { FullscreenContainer, ActionCard } from '@ui';
-import { Typography } from '@material-ui/core';
-import ImportImg from '@assets/icons/options/importwallet.svg';
-import CreateImg from '@assets/icons/options/createwallet.svg';
+import { FullscreenContainer, LinkButton } from '@ui';
+import BackIcon from '@assets/icons/back.svg';
 import { useTranslation } from 'react-i18next';
+import Header from './components/Header';
+import useSteps from './hooks/useSteps';
 import useStyles from './styles';
 
 const Welcome = () => {
   const { t } = useTranslation();
   const classes = useStyles();
+  const {
+    steps,
+    currentStep,
+    handlePreviousStep,
+  } = useSteps();
+
+  const step = steps[currentStep];
 
   return (
-    <FullscreenContainer>
-      <Grid container spacing={4}>
-
-        <Grid item xs={12} className={classes.titleContainer}>
-          <Plug size="big" message={t('welcome.plug1')} style={{ marginBottom: 24 }} />
-          <Typography variant="h2">{t('welcome.welcomeTitle')}</Typography>
-          <Typography variant="subtitle1">{t('welcome.welcomeSubtitle')}</Typography>
+    <FullscreenContainer maxWidth={currentStep === 0 ? 'md' : 'sm'}>
+      <Grid container spacing={2} style={{ position: 'relative' }}>
+        {
+          (currentStep > 0 && currentStep < steps.length - 1)
+          && (
+          <div className={classes.goBack}>
+            <LinkButton value={t('welcome.goBack')} onClick={handlePreviousStep} startIcon={BackIcon} />
+          </div>
+          )
+        }
+        <Grid item xs={12}>
+          <Header title={step.title} subtitle={step.subtitle} message={step.message} />
         </Grid>
-
-        <Grid item xs={12} md={6}>
-          <ActionCard icon={ImportImg} title={t('welcome.importWallet')} subtitle={t('welcome.importText')} button={t('welcome.importWallet')} onClick={() => null} />
-        </Grid>
-
-        <Grid item xs={12} md={6}>
-          <ActionCard icon={CreateImg} title={t('welcome.createWallet')} subtitle={t('welcome.createText')} button={t('welcome.createWallet')} onClick={() => null} />
-        </Grid>
-
+        {
+          step.component
+        }
       </Grid>
-
     </FullscreenContainer>
   );
 };
