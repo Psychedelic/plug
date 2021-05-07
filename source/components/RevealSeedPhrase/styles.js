@@ -26,11 +26,11 @@ export default makeStyles((theme) => ({
     bottom: 0,
     left: 0,
     right: 0,
+    justifyContent: 'center',
     flexDirection: 'column',
     margin: 'auto',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
   },
   text: {
     fontWeight: 700,
