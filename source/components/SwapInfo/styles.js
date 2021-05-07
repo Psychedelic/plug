@@ -8,7 +8,6 @@ export default makeStyles((theme) => ({
     justifyContent: 'space-between',
     width: '100%',
     position: 'relative',
-    height: theme.spacing(11),
   },
   assetInfo: {
     width: 170,

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import Grid from '@material-ui/core/Grid';
 import {
   FormItem, MultiInput, Container, Select, Button, Dialog,
 } from '@ui';
@@ -45,85 +46,91 @@ const Step1 = ({
 
   return (
     <Container>
+      <Grid container spacing={2}>
 
-      <FormItem
-        label={t('swap.swapFrom')}
-        component={(
-          <MultiInput
-            name={selectedFromAsset.name}
-            image={selectedFromAsset.image}
-            onClick={() => setOpenFromAssets(true)}
-            value={amount}
-            onChange={handleChangeAmount}
-            primaryValue={primaryValue}
-            secondaryValue={secondaryValue}
-            conversionPrice={conversionPrice}
-            handleSwapValues={handleSwapValues}
-            availableAmount={availableAmount.amount}
-          />
-        )}
-        subtitle={(
-          <div className={classes.subtitle}>
-            <Typography variant="subtitle2">
-              <NumberFormat
-                value={availableAmount.amount}
-                decimalScale={2}
-                fixedDecimalScale
-                thousandSeparator=","
-                displayType="text"
-                prefix={availableAmount.prefix}
-                suffix={availableAmount.suffix}
+        <Grid item xs={12}>
+          <FormItem
+            label={t('swap.swapFrom')}
+            component={(
+              <MultiInput
+                name={selectedFromAsset.name}
+                image={selectedFromAsset.image}
+                onClick={() => setOpenFromAssets(true)}
+                value={amount}
+                onChange={handleChangeAmount}
+                primaryValue={primaryValue}
+                secondaryValue={secondaryValue}
+                conversionPrice={conversionPrice}
+                handleSwapValues={handleSwapValues}
+                availableAmount={availableAmount.amount}
               />
+            )}
+            subtitle={(
+              <div className={classes.subtitle}>
+                <Typography variant="subtitle2">
+                  <NumberFormat
+                    value={availableAmount.amount}
+                    decimalScale={2}
+                    fixedDecimalScale
+                    thousandSeparator=","
+                    displayType="text"
+                    prefix={availableAmount.prefix}
+                    suffix={availableAmount.suffix}
+                  />
               &nbsp;
-              {t('swap.available')}
-            </Typography>
-            <Button
-              variant="primaryOutlined"
-              value={t('common.max')}
-              onClick={() => handleChangeAmount(availableAmount.amount)}
-            />
-          </div>
-        )}
-      />
-
-      <Dialog
-        title={t('swap.swapFrom')}
-        items={[]}
-        onClose={handleCloseFromAssets}
-        selectedValue={selectedFromAsset}
-        open={openFromAssets}
-        component={<SwapsComingSoon />}
-      />
-
-      <FormItem
-        label={t('swap.swapTo')}
-        component={(
-          <Select
-            image={selectedToAsset.image}
-            name={selectedToAsset.name}
-            shadow
-            onClick={() => setOpenToAssets(true)}
+                  {t('swap.available')}
+                </Typography>
+                <Button
+                  variant="primaryOutlined"
+                  value={t('common.max')}
+                  onClick={() => handleChangeAmount(availableAmount.amount)}
+                />
+              </div>
+            )}
           />
-        )}
-      />
+          <Dialog
+            title={t('swap.swapFrom')}
+            items={[]}
+            onClose={handleCloseFromAssets}
+            selectedValue={selectedFromAsset}
+            open={openFromAssets}
+            component={<SwapsComingSoon />}
+          />
+        </Grid>
 
-      <Dialog
-        title={t('swap.swapTo')}
-        items={[]}
-        onClose={handleCloseToAssets}
-        selectedValue={selectedToAsset}
-        open={openToAssets}
-        component={<SwapsComingSoon />}
-      />
+        <Grid item xs={12}>
+          <FormItem
+            label={t('swap.swapTo')}
+            component={(
+              <Select
+                image={selectedToAsset.image}
+                name={selectedToAsset.name}
+                shadow
+                onClick={() => setOpenToAssets(true)}
+              />
+            )}
+          />
+          <Dialog
+            title={t('swap.swapTo')}
+            items={[]}
+            onClose={handleCloseToAssets}
+            selectedValue={selectedToAsset}
+            open={openToAssets}
+            component={<SwapsComingSoon />}
+          />
+        </Grid>
 
-      <Button
-        style={{ marginTop: 6 }}
-        variant="rainbow"
-        value={t('swap.review')}
-        fullWidth
-        disabled={!(amount > 0)}
-        onClick={handleChangeStep}
-      />
+        <Grid item xs={12}>
+          <Button
+            variant="rainbow"
+            value={t('swap.review')}
+            fullWidth
+            disabled={!(amount > 0)}
+            onClick={handleChangeStep}
+          />
+        </Grid>
+
+      </Grid>
     </Container>
   );
 };

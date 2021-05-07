@@ -2,9 +2,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: 'inline-flex',
     flexDirection: 'column',
-    marginBottom: theme.spacing(2),
     width: '100%',
   },
   label: {
@@ -12,7 +11,7 @@ export default makeStyles((theme) => ({
     textAlign: 'left',
   },
   componentContainer: {
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(0.5),
   },
   subtitleContainer: {
     marginTop: theme.spacing(0.5),

@@ -2,20 +2,19 @@ import React from 'react';
 import {
   Container, LinkButton, SelectButton, Button,
 } from '@ui';
+import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import InfoImg from '@assets/icons/info.svg';
 import DankImg from '@assets/icons/dank.svg';
 import CanisterImg from '@assets/icons/canister.svg';
-import useStyles from '../styles';
 
 const dank = 'dank';
 const canister = 'canister';
 
 const Step2 = ({ destination, handleChangeDestination, handleChangeStep }) => {
   const { t } = useTranslation();
-  const classes = useStyles();
 
   const buttons = [
     {
@@ -36,20 +35,24 @@ const Step2 = ({ destination, handleChangeDestination, handleChangeStep }) => {
 
   return (
     <Container>
-      <div className={classes.chooseDestinationContainer}>
-        <Typography variant="subtitle1">{t('send.canisterDetected')}</Typography>
-
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Typography variant="subtitle1">{t('send.canisterDetected')}</Typography>
+        </Grid>
         {
           buttons.map((item) => (
-            <SelectButton {...item} />
+            <Grid item xs={12}>
+              <SelectButton {...item} />
+            </Grid>
           ))
         }
-
-        <LinkButton value={t('send.help')} onClick={() => null} />
-
-        <Button variant="rainbow" value={t('common.continue')} onClick={handleChangeStep} />
-      </div>
-
+        <Grid item xs={12}>
+          <LinkButton value={t('send.help')} onClick={() => null} />
+        </Grid>
+        <Grid item xs={12}>
+          <Button fullWidth variant="rainbow" value={t('common.continue')} onClick={handleChangeStep} />
+        </Grid>
+      </Grid>
     </Container>
   );
 };

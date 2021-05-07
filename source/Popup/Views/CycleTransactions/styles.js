@@ -39,14 +39,14 @@ export default makeStyles((theme) => ({
   requestHandler: {
     width: '100%',
     height: 40,
-    background: '#FFFBEB',
-    color: '#92400E',
+    background: '#B5B7BB',
+    color: 'white',
     display: 'flex',
     alignItems: 'center',
   },
   arrow: {
     fontWeight: 500,
-    color: '#B45309',
+    color: 'white',
     cursor: 'pointer',
     position: 'absolute',
   },

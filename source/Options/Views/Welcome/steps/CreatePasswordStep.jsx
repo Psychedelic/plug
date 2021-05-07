@@ -5,9 +5,11 @@ import { useTranslation } from 'react-i18next';
 import {
   Alert, Button, FormItem, TextInput,
 } from '@ui';
+import useStyles from '../styles';
 
 const CreatePasswordStep = ({ handleNextStep }) => {
   const { t } = useTranslation();
+  const classes = useStyles();
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -35,7 +37,7 @@ const CreatePasswordStep = ({ handleNextStep }) => {
           )}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} className={classes.marginBottom}>
         <FormItem
           style={{ marginTop: -24 }}
           label={t('welcome.passwordConfirmLabel')}
@@ -49,7 +51,7 @@ const CreatePasswordStep = ({ handleNextStep }) => {
           )}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} className={classes.marginBottom}>
         <Button
           variant="rainbow"
           value={t('welcome.passwordButton')}

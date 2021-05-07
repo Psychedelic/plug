@@ -36,18 +36,9 @@ export default makeStyles((theme) => ({
     position: 'absolute',
     height: '100%',
     width: '100%',
-    background: 'rgba(255,255,255,0.95)',
     borderRadius: 10,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  copy: {
-    WebkitBackgroundClip: 'text !important',
-    WebkitTextFillColor: 'transparent',
-    fontSize: 22,
-    fontWeight: 600,
-    background:
-      'linear-gradient(91.38deg, #FFE802 -2.08%, #E061D6 34.61%, #18DEDC 61.72%, #54FF55 100%)',
   },
 }));

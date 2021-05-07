@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Container, Button, LinkButton, CodeBox,
 } from '@ui';
+import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import { QRCode } from '@components';
 import { Typography } from '@material-ui/core';
@@ -24,28 +25,38 @@ const Step2 = ({ selectedSource, selectedAsset }) => {
       {
         selectedSource.id === 'PLUG_ACCOUNT'
         && (
-          <div className={classes.plugContainer}>
-            <QRCode value={address} />
-            <div className={classes.textContainer}>
+          <Grid container spacing={2} style={{ textAlign: 'center' }}>
+            <Grid item xs={12}>
+              <QRCode value={address} />
+            </Grid>
+            <Grid item xs={12}>
               <Typography variant="h3" className={classes.title}>{walletName}</Typography>
               <Typography variant="subtitle1">{shortenString(address)}</Typography>
-            </div>
-            <Button variant="rainbow" value={t('deposit.copyAddress')} onClick={() => navigator.clipboard.writeText(address)} />
-            <LinkButton value={`${t('deposit.learnMore')} ${selectedAsset.name}`} />
-          </div>
+            </Grid>
+            <Grid item xs={12}>
+              <Button variant="rainbow" value={t('deposit.copyAddress')} onClick={() => navigator.clipboard.writeText(address)} />
+            </Grid>
+            <Grid item xs={12}>
+              <LinkButton value={`${t('deposit.learnMore')} ${selectedAsset.name}`} />
+            </Grid>
+          </Grid>
         )
       }
       {
         selectedSource.id === 'CYCLE_WALLET'
         && (
-          <div className={classes.cyclesContainer}>
-            <div>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
               <Typography variant="h5" className={classes.command}>{t('deposit.runCommandTitle')}</Typography>
               <Typography variant="subtitle2">{t('deposit.runCommandSubtitle')}</Typography>
-            </div>
-            <CodeBox code={code} />
-            <Button variant="primary" value={t('deposit.runCommandButton')} onClick={() => navigator.clipboard.writeText(address)} fullWidth />
-          </div>
+            </Grid>
+            <Grid item xs={12}>
+              <CodeBox code={code} />
+            </Grid>
+            <Grid item xs={12}>
+              <Button variant="primary" value={t('deposit.runCommandButton')} onClick={() => navigator.clipboard.writeText(address)} fullWidth />
+            </Grid>
+          </Grid>
         )
       }
     </Container>
