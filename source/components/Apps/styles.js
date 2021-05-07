@@ -23,4 +23,12 @@ export default makeStyles((theme) => ({
     width: 46,
     height: 46,
   },
+  link: {
+    cursor: 'pointer',
+    color: theme.palette.common.blue,
+
+    '&:hover': {
+      opacity: 0.9,
+    },
+  },
 }));
