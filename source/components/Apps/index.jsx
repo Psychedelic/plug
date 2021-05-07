@@ -67,15 +67,15 @@ const Apps = () => {
       {
         open
         && (
-        <ActionDialog
-          open={open}
-          title={t('apps.disconnectTitle')}
-          content={<Typography>{t('apps.disconnectText')} <b>{selectedApp.name}</b>?</Typography>}
-          button={t('common.disconnect')}
-          buttonVariant="danger"
-          onClick={() => handleRemoveApp(selectedApp.id)}
-          onClose={() => setOpen(false)}
-        />
+          <ActionDialog
+            open={open}
+            title={t('apps.disconnectTitle')}
+            content={<Typography>{t('apps.disconnectText')} <b>{selectedApp.name}</b>?</Typography>}
+            button={t('common.disconnect')}
+            buttonVariant="danger"
+            onClick={() => handleRemoveApp(selectedApp.id)}
+            onClose={() => setOpen(false)}
+          />
         )
       }
     </>
