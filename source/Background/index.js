@@ -1,7 +1,6 @@
-import 'emoji-log';
-import browser from 'webextension-polyfill';
+import backgroundController from './Controller';
 
-browser.runtime.onInstalled.addListener(() => {
-  // eslint-disable-next-line no-console
-  console.emoji('🦄', 'extension installed');
-});
+backgroundController.start();
+
+/* eslint-disable-next-line no-console */
+console.log('controller started');
