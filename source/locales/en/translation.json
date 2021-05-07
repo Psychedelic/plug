@@ -50,11 +50,17 @@
     "rate": "Rate:",
     "total": "Total:",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "disconnect": "Disconnect"
   },
   "apps": {
     "title": "Connected Apps",
-    "subtitle": "Main IC Wallet is connected to these sites."
+    "subtitle": "Main IC Wallet is connected to these sites.",
+    "disconnectTitle": "Disconnect from Site",
+    "disconnectText": "Are you sure you want to disconnect from",
+    "emptyTitle": "You aren’t connected to any apps yet.",
+    "emptyText": "Explore a list of all apps that use Plug and find your first in",
+    "emptyLink": "our docs."
   },
   "login": {
     "title": "Welcome Back!",
@@ -153,28 +159,23 @@
     "createText": "Create a new wallet and seed phrase.",
     "importWallet": "Import Wallet",
     "importText": "Import using 12 word seed phrase or private key.",
-
     "welcomeTitle": "Welcome to Plug.",
     "welcomeSubtitle": "Choose if you want to import or create a wallet (Principal ID).",
     "welcomeMessage": "What’s good!",
-
     "passwordTitle": "Create Password for Plug",
     "passwordSubtitle": "Please create a password to access your Plug extension.",
-    "passwordMessage":"Make that pw secure frfr",
-    "passwordLabel":"New Password (min. 12 characters)",
+    "passwordMessage": "Make that pw secure frfr",
+    "passwordLabel": "New Password (min. 12 characters)",
     "passwordConfirmLabel": "Confirm Password",
     "passwordButton": "I made a secure password",
     "passwordWarning": "Don't forget your password, otherwise you'll need to reimport your wallet using your seed phrase.",
-
     "importSubtitle": "Please enter your 12 word seed phrase or private key.",
     "importMessage": "Paste that sh*t",
     "importLabel": "Seed Phrase or Private Key",
     "importButton": "Okay, I entered it.",
-
     "memeTitle": "You're good to go!",
     "memeSubtitle": "Peep your extensions and Plug should be there.",
     "memeMessage": "Let’s Gooo!!!",
-
     "seedTitle": "Seed Phrase Backup",
     "seedSubtitle": "Below is the seed phrase for your new wallet, write it down.",
     "seedMessage": "Keep this sh*t safe, forreal.",

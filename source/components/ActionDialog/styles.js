@@ -21,4 +21,10 @@ export default makeStyles((theme) => ({
     top: theme.spacing(0.25),
     color: theme.palette.common.primaryBlack,
   },
+  buttonContainer: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: '18px 0 12px 0',
+  },
 }));
