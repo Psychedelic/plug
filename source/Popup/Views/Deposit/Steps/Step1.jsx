@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Grid from '@material-ui/core/Grid';
 import {
   FormItem, Select, Dialog, Container, Button,
 } from '@ui';
@@ -33,58 +34,59 @@ const Step1 = ({
 
   return (
     <Container>
-
-      <FormItem
-        label={t('deposit.asset')}
-        component={(
-          <Select
-            image={selectedAsset.image}
-            name={selectedAsset.name}
-            onClick={() => setOpenAssets(true)}
-            shadow
-          />
-        )}
-      />
-      <Dialog
-        title={t('deposit.selectAsset')}
-        items={Array.from(assets.values())}
-        onClose={handleCloseAssets}
-        selectedValue={selectedAsset}
-        open={openAssets}
-      />
-
-      {
-        selectedAsset.id === 'CYCLES'
-        && (
-          <><FormItem
-            label={t('deposit.depositingFrom')}
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <FormItem
+            label={t('deposit.asset')}
             component={(
               <Select
-                image={selectedSource.image}
-                name={selectedSource.name}
-                onClick={() => setOpenSources(true)}
+                image={selectedAsset.image}
+                name={selectedAsset.name}
+                onClick={() => setOpenAssets(true)}
+                shadow
               />
             )}
           />
-            <Dialog
-              title={t('deposit.selectSource')}
-              items={Array.from(sources.values())}
-              onClose={handleCloseSources}
-              selectedValue={selectedSource}
-              open={openSources}
+          <Dialog
+            title={t('deposit.selectAsset')}
+            items={Array.from(assets.values())}
+            onClose={handleCloseAssets}
+            selectedValue={selectedAsset}
+            open={openAssets}
+          />
+        </Grid>
+        {
+          selectedAsset.id === 'CYCLES'
+          && (
+            <Grid item xs={12}><FormItem
+              label={t('deposit.depositingFrom')}
+              component={(
+                <Select
+                  image={selectedSource.image}
+                  name={selectedSource.name}
+                  onClick={() => setOpenSources(true)}
+                />
+              )}
             />
-          </>
-        )
-      }
-
-      <Button
-        style={{ marginTop: 12 }}
-        variant="rainbow"
-        value={t('common.continue')}
-        onClick={handleChangeStep}
-        fullWidth
-      />
-
+              <Dialog
+                title={t('deposit.selectSource')}
+                items={Array.from(sources.values())}
+                onClose={handleCloseSources}
+                selectedValue={selectedSource}
+                open={openSources}
+              />
+            </Grid>
+          )
+        }
+        <Grid item xs={12}>
+          <Button
+            variant="rainbow"
+            value={t('common.continue')}
+            onClick={handleChangeStep}
+            fullWidth
+          />
+        </Grid>
+      </Grid>
     </Container>
   );
 };

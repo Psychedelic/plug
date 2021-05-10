@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import { IDInput } from '@components';
 import {
@@ -38,80 +39,85 @@ const Step1 = ({
 
   return (
     <Container>
-
-      <FormItem
-        label={t('send.asset')}
-        component={(
-          <MultiInput
-            name={selectedAsset.name}
-            image={selectedAsset.image}
-            onClick={() => setOpenAssets(true)}
-            value={amount}
-            onChange={handleChangeAmount}
-            primaryValue={primaryValue}
-            secondaryValue={secondaryValue}
-            conversionPrice={conversionPrice}
-            handleSwapValues={handleSwapValues}
-            availableAmount={availableAmount.amount}
-          />
-        )}
-        subtitle={(
-          <div className={classes.subtitle}>
-            <Typography variant="subtitle2">
-              <NumberFormat
-                value={availableAmount.amount}
-                decimalScale={2}
-                fixedDecimalScale
-                thousandSeparator=","
-                displayType="text"
-                prefix={availableAmount.prefix}
-                suffix={availableAmount.suffix}
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <FormItem
+            label={t('send.asset')}
+            component={(
+              <MultiInput
+                name={selectedAsset.name}
+                image={selectedAsset.image}
+                onClick={() => setOpenAssets(true)}
+                value={amount}
+                onChange={handleChangeAmount}
+                primaryValue={primaryValue}
+                secondaryValue={secondaryValue}
+                conversionPrice={conversionPrice}
+                handleSwapValues={handleSwapValues}
+                availableAmount={availableAmount.amount}
               />
+            )}
+            subtitle={(
+              <div className={classes.subtitle}>
+                <Typography variant="subtitle2">
+                  <NumberFormat
+                    value={availableAmount.amount}
+                    decimalScale={2}
+                    fixedDecimalScale
+                    thousandSeparator=","
+                    displayType="text"
+                    prefix={availableAmount.prefix}
+                    suffix={availableAmount.suffix}
+                  />
               &nbsp;
-              {t('send.available')}
-            </Typography>
-            <Button
-              variant="primaryOutlined"
-              value={t('common.max')}
-              onClick={() => handleChangeAmount(availableAmount.amount)}
-            />
-          </div>
-        )}
-      />
-
-      <Dialog
-        title={t('send.selectAsset')}
-        items={assets}
-        onClose={handleCloseAssets}
-        selectedValue={selectedAsset}
-        open={openAssets}
-      />
-
-      <FormItem
-        label={t('send.to')}
-        component={(
-          <IDInput
-            value={address}
-            onChange={handleChangeAddress}
-            addressInfo={addressInfo}
-            handleChangeAddressInfo={handleChangeAddressInfo}
+                  {t('send.available')}
+                </Typography>
+                <Button
+                  variant="primaryOutlined"
+                  value={t('common.max')}
+                  onClick={() => handleChangeAmount(availableAmount.amount)}
+                />
+              </div>
+            )}
           />
-        )}
-      />
 
-      <Button
-        style={{ marginTop: 6 }}
-        variant="rainbow"
-        value={t('common.continue')}
-        fullWidth
-        disabled={
-          !(amount > 0)
-          || !addressInfo.isValid
-          || address === null
-          || address === ''
-        }
-        onClick={handleChangeStep}
-      />
+          <Dialog
+            title={t('send.selectAsset')}
+            items={assets}
+            onClose={handleCloseAssets}
+            selectedValue={selectedAsset}
+            open={openAssets}
+          />
+
+        </Grid>
+        <Grid item xs={12}>
+          <FormItem
+            label={t('send.to')}
+            component={(
+              <IDInput
+                value={address}
+                onChange={handleChangeAddress}
+                addressInfo={addressInfo}
+                handleChangeAddressInfo={handleChangeAddressInfo}
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Button
+            variant="rainbow"
+            value={t('common.continue')}
+            fullWidth
+            disabled={
+              !(amount > 0)
+              || !addressInfo.isValid
+              || address === null
+              || address === ''
+            }
+            onClick={handleChangeStep}
+          />
+        </Grid>
+      </Grid>
     </Container>
   );
 };

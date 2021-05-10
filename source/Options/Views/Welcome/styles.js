@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles({
+export default makeStyles((theme) => ({
   goBack: {
     position: 'absolute',
     left: 0,
@@ -16,4 +16,7 @@ export default makeStyles({
     backdropFilter: 'blur(7px)',
     borderRadius: 10,
   },
-});
+  marginBottom: {
+    marginBottom: theme.spacing(2),
+  },
+}));

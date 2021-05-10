@@ -10,7 +10,7 @@ const Data = ({ data }) => {
     <div className={classes.innerContainer}>
       {
         data.map((item) => (
-          <FormItem label={item.label} component={item.component} />
+          <FormItem label={item.label} component={item.component} style={{ marginBottom: 24 }} />
         ))
       }
     </div>

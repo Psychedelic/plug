@@ -5,7 +5,6 @@ import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';
 import Step1 from '../Steps/Step1';
 import Step2 from '../Steps/Step2';
-import Step3 from '../Steps/Step3';
 import { CURRENCIES } from '../../../../shared/constants/currencies';
 
 const AVAILABLE_AMOUNT = 100; // get available amount from somewhere
@@ -113,17 +112,10 @@ const useSteps = () => {
         fromAsset={selectedFromAsset}
         fromAmount={amount}
         toAsset={selectedToAsset}
-        handleChangeStep={() => handleChangeStep(2)}
       />,
       left: <LinkButton value={t('common.back')} onClick={() => { convertToSecondaryAsset(); handleChangeStep(0); }} startIcon={BackIcon} />,
       right: rightButton,
       center: `${t('swap.review')}`,
-    },
-    {
-      component: <Step3 />,
-      left: <LinkButton value={t('common.back')} onClick={() => handleChangeStep(1)} startIcon={BackIcon} />,
-      right: rightButton,
-      center: `${t('swap.title')}`,
     },
   ];
 

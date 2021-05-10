@@ -10,5 +10,6 @@ export default makeStyles((theme) => ({
     width: 'fit-content',
     display: 'flex',
     height: 'fit-content',
+    margin: 'auto',
   },
 }));
