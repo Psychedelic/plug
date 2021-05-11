@@ -3,7 +3,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography';
-import { shortenString } from '@shared/helpers/stringHelper';
+import shortAddress from '@shared/utils/short-address';
 import useStyles from './styles';
 
 const WalletInfo = ({ name, address }) => {
@@ -45,7 +45,7 @@ const WalletInfo = ({ name, address }) => {
         onMouseLeave={() => setShowTooltip(false)}
       >
         <Typography variant="h5">{name}</Typography>
-        <Typography variant="subtitle2">{shortenString(address)}</Typography>
+        <Typography variant="subtitle2">{shortAddress(address)}</Typography>
       </div>
     </Tooltip>
   );

@@ -5,5 +5,6 @@ export default makeStyles({
     zIndex: 1,
     background: '#FFFFFF',
     position: 'relative',
+    flex: 1,
   },
 });

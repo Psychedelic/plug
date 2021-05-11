@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import { QRCode } from '@components';
 import { Typography } from '@material-ui/core';
-import { shortenString } from '@shared/helpers/stringHelper';
+import shortAddress from '@shared/utils/short-address';
 import { useTranslation } from 'react-i18next';
 import useStyles from '../styles';
 import { currencyPropTypes } from '../../../../shared/constants/currencies';
@@ -31,7 +31,7 @@ const Step2 = ({ selectedSource, selectedAsset }) => {
             </Grid>
             <Grid item xs={12}>
               <Typography variant="h3" className={classes.title}>{walletName}</Typography>
-              <Typography variant="subtitle1">{shortenString(address)}</Typography>
+              <Typography variant="subtitle1">{shortAddress(address)}</Typography>
             </Grid>
             <Grid item xs={12}>
               <Button variant="rainbow" value={t('deposit.copyAddress')} onClick={() => navigator.clipboard.writeText(address)} />
