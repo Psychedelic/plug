@@ -69,6 +69,7 @@ module.exports = {
     options: path.join(sourcePath, 'Options', 'index.jsx'),
     inpage: path.join(sourcePath, 'Inpage', 'index.js'),
     notification: path.join(sourcePath, 'Pages', 'Notification', 'index.js'),
+    appConnection: path.join(sourcePath, 'Pages', 'AppConnection', 'index.jsx'),
   },
 
   output: {
@@ -193,6 +194,13 @@ module.exports = {
       template: path.join(viewsPath, 'notification.html'),
       inject: 'body',
       chunks: ['notification'],
+      hash: true,
+      filename: 'notification.html',
+    }),
+    new HtmlWebpackPlugin({
+      template: path.join(viewsPath, 'notification.html'),
+      inject: 'body',
+      chunks: ['appConnection'],
       hash: true,
       filename: 'notification.html',
     }),

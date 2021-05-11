@@ -4,26 +4,36 @@ import { BackgroundController } from '@fleekhq/browser-rpc';
 
 const backgroundController = new BackgroundController({
   name: 'bg-script',
-  trustedSources: ['plug-content-script', 'notification-port'],
+  trustedSources: [
+    'plug-content-script',
+    'notification-port',
+    'app-connection-port',
+  ],
 });
 
-backgroundController.exposeController('requestAccess', (opts, appName) => {
-  const { message, sender } = opts;
+backgroundController.exposeController(
+  'requestAccess',
+  (opts, domainUrl, icon) => {
+    const { message, sender } = opts;
 
-  const url = qs.stringifyUrl({
-    url: 'notification.html',
-    query: {
-      callId: message.data.data.id,
-      portId: sender.id,
-      appName,
-    },
-  });
+    const url = qs.stringifyUrl({
+      url: 'notification.html',
+      query: {
+        callId: message.data.data.id,
+        portId: sender.id,
+        url: domainUrl,
+        icon,
+      },
+    });
 
-  extension.windows.create({
-    url,
-    type: 'popup',
-  });
-});
+    extension.windows.create({
+      url,
+      type: 'popup',
+      width: 436,
+      height: 401,
+    });
+  },
+);
 
 backgroundController.exposeController(
   'handleAppAccess',
