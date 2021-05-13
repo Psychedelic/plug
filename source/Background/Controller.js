@@ -1,6 +1,9 @@
 import qs from 'query-string';
 import extension from 'extensionizer';
 import { BackgroundController } from '@fleekhq/browser-rpc';
+import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+
+const storage = extension.storage.local;
 
 const backgroundController = new BackgroundController({
   name: 'bg-script',
@@ -13,8 +16,17 @@ const backgroundController = new BackgroundController({
 
 backgroundController.exposeController(
   'requestConnect',
-  (opts, domainUrl, icon) => {
+  (opts, domainUrl, name, icon) => {
     const { message, sender } = opts;
+
+    storage.set({
+      [domainUrl]: {
+        url: domainUrl,
+        name,
+        status: CONNECTION_STATUS.pending,
+        icon,
+      },
+    });
 
     const url = qs.stringifyUrl({
       url: 'notification.html',
@@ -37,16 +49,28 @@ backgroundController.exposeController(
 
 backgroundController.exposeController(
   'handleAppConnect',
-  (opts, access, callId, portId) => {
+  (opts, url, status, callId, portId) => {
     const { callback } = opts;
 
-    console.log('access', access);
-    console.log('callId', callId);
-    console.log('portId', portId);
+    const storageItem = storage.get(url);
+
+    storageItem.status = CONNECTION_STATUS[status];
+
+    storage.set(storageItem);
 
     callback(null, true);
-    callback(null, access, [{ portId, callId }]);
+    callback(null, status, [{ portId, callId }]);
   },
 );
+
+backgroundController.exposeController('isConnected', (opts, url) => {
+  const { callback } = opts;
+
+  const storageItem = storage.get(url);
+
+  const response = storageItem?.status === CONNECTION_STATUS.accepted;
+
+  callback(null, response);
+});
 
 export default backgroundController;
