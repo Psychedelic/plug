@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
-    "@fleekhq/browser-rpc": "^2.0.0",
+    "@fleekhq/browser-rpc": "^2.0.1",
     "@fleekhq/plug-inpage-provider": "^1.0.0",
     "@fortawesome/fontawesome-pro": "^5.15.3",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
