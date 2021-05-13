@@ -1,6 +1,5 @@
 import { BrowserRPC } from '@fleekhq/browser-rpc';
 import { Provider } from '@fleekhq/plug-inpage-provider';
-import domainMetadata from '../shared/utils/domain-metadata';
 
 const clientRPC = new BrowserRPC(window, {
   name: 'plug-inpage-provider',
@@ -18,17 +17,4 @@ const ic = window.ic || {};
 window.ic = {
   ...ic,
   plug: plugProvider,
-  requestAccess: async () => {
-    const metadata = domainMetadata();
-    const icon = metadata.icons[0] || null;
-
-    const res = await clientRPC.call('requestAccess', [metadata.url, icon], {
-      timeout: 0,
-    });
-    console.log(res);
-  },
-  undefinedMethod: async () => {
-    const res = await clientRPC.call('undefinedMethod');
-    console.log(res);
-  },
 };

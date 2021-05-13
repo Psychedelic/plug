@@ -12,7 +12,7 @@ const backgroundController = new BackgroundController({
 });
 
 backgroundController.exposeController(
-  'requestAccess',
+  'requestConnect',
   (opts, domainUrl, icon) => {
     const { message, sender } = opts;
 
@@ -36,9 +36,13 @@ backgroundController.exposeController(
 );
 
 backgroundController.exposeController(
-  'handleAppAccess',
+  'handleAppConnect',
   (opts, access, callId, portId) => {
     const { callback } = opts;
+
+    console.log('access', access);
+    console.log('callId', callId);
+    console.log('portId', portId);
 
     callback(null, true);
     callback(null, access, [{ portId, callId }]);

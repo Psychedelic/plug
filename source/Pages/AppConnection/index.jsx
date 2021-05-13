@@ -33,8 +33,13 @@ const AppConnection = () => {
   const { callId, url, icon } = query;
   const portId = parseInt(query.portId, 10);
 
+  console.log('query', query);
+
   const onClickHandler = async (access) => {
-    await portRPC.call('handleAppAccess', [access, callId, portId]);
+    console.log('access', access);
+    const res = await portRPC.call('handleAppConnect', [access, callId, portId]);
+
+    console.log('response', res);
     window.close();
   };
 
