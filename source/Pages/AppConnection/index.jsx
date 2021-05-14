@@ -11,6 +11,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import i18n from 'i18next';
 
+import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import initConfig from '../../locales';
 import useStyles from './styles';
 
@@ -33,14 +34,15 @@ const AppConnection = () => {
   const { callId, url, icon } = query;
   const portId = parseInt(query.portId, 10);
 
-  const onClickHandler = async (access) => {
-    await portRPC.call('handleAppAccess', [access, callId, portId]);
+  const onClickHandler = async (status) => {
+    await portRPC.call('handleAppConnect', [url, status, callId, portId]);
     window.close();
   };
 
-  window.onbeforeunload = () => { // if user closes the window, reject connection
-    onClickHandler('rejected');
-  };
+  // find way to do this
+  // window.onbeforeunload = () => { // if user closes the window, reject connection
+  //  onClickHandler(CONNECTION_STATUS.rejected);
+  // };
 
   return (
     <ThemeProvider theme={theme}>
@@ -49,8 +51,8 @@ const AppConnection = () => {
         <Container>
           <IncomingAction url={url} image={icon} action={t('appConnection.connect')} />
           <div className={classes.buttonContainer}>
-            <Button variant="default" value={t('common.decline')} onClick={() => onClickHandler('rejected')} style={{ width: '48%' }} />
-            <Button variant="rainbow" value={t('common.allow')} onClick={() => onClickHandler('accepted')} style={{ width: '48%' }} />
+            <Button variant="default" value={t('common.decline')} onClick={() => onClickHandler(CONNECTION_STATUS.rejected)} style={{ width: '48%' }} />
+            <Button variant="rainbow" value={t('common.allow')} onClick={() => onClickHandler(CONNECTION_STATUS.accepted)} style={{ width: '48%' }} />
           </div>
         </Container>
       </Layout>

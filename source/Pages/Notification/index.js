@@ -31,7 +31,11 @@ const App = () => {
   const portId = parseInt(query.portId, 10);
 
   const onClickHandler = async (access) => {
-    const res = await portRPC.call('handleAppAccess', [access, callId, portId]);
+    const res = await portRPC.call('handleAppConnect', [
+      access,
+      callId,
+      portId,
+    ]);
     // eslint-disable-next-line no-console
     console.log('res', res);
     window.close();

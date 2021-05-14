@@ -1264,10 +1264,10 @@
     fastest-validator "^1.10.1"
     uuid "^8.3.2"
 
-"@fleekhq/browser-rpc@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@fleekhq/browser-rpc/-/browser-rpc-2.0.0.tgz#3f5e46386af69f5727ae0176c5e27f6bf8678896"
-  integrity sha512-4N6Xpw/0tcVOG3IFS35jVadHu05sl/c9lQCIcLCfDjxuXq4qhs+G07okMmYvQSSNukC5rNrm/MKZmlMtU1c/tw==
+"@fleekhq/browser-rpc@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@fleekhq/browser-rpc/-/browser-rpc-2.0.1.tgz#6d1dceb8fb2f735a825beca40ad10e9f7c081500"
+  integrity sha512-JTKq4174/yyZj54HJbqr2Nsgyy8/vS2LMWUCV+jD7GxLMFlI+cnx8fxDX3a8p63kDFJBIG5SoPQjqXn6Awngjw==
   dependencies:
     extensionizer "^1.0.1"
     joi "^17.4.0"
