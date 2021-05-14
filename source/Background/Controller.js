@@ -49,28 +49,39 @@ backgroundController.exposeController(
 
 backgroundController.exposeController(
   'handleAppConnect',
-  (opts, url, status, callId, portId) => {
+  async (opts, url, status, callId, portId) => {
     const { callback } = opts;
 
-    const storageItem = storage.get(url);
+    let connection = null;
 
-    storageItem.status = CONNECTION_STATUS[status];
+    storage.get([url], (state) => {
+      if (state[url]) {
+        connection = state[url];
+        connection.status = status;
 
-    storage.set(storageItem);
+        storage.set({
+          [url]: {
+            ...connection,
+          },
+        });
+      }
+    });
 
     callback(null, true);
-    callback(null, status, [{ portId, callId }]);
+    callback(null, status === CONNECTION_STATUS.accepted, [{ portId, callId }]);
   },
 );
 
 backgroundController.exposeController('isConnected', (opts, url) => {
   const { callback } = opts;
 
-  const storageItem = storage.get(url);
-
-  const response = storageItem?.status === CONNECTION_STATUS.accepted;
-
-  callback(null, response);
+  storage.get([url], (state) => {
+    if (state[url]) {
+      callback(null, state[url].status === CONNECTION_STATUS.accepted);
+    } else {
+      callback(null, false);
+    }
+  });
 });
 
 export default backgroundController;
