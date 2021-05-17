@@ -31,8 +31,12 @@ const AppConnection = () => {
 
   const { query } = qs.parseUrl(window.location.href);
 
-  const { callId, url, icon } = query;
-  const portId = parseInt(query.portId, 10);
+  const {
+    url,
+    icon,
+    callId,
+    portId,
+  } = query;
 
   const onClickHandler = async (status) => {
     await portRPC.call('handleAppConnect', [url, status, callId, portId]);

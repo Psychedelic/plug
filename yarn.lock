@@ -1256,30 +1256,22 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@fleekhq/browser-rpc@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@fleekhq/browser-rpc/-/browser-rpc-1.0.0.tgz#560d0071702452ed89c7427673346bbcecd1a345"
-  integrity sha512-7r6uBDHuiDU1BgI2lGJLO0rHwtjH5L1/U6V8WOECKqp0C6by/nWpkZc7jV2HdqhD7Re0vHgXra0/mxi0KE2U3g==
-  dependencies:
-    fastest-validator "^1.10.1"
-    uuid "^8.3.2"
-
-"@fleekhq/browser-rpc@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@fleekhq/browser-rpc/-/browser-rpc-2.0.1.tgz#6d1dceb8fb2f735a825beca40ad10e9f7c081500"
-  integrity sha512-JTKq4174/yyZj54HJbqr2Nsgyy8/vS2LMWUCV+jD7GxLMFlI+cnx8fxDX3a8p63kDFJBIG5SoPQjqXn6Awngjw==
+"@fleekhq/browser-rpc@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@fleekhq/browser-rpc/-/browser-rpc-2.0.2.tgz#6621a4e9191d45edb267c987b982132bfc83997e"
+  integrity sha512-JDojYoxGF0WmXVhlkvA8oLWk+aaQhuI65ayzahAz69+cZeYlCOkkxTBICz/s40gJgWV6qvPbLMPxUjaCPSZZ/Q==
   dependencies:
     extensionizer "^1.0.1"
     joi "^17.4.0"
     uuid "^8.3.2"
 
-"@fleekhq/plug-inpage-provider@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@fleekhq/plug-inpage-provider/-/plug-inpage-provider-1.0.0.tgz#8389ae65e2e0228508a063700961012f2850f7fe"
-  integrity sha512-+POVS8o37A9ebJBWUdE2MI2loAWjuzGW7uWHBgpm0piuhmMffi9LG184uNvE9uEKV9yXMUnghpIDKPuJ2HjefQ==
+"@fleekhq/plug-inpage-provider@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@fleekhq/plug-inpage-provider/-/plug-inpage-provider-1.0.1.tgz#b86ff73a309f73b22569222cb71d54b1866cdde3"
+  integrity sha512-p2C+oaxGLG9F4//5GsZB87Ukjv18XCVOBF1dvC6wS5ukWY/KApQbSj6A6FS6Mqym/4dX2QIvrdnHljWCxTCpbQ==
   dependencies:
     "@dfinity/agent" "^0.7.1"
-    "@fleekhq/browser-rpc" "^1.0.0"
+    "@fleekhq/browser-rpc" "^2.0.2"
 
 "@fortawesome/fontawesome-common-types@^0.2.35":
   version "0.2.35"
@@ -5880,11 +5872,6 @@ fastest-levenshtein@^1.0.12:
   version "1.0.12"
   resolved "https://registry.yarnpkg.com/fastest-levenshtein/-/fastest-levenshtein-1.0.12.tgz#9990f7d3a88cc5a9ffd1f1745745251700d497e2"
   integrity sha512-On2N+BpYJ15xIC974QNVuYGMOlEVt4s0EOI3wwMqOmK1fdDY+FN/zltPV8vosq4ad4c/gJ1KHScUn/6AWIgiow==
-
-fastest-validator@^1.10.1:
-  version "1.10.1"
-  resolved "https://registry.yarnpkg.com/fastest-validator/-/fastest-validator-1.10.1.tgz#b8cff07f80940206f929f8a0484ecf77d741c4ff"
-  integrity sha512-nhQP8JI16Ltml3kFKCEckKzxmPDYXZw0r+zF83Kf5qcJmA2Hoo4ORSo+SduxNiIbKpSS0i+3mV/UPhu8Po7Qkw==
 
 fastq@^1.6.0:
   version "1.11.0"
