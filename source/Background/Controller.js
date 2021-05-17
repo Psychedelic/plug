@@ -2,6 +2,7 @@ import qs from 'query-string';
 import extension from 'extensionizer';
 import { BackgroundController } from '@fleekhq/browser-rpc';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import CYCLE_WITHDRAWAL_SIZES from '../Pages/CycleWithdrawal/constants';
 
 const storage = extension.storage.local;
 
@@ -11,7 +12,20 @@ const backgroundController = new BackgroundController({
     'plug-content-script',
     'notification-port',
     'app-connection-port',
+    'cycle-withdrawal-port',
   ],
+});
+
+backgroundController.exposeController('isConnected', (opts, url) => {
+  const { callback } = opts;
+
+  storage.get([url], (state) => {
+    if (state[url]) {
+      callback(null, state[url].status === CONNECTION_STATUS.accepted);
+    } else {
+      callback(null, false);
+    }
+  });
 });
 
 backgroundController.exposeController(
@@ -72,16 +86,41 @@ backgroundController.exposeController(
   },
 );
 
-backgroundController.exposeController('isConnected', (opts, url) => {
-  const { callback } = opts;
+backgroundController.exposeController(
+  'requestCycleWithdrawal',
+  (opts, metadata, requests) => {
+    const { message, sender } = opts;
 
-  storage.get([url], (state) => {
-    if (state[url]) {
-      callback(null, state[url].status === CONNECTION_STATUS.accepted);
-    } else {
-      callback(null, false);
-    }
-  });
-});
+    const url = qs.stringifyUrl({
+      url: 'cycle-withdrawal.html',
+      query: {
+        callId: message.data.data.id,
+        portId: sender.id,
+        metadataJson: JSON.stringify(metadata),
+        incomingRequestsJson: JSON.stringify(requests),
+      },
+    });
+
+    extension.windows.create({
+      url,
+      type: 'popup',
+      width: CYCLE_WITHDRAWAL_SIZES.width,
+      height:
+        requests.length > 1
+          ? CYCLE_WITHDRAWAL_SIZES.detailsHeightBig
+          : CYCLE_WITHDRAWAL_SIZES.detailHeightSmall,
+    });
+  },
+);
+
+backgroundController.exposeController(
+  'handleCycleWithdrawal',
+  async (opts, requests, callId, portId) => {
+    const { callback } = opts;
+
+    callback(null, true);
+    callback(null, requests, [{ portId, callId }]);
+  },
+);
 
 export default backgroundController;
