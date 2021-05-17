@@ -70,6 +70,12 @@ module.exports = {
     inpage: path.join(sourcePath, 'Inpage', 'index.js'),
     notification: path.join(sourcePath, 'Pages', 'Notification', 'index.js'),
     appConnection: path.join(sourcePath, 'Pages', 'AppConnection', 'index.jsx'),
+    cycleWithdrawal: path.join(
+      sourcePath,
+      'Pages',
+      'CycleWithdrawal',
+      'index.jsx',
+    ),
   },
 
   output: {
@@ -203,6 +209,13 @@ module.exports = {
       chunks: ['appConnection'],
       hash: true,
       filename: 'notification.html',
+    }),
+    new HtmlWebpackPlugin({
+      template: path.join(viewsPath, 'cycle-withdrawal.html'),
+      inject: 'body',
+      chunks: ['cycleWithdrawal'],
+      hash: true,
+      filename: 'cycle-withdrawal.html',
     }),
     // write css file(s) to build folder
     new MiniCssExtractPlugin({ filename: 'css/[name].css' }),
