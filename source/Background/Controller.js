@@ -16,6 +16,18 @@ const backgroundController = new BackgroundController({
   ],
 });
 
+backgroundController.exposeController('isConnected', (opts, url) => {
+  const { callback } = opts;
+
+  storage.get([url], (state) => {
+    if (state[url]) {
+      callback(null, state[url].status === CONNECTION_STATUS.accepted);
+    } else {
+      callback(null, false);
+    }
+  });
+});
+
 backgroundController.exposeController(
   'requestConnect',
   (opts, domainUrl, name, icon) => {
