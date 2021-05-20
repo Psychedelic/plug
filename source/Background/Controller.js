@@ -99,7 +99,7 @@ backgroundController.exposeController(
       ]);
     } else {
       callback(
-        { code: -32000, message: 'User rejected the connection' },
+        { code: -32001, message: 'User rejected the connection' },
         null,
         [{ portId, callId }],
       );
@@ -142,7 +142,19 @@ backgroundController.exposeController(
 
 backgroundController.exposeController(
   'dankProxyRequest',
-  ({ message, sender }, metadata, requests) => {
+  ({ callback, message, sender }, metadata, requests) => {
+    const domainUrl = metadata.url;
+
+    storage.get([domainUrl], (state) => {
+      if (state[domainUrl]) {
+        const { status } = state[domainUrl];
+
+        if (status !== CONNECTION_STATUS.accepted) {
+          callback({ code: -32000, message: 'User is not connected' }, null);
+        }
+      }
+    });
+
     const url = qs.stringifyUrl({
       url: 'cycle-withdrawal.html',
       query: {
