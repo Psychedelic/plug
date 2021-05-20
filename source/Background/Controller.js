@@ -16,9 +16,7 @@ const backgroundController = new BackgroundController({
   ],
 });
 
-backgroundController.exposeController('isConnected', (opts, url) => {
-  const { callback } = opts;
-
+backgroundController.exposeController('isConnected', ({ callback }, url) => {
   storage.get([url], (state) => {
     if (state[url]) {
       callback(null, state[url].status === CONNECTION_STATUS.accepted);
@@ -28,17 +26,31 @@ backgroundController.exposeController('isConnected', (opts, url) => {
   });
 });
 
+/* window.ic.plug.withDankProxy('rwlgt-iiaaa-aaaaa-aaaaa-cai', [
+  {
+    methodName: 'Withdraw',
+    args: '[\n  {\n    types: unit 256',
+    options: { cycles: 5 }
+  }, {
+
+    methodName: 'Withdraw',
+    args: '[\n  {\n    types: unit 256',
+    options: { cycles: 10 }
+  },
+]).then(res => console.log(res)); */
+
 backgroundController.exposeController(
   'requestConnect',
-  (opts, domainUrl, name, icon) => {
-    const { message, sender } = opts;
+  ({ message, sender }, metadata, timeout) => {
+    const icon = metadata.icons[0] || null;
 
     storage.set({
-      [domainUrl]: {
-        url: domainUrl,
-        name,
+      [metadata.url]: {
+        url: metadata.url,
+        name: metadata.name,
         status: CONNECTION_STATUS.pending,
         icon,
+        timeout,
       },
     });
 
@@ -47,7 +59,7 @@ backgroundController.exposeController(
       query: {
         callId: message.data.data.id,
         portId: sender.id,
-        url: domainUrl,
+        url: metadata.url,
         icon,
       },
     });
@@ -63,9 +75,7 @@ backgroundController.exposeController(
 
 backgroundController.exposeController(
   'handleAppConnect',
-  async (opts, url, status, callId, portId) => {
-    const { callback } = opts;
-
+  async ({ callback }, url, status, callId, portId) => {
     let connection = null;
 
     storage.get([url], (state) => {
@@ -82,15 +92,24 @@ backgroundController.exposeController(
     });
 
     callback(null, true);
-    callback(null, status === CONNECTION_STATUS.accepted, [{ portId, callId }]);
+
+    if (status === CONNECTION_STATUS.accepted) {
+      callback(null, status === CONNECTION_STATUS.accepted, [
+        { portId, callId },
+      ]);
+    } else {
+      callback(
+        { code: -32000, message: 'User rejected the connection' },
+        null,
+        [{ portId, callId }],
+      );
+    }
   },
 );
 
 backgroundController.exposeController(
   'requestCycleWithdrawal',
-  (opts, metadata, requests) => {
-    const { message, sender } = opts;
-
+  ({ message, sender }, metadata, requests) => {
     const url = qs.stringifyUrl({
       url: 'cycle-withdrawal.html',
       query: {
@@ -115,11 +134,64 @@ backgroundController.exposeController(
 
 backgroundController.exposeController(
   'handleCycleWithdrawal',
-  async (opts, requests, callId, portId) => {
-    const { callback } = opts;
-
+  async ({ callback }, requests, callId, portId) => {
     callback(null, true);
     callback(null, requests, [{ portId, callId }]);
+  },
+);
+
+backgroundController.exposeController(
+  'dankProxyRequest',
+  ({ message, sender }, metadata, requests) => {
+    const url = qs.stringifyUrl({
+      url: 'cycle-withdrawal.html',
+      query: {
+        callId: message.data.data.id,
+        portId: sender.id,
+        metadataJson: JSON.stringify(metadata),
+        incomingRequestsJson: JSON.stringify(requests),
+      },
+    });
+
+    extension.windows.create({
+      url,
+      type: 'popup',
+      width: CYCLE_WITHDRAWAL_SIZES.width,
+      height:
+        requests.length > 1
+          ? CYCLE_WITHDRAWAL_SIZES.detailsHeightBig
+          : CYCLE_WITHDRAWAL_SIZES.detailHeightSmall,
+    });
+  },
+);
+
+// const agent = new HttpAgent();  // need the data to create agent
+// const dankActor = Actor.createActor(idl, { agent, canisterId});
+
+backgroundController.exposeController(
+  'handleDankProxyRequest',
+  async ({ callback }, requests, url, callId, portId) => {
+    requests.forEach((r) => {
+      if (r.status === 'accepted') {
+        let timeout = 5000; // default timeout?
+        storage.get([url], (state) => {
+          if (state[url]) {
+            timeout = state[url].timeout; // get timeout from storage
+          }
+        });
+        console.log('timeout', timeout);
+        // call dank proxy using timeout from connection
+        // await dankActor.proxyCall(r.canisterId, r.methodName, r.args, r.options.cycles);
+        console.log('accepted, calling dank proxy');
+
+        // await dank response
+      } else {
+        console.log('rejected');
+      }
+    });
+
+    callback(null, true);
+    callback(null, requests, [{ portId, callId }]); // return dank response here
   },
 );
 

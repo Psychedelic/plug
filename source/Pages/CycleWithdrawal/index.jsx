@@ -52,7 +52,7 @@ const CycleWithdrawal = () => {
       component: <Details
         url={url}
         image={icons[0] || null}
-        cycles={requestCount > 0 ? requests[currentRequest].cycles : 0}
+        cycles={requestCount > 0 ? requests[currentRequest].options.cycles : 0}
         requestCount={requestCount}
       />,
     },
@@ -83,25 +83,25 @@ const CycleWithdrawal = () => {
         {
           requestCount > 0
           && (
-          <>
-            <Tabs tabs={tabs} />
-            <Container>
-              <div className={classes.buttonContainer}>
-                <Button variant="default" value={t('common.decline')} onClick={() => handleRequest(requests[currentRequest], 'declined')} style={{ width: '48%' }} />
-                <Button variant="rainbow" value={t('common.confirm')} onClick={() => handleRequest(requests[currentRequest], 'accepted')} style={{ width: '48%' }} />
-              </div>
-              {
-                requestCount > 1
-                && (
-                <LinkButton
-                  value={`${t('cycleTransactions.decline')} ${requestCount} ${t('cycleTransactions.transactions')}`}
-                  onClick={() => handleDeclineAll()}
-                  style={{ marginTop: 24 }}
-                />
-                )
-              }
-            </Container>
-          </>
+            <>
+              <Tabs tabs={tabs} />
+              <Container>
+                <div className={classes.buttonContainer}>
+                  <Button variant="default" value={t('common.decline')} onClick={() => handleRequest(requests[currentRequest], 'declined')} style={{ width: '48%' }} />
+                  <Button variant="rainbow" value={t('common.confirm')} onClick={() => handleRequest(requests[currentRequest], 'accepted')} style={{ width: '48%' }} />
+                </div>
+                {
+                  requestCount > 1
+                  && (
+                    <LinkButton
+                      value={`${t('cycleTransactions.decline')} ${requestCount} ${t('cycleTransactions.transactions')}`}
+                      onClick={() => handleDeclineAll()}
+                      style={{ marginTop: 24 }}
+                    />
+                  )
+                }
+              </Container>
+            </>
           )
         }
       </Layout>

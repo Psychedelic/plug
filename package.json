@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
+    "@dfinity/agent": "^0.8.9",
     "@fleekhq/browser-rpc": "^2.0.2",
     "@fleekhq/plug-inpage-provider": "^1.0.1",
     "@fortawesome/fontawesome-pro": "^5.15.3",

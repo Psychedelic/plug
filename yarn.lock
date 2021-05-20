@@ -1109,6 +1109,19 @@
     js-sha256 "0.9.0"
     simple-cbor "^0.4.1"
 
+"@dfinity/agent@^0.8.9":
+  version "0.8.9"
+  resolved "https://registry.yarnpkg.com/@dfinity/agent/-/agent-0.8.9.tgz#bfe7796aeefe03926556d6a3b6eb6c02a6da0193"
+  integrity sha512-4D2ohuoR7ukfmHYMKADALh26/bf3OdZm4z2CLEn0BPTWdnHRv/T2KIFzo/jpuvL3U8KEgr6WxFCxlufuhXjZDQ==
+  dependencies:
+    base64-arraybuffer "^0.2.0"
+    bignumber.js "^9.0.0"
+    borc "^2.1.1"
+    buffer "^5.4.3"
+    buffer-pipe "0.0.4"
+    js-sha256 "0.9.0"
+    simple-cbor "^0.4.1"
+
 "@discoveryjs/json-ext@^0.5.0":
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.2.tgz#8f03a22a04de437254e8ce8cc84ba39689288752"

@@ -28,7 +28,7 @@ const useRequests = (incomingRequests, callId, portId) => {
 
   useEffect(async () => {
     if (requests.length === 0) {
-      await portRPC.call('handleCycleWithdrawal', [response, callId, portId]);
+      await portRPC.call('handleDankProxyRequest', [response, callId, portId]);
       window.close();
     }
   }, [requests]);
@@ -38,7 +38,7 @@ const useRequests = (incomingRequests, callId, portId) => {
 
   const handleDeclineAll = async () => {
     const declinedRequests = requests.map((r) => ({ ...r, status: 'declined' }));
-    await portRPC.call('handleCycleWithdrawal', [declinedRequests, callId, portId]);
+    await portRPC.call('handleDankProxyRequest', [declinedRequests, callId, portId]);
     window.close();
   };
 
@@ -73,7 +73,7 @@ const useRequests = (incomingRequests, callId, portId) => {
     },
     {
       label: t('cycleTransactions.parameters'),
-      component: <DataDisplay value={validData('parameters')} big />,
+      component: <DataDisplay value={JSON.stringify(validData('args'))} big />,
     },
   ];
 
