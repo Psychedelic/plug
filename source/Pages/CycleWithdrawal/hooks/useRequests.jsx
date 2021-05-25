@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DataDisplay } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { PortRPC } from '@fleekhq/browser-rpc';
+import extension from 'extensionizer';
 
 const portRPC = new PortRPC({
   name: 'cycle-withdrawal-port',
@@ -11,24 +12,44 @@ const portRPC = new PortRPC({
 
 portRPC.start();
 
-const useRequests = (incomingRequests, callId, portId) => {
+const storage = extension.storage.local;
+
+const useRequests = (site, callId, portId) => {
   const { t } = useTranslation();
 
-  /* eslint-disable no-param-reassign */
+  const [currentRequest, setCurrentRequest] = useState(0);
+  const [requests, setRequests] = useState([]);
+  const [response, setResponse] = useState([]);
+  const [metadata, setMetadata] = useState();
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    incomingRequests.forEach((item, i) => {
-      item.id = i;
+    storage.get([site], (state) => {
+      setMetadata(state[site]);
+    });
+
+    storage.get(['requests'], (state) => {
+      const storedRequests = state.requests;
+
+      if (storedRequests) {
+        setRequests(
+          storedRequests.filter((sr) => sr.status === 'pending' && sr.url === site),
+        );
+      }
     });
   }, []);
 
-  const [currentRequest, setCurrentRequest] = useState(0);
-  const [requests, setRequests] = useState(incomingRequests);
-
-  const [response, setResponse] = useState([]);
+  useEffect(async () => {
+    if (metadata && requests) setLoading(false);
+  }, [metadata, requests]);
 
   useEffect(async () => {
-    if (requests.length === 0) {
-      await portRPC.call('handleDankProxyRequest', [response, callId, portId]);
+    if (requests.length === 0 && !loading) {
+      storage.set({
+        requests: response, // i think doing this is not right
+      });
+
+      await portRPC.call('handleDankProxyRequest', [site, callId, portId]);
       window.close();
     }
   }, [requests]);
@@ -38,8 +59,13 @@ const useRequests = (incomingRequests, callId, portId) => {
 
   const handleDeclineAll = async () => {
     const declinedRequests = requests.map((r) => ({ ...r, status: 'declined' }));
-    await portRPC.call('handleDankProxyRequest', [declinedRequests, callId, portId]);
-    window.close();
+
+    setResponse([
+      ...response,
+      ...declinedRequests,
+    ]);
+
+    setRequests([]);
   };
 
   const handleRequest = async (request, status) => {
@@ -85,6 +111,8 @@ const useRequests = (incomingRequests, callId, portId) => {
     handleSetPreviousRequest,
     handleRequest,
     handleDeclineAll,
+    metadata,
+    loading,
   };
 };
 

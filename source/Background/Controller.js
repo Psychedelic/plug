@@ -142,16 +142,28 @@ backgroundController.exposeController(
 
 backgroundController.exposeController(
   'dankProxyRequest',
-  ({ callback, message, sender }, metadata, requests) => {
-    const domainUrl = metadata.url;
+  ({ callback, message, sender }, site, requests) => {
+    storage.get([site], (state) => {
+      if (state[site]) {
+        const metadata = state[site];
 
-    storage.get([domainUrl], (state) => {
-      if (state[domainUrl]) {
-        const { status } = state[domainUrl];
-
-        if (status !== CONNECTION_STATUS.accepted) {
+        if (metadata.status !== CONNECTION_STATUS.accepted) {
           callback({ code: -32000, message: 'User is not connected' }, null);
         }
+      }
+    });
+
+    storage.get(['requests'], (state) => {
+      const storedRequests = state.requests;
+
+      if (storedRequests) {
+        storage.set({
+          requests: [...storedRequests, ...requests],
+        });
+      } else {
+        storage.set({
+          requests,
+        });
       }
     });
 
@@ -160,8 +172,7 @@ backgroundController.exposeController(
       query: {
         callId: message.data.data.id,
         portId: sender.id,
-        metadataJson: JSON.stringify(metadata),
-        incomingRequestsJson: JSON.stringify(requests),
+        site,
       },
     });
 
@@ -182,28 +193,38 @@ backgroundController.exposeController(
 
 backgroundController.exposeController(
   'handleDankProxyRequest',
-  async ({ callback }, requests, url, callId, portId) => {
-    requests.forEach((r) => {
-      if (r.status === 'accepted') {
-        let timeout = 5000; // default timeout?
-        storage.get([url], (state) => {
-          if (state[url]) {
-            timeout = state[url].timeout; // get timeout from storage
-          }
-        });
-        console.log('timeout', timeout);
-        // call dank proxy using timeout from connection
-        // await dankActor.proxyCall(r.canisterId, r.methodName, r.args, r.options.cycles);
-        console.log('accepted, calling dank proxy');
+  async ({ callback }, url, callId, portId) => {
+    storage.get(['requests'], (state) => {
+      const { requests } = state;
 
-        // await dank response
-      } else {
-        console.log('rejected');
-      }
+      console.log('bg req', requests);
+
+      const siteRequests = requests.filter((r) => r.url === url);
+
+      siteRequests.forEach((r) => {
+        if (r.status === 'accepted') {
+          let timeout = 5000; // default timeout?
+          storage.get([url], (sites) => {
+            if (sites[url]) {
+              timeout = sites[url].timeout; // get timeout from storage
+            }
+          });
+          console.log('timeout', timeout);
+          // call dank proxy using timeout from connection
+          // await dankActor.proxyCall(r.canisterId, r.methodName, r.args, r.options.cycles);
+          console.log('accepted, calling dank proxy');
+
+          // change state of accepted requests to finished or something?
+
+          // await dank response
+        } else {
+          console.log('rejected');
+        }
+      });
+
+      callback(null, true);
+      callback(null, requests, [{ portId, callId }]); // return dank response here
     });
-
-    callback(null, true);
-    callback(null, requests, [{ portId, callId }]); // return dank response here
   },
 );
 

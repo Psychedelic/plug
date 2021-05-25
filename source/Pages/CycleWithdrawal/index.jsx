@@ -9,10 +9,8 @@ import {
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import i18n from 'i18next';
-
 import initConfig from '../../locales';
 import useStyles from './styles';
-
 import RequestHandler from './components/RequestHandler';
 import useRequests from './hooks/useRequests';
 import Details from './components/Details';
@@ -26,12 +24,8 @@ const CycleWithdrawal = () => {
 
   const { query } = qs.parseUrl(window.location.href);
 
-  const { callId, metadataJson, incomingRequestsJson } = query;
+  const { callId, site } = query;
 
-  const metadata = JSON.parse(metadataJson);
-  const incomingRequests = JSON.parse(incomingRequestsJson);
-
-  const { url, icons } = metadata;
   const portId = parseInt(query.portId, 10);
 
   const {
@@ -42,7 +36,13 @@ const CycleWithdrawal = () => {
     handleSetNextRequest,
     handleRequest,
     handleDeclineAll,
-  } = useRequests(incomingRequests, callId, portId);
+    metadata,
+    loading,
+  } = useRequests(site, callId, portId);
+
+  if (loading) {
+    return null;
+  }
 
   const requestCount = requests.length;
 
@@ -50,8 +50,8 @@ const CycleWithdrawal = () => {
     {
       label: t('cycleTransactions.details'),
       component: <Details
-        url={url}
-        image={icons[0] || null}
+        url={metadata.url}
+        image={metadata.icon}
         cycles={requestCount > 0 ? requests[currentRequest].options.cycles : 0}
         requestCount={requestCount}
       />,
@@ -70,40 +70,40 @@ const CycleWithdrawal = () => {
       <CssBaseline />
       <Layout>
         {
-          requestCount > 1
-          && (
-            <RequestHandler
-              currentRequest={currentRequest + 1}
-              requests={requestCount}
-              handlePrevious={handleSetPreviousRequest}
-              handleNext={handleSetNextRequest}
-            />
-          )
-        }
+            requestCount > 1
+            && (
+              <RequestHandler
+                currentRequest={currentRequest + 1}
+                requests={requestCount}
+                handlePrevious={handleSetPreviousRequest}
+                handleNext={handleSetNextRequest}
+              />
+            )
+          }
         {
-          requestCount > 0
-          && (
-            <>
-              <Tabs tabs={tabs} />
-              <Container>
-                <div className={classes.buttonContainer}>
-                  <Button variant="default" value={t('common.decline')} onClick={() => handleRequest(requests[currentRequest], 'declined')} style={{ width: '48%' }} />
-                  <Button variant="rainbow" value={t('common.confirm')} onClick={() => handleRequest(requests[currentRequest], 'accepted')} style={{ width: '48%' }} />
-                </div>
-                {
-                  requestCount > 1
-                  && (
-                    <LinkButton
-                      value={`${t('cycleTransactions.decline')} ${requestCount} ${t('cycleTransactions.transactions')}`}
-                      onClick={() => handleDeclineAll()}
-                      style={{ marginTop: 24 }}
-                    />
-                  )
-                }
-              </Container>
-            </>
-          )
-        }
+            requestCount > 0
+            && (
+              <>
+                <Tabs tabs={tabs} />
+                <Container>
+                  <div className={classes.buttonContainer}>
+                    <Button variant="default" value={t('common.decline')} onClick={() => handleRequest(requests[currentRequest], 'declined')} style={{ width: '48%' }} />
+                    <Button variant="rainbow" value={t('common.confirm')} onClick={() => handleRequest(requests[currentRequest], 'accepted')} style={{ width: '48%' }} />
+                  </div>
+                  {
+                    requestCount > 1
+                    && (
+                      <LinkButton
+                        value={`${t('cycleTransactions.decline')} ${requestCount} ${t('cycleTransactions.transactions')}`}
+                        onClick={() => handleDeclineAll()}
+                        style={{ marginTop: 24 }}
+                      />
+                    )
+                  }
+                </Container>
+              </>
+            )
+          }
       </Layout>
     </ThemeProvider>
   );
