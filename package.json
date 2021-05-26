@@ -49,6 +49,7 @@
     "qrcode": "^1.4.4",
     "query-string": "^7.0.0",
     "react": "^17.0.1",
+    "react-beforeunload": "^2.5.1",
     "react-dom": "^17.0.1",
     "react-i18next": "^11.8.13",
     "react-number-format": "^4.5.5",

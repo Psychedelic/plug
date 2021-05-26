@@ -59,7 +59,7 @@ const useRequests = (callId, portId) => {
   const handleSetNextRequest = () => setCurrentRequest(currentRequest + 1);
   const handleSetPreviousRequest = () => setCurrentRequest(currentRequest - 1);
 
-  const handleRequest = async (id, status) => {
+  const handleRequest = (id, status) => {
     storage.get(['requests'], (state) => {
       const storedRequests = state.requests;
 
@@ -75,10 +75,20 @@ const useRequests = (callId, portId) => {
     setRequests(requests.filter((r) => r.id !== id));
   };
 
-  const handleDeclineAll = async () => {
-    requests.forEach((r) => {
-      handleRequest(r, 'declined');
+  const handleDeclineAll = () => {
+    storage.get(['requests'], (state) => {
+      const ids = requests.map((r) => r.id);
+
+      const storedRequests = state.requests.map((sr) => ({ ...sr, status: ids.includes(sr.id) ? 'declined' : sr.status }));
+
+      console.log('storedRequests', storedRequests);
+
+      storage.set({
+        requests: storedRequests,
+      });
     });
+
+    setRequests([]);
   };
 
   const requestCount = requests.length;
@@ -105,6 +115,8 @@ const useRequests = (callId, portId) => {
   ];
 
   useBeforeunload(() => {
+    handleDeclineAll();
+
     storage.set({
       open: false,
     });
