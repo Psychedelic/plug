@@ -32,9 +32,6 @@ const useRequests = (callId, portId) => {
     storage.get(['requests'], (state) => {
       const storedRequests = state.requests;
 
-      console.log('storedRequests', storedRequests);
-      console.log('requests', requests);
-
       if (storedRequests) {
         setRequests(
           [
@@ -61,14 +58,16 @@ const useRequests = (callId, portId) => {
   }, []);
 
   useEffect(async () => {
-    if (requests.length > 0) setLoading(false);
+    if (requests.length > 0 && loading) setLoading(false);
 
     if (requests.length === 0 && !loading) {
       storage.set({
         requests: response,
+        open: false,
       });
 
       await portRPC.call('handleDankProxyRequest', [callId, portId]);
+
       window.close();
     }
   }, [requests]);

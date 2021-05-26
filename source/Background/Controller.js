@@ -6,6 +6,17 @@ import CYCLE_WITHDRAWAL_SIZES from '../Pages/CycleWithdrawal/constants';
 
 const storage = extension.storage.local;
 
+storage.set({
+  requests: [],
+  open: false,
+});
+
+storage.get(['open'], (state) => {
+  const isOpen = state.open;
+
+  console.log('isOpen', isOpen);
+});
+
 const backgroundController = new BackgroundController({
   name: 'bg-script',
   trustedSources: [
@@ -106,6 +117,8 @@ backgroundController.exposeController(
           if (metadata.status !== CONNECTION_STATUS.accepted) {
             callback({ code: -32000, message: 'User is not connected' }, null);
           }
+        } else {
+          callback({ code: -32000, message: 'User is not connected' }, null);
         }
       });
     });
@@ -132,37 +145,27 @@ backgroundController.exposeController(
       },
     });
 
-    extension.windows.create({
-      url,
-      type: 'popup',
-      width: CYCLE_WITHDRAWAL_SIZES.width,
-      height:
-        requests.length > 1
-          ? CYCLE_WITHDRAWAL_SIZES.detailsHeightBig
-          : CYCLE_WITHDRAWAL_SIZES.detailHeightSmall,
+    storage.get(['open'], (state) => {
+      const isOpen = state.open;
+
+      console.log('isOpen', isOpen);
+
+      if (!isOpen) {
+        extension.windows.create({
+          url,
+          type: 'popup',
+          width: CYCLE_WITHDRAWAL_SIZES.width,
+          height:
+            requests.length > 1
+              ? CYCLE_WITHDRAWAL_SIZES.detailsHeightBig
+              : CYCLE_WITHDRAWAL_SIZES.detailHeightSmall,
+        });
+
+        storage.set({
+          open: true,
+        });
+      }
     });
-
-    /* storage.get(['open'], (state) => {
-       const isOpen = state['open'];
-
-       console.log('isOpen', isOpen)
-
-       if (!isOpen) {
-         extension.windows.create({
-           url,
-           type: 'popup',
-           width: CYCLE_WITHDRAWAL_SIZES.width,
-           height:
-             requests.length > 1
-               ? CYCLE_WITHDRAWAL_SIZES.detailsHeightBig
-               : CYCLE_WITHDRAWAL_SIZES.detailHeightSmall,
-         });
-
-         storage.set({
-           open: true,
-         });
-       }
-     }); */
   },
 );
 

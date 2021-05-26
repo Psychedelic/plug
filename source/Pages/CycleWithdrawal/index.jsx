@@ -39,11 +39,9 @@ const CycleWithdrawal = () => {
     loading,
   } = useRequests(callId, portId);
 
-  if (loading) {
-    return null;
-  }
-
   const requestCount = requests.length;
+
+  if (loading || requestCount === 0) return null;
 
   const tabs = [
     {
@@ -69,40 +67,40 @@ const CycleWithdrawal = () => {
       <CssBaseline />
       <Layout>
         {
-            requestCount > 1
-            && (
-              <RequestHandler
-                currentRequest={currentRequest + 1}
-                requests={requestCount}
-                handlePrevious={handleSetPreviousRequest}
-                handleNext={handleSetNextRequest}
-              />
-            )
-          }
+          requestCount > 1
+          && (
+            <RequestHandler
+              currentRequest={currentRequest + 1}
+              requests={requestCount}
+              handlePrevious={handleSetPreviousRequest}
+              handleNext={handleSetNextRequest}
+            />
+          )
+        }
         {
-            requestCount > 0
-            && (
-              <>
-                <Tabs tabs={tabs} />
-                <Container>
-                  <div className={classes.buttonContainer}>
-                    <Button variant="default" value={t('common.decline')} onClick={() => handleRequest(requests[currentRequest], 'declined')} style={{ width: '48%' }} />
-                    <Button variant="rainbow" value={t('common.confirm')} onClick={() => handleRequest(requests[currentRequest], 'accepted')} style={{ width: '48%' }} />
-                  </div>
-                  {
-                    requestCount > 1
-                    && (
-                      <LinkButton
-                        value={`${t('cycleTransactions.decline')} ${requestCount} ${t('cycleTransactions.transactions')}`}
-                        onClick={() => handleDeclineAll()}
-                        style={{ marginTop: 24 }}
-                      />
-                    )
-                  }
-                </Container>
-              </>
-            )
-          }
+          requestCount > 0
+          && (
+            <>
+              <Tabs tabs={tabs} />
+              <Container>
+                <div className={classes.buttonContainer}>
+                  <Button variant="default" value={t('common.decline')} onClick={() => handleRequest(requests[currentRequest], 'declined')} style={{ width: '48%' }} />
+                  <Button variant="rainbow" value={t('common.confirm')} onClick={() => handleRequest(requests[currentRequest], 'accepted')} style={{ width: '48%' }} />
+                </div>
+                {
+                  requestCount > 1
+                  && (
+                    <LinkButton
+                      value={`${t('cycleTransactions.decline')} ${requestCount} ${t('cycleTransactions.transactions')}`}
+                      onClick={() => handleDeclineAll()}
+                      style={{ marginTop: 24 }}
+                    />
+                  )
+                }
+              </Container>
+            </>
+          )
+        }
       </Layout>
     </ThemeProvider>
   );
