@@ -26,19 +26,6 @@ backgroundController.exposeController('isConnected', ({ callback }, url) => {
   });
 });
 
-/* window.ic.plug.withDankProxy('rwlgt-iiaaa-aaaaa-aaaaa-cai', [
-  {
-    methodName: 'Withdraw',
-    args: '[\n  {\n    types: unit 256',
-    options: { cycles: 5 }
-  }, {
-
-    methodName: 'Withdraw',
-    args: '[\n  {\n    types: unit 256',
-    options: { cycles: 10 }
-  },
-]).then(res => console.log(res)); */
-
 backgroundController.exposeController(
   'requestConnect',
   ({ message, sender }, metadata, timeout) => {
@@ -108,55 +95,25 @@ backgroundController.exposeController(
 );
 
 backgroundController.exposeController(
-  'requestCycleWithdrawal',
-  ({ message, sender }, metadata, requests) => {
-    const url = qs.stringifyUrl({
-      url: 'cycle-withdrawal.html',
-      query: {
-        callId: message.data.data.id,
-        portId: sender.id,
-        metadataJson: JSON.stringify(metadata),
-        incomingRequestsJson: JSON.stringify(requests),
-      },
-    });
-
-    extension.windows.create({
-      url,
-      type: 'popup',
-      width: CYCLE_WITHDRAWAL_SIZES.width,
-      height:
-        requests.length > 1
-          ? CYCLE_WITHDRAWAL_SIZES.detailsHeightBig
-          : CYCLE_WITHDRAWAL_SIZES.detailHeightSmall,
-    });
-  },
-);
-
-backgroundController.exposeController(
-  'handleCycleWithdrawal',
-  async ({ callback }, requests, callId, portId) => {
-    callback(null, true);
-    callback(null, requests, [{ portId, callId }]);
-  },
-);
-
-backgroundController.exposeController(
   'dankProxyRequest',
-  ({ callback, message, sender }, site, requests) => {
-    storage.get([site], (state) => {
-      if (state[site]) {
-        const metadata = state[site];
+  ({ callback, message, sender }, requests) => {
+    requests.forEach((r) => {
+      const site = r.url;
+      storage.get([site], (state) => {
+        if (state[site]) {
+          const metadata = state[site];
 
-        if (metadata.status !== CONNECTION_STATUS.accepted) {
-          callback({ code: -32000, message: 'User is not connected' }, null);
+          if (metadata.status !== CONNECTION_STATUS.accepted) {
+            callback({ code: -32000, message: 'User is not connected' }, null);
+          }
         }
-      }
+      });
     });
 
     storage.get(['requests'], (state) => {
       const storedRequests = state.requests;
 
-      if (storedRequests) {
+      if (storedRequests && storedRequests.length > 0) {
         storage.set({
           requests: [...storedRequests, ...requests],
         });
@@ -172,7 +129,6 @@ backgroundController.exposeController(
       query: {
         callId: message.data.data.id,
         portId: sender.id,
-        site,
       },
     });
 
@@ -185,6 +141,28 @@ backgroundController.exposeController(
           ? CYCLE_WITHDRAWAL_SIZES.detailsHeightBig
           : CYCLE_WITHDRAWAL_SIZES.detailHeightSmall,
     });
+
+    /* storage.get(['open'], (state) => {
+       const isOpen = state['open'];
+
+       console.log('isOpen', isOpen)
+
+       if (!isOpen) {
+         extension.windows.create({
+           url,
+           type: 'popup',
+           width: CYCLE_WITHDRAWAL_SIZES.width,
+           height:
+             requests.length > 1
+               ? CYCLE_WITHDRAWAL_SIZES.detailsHeightBig
+               : CYCLE_WITHDRAWAL_SIZES.detailHeightSmall,
+         });
+
+         storage.set({
+           open: true,
+         });
+       }
+     }); */
   },
 );
 
@@ -193,16 +171,13 @@ backgroundController.exposeController(
 
 backgroundController.exposeController(
   'handleDankProxyRequest',
-  async ({ callback }, url, callId, portId) => {
+  async ({ callback }, callId, portId) => {
     storage.get(['requests'], (state) => {
       const { requests } = state;
 
-      console.log('bg req', requests);
-
-      const siteRequests = requests.filter((r) => r.url === url);
-
-      siteRequests.forEach((r) => {
+      requests.forEach((r) => {
         if (r.status === 'accepted') {
+          const { url } = r;
           let timeout = 5000; // default timeout?
           storage.get([url], (sites) => {
             if (sites[url]) {
@@ -220,6 +195,11 @@ backgroundController.exposeController(
         } else {
           console.log('rejected');
         }
+      });
+
+      storage.set({
+        requests: requests.filter((sr) => sr.status === 'pending'), // what to leave here? delete all?
+        open: false,
       });
 
       callback(null, true);

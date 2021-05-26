@@ -14,42 +14,61 @@ portRPC.start();
 
 const storage = extension.storage.local;
 
-const useRequests = (site, callId, portId) => {
+const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
+
+const poll = (promiseFn, time) => promiseFn().then(
+  sleep(time).then(() => poll(promiseFn, time)),
+);
+
+const useRequests = (callId, portId) => {
   const { t } = useTranslation();
 
   const [currentRequest, setCurrentRequest] = useState(0);
   const [requests, setRequests] = useState([]);
   const [response, setResponse] = useState([]);
-  const [metadata, setMetadata] = useState();
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    storage.get([site], (state) => {
-      setMetadata(state[site]);
-    });
-
+  const updateRequests = () => {
     storage.get(['requests'], (state) => {
       const storedRequests = state.requests;
 
+      console.log('storedRequests', storedRequests);
+      console.log('requests', requests);
+
       if (storedRequests) {
         setRequests(
-          storedRequests.filter((sr) => sr.status === 'pending' && sr.url === site),
+          [
+            ...requests,
+            ...storedRequests.filter((sr) => sr.status === 'pending'),
+          ],
         );
+
+        storage.set({
+          requests: storedRequests.map((r) => {
+            const temp = r;
+            if (temp.status === 'pending') {
+              temp.status = 'processing';
+            }
+            return temp;
+          }),
+        });
       }
     });
+  };
+
+  useEffect(() => {
+    poll(() => new Promise(() => updateRequests()), 1000);
   }, []);
 
   useEffect(async () => {
-    if (metadata && requests) setLoading(false);
-  }, [metadata, requests]);
+    if (requests.length > 0) setLoading(false);
 
-  useEffect(async () => {
     if (requests.length === 0 && !loading) {
       storage.set({
-        requests: response, // i think doing this is not right
+        requests: response,
       });
 
-      await portRPC.call('handleDankProxyRequest', [site, callId, portId]);
+      await portRPC.call('handleDankProxyRequest', [callId, portId]);
       window.close();
     }
   }, [requests]);
@@ -111,7 +130,6 @@ const useRequests = (site, callId, portId) => {
     handleSetPreviousRequest,
     handleRequest,
     handleDeclineAll,
-    metadata,
     loading,
   };
 };

@@ -24,7 +24,7 @@ const CycleWithdrawal = () => {
 
   const { query } = qs.parseUrl(window.location.href);
 
-  const { callId, site } = query;
+  const { callId } = query;
 
   const portId = parseInt(query.portId, 10);
 
@@ -36,9 +36,8 @@ const CycleWithdrawal = () => {
     handleSetNextRequest,
     handleRequest,
     handleDeclineAll,
-    metadata,
     loading,
-  } = useRequests(site, callId, portId);
+  } = useRequests(callId, portId);
 
   if (loading) {
     return null;
@@ -50,9 +49,9 @@ const CycleWithdrawal = () => {
     {
       label: t('cycleTransactions.details'),
       component: <Details
-        url={metadata.url}
-        image={metadata.icon}
-        cycles={requestCount > 0 ? requests[currentRequest].options.cycles : 0}
+        url={requests[currentRequest].url}
+        image={requests[currentRequest].icon}
+        cycles={requests[currentRequest].options.cycles}
         requestCount={requestCount}
       />,
     },
