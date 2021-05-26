@@ -108,63 +108,65 @@ backgroundController.exposeController(
 backgroundController.exposeController(
   'dankProxyRequest',
   ({ callback, message, sender }, requests) => {
-    requests.forEach((r) => {
-      const site = r.url;
-      storage.get([site], (state) => {
-        if (state[site]) {
-          const metadata = state[site];
+    let isConnected = false;
 
-          if (metadata.status !== CONNECTION_STATUS.accepted) {
-            callback({ code: -32000, message: 'User is not connected' }, null);
-          }
-        } else {
+    const site = requests[0].url;
+    storage.get([site], (state) => {
+      if (state[site]) {
+        const metadata = state[site];
+
+        if (metadata.status !== CONNECTION_STATUS.accepted) {
           callback({ code: -32000, message: 'User is not connected' }, null);
+        } else {
+          isConnected = true;
+        }
+      } else {
+        callback({ code: -32000, message: 'User is not connected' }, null);
+      }
+
+      if (!isConnected) return;
+
+      storage.get(['requests'], (requestState) => {
+        const storedRequests = requestState.requests;
+
+        if (storedRequests && storedRequests.length > 0) {
+          storage.set({
+            requests: [...storedRequests, ...requests],
+          });
+        } else {
+          storage.set({
+            requests,
+          });
         }
       });
-    });
 
-    storage.get(['requests'], (state) => {
-      const storedRequests = state.requests;
+      const url = qs.stringifyUrl({
+        url: 'cycle-withdrawal.html',
+        query: {
+          callId: message.data.data.id,
+          portId: sender.id,
+        },
+      });
 
-      if (storedRequests && storedRequests.length > 0) {
-        storage.set({
-          requests: [...storedRequests, ...requests],
-        });
-      } else {
-        storage.set({
-          requests,
-        });
-      }
-    });
+      storage.get(['open'], (openState) => {
+        const isOpen = openState.open;
 
-    const url = qs.stringifyUrl({
-      url: 'cycle-withdrawal.html',
-      query: {
-        callId: message.data.data.id,
-        portId: sender.id,
-      },
-    });
+        if (!isOpen) {
+          extension.windows.create({
+            url,
+            type: 'popup',
+            width: CYCLE_WITHDRAWAL_SIZES.width,
+            height:
+              requests.length > 1
+                ? CYCLE_WITHDRAWAL_SIZES.detailsHeightBig
+                : CYCLE_WITHDRAWAL_SIZES.detailHeightSmall,
+          });
 
-    storage.get(['open'], (state) => {
-      const isOpen = state.open;
-
-      console.log('isOpen', isOpen);
-
-      if (!isOpen) {
-        extension.windows.create({
-          url,
-          type: 'popup',
-          width: CYCLE_WITHDRAWAL_SIZES.width,
-          height:
-            requests.length > 1
-              ? CYCLE_WITHDRAWAL_SIZES.detailsHeightBig
-              : CYCLE_WITHDRAWAL_SIZES.detailHeightSmall,
-        });
-
-        storage.set({
-          open: true,
-        });
-      }
+          storage.set({
+            open: true,
+          });
+        }
+      });
     });
   },
 );

@@ -84,8 +84,8 @@ const CycleWithdrawal = () => {
               <Tabs tabs={tabs} />
               <Container>
                 <div className={classes.buttonContainer}>
-                  <Button variant="default" value={t('common.decline')} onClick={() => handleRequest(requests[currentRequest], 'declined')} style={{ width: '48%' }} />
-                  <Button variant="rainbow" value={t('common.confirm')} onClick={() => handleRequest(requests[currentRequest], 'accepted')} style={{ width: '48%' }} />
+                  <Button variant="default" value={t('common.decline')} onClick={() => handleRequest(requests[currentRequest].id, 'declined')} style={{ width: '48%' }} />
+                  <Button variant="rainbow" value={t('common.confirm')} onClick={() => handleRequest(requests[currentRequest].id, 'accepted')} style={{ width: '48%' }} />
                 </div>
                 {
                   requestCount > 1
