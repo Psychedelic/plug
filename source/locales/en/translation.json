@@ -1,0 +1,202 @@
+{
+  "connectionStatus": {
+    "plugged": "You're plugged into",
+    "notPlugged": "You're not plugged in",
+    "incomingConnection": "Incoming connection!"
+  },
+  "copy": {
+    "copyText": "Copy to clipboard",
+    "copiedText": "Copied!"
+  },
+  "profile": {
+    "settings": "Settings",
+    "help": "Help"
+  },
+  "tabs": {
+    "assets": "Assets",
+    "activity": "Activity",
+    "apps": "Apps"
+  },
+  "activity": {
+    "title": {
+      "send": "Send",
+      "receive": "Receive",
+      "swap": "Swap",
+      "for": "for",
+      "pluggedInto": "Plugged into"
+    },
+    "subtitle": {
+      "to": "To",
+      "from": "From"
+    },
+    "status": {
+      "pending": "Pending",
+      "failed": "Failed"
+    }
+  },
+  "common": {
+    "to": "to",
+    "delete": "delete",
+    "close": "Close",
+    "back": "Back",
+    "save": "Save",
+    "done": "Done",
+    "password": "Enter Password",
+    "decline": "Decline",
+    "allow": "Allow",
+    "continue": "Continue",
+    "max": "Max",
+    "taxFee": "Tx fee:",
+    "rate": "Rate:",
+    "total": "Total:",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "disconnect": "Disconnect",
+    "add": "Add"
+  },
+  "apps": {
+    "title": "Connected Apps",
+    "subtitle": "Main IC Wallet is connected to these sites.",
+    "disconnectTitle": "Disconnect from Site",
+    "disconnectText": "Are you sure you want to disconnect from",
+    "emptyTitle": "You aren’t connected to any apps yet.",
+    "emptyText": "Explore a list of all apps that use Plug and find your first in",
+    "emptyLink": "our docs."
+  },
+  "login": {
+    "title": "Welcome Back!",
+    "subtitle": "Plug into the Internet Computer",
+    "unlock": "Unlock",
+    "restore": "Restore account?",
+    "import": "Import account using your seed phrase"
+  },
+  "help": {
+    "title": "Help",
+    "documentation": "Documentation",
+    "blog": "Blog",
+    "followUs": "Follow us on Twitter",
+    "review": "Review Plug"
+  },
+  "settings": {
+    "title": "Settings",
+    "walletDetails": "Wallet Details",
+    "walletDetailsDescription": "Change the name & pic of your wallet.",
+    "contacts": "Contacts",
+    "contactsDescription": "Add, edit, remove and manage contacts.",
+    "seedPhrase": "Seed Phrase",
+    "seedPhraseDescription": "View your seed phrase & backup.",
+    "resetAccount": "Reset Account",
+    "resetAccountDescription": "Reset all Transactions and Linked Apps."
+  },
+  "walletDetails": {
+    "title": "Wallet Details",
+    "name": "Name",
+    "editWalletPic": "Edit Wallet Pic"
+  },
+  "seedPhrase": {
+    "title": "Seed Phrase",
+    "reveal": "Reveal Seed Phrase",
+    "checkbox": "I will be safe with my seed phrase."
+  },
+  "appConnection": {
+    "connect": "wants to connect to your wallet"
+  },
+  "deposit": {
+    "title": "Deposit",
+    "copyAddress": "Copy Address",
+    "asset": "Asset",
+    "depositingFrom": "Depositing from",
+    "learnMore": "Learn more about buying",
+    "selectAsset": "Select asset your depositing",
+    "selectDeposit": "Select where your depositing from",
+    "runCommandTitle": "Run the following command",
+    "runCommandSubtitle": "To deposit Cycles from a Cycles Wallet you need to run a DFX CLI command.",
+    "runCommandButton": "Ok, I ran the command."
+  },
+  "swap": {
+    "title": "Swap",
+    "swapFrom": "Swap from",
+    "swapTo": "Swap  to",
+    "available": "available to swap",
+    "review": "Review swap",
+    "confirm": "Confirm swap",
+    "comingSoonTitle": "More swaps coming soon!",
+    "comingSoonSubtitle": "Currently you can only swap from ICP to Cycles within the Plug Wallet.",
+    "swappingVia": "Swapping via:",
+    "cycleMinter": "Cycle Minter"
+  },
+  "send": {
+    "title": "Send",
+    "asset": "Asset",
+    "to": "To:",
+    "inputId": "Enter Principal ID or Canister ID",
+    "available": "available to send",
+    "selectAsset": "Select asset your sending",
+    "moreComingSoon": "MORE COMING SOON",
+    "payWith": "Pay with:",
+    "review": "Review Send",
+    "canisterDetected": "We detected the recipient ID you entered is a Canister, please choose where you want the cycles to go.",
+    "keepDank": "Keep in Dank",
+    "withdrawCanister": "Withdraw to Canister",
+    "help": "Which option should I choose?"
+  },
+  "cycleTransactions": {
+    "details": "Details",
+    "data": "Data",
+    "withdraw": "wants to withdraw from your wallet",
+    "amount": "Amount of Cycles",
+    "canisterId": "Canister ID",
+    "methodName": "Method Name",
+    "parameters": "Parameters",
+    "decline": "Decline",
+    "transactions": "transactions",
+    "notEnoughTitle": "Not enough Cycles",
+    "notEnoughText": "You don't have enough Cycles in your wallet to process this transaction. Please get more cycles to continue.",
+    "of": "of",
+    "requests": "requests",
+    "next": "Next →",
+    "previous": "← Previous"
+  },
+  "welcome": {
+    "goBack": "Go Back",
+    "createWallet": "Create Wallet",
+    "createText": "Create a new wallet and seed phrase.",
+    "importWallet": "Import Wallet",
+    "importText": "Import using 12 word seed phrase or private key.",
+    "welcomeTitle": "Welcome to Plug.",
+    "welcomeSubtitle": "Choose if you want to import or create a wallet (Principal ID).",
+    "welcomeMessage": "What’s good!",
+    "passwordTitle": "Create Password for Plug",
+    "passwordSubtitle": "Please create a password to access your Plug extension.",
+    "passwordMessage": "Make that pw secure frfr",
+    "passwordLabel": "New Password (min. 12 characters)",
+    "passwordConfirmLabel": "Confirm Password",
+    "passwordButton": "I made a secure password",
+    "passwordWarning": "Don't forget your password, otherwise you'll need to reimport your wallet using your seed phrase.",
+    "importSubtitle": "Please enter your 12 word seed phrase or private key.",
+    "importMessage": "Paste that sh*t",
+    "importLabel": "Seed Phrase or Private Key",
+    "importButton": "Okay, I entered it.",
+    "memeTitle": "You're good to go!",
+    "memeSubtitle": "Peep your extensions and Plug should be there.",
+    "memeMessage": "Let’s Gooo!!!",
+    "seedTitle": "Seed Phrase Backup",
+    "seedSubtitle": "Below is the seed phrase for your new wallet, write it down.",
+    "seedMessage": "Keep this sh*t safe, forreal.",
+    "seedCheckbox": "I wrote down the seed phrase and put it somewhere safe."
+  },
+  "contacts": {
+    "title": "Contacts",
+    "addContact": "Add Contact",
+    "addContacts": "Add Contacts",
+    "description": "Name your addresses for a better, safer, more fun experience.",
+    "dab": "Powered by Dab",
+    "name": "Name",
+    "id": "Principal or Canister ID",
+    "deleteTitle": "Delete Contact",
+    "deleteText": "Are you sure you want to delete",
+    "deleteButton": "Delete",
+    "newAddress": "New Address Detected!",
+    "addToContacts": "Add to Contacts"
+  }
+}

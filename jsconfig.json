@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@ui": ["source/ui"],
+      "@ui/*": ["source/ui/*"],
+      "@components": ["source/components"],
+      "@components/*": ["source/components/*"],
+      "@assets": ["source/assets"],
+      "@assets/*": ["source/assets/*"],
+      "@shared": ["source/shared"],
+      "@shared/*": ["source/shared/*"],
+      "@hooks": ["source/hooks"],
+      "@hooks/*": ["source/hooks/*"],
+    }
+  },
+  "exclude": ["node_modules"]
+}

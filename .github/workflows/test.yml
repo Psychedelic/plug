@@ -1,0 +1,32 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    env:
+      FA_NPM_TOKEN: ${{ secrets.FA_NPM_TOKEN }}
+
+    strategy:
+      matrix:
+        node-version: [ 14.x ]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install Dependencies
+      run: yarn
+    - name: Run ESLint
+      run: yarn lint
