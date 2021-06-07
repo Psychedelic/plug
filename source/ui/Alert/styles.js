@@ -10,16 +10,30 @@ export default makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     textAlign: 'left',
+    whiteSpace: 'pre-line',
   },
   warning: {
     background: '#FFFBEB',
     color: '#92400E',
   },
+  danger: {
+    background: 'rgba(224, 65, 65, 0.15)',
+    color: '#E04141',
+  },
   icon: {
     fontSize: 18,
+    cursor: 'pointer',
+  },
+  iconwarning: {
+    color: '#FBBF24',
+  },
+  icondanger: {
+    color: '#111827',
+  },
+  startIcon: {
     marginRight: theme.spacing(1),
   },
-  warningIcon: {
-    color: '#FBBF24',
+  endIcon: {
+    marginLeft: 'auto',
   },
 }));

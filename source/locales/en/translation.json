@@ -138,7 +138,8 @@
     "canisterDetected": "We detected the recipient ID you entered is a Canister, please choose where you want the cycles to go.",
     "keepDank": "Keep in Dank",
     "withdrawCanister": "Withdraw to Canister",
-    "help": "Which option should I choose?"
+    "help": "Which option should I choose?",
+    "accountWarning": "You can’t send cycles to an Account ID. \n Please enter a Principal ID or Canister ID."
   },
   "cycleTransactions": {
     "details": "Details",

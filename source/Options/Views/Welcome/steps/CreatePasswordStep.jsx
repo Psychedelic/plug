@@ -61,7 +61,7 @@ const CreatePasswordStep = ({ handleNextStep }) => {
         />
       </Grid>
       <Grid item xs={12}>
-        <Alert type="warning" value={t('welcome.passwordWarning')} />
+        <Alert type="warning" value={t('welcome.passwordWarning')} startIcon />
       </Grid>
     </>
   );
