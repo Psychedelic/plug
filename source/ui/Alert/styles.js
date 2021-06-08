@@ -20,6 +20,11 @@ export default makeStyles((theme) => ({
     background: 'rgba(224, 65, 65, 0.15)',
     color: '#E04141',
   },
+  info: {
+    background: '#F3F4F6',
+    color: '#111827',
+    fontSize: 16,
+  },
   icon: {
     fontSize: 18,
     cursor: 'pointer',
@@ -28,6 +33,9 @@ export default makeStyles((theme) => ({
     color: '#FBBF24',
   },
   icondanger: {
+    color: '#111827',
+  },
+  iconinfo: {
     color: '#111827',
   },
   startIcon: {

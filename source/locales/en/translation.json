@@ -91,7 +91,8 @@
   "walletDetails": {
     "title": "Wallet Details",
     "name": "Name",
-    "editWalletPic": "Edit Wallet Pic"
+    "editWalletPic": "Edit Wallet Pic",
+    "accountId": "ICP Account ID"
   },
   "seedPhrase": {
     "title": "Seed Phrase",

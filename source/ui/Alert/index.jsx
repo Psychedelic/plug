@@ -9,6 +9,7 @@ import useStyles from './styles';
 const ICONS = {
   warning: faExclamationTriangle,
   danger: faInfoCircle,
+  info: faInfoCircle,
 };
 
 const Alert = ({
@@ -20,12 +21,12 @@ const Alert = ({
     <FontAwesomeIcon
       icon={ICONS[type]}
       className={
-      clsx(
-        classes.icon,
-        classes[`icon${type}`],
-        startIcon ? classes.startIcon : classes.endIcon,
-      )
-    }
+        clsx(
+          classes.icon,
+          classes[`icon${type}`],
+          startIcon ? classes.startIcon : classes.endIcon,
+        )
+      }
       onClick={() => (url ? window.open(url, '_blank') : null)}
     />
   );
