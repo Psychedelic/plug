@@ -29,74 +29,78 @@ const Step2 = ({ selectedSource, selectedAsset }) => {
       {
         (selectedSource.id === 'PLUG_ACCOUNT' && selectedAsset.id === 'CYCLES')
         && (
-        <Grid container spacing={2} style={{ textAlign: 'center' }}>
-          <Grid item xs={12}>
-            <QRCode value={address} />
+          <Grid container spacing={2} style={{ textAlign: 'center' }}>
+            <Grid item xs={12}>
+              <QRCode value={address} />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="h3" className={classes.title}>{walletName}</Typography>
+              <Typography variant="subtitle1">{shortAddress(address)}</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Button variant="rainbow" value={t('deposit.copyAddress')} onClick={() => navigator.clipboard.writeText(address)} />
+            </Grid>
+            <Grid item xs={12}>
+              <LinkButton value={`${t('deposit.learnMore')} ${selectedAsset.name}`} />
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <Typography variant="h3" className={classes.title}>{walletName}</Typography>
-            <Typography variant="subtitle1">{shortAddress(address)}</Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Button variant="rainbow" value={t('deposit.copyAddress')} onClick={() => navigator.clipboard.writeText(address)} />
-          </Grid>
-          <Grid item xs={12}>
-            <LinkButton value={`${t('deposit.learnMore')} ${selectedAsset.name}`} />
-          </Grid>
-        </Grid>
         )
       }
       {
         (selectedAsset.id === 'ICP')
         && (
-        <Grid container spacing={1}>
-          <Grid item xs={12}>
-            <Typography variant="h5">{t('deposit.depositIcpTitle1')}</Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="subtitle2">{t('deposit.depositIcpSubtitle1')}</Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <InputBase>
-              <div className={classes.addressContainer}>
-                <Typography variant="h4" style={{ marginRight: 'auto' }}>{shortAddress(address)}</Typography>
-                <FontAwesomeIcon
-                  icon={faQrcode}
-                  className={classes.icon}
-                  onClick={() => setOpenQr(true)}
-                />
-                <CopyButton text={address} placement="top" />
-              </div>
-            </InputBase>
+          <Grid container spacing={1}>
+            <Grid item xs={12}>
+              <Typography variant="h5">{t('deposit.depositIcpTitle1')}</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="subtitle2">{t('deposit.depositIcpSubtitle1')}</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <InputBase>
+                <div className={classes.addressContainer}>
+                  <Typography variant="h4" style={{ marginRight: 'auto' }}>{shortAddress(address)}</Typography>
+                  <FontAwesomeIcon
+                    icon={faQrcode}
+                    className={classes.icon}
+                    onClick={() => setOpenQr(true)}
+                  />
+                  <CopyButton text={address} placement="top" />
+                </div>
+              </InputBase>
 
-            <Dialog
-              title={t('deposit.scanQrCode')}
-              onClose={() => setOpenQr(false)}
-              open={openQr}
-              component={(
-                <QRCode value={address} style={{ marginBottom: 36 }} />
-              )}
-            />
+              <Dialog
+                title={t('deposit.scanQrCode')}
+                onClose={() => setOpenQr(false)}
+                open={openQr}
+                component={(
+                  <QRCode value={address} style={{ marginBottom: 36 }} />
+                )}
+              />
 
-          </Grid>
-          <Grid item xs={12}>
-            or
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="h5">{t('deposit.depositIcpTitle2')}</Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="subtitle2">{t('deposit.depositIcpSubtitle2')}</Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <InputBase>
-              <div className={classes.addressContainer}>
-                <Typography variant="h4" style={{ marginRight: 'auto' }}>{shortAddress(address2)}</Typography>
-                <CopyButton text={address2} placement="top" />
+            </Grid>
+            <Grid item xs={12} className={classes.orContainer}>
+              <div className={classes.line} />
+              <div className={classes.or}>
+                {t('common.or')}
               </div>
-            </InputBase>
+              <div className={classes.line} />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="h5">{t('deposit.depositIcpTitle2')}</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="subtitle2">{t('deposit.depositIcpSubtitle2')}</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <InputBase>
+                <div className={classes.addressContainer}>
+                  <Typography variant="h4" style={{ marginRight: 'auto' }}>{shortAddress(address2)}</Typography>
+                  <CopyButton text={address2} placement="top" />
+                </div>
+              </InputBase>
+            </Grid>
           </Grid>
-        </Grid>
         )
       }
       {

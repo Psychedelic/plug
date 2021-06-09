@@ -30,4 +30,19 @@ export default makeStyles((theme) => ({
       transform: 'scale(1.03)',
     },
   },
+  orContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  or: {
+    padding: theme.spacing(1),
+    color: '#ACAEB3',
+    fontSize: 14,
+    textTransform: 'uppercase',
+  },
+  line: {
+    height: 1,
+    borderBottom: '1px solid #D1D5DB',
+    flex: 1,
+  },
 }));
