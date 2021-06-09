@@ -131,22 +131,23 @@ const Step1 = ({
                 handleRemoveContact={handleRemoveContact}
                 selectedContact={selectedContact}
                 handleSelectedContact={handleSelectedContact}
+                selectedAsset={selectedAsset}
               />
             )}
           />
         </Grid>
         {
-          address === 'account id'
+          addressInfo.type === 'account id' && selectedAsset.id === 'CYCLES'
           && (
-          <Grid item xs={12}>
-            <div className={classes.appearAnimation}>
-              <Alert
-                type="danger"
-                endIcon
-                value={t('send.accountWarning')}
-              />
-            </div>
-          </Grid>
+            <Grid item xs={12}>
+              <div className={classes.appearAnimation}>
+                <Alert
+                  type="danger"
+                  endIcon
+                  value={t('send.accountWarning')}
+                />
+              </div>
+            </Grid>
           )
         }
         {

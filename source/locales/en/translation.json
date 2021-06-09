@@ -52,7 +52,8 @@
     "cancel": "Cancel",
     "confirm": "Confirm",
     "disconnect": "Disconnect",
-    "add": "Add"
+    "add": "Add",
+    "or": "or"
   },
   "apps": {
     "title": "Connected Apps",
@@ -112,7 +113,12 @@
     "selectDeposit": "Select where your depositing from",
     "runCommandTitle": "Run the following command",
     "runCommandSubtitle": "To deposit Cycles from a Cycles Wallet you need to run a DFX CLI command.",
-    "runCommandButton": "Ok, I ran the command."
+    "runCommandButton": "Ok, I ran the command.",
+    "depositIcpTitle1": "1. Deposit Using Principal ID 😎",
+    "depositIcpSubtitle1": "Use when receiving from Plug accounts & users, or other apps that support sending directly to Principal ID's.",
+    "depositIcpTitle2": "2. Deposit Using Account ID 😑",
+    "depositIcpSubtitle2": "Use when receiving from exchanges or other apps that only support sending to Account ID’s.",
+    "scanQrCode": "Scan QR Code"
   },
   "swap": {
     "title": "Swap",
@@ -137,10 +143,14 @@
     "payWith": "Pay with:",
     "review": "Review Send",
     "canisterDetected": "We detected the recipient ID you entered is a Canister, please choose where you want the cycles to go.",
-    "keepDank": "Keep in Dank",
-    "withdrawCanister": "Withdraw to Canister",
+    "keepDank": "Keep Cycles in Dank",
+    "withdrawCanister": "Withdraw Cycles to Canister",
     "help": "Which option should I choose?",
-    "accountWarning": "You can’t send cycles to an Account ID. \n Please enter a Principal ID or Canister ID."
+    "accountWarning": "You can’t send cycles to an Account ID. \n Please enter a Principal ID or Canister ID.",
+    "warning": "Warning",
+    "canisterDetectedIcp1": "We detected the recipient ID you entered is a Canister. Please be aware that although you can send ICP to a canister, ",
+    "canisterDetectedIcp2": "currently there is no way to send ICP out of a canister.",
+    "canisterDetectedUnderstand": "I understand. Send ICP to canister anyways."
   },
   "cycleTransactions": {
     "details": "Details",

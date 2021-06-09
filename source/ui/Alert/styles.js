@@ -24,6 +24,7 @@ export default makeStyles((theme) => ({
     background: '#F3F4F6',
     color: '#111827',
     fontSize: 16,
+    fontWeight: 'normal',
   },
   icon: {
     fontSize: 18,

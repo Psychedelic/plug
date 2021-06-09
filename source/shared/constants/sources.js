@@ -15,7 +15,7 @@ export const SOURCES = new Map([
     'CYCLE_WALLET',
     {
       id: 'CYCLE_WALLET',
-      name: 'Cycle Wallet',
+      name: 'Canister / Cycle Wallet',
       image: CycleWalletImg,
     },
   ],
