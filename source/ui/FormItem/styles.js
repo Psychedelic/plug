@@ -16,4 +16,10 @@ export default makeStyles((theme) => ({
   subtitleContainer: {
     marginTop: theme.spacing(0.5),
   },
+  smallLabel: {
+    color: '#374151',
+    fontSize: 14,
+    fontWeight: 500,
+    lineHeight: '16.8px',
+  },
 }));

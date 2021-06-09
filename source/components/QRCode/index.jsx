@@ -26,6 +26,7 @@ const QRCode = ({
   logoSize,
   size,
   value,
+  ...other
 }) => {
   const classes = useStyles();
   const href = logo; // useSafeImageUri(logo); check this later
@@ -102,7 +103,7 @@ const QRCode = ({
   const logoWrapperSize = logoSize + logoMargin * 2;
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} {...other}>
       <svg height={size} width={size}>
         <defs>
           <clipPath id="clip-wrapper">

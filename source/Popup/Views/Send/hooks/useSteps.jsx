@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';
 import Step1 from '../Steps/Step1';
-import Step2 from '../Steps/Step2';
+import Step2a from '../Steps/Step2a';
+import Step2b from '../Steps/Step2b';
 import Step3 from '../Steps/Step3';
 import { CURRENCIES } from '../../../../shared/constants/currencies';
 
@@ -29,6 +30,25 @@ const useSteps = () => {
   const handleChangeStep = (index) => setStep(index);
   const handleChangeAmount = (value) => setAmount(value);
   const handleChangeDestination = (value) => setDestination(value);
+
+  useEffect(() => {
+    if (address !== null) {
+      let isValid = address.includes('valid id')
+        && (address.includes('dank') || address.includes('canister') || address.includes('account id'));
+
+      let type = null;
+      if (address.includes('dank')) type = 'dank';
+      else if (address.includes('canister')) type = 'canister';
+      else if (address.includes('account id')) type = 'account id';
+
+      // check for account id if cycles selected
+      if (type === 'account id' && selectedAsset.id === 'CYCLES') {
+        isValid = false;
+      }
+
+      handleChangeAddressInfo({ isValid, type });
+    }
+  }, [address, selectedAsset]);
 
   const [primaryValue, setPrimaryValue] = useState(
     {
@@ -111,6 +131,34 @@ const useSteps = () => {
 
   const rightButton = <LinkButton value={t('common.cancel')} onClick={() => navigator.navigate('home')} />;
 
+  const step2a = {
+    component: <Step2a
+      destination={destination}
+      handleChangeDestination={handleChangeDestination}
+      handleChangeStep={() => handleChangeStep(2)}
+    />,
+    left: <LinkButton value={t('common.back')} onClick={() => { convertToSecondaryAsset(); handleChangeStep(0); }} startIcon={BackIcon} />,
+    right: rightButton,
+    center: `${t('send.review')}`,
+  };
+
+  const step2b = {
+    component: <Step2b
+      handleChangeStep={() => handleChangeStep(2)}
+    />,
+    left: <LinkButton value={t('common.back')} onClick={() => { convertToSecondaryAsset(); handleChangeStep(0); }} startIcon={BackIcon} />,
+    right: rightButton,
+    center: `${t('send.warning')}`,
+  };
+
+  let step2;
+
+  if (selectedAsset.id === 'CYCLES') {
+    step2 = step2a;
+  } else if (selectedAsset.id === 'ICP') {
+    step2 = step2b;
+  }
+
   const handleNextStep = () => {
     convertToPrimaryAsset();
 
@@ -154,14 +202,7 @@ const useSteps = () => {
       center: t('send.title'),
     },
     {
-      component: <Step2
-        destination={destination}
-        handleChangeDestination={handleChangeDestination}
-        handleChangeStep={() => handleChangeStep(2)}
-      />,
-      left: <LinkButton value={t('common.back')} onClick={() => { convertToSecondaryAsset(); handleChangeStep(0); }} startIcon={BackIcon} />,
-      right: rightButton,
-      center: `${t('swap.review')}`,
+      ...step2,
     },
     {
       component: <Step3

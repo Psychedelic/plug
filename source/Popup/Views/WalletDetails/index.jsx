@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Layout, UserIcon, useStorage } from '@components';
 import {
-  Header, LinkButton, FormInput, Button, Container,
+  Header, LinkButton, FormInput, Button, Container, FormItem, Alert,
 } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from '@components/Router';
@@ -86,6 +86,19 @@ const WalletDetails = ({ currentWalletName }) => {
           }
           <Grid item xs={12}>
             <FormInput id="name" label={t('walletDetails.name')} type="text" value={walletName} onChange={handleChange} />
+          </Grid>
+          <Grid item xs={12}>
+            <FormItem
+              label={t('walletDetails.accountId')}
+              smallLabel
+              component={(
+                <Alert
+                  value="rwlgt-iiaaa-aaaaa-aaaaa-cai"
+                  type="info"
+                  endIcon
+                />
+              )}
+            />
           </Grid>
           <Grid item xs={12}>
             <Button value={t('common.save')} variant="rainbow" fullWidth onClick={() => onSave()} />

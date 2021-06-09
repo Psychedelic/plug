@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import { IDInput, ActionDialog } from '@components';
 import {
-  FormItem, MultiInput, Container, Button, Dialog, TextInput,
+  FormItem, MultiInput, Container, Button, Dialog, TextInput, Alert,
 } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
@@ -131,10 +131,25 @@ const Step1 = ({
                 handleRemoveContact={handleRemoveContact}
                 selectedContact={selectedContact}
                 handleSelectedContact={handleSelectedContact}
+                selectedAsset={selectedAsset}
               />
             )}
           />
         </Grid>
+        {
+          addressInfo.type === 'account id' && selectedAsset.id === 'CYCLES'
+          && (
+            <Grid item xs={12}>
+              <div className={classes.appearAnimation}>
+                <Alert
+                  type="danger"
+                  endIcon
+                  value={t('send.accountWarning')}
+                />
+              </div>
+            </Grid>
+          )
+        }
         {
           (address !== ''
             && addressInfo.isValid
