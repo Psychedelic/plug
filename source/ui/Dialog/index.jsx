@@ -14,7 +14,11 @@ const Dialog = ({
   const classes = useStyles();
 
   const handleClose = () => {
-    onClose(selectedValue);
+    if (selectedValue) {
+      onClose(selectedValue);
+    } else {
+      onClose();
+    }
   };
 
   const handleItemClick = (value) => {
@@ -56,6 +60,7 @@ export default Dialog;
 
 Dialog.defaultProps = {
   component: null,
+  selectedValue: null,
 };
 
 Dialog.propTypes = {
@@ -66,6 +71,6 @@ Dialog.propTypes = {
   })).isRequired,
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
-  selectedValue: PropTypes.string.isRequired,
+  selectedValue: PropTypes.string,
   component: PropTypes.node,
 };

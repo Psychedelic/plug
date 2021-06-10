@@ -13,7 +13,7 @@ import CanisterImg from '@assets/icons/canister.svg';
 const dank = 'dank';
 const canister = 'canister';
 
-const Step2 = ({ destination, handleChangeDestination, handleChangeStep }) => {
+const Step2a = ({ destination, handleChangeDestination, handleChangeStep }) => {
   const { t } = useTranslation();
 
   const buttons = [
@@ -57,9 +57,9 @@ const Step2 = ({ destination, handleChangeDestination, handleChangeStep }) => {
   );
 };
 
-export default Step2;
+export default Step2a;
 
-Step2.propTypes = {
+Step2a.propTypes = {
   destination: PropTypes.string.isRequired,
   handleChangeDestination: PropTypes.func.isRequired,
   handleChangeStep: PropTypes.func.isRequired,

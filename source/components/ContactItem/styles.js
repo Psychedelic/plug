@@ -30,11 +30,6 @@ export default makeStyles((theme) => ({
       transform: 'scale(1.03)',
     },
   },
-  copyIcon: {
-    color: '#367FF8',
-    marginLeft: 'auto',
-    height: 18,
-  },
   deleteIcon: {
     color: '#111827',
     marginLeft: theme.spacing(1),

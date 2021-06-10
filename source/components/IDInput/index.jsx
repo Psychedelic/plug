@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import MInputBase from '@material-ui/core/InputBase';
 import BookIcon from '@assets/icons/notebook.svg';
@@ -16,7 +16,6 @@ const IDInput = ({
   value,
   onChange,
   addressInfo,
-  handleChangeAddressInfo,
   contacts,
   selectedContact,
   handleSelectedContact,
@@ -41,22 +40,6 @@ const IDInput = ({
     onChange('');
     handleSelectedContact(null);
   };
-
-  useEffect(() => {
-    const debounce = setTimeout(() => {
-      if (value !== null) {
-        const isValid = value.includes('valid id') && (value.includes('dank') || value.includes('canister'));
-
-        let type = null;
-        if (value.includes('dank')) type = 'dank';
-        else if (value.includes('canister')) type = 'canister';
-
-        handleChangeAddressInfo({ isValid, type });
-      }
-    }, 1000);
-
-    return () => clearTimeout(debounce);
-  }, [value]);
 
   return (
     <div className={classes.root}>
@@ -117,7 +100,6 @@ IDInput.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   addressInfo: PropTypes.objectOf(PropTypes.object).isRequired,
-  handleChangeAddressInfo: PropTypes.func.isRequired,
   contacts: PropTypes.arrayOf(PropTypes.object).isRequired,
   selectedContact: PropTypes.objectOf(PropTypes.object).isRequired,
   handleSelectedContact: PropTypes.func.isRequired,

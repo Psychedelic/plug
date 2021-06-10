@@ -10,16 +10,39 @@ export default makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     textAlign: 'left',
+    whiteSpace: 'pre-line',
   },
   warning: {
     background: '#FFFBEB',
     color: '#92400E',
   },
+  danger: {
+    background: 'rgba(224, 65, 65, 0.15)',
+    color: '#E04141',
+  },
+  info: {
+    background: '#F3F4F6',
+    color: '#111827',
+    fontSize: 16,
+    fontWeight: 'normal',
+  },
   icon: {
     fontSize: 18,
+    cursor: 'pointer',
+  },
+  iconwarning: {
+    color: '#FBBF24',
+  },
+  icondanger: {
+    color: '#111827',
+  },
+  iconinfo: {
+    color: '#111827',
+  },
+  startIcon: {
     marginRight: theme.spacing(1),
   },
-  warningIcon: {
-    color: '#FBBF24',
+  endIcon: {
+    marginLeft: 'auto',
   },
 }));
