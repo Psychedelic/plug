@@ -99,4 +99,21 @@ export default makeStyles((theme) => ({
       boxShadow: 'none',
     },
   },
+  rainbowOutlined: {
+    color: '#111827',
+    border: 'double 2px transparent',
+    backgroundImage:
+      'linear-gradient(white, white), radial-gradient(circle at top left,#FFE701,#FA51D3,#10D9ED,#53FF54)',
+    backgroundOrigin: 'border-box',
+    backgroundClip: 'padding-box, border-box',
+    boxShadow: 'none',
+    '&:hover': {
+      opacity: 0.9,
+      boxShadow: 'none',
+    },
+    '&:disabled': {
+      opacity: 0.6,
+      boxShadow: 'none',
+    },
+  },
 }));
