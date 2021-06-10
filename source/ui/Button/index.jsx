@@ -7,6 +7,9 @@ const VARIANTS = {
   rainbow: {
     variant: 'contained',
   },
+  rainbowOutlined: {
+    variant: 'outlined',
+  },
   danger: {
     variant: 'contained',
   },
@@ -42,6 +45,6 @@ export default Button;
 
 Button.propTypes = {
   value: PropTypes.string.isRequired,
-  variant: PropTypes.oneOf(['rainbow', 'danger', 'default', 'primary']).isRequired,
+  variant: PropTypes.oneOf(['rainbow', 'danger', 'default', 'primary', 'primaryOutlined', 'rainbowOutlined']).isRequired,
   onClick: PropTypes.func.isRequired,
 };
