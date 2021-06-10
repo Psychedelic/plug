@@ -29,6 +29,7 @@ const Popup = ({ storage }) => (
       <Route name="swap" component={Swap} />
       <Route name="send" component={Send} />
       <Route name="contacts" component={Contacts} />
+      <Route name="add-token" component={Contacts} />
     </Router>
   </StorageProvider>
 );
