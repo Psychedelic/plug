@@ -210,5 +210,8 @@
     "deleteButton": "Delete",
     "newAddress": "New Address Detected!",
     "addToContacts": "Add to Contacts"
+  },
+  "assets":{
+    "addToken": "Add Token"
   }
 }
