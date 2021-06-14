@@ -211,7 +211,15 @@
     "newAddress": "New Address Detected!",
     "addToContacts": "Add to Contacts"
   },
-  "assets":{
-    "addToken": "Add Token"
+  "addToken":{
+    "title": "Add Token",
+    "search": "Search",
+    "custom": "Custom",
+    "searchText": "Add tokens to your wallet, verified tokens will appear in the search.",
+    "searchLink": "Learn more about tokens",
+    "tokenCanisterId": "Token Canister ID",
+    "confirmText": "Token Safety Alert: For your security, make sure to do proper research before interacting with any token.",
+    "emptyResults": "No search results found",
+    "searchTokens": "Search Tokens"
   }
 }
