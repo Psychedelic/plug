@@ -9,8 +9,10 @@ const Layout = ({ children }) => {
 
   return (
     <>
-      <ConnectionStatus status="plugged" web="fleek.ooo" />
-      <NavBar />
+      <div className={classes.stickyHeader}>
+        <ConnectionStatus status="plugged" web="fleek.ooo" />
+        <NavBar />
+      </div>
       <div className={classes.root}>
         {children}
       </div>

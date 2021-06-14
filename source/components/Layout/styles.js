@@ -7,4 +7,12 @@ export default makeStyles({
     position: 'relative',
     flex: 1,
   },
+  stickyHeader: {
+    position: 'sticky',
+    height: 108,
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 100,
+  },
 });
