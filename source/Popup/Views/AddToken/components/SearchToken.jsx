@@ -65,7 +65,7 @@ const SearchToken = ({ handleChangeSelectedToken }) => {
         </Grid>
         {
           /* eslint-disable no-nested-ternary */
-          search === ''
+          !search
             ? (
               <>
                 <Grid item xs={12}>
@@ -76,20 +76,20 @@ const SearchToken = ({ handleChangeSelectedToken }) => {
                 </Grid>
               </>
             )
-            : (filteredTokens.length > 0
+            : filteredTokens.length > 0
               ? (
                 <Grid item xs={12}>
                   {filteredTokens.map((ft) => (
                     <div
                       className={classes.tokenItem}
-                      onClick={() => handleChangeSelectedToken(ft)}
+                      onClick={handleChangeSelectedToken(ft)}
                     >
                       <div className={classes.tokenImage}>
                         <img src={ft.image} />
                         {
-                          ft.verified
-                          && <img src={VerifiedImg} className={classes.verified} />
-                        }
+                        ft.verified
+                        && <img src={VerifiedImg} className={classes.verified} />
+                      }
                       </div>
                       <Typography variant="h4">{ft.name} ({ft.token})</Typography>
                     </div>
@@ -102,7 +102,6 @@ const SearchToken = ({ handleChangeSelectedToken }) => {
                   <Typography variant="h5">{t('addToken.emptyResults')}</Typography>
                 </div>
               )
-            )
         }
       </Grid>
     </Container>

@@ -13,7 +13,7 @@ const useSteps = () => {
 
   const [selectedToken, setSelectedToken] = useState(null);
 
-  const handleChangeSelectedToken = (token) => {
+  const handleChangeSelectedToken = (token) => () => {
     setSelectedToken(token);
     setStep(1);
   };

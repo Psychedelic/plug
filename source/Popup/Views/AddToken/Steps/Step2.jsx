@@ -38,7 +38,7 @@ const Step2 = ({ selectedToken, handleClose }) => {
           <Button
             variant="rainbow"
             value={t('common.add')}
-            onClick={() => handleClose()}
+            onClick={handleClose}
             fullWidth
           />
         </Grid>

@@ -42,13 +42,13 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
           <Button
             variant="rainbow"
             value={t('common.continue')}
-            onClick={() => handleChangeSelectedToken({
+            onClick={handleChangeSelectedToken({
               image: DfinityImg,
               name: 'Internet Computer',
               token: 'ICP',
             })}
             fullWidth
-            disabled={token === '' || invalidToken}
+            disabled={!token || invalidToken}
           />
         </Grid>
       </Grid>
