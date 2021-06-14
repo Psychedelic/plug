@@ -37,8 +37,8 @@ const Assets = () => {
       }
       <Button
         variant="rainbowOutlined"
-        value={t('assets.addToken')}
-        onClick={() => navigator.navigate('deposit')}
+        value={t('addToken.title')}
+        onClick={() => navigator.navigate('add-token')}
         style={{
           width: 166,
           height: 42,

@@ -54,6 +54,7 @@ const Step1 = ({
     setSelectedContact(contact);
     handleChangeAddress(contact.id);
     setOpenAddContact(false);
+    setContactName('');
   };
 
   const handleChangeContactName = (e) => {

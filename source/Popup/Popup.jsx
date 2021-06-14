@@ -16,6 +16,7 @@ import Deposit from './Views/Deposit';
 import Swap from './Views/Swap';
 import Send from './Views/Send';
 import Contacts from './Views/Contacts';
+import AddToken from './Views/AddToken';
 
 const Popup = ({ storage }) => (
   <StorageProvider storage={storage}>
@@ -29,7 +30,7 @@ const Popup = ({ storage }) => (
       <Route name="swap" component={Swap} />
       <Route name="send" component={Send} />
       <Route name="contacts" component={Contacts} />
-      <Route name="add-token" component={Contacts} />
+      <Route name="add-token" component={AddToken} />
     </Router>
   </StorageProvider>
 );

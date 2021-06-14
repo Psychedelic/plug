@@ -26,7 +26,7 @@ const Step3 = ({
 
         <Grid item xs={12} style={{ textAlign: 'center' }}>
           <Typography variant="h1" style={{ marginBottom: 3 }}>
-            <AssetFormat value={amount} asset={asset} />
+            <AssetFormat value={amount} asset={asset.value} />
           </Typography>
           <Typography variant="subtitle1">
             <USDFormat value={subtotal} />
