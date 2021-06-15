@@ -1,7 +1,6 @@
 import PenIcon from '@assets/icons/settings/pen.svg';
 import KeyIcon from '@assets/icons/settings/old-key.svg';
 import NotebookIcon from '@assets/icons/settings/notebook.svg';
-import HeartIcon from '@assets/icons/settings/broken-heart.svg';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from '@components/Router';
 
@@ -27,12 +26,6 @@ const useSettingsItems = () => {
       name: t('settings.seedPhrase'),
       description: t('settings.seedPhraseDescription'),
       onClick: (() => navigator.navigate('seed-phrase')),
-    },
-    {
-      image: HeartIcon,
-      name: t('settings.resetAccount'),
-      description: t('settings.resetAccountDescription'),
-      onClick: (() => navigator.navigate('reset-account')),
     },
   ];
 };
