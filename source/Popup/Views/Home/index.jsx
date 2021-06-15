@@ -4,6 +4,7 @@ import {
 } from '@components';
 import { Tabs } from '@ui';
 import { useTranslation } from 'react-i18next';
+import { useTabs } from '@hooks';
 
 const getTabs = (t) => [
   {
@@ -22,10 +23,12 @@ const getTabs = (t) => [
 
 const Home = () => {
   const { t } = useTranslation();
+  const { selectedTab, handleChangeTab } = useTabs();
+
   return (
     <Layout>
       <Actions />
-      <Tabs tabs={getTabs(t)} />
+      <Tabs tabs={getTabs(t)} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
     </Layout>
   );
 };

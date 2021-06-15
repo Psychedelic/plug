@@ -25,7 +25,7 @@ const TOKENS = [
   },
 ];
 
-const SearchToken = ({ handleChangeSelectedToken }) => {
+const SearchToken = ({ handleChangeSelectedToken, handleChangeTab }) => {
   const { t } = useTranslation();
   const classes = useStyles();
 
@@ -87,9 +87,9 @@ const SearchToken = ({ handleChangeSelectedToken }) => {
                       <div className={classes.tokenImage}>
                         <img src={ft.image} />
                         {
-                        ft.verified
-                        && <img src={VerifiedImg} className={classes.verified} />
-                      }
+                          ft.verified
+                          && <img src={VerifiedImg} className={classes.verified} />
+                        }
                       </div>
                       <Typography variant="h4">{ft.name} ({ft.token})</Typography>
                     </div>
@@ -100,6 +100,11 @@ const SearchToken = ({ handleChangeSelectedToken }) => {
                 <div className={classes.emptyResults}>
                   <span className={classes.emoji}>🤔</span>
                   <Typography variant="h5">{t('addToken.emptyResults')}</Typography>
+                  <LinkButton
+                    style={{ marginTop: 6 }}
+                    value={t('addToken.addCustomToken')}
+                    onClick={() => handleChangeTab(1)}
+                  />
                 </div>
               )
         }
@@ -112,4 +117,5 @@ export default SearchToken;
 
 SearchToken.propTypes = {
   handleChangeSelectedToken: PropTypes.func.isRequired,
+  handleChangeTab: PropTypes.func.isRequired,
 };
