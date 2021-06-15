@@ -93,7 +93,7 @@ const WalletDetails = ({ currentWalletName }) => {
               smallLabel
               component={(
                 <Alert
-                  value="rwlgt-iiaaa-aaaaa-aaaaa-cai"
+                  title="rwlgt-iiaaa-aaaaa-aaaaa-cai"
                   type="info"
                   endIcon
                 />

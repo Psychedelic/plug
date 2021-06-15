@@ -13,7 +13,7 @@ const ICONS = {
 };
 
 const Alert = ({
-  type, value, startIcon, endIcon, url,
+  type, title, subtitle, startIcon, endIcon, url,
 }) => {
   const classes = useStyles();
 
@@ -34,7 +34,16 @@ const Alert = ({
   return (
     <div className={clsx(classes.root, classes[type])}>
       {startIcon && icon}
-      {value}
+      {
+        subtitle
+          ? (
+            <div className={classes.textContainer}>
+              <b>{title}</b>
+              {subtitle}
+            </div>
+          )
+          : title
+      }
       {endIcon && icon}
     </div>
   );
@@ -46,11 +55,13 @@ Alert.defaultProps = {
   startIcon: false,
   endIcon: false,
   url: null,
+  subtitle: null,
 };
 
 Alert.propTypes = {
   type: PropTypes.oneOf(['warning']).isRequired,
-  value: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  subtitle: PropTypes.string,
   startIcon: PropTypes.bool,
   endIcon: PropTypes.bool,
   url: PropTypes.string,

@@ -45,4 +45,8 @@ export default makeStyles((theme) => ({
   endIcon: {
     marginLeft: 'auto',
   },
+  textContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
 }));

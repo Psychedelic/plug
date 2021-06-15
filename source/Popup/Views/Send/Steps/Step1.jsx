@@ -145,7 +145,7 @@ const Step1 = ({
                 <Alert
                   type="danger"
                   endIcon
-                  value={t('send.accountWarning')}
+                  title={t('send.accountWarning')}
                 />
               </div>
             </Grid>
