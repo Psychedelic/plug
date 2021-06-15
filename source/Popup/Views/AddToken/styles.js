@@ -9,6 +9,7 @@ export default makeStyles((theme) => ({
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
+    padding: '6px 0',
   },
   tokenImage: {
     position: 'relative',

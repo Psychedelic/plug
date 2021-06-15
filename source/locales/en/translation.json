@@ -211,7 +211,7 @@
     "newAddress": "New Address Detected!",
     "addToContacts": "Add to Contacts"
   },
-  "addToken":{
+  "addToken": {
     "title": "Add Token",
     "search": "Search",
     "custom": "Custom",
@@ -220,6 +220,7 @@
     "tokenCanisterId": "Token Canister ID",
     "confirmText": "Token Safety Alert: For your security, make sure to do proper research before interacting with any token.",
     "emptyResults": "No search results found",
-    "searchTokens": "Search Tokens"
+    "searchTokens": "Search Tokens",
+    "addCustomToken": "Add Custom Token"
   }
 }

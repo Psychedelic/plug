@@ -5,6 +5,7 @@ import {
 } from '@ui';
 import { useTranslation } from 'react-i18next';
 import FleekImg from '@assets/icons/Fleek.svg';
+import { useTabs } from '@hooks';
 import useStyles from './styles';
 import Details from './components/Details';
 import Data from './components/Data';
@@ -16,6 +17,7 @@ const AVAILABLE_CYCLES = 100;
 const CycleTransactions = () => {
   const { t } = useTranslation();
   const classes = useStyles();
+  const { selectedTab, handleChangeTab } = useTabs();
 
   const {
     requests,
@@ -58,7 +60,7 @@ const CycleTransactions = () => {
           />
         )
       }
-      <Tabs tabs={tabs} />
+      <Tabs tabs={tabs} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
       <Container>
         {
           !enoughCycles

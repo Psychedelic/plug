@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import MuiTabs from '@material-ui/core/Tabs';
 import SwipeableViews from 'react-swipeable-views';
 import PropTypes from 'prop-types';
 import useStyles from './styles';
 import Tab from '../Tab';
 
-const Tabs = ({ tabs }) => {
-  const [value, setValue] = useState(0);
+const Tabs = ({ tabs, selectedTab, handleChangeTab }) => {
   const classes = useStyles();
-
-  const handleChange = (_event, newValue) => setValue(newValue);
-  const handleChangeIndex = (index) => setValue(index);
+  const handleChange = (_event, newValue) => handleChangeTab(newValue);
+  const handleChangeIndex = (index) => handleChangeTab(index);
 
   return (
     <>
@@ -19,7 +17,7 @@ const Tabs = ({ tabs }) => {
           root: classes.root,
           indicator: classes.indicator,
         }}
-        value={value}
+        value={selectedTab}
         indicatorColor="primary"
         textColor="primary"
         onChange={handleChange}
@@ -31,12 +29,12 @@ const Tabs = ({ tabs }) => {
         }
       </MuiTabs>
       <SwipeableViews
-        index={value}
+        index={selectedTab}
         onChangeIndex={handleChangeIndex}
       >
         {
           tabs.map((tab, i) => (
-            <TabPanel key={tab.label} value={value} index={i} classes={classes}>
+            <TabPanel key={tab.label} value={selectedTab} index={i} classes={classes}>
               {tab.component}
             </TabPanel>
           ))
@@ -63,6 +61,8 @@ Tabs.propTypes = {
     label: PropTypes.string.isRequired,
     component: PropTypes.element.isRequired,
   })).isRequired,
+  selectedTab: PropTypes.number.isRequired,
+  handleChangeTab: PropTypes.func.isRequired,
 };
 
 TabPanel.propTypes = {
