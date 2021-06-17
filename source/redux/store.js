@@ -9,8 +9,4 @@ const store = configureStore({
   reducer,
 });
 
-// store.subscribe(() => {
-//  saveState(store.getState().wallet);
-// });
-
 export default store;
