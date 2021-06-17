@@ -5,9 +5,6 @@ import WalletInfo from '../WalletInfo';
 import useStyles from './styles';
 
 const NavBar = () => {
-  const walletName = 'Main IC Wallet';
-  const walletAddress = 'rwlgt-iiaaa{{THIS SHOULDNT BE VISIBLE DIRECTLY}}aaaaa-cai';
-
   const classes = useStyles();
 
   return (
@@ -16,7 +13,7 @@ const NavBar = () => {
         <Plug size="small" />
       </div>
       <div className={classes.walletContainer}>
-        <WalletInfo name={walletName} address={walletAddress} />
+        <WalletInfo />
       </div>
       <div className={classes.flex}>
         <Profile />
