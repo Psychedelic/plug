@@ -77,9 +77,7 @@ module.exports = {
       'index.jsx',
     ),
   },
-  node: {
-    fs: 'empty',
-  },
+
   output: {
     path: path.join(destPath, targetBrowser),
     filename: 'js/[name].bundle.js',
