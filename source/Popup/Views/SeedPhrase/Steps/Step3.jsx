@@ -19,7 +19,7 @@ const WORDS = [ // get from somewhere
 
 const Step3 = () => (
   <Container>
-    <div style={{ height: 178 }}>
+    <div style={{ height: 176 }}>
       <SeedPhrase words={WORDS} />
     </div>
   </Container>
