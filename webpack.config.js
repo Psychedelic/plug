@@ -124,10 +124,7 @@ module.exports = {
       {
         test: /\.(js|ts)x?$/,
         loader: 'babel-loader',
-        // exclude: /node_modules/,
-        options: {
-          plugins: ['@babel/plugin-proposal-export-namespace-from'],
-        },
+        exclude: /node_modules/,
       },
       {
         test: /\.(sa|sc|c)ss$/,
