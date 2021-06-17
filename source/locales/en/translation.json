@@ -69,7 +69,7 @@
     "subtitle": "Plug into the Internet Computer",
     "unlock": "Unlock",
     "restore": "Restore account?",
-    "import": "Import account using your seed phrase"
+    "import": "Import account using your Secret Recovery Phrase"
   },
   "help": {
     "title": "Help",
@@ -84,8 +84,8 @@
     "walletDetailsDescription": "Change the name & pic of your wallet.",
     "contacts": "Contacts",
     "contactsDescription": "Add, edit, remove and manage contacts.",
-    "seedPhrase": "Seed Phrase",
-    "seedPhraseDescription": "View your seed phrase & backup.",
+    "seedPhrase": "Secret Recovery Phrase",
+    "seedPhraseDescription": "View your Secret Recovery Phrase & backup.",
     "resetAccount": "Reset Account",
     "resetAccountDescription": "Reset all Transactions and Linked Apps."
   },
@@ -96,9 +96,9 @@
     "accountId": "ICP Account ID"
   },
   "seedPhrase": {
-    "title": "Seed Phrase",
-    "reveal": "Reveal Seed Phrase",
-    "checkbox": "I will be safe with my seed phrase."
+    "title": "Secret Recovery Phrase",
+    "reveal": "Reveal Secret Recovery Phrase",
+    "checkbox": "I will be safe with my Secret Recovery Phrase."
   },
   "appConnection": {
     "connect": "wants to connect to your wallet"
@@ -172,9 +172,9 @@
   "welcome": {
     "goBack": "Go Back",
     "createWallet": "Create Wallet",
-    "createText": "Create a new wallet and seed phrase.",
+    "createText": "Create a new wallet and Secret Recovery Phrase.",
     "importWallet": "Import Wallet",
-    "importText": "Import using 12 word seed phrase or private key.",
+    "importText": "Import using 12 word Secret Recovery Phrase or private key.",
     "welcomeTitle": "Welcome to Plug.",
     "welcomeSubtitle": "Choose if you want to import or create a wallet (Principal ID).",
     "welcomeMessage": "What’s good!",
@@ -184,18 +184,18 @@
     "passwordLabel": "New Password (min. 12 characters)",
     "passwordConfirmLabel": "Confirm Password",
     "passwordButton": "I made a secure password",
-    "passwordWarning": "Don't forget your password, otherwise you'll need to reimport your wallet using your seed phrase.",
-    "importSubtitle": "Please enter your 12 word seed phrase or private key.",
+    "passwordWarning": "Don't forget your password, otherwise you'll need to reimport your wallet using your Secret Recovery Phrase.",
+    "importSubtitle": "Please enter your 12 word Secret Recovery Phrase or private key.",
     "importMessage": "Paste that sh*t",
-    "importLabel": "Seed Phrase or Private Key",
+    "importLabel": "Secret Recovery Phrase or Private Key",
     "importButton": "Okay, I entered it.",
     "memeTitle": "You're good to go!",
     "memeSubtitle": "Peep your extensions and Plug should be there.",
     "memeMessage": "Let’s Gooo!!!",
-    "seedTitle": "Seed Phrase Backup",
-    "seedSubtitle": "Below is the seed phrase for your new wallet, write it down.",
+    "seedTitle": "Secret Recovery Phrase Backup",
+    "seedSubtitle": "Below is the Secret Recovery Phrase for your new wallet, write it down.",
     "seedMessage": "Keep this sh*t safe, forreal.",
-    "seedCheckbox": "I wrote down the seed phrase and put it somewhere safe."
+    "seedCheckbox": "I wrote down the Secret Recovery Phrase and put it somewhere safe."
   },
   "contacts": {
     "title": "Contacts",
