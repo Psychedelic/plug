@@ -49,6 +49,14 @@ module.exports = {
         loader: 'babel-loader',
         exclude: /node_modules/,
       },
+      {
+        test: /\.js|\.jsx$/,
+        loader: 'babel-loader',
+        // exclude: /node_modules/,
+        options: {
+          plugins: ['@babel/plugin-proposal-export-namespace-from'],
+        },
+      },
     ],
   },
 

@@ -77,7 +77,9 @@ module.exports = {
       'index.jsx',
     ),
   },
-
+  node: {
+    fs: 'empty',
+  },
   output: {
     path: path.join(destPath, targetBrowser),
     filename: 'js/[name].bundle.js',
@@ -121,7 +123,10 @@ module.exports = {
       {
         test: /\.(js|ts)x?$/,
         loader: 'babel-loader',
-        exclude: /node_modules/,
+        // exclude: /node_modules/,
+        options: {
+          plugins: ['@babel/plugin-proposal-export-namespace-from'],
+        },
       },
       {
         test: /\.(sa|sc|c)ss$/,
