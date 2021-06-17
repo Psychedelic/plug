@@ -55,7 +55,7 @@ const CreatePasswordStep = ({ handleNextStep }) => {
         <Button
           variant="rainbow"
           value={t('welcome.passwordButton')}
-          onClick={() => handleNextStep()}
+          onClick={handleNextStep}
           fullWidth
           disabled={password === '' || password !== confirmPassword || password.length < 12}
         />
