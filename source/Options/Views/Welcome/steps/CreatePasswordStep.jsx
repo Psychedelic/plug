@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import {
   Alert, Button, FormItem, TextInput,
 } from '@ui';
-import PlugController from '@psychedelic/plug-controller';
 import useStyles from '../styles';
 
 const CreatePasswordStep = ({ handleNextStep }) => {
@@ -21,16 +20,6 @@ const CreatePasswordStep = ({ handleNextStep }) => {
 
   const handleChangeConfirmPassword = (e) => {
     setConfirmPassword(e.target.value);
-  };
-
-  const handleCreateAccount = async () => {
-    const keyRing = new PlugController.PlugKeyRing();
-    console.log('keyRing1', keyRing);
-    await keyRing.load();
-    console.log('keyRing2', keyRing);
-    const wallet = await keyRing.create(password);
-    console.log(wallet);
-    handleNextStep();
   };
 
   return (
@@ -66,7 +55,7 @@ const CreatePasswordStep = ({ handleNextStep }) => {
         <Button
           variant="rainbow"
           value={t('welcome.passwordButton')}
-          onClick={() => handleCreateAccount()}
+          onClick={() => handleNextStep()}
           fullWidth
           disabled={password === '' || password !== confirmPassword || password.length < 12}
         />
