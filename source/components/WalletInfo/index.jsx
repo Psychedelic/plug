@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography';
 import shortAddress from '@shared/utils/short-address';
+import { useSelector } from 'react-redux';
 import useStyles from './styles';
 
-const WalletInfo = ({ name, address }) => {
+const WalletInfo = () => {
   const classes = useStyles();
   const [copied, setCopied] = useState(false);
+
+  const { name, address } = useSelector((state) => state.wallet);
 
   const { t } = useTranslation();
   const copyText = t('copy.copyText');
@@ -52,8 +54,3 @@ const WalletInfo = ({ name, address }) => {
 };
 
 export default WalletInfo;
-
-WalletInfo.propTypes = {
-  name: PropTypes.string.isRequired,
-  address: PropTypes.string.isRequired,
-};
