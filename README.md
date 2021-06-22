@@ -11,6 +11,20 @@ Ensure you have
 - [Node.js](https://nodejs.org) 10 or later installed
 - [Yarn](https://yarnpkg.com) v1 or v2 installed
 
+Authenticate to Github registry by:
+
+```
+npm login --registry=https://npm.pkg.github.com --scope=@Psychedelic
+```
+
+This because the packages under the organisation scope [@Psychedelic](https://github.com/Psychedelic) are published under the [Psychedelic packages](https://github.com/orgs/Psychedelic/packages), as you can see in the `.npmrc`:
+
+```
+@psychedelic:registry=https://npm.pkg.github.com
+```
+
+Choose the github username that you use as a member of @Psychedelic and for the password, a [personal access token](https://github.com/settings/tokens), with the `read:packages` scope (permission).
+
 Then run the following:
 
 - `yarn install` to install dependencies.
