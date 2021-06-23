@@ -10,12 +10,9 @@ import {
 
 const useSteps = () => {
   const { t } = useTranslation();
-
   const [currentStep, setCurrentStep] = useState(0);
-
   const [currentBranch, setCurrentBranch] = useState('import');
-
-  const [mnemonic, setMnemonic] = useState(null);
+  const [mnemonic, setMnemonic] = useState('');
 
   const handlePreviousStep = () => setCurrentStep(currentStep - 1);
   const handleNextStep = () => setCurrentStep(currentStep + 1);
@@ -25,8 +22,8 @@ const useSteps = () => {
     handleNextStep();
   };
 
-  const handleSetMnemonic = (mnemonicString) => {
-    setMnemonic(mnemonicString.split(' '));
+  const handleSetMnemonic = (value) => {
+    setMnemonic(value);
   };
 
   const branches = {
