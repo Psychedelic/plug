@@ -8,7 +8,7 @@ import {
 import PlugController from '@psychedelic/plug-controller';
 import useStyles from '../styles';
 
-const CreatePasswordStep = ({ handleNextStep }) => {
+const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => {
   const { t } = useTranslation();
   const classes = useStyles();
 
@@ -24,12 +24,18 @@ const CreatePasswordStep = ({ handleNextStep }) => {
   };
 
   const handleCreateAccount = async () => {
-    const keyRing = new PlugController.PlugKeyRing();
-    console.log('keyRing1', keyRing);
-    await keyRing.load();
-    console.log('keyRing2', keyRing);
-    const wallet = await keyRing.create(password);
-    console.log(wallet);
+    /* eslint-disable-next-line new-cap */
+    const keyRing = new PlugController.PlugKeyRing.default();
+
+    if (mnemonic) { // if receive mnemonic, import account
+      const wallet = await keyRing.importMnemonic({ mnemonic, password });
+      console.log(wallet);
+    } else { // else create account
+      const account = await keyRing.create({ password });
+      console.log(account);
+      handleSetMnemonic(account.mnemonic);
+    }
+
     handleNextStep();
   };
 
@@ -66,9 +72,13 @@ const CreatePasswordStep = ({ handleNextStep }) => {
         <Button
           variant="rainbow"
           value={t('welcome.passwordButton')}
-          onClick={() => handleCreateAccount()}
+          onClick={handleCreateAccount}
           fullWidth
-          disabled={password === '' || password !== confirmPassword || password.length < 12}
+          disabled={
+            password === ''
+            || password !== confirmPassword
+            || password.length < 12
+          }
         />
       </Grid>
       <Grid item xs={12}>
@@ -80,6 +90,13 @@ const CreatePasswordStep = ({ handleNextStep }) => {
 
 export default CreatePasswordStep;
 
+CreatePasswordStep.defaultProps = {
+  handleSetMnemonic: null,
+  mnemonic: null,
+};
+
 CreatePasswordStep.propTypes = {
   handleNextStep: PropTypes.func.isRequired,
+  handleSetMnemonic: PropTypes.func,
+  mnemonic: PropTypes.arrayOf(PropTypes.string),
 };

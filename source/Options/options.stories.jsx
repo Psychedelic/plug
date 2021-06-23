@@ -1,6 +1,4 @@
-import { StorageMock } from '@components';
-
-import Options from './Options';
+import Options from './Views/Welcome';
 
 export default {
   title: 'Options',
@@ -10,6 +8,4 @@ export default {
 const Template = (args) => <Options {...args} />;
 
 export const Default = Template.bind({});
-Default.args = {
-  storage: new StorageMock(),
-};
+Default.args = {};

@@ -15,6 +15,8 @@ const useSteps = () => {
 
   const [currentBranch, setCurrentBranch] = useState('import');
 
+  const [mnemonic, setMnemonic] = useState(null);
+
   const handlePreviousStep = () => setCurrentStep(currentStep - 1);
   const handleNextStep = () => setCurrentStep(currentStep + 1);
 
@@ -23,25 +25,37 @@ const useSteps = () => {
     handleNextStep();
   };
 
+  const handleSetMnemonic = (mnemonicString) => {
+    setMnemonic(mnemonicString.split(' '));
+  };
+
   const branches = {
     import: [
       {
         title: t('welcome.welcomeTitle'),
         subtitle: t('welcome.welcomeSubtitle'),
         message: t('welcome.welcomeMessage'),
-        component: <ActionsStep handleChangeBranch={handleChangeBranch} />,
+        component: <ActionsStep
+          handleChangeBranch={handleChangeBranch}
+        />,
       },
       {
         title: t('welcome.importWallet'),
         subtitle: t('welcome.importSubtitle'),
         message: t('welcome.importMessage'),
-        component: <ImportWalletStep handleNextStep={handleNextStep} />,
+        component: <ImportWalletStep
+          handleNextStep={handleNextStep}
+          handleSetMnemonic={handleSetMnemonic}
+        />,
       },
       {
         title: t('welcome.passwordTitle'),
         subtitle: t('welcome.passwordSubtitle'),
         message: t('welcome.passwordMessage'),
-        component: <CreatePasswordStep handleNextStep={handleNextStep} />,
+        component: <CreatePasswordStep
+          handleNextStep={handleNextStep}
+          mnemonic={mnemonic}
+        />,
       },
       {
         title: t('welcome.memeTitle'),
@@ -55,19 +69,27 @@ const useSteps = () => {
         title: t('welcome.welcomeTitle'),
         subtitle: t('welcome.welcomeSubtitle'),
         message: t('welcome.welcomeMessage'),
-        component: <ActionsStep handleChangeBranch={handleChangeBranch} />,
+        component: <ActionsStep
+          handleChangeBranch={handleChangeBranch}
+        />,
       },
       {
         title: t('welcome.passwordTitle'),
         subtitle: t('welcome.passwordSubtitle'),
         message: t('welcome.passwordMessage'),
-        component: <CreatePasswordStep handleNextStep={handleNextStep} />,
+        component: <CreatePasswordStep
+          handleNextStep={handleNextStep}
+          handleSetMnemonic={handleSetMnemonic}
+        />,
       },
       {
         title: t('welcome.seedTitle'),
         subtitle: t('welcome.seedSubtitle'),
         message: t('welcome.seedMessage'),
-        component: <SeedPhraseStep handleNextStep={handleNextStep} />,
+        component: <SeedPhraseStep
+          handleNextStep={handleNextStep}
+          mnemonic={mnemonic}
+        />,
       },
       {
         title: t('welcome.memeTitle'),
