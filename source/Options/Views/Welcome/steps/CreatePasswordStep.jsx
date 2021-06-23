@@ -25,7 +25,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
 
   const handleCreateAccount = async () => {
     /* eslint-disable-next-line new-cap */
-    const keyRing = new PlugController.PlugKeyRing.default();
+    const keyRing = new PlugController.PlugKeyRing();
 
     if (mnemonic) { // if receive mnemonic, import account
       const wallet = await keyRing.importMnemonic({ mnemonic, password });
