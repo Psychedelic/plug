@@ -3,30 +3,19 @@ import { useRouter } from '@components/Router';
 import { ActionButton } from '@ui';
 import useStyles from './styles';
 
-const ACTIONS = (navigator) => [
-  {
-    type: 'deposit',
-    onClick: (() => navigator.navigate('deposit')),
-  },
-  {
-    type: 'send',
-    onClick: (() => navigator.navigate('send')),
-  },
-  // {
-  //   type: 'swap',
-  //   onClick: (() => navigator.navigate('swap')),
-  // },
-];
+const ACTIONS = ['deposit', 'send', 'swap'];
 
 const Actions = () => {
   const classes = useStyles();
   const { navigator } = useRouter();
 
+  // TODO: Re-enable swap when available.
+  const navigate = (route) => () => route !== 'swap' && navigator.navigate(route);
   return (
     <div className={classes.root}>
       {
-        ACTIONS(navigator).map((action) => (
-          <ActionButton key={action.type} type={action.type} onClick={action.onClick} />
+        ACTIONS.map((action) => (
+          <ActionButton key={action} type={action} onClick={navigate(action)} />
         ))
       }
     </div>
