@@ -26,8 +26,7 @@ export default makeStyles((theme) => ({
   },
   iconSwap: {
     background:
-      'radial-gradient(85.62% 86.59% at 48.78% 48.78%, #00E8FF 0%, #47F748 67.19%)',
-    boxShadow: '0px 0px 10px rgba(61, 240, 154, 0.6)',
+      'radial-gradient(85.62% 86.59% at 48.78% 48.78%, whitesmoke 0%, grey 67.19%)',
   },
   textDeposit: {
     background: 'linear-gradient(102.53deg, #FB5DC3 5.45%, #FDB943 96.36%)',
@@ -36,7 +35,7 @@ export default makeStyles((theme) => ({
     background: 'linear-gradient(103.8deg, #36C3E9 5.92%, #CF6ED3 84.31%)',
   },
   textSwap: {
-    background: 'linear-gradient(102.05deg, #09DF66 5.28%, #05DCC8 83.22%)',
+    background: 'linear-gradient(102.05deg, grey 5.28%, darkgrey 83.22%)',
   },
   text: {
     WebkitBackgroundClip: 'text !important',
