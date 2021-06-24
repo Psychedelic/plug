@@ -12,10 +12,10 @@ const ACTIONS = (navigator) => [
     type: 'send',
     onClick: (() => navigator.navigate('send')),
   },
-  {
-    type: 'swap',
-    onClick: (() => navigator.navigate('swap')),
-  },
+  // {
+  //   type: 'swap',
+  //   onClick: (() => navigator.navigate('swap')),
+  // },
 ];
 
 const Actions = () => {
