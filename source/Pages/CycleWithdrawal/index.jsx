@@ -10,6 +10,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import i18n from 'i18next';
 
+import { useTabs } from '@hooks';
 import initConfig from '../../locales';
 import useStyles from './styles';
 
@@ -23,6 +24,8 @@ i18n.use(initReactI18next).init(initConfig);
 const CycleWithdrawal = () => {
   const { t } = useTranslation();
   const classes = useStyles();
+
+  const { selectedTab, handleChangeTab } = useTabs();
 
   const { query } = qs.parseUrl(window.location.href);
 
@@ -83,25 +86,25 @@ const CycleWithdrawal = () => {
         {
           requestCount > 0
           && (
-          <>
-            <Tabs tabs={tabs} />
-            <Container>
-              <div className={classes.buttonContainer}>
-                <Button variant="default" value={t('common.decline')} onClick={() => handleRequest(requests[currentRequest], 'declined')} style={{ width: '48%' }} />
-                <Button variant="rainbow" value={t('common.confirm')} onClick={() => handleRequest(requests[currentRequest], 'accepted')} style={{ width: '48%' }} />
-              </div>
-              {
-                requestCount > 1
-                && (
-                <LinkButton
-                  value={`${t('cycleTransactions.decline')} ${requestCount} ${t('cycleTransactions.transactions')}`}
-                  onClick={() => handleDeclineAll()}
-                  style={{ marginTop: 24 }}
-                />
-                )
-              }
-            </Container>
-          </>
+            <>
+              <Tabs tabs={tabs} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
+              <Container>
+                <div className={classes.buttonContainer}>
+                  <Button variant="default" value={t('common.decline')} onClick={() => handleRequest(requests[currentRequest], 'declined')} style={{ width: '48%' }} />
+                  <Button variant="rainbow" value={t('common.confirm')} onClick={() => handleRequest(requests[currentRequest], 'accepted')} style={{ width: '48%' }} />
+                </div>
+                {
+                  requestCount > 1
+                  && (
+                    <LinkButton
+                      value={`${t('cycleTransactions.decline')} ${requestCount} ${t('cycleTransactions.transactions')}`}
+                      onClick={() => handleDeclineAll()}
+                      style={{ marginTop: 24 }}
+                    />
+                  )
+                }
+              </Container>
+            </>
           )
         }
       </Layout>

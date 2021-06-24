@@ -29,7 +29,7 @@ const useSteps = () => {
       component: <ContactList contacts={contacts} handleRemoveContact={handleRemoveContact} />,
       left: leftButton(() => navigator.navigate('settings')),
       right: <Button
-        variant="primary"
+        variant="rainbowOutlined"
         value={t('common.add')}
         onClick={() => handleChangeView(1)}
         style={{

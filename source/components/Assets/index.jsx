@@ -1,6 +1,9 @@
 import React from 'react';
-import { AssetItem } from '@ui';
+import { AssetItem, Button } from '@ui';
 import { CURRENCIES } from '@shared/constants/currencies';
+import { useRouter } from '@components/Router';
+
+import { useTranslation } from 'react-i18next';
 import useStyles from './styles';
 
 const ASSETS = [
@@ -22,6 +25,8 @@ const ASSETS = [
 
 const Assets = () => {
   const classes = useStyles();
+  const { navigator } = useRouter();
+  const { t } = useTranslation();
 
   return (
     <div className={classes.root}>
@@ -30,6 +35,18 @@ const Assets = () => {
           <AssetItem {...asset} />
         ))
       }
+      <Button
+        variant="rainbowOutlined"
+        value={t('addToken.title')}
+        onClick={() => navigator.navigate('add-token')}
+        style={{
+          width: 166,
+          height: 42,
+          borderRadius: 10,
+          alignSelf: 'center',
+          marginTop: 12,
+        }}
+      />
     </div>
   );
 };

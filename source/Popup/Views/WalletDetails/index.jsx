@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { Layout, UserIcon, useStorage } from '@components';
+import { Layout, UserIcon } from '@components';
 import {
   Header, LinkButton, FormInput, Button, Container, FormItem, Alert,
 } from '@ui';
@@ -9,25 +8,32 @@ import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';
 import Picker from 'emoji-picker-react';
 import Grid from '@material-ui/core/Grid';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateWalletDetails } from '../../../redux/wallet';
 
-const WalletDetails = ({ currentWalletName }) => {
+const WalletDetails = () => {
+  const { name, emoji } = useSelector((state) => state.wallet);
+
   const { navigator } = useRouter();
   const { t } = useTranslation();
   const [openEmojis, setOpenEmojis] = useState(false);
-  const [walletName, setWalletName] = useState(currentWalletName);
+  const [walletName, setWalletName] = useState(name);
+  const [currentEmoji, setCurrentEmoji] = useState(emoji);
 
-  const { storage, updateStorage } = useStorage();
-  const [emoji, setEmoji] = useState(storage);
+  const dispatch = useDispatch();
 
   const handleChange = (e) => setWalletName(e.target.value);
 
   const onEmojiClick = (_event, emojiObject) => {
-    setEmoji(emojiObject.emoji);
+    setCurrentEmoji(emojiObject.emoji);
     setOpenEmojis(false);
   };
 
   const onSave = () => {
-    updateStorage(emoji);
+    dispatch(updateWalletDetails({
+      name: walletName,
+      emoji: currentEmoji,
+    }));
   };
 
   return (
@@ -60,7 +66,7 @@ const WalletDetails = ({ currentWalletName }) => {
               flexDirection: 'column',
             }}
           >
-            <UserIcon big icon={emoji} />
+            <UserIcon big icon={currentEmoji} />
             <Button
               variant="primaryOutlined"
               value={t('walletDetails.editWalletPic')}
@@ -93,7 +99,7 @@ const WalletDetails = ({ currentWalletName }) => {
               smallLabel
               component={(
                 <Alert
-                  value="rwlgt-iiaaa-aaaaa-aaaaa-cai"
+                  title="rwlgt-iiaaa-aaaaa-aaaaa-cai"
                   type="info"
                   endIcon
                 />
@@ -110,11 +116,3 @@ const WalletDetails = ({ currentWalletName }) => {
 };
 
 export default WalletDetails;
-
-WalletDetails.defaultProps = {
-  currentWalletName: 'Main IC Wallet', // I'll leave it like this until we have redux
-};
-
-WalletDetails.propTypes = {
-  currentWalletName: PropTypes.string,
-};

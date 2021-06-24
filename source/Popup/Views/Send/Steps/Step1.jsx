@@ -54,6 +54,7 @@ const Step1 = ({
     setSelectedContact(contact);
     handleChangeAddress(contact.id);
     setOpenAddContact(false);
+    setContactName('');
   };
 
   const handleChangeContactName = (e) => {
@@ -144,7 +145,7 @@ const Step1 = ({
                 <Alert
                   type="danger"
                   endIcon
-                  value={t('send.accountWarning')}
+                  title={t('send.accountWarning')}
                 />
               </div>
             </Grid>

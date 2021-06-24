@@ -42,6 +42,7 @@ module.exports = {
           ['@assets', './source/assets'],
           ['@shared', './source/shared'],
           ['@hooks', './source/hooks'],
+          ['@redux', './source/redux'],
         ],
       },
     },
