@@ -15,10 +15,12 @@ const getTabs = (t) => [
     label: t('tabs.activity'),
     component: <Activity />,
   },
+  /*
   {
     label: t('tabs.apps'),
     component: <Apps />,
   },
+  */
 ];
 
 const Home = () => {
