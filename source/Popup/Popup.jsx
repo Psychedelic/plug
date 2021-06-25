@@ -10,7 +10,7 @@ import {
 import Home from './Views/Home';
 import Help from './Views/Help';
 import Settings from './Views/Settings';
-import WalletDetails from './Views/WalletDetails';
+// import WalletDetails from './Views/WalletDetails';
 import SeedPhrase from './Views/SeedPhrase';
 import Deposit from './Views/Deposit';
 import Swap from './Views/Swap';

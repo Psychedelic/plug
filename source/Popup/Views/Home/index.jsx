@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Actions, Assets, Activity, Apps, Layout,
+  Actions, Assets, Activity, Layout,
 } from '@components';
 import { Tabs } from '@ui';
 import { useTranslation } from 'react-i18next';
