@@ -3,6 +3,7 @@ import KeyIcon from '@assets/icons/settings/old-key.svg';
 import NotebookIcon from '@assets/icons/settings/notebook.svg';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from '@components/Router';
+import browser from 'webextension-polyfill';
 
 const useSettingsItems = () => {
   const { navigator } = useRouter();
@@ -26,6 +27,12 @@ const useSettingsItems = () => {
       name: t('settings.seedPhrase'),
       description: t('settings.seedPhraseDescription'),
       onClick: (() => navigator.navigate('seed-phrase')),
+    },
+    {
+      image: KeyIcon,
+      name: 'Create/Import account screen',
+      description: '',
+      onClick: (() => browser.tabs.create({ url: 'options.html' })),
     },
   ];
 };
