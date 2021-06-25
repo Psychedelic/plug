@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Actions, Assets, Activity, Layout,
+  Actions, Assets, Activity, Apps, Layout,
 } from '@components';
 import { Tabs } from '@ui';
 import { useTranslation } from 'react-i18next';
@@ -15,12 +15,10 @@ const getTabs = (t) => [
     label: t('tabs.activity'),
     component: <Activity />,
   },
-  /*
   {
     label: t('tabs.apps'),
     component: <Apps />,
   },
-  */
 ];
 
 const Home = () => {

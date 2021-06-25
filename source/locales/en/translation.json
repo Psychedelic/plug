@@ -62,7 +62,9 @@
     "disconnectText": "Are you sure you want to disconnect from",
     "emptyTitle": "You aren’t connected to any apps yet.",
     "emptyText": "Explore a list of all apps that use Plug and find your first in",
-    "emptyLink": "our docs."
+    "emptyLink": "our docs.",
+    "comingSoonTitle": "Coming Soon!",
+    "comingSoonSubtitle": "Plug will allow you to connect and log into IC Apps."
   },
   "login": {
     "title": "Welcome Back!",
