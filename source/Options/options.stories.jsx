@@ -1,4 +1,4 @@
-import Options from './Views/Welcome';
+import Options from './Views/Welcome/index';
 
 export default {
   title: 'Options',

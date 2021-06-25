@@ -35,7 +35,7 @@ const SeedPhraseStep = ({ handleNextStep, mnemonic }) => {
               </>
             )
           }
-          <SeedPhrase words={mnemonic} />
+          <SeedPhrase words={mnemonic.split(' ')} />
         </Grid>
         <Grid item xs={12}>
           <Checkbox style={{ margin: 0 }} checked={checked} handleChange={handleChangeCheckbox} label={t('welcome.seedCheckbox')} />

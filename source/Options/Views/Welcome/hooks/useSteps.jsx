@@ -25,9 +25,7 @@ const useSteps = () => {
     handleNextStep();
   };
 
-  const handleSetMnemonic = (mnemonicString) => {
-    setMnemonic(mnemonicString.split(' '));
-  };
+  const handleSetMnemonic = (value) => setMnemonic(value);
 
   const branches = {
     import: [
