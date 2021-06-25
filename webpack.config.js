@@ -77,7 +77,9 @@ module.exports = {
       'index.jsx',
     ),
   },
-
+  node: {
+    fs: 'empty',
+  },
   output: {
     path: path.join(destPath, targetBrowser),
     filename: 'js/[name].bundle.js',
@@ -91,7 +93,6 @@ module.exports = {
       '@assets': path.join(path.resolve(__dirname, './source/assets')),
       '@shared': path.join(path.resolve(__dirname, './source/shared')),
       '@hooks': path.join(path.resolve(__dirname, './source/hooks')),
-      '@redux': path.join(path.resolve(__dirname, './source/redux')),
       'webextension-polyfill': path.resolve(
         path.join(__dirname, 'node_modules', 'webextension-polyfill'),
       ),
@@ -122,7 +123,10 @@ module.exports = {
       {
         test: /\.(js|ts)x?$/,
         loader: 'babel-loader',
-        exclude: /node_modules/,
+        // exclude: /node_modules/,
+        options: {
+          plugins: ['@babel/plugin-proposal-export-namespace-from'],
+        },
       },
       {
         test: /\.(sa|sc|c)ss$/,
