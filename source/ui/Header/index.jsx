@@ -3,7 +3,12 @@ import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import useStyles from './styles';
 
-const Header = ({ center, left, right, className }) => {
+const Header = ({
+  center,
+  left,
+  right,
+  className,
+}) => {
   const classes = useStyles();
 
   return (
