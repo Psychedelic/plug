@@ -85,7 +85,7 @@
     "contacts": "Contacts",
     "contactsDescription": "Add, edit, remove and manage contacts.",
     "seedPhrase": "Secret Recovery Phrase",
-    "seedPhraseDescription": "View your Secret Recovery Phrase & backup.",
+    "seedPhraseDescription": "View and backup your secret phrase.",
     "resetAccount": "Reset Account",
     "resetAccountDescription": "Reset all Transactions and Linked Apps."
   },
