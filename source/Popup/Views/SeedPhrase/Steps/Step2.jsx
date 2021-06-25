@@ -16,7 +16,7 @@ const Step2 = ({ handleChangeStep }) => {
 
   return (
     <Container>
-      <Grid container spacing={1}>
+      <Grid container spacing={2}>
         <Grid item xs={12}>
           <FormInput id="password" label={t('common.password')} type="password" value={password} onChange={handleChangePassword} />
         </Grid>

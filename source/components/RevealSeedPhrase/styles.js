@@ -2,8 +2,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
   root: {
-    width: 262,
-    height: 114,
+    width: 350,
+    height: 134,
     position: 'relative',
     cursor: 'pointer',
     transition: 'transform 0.3s',

@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import {
   Alert, Button, FormItem, TextInput,
 } from '@ui';
-import PlugController from '@psychedelic/plug-controller';
 import useStyles from '../styles';
 
 const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => {
