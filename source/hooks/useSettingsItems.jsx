@@ -9,12 +9,14 @@ const useSettingsItems = () => {
   const { t } = useTranslation();
 
   return [
+/*
     {
       image: PenIcon,
       name: t('settings.walletDetails'),
       description: t('settings.walletDetailsDescription'),
       onClick: (() => navigator.navigate('wallet-details')),
     },
+*/
     {
       image: NotebookIcon,
       name: t('settings.contacts'),

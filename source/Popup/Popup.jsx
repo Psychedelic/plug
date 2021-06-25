@@ -24,7 +24,7 @@ const Popup = ({ storage }) => (
       <Route name="home" component={Home} />
       <Route name="help" component={Help} />
       <Route name="settings" component={Settings} />
-      <Route name="wallet-details" component={WalletDetails} />
+      { /* <Route name="wallet-details" component={WalletDetails} /> */ }
       <Route name="seed-phrase" component={SeedPhrase} />
       <Route name="deposit" component={Deposit} />
       <Route name="swap" component={Swap} />
