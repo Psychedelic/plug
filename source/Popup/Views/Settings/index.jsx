@@ -16,12 +16,12 @@ const Settings = () => {
     <Layout>
       <Header
         center={t('settings.title')}
-        right={
+        right={(
           <LinkButton
             value={t('common.close')}
             onClick={() => navigator.navigate('home')}
           />
-        }
+        )}
         className={classes.title}
       />
       <div>
