@@ -26,6 +26,12 @@ const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
     }
   };
 
+  const handleValidateMnemonic = () => (
+    text === ''
+    || text.trim().split(/\s+/g).length !== 12
+    || invalidMnemonic
+  );
+
   return (
     <>
       <Grid item xs={12}>
@@ -50,11 +56,7 @@ const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
           value={t('welcome.importButton')}
           onClick={handleImportMnemonic}
           fullWidth
-          disabled={
-            text === ''
-            || text.trim().split(/\s+/g).length !== 12
-            || invalidMnemonic
-          }
+          disabled={handleValidateMnemonic()}
         />
       </Grid>
     </>

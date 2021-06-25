@@ -18,6 +18,7 @@
     "@babel/react"
   ],
   "plugins": [
+    ["@babel/plugin-proposal-export-namespace-from"],
     ["@babel/plugin-proposal-class-properties"],
     ["@babel/plugin-transform-destructuring", {
       "useBuiltIns": true

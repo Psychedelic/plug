@@ -36,6 +36,12 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
     handleNextStep();
   };
 
+  const validatePassword = () => (
+    password === ''
+    || password !== confirmPassword
+    || password.length < 12
+  );
+
   return (
     <>
       <Grid item xs={12}>
@@ -71,11 +77,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
           value={t('welcome.passwordButton')}
           onClick={handleCreateAccount}
           fullWidth
-          disabled={
-            password === ''
-            || password !== confirmPassword
-            || password.length < 12
-          }
+          disabled={validatePassword()}
         />
       </Grid>
       <Grid item xs={12}>
