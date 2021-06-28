@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FA_NPM_TOKEN: ${{ secrets.FA_NPM_TOKEN }}
+      PSYCHEDELIC_ORG_NPM_PKG_TOKEN: ${{ secrets.PSYCHEDELIC_ORG_NPM_PKG_TOKEN }}
 
     strategy:
       matrix:
@@ -26,7 +27,13 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
+
+    - name: Grant packages read
+      run: |
+        echo "//npm.pkg.github.com/:_authToken=$PSYCHEDELIC_ORG_NPM_PKG_TOKEN" >> .npmrc
+
     - name: Install Dependencies
       run: yarn
+
     - name: Run ESLint
       run: yarn lint
