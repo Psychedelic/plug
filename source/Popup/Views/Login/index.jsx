@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Plug } from '@components';
 import { LinkButton, Button, FormInput } from '@ui';
 import clsx from 'clsx';
-import KeyRing from '@shared/utils/keyring';
+import { KeyRing } from '@background';
 import { useRouter } from '@components/Router';
 import browser from 'webextension-polyfill';
 import useStyles from './styles';

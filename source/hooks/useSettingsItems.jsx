@@ -3,6 +3,7 @@ import KeyIcon from '@assets/icons/settings/old-key.svg';
 import NotebookIcon from '@assets/icons/settings/notebook.svg';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from '@components/Router';
+import { KeyRing } from '@background';
 
 const useSettingsItems = () => {
   const { navigator } = useRouter();
@@ -33,7 +34,12 @@ const useSettingsItems = () => {
       image: KeyIcon,
       name: 'Lock',
       description: '',
-      onClick: (() => navigator.navigate('login')),
+      onClick: (() => {
+        KeyRing.lock()
+          .then(() => {
+            navigator.navigate('login')
+          })
+      }),
     },
   ];
 };

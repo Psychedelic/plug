@@ -7,6 +7,7 @@ import {
 } from '@ui';
 import PlugController from '@psychedelic/plug-controller';
 import useStyles from '../styles';
+import { KeyRing } from '@background'
 
 const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => {
   const { t } = useTranslation();
@@ -24,12 +25,10 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
   };
 
   const handleCreateAccount = async () => {
-    const keyRing = new PlugController.PlugKeyRing();
-
     if (mnemonic) { // if receive mnemonic, import account
-      await keyRing.importMnemonic({ mnemonic, password });
+      await KeyRing.importMnemonic({ mnemonic, password });
     } else { // else create account
-      const account = await keyRing.create({ password });
+      const account = await KeyRing.create({ password });
       handleSetMnemonic(account.mnemonic);
     }
 

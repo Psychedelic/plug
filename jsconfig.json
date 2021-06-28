@@ -14,6 +14,7 @@
       "@hooks/*": ["source/hooks/*"],
       "@redux": ["source/redux"],
       "@redux/*": ["source/redux/*"],
+      "@background": ["source/Background"]
     }
   },
   "exclude": ["node_modules"]

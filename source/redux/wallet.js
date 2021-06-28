@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { ACTIVITY_STATUS } from '@shared/constants/activity';
 import { CURRENCIES } from '@shared/constants/currencies';
-import keyRing from '@shared/utils/keyring';
+import { KeyRing } from '@background';
 
 export const getTransactions = createAsyncThunk('wallet/getTransactions', async () => {
-  const transactions = await keyRing.getTransactions();
+  const transactions = await KeyRing.getTransactions();
   const mapTransaction = (trx) => {
     const type = Object.keys(trx.transfer)[0];
     const amount = trx.tranfer[type]?.amount?.e8s; // The same regardless of the type
