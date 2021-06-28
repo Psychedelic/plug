@@ -7,7 +7,6 @@ import clsx from 'clsx';
 import KeyRing from '@shared/utils/keyring';
 import { useRouter } from '@components/Router';
 import browser from 'webextension-polyfill';
-import extension from 'extensionizer';
 import useStyles from './styles';
 
 const Login = () => {
@@ -24,10 +23,6 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-    if (password === 'clear') {
-      extension.storage.local.clear();
-    }
-
     let unlocked;
 
     try {
