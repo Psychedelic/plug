@@ -4,16 +4,43 @@ import { useTranslation } from 'react-i18next';
 import { Plug } from '@components';
 import { LinkButton, Button, FormInput } from '@ui';
 import clsx from 'clsx';
+import KeyRing from '@shared/utils/keyring';
+import { useRouter } from '@components/Router';
+import browser from 'webextension-polyfill';
+import extension from 'extensionizer';
 import useStyles from './styles';
 
 const Login = () => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const { navigator } = useRouter();
 
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(false);
 
   const handleChangePassword = (e) => {
     setPassword(e.target.value);
+    setError(false);
+  };
+
+  const handleLogin = async () => {
+    if (password === 'clear') {
+      extension.storage.local.clear();
+    }
+
+    let unlocked;
+
+    try {
+      unlocked = await KeyRing.unlock(password);
+    } catch (e) {
+      unlocked = false;
+    }
+
+    if (unlocked) {
+      navigator.navigate('home');
+    } else {
+      setError(true);
+    }
   };
 
   return (
@@ -32,18 +59,23 @@ const Login = () => {
           onChange={handleChangePassword}
           type="password"
           id="password"
+          error={error}
         />
         <Button
           value={t('login.unlock')}
           variant="rainbow"
           fullWidth
           disabled={password === ''}
+          onClick={handleLogin}
         />
       </div>
 
       <div className={clsx(classes.flex, classes.actionContainer)}>
         <Typography variant="subtitle1">{t('login.restore')}</Typography>
-        <LinkButton value={t('login.import')} onClick={() => null} />
+        <LinkButton
+          value={t('login.import')}
+          onClick={() => browser.tabs.create({ url: 'options.html' })}
+        />
       </div>
 
     </div>

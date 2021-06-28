@@ -3,7 +3,6 @@ import KeyIcon from '@assets/icons/settings/old-key.svg';
 import NotebookIcon from '@assets/icons/settings/notebook.svg';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from '@components/Router';
-import browser from 'webextension-polyfill';
 
 const useSettingsItems = () => {
   const { navigator } = useRouter();
@@ -30,9 +29,9 @@ const useSettingsItems = () => {
     },
     {
       image: KeyIcon,
-      name: 'Create/Import account screen',
+      name: 'Lock',
       description: '',
-      onClick: (() => browser.tabs.create({ url: 'options.html' })),
+      onClick: (() => navigator.navigate('login')),
     },
   ];
 };
