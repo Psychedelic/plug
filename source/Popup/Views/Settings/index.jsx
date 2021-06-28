@@ -4,15 +4,26 @@ import { useRouter } from '@components/Router';
 import { Layout } from '@components';
 import { MenuItemDetailed, Header, LinkButton } from '@ui';
 import useSettingsItems from '../../../hooks/useSettingsItems';
+import useStyles from './styles';
 
 const Settings = () => {
+  const classes = useStyles();
   const settingsItems = useSettingsItems();
   const { navigator } = useRouter();
   const { t } = useTranslation();
 
   return (
     <Layout>
-      <Header center={t('settings.title')} right={<LinkButton value={t('common.close')} onClick={() => navigator.navigate('home')} />} />
+      <Header
+        center={t('settings.title')}
+        right={(
+          <LinkButton
+            value={t('common.close')}
+            onClick={() => navigator.navigate('home')}
+          />
+        )}
+        className={classes.title}
+      />
       <div>
         {
           settingsItems.map((item) => (
