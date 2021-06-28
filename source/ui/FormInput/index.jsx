@@ -7,7 +7,7 @@ import TextInput from '../TextInput';
 import useStyles from './styles';
 
 const FormInput = ({
-  id, label, type, value, onChange,
+  id, label, type, value, onChange, error,
 }) => {
   const classes = useStyles();
 
@@ -16,7 +16,7 @@ const FormInput = ({
       <InputLabel shrink htmlFor={id} className={classes.formLabel}>
         <Typography variant="h6">{label}</Typography>
       </InputLabel>
-      <TextInput id={id} type={type} value={value} onChange={onChange} />
+      <TextInput id={id} type={type} value={value} onChange={onChange} error={error} />
     </FormControl>
   );
 };
@@ -29,4 +29,5 @@ FormInput.propTypes = {
   type: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
+  error: PropTypes.bool.isRequired,
 };

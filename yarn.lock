@@ -1763,10 +1763,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.9.2.tgz#adea7b6953cbb34651766b0548468e743c6a2353"
   integrity sha512-VZMYa7+fXHdwIq1TDhSXoVmSPEGM/aa+6Aiq3nVVJ9bXr24zScr+NlKFKC3iPljA7ho/GAZr+d2jOf5GIRC30Q==
 
-"@psychedelic/plug-controller@0.0.2":
-  version "0.0.2"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.0.2/c4a047cad2b707920bd2c0c4176d22c1f23100abcb914a9ca1a38caf8a1c9e2f#38eaa620d6a7bc8dd3aacca038fd48682a391c9b"
-  integrity sha512-Bq0SeNd6mi4hz/tmn4YTNe54bQzPew47FLThD6ek0KFFySvR4Lf0O2Gpw7gUMntHiWJ+FYpMmidcg1oHF0ZF2g==
+"@psychedelic/plug-controller@0.0.5":
+  version "0.0.5"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.0.5/b8b7c3d810ebb765a85e0553c6f86f9827c8b2dbd7383e9b46cee3b4c38ca0fb#0caaf8cbcc9c2fdd82909601f3b1c679f9e89123"
+  integrity sha512-g4DGttJj0DpH2qK1p5HQRAJUJb6kt++GBrUPpdXhikQkZMi3bwcf4u0QjUpvkwv0DPQCSCpLpcMdbubIFNTk+g==
   dependencies:
     "@babel/preset-env" "^7.14.4"
     "@dfinity/agent" "^0.8.9"
@@ -2582,9 +2582,9 @@
     "@babel/types" "^7.0.0"
 
 "@types/babel__traverse@*", "@types/babel__traverse@^7.0.6":
-  version "7.11.1"
-  resolved "https://registry.yarnpkg.com/@types/babel__traverse/-/babel__traverse-7.11.1.tgz#654f6c4f67568e24c23b367e947098c6206fa639"
-  integrity sha512-Vs0hm0vPahPMYi9tDjtP66llufgO3ST16WXaSTtDGEl9cewAl3AibmxWw6TINOqHPT9z0uABKAYjT9jNSg4npw==
+  version "7.14.0"
+  resolved "https://registry.yarnpkg.com/@types/babel__traverse/-/babel__traverse-7.14.0.tgz#a34277cf8acbd3185ea74129e1f100491eb1da7f"
+  integrity sha512-IilJZ1hJBUZwMOVDNTdflOOLzJB/ZtljYVa7k3gEZN/jqIJIPkWHC6dvbX+DD2CwZDHB9wAKzZPzzqMIkW37/w==
   dependencies:
     "@babel/types" "^7.3.0"
 

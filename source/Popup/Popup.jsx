@@ -5,7 +5,6 @@ import {
   Route,
   Router,
   storagePropType,
-  StorageProvider,
 } from '@components';
 import Home from './Views/Home';
 import Help from './Views/Help';
@@ -17,22 +16,22 @@ import Swap from './Views/Swap';
 import Send from './Views/Send';
 import Contacts from './Views/Contacts';
 import AddToken from './Views/AddToken';
+import Login from './Views/Login';
 
-const Popup = ({ storage }) => (
-  <StorageProvider storage={storage}>
-    <Router initialRouteName="home" storage={storage}>
-      <Route name="home" component={Home} />
-      <Route name="help" component={Help} />
-      <Route name="settings" component={Settings} />
-      { /* <Route name="wallet-details" component={WalletDetails} /> */ }
-      <Route name="seed-phrase" component={SeedPhrase} />
-      <Route name="deposit" component={Deposit} />
-      <Route name="swap" component={Swap} />
-      <Route name="send" component={Send} />
-      <Route name="contacts" component={Contacts} />
-      <Route name="add-token" component={AddToken} />
-    </Router>
-  </StorageProvider>
+const Popup = ({ storage, initialRoute }) => (
+  <Router initialRouteName={initialRoute} storage={storage}>
+    <Route name="login" component={Login} />
+    <Route name="home" component={Home} />
+    <Route name="help" component={Help} />
+    <Route name="settings" component={Settings} />
+    {/* <Route name="wallet-details" component={WalletDetails} /> */}
+    <Route name="seed-phrase" component={SeedPhrase} />
+    <Route name="deposit" component={Deposit} />
+    <Route name="swap" component={Swap} />
+    <Route name="send" component={Send} />
+    <Route name="contacts" component={Contacts} />
+    <Route name="add-token" component={AddToken} />
+  </Router>
 );
 
 Popup.defaultProps = {
@@ -41,6 +40,7 @@ Popup.defaultProps = {
 
 Popup.propTypes = {
   storage: PropTypes.shape(storagePropType),
+  initialRoute: PropTypes.string.isRequired,
 };
 
 export default Popup;
