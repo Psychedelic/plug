@@ -10,6 +10,13 @@ export default makeStyles((theme) => ({
     flexDirection: 'column',
     padding: `0 ${theme.spacing(2)}px ${theme.spacing(0.5)}px`,
   },
+  centerTextContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+  },
   emptyState: {
     display: 'flex',
     flexDirection: 'column',
@@ -18,6 +25,12 @@ export default makeStyles((theme) => ({
     padding: `${theme.spacing(1)}px ${theme.spacing(4)}px`,
     height: 144,
     textAlign: 'center',
+  },
+  comingSoonTitle: {
+    margin: '15px 0 8px',
+  },
+  comingSoonSubtitle: {
+    width: '230px',
   },
   image: {
     width: 46,

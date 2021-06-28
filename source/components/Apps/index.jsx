@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography';
 import { AppItem } from '@ui';
 import DeleteImg from '@assets/icons/delete.svg';
+import WinkingEmoji from '@assets/icons/wink.png';
 import ActionDialog from '../ActionDialog';
 import useStyles from './styles';
 import EmptyState from './components/EmptyState';
@@ -40,6 +41,19 @@ const Apps = () => {
     setOpen(true);
   };
 
+  return (
+    <div className={classes.centerTextContainer}>
+      <img src={WinkingEmoji} className={classes.image} />
+      <Typography variant="h4" className={classes.comingSoonTitle}>
+        {t('apps.comingSoonTitle')}
+      </Typography>
+      <Typography variant="subtitle2" className={classes.comingSoonSubtitle}>
+        {t('apps.comingSoonSubtitle')}
+      </Typography>
+    </div>
+  );
+
+  /* eslint-disable-next-line no-unreachable */
   return (
     <>
       <div className={classes.root}>
