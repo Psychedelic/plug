@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Actions, Assets, Activity, Apps, Layout,
 } from '@components';
 import { Tabs } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { useTabs } from '@hooks';
+import { useDispatch } from 'react-redux';
+import { getData } from '@redux/wallet';
 
 const getTabs = (t) => [
   {
@@ -24,6 +26,11 @@ const getTabs = (t) => [
 const Home = () => {
   const { t } = useTranslation();
   const { selectedTab, handleChangeTab } = useTabs();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getData());
+  }, []);
 
   return (
     <Layout>
