@@ -35,6 +35,7 @@ module.exports = {
       "@shared": path.join(path.resolve(__dirname, "../source/shared")),
       "@hooks": path.join(path.resolve(__dirname, "../source/hooks")),
       "@redux": path.join(path.resolve(__dirname, "../source/redux")),
+      "@background": path.join(path.resolve(__dirname, "../source/Background")),
     };
 
     return config;

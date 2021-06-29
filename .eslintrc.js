@@ -43,6 +43,7 @@ module.exports = {
           ['@shared', './source/shared'],
           ['@hooks', './source/hooks'],
           ['@redux', './source/redux'],
+          ['@background', './source/Background'],
         ],
       },
     },
