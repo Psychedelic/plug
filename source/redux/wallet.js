@@ -96,6 +96,14 @@ export const walletSlice = createSlice({
       state.name = name;
       state.principalId = principalId;
     },
+    [getAssets.fulfilled]: (state, action) => {
+      state.assets = [action.payload];
+    },
+    [getAssets.rejected]: (state, action) => {
+      /* eslint-disable-next-line no-console */
+      console.log(action.error.message);
+      state.assets = [];
+    },
   },
 });
 
