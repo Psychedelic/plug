@@ -30,6 +30,19 @@ export const getData = createAsyncThunk('wallet/getData', async () => {
   return wallets[0];
 });
 
+export const getAssets = createAsyncThunk('wallet/assets', async () => {
+  let balance = await KeyRing.getBalance();
+  balance = parseInt(balance.toString(), 10);
+
+  return {
+    image: CURRENCIES.get('ICP').image,
+    name: CURRENCIES.get('ICP').name,
+    amount: balance,
+    value: balance,
+    currency: CURRENCIES.get('ICP').value,
+  };
+});
+
 /* eslint-disable no-param-reassign */
 export const walletSlice = createSlice({
   name: 'wallet',
@@ -39,6 +52,7 @@ export const walletSlice = createSlice({
     accountId: '',
     emoji: '🔌',
     transactions: [],
+    assets: [],
   },
   reducers: {
     updateWalletDetails: (state, action) => {
@@ -64,6 +78,14 @@ export const walletSlice = createSlice({
       state.icon = icon;
       state.name = name;
       state.principalId = principalId;
+    },
+    [getAssets.fulfilled]: (state, action) => {
+      state.assets = [action.payload];
+    },
+    [getAssets.rejected]: (state, action) => {
+      /* eslint-disable-next-line no-console */
+      console.log(action.error.message);
+      state.assets = [];
     },
   },
 });
