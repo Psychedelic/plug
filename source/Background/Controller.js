@@ -3,8 +3,11 @@ import extension from 'extensionizer';
 import { BackgroundController } from '@fleekhq/browser-rpc';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import CYCLE_WITHDRAWAL_SIZES from '../Pages/CycleWithdrawal/constants';
+import PlugController from '@psychedelic/plug-controller';
 
 const storage = extension.storage.local;
+
+let keyring;
 
 const backgroundController = new BackgroundController({
   name: 'bg-script',
@@ -13,7 +16,31 @@ const backgroundController = new BackgroundController({
     'notification-port',
     'app-connection-port',
     'cycle-withdrawal-port',
+    'keyring-port',
   ],
+});
+
+backgroundController.start();
+
+export const init = async ()=>{
+  keyring = new PlugController.PlugKeyRing();
+  await keyring.init();
+};
+
+// keyring functions to implement:
+// get transactions
+// send icp
+// get balance
+// get state
+// lock
+// unlock
+// create
+// import
+
+backgroundController.exposeController('unlock-keyring', async (opts, password) => {
+  console.log("unlock-keyring called");
+  const { callback } = opts;
+  return await keyring.unlock(password);
 });
 
 backgroundController.exposeController('isConnected', (opts, url) => {

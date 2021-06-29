@@ -8,6 +8,15 @@ import { KeyRing } from '@background';
 import { useRouter } from '@components/Router';
 import browser from 'webextension-polyfill';
 import useStyles from './styles';
+import { PortRPC } from '@fleekhq/browser-rpc';
+
+const portRPC = new PortRPC({
+  name: 'keyring-port',
+  target: 'bg-script',
+  timeout: 5000,
+});
+
+portRPC.start();
 
 const Login = () => {
   const classes = useStyles();
@@ -26,7 +35,7 @@ const Login = () => {
     let unlocked;
 
     try {
-      unlocked = await KeyRing.unlock(password);
+      unlocked = await portRPC.call('unlock-keyring', [password]);
     } catch (e) {
       unlocked = false;
     }
