@@ -10,6 +10,7 @@ import shortAddress from '@shared/utils/short-address';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQrcode } from '@fortawesome/pro-regular-svg-icons/faQrcode';
+import { useSelector } from 'react-redux';
 import useStyles from '../styles';
 import { currencyPropTypes } from '../../../../shared/constants/currencies';
 import { sourcePropTypes } from '../../../../shared/constants/sources';
@@ -19,9 +20,8 @@ const Step2 = ({ selectedSource, selectedAsset }) => {
   const { t } = useTranslation();
   const [openQr, setOpenQr] = useState(false);
 
-  const walletName = 'Main IC Wallet';
-  const address = '0xc6e8e3197dac52a68428030463584437227a3e5f';
-  const address2 = 'oflzj-g4zss-ac52a68-4280304-63rambd-a38';
+  const { name, principalId, accountId } = useSelector((state) => state.wallet);
+
   const code = 'dfx canister --no-wallet call $(dfx identity get-wallet) wallet_call "(record { canister=(principal "<dank-canister-id>"); method_name="deposit"; args=(blob "(principal "<user-pulg-principal>")"); cycles=<amount> })"';
 
   return (
@@ -31,14 +31,14 @@ const Step2 = ({ selectedSource, selectedAsset }) => {
         && (
           <Grid container spacing={2} style={{ textAlign: 'center' }}>
             <Grid item xs={12}>
-              <QRCode value={address} />
+              <QRCode value={principalId} />
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="h3" className={classes.title}>{walletName}</Typography>
-              <Typography variant="subtitle1">{shortAddress(address)}</Typography>
+              <Typography variant="h3" className={classes.title}>{name}</Typography>
+              <Typography variant="subtitle1">{shortAddress(principalId)}</Typography>
             </Grid>
             <Grid item xs={12}>
-              <Button variant="rainbow" value={t('deposit.copyAddress')} onClick={() => navigator.clipboard.writeText(address)} />
+              <Button variant="rainbow" value={t('deposit.copyAddress')} onClick={() => navigator.clipboard.writeText(principalId)} />
             </Grid>
             <Grid item xs={12}>
               <LinkButton value={`${t('deposit.learnMore')} ${selectedAsset.name}`} />
@@ -59,13 +59,13 @@ const Step2 = ({ selectedSource, selectedAsset }) => {
             <Grid item xs={12}>
               <InputBase>
                 <div className={classes.addressContainer}>
-                  <Typography variant="h4" style={{ marginRight: 'auto' }}>{shortAddress(address)}</Typography>
+                  <Typography variant="h4" style={{ marginRight: 'auto' }}>{shortAddress(principalId)}</Typography>
                   <FontAwesomeIcon
                     icon={faQrcode}
                     className={classes.icon}
                     onClick={() => setOpenQr(true)}
                   />
-                  <CopyButton text={address} placement="top" />
+                  <CopyButton text={principalId} placement="top" />
                 </div>
               </InputBase>
 
@@ -74,7 +74,7 @@ const Step2 = ({ selectedSource, selectedAsset }) => {
                 onClose={() => setOpenQr(false)}
                 open={openQr}
                 component={(
-                  <QRCode value={address} style={{ marginBottom: 36 }} />
+                  <QRCode value={principalId} style={{ marginBottom: 36 }} />
                 )}
               />
 
@@ -95,8 +95,8 @@ const Step2 = ({ selectedSource, selectedAsset }) => {
             <Grid item xs={12}>
               <InputBase>
                 <div className={classes.addressContainer}>
-                  <Typography variant="h4" style={{ marginRight: 'auto' }}>{shortAddress(address2)}</Typography>
-                  <CopyButton text={address2} placement="top" />
+                  <Typography variant="h4" style={{ marginRight: 'auto' }}>{shortAddress(accountId)}</Typography>
+                  <CopyButton text={accountId} placement="top" />
                 </div>
               </InputBase>
             </Grid>
@@ -115,7 +115,7 @@ const Step2 = ({ selectedSource, selectedAsset }) => {
               <CodeBox code={code} />
             </Grid>
             <Grid item xs={12}>
-              <Button variant="primary" value={t('deposit.runCommandButton')} onClick={() => navigator.clipboard.writeText(address)} fullWidth />
+              <Button variant="primary" value={t('deposit.runCommandButton')} onClick={() => navigator.clipboard.writeText(principalId)} fullWidth />
             </Grid>
           </Grid>
         )

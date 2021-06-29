@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ActivityItem } from '@ui';
-
 import { getTransactions } from '../../redux/wallet';
 import useStyles from './styles';
 

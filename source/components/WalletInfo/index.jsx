@@ -10,7 +10,7 @@ const WalletInfo = () => {
   const classes = useStyles();
   const [copied, setCopied] = useState(false);
 
-  const { name, address } = useSelector((state) => state.wallet);
+  const { name, principalId } = useSelector((state) => state.wallet);
 
   const { t } = useTranslation();
   const copyText = t('copy.copyText');
@@ -20,7 +20,7 @@ const WalletInfo = () => {
   const [tooltipText, setTooltipText] = useState(copyText);
 
   const handleWalletClick = () => {
-    navigator.clipboard.writeText(address);
+    navigator.clipboard.writeText(principalId);
     setCopied(true);
     setTooltipText(copiedText);
 
@@ -47,7 +47,7 @@ const WalletInfo = () => {
         onMouseLeave={() => setShowTooltip(false)}
       >
         <Typography variant="h5">{name}</Typography>
-        <Typography variant="subtitle2">{shortAddress(address)}</Typography>
+        <Typography variant="subtitle2">{shortAddress(principalId)}</Typography>
       </div>
     </Tooltip>
   );

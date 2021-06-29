@@ -27,7 +27,7 @@ const App = () => {
     } else {
       browser.tabs.create({ url: 'options.html' });
     }
-  }, []);
+  });
 
   return (
     initialRoute
