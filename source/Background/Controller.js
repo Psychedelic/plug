@@ -28,7 +28,7 @@ export const init = async () => {
 };
 
 // keyring
-chrome.runtime.onMessage.addListener(async (message, _, sendResponse) => {
+extension.runtime.onMessage.addListener(async (message, _, sendResponse) => {
   const { params, type } = message;
   if (type === 'unlock-keyring') {
     let unlocked = false;
