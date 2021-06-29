@@ -2,8 +2,8 @@ import qs from 'query-string';
 import extension from 'extensionizer';
 import { BackgroundController } from '@fleekhq/browser-rpc';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
-import CYCLE_WITHDRAWAL_SIZES from '../Pages/CycleWithdrawal/constants';
 import PlugController from '@psychedelic/plug-controller';
+import CYCLE_WITHDRAWAL_SIZES from '../Pages/CycleWithdrawal/constants';
 
 const storage = extension.storage.local;
 
@@ -22,10 +22,32 @@ const backgroundController = new BackgroundController({
 
 backgroundController.start();
 
-export const init = async ()=>{
+export const init = async () => {
   keyring = new PlugController.PlugKeyRing();
   await keyring.init();
 };
+
+// keyring
+chrome.runtime.onMessage.addListener(async (message, _, sendResponse) => {
+  const { params, type } = message;
+  if (type === 'unlock-keyring') {
+    let unlocked = false;
+    try {
+      unlocked = await keyring.unlock(params?.password);
+    } catch (e) {
+      unlocked = false;
+    }
+    sendResponse(unlocked);
+  }
+  if (type === 'create-keyring') {
+    const wallet = await keyring.create({ ...params });
+    sendResponse(wallet);
+  }
+  if (type === 'import-keyring') {
+    const wallet = await keyring.importMnemonic({ ...params });
+    sendResponse(wallet);
+  }
+});
 
 // keyring functions to implement:
 // get transactions
@@ -38,9 +60,10 @@ export const init = async ()=>{
 // import
 
 backgroundController.exposeController('unlock-keyring', async (opts, password) => {
-  console.log("unlock-keyring called");
+  console.log('unlock-keyring called');
   const { callback } = opts;
-  return await keyring.unlock(password);
+  const unlocked = await keyring.unlock(password);
+  callback(null, unlocked);
 });
 
 backgroundController.exposeController('isConnected', (opts, url) => {

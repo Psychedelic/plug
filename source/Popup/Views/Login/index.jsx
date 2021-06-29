@@ -2,21 +2,12 @@ import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { useTranslation } from 'react-i18next';
 import { Plug } from '@components';
+import extension from 'extensionizer';
 import { LinkButton, Button, FormInput } from '@ui';
 import clsx from 'clsx';
-import { KeyRing } from '@background';
 import { useRouter } from '@components/Router';
 import browser from 'webextension-polyfill';
 import useStyles from './styles';
-import { PortRPC } from '@fleekhq/browser-rpc';
-
-const portRPC = new PortRPC({
-  name: 'keyring-port',
-  target: 'bg-script',
-  timeout: 5000,
-});
-
-portRPC.start();
 
 const Login = () => {
   const classes = useStyles();
@@ -32,19 +23,14 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-    let unlocked;
-
-    try {
-      unlocked = await portRPC.call('unlock-keyring', [password]);
-    } catch (e) {
-      unlocked = false;
-    }
-
-    if (unlocked) {
-      navigator.navigate('home');
-    } else {
-      setError(true);
-    }
+    extension.runtime.sendMessage({ type: 'unlock-keyring', params: { password } }, (unlocked) => {
+      console.log('Unlocked keyring', unlocked);
+      if (unlocked) {
+        navigator.navigate('home');
+      } else {
+        setError(true);
+      }
+    });
   };
 
   return (
