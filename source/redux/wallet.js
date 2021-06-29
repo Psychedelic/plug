@@ -87,6 +87,15 @@ export const walletSlice = createSlice({
       console.log(action.error.message);
       state.assets = [];
     },
+    [getData.fulfilled]: (state, action) => {
+      const { accountId, icon, name } = action.payload;
+      const principalId = action.payload.principal.toString();
+
+      state.accountId = accountId;
+      state.icon = icon;
+      state.name = name;
+      state.principalId = principalId;
+    },
   },
 });
 
