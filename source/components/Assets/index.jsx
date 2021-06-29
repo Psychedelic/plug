@@ -4,7 +4,7 @@ import { useRouter } from '@components/Router';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { getAssets } from '../../redux/wallet';
+import { getAssets } from '@redux/wallet';
 import useStyles from './styles';
 
 const Assets = () => {

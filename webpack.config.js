@@ -95,6 +95,7 @@ module.exports = {
       '@hooks': path.join(path.resolve(__dirname, './source/hooks')),
       '@redux': path.join(path.resolve(__dirname, './source/redux')),
       '@background': path.join(path.resolve(__dirname, './source/Background')),
+      '@redux': path.join(path.resolve(__dirname, './source/redux')),
       'webextension-polyfill': path.resolve(
         path.join(__dirname, 'node_modules', 'webextension-polyfill'),
       ),
