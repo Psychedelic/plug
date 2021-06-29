@@ -37,8 +37,8 @@ const useSettingsItems = () => {
       onClick: (() => {
         KeyRing.lock()
           .then(() => {
-            navigator.navigate('login')
-          })
+            navigator.navigate('login');
+          });
       }),
     },
   ];

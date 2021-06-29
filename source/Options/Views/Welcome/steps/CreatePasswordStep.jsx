@@ -5,9 +5,8 @@ import { useTranslation } from 'react-i18next';
 import {
   Alert, Button, FormItem, TextInput,
 } from '@ui';
-import PlugController from '@psychedelic/plug-controller';
+import { KeyRing } from '@background';
 import useStyles from '../styles';
-import { KeyRing } from '@background'
 
 const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => {
   const { t } = useTranslation();
