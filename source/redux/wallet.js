@@ -35,8 +35,8 @@ export const walletSlice = createSlice({
   name: 'wallet',
   initialState: {
     name: 'Main IC Wallet',
-    principalId: 'a',
-    accountId: 'b',
+    principalId: '',
+    accountId: '',
     emoji: '🔌',
     transactions: [],
   },
