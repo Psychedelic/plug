@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import extension from 'extensionizer';
 
 import { ActivityItem } from '@ui';
-import { HANDLER_TYPES } from '../../Background/Keyring';
+import { HANDLER_TYPES } from '@background/Keyring';
 import { setTransactions } from '../../redux/wallet';
 import useStyles from './styles';
 

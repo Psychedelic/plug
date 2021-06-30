@@ -1,18 +1,18 @@
 import React, { StrictMode, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import i18n from 'i18next';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import extension from 'extensionizer';
+import browser from 'webextension-polyfill';
 
 import { theme } from '@ui';
-import { Provider } from 'react-redux';
-import browser from 'webextension-polyfill';
+import { HANDLER_TYPES } from '@background/Keyring';
 import Popup from './Popup';
 import initConfig from '../locales';
 import store from '../redux/store';
-import { HANDLER_TYPES } from '../Background/Keyring';
 
 i18n.use(initReactI18next).init(initConfig);
 
@@ -20,9 +20,9 @@ const App = () => {
   const [initialRoute, setInitialRoute] = useState(null);
 
   useEffect(() => {
-    extension.runtime.sendMessage({ type: HANDLER_TYPES.GET, params: {} }, (keyring) => {
-      if (keyring?.isInitialized) {
-        if (keyring?.isUnlocked) {
+    extension.runtime.sendMessage({ type: HANDLER_TYPES.GET_LOCKS, params: {} }, (locks) => {
+      if (locks?.isInitialized) {
+        if (locks?.isUnlocked) {
           setInitialRoute('home');
         } else {
           setInitialRoute('login');

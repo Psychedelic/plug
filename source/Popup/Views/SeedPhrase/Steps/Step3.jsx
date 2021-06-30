@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import extension from 'extensionizer';
 import { SeedPhrase } from '@components';
 import { Container } from '@ui';
-import { HANDLER_TYPES } from '../../../../Background/Keyring';
+import { HANDLER_TYPES } from '@background/Keyring';
 
 const Step3 = () => {
   const [words, setWords] = useState([]);

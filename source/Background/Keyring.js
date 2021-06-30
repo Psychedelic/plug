@@ -1,3 +1,5 @@
+import { CURRENCIES } from '@shared/constants/currencies';
+
 export const HANDLER_TYPES = {
   LOCK: 'lock-keyring',
   UNLOCK: 'unlock-keyring',
@@ -6,6 +8,7 @@ export const HANDLER_TYPES = {
   GET: 'get-keyring',
   GET_STATE: 'get-keyring-state',
   GET_TRANSACTIONS: 'get-keyring-transactions',
+  GET_ASSETS: 'get-keyring-assets',
 };
 
 export const getKeyringHandler = (type, keyring) => ({
@@ -21,7 +24,22 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.CREATE]: async (params) => keyring.create({ ...params }),
   [HANDLER_TYPES.IMPORT]: async (params) => keyring.importMnemonic({ ...params }),
-  [HANDLER_TYPES.GET]: () => keyring,
+  [HANDLER_TYPES.GET_LOCKS]: () => ({
+    isUnlocked: keyring?.isUnlocked,
+    isInitialized: keyring?.isInitialized,
+  }),
   [HANDLER_TYPES.GET_STATE]: async () => keyring.getState(),
   [HANDLER_TYPES.GET_TRANSACTIONS]: async () => keyring.transactions,
+  [HANDLER_TYPES.GET_ASSETS]: async () => {
+    const e8s = await keyring.getBalance();
+    const balance = parseInt(e8s.toString(), 10) / 100_000_000;
+    const assets = [{
+      image: CURRENCIES.get('ICP').image,
+      name: CURRENCIES.get('ICP').name,
+      amount: balance,
+      value: balance,
+      currency: CURRENCIES.get('ICP').value,
+    }];
+    return assets;
+  },
 })[type];
