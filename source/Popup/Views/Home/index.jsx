@@ -6,7 +6,7 @@ import { Tabs } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { useTabs } from '@hooks';
 import { useDispatch } from 'react-redux';
-import { getData } from '@redux/wallet';
+import { getData } from '../../../redux/wallet';
 
 const getTabs = (t) => [
   {
