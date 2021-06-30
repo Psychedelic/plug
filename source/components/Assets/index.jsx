@@ -1,37 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import extension from 'extensionizer';
 import { AssetItem, Button } from '@ui';
-import { CURRENCIES } from '@shared/constants/currencies';
 import { useRouter } from '@components/Router';
+import { setAssets } from '@redux/wallet';
+import { HANDLER_TYPES } from '@background/Keyring';
 
 import { useTranslation } from 'react-i18next';
 import useStyles from './styles';
-
-const ASSETS = [
-  {
-    image: CURRENCIES.get('ICP').image,
-    name: CURRENCIES.get('ICP').name,
-    amount: 152.28,
-    value: 12183.29,
-    currency: CURRENCIES.get('ICP').value,
-  },
-  {
-    image: CURRENCIES.get('CYCLES').image,
-    name: CURRENCIES.get('CYCLES').name,
-    amount: 102.2913,
-    value: 102.30,
-    currency: CURRENCIES.get('CYCLES').value,
-  },
-];
 
 const Assets = () => {
   const classes = useStyles();
   const { navigator } = useRouter();
   const { t } = useTranslation();
 
+  const { assets } = useSelector((state) => state.wallet);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    extension.runtime.sendMessage({
+      type: HANDLER_TYPES.GET_ASSETS,
+      params: {},
+    }, (keyringAssets) => dispatch(setAssets(keyringAssets)));
+  }, []);
   return (
     <div className={classes.root}>
       {
-        ASSETS.map((asset) => (
+        assets.map((asset) => (
           <AssetItem {...asset} />
         ))
       }

@@ -4,7 +4,7 @@ import NotebookIcon from '@assets/icons/settings/notebook.svg';
 import { useTranslation } from 'react-i18next';
 import extension from 'extensionizer';
 import { useRouter } from '@components/Router';
-import { HANDLER_TYPES } from '../Background/Keyring';
+import { HANDLER_TYPES } from '@background/Keyring';
 
 const useSettingsItems = () => {
   const { navigator } = useRouter();

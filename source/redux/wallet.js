@@ -12,6 +12,7 @@ export const walletSlice = createSlice({
     accountId: '',
     emoji: '🔌',
     transactions: [],
+    assets: [],
   },
   reducers: {
     updateWalletDetails: (state, action) => {
@@ -47,9 +48,17 @@ export const walletSlice = createSlice({
       };
       state.transactions = action.payload?.transactions?.map?.(mapTransaction) || [];
     },
+    setAssets: (state, action) => {
+      state.assets = action.payload;
+    },
   },
 });
 
-export const { updateWalletDetails, setAccountInfo, setTransactions } = walletSlice.actions;
+export const {
+  updateWalletDetails,
+  setAccountInfo,
+  setTransactions,
+  setAssets,
+} = walletSlice.actions;
 
 export default walletSlice.reducer;
