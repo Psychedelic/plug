@@ -53,19 +53,25 @@ export const walletSlice = createSlice({
       state.name = name;
       state.principalId = principalId;
     },
-  },
-  extraReducers: {
-    [getTransactions.fulfilled]: (state, action) => {
-      state.transactions = action.payload;
-    },
-    [getTransactions.rejected]: (state, action) => {
-      /* eslint-disable-next-line no-console */
-      console.log(action.error.message);
-      state.transactions = [];
+    setTransactions: (state, action) => {
+      const mapTransaction = (trx) => {
+        const type = Object.keys(trx.transfer)[0];
+        const amount = trx.tranfer[type]?.amount?.e8s; // The same regardless of the type
+        return {
+          type,
+          currency: CURRENCIES.get('ICP'),
+          amount,
+          date: new Date(trx?.timestamp),
+          value: amount * 40 /* TODO: Add helder's fee function / call to nns */,
+          status: ACTIVITY_STATUS.DONE,
+          plug: null,
+        };
+      };
+      state.transactions = action.payload?.map?.(mapTransaction) || [];
     },
   },
 });
 
-export const { updateWalletDetails, setAccountInfo } = walletSlice.actions;
+export const { updateWalletDetails, setAccountInfo, setTransactions } = walletSlice.actions;
 
 export default walletSlice.reducer;

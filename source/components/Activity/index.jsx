@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import extension from 'extensionizer';
+
 import { ActivityItem } from '@ui';
-import { getTransactions } from '../../redux/wallet';
+import { setTransactions } from '../../redux/wallet';
 import useStyles from './styles';
 
 const Activity = () => {
@@ -10,7 +12,10 @@ const Activity = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getTransactions());
+    extension.runtime.sendMessage({ type: 'get-keyring-transactions', params: {} },
+      (trxs) => {
+        dispatch(setTransactions(trxs));
+      });
   }, []);
 
   return (
