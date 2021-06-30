@@ -42,14 +42,10 @@ const Apps = () => {
   };
 
   return (
-    <div className={classes.centerTextContainer}>
+    <div className={classes.emptyState}>
       <img src={WinkingEmoji} className={classes.image} />
-      <Typography variant="h4" className={classes.comingSoonTitle}>
-        {t('apps.comingSoonTitle')}
-      </Typography>
-      <Typography variant="subtitle2" className={classes.comingSoonSubtitle}>
-        {t('apps.comingSoonSubtitle')}
-      </Typography>
+      <Typography variant="h4">  {t('apps.comingSoonTitle')}</Typography>
+      <Typography variant="subtitle2">{t('apps.comingSoonSubtitle')}</Typography>
     </div>
   );
 

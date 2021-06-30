@@ -32,7 +32,9 @@
     "status": {
       "pending": "Pending",
       "failed": "Failed"
-    }
+    },
+    "noActivityTitle": "You have no activity yet",
+    "noActivityText": "When you deposit, send, or swap,\nyour activity will be displayed here."
   },
   "common": {
     "to": "to",
@@ -64,7 +66,7 @@
     "emptyText": "Explore a list of all apps that use Plug and find your first in",
     "emptyLink": "our docs.",
     "comingSoonTitle": "Coming Soon!",
-    "comingSoonSubtitle": "Plug will allow you to connect and log into IC Apps."
+    "comingSoonSubtitle": "Plug will allow you to connect\nand log into IC Apps."
   },
   "login": {
     "title": "Welcome Back!",

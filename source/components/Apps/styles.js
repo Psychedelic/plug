@@ -25,12 +25,7 @@ export default makeStyles((theme) => ({
     padding: `${theme.spacing(1)}px ${theme.spacing(4)}px`,
     height: 144,
     textAlign: 'center',
-  },
-  comingSoonTitle: {
-    margin: '15px 0 8px',
-  },
-  comingSoonSubtitle: {
-    width: '230px',
+    whiteSpace: 'pre-line',
   },
   image: {
     width: 46,
