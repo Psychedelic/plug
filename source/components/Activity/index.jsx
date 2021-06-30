@@ -14,6 +14,7 @@ const Activity = () => {
   useEffect(() => {
     extension.runtime.sendMessage({ type: 'get-keyring-transactions', params: {} },
       (trxs) => {
+        console.log('trxs', trxs);
         dispatch(setTransactions(trxs));
       });
   }, []);

@@ -67,7 +67,7 @@ export const walletSlice = createSlice({
           plug: null,
         };
       };
-      state.transactions = action.payload?.map?.(mapTransaction) || [];
+      state.transactions = action.payload?.transactions?.map?.(mapTransaction) || [];
     },
   },
 });
