@@ -17,7 +17,6 @@ const backgroundController = new BackgroundController({
     'notification-port',
     'app-connection-port',
     'cycle-withdrawal-port',
-    'keyring-port',
   ],
 });
 
