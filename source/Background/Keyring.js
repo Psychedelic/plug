@@ -1,5 +1,7 @@
 import { CURRENCIES } from '@shared/constants/currencies';
 
+export const E8S_PER_ICP = 100_000_000;
+
 export const HANDLER_TYPES = {
   LOCK: 'lock-keyring',
   UNLOCK: 'unlock-keyring',
@@ -32,7 +34,8 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.GET_TRANSACTIONS]: async () => keyring.transactions,
   [HANDLER_TYPES.GET_ASSETS]: async () => {
     const e8s = await keyring.getBalance();
-    const balance = parseInt(e8s.toString(), 10) / 100_000_000;
+    // The result is in e8s and a bigint. We parse it and transform to ICP
+    const balance = parseInt(e8s.toString(), 10) / E8S_PER_ICP;
     const assets = [{
       image: CURRENCIES.get('ICP').image,
       name: CURRENCIES.get('ICP').name,
