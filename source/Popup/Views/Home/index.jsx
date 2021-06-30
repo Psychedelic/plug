@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useTabs } from '@hooks';
 import { useDispatch } from 'react-redux';
 import { setAccountInfo } from '../../../redux/wallet';
+import { HANDLER_TYPES } from '../../../Background/Keyring';
 
 const getTabs = (t) => [
   {
@@ -30,9 +31,8 @@ const Home = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    extension.runtime.sendMessage({ type: 'get-keyring-state', params: {} },
+    extension.runtime.sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
       (state) => {
-        console.log('home state', state);
         dispatch(setAccountInfo(state.wallets[0]));
       });
   }, []);

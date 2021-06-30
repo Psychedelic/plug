@@ -7,6 +7,7 @@ import { LinkButton, Button, FormInput } from '@ui';
 import clsx from 'clsx';
 import { useRouter } from '@components/Router';
 import browser from 'webextension-polyfill';
+import { HANDLER_TYPES } from '../../../Background/Keyring';
 import useStyles from './styles';
 
 const Login = () => {
@@ -23,13 +24,10 @@ const Login = () => {
   };
 
   const handleLogin = () => {
-    extension.runtime.sendMessage({ type: 'unlock-keyring', params: { password } }, (unlocked) => {
-      if (unlocked) {
-        navigator.navigate('home');
-      } else {
-        setError(true);
-      }
-    });
+    extension.runtime.sendMessage({
+      type: HANDLER_TYPES.UNLOCK,
+      params: { password },
+    }, (unlocked) => (unlocked ? navigator.navigate('home') : setError(true)));
   };
 
   return (

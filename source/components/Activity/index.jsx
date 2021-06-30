@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import extension from 'extensionizer';
 
 import { ActivityItem } from '@ui';
+import { HANDLER_TYPES } from '../../Background/Keyring';
 import { setTransactions } from '../../redux/wallet';
 import useStyles from './styles';
 
@@ -12,9 +13,8 @@ const Activity = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    extension.runtime.sendMessage({ type: 'get-keyring-transactions', params: {} },
+    extension.runtime.sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: {} },
       (trxs) => {
-        console.log('trxs', trxs);
         dispatch(setTransactions(trxs));
       });
   }, []);

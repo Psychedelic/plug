@@ -4,7 +4,7 @@ import { BackgroundController } from '@fleekhq/browser-rpc';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import PlugController from '@psychedelic/plug-controller';
 import CYCLE_WITHDRAWAL_SIZES from '../Pages/CycleWithdrawal/constants';
-import getKeyringHandler from './Keyring';
+import { getKeyringHandler } from './Keyring';
 
 const storage = extension.storage.local;
 

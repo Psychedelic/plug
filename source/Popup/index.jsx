@@ -12,6 +12,7 @@ import browser from 'webextension-polyfill';
 import Popup from './Popup';
 import initConfig from '../locales';
 import store from '../redux/store';
+import { HANDLER_TYPES } from '../Background/Keyring';
 
 i18n.use(initReactI18next).init(initConfig);
 
@@ -19,7 +20,7 @@ const App = () => {
   const [initialRoute, setInitialRoute] = useState(null);
 
   useEffect(() => {
-    extension.runtime.sendMessage({ type: 'get-keyring', params: {} }, (keyring) => {
+    extension.runtime.sendMessage({ type: HANDLER_TYPES.GET, params: {} }, (keyring) => {
       if (keyring?.isInitialized) {
         if (keyring?.isUnlocked) {
           setInitialRoute('home');
