@@ -76,7 +76,7 @@ const Step1 = ({
               <MultiInput
                 name={selectedAsset.name}
                 image={selectedAsset.image}
-                onClick={() => setOpenAssets(true)}
+                onClick={null}
                 value={amount}
                 onChange={handleChangeAmount}
                 primaryValue={primaryValue}
@@ -91,7 +91,7 @@ const Step1 = ({
                 <Typography variant="subtitle2">
                   <NumberFormat
                     value={availableAmount.amount}
-                    decimalScale={2}
+                    decimalScale={5}
                     fixedDecimalScale
                     thousandSeparator=","
                     displayType="text"
