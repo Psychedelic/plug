@@ -4,6 +4,7 @@ import { BackgroundController } from '@fleekhq/browser-rpc';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import PlugController from '@psychedelic/plug-controller';
 import CYCLE_WITHDRAWAL_SIZES from '../Pages/CycleWithdrawal/constants';
+import getKeyringHandler from './Keyring';
 
 const storage = extension.storage.local;
 
@@ -27,62 +28,13 @@ export const init = async () => {
   await keyring.init();
 };
 
-// keyring
+// keyring handlers
 extension.runtime.onMessage.addListener(async (message, _, sendResponse) => {
   const { params, type } = message;
-  if (type === 'lock-keyring') {
-    await keyring.lock();
-    sendResponse();
-  }
-  if (type === 'unlock-keyring') {
-    let unlocked = false;
-    try {
-      unlocked = await keyring.unlock(params?.password);
-    } catch (e) {
-      unlocked = false;
-    }
-    sendResponse(unlocked);
-  }
-  if (type === 'create-keyring') {
-    const wallet = await keyring.create({ ...params });
-    sendResponse(wallet);
-  }
-  if (type === 'import-keyring') {
-    const wallet = await keyring.importMnemonic({ ...params });
-    sendResponse(wallet);
-  }
-  if (type === 'get-keyring') {
-    sendResponse(keyring);
-  }
-  if (type === 'get-keyring-state') {
-    const state = await keyring.getState();
-    console.log('keyring state', state);
-    sendResponse(state);
-  }
-  if (type === 'get-keyring-transactions') {
-    try {
-      const transactions = await keyring.getTransactions();
-      sendResponse(transactions);
-    } catch (e) {
-      console.log('trx err', e);
-    }
-  }
-});
-
-// keyring functions to implement:
-// get transactions
-// send icp
-// get balance
-// get state
-// lock
-// unlock
-// create
-// import
-
-backgroundController.exposeController('unlock-keyring', async (opts, password) => {
-  const { callback } = opts;
-  const unlocked = await keyring.unlock(password);
-  callback(null, unlocked);
+  const keyringHandler = getKeyringHandler(type, keyring);
+  if (!keyringHandler) return;
+  const response = await keyringHandler(params);
+  sendResponse(response);
 });
 
 backgroundController.exposeController('isConnected', (opts, url) => {
