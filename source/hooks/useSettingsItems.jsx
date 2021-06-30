@@ -2,8 +2,9 @@
 import KeyIcon from '@assets/icons/settings/old-key.svg';
 import NotebookIcon from '@assets/icons/settings/notebook.svg';
 import { useTranslation } from 'react-i18next';
+import extension from 'extensionizer';
 import { useRouter } from '@components/Router';
-import { KeyRing } from '@background';
+import { HANDLER_TYPES } from '../Background/Keyring';
 
 const useSettingsItems = () => {
   const { navigator } = useRouter();
@@ -35,10 +36,9 @@ const useSettingsItems = () => {
       name: 'Lock',
       description: '',
       onClick: (() => {
-        KeyRing.lock()
-          .then(() => {
-            navigator.navigate('login');
-          });
+        extension.runtime.sendMessage({ type: HANDLER_TYPES.LOCK, params: {} }, () => {
+          navigator.navigate('login');
+        });
       }),
     },
   ];

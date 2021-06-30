@@ -2,9 +2,13 @@ import qs from 'query-string';
 import extension from 'extensionizer';
 import { BackgroundController } from '@fleekhq/browser-rpc';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import PlugController from '@psychedelic/plug-controller';
 import CYCLE_WITHDRAWAL_SIZES from '../Pages/CycleWithdrawal/constants';
+import { getKeyringHandler } from './Keyring';
 
 const storage = extension.storage.local;
+
+let keyring;
 
 const backgroundController = new BackgroundController({
   name: 'bg-script',
@@ -14,6 +18,22 @@ const backgroundController = new BackgroundController({
     'app-connection-port',
     'cycle-withdrawal-port',
   ],
+});
+
+backgroundController.start();
+
+export const init = async () => {
+  keyring = new PlugController.PlugKeyRing();
+  await keyring.init();
+};
+
+// keyring handlers
+extension.runtime.onMessage.addListener(async (message, _, sendResponse) => {
+  const { params, type } = message;
+  const keyringHandler = getKeyringHandler(type, keyring);
+  if (!keyringHandler) return;
+  const response = await keyringHandler(params);
+  sendResponse(response);
 });
 
 backgroundController.exposeController('isConnected', (opts, url) => {
