@@ -30,6 +30,10 @@ export const init = async () => {
 // keyring
 extension.runtime.onMessage.addListener(async (message, _, sendResponse) => {
   const { params, type } = message;
+  if (type === 'lock-keyring') {
+    await keyring.lock();
+    sendResponse();
+  }
   if (type === 'unlock-keyring') {
     let unlocked = false;
     try {
@@ -47,6 +51,22 @@ extension.runtime.onMessage.addListener(async (message, _, sendResponse) => {
     const wallet = await keyring.importMnemonic({ ...params });
     sendResponse(wallet);
   }
+  if (type === 'get-keyring') {
+    sendResponse(keyring);
+  }
+  if (type === 'get-keyring-state') {
+    const state = await keyring.getState();
+    console.log('keyring state', state);
+    sendResponse(state);
+  }
+  if (type === 'get-keyring-transactions') {
+    try {
+      const transactions = await keyring.getTransactions();
+      sendResponse(transactions);
+    } catch (e) {
+      console.log('trx err', e);
+    }
+  }
 });
 
 // keyring functions to implement:
@@ -60,7 +80,6 @@ extension.runtime.onMessage.addListener(async (message, _, sendResponse) => {
 // import
 
 backgroundController.exposeController('unlock-keyring', async (opts, password) => {
-  console.log('unlock-keyring called');
   const { callback } = opts;
   const unlocked = await keyring.unlock(password);
   callback(null, unlocked);

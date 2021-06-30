@@ -4,10 +4,11 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import extension from 'extensionizer';
+
 import { theme } from '@ui';
 import { Provider } from 'react-redux';
 import browser from 'webextension-polyfill';
-import { KeyRing } from '@background';
 import Popup from './Popup';
 import initConfig from '../locales';
 import store from '../redux/store';
@@ -17,16 +18,18 @@ i18n.use(initReactI18next).init(initConfig);
 const App = () => {
   const [initialRoute, setInitialRoute] = useState(null);
 
-  useEffect(async () => {
-    if (KeyRing.isInitialized) {
-      if (KeyRing.isUnlocked) {
-        setInitialRoute('home');
+  useEffect(() => {
+    extension.runtime.sendMessage({ type: 'get-keyring', params: {} }, (keyring) => {
+      if (keyring?.isInitialized) {
+        if (keyring?.isUnlocked) {
+          setInitialRoute('home');
+        } else {
+          setInitialRoute('login');
+        }
       } else {
-        setInitialRoute('login');
+        browser.tabs.create({ url: 'options.html' });
       }
-    } else {
-      browser.tabs.create({ url: 'options.html' });
-    }
+    });
   });
 
   return (

@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import extension from 'extensionizer';
 import { SeedPhrase } from '@components';
 import { Container } from '@ui';
-import { KeyRing } from '@background';
 
 const Step3 = () => {
   const [words, setWords] = useState([]);
 
   useEffect(async () => {
-    const { mnemonic } = await KeyRing.getState();
-    setWords(mnemonic.split(' '));
+    extension.runtime.sendMessage({ type: 'get-keyring-state', params: {} }, (state) => {
+      setWords(state.mnemonic.split(' '));
+    });
   }, []);
 
   return (

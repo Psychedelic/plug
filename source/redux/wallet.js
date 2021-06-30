@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { Ed25519KeyIdentity } from '@dfinity/identity';
 import { ACTIVITY_STATUS } from '@shared/constants/activity';
 import { CURRENCIES } from '@shared/constants/currencies';
-import { KeyRing } from '@background';
+import extension from 'extensionizer';
 
 export const getTransactions = createAsyncThunk(
   'wallet/getTransactions',
-  async () => {
-    const transactions = await KeyRing.getTransactions();
+  async () => extension.runtime.sendMessage({ type: 'get-keyring-transactions', params: {} }, (transactions) => {
     const mapTransaction = (trx) => {
       const type = Object.keys(trx.transfer)[0];
       const amount = trx.tranfer[type]?.amount?.e8s; // The same regardless of the type
@@ -22,13 +22,8 @@ export const getTransactions = createAsyncThunk(
     };
 
     return transactions?.map?.(mapTransaction) || [];
-  },
+  }),
 );
-
-export const getData = createAsyncThunk('wallet/getData', async () => {
-  const { wallets } = await KeyRing.getState();
-  return wallets[0];
-});
 
 /* eslint-disable no-param-reassign */
 export const walletSlice = createSlice({
@@ -46,6 +41,18 @@ export const walletSlice = createSlice({
       state.name = name;
       state.emoji = emoji;
     },
+    setAccountInfo: (state, action) => {
+      // Chrome serializes everything with toJSON
+      const {
+        accountId, icon, name, identity,
+      } = action.payload;
+      const id = Ed25519KeyIdentity.fromParsedJson(identity);
+      const principalId = id.getPrincipal().toString();
+      state.accountId = accountId;
+      state.icon = icon;
+      state.name = name;
+      state.principalId = principalId;
+    },
   },
   extraReducers: {
     [getTransactions.fulfilled]: (state, action) => {
@@ -56,18 +63,9 @@ export const walletSlice = createSlice({
       console.log(action.error.message);
       state.transactions = [];
     },
-    [getData.fulfilled]: (state, action) => {
-      const { accountId, icon, name } = action.payload;
-      const principalId = action.payload.principal.toString();
-
-      state.accountId = accountId;
-      state.icon = icon;
-      state.name = name;
-      state.principalId = principalId;
-    },
   },
 });
 
-export const { updateWalletDetails } = walletSlice.actions;
+export const { updateWalletDetails, setAccountInfo } = walletSlice.actions;
 
 export default walletSlice.reducer;

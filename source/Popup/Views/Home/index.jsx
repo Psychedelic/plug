@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import extension from 'extensionizer';
 import {
   Actions, Assets, Activity, Apps, Layout,
 } from '@components';
@@ -6,7 +7,7 @@ import { Tabs } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { useTabs } from '@hooks';
 import { useDispatch } from 'react-redux';
-import { getData } from '../../../redux/wallet';
+import { setAccountInfo } from '../../../redux/wallet';
 
 const getTabs = (t) => [
   {
@@ -29,7 +30,11 @@ const Home = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getData());
+    extension.runtime.sendMessage({ type: 'get-keyring-state', params: {} },
+      (state) => {
+        console.log('home state', state);
+        dispatch(setAccountInfo(state.wallets[0]));
+      });
   }, []);
 
   return (

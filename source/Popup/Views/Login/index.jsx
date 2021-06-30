@@ -22,9 +22,8 @@ const Login = () => {
     setError(false);
   };
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     extension.runtime.sendMessage({ type: 'unlock-keyring', params: { password } }, (unlocked) => {
-      console.log('Unlocked keyring', unlocked);
       if (unlocked) {
         navigator.navigate('home');
       } else {

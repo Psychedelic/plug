@@ -26,9 +26,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
   const handleCreateAccount = async () => {
     const type = mnemonic ? 'import-keyring' : 'create-keyring';
     const params = { password, mnemonic };
-
     extension.runtime.sendMessage({ type, params }, (response) => {
-      console.log('Created keyring', response);
       handleSetMnemonic(response.mnemonic);
     });
     handleNextStep();
