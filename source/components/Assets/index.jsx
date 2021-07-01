@@ -1,18 +1,13 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import extension from 'extensionizer';
-import { AssetItem, Button } from '@ui';
-import { useRouter } from '@components/Router';
+import { AssetItem } from '@ui';
 import { setAssets } from '@redux/wallet';
 import { HANDLER_TYPES } from '@background/Keyring';
-
-import { useTranslation } from 'react-i18next';
 import useStyles from './styles';
 
 const Assets = () => {
   const classes = useStyles();
-  const { navigator } = useRouter();
-  const { t } = useTranslation();
 
   const { assets } = useSelector((state) => state.wallet);
   const dispatch = useDispatch();
@@ -30,7 +25,9 @@ const Assets = () => {
           <AssetItem {...asset} />
         ))
       }
-      <Button
+      {
+        /*
+        <Button
         variant="rainbowOutlined"
         value={t('addToken.title')}
         onClick={() => navigator.navigate('add-token')}
@@ -41,7 +38,9 @@ const Assets = () => {
           alignSelf: 'center',
           marginTop: 12,
         }}
-      />
+        />
+        */
+      }
     </div>
   );
 };
