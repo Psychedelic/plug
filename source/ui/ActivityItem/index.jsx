@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';
+import moment from 'moment';
 import { ACTIVITY_TYPES, ACTIVITY_STATUS } from '@shared/constants/activity';
 import { currencyPropTypes } from '@shared/constants/currencies';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import GenericIcon from '../GenericIcon';
 import SwapIcon from './SwapIcon';
 import useStyles from './styles';
+import shortAddress from '@shared/utils/short-address';
 
 const getTitle = (type, currency, swapData, plug, t) => {
   switch (type) {
@@ -28,21 +30,18 @@ const getStatus = (status, classes, t) => {
   switch (status) {
     case ACTIVITY_STATUS.PENDING:
       return <span className={classes.pending}>{t('activity.status.pending')}</span>;
-    case ACTIVITY_STATUS.FAILED:
+    case ACTIVITY_STATUS.REVERTED:
       return <span className={classes.failed}>{t('activity.status.failed')}</span>;
     default:
       return null;
   }
 };
 
-const getSubtitle = (type, status, date, wallet, t) => {
+const getSubtitle = (type, status, date, to, t) => {
   let subtitle = '';
-
-  if (status === ACTIVITY_STATUS.DONE) subtitle += date;
-
-  if (type === ACTIVITY_TYPES.SEND) subtitle += ` · ${t('activity.subtitle.to')}: ${wallet}`;
-
-  if (type === ACTIVITY_TYPES.RECEIVE) subtitle += ` · ${t('activity.subtitle.from')}: ${wallet}`;
+  if (status === ACTIVITY_STATUS.COMPLETED) subtitle += moment(date).format('MMMM Do');
+  if (type === ACTIVITY_TYPES.SEND) subtitle += ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`;
+  if (type === ACTIVITY_TYPES.RECEIVE) subtitle += ` · ${t('activity.subtitle.from')}: ${shortAddress(to)}`;
 
   return subtitle;
 };
@@ -50,7 +49,7 @@ const getSubtitle = (type, status, date, wallet, t) => {
 const ActivityItem = ({
   type,
   currency,
-  wallet,
+  to,
   amount,
   value,
   status,
@@ -90,7 +89,7 @@ const ActivityItem = ({
           {getTitle(type, currency, swapData, plug, t)}
         </Typography>
         <Typography variant="subtitle2">
-          {getStatus(status, classes, t)}{getSubtitle(type, status, date, wallet, t)}
+          {getStatus(status, classes, t)}{getSubtitle(type, status, date, to, t)}
         </Typography>
       </div>
 
@@ -115,7 +114,7 @@ const ActivityItem = ({
 export default ActivityItem;
 
 ActivityItem.defaultProps = {
-  wallet: null,
+  to: null,
   amount: null,
   value: null,
   status: null,
@@ -126,7 +125,7 @@ ActivityItem.defaultProps = {
 ActivityItem.propTypes = {
   type: PropTypes.number.isRequired,
   currency: PropTypes.shape(currencyPropTypes).isRequired,
-  wallet: PropTypes.string,
+  to: PropTypes.string,
   amount: PropTypes.number,
   value: PropTypes.number,
   status: PropTypes.number,

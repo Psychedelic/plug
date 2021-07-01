@@ -55,8 +55,6 @@ const useSteps = () => {
       if (type === ADDRESS_TYPES.ACCOUNT && selectedAsset.id === 'CYCLES') {
         isValid = false;
       }
-      console.log(type, isValid);
-
       handleChangeAddressInfo({ isValid, type });
     }
   }, [address, selectedAsset]);

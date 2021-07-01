@@ -16,7 +16,7 @@ Default.args = {
   wallet: 'rwlgt...ii-cai',
   amount: -182.27,
   value: 2129.12,
-  status: ACTIVITY_STATUS.DONE,
+  status: ACTIVITY_STATUS.COMPLETED,
   date: 'Apr 12',
   plug: null,
 };
