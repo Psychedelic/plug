@@ -48,6 +48,7 @@ const Dialog = ({
                 onClick={() => handleItemClick(item)}
                 border={index !== items.length - 1}
                 size="medium"
+                disabled={item.disabled}
               />
             ))
             : component

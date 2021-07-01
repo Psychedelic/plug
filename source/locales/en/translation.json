@@ -55,7 +55,8 @@
     "confirm": "Confirm",
     "disconnect": "Disconnect",
     "add": "Add",
-    "or": "or"
+    "or": "or",
+    "comingSoon": "Coming Soon"
   },
   "apps": {
     "title": "Connected Apps",
