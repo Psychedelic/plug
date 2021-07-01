@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';
 import moment from 'moment';
+import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
+
 import { ACTIVITY_TYPES, ACTIVITY_STATUS } from '@shared/constants/activity';
 import { currencyPropTypes } from '@shared/constants/currencies';
-import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
+import shortAddress from '@shared/utils/short-address';
 import Typography from '@material-ui/core/Typography';
+
 import GenericIcon from '../GenericIcon';
 import SwapIcon from './SwapIcon';
 import useStyles from './styles';
-import shortAddress from '@shared/utils/short-address';
 
 const getTitle = (type, currency, swapData, plug, t) => {
   switch (type) {
