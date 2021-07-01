@@ -7,12 +7,11 @@ const Header = ({
   center,
   left,
   right,
-  className,
 }) => {
   const classes = useStyles();
 
   return (
-    <div className={`${classes.root} ${className}`}>
+    <div className={classes.root}>
       {
         left
         && <div className={classes.left}>{left}</div>
@@ -31,12 +30,10 @@ export default Header;
 Header.defaultProps = {
   left: null,
   right: null,
-  className: '',
 };
 
 Header.propTypes = {
   center: PropTypes.string.isRequired,
   left: PropTypes.node,
   right: PropTypes.node,
-  className: PropTypes.string,
 };

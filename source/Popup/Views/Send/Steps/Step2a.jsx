@@ -40,8 +40,8 @@ const Step2a = ({ destination, handleChangeDestination, handleChangeStep }) => {
           <Typography variant="subtitle1">{t('send.canisterDetected')}</Typography>
         </Grid>
         {
-          buttons.map((item) => (
-            <Grid item xs={12}>
+          buttons.map((item, index) => (
+            <Grid item xs={12} key={index.toString()}>
               <SelectButton {...item} />
             </Grid>
           ))

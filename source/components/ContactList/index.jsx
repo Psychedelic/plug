@@ -27,6 +27,7 @@ const ContactList = ({
             {
               item.contacts.sort((a, b) => a.name.localeCompare(b.name)).map((contact) => (
                 <ContactItem
+                  key={contact.id}
                   contact={contact}
                   handleClick={selectable ? onClick : null}
                   handleDelete={selectable

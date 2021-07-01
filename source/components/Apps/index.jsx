@@ -61,8 +61,9 @@ const Apps = () => {
                   <Typography variant="h5">{t('apps.title')}</Typography>
                   <Typography variant="subtitle2">{t('apps.subtitle')}</Typography>
                 </div>
-                {apps.map((app) => (
+                {apps.map((app, index) => (
                   <AppItem
+                    key={index.toString()}
                     onClick={() => handleOpenDialog(app)}
                     icon={DeleteImg}
                     action={t('common.delete')}

@@ -58,7 +58,11 @@ const SeedPhraseStep = ({ handleNextStep, mnemonic }) => {
 
 export default SeedPhraseStep;
 
+SeedPhraseStep.defaultProps = {
+  mnemonic: null,
+};
+
 SeedPhraseStep.propTypes = {
   handleNextStep: PropTypes.func.isRequired,
-  mnemonic: PropTypes.arrayOf(PropTypes.string).isRequired,
+  mnemonic: PropTypes.arrayOf(PropTypes.string),
 };

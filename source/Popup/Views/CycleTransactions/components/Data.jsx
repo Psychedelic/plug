@@ -9,8 +9,13 @@ const Data = ({ data }) => {
   return (
     <div className={classes.innerContainer}>
       {
-        data.map((item) => (
-          <FormItem label={item.label} component={item.component} style={{ marginBottom: 24 }} />
+        data.map((item, index) => (
+          <FormItem
+            key={index.toString()}
+            label={item.label}
+            component={item.component}
+            style={{ marginBottom: 24 }}
+          />
         ))
       }
     </div>

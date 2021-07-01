@@ -46,7 +46,7 @@ const SeedPhrase = ({ words }) => {
       >
         {
           words.map((word, i) => (
-            <div className={classes.item}>
+            <div className={classes.item} key={word}>
               <ListItem number={i + 1} text={word} />
             </div>
           ))
