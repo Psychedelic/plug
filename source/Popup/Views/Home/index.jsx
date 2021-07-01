@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import extension from 'extensionizer';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import {
   Actions, Assets, Activity, Apps, Layout,
 } from '@components';
 import { Tabs } from '@ui';
-import { useTranslation } from 'react-i18next';
 import { useTabs } from '@hooks';
-import { useDispatch } from 'react-redux';
+import { HANDLER_TYPES } from '@background/Keyring';
 import { setAccountInfo } from '../../../redux/wallet';
-import { HANDLER_TYPES } from '../../../Background/Keyring';
 
 const getTabs = (t) => [
   {
