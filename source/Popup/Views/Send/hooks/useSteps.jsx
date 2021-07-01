@@ -7,7 +7,7 @@ import { LinkButton } from '@ui';
 import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';
 import { setAssets } from '@redux/wallet';
-import { HANDLER_TYPES } from '@background/Keyring';
+import { HANDLER_TYPES, E8S_PER_ICP } from '@background/Keyring';
 import Step1 from '../Steps/Step1';
 import Step2a from '../Steps/Step2a';
 import Step2b from '../Steps/Step2b';
@@ -40,7 +40,7 @@ const useSteps = () => {
   const handleSendClick = () => {
     extension.runtime.sendMessage({
       type: HANDLER_TYPES.SEND_ICP,
-      params: { to: address, amount },
+      params: { to: address, amount: amount * E8S_PER_ICP },
     }, (keyringAssets) => {
       dispatch(setAssets(keyringAssets));
       navigator.navigate('home');
@@ -76,8 +76,8 @@ const useSteps = () => {
       conversionRate: selectedAsset.price,
     },
   );
-
-  const available = assets[0].amount; // Only ICP supported for now
+  console.log(assets);
+  const available = assets[0]?.amount; // Only ICP supported for now
   const [availableAmount, setAvailableAmount] = useState({
     amount: available * primaryValue.conversionRate,
     prefix: primaryValue.prefix,
