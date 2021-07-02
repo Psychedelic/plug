@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { LinkButton } from '@ui';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import extension from 'extensionizer';
+
+import { LinkButton } from '@ui';
 import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';
+import { setAssets } from '@redux/wallet';
+import { HANDLER_TYPES } from '@background/Keyring';
 import Step1 from '../Steps/Step1';
 import Step2a from '../Steps/Step2a';
 import Step2b from '../Steps/Step2b';
 import Step3 from '../Steps/Step3';
 import { CURRENCIES } from '../../../../shared/constants/currencies';
-
-const AVAILABLE_AMOUNT = 100; // get available amount from somewhere
+import { validateAccountId, validatePrincipalId } from './utils';
+import { ADDRESS_TYPES } from './constants';
 
 const useSteps = () => {
   const [step, setStep] = useState(0);
   const { navigator } = useRouter();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const [selectedAsset, setSelectedAsset] = useState(CURRENCIES.get('ICP'));
   const [amount, setAmount] = useState(null);
@@ -23,6 +29,7 @@ const useSteps = () => {
   const [addressInfo, setAddressInfo] = useState({ isValid: null, type: null });
 
   const [destination, setDestination] = useState('dank');
+  const { assets } = useSelector((state) => state.wallet);
 
   const handleChangeAddress = (value) => setAddress(value);
   const handleChangeAddressInfo = (value) => setAddressInfo(value);
@@ -30,22 +37,24 @@ const useSteps = () => {
   const handleChangeStep = (index) => setStep(index);
   const handleChangeAmount = (value) => setAmount(value);
   const handleChangeDestination = (value) => setDestination(value);
+  const handleSendClick = () => {
+    extension.runtime.sendMessage({
+      type: HANDLER_TYPES.SEND_ICP,
+      params: { to: address, amount },
+    }, (keyringAssets) => {
+      dispatch(setAssets(keyringAssets));
+      navigator.navigate('home');
+    });
+  };
 
   useEffect(() => {
     if (address !== null) {
-      let isValid = address.includes('valid id')
-        && (address.includes('dank') || address.includes('canister') || address.includes('account id'));
-
-      let type = null;
-      if (address.includes('dank')) type = 'dank';
-      else if (address.includes('canister')) type = 'canister';
-      else if (address.includes('account id')) type = 'account id';
-
-      // check for account id if cycles selected
-      if (type === 'account id' && selectedAsset.id === 'CYCLES') {
+      let isValid = validatePrincipalId(address) || validateAccountId(address);
+      const type = validatePrincipalId(address) ? ADDRESS_TYPES.PRINCIPAL : ADDRESS_TYPES.ACCOUNT;
+      // check for accountId if cycles selected
+      if (type === ADDRESS_TYPES.ACCOUNT && selectedAsset.id === 'CYCLES') {
         isValid = false;
       }
-
       handleChangeAddressInfo({ isValid, type });
     }
   }, [address, selectedAsset]);
@@ -68,14 +77,15 @@ const useSteps = () => {
     },
   );
 
+  const available = assets[0].amount; // Only ICP supported for now
   const [availableAmount, setAvailableAmount] = useState({
-    amount: AVAILABLE_AMOUNT * primaryValue.conversionRate,
+    amount: available * primaryValue.conversionRate,
     prefix: primaryValue.prefix,
     suffix: primaryValue.suffix,
   });
 
   useEffect(() => {
-    const maxAmount = AVAILABLE_AMOUNT * primaryValue.conversionRate;
+    const maxAmount = available * primaryValue.conversionRate;
 
     setAvailableAmount(
       {
@@ -209,7 +219,7 @@ const useSteps = () => {
         asset={selectedAsset}
         amount={amount}
         address={address}
-        handleSendClick={() => navigator.navigate('home')}
+        handleSendClick={handleSendClick}
       />,
       left: <LinkButton value={t('common.back')} onClick={() => handlePreviousStep()} startIcon={BackIcon} />,
       right: rightButton,

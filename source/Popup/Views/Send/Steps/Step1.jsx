@@ -90,7 +90,7 @@ const Step1 = ({
                 <Typography variant="subtitle2">
                   <NumberFormat
                     value={availableAmount.amount}
-                    decimalScale={2}
+                    decimalScale={5}
                     fixedDecimalScale
                     thousandSeparator=","
                     displayType="text"
