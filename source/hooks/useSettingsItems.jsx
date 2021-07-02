@@ -1,6 +1,6 @@
 // import PenIcon from '@assets/icons/settings/pen.svg';
 import KeyIcon from '@assets/icons/settings/old-key.svg';
-import NotebookIcon from '@assets/icons/settings/notebook.svg';
+// import NotebookIcon from '@assets/icons/settings/notebook.svg';
 import { useTranslation } from 'react-i18next';
 import extension from 'extensionizer';
 import { useRouter } from '@components/Router';
@@ -18,13 +18,13 @@ const useSettingsItems = () => {
       description: t('settings.walletDetailsDescription'),
       onClick: (() => navigator.navigate('wallet-details')),
     },
-    */
     {
       image: NotebookIcon,
       name: t('settings.contacts'),
       description: t('settings.contactsDescription'),
       onClick: (() => navigator.navigate('contacts')),
     },
+    */
     {
       image: KeyIcon,
       name: t('settings.seedPhrase'),
