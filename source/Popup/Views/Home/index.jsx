@@ -34,7 +34,6 @@ const Home = () => {
   useEffect(() => {
     extension.runtime.sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
       (state) => {
-        console.log(state);
         if (!state?.wallets?.length) {
           extension.runtime.sendMessage({ type: HANDLER_TYPES.LOCK, params: {} },
             () => navigator.navigate('login'));
