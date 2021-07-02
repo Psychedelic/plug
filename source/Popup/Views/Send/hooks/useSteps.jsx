@@ -7,7 +7,7 @@ import { LinkButton } from '@ui';
 import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';
 import { setAssets } from '@redux/wallet';
-import { HANDLER_TYPES } from '@background/Keyring';
+import { HANDLER_TYPES, E8S_PER_ICP } from '@background/Keyring';
 import Step1 from '../Steps/Step1';
 import Step2a from '../Steps/Step2a';
 import Step2b from '../Steps/Step2b';
@@ -22,6 +22,7 @@ const useSteps = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
+  const { assets } = useSelector((state) => state.wallet);
   const [selectedAsset, setSelectedAsset] = useState(CURRENCIES.get('ICP'));
   const [amount, setAmount] = useState(null);
 
@@ -29,7 +30,6 @@ const useSteps = () => {
   const [addressInfo, setAddressInfo] = useState({ isValid: null, type: null });
 
   const [destination, setDestination] = useState('dank');
-  const { assets } = useSelector((state) => state.wallet);
 
   const handleChangeAddress = (value) => setAddress(value);
   const handleChangeAddressInfo = (value) => setAddressInfo(value);
@@ -38,9 +38,10 @@ const useSteps = () => {
   const handleChangeAmount = (value) => setAmount(value);
   const handleChangeDestination = (value) => setDestination(value);
   const handleSendClick = () => {
+    const e8s = parseInt(amount * E8S_PER_ICP, 10);
     extension.runtime.sendMessage({
       type: HANDLER_TYPES.SEND_ICP,
-      params: { to: address, amount },
+      params: { to: address, amount: e8s },
     }, (keyringAssets) => {
       dispatch(setAssets(keyringAssets));
       navigator.navigate('home');
@@ -76,8 +77,7 @@ const useSteps = () => {
       conversionRate: selectedAsset.price,
     },
   );
-
-  const available = assets[0].amount; // Only ICP supported for now
+  const available = assets[0]?.amount; // Only ICP supported for now
   const [availableAmount, setAvailableAmount] = useState({
     amount: available * primaryValue.conversionRate,
     prefix: primaryValue.prefix,
@@ -119,6 +119,18 @@ const useSteps = () => {
       },
     );
   }, [selectedAsset]);
+
+  useEffect(() => {
+    if (!assets?.length) {
+      extension.runtime.sendMessage({
+        type: HANDLER_TYPES.GET_ASSETS,
+        params: {},
+      }, (keyringAssets) => {
+        dispatch(setAssets(keyringAssets));
+        setAvailableAmount(keyringAssets?.[0]?.amount);
+      });
+    }
+  }, []);
 
   const handleSwapValues = () => {
     const temp = secondaryValue;

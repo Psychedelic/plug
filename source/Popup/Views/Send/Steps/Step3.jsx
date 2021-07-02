@@ -1,4 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
+
 import Grid from '@material-ui/core/Grid';
 import {
   Container,
@@ -9,9 +12,8 @@ import {
   USDFormat,
 } from '@ui';
 import { Typography } from '@material-ui/core';
-import { useTranslation } from 'react-i18next';
 import AccountImg from '@assets/icons/account.svg';
-import PropTypes from 'prop-types';
+import shortAddress from '@shared/utils/short-address';
 
 const Step3 = ({
   asset, amount, address, handleSendClick,
@@ -36,12 +38,12 @@ const Step3 = ({
         <Grid item xs={12}>
           <Card>
             <InfoRow name={t('send.payWith')} value={asset.name} image={asset.image} border spaced />
-            <InfoRow name={t('send.to')} value={address} image={AccountImg} spaced />
+            <InfoRow name={t('send.to')} value={shortAddress(address)} image={AccountImg} spaced />
           </Card>
         </Grid>
 
         <Grid item xs={12}>
-          <InfoRow name={t('common.taxFee')} value="0.00005 T Cycles ($2.50)" />
+          <InfoRow name={t('common.taxFee')} value="0.00001 ICP ($2.50)" /> {/* TODO: Get price from API */}
         </Grid>
 
         <Grid item xs={12}>

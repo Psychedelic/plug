@@ -66,8 +66,8 @@ export const getKeyringHandler = (type, keyring) => ({
     const e8s = await keyring.getBalance();
     return formatAssets(e8s);
   },
-  [HANDLER_TYPES.SEND_ICP]: async (params) => {
-    await keyring.sendICP(params);
+  [HANDLER_TYPES.SEND_ICP]: async ({ to, amount }) => {
+    await keyring.sendICP(to, BigInt(amount));
     const e8s = await keyring.getBalance();
     return formatAssets(e8s);
   },
