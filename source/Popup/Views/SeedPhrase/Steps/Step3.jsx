@@ -9,7 +9,7 @@ const Step3 = () => {
 
   useEffect(async () => {
     extension.runtime.sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
-      setWords(state.mnemonic.split(' '));
+      setWords(state?.mnemonic?.split(' '));
     });
   }, []);
 
