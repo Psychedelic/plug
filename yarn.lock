@@ -1684,10 +1684,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.9.2.tgz#adea7b6953cbb34651766b0548468e743c6a2353"
   integrity sha512-VZMYa7+fXHdwIq1TDhSXoVmSPEGM/aa+6Aiq3nVVJ9bXr24zScr+NlKFKC3iPljA7ho/GAZr+d2jOf5GIRC30Q==
 
-"@psychedelic/plug-controller@0.0.8":
-  version "0.0.8"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.0.8/00e45caa2dceddbee9a73072955005f93b9322b56f1dd2318feb3c4ffe085874#5611a95df7d8227436ebfde7ef07d37798515cae"
-  integrity sha512-zpooBrQhUq0d4lKjyp76xoVSqPC73vB0S4yZx+ME8xqbFwei5ZWPTBc/YrRAtWFyGwrcVoU5nZpeEkvINZq3Ww==
+"@psychedelic/plug-controller@@psychedelic/plug-controller@0.0.9":
+  version "0.0.9"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.0.9/bbc669ea92cf9ad1d2c8afd1c7a9d61f91ca929b318b4360c8a0a20441d41d79#c6ef2bc4557fb978819717c9d00a94371fa32bb0"
+  integrity sha512-S7VeE9EIV9BOmxyUPfNsC0HJQ8ollLkyxo8c+HnurPA/WiZ91sJ3Ue2kinHtHUsOpiWsuSObLWEHFaYgiUSYDg==
   dependencies:
     "@babel/preset-env" "^7.14.4"
     "@dfinity/agent" "^0.8.9"
@@ -1698,6 +1698,7 @@
     create-hmac "^1.1.7"
     cross-fetch "^3.1.4"
     crypto-js "^4.0.0"
+    dotenv "^10.0.0"
     ed25519-hd-key "^1.2.0"
     extensionizer "^1.0.1"
     random-bigint "^0.0.1"
@@ -3508,6 +3509,13 @@ axe-core@^4.0.2:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.2.3.tgz#2a3afc332f0031b42f602f4a3de03c211ca98f72"
   integrity sha512-pXnVMfJKSIWU2Ml4JHP7pZEPIrgBO1Fd3WGx+fPBsS+KRGhE4vxooD8XBGWbQOIVSZsVK7pUDBBkCicNu80yzQ==
+
+axios@^0.21.1:
+  version "0.21.1"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
+  integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
+  dependencies:
+    follow-redirects "^1.10.0"
 
 axobject-query@^2.2.0:
   version "2.2.0"
@@ -5549,6 +5557,11 @@ dotenv-webpack@^1.8.0:
   dependencies:
     dotenv-defaults "^1.0.2"
 
+dotenv@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-10.0.0.tgz#3d4227b8fb95f81096cdd2b66653fb2c7085ba81"
+  integrity sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==
+
 dotenv@^6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-6.2.0.tgz#941c0410535d942c8becf28d3f357dbd9d476064"
@@ -6493,6 +6506,11 @@ flush-write-stream@^1.0.0:
   dependencies:
     inherits "^2.0.3"
     readable-stream "^2.3.6"
+
+follow-redirects@^1.10.0:
+  version "1.14.1"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.1.tgz#d9114ded0a1cfdd334e164e6662ad02bfd91ff43"
+  integrity sha512-HWqDgT7ZEkqRzBvc2s64vSZ/hfOceEol3ac/7tKwzuvEyWx3/4UegXh5oBOIotkGsObyk3xznnSRVADBgWSQVg==
 
 for-in@^1.0.2:
   version "1.0.2"

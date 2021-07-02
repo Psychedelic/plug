@@ -20,7 +20,7 @@
     "https://*/*"
   ],
 
-  "content_security_policy": "script-src 'self'; object-src 'self'",
+  "content_security_policy": "script-src 'self' 'wasm-eval'; object-src 'self'",
 
   "__chrome|firefox__author": "FleekHQ",
   "__opera__developer": {
@@ -60,7 +60,7 @@
     "scripts": [
       "js/background.bundle.js"
     ],
-    "__chrome|opera__persistent": false
+    "__chrome|opera__persistent": true
   },
 
   "content_scripts": [{
