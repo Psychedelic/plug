@@ -24,7 +24,7 @@ const NumberFormatCustom = (props) => {
       {...other}
       getInputRef={inputRef}
       onValueChange={(values) => { onChange(values.value); }}
-      decimalScale={2}
+      decimalScale={5}
       fixedDecimalScale
       thousandSeparator=","
       allowNegative={false}
@@ -48,6 +48,7 @@ const MultiInput = ({
   conversionPrice,
   handleSwapValues,
   availableAmount,
+  decimalScale,
 }) => {
   const classes = useStyles();
 
@@ -73,12 +74,13 @@ const MultiInput = ({
               availableAmount,
             },
             inputComponent: NumberFormatCustom,
+            decimalScale,
           }}
         />
         <span className={classes.estimatedTotal}>
           <NumberFormat
             displayType="text"
-            decimalScale={2}
+            decimalScale={decimalScale}
             fixedDecimalScale
             thousandSeparator=","
             value={conversionPrice}
@@ -107,6 +109,11 @@ MultiInput.propTypes = {
   conversionPrice: PropTypes.number.isRequired,
   handleSwapValues: PropTypes.func.isRequired,
   availableAmount: PropTypes.number.isRequired,
+  decimalScale: PropTypes.number,
+};
+
+MultiInput.defaultProps = {
+  decimalScale: 2,
 };
 
 NumberFormatCustom.propTypes = {
