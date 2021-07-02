@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
-import { IDInput, ActionDialog } from '@components';
+import { IDInput } from '@components';
 import {
-  FormItem, MultiInput, Container, Button, Dialog, TextInput, Alert,
+  FormItem, MultiInput, Container, Button, Dialog, Alert,
 } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
 import NumberFormat from 'react-number-format';
-import clsx from 'clsx';
-import FleekImg from '@assets/icons/Fleek.svg';
-import { useContacts } from '@hooks';
 import useStyles from '../styles';
 
 const Step1 = ({
@@ -35,6 +32,7 @@ const Step1 = ({
 
   const [openAssets, setOpenAssets] = useState(false);
 
+  /*
   const [openAddContact, setOpenAddContact] = useState(false);
   const [contactName, setContactName] = useState('');
 
@@ -60,6 +58,7 @@ const Step1 = ({
   const handleChangeContactName = (e) => {
     setContactName(e.target.value);
   };
+  */
 
   const handleCloseAssets = (value) => {
     setOpenAssets(false);
@@ -128,10 +127,10 @@ const Step1 = ({
                 onChange={handleChangeAddress}
                 addressInfo={addressInfo}
                 handleChangeAddressInfo={handleChangeAddressInfo}
-                contacts={contacts}
-                handleRemoveContact={handleRemoveContact}
-                selectedContact={selectedContact}
-                handleSelectedContact={handleSelectedContact}
+                // contacts={contacts}
+                // handleRemoveContact={handleRemoveContact}
+                // selectedContact={selectedContact}
+                // handleSelectedContact={handleSelectedContact}
                 selectedAsset={selectedAsset}
               />
             )}
@@ -152,6 +151,7 @@ const Step1 = ({
           )
         }
         {
+          /*
           (address !== ''
             && addressInfo.isValid
             && !contacts.flatMap((c) => c.contacts).map((c) => c.id).includes(address))
@@ -198,6 +198,7 @@ const Step1 = ({
               </div>
             </Grid>
           )
+          */
         }
         <Grid item xs={12}>
           <Button
