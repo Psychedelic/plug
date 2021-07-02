@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
   infoRow: {
-    padding: '8px 0',
+    padding: '4px 0',
     width: '100%',
     display: 'flex',
     alignItems: 'center',

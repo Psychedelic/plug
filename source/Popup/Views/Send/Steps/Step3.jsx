@@ -11,8 +11,10 @@ import {
 import { Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import AccountImg from '@assets/icons/account.svg';
+import ArrowImg from '@assets/icons/send-arrow.png';
 import PropTypes from 'prop-types';
 import shortAddress from '@shared/utils/short-address';
+import useStyles from '../styles';
 
 const Step3 = ({
   asset, amount, address, handleSendClick,
@@ -20,6 +22,8 @@ const Step3 = ({
   const { t } = useTranslation();
 
   const subtotal = amount * asset.price;
+
+  const classes = useStyles();
 
   return (
     <Container>
@@ -37,7 +41,19 @@ const Step3 = ({
         <Grid item xs={12}>
           <Card>
             <InfoRow name={t('send.payWith')} value={asset.name} image={asset.image} border spaced />
-            <InfoRow name={t('send.to')} value={shortAddress(address)} image={AccountImg} spaced />
+            <div className={classes.accountIdContainer}>
+              <div>
+                <Typography variant="subtitle1">{t('send.to')}</Typography>
+                <div className={classes.titleContainer}>
+                  <img src={ArrowImg} className={classes.arrow} />
+                  <Typography variant="subtitle1">{t('send.accountId')}</Typography>
+                </div>
+              </div>
+              <div className={classes.addressContainer}>
+                <div className={classes.flex}><img className={classes.image} src={AccountImg} /><Typography variant="h5">{shortAddress(address)}</Typography></div>
+                <div className={classes.flex}><img className={classes.image} src={AccountImg} /><Typography variant="h5">{shortAddress(address)}</Typography></div>
+              </div>
+            </div>
           </Card>
         </Grid>
 
