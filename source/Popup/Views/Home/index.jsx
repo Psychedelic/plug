@@ -8,7 +8,9 @@ import {
 import { Tabs } from '@ui';
 import { useTabs } from '@hooks';
 import { HANDLER_TYPES } from '@background/Keyring';
-import { setAccountInfo } from '../../../redux/wallet';
+import getIcpPrice from '@shared/services/ICPPrice';
+import { setAccountInfo } from '@redux/wallet';
+import { setIcpPrice } from '@redux/icp';
 
 const getTabs = (t) => [
   {
@@ -32,6 +34,7 @@ const Home = () => {
   const { navigator } = useRouter();
 
   useEffect(() => {
+    getIcpPrice().then((response) => dispatch(setIcpPrice(response?.data?.[0]?.price)));
     extension.runtime.sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
       (state) => {
         if (!state?.wallets?.length) {

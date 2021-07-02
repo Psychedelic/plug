@@ -23,6 +23,7 @@ const useSteps = () => {
   const dispatch = useDispatch();
 
   const { assets } = useSelector((state) => state.wallet);
+  const { icpPrice } = useSelector((state) => state.icp);
   const [selectedAsset, setSelectedAsset] = useState(CURRENCIES.get('ICP'));
   const [amount, setAmount] = useState(null);
 
@@ -47,6 +48,12 @@ const useSteps = () => {
       navigator.navigate('home');
     });
   };
+
+  useEffect(() => {
+    if (selectedAsset.name === 'ICP') {
+      setSelectedAsset({ ...selectedAsset, price: icpPrice });
+    } // TODO: Add corresponding sentence for cycles
+  }, [icpPrice]);
 
   useEffect(() => {
     if (address !== null) {
@@ -238,7 +245,6 @@ const useSteps = () => {
       center: `${t('send.review')}`,
     },
   ];
-
   return steps[step];
 };
 
