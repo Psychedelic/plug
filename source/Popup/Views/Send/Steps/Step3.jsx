@@ -19,9 +19,8 @@ const Step3 = ({
   asset, amount, address, handleSendClick,
 }) => {
   const { t } = useTranslation();
-
   const subtotal = amount * asset.price;
-
+  const fee = (asset?.price * 0.00001).toFixed(5);
   return (
     <Container>
       <Grid container spacing={2}>
@@ -43,11 +42,11 @@ const Step3 = ({
         </Grid>
 
         <Grid item xs={12}>
-          <InfoRow name={t('common.taxFee')} value="0.00001 ICP ($2.50)" /> {/* TODO: Get price from API */}
+          <InfoRow name={t('common.taxFee')} value={`0.00001 ICP ($${fee})`} /> {/* TODO: Get price from API */}
         </Grid>
 
         <Grid item xs={12}>
-          <InfoRow name={t('common.total')} value={<USDFormat value={subtotal + 2.5} />} total />
+          <InfoRow name={t('common.total')} value={<USDFormat value={subtotal + fee} />} total />
         </Grid>
 
         <Grid item xs={12}>

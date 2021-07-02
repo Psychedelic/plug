@@ -16,13 +16,16 @@ const Assets = () => {
 
   const { assets } = useSelector((state) => state.wallet);
   const dispatch = useDispatch();
+  const { icpPrice } = useSelector((state) => state.icp);
 
   useEffect(() => {
-    extension.runtime.sendMessage({
-      type: HANDLER_TYPES.GET_ASSETS,
-      params: {},
-    }, (keyringAssets) => dispatch(setAssets(keyringAssets)));
-  }, []);
+    if (icpPrice) {
+      extension.runtime.sendMessage({
+        type: HANDLER_TYPES.GET_ASSETS,
+        params: icpPrice,
+      }, (keyringAssets) => dispatch(setAssets(keyringAssets)));
+    }
+  }, [icpPrice]);
   return (
     <div className={classes.root}>
       {

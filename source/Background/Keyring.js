@@ -15,14 +15,14 @@ const recursiveParseBigint = (obj) => Object.entries(obj).reduce((acum, [key, va
   return { ...acum, [key]: val };
 }, { ...obj });
 
-const formatAssets = (e8s) => {
+const formatAssets = (e8s, icpPrice) => {
   // The result is in e8s and a bigint. We parse it and transform to ICP
   const icpBalance = parseInt(e8s.toString(), 10) / E8S_PER_ICP;
   const assets = [{
     image: CURRENCIES.get('ICP').image,
     name: CURRENCIES.get('ICP').name,
     amount: icpBalance,
-    value: icpBalance,
+    value: icpBalance * icpPrice || icpBalance,
     currency: CURRENCIES.get('ICP').value,
   }];
   return assets;
@@ -62,9 +62,9 @@ export const getKeyringHandler = (type, keyring) => ({
     const response = await keyring.getTransactions();
     return recursiveParseBigint(response);
   },
-  [HANDLER_TYPES.GET_ASSETS]: async () => {
+  [HANDLER_TYPES.GET_ASSETS]: async (icpPrice) => {
     const e8s = await keyring.getBalance();
-    return formatAssets(e8s);
+    return formatAssets(e8s, icpPrice);
   },
   [HANDLER_TYPES.SEND_ICP]: async ({ to, amount }) => {
     await keyring.sendICP(to, BigInt(amount));

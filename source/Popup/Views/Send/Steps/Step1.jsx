@@ -84,6 +84,7 @@ const Step1 = ({
                 conversionPrice={conversionPrice}
                 handleSwapValues={handleSwapValues}
                 availableAmount={availableAmount.amount}
+                decimalScale={5}
               />
             )}
             subtitle={(

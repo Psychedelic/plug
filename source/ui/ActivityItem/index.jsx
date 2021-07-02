@@ -100,10 +100,10 @@ const ActivityItem = ({
         && (
           <div className={classes.rightContainer}>
             <Typography variant="h5">
-              <NumberFormat value={showSwap ? swapData.amount : amount} displayType="text" thousandSeparator="," suffix={` ${showSwap ? swapData.currency.value : currency.value}`} />
+              <NumberFormat value={showSwap ? swapData.amount : amount} displayType="text" thousandSeparator="," suffix={` ${showSwap ? swapData.currency.value : currency.value}`} decimalScale={8} />
             </Typography>
             <Typography variant="subtitle2">
-              <NumberFormat value={showSwap ? swapData.value : value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" />
+              <NumberFormat value={showSwap ? swapData.value : value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" decimalScale={8} />
             </Typography>
           </div>
         )

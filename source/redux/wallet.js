@@ -41,7 +41,7 @@ export const walletSlice = createSlice({
           currency: CURRENCIES.get(trx?.currency?.symbol),
           amount,
           date: new Date(trx?.timestamp / NANOS_PER_SECOND),
-          value: amount * 40 /* TODO: Add helder's fee function / call to nns */,
+          value: amount * action?.payload?.icpPrice,
           status: ACTIVITY_STATUS[trx?.status],
           to: trx?.to,
           plug: null,
