@@ -10,7 +10,8 @@
   },
   "profile": {
     "settings": "Settings",
-    "help": "Help"
+    "help": "Help",
+    "lock": "Lock"
   },
   "tabs": {
     "assets": "Assets",
