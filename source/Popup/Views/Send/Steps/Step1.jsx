@@ -76,7 +76,7 @@ const Step1 = ({
               <MultiInput
                 name={selectedAsset.name}
                 image={selectedAsset.image}
-                onClick={null}
+                onClick={() => setOpenAssets(true)}
                 value={amount}
                 onChange={handleChangeAmount}
                 primaryValue={primaryValue}
