@@ -48,6 +48,20 @@ backgroundController.exposeController('isConnected', (opts, url) => {
   });
 });
 
+backgroundController.exposeController('sign', async (opts, url, payload) => {
+  const { callback } = opts;
+
+  // TODO verify url is connected.
+
+  console.log("received sign request with payload", payload);
+
+  const state = await keyring.getState();
+  const wallet = state.wallets[state.currentWalletId || 0]
+  const result = await wallet.sign(payload);
+
+  callback(null, result);
+});
+
 backgroundController.exposeController(
   'requestConnect',
   (opts, domainUrl, name, icon) => {
