@@ -12,16 +12,31 @@ import {
 } from '@ui';
 import { Typography } from '@material-ui/core';
 import AccountImg from '@assets/icons/account.svg';
+import ArrowImg from '@assets/icons/send-arrow.png';
 import shortAddress from '@shared/utils/short-address';
+import { getAccountId } from '@psychedelic/plug-controller';
+import { Principal } from '@dfinity/agent';
+import useStyles from '../styles';
+import { ADDRESS_TYPES } from '../hooks/constants';
 
 const Step3 = ({
-  asset, amount, address, handleSendClick,
+  asset, amount, address, addressInfo, handleSendClick,
 }) => {
   const { t } = useTranslation();
+  const classes = useStyles();
 
   const subtotal = amount * asset.price;
 
   const fee = (asset?.price * 0.00001).toFixed(5);
+
+  const principal = Principal.fromText(address);
+  console.log('principal', principal);
+
+  const accountId = getAccountId(principal);
+  console.log('accountId', accountId);
+
+  const shortAccount = shortAddress(accountId);
+  console.log('shortAccount', shortAccount);
 
   return (
     <Container>
@@ -39,7 +54,39 @@ const Step3 = ({
         <Grid item xs={12}>
           <Card>
             <InfoRow name={t('send.payWith')} value={asset.name} image={asset.image} border spaced />
-            <InfoRow name={t('send.to')} value={shortAddress(address)} image={AccountImg} spaced />
+            {
+              addressInfo.type === ADDRESS_TYPES.PRINCIPAL
+                ? (
+                  <div className={classes.accountIdContainer}>
+                    <div>
+                      <Typography variant="subtitle1">{t('send.to')}</Typography>
+                      <div className={classes.titleContainer}>
+                        <img src={ArrowImg} className={classes.arrow} />
+                        <Typography variant="subtitle1">{t('send.accountId')}</Typography>
+                      </div>
+                    </div>
+                    <div className={classes.addressContainer}>
+                      <div className={classes.flex}>
+                        <img className={classes.image} src={AccountImg} />
+                        <Typography variant="h5">{shortAddress(address)}</Typography>
+                      </div>
+                      <div className={classes.flex}>
+                        <img className={classes.image} src={AccountImg} />
+                        <Typography variant="h5">
+                          {
+                          shortAddress(
+                            getAccountId(
+                              Principal.fromText(address),
+                            ),
+                          )
+                        }
+                        </Typography>
+                      </div>
+                    </div>
+                  </div>
+                )
+                : <InfoRow name={t('send.to')} value={shortAddress(address)} image={AccountImg} spaced />
+            }
           </Card>
         </Grid>
 
@@ -66,5 +113,6 @@ Step3.propTypes = {
   asset: PropTypes.objectOf(PropTypes.object).isRequired,
   amount: PropTypes.number.isRequired,
   address: PropTypes.string.isRequired,
+  addressInfo: PropTypes.objectOf(PropTypes.object).isRequired,
   handleSendClick: PropTypes.func.isRequired,
 };

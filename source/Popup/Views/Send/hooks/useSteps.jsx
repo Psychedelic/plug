@@ -32,7 +32,7 @@ const useSteps = () => {
 
   const [destination, setDestination] = useState('dank');
 
-  const handleChangeAddress = (value) => setAddress(value);
+  const handleChangeAddress = (value) => setAddress(value.trim());
   const handleChangeAddressInfo = (value) => setAddressInfo(value);
   const handleChangeAsset = (value) => setSelectedAsset(value);
   const handleChangeStep = (index) => setStep(index);
@@ -58,7 +58,14 @@ const useSteps = () => {
   useEffect(() => {
     if (address !== null) {
       let isValid = validatePrincipalId(address) || validateAccountId(address);
+
+      console.log('isValid', isValid);
+
       const type = validatePrincipalId(address) ? ADDRESS_TYPES.PRINCIPAL : ADDRESS_TYPES.ACCOUNT;
+
+      console.log('validatePrincipalId(address)', validatePrincipalId(address));
+      console.log('type', type);
+
       // check for accountId if cycles selected
       if (type === ADDRESS_TYPES.ACCOUNT && selectedAsset.id === 'CYCLES') {
         isValid = false;
@@ -238,6 +245,7 @@ const useSteps = () => {
         asset={selectedAsset}
         amount={amount}
         address={address}
+        addressInfo={addressInfo}
         handleSendClick={handleSendClick}
       />,
       left: <LinkButton value={t('common.back')} onClick={() => handlePreviousStep()} startIcon={BackIcon} />,
