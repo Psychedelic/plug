@@ -58,13 +58,7 @@ const useSteps = () => {
   useEffect(() => {
     if (address !== null) {
       let isValid = validatePrincipalId(address) || validateAccountId(address);
-
-      console.log('isValid', isValid);
-
       const type = validatePrincipalId(address) ? ADDRESS_TYPES.PRINCIPAL : ADDRESS_TYPES.ACCOUNT;
-
-      console.log('validatePrincipalId(address)', validatePrincipalId(address));
-      console.log('type', type);
 
       // check for accountId if cycles selected
       if (type === ADDRESS_TYPES.ACCOUNT && selectedAsset.id === 'CYCLES') {

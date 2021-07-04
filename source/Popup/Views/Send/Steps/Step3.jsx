@@ -14,10 +14,10 @@ import { Typography } from '@material-ui/core';
 import AccountImg from '@assets/icons/account.svg';
 import ArrowImg from '@assets/icons/send-arrow.png';
 import shortAddress from '@shared/utils/short-address';
-import { getAccountId } from '@psychedelic/plug-controller';
+import PlugController from '@psychedelic/plug-controller';
 import { Principal } from '@dfinity/agent';
 import useStyles from '../styles';
-import { ADDRESS_TYPES } from '../hooks/constants';
+import { ADDRESS_TYPES, DEFAULT_FEE } from '../hooks/constants';
 
 const Step3 = ({
   asset, amount, address, addressInfo, handleSendClick,
@@ -26,18 +26,7 @@ const Step3 = ({
   const classes = useStyles();
 
   const subtotal = amount * asset.price;
-
-  const fee = (asset?.price * 0.00001).toFixed(5);
-
-  const principal = Principal.fromText(address);
-  console.log('principal', principal);
-
-  const accountId = getAccountId(principal);
-  console.log('accountId', accountId);
-
-  const shortAccount = shortAddress(accountId);
-  console.log('shortAccount', shortAccount);
-
+  const fee = (asset?.price * DEFAULT_FEE).toFixed(5);
   return (
     <Container>
       <Grid container spacing={2}>
@@ -75,7 +64,7 @@ const Step3 = ({
                         <Typography variant="h5">
                           {
                           shortAddress(
-                            getAccountId(
+                            PlugController.getAccountId(
                               Principal.fromText(address),
                             ),
                           )
