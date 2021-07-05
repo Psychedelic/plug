@@ -52,11 +52,6 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
 
     return false;
   }
-  const validatePassword = () => (
-    password === ''
-    || password !== confirmPassword
-    || password.length < 12
-  );
 
   return (
     <>
