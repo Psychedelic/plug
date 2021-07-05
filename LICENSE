@@ -631,8 +631,7 @@ to attach them to the start of each source file to most effectively
 state the exclusion of warranty; and each file should have at least
 the "copyright" line and a pointer to where the full notice is found.
 
-    Plug is a crypto wallet for the Internet Computer that allows you to hold, 
-    send, and swap ICP, Cycles, and other tokens and access IC apps in one click.
+    Plug is an Internet Computer browser crypto wallet & authentication provider.
     Copyright (C) 2021  Fleek LLC
 
     This program is free software: you can redistribute it and/or modify
