@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import Grid from '@material-ui/core/Grid';
@@ -24,9 +24,16 @@ const Step3 = ({
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
+  const [loading, setLoading] = useState(false);
 
   const subtotal = amount * asset.price;
-  const fee = (asset?.price * DEFAULT_FEE).toFixed(5);
+  const fee = +(asset?.price * DEFAULT_FEE).toFixed(5);
+
+  const onClick = () => {
+    setLoading(true);
+    handleSendClick();
+  };
+
   return (
     <Container>
       <Grid container spacing={2}>
@@ -63,12 +70,12 @@ const Step3 = ({
                         <img className={classes.image} src={AccountImg} />
                         <Typography variant="h5">
                           {
-                          shortAddress(
-                            PlugController.getAccountId(
-                              Principal.fromText(address),
-                            ),
-                          )
-                        }
+                            shortAddress(
+                              PlugController.getAccountId(
+                                Principal.fromText(address),
+                              ),
+                            )
+                          }
                         </Typography>
                       </div>
                     </div>
@@ -88,7 +95,13 @@ const Step3 = ({
         </Grid>
 
         <Grid item xs={12}>
-          <Button variant="rainbow" value={t('send.title')} onClick={handleSendClick} fullWidth />
+          <Button
+            variant="rainbow"
+            value={t('send.title')}
+            onClick={onClick}
+            fullWidth
+            loading={loading}
+          />
         </Grid>
 
       </Grid>
