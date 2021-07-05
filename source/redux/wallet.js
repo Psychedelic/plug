@@ -49,7 +49,7 @@ export const walletSlice = createSlice({
         return transaction;
       };
       const parsedTrx = action.payload?.transactions?.map(mapTransaction) || [];
-      state.transactions = parsedTrx;
+      state.transactions = parsedTrx.reverse();
     },
     setAssets: (state, action) => {
       state.assets = action.payload;
