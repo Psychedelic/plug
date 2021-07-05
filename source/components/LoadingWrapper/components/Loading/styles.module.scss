@@ -1,0 +1,21 @@
+.spinnerLogo {
+  height: 75px;
+  width: 75px;
+  pointer-events: none;
+  animation: spin infinite 3s linear;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+} 
