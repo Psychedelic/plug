@@ -3,11 +3,10 @@
   "version": "0.0.0",
   "description": "Your plug into the Internet Computer",
   "private": true,
-  "repository": "https://github.com/FleekHQ/plug-extension",
+  "repository": "https://github.com/Psychedelic/plug",
   "author": {
-    "name": "Christian Laino",
-    "email": "christian@fleek.co",
-    "url": "https://github.com/ChriLnth"
+    "name": "Psychedelic",
+    "url": "https://github.com/Psychedelic"
   },
   "license": "MIT",
   "engines": {
