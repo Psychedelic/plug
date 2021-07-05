@@ -49,7 +49,6 @@ export const HANDLER_TYPES = {
 
 export const sendMessage = (args, callback) => {
   extension.runtime.sendMessage(args, (response) => {
-    console.log('sendMessageResponse', response);
     let parsedResponse = response;
     if (typeof response === 'string') {
       try {
@@ -58,8 +57,6 @@ export const sendMessage = (args, callback) => {
         parsedResponse = response;
       }
     }
-    console.log('SendMessageParsedResponse', parsedResponse);
-
     callback(parsedResponse);
     return parsedResponse;
   });
