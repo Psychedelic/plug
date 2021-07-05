@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import extension from 'extensionizer';
 import Grid from '@material-ui/core/Grid';
 import { useTranslation } from 'react-i18next';
 import {
   Alert, Button, FormItem, TextInput,
 } from '@ui';
+import { sendMessage } from '@background/Keyring';
+
 import useStyles from '../styles';
 
 const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => {
@@ -26,7 +27,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
   const handleCreateAccount = async () => {
     const type = mnemonic ? 'import-keyring' : 'create-keyring';
     const params = { password, mnemonic };
-    extension.runtime.sendMessage({ type, params }, (response) => {
+    sendMessage({ type, params }, (response) => {
       handleSetMnemonic(response?.mnemonic);
     });
     handleNextStep();
