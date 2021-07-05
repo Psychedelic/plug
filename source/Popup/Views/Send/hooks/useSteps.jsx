@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import extension from 'extensionizer';
 
 import { LinkButton } from '@ui';
 import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';
 import { setAssets } from '@redux/wallet';
-import { HANDLER_TYPES, E8S_PER_ICP } from '@background/Keyring';
+import { HANDLER_TYPES, E8S_PER_ICP, sendMessage } from '@background/Keyring';
 import Step1 from '../Steps/Step1';
 import Step2a from '../Steps/Step2a';
 import Step2b from '../Steps/Step2b';
@@ -40,7 +39,7 @@ const useSteps = () => {
   const handleChangeDestination = (value) => setDestination(value);
   const handleSendClick = () => {
     const e8s = parseInt(amount * E8S_PER_ICP, 10);
-    extension.runtime.sendMessage({
+    sendMessage({
       type: HANDLER_TYPES.SEND_ICP,
       params: { to: address, amount: e8s },
     }, (keyringAssets) => {
@@ -129,7 +128,7 @@ const useSteps = () => {
 
   useEffect(() => {
     if (!assets?.length) {
-      extension.runtime.sendMessage({
+      sendMessage({
         type: HANDLER_TYPES.GET_ASSETS,
         params: {},
       }, (keyringAssets) => {

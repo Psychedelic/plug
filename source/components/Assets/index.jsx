@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import extension from 'extensionizer';
 import { AssetItem } from '@ui';
 import { setAssets } from '@redux/wallet';
-import { HANDLER_TYPES } from '@background/Keyring';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import useStyles from './styles';
 
 const Assets = () => {
@@ -15,7 +14,7 @@ const Assets = () => {
 
   useEffect(() => {
     if (icpPrice) {
-      extension.runtime.sendMessage({
+      sendMessage({
         type: HANDLER_TYPES.GET_ASSETS,
         params: icpPrice,
       }, (keyringAssets) => dispatch(setAssets(keyringAssets)));
