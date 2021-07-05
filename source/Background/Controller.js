@@ -34,6 +34,7 @@ extension.runtime.onMessage.addListener(async (message, _, sendResponse) => {
   if (!keyringHandler) return;
   const response = await keyringHandler(params);
   sendResponse(response);
+  return JSON.stringify(response);
 });
 
 backgroundController.exposeController('isConnected', (opts, url) => {
