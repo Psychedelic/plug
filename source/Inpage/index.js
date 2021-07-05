@@ -9,7 +9,20 @@ const clientRPC = new BrowserRPC(window, {
 
 clientRPC.start();
 
-const plugProvider = new Provider(clientRPC);
+console.log('YO!');
+
+let publicKey;
+
+clientRPC
+  .call('getPublicKey')
+  .then((result) => {
+    publicKey = result;
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+
+const plugProvider = new Provider(clientRPC, publicKey);
 
 const ic = window.ic || {};
 

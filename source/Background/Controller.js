@@ -62,6 +62,13 @@ backgroundController.exposeController('sign', async (opts, url, payload) => {
   callback(null, result);
 });
 
+backgroundController.exposeController('getPublicKey', async (opts) => {
+  const { callback } = opts;
+  const state = await keyring.getState();
+  const PublicKey = state.currentWalletId;
+  callback(null, PublicKey);
+});
+
 backgroundController.exposeController(
   'requestConnect',
   (opts, domainUrl, name, icon) => {
