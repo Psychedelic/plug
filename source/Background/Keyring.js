@@ -48,8 +48,8 @@ export const HANDLER_TYPES = {
   SEND_ICP: 'send-icp',
 };
 
-export const sendMessage = (args, callback) => {
-  extension.runtime.sendMessage(args, (response) => {
+export const sendMessage = async (args, callback) => {
+  await extension.runtime.sendMessage(args, (response) => {
     let parsedResponse = response;
     if (typeof response === 'string') {
       try {
