@@ -34,7 +34,8 @@ extension.runtime.onMessage.addListener(async (message, _, sendResponse) => {
   if (!keyringHandler) return;
   const response = await keyringHandler(params);
   sendResponse(response);
-  return JSON.stringify(response);
+  // Usually we would not return, but it seems firefox needs us to
+  return JSON.stringify(response); // eslint-disable-line 
 });
 
 backgroundController.exposeController('isConnected', (opts, url) => {
