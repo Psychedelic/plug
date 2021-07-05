@@ -6,15 +6,22 @@ import {
 } from '@ui';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import { validateAccountId, validatePrincipalId } from '../../Send/hooks/utils';
 
 const AddContact = ({ handleAddContact }) => {
   const { t } = useTranslation();
 
   const [name, setName] = useState('');
   const [id, setId] = useState('');
+  const [isValidId, setIsValidId] = useState(null);
 
   const handleChangeName = (e) => setName(e.target.value);
-  const handleChangeId = (e) => setId(e.target.value);
+
+  const handleChangeId = (e) => {
+    const { value } = e.target;
+    setId(value);
+    setIsValidId(validatePrincipalId(value) || validateAccountId(value));
+  };
 
   return (
     <Container>
@@ -41,6 +48,7 @@ const AddContact = ({ handleAddContact }) => {
                 value={id}
                 onChange={handleChangeId}
                 type="text"
+                error={isValidId === false}
               />
             )}
           />
@@ -50,7 +58,11 @@ const AddContact = ({ handleAddContact }) => {
             fullWidth
             variant="rainbow"
             value={t('common.add')}
-            disabled={id === '' || name === ''}
+            disabled={
+              id === ''
+              || name === ''
+              || !isValidId
+            }
             onClick={() => handleAddContact({
               name,
               id,
