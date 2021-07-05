@@ -49,6 +49,7 @@ export const HANDLER_TYPES = {
 
 export const sendMessage = (args, callback) => {
   extension.runtime.sendMessage(args, (response) => {
+    console.log('sendMessageResponse', response);
     let parsedResponse = response;
     if (typeof response === 'string') {
       try {
@@ -57,7 +58,10 @@ export const sendMessage = (args, callback) => {
         parsedResponse = response;
       }
     }
+    console.log('SendMessageParsedResponse', parsedResponse);
+
     callback(parsedResponse);
+    return parsedResponse;
   });
 };
 
@@ -88,8 +92,12 @@ export const getKeyringHandler = (type, keyring) => ({
     return formatAssets(e8s, icpPrice);
   },
   [HANDLER_TYPES.SEND_ICP]: async ({ to, amount }) => {
-    await keyring.sendICP(to, BigInt(amount));
-    const e8s = await keyring.getBalance();
-    return formatAssets(e8s);
+    try {
+      await keyring.sendICP(to, BigInt(amount));
+      const e8s = await keyring.getBalance();
+      return formatAssets(e8s);
+    } catch (e) {
+      return [];
+    }
   },
 }[type]);

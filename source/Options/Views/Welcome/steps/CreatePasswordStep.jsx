@@ -28,6 +28,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
     const type = mnemonic ? 'import-keyring' : 'create-keyring';
     const params = { password, mnemonic };
     sendMessage({ type, params }, (response) => {
+      console.log('component: ', response);
       handleSetMnemonic(response?.mnemonic);
     });
     handleNextStep();

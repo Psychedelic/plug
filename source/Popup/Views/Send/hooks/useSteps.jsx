@@ -43,7 +43,9 @@ const useSteps = () => {
       type: HANDLER_TYPES.SEND_ICP,
       params: { to: address, amount: e8s },
     }, (keyringAssets) => {
-      dispatch(setAssets(keyringAssets));
+      if (keyringAssets.length) {
+        dispatch(setAssets(keyringAssets));
+      }
       navigator.navigate('home');
     });
   };
