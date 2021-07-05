@@ -3,28 +3,34 @@ import { CURRENCIES } from '@shared/constants/currencies';
 export const E8S_PER_ICP = 100_000_000;
 export const NANOS_PER_SECOND = 1_000_000;
 
-const recursiveParseBigint = (obj) => Object.entries(obj).reduce((acum, [key, val]) => {
-  if (val instanceof Object) {
-    const res = Array.isArray(val)
-      ? val.map((el) => recursiveParseBigint(el))
-      : recursiveParseBigint(val);
-    return { ...acum, [key]: res };
-  } if (typeof (val) === 'bigint') {
-    return { ...acum, [key]: parseInt(val.toString(), 10) };
-  }
-  return { ...acum, [key]: val };
-}, { ...obj });
+const recursiveParseBigint = (obj) => Object.entries(obj).reduce(
+  (acum, [key, val]) => {
+    if (val instanceof Object) {
+      const res = Array.isArray(val)
+        ? val.map((el) => recursiveParseBigint(el))
+        : recursiveParseBigint(val);
+      return { ...acum, [key]: res };
+    }
+    if (typeof val === 'bigint') {
+      return { ...acum, [key]: parseInt(val.toString(), 10) };
+    }
+    return { ...acum, [key]: val };
+  },
+  { ...obj },
+);
 
 const formatAssets = (e8s, icpPrice) => {
   // The result is in e8s and a bigint. We parse it and transform to ICP
   const icpBalance = parseInt(e8s.toString(), 10) / E8S_PER_ICP;
-  const assets = [{
-    image: CURRENCIES.get('ICP').image,
-    name: CURRENCIES.get('ICP').name,
-    amount: icpBalance,
-    value: icpBalance * icpPrice || icpBalance,
-    currency: CURRENCIES.get('ICP').value,
-  }];
+  const assets = [
+    {
+      image: CURRENCIES.get('ICP').image,
+      name: CURRENCIES.get('ICP').name,
+      amount: icpBalance,
+      value: icpBalance * icpPrice || icpBalance,
+      currency: CURRENCIES.get('ICP').value,
+    },
+  ];
   return assets;
 };
 
@@ -71,4 +77,4 @@ export const getKeyringHandler = (type, keyring) => ({
     const e8s = await keyring.getBalance();
     return formatAssets(e8s);
   },
-})[type];
+}[type]);

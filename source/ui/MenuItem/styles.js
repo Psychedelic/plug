@@ -8,14 +8,19 @@ export default makeStyles((theme) => ({
   text: {
     paddingRight: theme.spacing(1),
   },
-  big: {
+  small: {
     minHeight: 42,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
+  big: {
+    minHeight: 54,
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+  },
   smallImage: {
-    width: 22,
-    height: 22,
+    width: 30,
+    height: 30,
   },
   bigImage: {
     width: 41,
@@ -32,5 +37,8 @@ export default makeStyles((theme) => ({
       height: 1,
       borderBottom: '1px solid #E8EBEF',
     },
+  },
+  comingSoon: {
+    marginLeft: 'auto',
   },
 }));

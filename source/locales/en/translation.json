@@ -10,7 +10,8 @@
   },
   "profile": {
     "settings": "Settings",
-    "help": "Help"
+    "help": "Help",
+    "lock": "Lock"
   },
   "tabs": {
     "assets": "Assets",
@@ -55,7 +56,8 @@
     "confirm": "Confirm",
     "disconnect": "Disconnect",
     "add": "Add",
-    "or": "or"
+    "or": "or",
+    "comingSoon": "Coming Soon"
   },
   "apps": {
     "title": "Connected Apps",
@@ -154,7 +156,8 @@
     "warning": "Warning",
     "canisterDetectedIcp1": "We detected the recipient ID you entered is a Canister. Please be aware that although you can send ICP to a canister, ",
     "canisterDetectedIcp2": "currently there is no way to send ICP out of a canister.",
-    "canisterDetectedUnderstand": "I understand. Send ICP to canister anyways."
+    "canisterDetectedUnderstand": "I understand. Send ICP to canister anyways.",
+    "accountId": "Account ID:"
   },
   "cycleTransactions": {
     "details": "Details",

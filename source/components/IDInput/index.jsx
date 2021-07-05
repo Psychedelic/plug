@@ -64,15 +64,15 @@ const IDInput = ({
               />
               <div className={classes.iconContainer}>
                 {
-                  contacts.length > 0
-                  && (
-                    <img
-                      className={classes.icon}
-                      src={BookIcon}
-                      onClick={() => setOpenContacts(true)}
-                    />
-                  )
-                }
+            contacts.length > 0
+            && (
+              <img
+                className={classes.icon}
+                src={BookIcon}
+                onClick={() => setOpenContacts(true)}
+              />
+            )
+          }
                 <Dialog
                   title={t('contacts.title')}
                   onClose={handleCloseContacts}
@@ -84,7 +84,7 @@ const IDInput = ({
                       selectable
                       onClick={handleSelectContact}
                     />
-                  )}
+            )}
                 />
               </div>
             </>

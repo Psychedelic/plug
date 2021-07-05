@@ -26,8 +26,8 @@ const Activity = () => {
     <div className={classes.root}>
       {
         transactions && transactions.length > 0
-          ? transactions.map((item) => (
-            <ActivityItem {...item} />
+          ? transactions.map((item, index) => (
+            <ActivityItem key={index.toString()} {...item} />
           ))
           : <EmptyState />
       }

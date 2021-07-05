@@ -42,11 +42,13 @@ const Dialog = ({
           (items && items.length > 0)
             ? items.map((item, index) => (
               <MenuItem
+                key={index.toString()}
                 name={item.name}
                 image={item.image}
                 onClick={() => handleItemClick(item)}
                 border={index !== items.length - 1}
                 size="medium"
+                disabled={item.disabled}
               />
             ))
             : component

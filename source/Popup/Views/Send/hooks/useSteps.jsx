@@ -32,7 +32,7 @@ const useSteps = () => {
 
   const [destination, setDestination] = useState('dank');
 
-  const handleChangeAddress = (value) => setAddress(value);
+  const handleChangeAddress = (value) => setAddress(value.trim());
   const handleChangeAddressInfo = (value) => setAddressInfo(value);
   const handleChangeAsset = (value) => setSelectedAsset(value);
   const handleChangeStep = (index) => setStep(index);
@@ -238,6 +238,7 @@ const useSteps = () => {
         asset={selectedAsset}
         amount={amount}
         address={address}
+        addressInfo={addressInfo}
         handleSendClick={handleSendClick}
       />,
       left: <LinkButton value={t('common.back')} onClick={() => handlePreviousStep()} startIcon={BackIcon} />,
