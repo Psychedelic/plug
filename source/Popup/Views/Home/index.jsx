@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import extension from 'extensionizer';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import {
@@ -7,7 +6,7 @@ import {
 } from '@components';
 import { Tabs } from '@ui';
 import { useTabs } from '@hooks';
-import { HANDLER_TYPES } from '@background/Keyring';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import getIcpPrice from '@shared/services/ICPPrice';
 import { setAccountInfo } from '@redux/wallet';
 import { setIcpPrice } from '@redux/icp';
@@ -35,10 +34,10 @@ const Home = () => {
 
   useEffect(() => {
     getIcpPrice().then((response) => dispatch(setIcpPrice(response?.data?.[0]?.price)));
-    extension.runtime.sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
       (state) => {
         if (!state?.wallets?.length) {
-          extension.runtime.sendMessage({ type: HANDLER_TYPES.LOCK, params: {} },
+          sendMessage({ type: HANDLER_TYPES.LOCK, params: {} },
             () => navigator.navigate('login'));
         }
         dispatch(setAccountInfo(state.wallets[0]));

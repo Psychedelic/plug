@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import browser from 'webextension-polyfill';
 import { useTranslation } from 'react-i18next';
-import extension from 'extensionizer';
 import clsx from 'clsx';
 import Typography from '@material-ui/core/Typography';
 import { Plug } from '@components';
 import { LinkButton, Button, FormInput } from '@ui';
 import { useRouter } from '@components/Router';
-import { HANDLER_TYPES } from '@background/Keyring';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import useStyles from './styles';
 
 const Login = () => {
@@ -24,7 +23,7 @@ const Login = () => {
   };
 
   const handleLogin = () => {
-    extension.runtime.sendMessage({
+    sendMessage({
       type: HANDLER_TYPES.UNLOCK,
       params: { password },
     }, (unlocked) => (unlocked ? navigator.navigate('home') : setError(true)));

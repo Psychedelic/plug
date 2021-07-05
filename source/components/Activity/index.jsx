@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import extension from 'extensionizer';
 import { ActivityItem } from '@ui';
-import { HANDLER_TYPES } from '@background/Keyring';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 
 import { setTransactions } from '../../redux/wallet';
 import useStyles from './styles';
@@ -16,7 +15,7 @@ const Activity = () => {
 
   useEffect(() => {
     if (icpPrice) {
-      extension.runtime.sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: {} },
+      sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: {} },
         (trxs) => {
           dispatch(setTransactions({ ...trxs, icpPrice }));
         });
