@@ -1,4 +1,6 @@
 import { CURRENCIES } from '@shared/constants/currencies';
+import extension from 'extensionizer';
+
 
 export const E8S_PER_ICP = 100_000_000;
 export const NANOS_PER_SECOND = 1_000_000;
@@ -44,6 +46,20 @@ export const HANDLER_TYPES = {
   GET_TRANSACTIONS: 'get-keyring-transactions',
   GET_ASSETS: 'get-keyring-assets',
   SEND_ICP: 'send-icp',
+};
+
+export const sendMessage = (args, callback) => {
+  extension.runtime.sendMessage(args, (response) => {
+    let parsedResponse = response;
+    if (typeof response === 'string') {
+      try {
+        parsedResponse = JSON.parse(response);
+      } catch (error) {
+        parsedResponse = response;
+      }
+    }
+    callback(parsedResponse);
+  });
 };
 
 export const getKeyringHandler = (type, keyring) => ({
