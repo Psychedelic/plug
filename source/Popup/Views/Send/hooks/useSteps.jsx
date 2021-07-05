@@ -59,7 +59,6 @@ const useSteps = () => {
     if (address !== null) {
       let isValid = validatePrincipalId(address) || validateAccountId(address);
       const type = validatePrincipalId(address) ? ADDRESS_TYPES.PRINCIPAL : ADDRESS_TYPES.ACCOUNT;
-
       // check for accountId if cycles selected
       if (type === ADDRESS_TYPES.ACCOUNT && selectedAsset.id === 'CYCLES') {
         isValid = false;

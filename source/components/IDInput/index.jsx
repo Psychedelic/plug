@@ -1,29 +1,29 @@
-import React /* ,{ useState } */ from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import MInputBase from '@material-ui/core/InputBase';
-// import BookIcon from '@assets/icons/notebook.svg';
+import BookIcon from '@assets/icons/notebook.svg';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
-/* import {
+import {
   Dialog,
   InputBase,
 } from '@ui';
 import ContactItem from '../ContactItem';
-import ContactList from '../ContactList'; */
+import ContactList from '../ContactList';
 import useStyles from './styles';
 
 const IDInput = ({
   value,
   onChange,
   addressInfo,
-  // contacts,
-  // selectedContact,
-  // handleSelectedContact,
+  contacts,
+  selectedContact,
+  handleSelectedContact,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
-  /* const [openContacts, setOpenContacts] = useState(false);
+  const [openContacts, setOpenContacts] = useState(false);
 
   const handleCloseContacts = (contact) => {
     handleSelectedContact(contact);
@@ -40,32 +40,30 @@ const IDInput = ({
     onChange('');
     handleSelectedContact(null);
   };
-  */
 
   return (
     <div className={classes.root}>
       {
-        /* selectedContact
+        selectedContact
           ? (
             <InputBase>
               <ContactItem contact={selectedContact} handleCancel={handleCancelContact} />
             </InputBase>
           )
           : (
-            <> */
-        <MInputBase
-          classes={{
-            input: clsx(classes.input, addressInfo.isValid === false && classes.inputInvalid),
-          }}
-          fullWidth
-          value={value}
-          type="text"
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={t('send.inputId')}
-        />
-        /*
-        <div className={classes.iconContainer}>
-          {
+            <>
+              <MInputBase
+                classes={{
+                  input: clsx(classes.input, addressInfo.isValid === false && classes.inputInvalid),
+                }}
+                fullWidth
+                value={value}
+                type="text"
+                onChange={(e) => onChange(e.target.value)}
+                placeholder={t('send.inputId')}
+              />
+              <div className={classes.iconContainer}>
+                {
             contacts.length > 0
             && (
               <img
@@ -75,22 +73,22 @@ const IDInput = ({
               />
             )
           }
-          <Dialog
-            title={t('contacts.title')}
-            onClose={handleCloseContacts}
-            selectedValue={selectedContact}
-            open={openContacts}
-            component={(
-              <ContactList
-                contacts={contacts}
-                selectable
-                onClick={handleSelectContact}
-              />
+                <Dialog
+                  title={t('contacts.title')}
+                  onClose={handleCloseContacts}
+                  selectedValue={selectedContact}
+                  open={openContacts}
+                  component={(
+                    <ContactList
+                      contacts={contacts}
+                      selectable
+                      onClick={handleSelectContact}
+                    />
             )}
-          />
-        </div>
-      </>
-    ) */
+                />
+              </div>
+            </>
+          )
       }
     </div>
   );
@@ -102,7 +100,7 @@ IDInput.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   addressInfo: PropTypes.objectOf(PropTypes.object).isRequired,
-  // contacts: PropTypes.arrayOf(PropTypes.object).isRequired,
-  // selectedContact: PropTypes.objectOf(PropTypes.object).isRequired,
-  // handleSelectedContact: PropTypes.func.isRequired,
+  contacts: PropTypes.arrayOf(PropTypes.object).isRequired,
+  selectedContact: PropTypes.objectOf(PropTypes.object).isRequired,
+  handleSelectedContact: PropTypes.func.isRequired,
 };

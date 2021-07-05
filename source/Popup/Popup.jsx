@@ -14,7 +14,7 @@ import SeedPhrase from './Views/SeedPhrase';
 import Deposit from './Views/Deposit';
 // import Swap from './Views/Swap';
 import Send from './Views/Send';
-// import Contacts from './Views/Contacts';
+import Contacts from './Views/Contacts';
 // import AddToken from './Views/AddToken';
 import Login from './Views/Login';
 
@@ -29,7 +29,7 @@ const Popup = ({ storage, initialRoute }) => (
     <Route name="deposit" component={Deposit} />
     {/* <Route name="swap" component={Swap} /> */}
     <Route name="send" component={Send} />
-    {/* <Route name="contacts" component={Contacts} /> */}
+    <Route name="contacts" component={Contacts} />
     {/* <Route name="add-token" component={AddToken} /> */}
   </Router>
 );
