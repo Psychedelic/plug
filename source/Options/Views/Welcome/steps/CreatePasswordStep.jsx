@@ -6,6 +6,7 @@ import {
   Alert, Button, FormItem, TextInput,
 } from '@ui';
 import { sendMessage } from '@background/Keyring';
+import facepalmEmoji from '@assets/icons/facepalm.svg';
 
 import useStyles from '../styles';
 
@@ -13,6 +14,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
   const { t } = useTranslation();
   const classes = useStyles();
 
+  const [passwordError, setPasswordError] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -25,6 +27,12 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
   };
 
   const handleCreateAccount = async () => {
+    const passwordValidation = validatePasswordError();
+    if (passwordValidation) {
+      setPasswordError(passwordValidation);
+      return;
+    }
+
     const type = mnemonic ? 'import-keyring' : 'create-keyring';
     const params = { password, mnemonic };
     sendMessage({ type, params }, (response) => {
@@ -33,6 +41,17 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
     handleNextStep();
   };
 
+  const validatePasswordError = () => {
+    if (password === '' || password.length < 12) {
+      return 'welcome.passwordShortError'
+    }
+
+    if (password != confirmPassword) {
+      return 'welcome.passwordMatchError'
+    }
+
+    return false;
+  }
   const validatePassword = () => (
     password === ''
     || password !== confirmPassword
@@ -74,12 +93,17 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
           value={t('welcome.passwordButton')}
           onClick={handleCreateAccount}
           fullWidth
-          disabled={validatePassword()}
         />
       </Grid>
       <Grid item xs={12}>
         <Alert type="warning" title={t('welcome.passwordWarning')} startIcon />
       </Grid>
+      {passwordError && (
+        <Grid item xs={12} className={classes.passwordError}>
+          <img alt="facepalm-emoji" src={facepalmEmoji} />
+          <p>{t(`${passwordError}`)}</p>
+        </Grid>
+      )}
     </>
   );
 };

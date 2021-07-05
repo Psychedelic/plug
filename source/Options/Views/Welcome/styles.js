@@ -19,4 +19,14 @@ export default makeStyles((theme) => ({
   marginBottom: {
     marginBottom: theme.spacing(2),
   },
+  passwordError: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    '& > img': {
+      marginRight: '1rem',
+    }
+  }
 }));
