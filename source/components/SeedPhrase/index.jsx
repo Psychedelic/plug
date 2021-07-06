@@ -33,6 +33,7 @@ const SeedPhrase = ({ words }) => {
 
   return (
     <Tooltip
+      classes={{ tooltipPlacementTop: classes.tooltip }}
       title={tooltipText}
       arrow
       open={showTooltip || copied}

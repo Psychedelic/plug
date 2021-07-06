@@ -57,7 +57,7 @@
     "disconnect": "Disconnect",
     "add": "Add",
     "or": "or",
-    "comingSoon": "Coming Soon"
+    "comingSoon": "Coming soon"
   },
   "apps": {
     "title": "Connected Apps",
@@ -67,7 +67,7 @@
     "emptyTitle": "You aren’t connected to any apps yet.",
     "emptyText": "Explore a list of all apps that use Plug and find your first in",
     "emptyLink": "our docs.",
-    "comingSoonTitle": "Coming Soon!",
+    "comingSoonTitle": "Coming soon!",
     "comingSoonSubtitle": "Plug will allow you to connect\nand log into IC Apps."
   },
   "login": {
@@ -75,7 +75,7 @@
     "subtitle": "Plug into the Internet Computer",
     "unlock": "Unlock",
     "restore": "Restore account?",
-    "import": "Import account using your Secret Recovery Phrase"
+    "import": "Import using your Secret Recovery Phrase"
   },
   "help": {
     "title": "Help",
@@ -181,7 +181,7 @@
     "createWallet": "Create Wallet",
     "createText": "Create a new wallet and Secret Recovery Phrase.",
     "importWallet": "Import Wallet",
-    "importText": "Import using 12 word Secret Recovery Phrase or private key.",
+    "importText": "Import using 12 word Secret Recovery Phrase from an existing Plug wallet.",
     "welcomeTitle": "Welcome to Plug.",
     "welcomeSubtitle": "Choose if you want to import or create a wallet (Principal ID).",
     "welcomeMessage": "What’s good!",
@@ -192,7 +192,7 @@
     "passwordConfirmLabel": "Confirm Password",
     "passwordButton": "I made a secure password",
     "passwordWarning": "Don't forget your password, otherwise you'll need to reimport your wallet using your Secret Recovery Phrase.",
-    "importSubtitle": "Please enter your 12 word Secret Recovery Phrase or private key.",
+    "importSubtitle": "Please enter your 12 word Secret Recovery Phrase.",
     "importMessage": "Paste that sh*t",
     "importLabel": "Secret Recovery Phrase or Private Key",
     "importButton": "Okay, I entered it.",

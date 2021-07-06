@@ -28,6 +28,7 @@ const AddContact = ({ handleAddContact }) => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <FormItem
+            smallLabel
             label={t('contacts.name')}
             component={(
               <TextInput
@@ -41,6 +42,7 @@ const AddContact = ({ handleAddContact }) => {
         </Grid>
         <Grid item xs={12}>
           <FormItem
+            smallLabel
             label={t('contacts.id')}
             component={(
               <TextInput

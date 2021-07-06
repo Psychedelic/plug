@@ -21,6 +21,10 @@ export default makeStyles((theme) => ({
     width: 41,
     borderRadius: 41,
   },
+  smallImage: {
+    width: 29,
+    height: 29,
+  },
   icon: {
     cursor: 'pointer',
     fontSize: 18,
@@ -45,6 +49,7 @@ export default makeStyles((theme) => ({
     },
   },
   cancelable: {
+    padding: '0 16px 0 12px',
     height: '100%',
     width: '100%',
   },
