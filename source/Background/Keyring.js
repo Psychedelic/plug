@@ -3,6 +3,7 @@ import extension from 'extensionizer';
 
 export const E8S_PER_ICP = 100_000_000;
 export const NANOS_PER_SECOND = 1_000_000;
+export const BALANCE_ERROR = 'You have tried to spend more than the balance of your account';
 
 const recursiveParseBigint = (obj) => Object.entries(obj).reduce(
   (acum, [key, val]) => {
@@ -94,6 +95,7 @@ export const getKeyringHandler = (type, keyring) => ({
       const e8s = await keyring.getBalance();
       return formatAssets(e8s);
     } catch (e) {
+      console.log(e);
       return [];
     }
   },

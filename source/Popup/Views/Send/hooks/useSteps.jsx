@@ -13,7 +13,7 @@ import Step2b from '../Steps/Step2b';
 import Step3 from '../Steps/Step3';
 import { CURRENCIES } from '../../../../shared/constants/currencies';
 import { validateAccountId, validatePrincipalId } from './utils';
-import { ADDRESS_TYPES } from './constants';
+import { ADDRESS_TYPES, DEFAULT_FEE } from './constants';
 
 const useSteps = () => {
   const [step, setStep] = useState(0);
@@ -45,8 +45,11 @@ const useSteps = () => {
     }, (keyringAssets) => {
       if (keyringAssets.length) {
         dispatch(setAssets(keyringAssets));
+        navigator.navigate('home');
+      } else {
+        console.log('ERROR SENDING');
+        // TODO: Add setEror somehow to show error on step3
       }
-      navigator.navigate('home');
     });
   };
 
@@ -85,15 +88,16 @@ const useSteps = () => {
       conversionRate: selectedAsset.price,
     },
   );
-  const available = assets[0]?.amount; // Only ICP supported for now
+  const available = (assets[0]?.amount || 0) - DEFAULT_FEE; // Only ICP supported for now
+  const convertedAmount = Math.max(available * primaryValue.conversionRate, 0);
   const [availableAmount, setAvailableAmount] = useState({
-    amount: available * primaryValue.conversionRate,
+    amount: convertedAmount,
     prefix: primaryValue.prefix,
     suffix: primaryValue.suffix,
   });
 
   useEffect(() => {
-    const maxAmount = available * primaryValue.conversionRate;
+    const maxAmount = convertedAmount;
 
     setAvailableAmount(
       {

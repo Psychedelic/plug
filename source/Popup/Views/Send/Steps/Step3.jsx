@@ -87,7 +87,7 @@ const Step3 = ({
         </Grid>
 
         <Grid item xs={12}>
-          <InfoRow name={t('common.taxFee')} value={`0.00001 ICP ($${fee})`} /> {/* TODO: Get price from API */}
+          <InfoRow name={t('common.taxFee')} value={`${DEFAULT_FEE} ICP ($${fee})`} />
         </Grid>
 
         <Grid item xs={12}>
