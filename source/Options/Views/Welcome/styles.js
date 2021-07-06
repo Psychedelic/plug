@@ -27,6 +27,6 @@ export default makeStyles((theme) => ({
 
     '& > img': {
       marginRight: '1rem',
-    }
-  }
+    },
+  },
 }));

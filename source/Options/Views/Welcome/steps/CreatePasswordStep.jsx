@@ -26,6 +26,18 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
     setConfirmPassword(e.target.value);
   };
 
+  const validatePasswordError = () => {
+    if (password === '' || password.length < 12) {
+      return 'welcome.passwordShortError';
+    }
+
+    if (password !== confirmPassword) {
+      return 'welcome.passwordMatchError';
+    }
+
+    return false;
+  };
+
   const handleCreateAccount = async () => {
     const passwordValidation = validatePasswordError();
     if (passwordValidation) {
@@ -40,18 +52,6 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
     });
     handleNextStep();
   };
-
-  const validatePasswordError = () => {
-    if (password === '' || password.length < 12) {
-      return 'welcome.passwordShortError'
-    }
-
-    if (password != confirmPassword) {
-      return 'welcome.passwordMatchError'
-    }
-
-    return false;
-  }
 
   return (
     <>
