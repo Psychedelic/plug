@@ -4,7 +4,7 @@ import { BackgroundController } from '@fleekhq/browser-rpc';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import PlugController from '@psychedelic/plug-controller';
 import CYCLE_WITHDRAWAL_SIZES from '../Pages/CycleWithdrawal/constants';
-import { getKeyringHandler } from './Keyring';
+import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
 
 const storage = extension.storage.local;
 
@@ -142,6 +142,28 @@ backgroundController.exposeController(
 
     callback(null, true);
     callback(null, requests, [{ portId, callId }]);
+  },
+);
+
+backgroundController.exposeController(
+  'requestBalance',
+  async (opts) => {
+    const { callback } = opts;
+    const keyringHandler = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
+    const response = await keyringHandler();
+
+    callback(null, response);
+  },
+);
+
+backgroundController.exposeController(
+  'requestTransfer',
+  async (opts, to, amount, params) => {
+    const { callback } = opts;
+    const keyringHandler = getKeyringHandler(HANDLER_TYPES.SEND_ICP, keyring);
+    const response = await keyringHandler({ to, amount }); // await is necessary
+
+    callback(null, response);
   },
 );
 

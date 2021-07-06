@@ -44,6 +44,7 @@ export const HANDLER_TYPES = {
   GET_STATE: 'get-keyring-state',
   GET_TRANSACTIONS: 'get-keyring-transactions',
   GET_ASSETS: 'get-keyring-assets',
+  GET_BALANCE: 'get-balance',
   SEND_ICP: 'send-icp',
 };
 
@@ -86,6 +87,10 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.GET_ASSETS]: async (icpPrice) => {
     const e8s = await keyring.getBalance();
     return formatAssets(e8s, icpPrice);
+  },
+  [HANDLER_TYPES.GET_BALANCE]: async () => {
+    const e8s = await keyring.getBalance();
+    return formatAssets(e8s);
   },
   [HANDLER_TYPES.SEND_ICP]: async ({ to, amount }) => {
     await keyring.sendICP(to, BigInt(amount));
