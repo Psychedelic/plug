@@ -231,5 +231,10 @@
     "emptyResults": "No search results found",
     "searchTokens": "Search Tokens",
     "addCustomToken": "Add Custom Token"
+  },
+  "error": {
+    "errorTitle": "Something went wrong",
+    "errorBody": "We’re sorry, something weird happened. Return home and retry the action.",
+    "returnHome": "Return Home"
   }
 }
