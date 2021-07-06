@@ -59,7 +59,6 @@ export const sendMessage = (args, callback) => {
       }
     }
     callback(parsedResponse);
-    return parsedResponse;
   });
 };
 
@@ -76,7 +75,7 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.CREATE]: async (params) => keyring.create(params),
   [HANDLER_TYPES.IMPORT]: async (params) => keyring.importMnemonic(params),
-  [HANDLER_TYPES.GET_LOCKS]: () => ({
+  [HANDLER_TYPES.GET_LOCKS]: async () => ({
     isUnlocked: keyring?.isUnlocked,
     isInitialized: keyring?.isInitialized,
   }),
