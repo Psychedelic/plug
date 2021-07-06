@@ -15,7 +15,7 @@ const useHelpItems = () => {
     {
       image: NewspaperIcon,
       name: t('help.blog'),
-      onClick: (() => window.open('https://docs.plugwallet.ooo/#resources', '_blank')),
+      onClick: (() => window.open('https://medium.com/plugwallet', '_blank')),
     },
     {
       image: BirdIcon,
