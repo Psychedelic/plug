@@ -33,19 +33,19 @@ const Home = () => {
   const { navigator } = useRouter();
 
   useEffect(() => {
-    // TODO: handle error gracefully
-    // what to do when API price is unavailable?
-    getICPPrice()
-      .then(({ data }) => {
-        if (
-          data['internet-computer'] === undefined
-          || !data['internet-computer']?.usd
-        ) throw new Error('ICP Price is required!');
-
-        dispatch(
-          setICPPrice(data['internet-computer'].usd),
-        );
-      });
+    try {
+      // TODO: handle error gracefully
+      // what to do when API price is unavailable?
+      getICPPrice()
+        .then(({ data }) => {
+          dispatch(
+            setICPPrice(data['internet-computer'].usd),
+          );
+        });
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.warn(err);
+    }
 
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
       (state) => {
