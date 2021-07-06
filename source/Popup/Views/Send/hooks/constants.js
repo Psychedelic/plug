@@ -7,4 +7,4 @@ export const ADDRESS_TYPES = {
   CANISTER: 'canister',
 };
 
-export const DEFAULT_FEE = 0.00001;
+export const DEFAULT_FEE = 0.0001;
