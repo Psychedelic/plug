@@ -89,7 +89,7 @@ export const getKeyringHandler = (type, keyring) => ({
     const e8s = await keyring.getBalance();
     return formatAssets(e8s, icpPrice);
   },
-  [HANDLER_TYPES.GET_BALANCE]: async () => {
+  [HANDLER_TYPES.GET_BALANCE]: async (accountId) => {
     const e8s = await keyring.getBalance();
     return formatAssets(e8s);
   },

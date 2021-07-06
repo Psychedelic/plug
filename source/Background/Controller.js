@@ -146,7 +146,7 @@ backgroundController.exposeController(
 
 backgroundController.exposeController(
   'requestBalance',
-  async (opts) => {
+  async (opts, accountId) => {
     const { callback } = opts;
     const keyringHandler = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
     const response = await keyringHandler();
