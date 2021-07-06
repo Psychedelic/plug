@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import Grid from '@material-ui/core/Grid';
@@ -16,15 +16,17 @@ import ArrowImg from '@assets/icons/send-arrow.png';
 import shortAddress from '@shared/utils/short-address';
 import PlugController from '@psychedelic/plug-controller';
 import { Principal } from '@dfinity/agent';
+import { useRouter } from '@components';
 import useStyles from '../styles';
 import { ADDRESS_TYPES, DEFAULT_FEE } from '../hooks/constants';
 
 const Step3 = ({
-  asset, amount, address, addressInfo, handleSendClick,
+  asset, amount, address, addressInfo, handleSendClick, error,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
+  const { navigator } = useRouter();
 
   const subtotal = amount * asset.price;
   const fee = +(asset?.price * DEFAULT_FEE).toFixed(5);
@@ -33,6 +35,12 @@ const Step3 = ({
     setLoading(true);
     handleSendClick();
   };
+
+  useEffect(() => {
+    if (error) {
+      navigator.navigate('error');
+    }
+  }, [error]);
 
   return (
     <Container>
@@ -109,12 +117,17 @@ const Step3 = ({
   );
 };
 
-export default Step3;
-
 Step3.propTypes = {
   asset: PropTypes.objectOf(PropTypes.object).isRequired,
   amount: PropTypes.number.isRequired,
   address: PropTypes.string.isRequired,
   addressInfo: PropTypes.objectOf(PropTypes.object).isRequired,
   handleSendClick: PropTypes.func.isRequired,
+  error: PropTypes.bool,
 };
+
+Step3.defaultProps = {
+  error: false,
+};
+
+export default Step3;

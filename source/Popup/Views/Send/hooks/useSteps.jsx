@@ -30,6 +30,7 @@ const useSteps = () => {
   const [addressInfo, setAddressInfo] = useState({ isValid: null, type: null });
 
   const [destination, setDestination] = useState('dank');
+  const [sendError, setError] = useState(false);
 
   const handleChangeAddress = (value) => setAddress(value.trim());
   const handleChangeAddressInfo = (value) => setAddressInfo(value);
@@ -42,13 +43,13 @@ const useSteps = () => {
     sendMessage({
       type: HANDLER_TYPES.SEND_ICP,
       params: { to: address, amount: e8s },
-    }, (keyringAssets) => {
-      if (keyringAssets.length) {
+    }, (response) => {
+      const { error, assets: keyringAssets } = response || {};
+      if (error) {
+        setError(true);
+      } else {
         dispatch(setAssets(keyringAssets));
         navigator.navigate('home');
-      } else {
-        console.log('ERROR SENDING');
-        // TODO: Add setEror somehow to show error on step3
       }
     });
   };
@@ -245,6 +246,7 @@ const useSteps = () => {
         address={address}
         addressInfo={addressInfo}
         handleSendClick={handleSendClick}
+        error={sendError}
       />,
       left: <LinkButton value={t('common.back')} onClick={() => handlePreviousStep()} startIcon={BackIcon} />,
       right: rightButton,
