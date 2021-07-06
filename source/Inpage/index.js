@@ -1,5 +1,7 @@
 import { BrowserRPC } from '@fleekhq/browser-rpc';
 import { Provider } from '@fleekhq/plug-inpage-provider';
+import extension from 'extensionizer';
+import { HANDLER_TYPES } from '@background/Keyring';
 
 const clientRPC = new BrowserRPC(window, {
   name: 'plug-inpage-provider',
@@ -9,18 +11,10 @@ const clientRPC = new BrowserRPC(window, {
 
 clientRPC.start();
 
-console.log('YO!');
-
-let publicKey;
-
-clientRPC
-  .call('getPublicKey')
-  .then((result) => {
-    publicKey = result;
-  })
-  .catch((error) => {
-    console.error(error);
-  });
+const publicKey = extension.runtime.sendMessage({
+  type: HANDLER_TYPES.GET_STATUS,
+  params: {},
+}, (keyringStatus) => keyringStatus.currentWalletId);
 
 const plugProvider = new Provider(clientRPC, publicKey);
 

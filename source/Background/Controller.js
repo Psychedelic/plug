@@ -51,22 +51,16 @@ backgroundController.exposeController('isConnected', (opts, url) => {
 backgroundController.exposeController('sign', async (opts, url, payload) => {
   const { callback } = opts;
 
-  // TODO verify url is connected.
+  // This method should be removed later.
 
-  console.log("received sign request with payload", payload);
+  // eslint-disable-next-line no-console
+  console.log('received sign request with payload', payload);
 
   const state = await keyring.getState();
-  const wallet = state.wallets[state.currentWalletId || 0]
+  const wallet = state.wallets[state.currentWalletId || 0];
   const result = await wallet.sign(payload);
 
   callback(null, result);
-});
-
-backgroundController.exposeController('getPublicKey', async (opts) => {
-  const { callback } = opts;
-  const state = await keyring.getState();
-  const PublicKey = state.currentWalletId;
-  callback(null, PublicKey);
 });
 
 backgroundController.exposeController(
