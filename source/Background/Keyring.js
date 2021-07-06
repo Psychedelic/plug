@@ -3,6 +3,7 @@ import extension from 'extensionizer';
 
 export const E8S_PER_ICP = 100_000_000;
 export const NANOS_PER_SECOND = 1_000_000;
+export const BALANCE_ERROR = 'You have tried to spend more than the balance of your account';
 
 const recursiveParseBigint = (obj) => Object.entries(obj).reduce(
   (acum, [key, val]) => {
@@ -75,7 +76,7 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.CREATE]: async (params) => keyring.create(params),
   [HANDLER_TYPES.IMPORT]: async (params) => keyring.importMnemonic(params),
-  [HANDLER_TYPES.GET_LOCKS]: () => ({
+  [HANDLER_TYPES.GET_LOCKS]: async () => ({
     isUnlocked: keyring?.isUnlocked,
     isInitialized: keyring?.isInitialized,
   }),
@@ -93,8 +94,13 @@ export const getKeyringHandler = (type, keyring) => ({
     return formatAssets(e8s);
   },
   [HANDLER_TYPES.SEND_ICP]: async ({ to, amount }) => {
-    await keyring.sendICP(to, BigInt(amount));
-    const e8s = await keyring.getBalance();
-    return formatAssets(e8s);
+    try {
+      await keyring.sendICP(to, BigInt(amount));
+      const e8s = await keyring.getBalance();
+      return formatAssets(e8s);
+    } catch (e) {
+      console.log(e);
+      return [];
+    }
   },
 }[type]);

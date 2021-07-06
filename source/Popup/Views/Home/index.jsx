@@ -7,9 +7,9 @@ import {
 import { Tabs } from '@ui';
 import { useTabs } from '@hooks';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import getIcpPrice from '@shared/services/ICPPrice';
+import getICPPrice from '@shared/services/ICPPrice';
 import { setAccountInfo } from '@redux/wallet';
-import { setIcpPrice } from '@redux/icp';
+import { setICPPrice } from '@redux/icp';
 
 const getTabs = (t) => [
   {
@@ -33,7 +33,20 @@ const Home = () => {
   const { navigator } = useRouter();
 
   useEffect(() => {
-    getIcpPrice().then((response) => dispatch(setIcpPrice(response?.data?.[0]?.price)));
+    try {
+      // TODO: handle error gracefully
+      // what to do when API price is unavailable?
+      getICPPrice()
+        .then(({ data }) => {
+          dispatch(
+            setICPPrice(data['internet-computer'].usd),
+          );
+        });
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.warn(err);
+    }
+
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
       (state) => {
         if (!state?.wallets?.length) {

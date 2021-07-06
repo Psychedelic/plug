@@ -21,4 +21,8 @@ export default makeStyles((theme) => ({
   web: {
     fontWeight: 700,
   },
+  rainbow: {
+    background:
+      'linear-gradient(94.95deg, #FFE701 -1.41%, #FA51D3 34.12%, #10D9ED 70.19%, #52FF53 101.95%)',
+  },
 }));

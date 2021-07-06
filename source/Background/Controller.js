@@ -28,14 +28,13 @@ export const init = async () => {
 };
 
 // keyring handlers
-extension.runtime.onMessage.addListener(async (message, _, sendResponse) => {
+extension.runtime.onMessage.addListener((message, _, sendResponse) => {
   const { params, type } = message;
   const keyringHandler = getKeyringHandler(type, keyring);
   if (!keyringHandler) return;
-  const response = await keyringHandler(params);
-  sendResponse(response);
+  keyringHandler(params).then((response) => sendResponse(response));
   // Usually we would not return, but it seems firefox needs us to
-  return JSON.stringify(response); // eslint-disable-line 
+  return true; // eslint-disable-line 
 });
 
 backgroundController.exposeController('isConnected', (opts, url) => {
