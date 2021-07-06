@@ -202,7 +202,9 @@
     "seedTitle": "Secret Recovery Phrase Backup",
     "seedSubtitle": "Below is the Secret Recovery Phrase for your new wallet, write it down.",
     "seedMessage": "Keep this sh*t safe, forreal.",
-    "seedCheckbox": "I wrote down the Secret Recovery Phrase and put it somewhere safe."
+    "seedCheckbox": "I wrote down the Secret Recovery Phrase and put it somewhere safe.",
+    "passwordShortError": "The minimum is 12 characters, smh!",
+    "passwordMatchError": "The passwords gotta match, smh!"
   },
   "contacts": {
     "title": "Contacts",
