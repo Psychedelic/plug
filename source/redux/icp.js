@@ -7,12 +7,12 @@ export const walletSlice = createSlice({
     icpPrice: null,
   },
   reducers: {
-    setIcpPrice: (state, action) => {
+    setICPPrice: (state, action) => {
       state.icpPrice = action.payload;
     },
   },
 });
 
-export const { setIcpPrice } = walletSlice.actions;
+export const { setICPPrice } = walletSlice.actions;
 
 export default walletSlice.reducer;
