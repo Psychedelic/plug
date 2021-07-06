@@ -32,7 +32,7 @@ This because the packages under the organisation scope [@Psychedelic](https://gi
 @psychedelic:registry=https://npm.pkg.github.com
 ```
 
-Choose the github username that you use as a member of @Psychedelic and for the password, a [personal access token](https://github.com/settings/tokens), with the `read:packages` scope (permission).
+Choose the github username that you use as a member of @Psychedelic and for the password, a [personal access token](https://github.com/settings/tokens), with the `repo` and `read:packages` scopes (permissions).
 
 Then run the following:
 
