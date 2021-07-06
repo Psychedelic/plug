@@ -2,10 +2,8 @@ import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import shortAddress from '@shared/utils/short-address';
-import { faTrashAlt } from '@fortawesome/pro-regular-svg-icons/faTrashAlt';
 import { Typography } from '@material-ui/core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/pro-regular-svg-icons/faTimes';
+import { Trash2, Times } from 'react-feather';
 import CopyButton from '../CopyButton';
 import useStyles from './styles';
 
@@ -31,10 +29,10 @@ const ContactItem = ({
         && (
           <>
             <CopyButton text={contact.id} placement="left" style={{ marginLeft: 'auto' }} />
-            <FontAwesomeIcon
-              icon={faTrashAlt}
+            <Trash2
               className={clsx(classes.icon, classes.deleteIcon)}
               onClick={() => handleDelete()}
+              size="18"
             />
           </>
         )
@@ -42,8 +40,7 @@ const ContactItem = ({
       {
         handleCancel
         && (
-          <FontAwesomeIcon
-            icon={faTimes}
+          <Times
             className={clsx(classes.icon, classes.cancelIcon)}
             onClick={() => handleCancel()}
           />
