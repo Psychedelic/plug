@@ -12,6 +12,8 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import i18n from 'i18next';
 
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import { Provider } from 'react-redux';
+import store from '../../redux/store';
 import initConfig from '../../locales';
 import useStyles from './styles';
 
@@ -49,18 +51,20 @@ const AppConnection = () => {
   // };
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Layout>
-        <Container>
-          <IncomingAction url={url} image={icon} action={t('appConnection.connect')} />
-          <div className={classes.buttonContainer}>
-            <Button variant="default" value={t('common.decline')} onClick={() => onClickHandler(CONNECTION_STATUS.rejected)} style={{ width: '48%' }} />
-            <Button variant="rainbow" value={t('common.allow')} onClick={() => onClickHandler(CONNECTION_STATUS.accepted)} style={{ width: '48%' }} />
-          </div>
-        </Container>
-      </Layout>
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Layout>
+          <Container>
+            <IncomingAction url={url} image={icon} action={t('appConnection.connect')} />
+            <div className={classes.buttonContainer}>
+              <Button variant="default" value={t('common.decline')} onClick={() => onClickHandler(CONNECTION_STATUS.rejected)} style={{ width: '48%' }} />
+              <Button variant="rainbow" value={t('common.allow')} onClick={() => onClickHandler(CONNECTION_STATUS.accepted)} style={{ width: '48%' }} />
+            </div>
+          </Container>
+        </Layout>
+      </ThemeProvider>
+    </Provider>
   );
 };
 
