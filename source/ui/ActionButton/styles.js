@@ -44,4 +44,7 @@ export default makeStyles((theme) => ({
     fontWeight: 600,
     marginTop: 4,
   },
+  tooltip: {
+    margin: '8px 0',
+  },
 }));

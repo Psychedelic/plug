@@ -57,7 +57,7 @@
     "disconnect": "Disconnect",
     "add": "Add",
     "or": "or",
-    "comingSoon": "Coming Soon"
+    "comingSoon": "Coming soon"
   },
   "apps": {
     "title": "Connected Apps",
@@ -67,7 +67,7 @@
     "emptyTitle": "You aren’t connected to any apps yet.",
     "emptyText": "Explore a list of all apps that use Plug and find your first in",
     "emptyLink": "our docs.",
-    "comingSoonTitle": "Coming Soon!",
+    "comingSoonTitle": "Coming soon!",
     "comingSoonSubtitle": "Plug will allow you to connect\nand log into IC Apps."
   },
   "login": {
@@ -75,7 +75,7 @@
     "subtitle": "Plug into the Internet Computer",
     "unlock": "Unlock",
     "restore": "Restore account?",
-    "import": "Import account using your Secret Recovery Phrase"
+    "import": "Import using your Secret Recovery Phrase"
   },
   "help": {
     "title": "Help",

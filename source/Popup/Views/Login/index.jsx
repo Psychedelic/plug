@@ -59,6 +59,7 @@ const Login = () => {
       <div className={clsx(classes.flex, classes.actionContainer)}>
         <Typography variant="subtitle1">{t('login.restore')}</Typography>
         <LinkButton
+          style={{ paddingTop: 6 }}
           value={t('login.import')}
           onClick={() => browser.tabs.create({ url: 'options.html' })}
         />

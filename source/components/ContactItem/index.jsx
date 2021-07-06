@@ -21,7 +21,10 @@ const ContactItem = ({
         handleCancel ? classes.cancelable : classes.border)}
       onClick={() => handleClick(contact)}
     >
-      <img src={contact.image} className={classes.image} />
+      <img
+        src={contact.image}
+        className={handleCancel ? classes.smallImage : classes.image}
+      />
       <div className={classes.nameContainer}>
         <Typography variant="h5">{contact.name}</Typography>
         <Typography variant="subtitle1">{shortAddress(contact.id)}</Typography>

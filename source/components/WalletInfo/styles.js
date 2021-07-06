@@ -14,4 +14,7 @@ export default makeStyles({
       background: '#F3F4F6',
     },
   },
+  tooltip: {
+    margin: '8px 0',
+  },
 });

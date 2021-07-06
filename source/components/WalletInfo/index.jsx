@@ -35,6 +35,7 @@ const WalletInfo = () => {
 
   return (
     <Tooltip
+      classes={{ tooltipPlacementBottom: classes.tooltip }}
       title={tooltipText}
       arrow
       open={showTooltip || copied}
