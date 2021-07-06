@@ -1,17 +1,25 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles(() => ({
+export default makeStyles((theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
     alignItems: 'center',
-    height: 400,
-    padding: '20px 10px',
-    width: '100%',
+    justifyContent: 'center',
+    padding: `${theme.spacing(1)}px ${theme.spacing(4)}px`,
+    height: 350,
+    textAlign: 'center',
+    whiteSpace: 'pre-line',
   },
   image: {
-    width: 25,
-    height: 25,
+    width: 46,
+    height: 46,
+    marginBottom: 20,
+  },
+  text: {
+    marginBottom: 20,
+  },
+  button: {
+    width: 165,
   },
 }));

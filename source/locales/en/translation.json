@@ -234,7 +234,7 @@
   },
   "error": {
     "errorTitle": "Something went wrong",
-    "errorBody": "We’re sorry, something weird happened. Return home and retry the action.",
+    "errorBody": "We’re sorry, something weird happened. \nReturn home and retry the action.",
     "returnHome": "Return Home"
   }
 }

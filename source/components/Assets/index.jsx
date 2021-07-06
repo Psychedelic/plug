@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AssetItem, Button } from '@ui';
+import { AssetItem } from '@ui';
 import { setAssets } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import LoadingWrapper from '@components/LoadingWrapper';
-import { useRouter } from '@components/Router';
-
 import useStyles from './styles';
 
 const Assets = () => {
@@ -14,7 +12,6 @@ const Assets = () => {
   const [assetsLoading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const { icpPrice } = useSelector((state) => state.icp);
-  const { navigator } = useRouter();
 
   useEffect(() => {
     if (icpPrice) {
@@ -35,20 +32,22 @@ const Assets = () => {
           <AssetItem {...asset} />
         ))
         }
-
+        {
+        /*
         <Button
-          variant="rainbowOutlined"
-          value="Error screen"
-          onClick={() => navigator.navigate('error')}
-          style={{
-            width: 166,
-            height: 42,
-            borderRadius: 10,
-            alignSelf: 'center',
-            marginTop: 12,
-          }}
+        variant="rainbowOutlined"
+        value={t('addToken.title')}
+        onClick={() => navigator.navigate('add-token')}
+        style={{
+          width: 166,
+          height: 42,
+          borderRadius: 10,
+          alignSelf: 'center',
+          marginTop: 12,
+        }}
         />
-
+        */
+      }
       </div>
     </LoadingWrapper>
   );
