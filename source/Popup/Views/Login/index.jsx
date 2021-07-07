@@ -29,9 +29,10 @@ const Login = () => {
     }, (unlocked) => (unlocked ? navigator.navigate('home') : setError(true)));
   };
 
-  return (
-    <div className={classes.root}>
+  const handleKeyPress = (e) => e.key === 'Enter' && handleLogin();
 
+  return (
+    <div className={classes.root} onKeyPress={handleKeyPress}>
       <div className={clsx(classes.flex, classes.textContainer)}>
         <Plug size="big" />
         <Typography variant="h1" className={classes.title}>{t('login.title')}</Typography>
