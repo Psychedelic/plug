@@ -1,6 +1,6 @@
 import { ProxyRPC } from '@fleekhq/browser-rpc';
 
-import { injectScript } from './utils';
+// import { injectScript } from './utils';
 
 const serverRPC = new ProxyRPC(window, {
   name: 'plug-content-script',
@@ -15,7 +15,7 @@ serverRPC.exposeHandler('test', (props, name) => {
 
 serverRPC.start();
 
-injectScript(null, INPAGE_SCRIPT);
+// injectScript(null, INPAGE_SCRIPT);
 
 /* eslint-disable no-console */
 console.log('helloworld from content script');

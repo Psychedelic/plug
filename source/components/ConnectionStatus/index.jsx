@@ -35,7 +35,7 @@ const ConnectionStatus = () => {
 
   return (
     <div className={clsx(classes.root, classes.rainbow)}>
-      <span className={classes.web}>Plug - Early Release</span>
+      <span className={classes.web}>Plug - Alpha Version</span>
     </div>
   );
 };

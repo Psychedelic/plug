@@ -29,4 +29,14 @@ export default makeStyles((theme) => ({
       marginRight: '1rem',
     },
   },
+  memeContainer: {
+    width: '100%',
+    height: 300,
+    background: 'white',
+    borderRadius: 5,
+  },
+  meme: {
+    width: '100%',
+    borderRadius: 5,
+  },
 }));

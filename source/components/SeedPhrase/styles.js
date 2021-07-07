@@ -41,4 +41,7 @@ export default makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  tooltip: {
+    margin: '8px 0',
+  },
 }));
