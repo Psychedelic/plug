@@ -10,7 +10,8 @@
   },
   "profile": {
     "settings": "Settings",
-    "help": "Help"
+    "help": "Help",
+    "lock": "Lock"
   },
   "tabs": {
     "assets": "Assets",
@@ -55,7 +56,8 @@
     "confirm": "Confirm",
     "disconnect": "Disconnect",
     "add": "Add",
-    "or": "or"
+    "or": "or",
+    "comingSoon": "Coming soon"
   },
   "apps": {
     "title": "Connected Apps",
@@ -65,7 +67,7 @@
     "emptyTitle": "You aren’t connected to any apps yet.",
     "emptyText": "Explore a list of all apps that use Plug and find your first in",
     "emptyLink": "our docs.",
-    "comingSoonTitle": "Coming Soon!",
+    "comingSoonTitle": "Coming soon!",
     "comingSoonSubtitle": "Plug will allow you to connect\nand log into IC Apps."
   },
   "login": {
@@ -73,7 +75,7 @@
     "subtitle": "Plug into the Internet Computer",
     "unlock": "Unlock",
     "restore": "Restore account?",
-    "import": "Import account using your Secret Recovery Phrase"
+    "import": "Import using your Secret Recovery Phrase"
   },
   "help": {
     "title": "Help",
@@ -113,8 +115,8 @@
     "asset": "Asset",
     "depositingFrom": "Depositing from",
     "learnMore": "Learn more about buying",
-    "selectAsset": "Select asset your depositing",
-    "selectDeposit": "Select where your depositing from",
+    "selectAsset": "Select asset you're depositing",
+    "selectDeposit": "Select where you're depositing from",
     "runCommandTitle": "Run the following command",
     "runCommandSubtitle": "To deposit Cycles from a Cycles Wallet you need to run a DFX CLI command.",
     "runCommandButton": "Ok, I ran the command.",
@@ -140,9 +142,9 @@
     "title": "Send",
     "asset": "Asset",
     "to": "To:",
-    "inputId": "Enter Principal ID or Canister ID",
+    "inputId": "Enter Principal ID or Account ID",
     "available": "available to send",
-    "selectAsset": "Select asset your sending",
+    "selectAsset": "Select asset you're sending",
     "moreComingSoon": "MORE COMING SOON",
     "payWith": "Pay with:",
     "review": "Review Send",
@@ -154,7 +156,8 @@
     "warning": "Warning",
     "canisterDetectedIcp1": "We detected the recipient ID you entered is a Canister. Please be aware that although you can send ICP to a canister, ",
     "canisterDetectedIcp2": "currently there is no way to send ICP out of a canister.",
-    "canisterDetectedUnderstand": "I understand. Send ICP to canister anyways."
+    "canisterDetectedUnderstand": "I understand. Send ICP to canister anyways.",
+    "accountId": "Account ID:"
   },
   "cycleTransactions": {
     "details": "Details",
@@ -178,7 +181,7 @@
     "createWallet": "Create Wallet",
     "createText": "Create a new wallet and Secret Recovery Phrase.",
     "importWallet": "Import Wallet",
-    "importText": "Import using 12 word Secret Recovery Phrase or private key.",
+    "importText": "Import using 12 word Secret Recovery Phrase from an existing Plug wallet.",
     "welcomeTitle": "Welcome to Plug.",
     "welcomeSubtitle": "Choose if you want to import or create a wallet (Principal ID).",
     "welcomeMessage": "What’s good!",
@@ -189,7 +192,7 @@
     "passwordConfirmLabel": "Confirm Password",
     "passwordButton": "I made a secure password",
     "passwordWarning": "Don't forget your password, otherwise you'll need to reimport your wallet using your Secret Recovery Phrase.",
-    "importSubtitle": "Please enter your 12 word Secret Recovery Phrase or private key.",
+    "importSubtitle": "Please enter your 12 word Secret Recovery Phrase.",
     "importMessage": "Paste that sh*t",
     "importLabel": "Secret Recovery Phrase or Private Key",
     "importButton": "Okay, I entered it.",
@@ -199,7 +202,9 @@
     "seedTitle": "Secret Recovery Phrase Backup",
     "seedSubtitle": "Below is the Secret Recovery Phrase for your new wallet, write it down.",
     "seedMessage": "Keep this sh*t safe, forreal.",
-    "seedCheckbox": "I wrote down the Secret Recovery Phrase and put it somewhere safe."
+    "seedCheckbox": "I wrote down the Secret Recovery Phrase and put it somewhere safe.",
+    "passwordShortError": "The minimum is 12 characters, smh!",
+    "passwordMatchError": "The passwords gotta match, smh!"
   },
   "contacts": {
     "title": "Contacts",
@@ -208,7 +213,7 @@
     "description": "Name your addresses for a better, safer, more fun experience.",
     "dab": "Powered by Dab",
     "name": "Name",
-    "id": "Principal or Canister ID",
+    "id": "Principal or Account ID",
     "deleteTitle": "Delete Contact",
     "deleteText": "Are you sure you want to delete",
     "deleteButton": "Delete",

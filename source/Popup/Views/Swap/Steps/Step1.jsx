@@ -62,14 +62,14 @@ const Step1 = ({
                 secondaryValue={secondaryValue}
                 conversionPrice={conversionPrice}
                 handleSwapValues={handleSwapValues}
-                availableAmount={availableAmount.amount}
+                availableAmount={availableAmount?.amount}
               />
             )}
             subtitle={(
               <div className={classes.subtitle}>
                 <Typography variant="subtitle2">
                   <NumberFormat
-                    value={availableAmount.amount}
+                    value={availableAmount?.amount}
                     decimalScale={2}
                     fixedDecimalScale
                     thousandSeparator=","
@@ -83,7 +83,7 @@ const Step1 = ({
                 <Button
                   variant="primaryOutlined"
                   value={t('common.max')}
-                  onClick={() => handleChangeAmount(availableAmount.amount)}
+                  onClick={() => handleChangeAmount(availableAmount?.amount)}
                 />
               </div>
             )}

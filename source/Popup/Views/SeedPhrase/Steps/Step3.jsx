@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import extension from 'extensionizer';
 import { SeedPhrase } from '@components';
 import { Container } from '@ui';
-import { HANDLER_TYPES } from '@background/Keyring';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 
 const Step3 = () => {
   const [words, setWords] = useState([]);
 
   useEffect(async () => {
-    extension.runtime.sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
-      setWords(state.mnemonic.split(' '));
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
+      setWords(state?.mnemonic?.split(' '));
     });
   }, []);
 

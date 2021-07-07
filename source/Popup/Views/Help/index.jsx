@@ -18,7 +18,11 @@ const Help = () => {
       <div className={classes.menuContainer}>
         {
           helpItems.map((item) => (
-            <MenuItem {...item} size="medium" />
+            <MenuItem
+              key={item.name}
+              {...item}
+              size="medium"
+            />
           ))
         }
       </div>

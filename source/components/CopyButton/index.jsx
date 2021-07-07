@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Tooltip from '@material-ui/core/Tooltip';
-import { faClone } from '@fortawesome/pro-regular-svg-icons/faClone';
+import { Copy } from 'react-feather';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useStyles from './styles';
 
 const CopyButton = ({ text, placement, ...other }) => {
@@ -34,6 +33,12 @@ const CopyButton = ({ text, placement, ...other }) => {
 
   return (
     <Tooltip
+      classes={{
+        tooltipPlacementBottom: classes.tooltip,
+        tooltipPlacementTop: classes.tooltip,
+        tooltipPlacementLeft: classes.tooltip,
+        tooltipPlacementRight: classes.tooltip,
+      }}
       title={tooltipText}
       arrow
       open={showTooltip || copied}
@@ -46,10 +51,7 @@ const CopyButton = ({ text, placement, ...other }) => {
         onMouseLeave={() => setShowTooltip(false)}
         {...other}
       >
-        <FontAwesomeIcon
-          icon={faClone}
-          className={classes.icon}
-        />
+        <Copy size="18" className={classes.icon} />
       </div>
     </Tooltip>
   );

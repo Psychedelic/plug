@@ -50,6 +50,7 @@ const ActionButton = ({ type, onClick }) => {
   return (
     <HoverAnimation disabled={disabled}>
       <Tooltip
+        classes={{ tooltipPlacementTop: classes.tooltip }}
         title={tooltip}
         arrow
         open={!!tooltip && hovered}

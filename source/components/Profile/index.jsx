@@ -62,6 +62,7 @@ const Profile = () => {
                   {
                     menuItems.map((item) => (
                       <MenuItem
+                        size="small"
                         key={item.name}
                         name={item.name}
                         image={item.image}

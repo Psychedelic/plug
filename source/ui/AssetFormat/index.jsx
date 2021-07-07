@@ -3,7 +3,7 @@ import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
 
 const AssetFormat = ({ value, asset, ...other }) => (
-  <NumberFormat value={value} displayType="text" thousandSeparator="," suffix={` ${asset}`} decimalScale={2} fixedDecimalScale {...other} />
+  <NumberFormat value={value} displayType="text" thousandSeparator="," suffix={` ${asset}`} decimalScale={5} fixedDecimalScale {...other} />
 );
 
 export default AssetFormat;

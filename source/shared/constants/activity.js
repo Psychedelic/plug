@@ -6,7 +6,7 @@ export const ACTIVITY_TYPES = {
 };
 
 export const ACTIVITY_STATUS = {
-  DONE: 0,
+  COMPLETED: 0,
   PENDING: 1,
-  FAILED: 2,
+  REVERTED: 2,
 };

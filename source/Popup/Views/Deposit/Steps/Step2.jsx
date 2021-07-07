@@ -4,12 +4,10 @@ import {
 } from '@ui';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
-import { QRCode, CopyButton } from '@components';
+import { QRCode, CopyButton, IconQrCode } from '@components';
 import { Typography } from '@material-ui/core';
 import shortAddress from '@shared/utils/short-address';
 import { useTranslation } from 'react-i18next';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faQrcode } from '@fortawesome/pro-regular-svg-icons/faQrcode';
 import { useSelector } from 'react-redux';
 import useStyles from '../styles';
 import { currencyPropTypes } from '../../../../shared/constants/currencies';
@@ -60,10 +58,9 @@ const Step2 = ({ selectedSource, selectedAsset }) => {
               <InputBase>
                 <div className={classes.addressContainer}>
                   <Typography variant="h4" style={{ marginRight: 'auto' }}>{shortAddress(principalId)}</Typography>
-                  <FontAwesomeIcon
-                    icon={faQrcode}
-                    className={classes.icon}
+                  <IconQrCode
                     onClick={() => setOpenQr(true)}
+                    classes={classes}
                   />
                   <CopyButton text={principalId} placement="top" />
                 </div>

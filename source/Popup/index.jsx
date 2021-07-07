@@ -5,11 +5,10 @@ import i18n from 'i18next';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { initReactI18next } from 'react-i18next';
-import extension from 'extensionizer';
 import browser from 'webextension-polyfill';
 
 import { theme } from '@ui';
-import { HANDLER_TYPES } from '@background/Keyring';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import Popup from './Popup';
 import initConfig from '../locales';
 import store from '../redux/store';
@@ -20,7 +19,7 @@ const App = () => {
   const [initialRoute, setInitialRoute] = useState(null);
 
   useEffect(() => {
-    extension.runtime.sendMessage({ type: HANDLER_TYPES.GET_LOCKS, params: {} }, (locks) => {
+    sendMessage({ type: HANDLER_TYPES.GET_LOCKS, params: {} }, (locks) => {
       if (locks?.isInitialized) {
         if (locks?.isUnlocked) {
           setInitialRoute('home');

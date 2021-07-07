@@ -116,4 +116,18 @@ export default makeStyles((theme) => ({
       boxShadow: 'none',
     },
   },
+  wrapper: {
+    position: 'relative',
+  },
+  buttonProgress: {
+    color: 'white',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
+  fullWidth: {
+    width: '100%',
+  },
 }));

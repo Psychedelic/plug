@@ -27,7 +27,7 @@ const Settings = () => {
       <div>
         {
           settingsItems.map((item) => (
-            <MenuItemDetailed {...item} />
+            <MenuItemDetailed key={item.name} {...item} />
           ))
         }
       </div>

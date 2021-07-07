@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Ed25519KeyIdentity } from '@dfinity/identity';
-import { ACTIVITY_STATUS } from '@shared/constants/activity';
+import { ACTIVITY_STATUS, ACTIVITY_TYPES } from '@shared/constants/activity';
 import { CURRENCIES } from '@shared/constants/currencies';
+import { E8S_PER_ICP, NANOS_PER_SECOND } from '@background/Keyring';
 
 /* eslint-disable no-param-reassign */
 export const walletSlice = createSlice({
@@ -34,19 +35,21 @@ export const walletSlice = createSlice({
     },
     setTransactions: (state, action) => {
       const mapTransaction = (trx) => {
-        const type = Object.keys(trx.transfer)[0];
-        const amount = trx.tranfer[type]?.amount?.e8s; // The same regardless of the type
-        return {
-          type,
-          currency: CURRENCIES.get('ICP'),
+        const amount = parseInt(trx?.amount?.toString(), 10) / E8S_PER_ICP;
+        const transaction = {
+          type: ACTIVITY_TYPES[trx?.type],
+          currency: CURRENCIES.get(trx?.currency?.symbol),
           amount,
-          date: new Date(trx?.timestamp),
-          value: amount * 40 /* TODO: Add helder's fee function / call to nns */,
-          status: ACTIVITY_STATUS.DONE,
+          date: new Date(trx?.timestamp / NANOS_PER_SECOND),
+          value: amount * action?.payload?.icpPrice,
+          status: ACTIVITY_STATUS[trx?.status],
+          to: trx?.to,
           plug: null,
         };
+        return transaction;
       };
-      state.transactions = action.payload?.transactions?.map?.(mapTransaction) || [];
+      const parsedTrx = action.payload?.transactions?.map(mapTransaction) || [];
+      state.transactions = parsedTrx.reverse();
     },
     setAssets: (state, action) => {
       state.assets = action.payload;
