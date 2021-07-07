@@ -39,11 +39,11 @@ const getStatus = (status, classes, t) => {
   }
 };
 
-const getSubtitle = (type, status, date, to, t) => {
+const getSubtitle = (type, status, date, to, from, t) => {
   let subtitle = '';
   if (status === ACTIVITY_STATUS.COMPLETED) subtitle += moment(date).format('MMMM Do');
   if (type === ACTIVITY_TYPES.SEND) subtitle += ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`;
-  if (type === ACTIVITY_TYPES.RECEIVE) subtitle += ` · ${t('activity.subtitle.from')}: ${shortAddress(to)}`;
+  if (type === ACTIVITY_TYPES.RECEIVE) subtitle += ` · ${t('activity.subtitle.from')}: ${shortAddress(from)}`;
 
   return subtitle;
 };
@@ -52,6 +52,7 @@ const ActivityItem = ({
   type,
   currency,
   to,
+  from,
   amount,
   value,
   status,
@@ -91,7 +92,7 @@ const ActivityItem = ({
           {getTitle(type, currency, swapData, plug, t)}
         </Typography>
         <Typography variant="subtitle2">
-          {getStatus(status, classes, t)}{getSubtitle(type, status, date, to, t)}
+          {getStatus(status, classes, t)}{getSubtitle(type, status, date, to, from, t)}
         </Typography>
       </div>
 
@@ -100,10 +101,10 @@ const ActivityItem = ({
         && (
           <div className={classes.rightContainer}>
             <Typography variant="h5">
-              <NumberFormat value={showSwap ? swapData.amount : amount} displayType="text" thousandSeparator="," suffix={` ${showSwap ? swapData.currency.value : currency.value}`} decimalScale={8} />
+              <NumberFormat value={showSwap ? swapData.amount : amount} displayType="text" thousandSeparator="," suffix={` ${showSwap ? swapData.currency.value : currency.value}`} decimalScale={5} />
             </Typography>
             <Typography variant="subtitle2">
-              <NumberFormat value={showSwap ? swapData.value : value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" decimalScale={8} />
+              <NumberFormat value={showSwap ? swapData.value : value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" decimalScale={2} />
             </Typography>
           </div>
         )
@@ -117,6 +118,7 @@ export default ActivityItem;
 
 ActivityItem.defaultProps = {
   to: null,
+  from: null,
   amount: null,
   value: null,
   status: null,
@@ -128,6 +130,7 @@ ActivityItem.propTypes = {
   type: PropTypes.number.isRequired,
   currency: PropTypes.shape(currencyPropTypes).isRequired,
   to: PropTypes.string,
+  from: PropTypes.string,
   amount: PropTypes.number,
   value: PropTypes.number,
   status: PropTypes.number,

@@ -17,4 +17,7 @@ export default makeStyles({
   tooltip: {
     margin: '8px 0',
   },
+  tooltipSides: {
+    margin: '0 8px',
+  },
 });
