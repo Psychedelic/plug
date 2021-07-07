@@ -1179,6 +1179,14 @@
     js-sha256 "0.9.0"
     simple-cbor "^0.4.1"
 
+"@dfinity/candid@^0.9.1":
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/@dfinity/candid/-/candid-0.9.1.tgz#2085f79de3145b32aeb6065b612c21f96c9955b5"
+  integrity sha512-5P2Ic3hAf9935qW3uCLDN5FFRTBO3SA7c0n56W9GzIEZZnNXdclO5/3WAnDCfhSjZslRjGfvR225Grd/ekCUoA==
+  dependencies:
+    buffer "^6.0.3"
+    buffer-pipe "^0.0.4"
+
 "@dfinity/identity@^0.8.9":
   version "0.8.9"
   resolved "https://registry.yarnpkg.com/@dfinity/identity/-/identity-0.8.9.tgz#adc6c2dbd4327844d73a0d9f91ea1f81d2d52e71"
@@ -1189,6 +1197,11 @@
     buffer "^5.4.3"
     buffer-pipe "0.0.4"
     tweetnacl "^1.0.1"
+
+"@dfinity/principal@^0.9.1":
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/@dfinity/principal/-/principal-0.9.1.tgz#166d4c5014101d9f9d6a3ed1f9b70e102c0bb9be"
+  integrity sha512-PWDvGPbSGMotxJhXEvttbwsSyn6gpEqqHVF957LqAqrDwGvWPLvfddJElSIikrook/U49HmtJslE7opWrjvRkA==
 
 "@discoveryjs/json-ext@^0.5.0":
   version "0.5.3"
@@ -1646,14 +1659,16 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.9.2.tgz#adea7b6953cbb34651766b0548468e743c6a2353"
   integrity sha512-VZMYa7+fXHdwIq1TDhSXoVmSPEGM/aa+6Aiq3nVVJ9bXr24zScr+NlKFKC3iPljA7ho/GAZr+d2jOf5GIRC30Q==
 
-"@psychedelic/plug-controller@0.0.10":
-  version "0.0.10"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.0.10/93caec42d49ad82d0731bd13f5b69d4f537aa70d2d170531a3a1500b966bd396#dcaa998a2fe29c7e306ad267568923d9bd76abfc"
-  integrity sha512-E+3WykA+B5b+xNMckpI74nYjD1O64QDXCrvmpkrd1+qOWCc+7RcXwAMbEZM148zOI6muj72NphHs0piNDw0VHQ==
+"@psychedelic/plug-controller@0.0.11":
+  version "0.0.11"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.0.11/3d788a166ebf3f27565ffdbeef63d296e0d52e1fd58bb8959682dae76e3961b9#1d275b38d74d91b45874fb1973afdd02141c1c64"
+  integrity sha512-/n38VpcK6afUsW7ZcWvzKsqFRhwGLE4pdTjfHMkrgAKRy3AnLxsfj63w6LV1rFR2zJGAwqLPQqlKEZI7jeNQ7w==
   dependencies:
     "@babel/preset-env" "^7.14.4"
     "@dfinity/agent" "^0.8.9"
+    "@dfinity/candid" "^0.9.1"
     "@dfinity/identity" "^0.8.9"
+    "@dfinity/principal" "^0.9.1"
     babel-jest "^25.5.1"
     bip39 "^3.0.4"
     buffer-crc32 "^0.2.13"
@@ -4018,7 +4033,7 @@ buffer-from@^1.0.0, buffer-from@^1.1.1:
   resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.1.tgz#32713bc028f75c02fdb710d7c7bcec1f2c6070ef"
   integrity sha512-MQcXEUbCKtEo7bhqEs6560Hyd4XaovZlO/k9V3hjVUF/zwW7KBVdSK4gIt/bzwS9MbR5qob+F5jusZsb0YQK2A==
 
-buffer-pipe@0.0.4:
+buffer-pipe@0.0.4, buffer-pipe@^0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/buffer-pipe/-/buffer-pipe-0.0.4.tgz#e7f2ea95beb60fb692fc1dd1c878e894397a974d"
   integrity sha512-8cHio1V6wgX+LIX6+af4tCn0+Ljl2vQd9JZdZ8vDJZdDf8x5p2DneKaq1dWxSswJG+sK4Inok9aqoqILG5kQVQ==
@@ -4046,6 +4061,14 @@ buffer@^5.1.0, buffer@^5.4.3, buffer@^5.5.0:
   dependencies:
     base64-js "^1.3.1"
     ieee754 "^1.1.13"
+
+buffer@^6.0.3:
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/buffer/-/buffer-6.0.3.tgz#2ace578459cc8fbe2a70aaa8f52ee63b6a74c6c6"
+  integrity sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==
+  dependencies:
+    base64-js "^1.3.1"
+    ieee754 "^1.2.1"
 
 builtin-status-codes@^3.0.0:
   version "3.0.0"
@@ -7321,7 +7344,7 @@ icss-utils@^5.0.0, icss-utils@^5.1.0:
   resolved "https://registry.yarnpkg.com/icss-utils/-/icss-utils-5.1.0.tgz#c6be6858abd013d768e98366ae47e25d5887b1ae"
   integrity sha512-soFhflCVWLfRNOPU3iv5Z9VUdT44xFRbzjLsEzSr5AQmgqPMTHdU3PMT1Cf1ssx8fLNJDA1juftYl+PUcv3MqA==
 
-ieee754@^1.1.13, ieee754@^1.1.4:
+ieee754@^1.1.13, ieee754@^1.1.4, ieee754@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.2.1.tgz#8eb7a10a63fff25d15a57b001586d177d1b0d352"
   integrity sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==
