@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
   root: {
-    height: 505,
+    height: 552,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -13,6 +13,7 @@ export default makeStyles((theme) => ({
   },
   title: {
     paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(0.5),
   },
   formLabel: {
     transform: 'translate(0, 1.5px) scale(1) !important',
@@ -25,14 +26,17 @@ export default makeStyles((theme) => ({
   },
   textContainer: {
     height: 200,
-  },
-  actionContainer: {
-    height: 44,
+    marginTop: theme.spacing(3.5),
   },
   formContainer: {
     height: 131,
     width: '100%',
-    marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(1.5),
+    marginBottom: theme.spacing(2.5),
     justifyContent: 'space-between',
+  },
+  actionContainer: {
+    height: 44,
+    marginBottom: theme.spacing(2),
   },
 }));

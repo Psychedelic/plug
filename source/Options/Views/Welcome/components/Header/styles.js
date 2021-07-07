@@ -9,4 +9,7 @@ export default makeStyles((theme) => ({
     flexDirection: 'column',
     marginBottom: theme.spacing(1),
   },
+  subtitle: {
+    width: '102%',
+  },
 }));

@@ -97,10 +97,9 @@ export const getKeyringHandler = (type, keyring) => ({
     try {
       await keyring.sendICP(to, BigInt(amount));
       const e8s = await keyring.getBalance();
-      return formatAssets(e8s);
+      return { assets: formatAssets(e8s) };
     } catch (e) {
-      console.log(e);
-      return [];
+      return { error: true, assets: [] };
     }
   },
 }[type]);

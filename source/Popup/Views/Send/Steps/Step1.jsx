@@ -33,7 +33,6 @@ const Step1 = ({
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
-
   const [openAssets, setOpenAssets] = useState(false);
   const [openAddContact, setOpenAddContact] = useState(false);
   const [contactName, setContactName] = useState('');
@@ -43,7 +42,6 @@ const Step1 = ({
   const handleSelectedContact = (contact) => setSelectedContact(contact);
 
   const { contacts, handleAddContact, handleRemoveContact } = useContacts();
-
   const addContact = () => {
     const contact = {
       name: contactName,

@@ -10,8 +10,8 @@
     "128": "assets/icons/favicon-128.png"
   },
   "description": "Your plug into the Internet Computer",
-  "homepage_url": "https://github.com/abhijithvijayan/web-extension-starter",
-  "short_name": "Sample Name",
+  "homepage_url": "https://github.com/psychedelic/plug",
+  "short_name": "Plug",
 
   "permissions": [
     "activeTab",
@@ -29,7 +29,7 @@
 
   "__firefox__applications": {
     "gecko": {
-      "id": "{754FB1AD-CC3B-4856-B6A0-7786F8CA9D17}"
+      "id": "plug@plugwallet.ooo"
     }
   },
 

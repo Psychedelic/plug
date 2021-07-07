@@ -1,11 +1,17 @@
-![](https://storageapi.fleek.co/fleek-team-bucket/plug.png)
+![](https://storageapi.fleek.co/fleek-team-bucket/plug-banner.png)
+
+# Plug
+
+[![Fleek](https://img.shields.io/badge/Made%20by-Fleek-blue)](https://fleek.co/)
+[![Discord](https://img.shields.io/badge/Discord-Channel-blue)](https://discord.gg/yVEcEzmrgm)
 
 ## Introduction
 
-Welcome to Plug! An Internet Computer crypto wallet and authentication provider browser extension. Find our latest version on this repository's releases, or on our [website](https://plugwallet.ooo/). You can go to our [documentation](https://docs.plugwallet.ooo/) to learn more about how to interact with Plug as a developer.
+Welcome to Plug! An [Internet Computer](https://dfinity.org/) crypto wallet and authentication provider as a browser extension. Find our latest version in this repository's releases, or on our [website](https://plugwallet.ooo/). You can go to our [documentation](https://docs.plugwallet.ooo/) to learn more about how to interact with Plug as a developer.
+
+> **Warning: Plug is still alpha software - treat it as a hot wallet for small amounts of ICP**
 
 This repository is the frontend for Plug's browser extension. It uses the [Plug Controller](https://github.com/Psychedelic/plug-controller) and the [Plug Inpage Provider](https://github.com/Psychedelic/plug-inpage-provider) to power the features in Plug and all its interactions with the Internet Computer.
-
 
 ## Browser Support
 
@@ -13,26 +19,19 @@ This repository is the frontend for Plug's browser extension. It uses the [Plug 
 | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
 | 49 & later ✔                                                                                  | 52 & later ✔                                                                                     | 36 & later ✔                                                                               | 79 & later ✔                                                                            | Latest ✔                                                                                      | Latest ✔                                                                                   | Latest ✔                                                                                         |
 
-## 🚀 Quick Start
+## 🚀 Install
+
+Plug must currently be installed as development builds from our release page:
+
+- [Install Plug in Chrome](./docs/install-plug-in-chrome.md)
+- [Install Plug in Firefox](./docs/install-plug-in-firefox.md)
+
+## 🏗️ Development Quick Start
 
 Ensure you have
 
 - [Node.js](https://nodejs.org) 10 or later installed
 - [Yarn](https://yarnpkg.com) v1 or v2 installed
-
-Authenticate to Github registry by:
-
-```
-npm login --registry=https://npm.pkg.github.com --scope=@Psychedelic
-```
-
-This because the packages under the organisation scope [@Psychedelic](https://github.com/Psychedelic) are published under the [Psychedelic packages](https://github.com/orgs/Psychedelic/packages), as you can see in the `.npmrc`:
-
-```
-@psychedelic:registry=https://npm.pkg.github.com
-```
-
-Choose the github username that you use as a member of @Psychedelic and for the password, a [personal access token](https://github.com/settings/tokens), with the `repo` and `read:packages` scopes (permissions).
 
 Then run the following:
 
@@ -131,5 +130,5 @@ See the original [README](https://github.com/abhijithvijayan/wext-manifest-loade
 
 ## License
 
-Original template MIT © [Abhijith Vijayan](https://abhijithvijayan.in)
 Plug extension © Fleek LLC
+Original template MIT © [Abhijith Vijayan](https://abhijithvijayan.in)

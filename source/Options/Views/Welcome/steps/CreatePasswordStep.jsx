@@ -27,7 +27,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
   };
 
   const validatePasswordError = () => {
-    if (password === '' || password.length < 12) {
+    if (password.trim() === '' || password.length < 12) {
       return 'welcome.passwordShortError';
     }
 
