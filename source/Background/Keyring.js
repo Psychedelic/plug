@@ -46,6 +46,7 @@ export const HANDLER_TYPES = {
   GET_TRANSACTIONS: 'get-keyring-transactions',
   GET_ASSETS: 'get-keyring-assets',
   SEND_ICP: 'send-icp',
+  SIGN: 'sign',
 };
 
 export const sendMessage = (args, callback) => {
@@ -93,6 +94,15 @@ export const getKeyringHandler = (type, keyring) => ({
       await keyring.sendICP(to, BigInt(amount));
       const e8s = await keyring.getBalance();
       return formatAssets(e8s);
+    } catch (e) {
+      console.log(e);
+      return [];
+    }
+  },
+  [HANDLER_TYPES.SIGN]: async ({ payload }) => {
+    try {
+      const res = await keyring.sign(payload);
+      return res;
     } catch (e) {
       console.log(e);
       return [];
