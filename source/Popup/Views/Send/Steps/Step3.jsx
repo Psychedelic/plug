@@ -23,17 +23,20 @@ import { icIdsUrl } from '@shared/constants/urls';
 import browser from 'webextension-polyfill';
 import ArrowUpRight from '@assets/icons/arrow-up-right.png';
 import clsx from 'clsx';
+import { useRouter } from '@components';
+
 import { ADDRESS_TYPES, DEFAULT_FEE } from '../hooks/constants';
 import useStyles from '../styles';
 
 const openTwoIdsBlog = () => browser.tabs.create({ url: icIdsUrl });
 
 const Step3 = ({
-  asset, amount, address, addressInfo, handleSendClick,
+  asset, amount, address, addressInfo, handleSendClick, error,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
+  const { navigator } = useRouter();
   const [accountId, setAccountId] = useState('');
 
   const [open, setOpen] = useState(false);
@@ -47,6 +50,9 @@ const Step3 = ({
   };
 
   useEffect(() => {
+    if (error) {
+      navigator.navigate('error');
+    }
     if (addressInfo.type === ADDRESS_TYPES.PRINCIPAL) {
       setAccountId(
         PlugController.getAccountId(
@@ -193,12 +199,17 @@ const Step3 = ({
   );
 };
 
-export default Step3;
-
 Step3.propTypes = {
   asset: PropTypes.objectOf(PropTypes.object).isRequired,
   amount: PropTypes.number.isRequired,
   address: PropTypes.string.isRequired,
   addressInfo: PropTypes.objectOf(PropTypes.object).isRequired,
   handleSendClick: PropTypes.func.isRequired,
+  error: PropTypes.bool,
 };
+
+Step3.defaultProps = {
+  error: false,
+};
+
+export default Step3;
