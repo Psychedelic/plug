@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 // eslint-disable-next-line import/prefer-default-export
-export const IconQrCode = ({ classes }) => (
+export const IconQrCode = ({ classes, ...props }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     ariaHidden="true"
@@ -11,6 +11,7 @@ export const IconQrCode = ({ classes }) => (
     data-icon="qrcode"
     data-prefix="far"
     viewBox="0 0 448 512"
+    {...props}
   >
     <path
       fill="currentColor"
