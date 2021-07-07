@@ -123,5 +123,5 @@ See the original [README](https://github.com/abhijithvijayan/wext-manifest-loade
 
 ## License
 
-Original template MIT © [Abhijith Vijayan](https://abhijithvijayan.in)
 Plug extension © Fleek LLC
+Original template MIT © [Abhijith Vijayan](https://abhijithvijayan.in)
