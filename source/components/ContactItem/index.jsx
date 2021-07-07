@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import shortAddress from '@shared/utils/short-address';
 import { Typography } from '@material-ui/core';
-import { Trash2, Times } from 'react-feather';
+import { Trash2, X } from 'react-feather';
 import CopyButton from '../CopyButton';
 import useStyles from './styles';
 
@@ -11,7 +11,6 @@ const ContactItem = ({
   contact, handleClick, handleDelete, handleCancel,
 }) => {
   const classes = useStyles();
-
   return (
     <div
       className={clsx(classes.contact,
@@ -43,10 +42,7 @@ const ContactItem = ({
       {
         handleCancel
         && (
-          <Times
-            className={clsx(classes.icon, classes.cancelIcon)}
-            onClick={() => handleCancel()}
-          />
+          <X className={clsx(classes.icon, classes.cancelIcon)} onClick={() => handleCancel()} />
         )
       }
     </div>
