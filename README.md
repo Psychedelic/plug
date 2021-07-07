@@ -1,11 +1,17 @@
 ![](https://storageapi.fleek.co/fleek-team-bucket/plug.png)
 
+# Plug
+
+[![Fleek](https://img.shields.io/badge/Made%20by-Fleek-blue)](https://fleek.co/)
+[![Discord](https://img.shields.io/badge/Discord-Channel-blue)](https://discord.gg/yVEcEzmrgm)
+
 ## Introduction
 
-Welcome to Plug! An Internet Computer crypto wallet and authentication provider browser extension. Find our latest version on this repository's releases, or on our [website](https://plugwallet.ooo/). You can go to our [documentation](https://docs.plugwallet.ooo/) to learn more about how to interact with Plug as a developer.
+Welcome to Plug! An [Internet Computer](https://dfinity.org/) crypto wallet and authentication provider as a browser extension. Find our latest version in this repository's releases, or on our [website](https://plugwallet.ooo/). You can go to our [documentation](https://docs.plugwallet.ooo/) to learn more about how to interact with Plug as a developer.
+
+> **Warning: Plug is still alpha software - treat it as a hot wallet for small amounts of ICP**
 
 This repository is the frontend for Plug's browser extension. It uses the [Plug Controller](https://github.com/Psychedelic/plug-controller) and the [Plug Inpage Provider](https://github.com/Psychedelic/plug-inpage-provider) to power the features in Plug and all its interactions with the Internet Computer.
-
 
 ## Browser Support
 
