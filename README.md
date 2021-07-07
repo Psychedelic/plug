@@ -1,4 +1,4 @@
-![](https://storageapi.fleek.co/fleek-team-bucket/plug.png)
+![](https://storageapi.fleek.co/fleek-team-bucket/plug-banner.png)
 
 # Plug
 
