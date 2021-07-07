@@ -30,6 +30,12 @@ export default makeStyles((theme) => ({
       transform: 'scale(1.03)',
     },
   },
+  iconQrCode: {
+    width: 18,
+    height: 18,
+    marginRight: 6,
+    color: '#367FF8',
+  },
   orContainer: {
     display: 'flex',
     alignItems: 'center',

@@ -1,4 +1,40 @@
 import { CURRENCIES } from '@shared/constants/currencies';
+import extension from 'extensionizer';
+
+export const E8S_PER_ICP = 100_000_000;
+export const NANOS_PER_SECOND = 1_000_000;
+export const BALANCE_ERROR = 'You have tried to spend more than the balance of your account';
+
+const recursiveParseBigint = (obj) => Object.entries(obj).reduce(
+  (acum, [key, val]) => {
+    if (val instanceof Object) {
+      const res = Array.isArray(val)
+        ? val.map((el) => recursiveParseBigint(el))
+        : recursiveParseBigint(val);
+      return { ...acum, [key]: res };
+    }
+    if (typeof val === 'bigint') {
+      return { ...acum, [key]: parseInt(val.toString(), 10) };
+    }
+    return { ...acum, [key]: val };
+  },
+  { ...obj },
+);
+
+const formatAssets = (e8s, icpPrice) => {
+  // The result is in e8s and a bigint. We parse it and transform to ICP
+  const icpBalance = parseInt(e8s.toString(), 10) / E8S_PER_ICP;
+  const assets = [
+    {
+      image: CURRENCIES.get('ICP').image,
+      name: CURRENCIES.get('ICP').name,
+      amount: icpBalance,
+      value: icpBalance * icpPrice || icpBalance,
+      currency: CURRENCIES.get('ICP').value,
+    },
+  ];
+  return assets;
+};
 
 export const HANDLER_TYPES = {
   LOCK: 'lock-keyring',
@@ -9,6 +45,21 @@ export const HANDLER_TYPES = {
   GET_STATE: 'get-keyring-state',
   GET_TRANSACTIONS: 'get-keyring-transactions',
   GET_ASSETS: 'get-keyring-assets',
+  SEND_ICP: 'send-icp',
+};
+
+export const sendMessage = (args, callback) => {
+  extension.runtime.sendMessage(args, (response) => {
+    let parsedResponse = response;
+    if (typeof response === 'string') {
+      try {
+        parsedResponse = JSON.parse(response);
+      } catch (error) {
+        parsedResponse = response;
+      }
+    }
+    callback(parsedResponse);
+  });
 };
 
 export const getKeyringHandler = (type, keyring) => ({
@@ -22,24 +73,29 @@ export const getKeyringHandler = (type, keyring) => ({
     }
     return unlocked;
   },
-  [HANDLER_TYPES.CREATE]: async (params) => keyring.create({ ...params }),
-  [HANDLER_TYPES.IMPORT]: async (params) => keyring.importMnemonic({ ...params }),
-  [HANDLER_TYPES.GET_LOCKS]: () => ({
+  [HANDLER_TYPES.CREATE]: async (params) => keyring.create(params),
+  [HANDLER_TYPES.IMPORT]: async (params) => keyring.importMnemonic(params),
+  [HANDLER_TYPES.GET_LOCKS]: async () => ({
     isUnlocked: keyring?.isUnlocked,
     isInitialized: keyring?.isInitialized,
   }),
   [HANDLER_TYPES.GET_STATE]: async () => keyring.getState(),
-  [HANDLER_TYPES.GET_TRANSACTIONS]: async () => keyring.transactions,
-  [HANDLER_TYPES.GET_ASSETS]: async () => {
-    const e8s = await keyring.getBalance();
-    const balance = parseInt(e8s.toString(), 10) / 100_000_000;
-    const assets = [{
-      image: CURRENCIES.get('ICP').image,
-      name: CURRENCIES.get('ICP').name,
-      amount: balance,
-      value: balance,
-      currency: CURRENCIES.get('ICP').value,
-    }];
-    return assets;
+  [HANDLER_TYPES.GET_TRANSACTIONS]: async () => {
+    const response = await keyring.getTransactions();
+    return recursiveParseBigint(response);
   },
-})[type];
+  [HANDLER_TYPES.GET_ASSETS]: async (icpPrice) => {
+    const e8s = await keyring.getBalance();
+    return formatAssets(e8s, icpPrice);
+  },
+  [HANDLER_TYPES.SEND_ICP]: async ({ to, amount }) => {
+    try {
+      await keyring.sendICP(to, BigInt(amount));
+      const e8s = await keyring.getBalance();
+      return formatAssets(e8s);
+    } catch (e) {
+      console.log(e);
+      return [];
+    }
+  },
+}[type]);

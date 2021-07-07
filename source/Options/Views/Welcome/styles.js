@@ -19,4 +19,24 @@ export default makeStyles((theme) => ({
   marginBottom: {
     marginBottom: theme.spacing(2),
   },
+  passwordError: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    '& > img': {
+      marginRight: '1rem',
+    },
+  },
+  memeContainer: {
+    width: '100%',
+    height: 300,
+    background: 'white',
+    borderRadius: 5,
+  },
+  meme: {
+    width: '100%',
+    borderRadius: 5,
+  },
 }));

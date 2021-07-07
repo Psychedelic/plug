@@ -1,36 +1,40 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import extension from 'extensionizer';
-import { AssetItem, Button } from '@ui';
-import { useRouter } from '@components/Router';
+import { AssetItem } from '@ui';
 import { setAssets } from '@redux/wallet';
-import { HANDLER_TYPES } from '@background/Keyring';
-
-import { useTranslation } from 'react-i18next';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import LoadingWrapper from '@components/LoadingWrapper';
 import useStyles from './styles';
 
 const Assets = () => {
   const classes = useStyles();
-  const { navigator } = useRouter();
-  const { t } = useTranslation();
-
   const { assets } = useSelector((state) => state.wallet);
+  const [assetsLoading, setLoading] = useState(true);
   const dispatch = useDispatch();
+  const { icpPrice } = useSelector((state) => state.icp);
 
   useEffect(() => {
-    extension.runtime.sendMessage({
-      type: HANDLER_TYPES.GET_ASSETS,
-      params: {},
-    }, (keyringAssets) => dispatch(setAssets(keyringAssets)));
-  }, []);
+    if (icpPrice) {
+      sendMessage({
+        type: HANDLER_TYPES.GET_ASSETS,
+        params: icpPrice,
+      }, (keyringAssets) => {
+        dispatch(setAssets(keyringAssets));
+        setLoading(false);
+      });
+    }
+  }, [icpPrice]);
   return (
-    <div className={classes.root}>
-      {
+    <LoadingWrapper loading={!assets?.length && assetsLoading}>
+      <div className={classes.root}>
+        {
         assets.map((asset) => (
           <AssetItem {...asset} />
         ))
-      }
-      <Button
+        }
+        {
+        /*
+        <Button
         variant="rainbowOutlined"
         value={t('addToken.title')}
         onClick={() => navigator.navigate('add-token')}
@@ -41,8 +45,11 @@ const Assets = () => {
           alignSelf: 'center',
           marginTop: 12,
         }}
-      />
-    </div>
+        />
+        */
+      }
+      </div>
+    </LoadingWrapper>
   );
 };
 

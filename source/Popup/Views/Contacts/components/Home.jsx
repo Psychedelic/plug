@@ -25,9 +25,11 @@ const Home = ({ handleChangeView }) => {
         <Grid item xs={12} style={{ marginTop: 12 }}>
           <Button variant="rainbow" value={t('contacts.addContact')} onClick={() => handleChangeView()} />
         </Grid>
-        <Grid item xs={12} style={{ marginTop: 24, marginBottom: -24 }}>
-          <Typography variant="subtitle1">{t('contacts.dab')}</Typography>
-        </Grid>
+        {
+          /* <Grid item xs={12} style={{ marginTop: 24, marginBottom: -24 }}>
+            <Typography variant="subtitle1">{t('contacts.dab')}</Typography>
+          </Grid> */
+        }
       </Grid>
     </Container>
   );

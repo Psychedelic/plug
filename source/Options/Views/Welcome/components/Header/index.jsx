@@ -11,7 +11,7 @@ const Header = ({ title, subtitle, message }) => {
     <div className={classes.root}>
       <Plug size="big" message={message} style={{ marginBottom: 6 }} />
       <Typography variant="h2">{title}</Typography>
-      <Typography variant="subtitle1">{subtitle}</Typography>
+      <Typography variant="subtitle1" className={classes.subtitle}>{subtitle}</Typography>
     </div>
   );
 };

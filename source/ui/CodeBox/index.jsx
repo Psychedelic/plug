@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClone } from '@fortawesome/pro-regular-svg-icons/faClone';
+import { Copy } from 'react-feather';
 import useStyles from './styles';
 
 const CodeBox = ({ prefix, code }) => {
@@ -27,7 +26,7 @@ const CodeBox = ({ prefix, code }) => {
           onClick={onCopy}
           onAnimationEnd={() => { setCopied(false); }}
         >
-          <FontAwesomeIcon icon={faClone} className={classes.copyIcon} />
+          <Copy size="14" className={classes.copyIcon} />
           <span className={classes.copyText}>
             Copy
           </span>

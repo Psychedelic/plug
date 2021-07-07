@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
-import { IDInput, ActionDialog } from '@components';
+import clsx from 'clsx';
+import FleekImg from '@assets/icons/Fleek.svg';
+
+import { useContacts } from '@hooks';
+import { ActionDialog, IDInput } from '@components';
 import {
-  FormItem, MultiInput, Container, Button, Dialog, TextInput, Alert,
+  FormItem, MultiInput, Container, Button, Dialog, Alert, TextInput,
 } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
 import NumberFormat from 'react-number-format';
-import clsx from 'clsx';
-import FleekImg from '@assets/icons/Fleek.svg';
-import { useContacts } from '@hooks';
 import useStyles from '../styles';
 
 const Step1 = ({
@@ -32,9 +33,7 @@ const Step1 = ({
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
-
   const [openAssets, setOpenAssets] = useState(false);
-
   const [openAddContact, setOpenAddContact] = useState(false);
   const [contactName, setContactName] = useState('');
 
@@ -43,7 +42,6 @@ const Step1 = ({
   const handleSelectedContact = (contact) => setSelectedContact(contact);
 
   const { contacts, handleAddContact, handleRemoveContact } = useContacts();
-
   const addContact = () => {
     const contact = {
       name: contactName,
@@ -84,6 +82,7 @@ const Step1 = ({
                 conversionPrice={conversionPrice}
                 handleSwapValues={handleSwapValues}
                 availableAmount={availableAmount.amount}
+                decimalScale={5}
               />
             )}
             subtitle={(
@@ -91,7 +90,7 @@ const Step1 = ({
                 <Typography variant="subtitle2">
                   <NumberFormat
                     value={availableAmount.amount}
-                    decimalScale={2}
+                    decimalScale={5}
                     fixedDecimalScale
                     thousandSeparator=","
                     displayType="text"

@@ -45,4 +45,34 @@ export default makeStyles((theme) => ({
     animationName: '$appear',
     animationDuration: '0.5s',
   },
+  image: {
+    height: 22,
+    width: 22,
+    borderRadius: 44,
+    marginRight: 6,
+  },
+  accountIdContainer: {
+    padding: '15px 0',
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  titleContainer: {
+    display: 'flex',
+    alignItems: 'flex-end',
+  },
+  addressContainer: {
+    height: 58,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  flex: {
+    display: 'flex',
+  },
+  arrow: {
+    padding: '6px 10px',
+  },
 }));
