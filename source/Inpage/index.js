@@ -1,7 +1,6 @@
 import { BrowserRPC } from '@fleekhq/browser-rpc';
 import { Provider } from '@fleekhq/plug-inpage-provider';
 import extension from 'extensionizer';
-import reduxicp from '@redux/icp';
 import { HANDLER_TYPES } from '@background/Keyring';
 
 const clientRPC = new BrowserRPC(window, {
@@ -11,8 +10,6 @@ const clientRPC = new BrowserRPC(window, {
 });
 
 clientRPC.start();
-
-console.log(reduxicp);
 
 const publicKey = extension.runtime.sendMessage({
   type: HANDLER_TYPES.GET_STATUS,
