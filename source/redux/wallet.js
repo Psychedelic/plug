@@ -26,7 +26,9 @@ export const walletSlice = createSlice({
       const {
         accountId, icon, name, identity,
       } = action.payload;
-      const id = Ed25519KeyIdentity.fromParsedJson(identity);
+      const id = Array.isArray(identity)
+        ? Ed25519KeyIdentity.fromParsedJson(identity)
+        : Ed25519KeyIdentity.fromParsedJson([identity._publicKey.derKey, identity._privateKey]); // eslint-disable-line
       const principalId = id.getPrincipal().toString();
       state.accountId = accountId;
       state.icon = icon;
