@@ -2,7 +2,7 @@ import { Typography } from '@material-ui/core';
 import { Button, Container } from '@ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import NotebookIcon from '@assets/icons/settings/notebook.svg';
+import ContactIcon from '@assets/icons/contacts.svg';
 import PropTypes from 'prop-types';
 
 import Grid from '@material-ui/core/Grid';
@@ -14,7 +14,7 @@ const Home = ({ handleChangeView }) => {
     <Container big>
       <Grid container spacing={1} style={{ textAlign: 'center' }}>
         <Grid item xs={12}>
-          <img src={NotebookIcon} style={{ width: 73, height: 73 }} />
+          <img src={ContactIcon} />
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h3">{t('contacts.addContacts')}</Typography>
