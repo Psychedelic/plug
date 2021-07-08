@@ -50,9 +50,6 @@ const Step3 = ({
   };
 
   useEffect(() => {
-    if (error) {
-      navigator.navigate('error');
-    }
     if (addressInfo.type === ADDRESS_TYPES.PRINCIPAL) {
       setAccountId(
         PlugController.getAccountId(
@@ -61,6 +58,12 @@ const Step3 = ({
       );
     }
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      navigator.navigate('error');
+    }
+  }, [error]);
 
   return (
     <Container>

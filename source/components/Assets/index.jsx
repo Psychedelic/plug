@@ -28,7 +28,7 @@ const Assets = () => {
     <LoadingWrapper loading={!assets?.length && assetsLoading}>
       <div className={classes.root}>
         {
-        assets.map((asset) => (
+        assets?.map((asset) => (
           <AssetItem {...asset} />
         ))
         }
