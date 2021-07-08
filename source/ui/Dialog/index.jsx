@@ -31,12 +31,14 @@ const Dialog = ({
       open={open}
       PaperProps={{ className: classes.paper }}
     >
+      {title && (
       <DialogTitle disableTypography>
         <span className={classes.title}>{title}</span>
         <IconButton className={classes.closeButton} onClick={handleClose}>
           <CloseIcon />
         </IconButton>
       </DialogTitle>
+      )}
       <MenuList>
         {
           (items && items.length > 0)

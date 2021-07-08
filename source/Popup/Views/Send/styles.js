@@ -145,4 +145,16 @@ export default makeStyles((theme) => ({
   pre: {
     whiteSpace: 'pre',
   },
+  sendingModal: {
+    height: 295,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    flexDirection: 'column',
+    background:
+      'linear-gradient(122.45deg, rgba(255, 231, 1, 0.2) 15.68%, rgba(250, 81, 211, 0.2) 39.58%, rgba(16, 217, 237, 0.2) 63.84%, rgba(82, 255, 83, 0.2) 85.21%)',
+  },
+  sendModalTitle: {
+    fontWeight: 'bold',
+  },
 }));

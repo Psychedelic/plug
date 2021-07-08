@@ -49,7 +49,7 @@ const useSteps = () => {
         setError(true);
       } else {
         dispatch(setAssets(keyringAssets));
-        navigator.navigate('home');
+        // navigator.navigate('home');
       }
     });
   };
