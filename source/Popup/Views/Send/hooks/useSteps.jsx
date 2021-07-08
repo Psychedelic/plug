@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { LinkButton } from '@ui';
 import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';
-import { setAssets } from '@redux/wallet';
+import { setAssets, setTransactions } from '@redux/wallet';
 import { HANDLER_TYPES, E8S_PER_ICP, sendMessage } from '@background/Keyring';
 import Step1 from '../Steps/Step1';
 import Step2a from '../Steps/Step2a';
@@ -25,7 +25,7 @@ const useSteps = () => {
   const { icpPrice } = useSelector((state) => state.icp);
   const [selectedAsset, setSelectedAsset] = useState(CURRENCIES.get('ICP'));
   const [amount, setAmount] = useState(null);
-
+  const [transaction, setTransaction] = useState(null);
   const [address, setAddress] = useState(null);
   const [addressInfo, setAddressInfo] = useState({ isValid: null, type: null });
 
@@ -44,12 +44,13 @@ const useSteps = () => {
       type: HANDLER_TYPES.SEND_ICP,
       params: { to: address, amount: e8s },
     }, (response) => {
-      const { error, assets: keyringAssets } = response || {};
+      const { error, assets: keyringAssets, transactions } = response || {};
       if (error) {
         setError(true);
       } else {
         dispatch(setAssets(keyringAssets));
-        // navigator.navigate('home');
+        dispatch(setTransactions({ ...transactions, icpPrice }));
+        setTransaction(transactions?.transactions[transactions?.total - 1]);
       }
     });
   };
@@ -253,6 +254,7 @@ const useSteps = () => {
         addressInfo={addressInfo}
         handleSendClick={handleSendClick}
         error={sendError}
+        transaction={transaction}
       />,
       left: <LinkButton value={t('common.back')} onClick={() => handlePreviousStep()} startIcon={BackIcon} />,
       right: rightButton,

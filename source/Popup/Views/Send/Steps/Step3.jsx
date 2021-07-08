@@ -29,7 +29,7 @@ import { ADDRESS_TYPES, DEFAULT_FEE } from '../hooks/constants';
 import useStyles from '../styles';
 
 const Step3 = ({
-  asset, amount, address, addressInfo, handleSendClick, error,
+  asset, amount, address, addressInfo, handleSendClick, error, transaction,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -43,9 +43,14 @@ const Step3 = ({
   const subtotal = amount * asset.price;
   const fee = +(asset?.price * DEFAULT_FEE).toFixed(5);
 
+  const openSendModal = () => {
+    setOpenICPModal(false);
+    setSendingModalOpen(true);
+  };
+
   const onClick = () => {
     setLoading(true);
-    setSendingModalOpen(true);
+    openSendModal();
     handleSendClick();
   };
 
@@ -56,9 +61,8 @@ const Step3 = ({
   };
 
   const openICRocksTx = () => {
-    if (!loading) {
-      browser.tabs.create({ url: 'https://ic.rocks/transaction/test' }); // TODO TAKE TX FROM STORE
-    }
+    navigator.navigate('home');
+    browser.tabs.create({ url: `https://ic.rocks/transaction/${transaction.hash}` }); // TODO TAKE TX FROM STORE
   };
 
   const openTwoIdsBlog = () => {
@@ -82,8 +86,6 @@ const Step3 = ({
       navigator.navigate('error');
     }
   }, [error]);
-
-  const transaction = false;
 
   return (
     <Container>
@@ -173,7 +175,13 @@ const Step3 = ({
           component={(
             <div className={classes.modal}>
               <Typography>{t('send.icpModalText')}</Typography>
-              <Button variant="rainbow" value={t('send.icpModalButton1')} onClick={() => setOpenICPModal(false)} fullWidth disabled={loading} />
+              <Button
+                variant="rainbow"
+                value={t('send.icpModalButton1')}
+                onClick={() => setOpenICPModal(false)}
+                fullWidth
+                disabled={loading}
+              />
               <LinkButton
                 value={t('send.icpModalButton2')}
                 onClick={openTwoIdsBlog}
@@ -183,7 +191,7 @@ const Step3 = ({
         />
         <Dialog
           onClose={() => setSendingModalOpen(false)}
-          open={sendingModalOpen || true}
+          open={sendingModalOpen}
           component={(
             <div className={classes.sendingModal}>
               <Plug size="big" message={t(`send.plug${transaction ? 'LetsGo' : 'Chill'}`)} />
@@ -193,8 +201,7 @@ const Step3 = ({
                   <Button
                     variant="rainbow"
                     value={t('send.returnHome')}
-                    onClick={() => setOpenICPModal(false)}
-                    disabled={loading}
+                    onClick={() => navigator.navigate('home')}
                   />
                   <LinkButton onClick={openICRocksTx} value={t('send.viewTxOnICRocks')} />
                 </>
@@ -254,6 +261,7 @@ Step3.propTypes = {
   addressInfo: PropTypes.objectOf(PropTypes.object).isRequired,
   handleSendClick: PropTypes.func.isRequired,
   error: PropTypes.bool,
+  transaction: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 Step3.defaultProps = {
