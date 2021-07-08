@@ -143,7 +143,7 @@
     "asset": "Asset",
     "to": "To:",
     "inputId": "Enter Principal ID or Account ID",
-    "available": "available to send",
+    "available": "available to send \n(considering fees)",
     "selectAsset": "Select asset you're sending",
     "moreComingSoon": "MORE COMING SOON",
     "payWith": "Pay with:",
