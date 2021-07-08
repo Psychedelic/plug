@@ -31,7 +31,6 @@ export default makeStyles((theme) => ({
   },
   memeContainer: {
     width: '100%',
-    height: 300,
     background: 'white',
     borderRadius: 5,
   },
