@@ -62,7 +62,7 @@ const Step3 = ({
 
   const openICRocksTx = () => {
     navigator.navigate('home');
-    browser.tabs.create({ url: `https://ic.rocks/transaction/${transaction.hash}` }); // TODO TAKE TX FROM STORE
+    browser.tabs.create({ url: `https://ic.rocks/transaction/${transaction.hash}` });
   };
 
   const openTwoIdsBlog = () => {
