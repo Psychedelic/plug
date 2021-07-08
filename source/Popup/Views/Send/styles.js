@@ -147,6 +147,7 @@ export default makeStyles((theme) => ({
   },
   sendingModal: {
     height: 295,
+    margin: '-10px 0',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-evenly',

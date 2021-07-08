@@ -194,7 +194,6 @@ const Step3 = ({
                     variant="rainbow"
                     value={t('send.returnHome')}
                     onClick={() => setOpenICPModal(false)}
-                    fullWidth
                     disabled={loading}
                   />
                   <LinkButton onClick={openICRocksTx} value={t('send.viewTxOnICRocks')} />
