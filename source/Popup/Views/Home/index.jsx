@@ -30,7 +30,11 @@ const Home = () => {
   const { t } = useTranslation();
   const { selectedTab, handleChangeTab } = useTabs();
   const dispatch = useDispatch();
-  const { navigator } = useRouter();
+  const { navigator, tabIndex } = useRouter();
+
+  useEffect(() => {
+    handleChangeTab(tabIndex || 0);
+  }, [tabIndex]);
 
   useEffect(() => {
     try {
