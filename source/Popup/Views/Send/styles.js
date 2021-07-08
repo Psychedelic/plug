@@ -146,7 +146,7 @@ export default makeStyles((theme) => ({
     whiteSpace: 'pre',
   },
   sendingModal: {
-    height: 295,
+    height: 320,
     margin: '-10px 0',
     display: 'flex',
     alignItems: 'center',
@@ -157,5 +157,9 @@ export default makeStyles((theme) => ({
   },
   sendModalTitle: {
     fontWeight: 'bold',
+  },
+  modalWarning: {
+    padding: '0px 40px',
+    textAlign: 'center',
   },
 }));

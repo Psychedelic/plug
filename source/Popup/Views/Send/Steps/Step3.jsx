@@ -83,7 +83,7 @@ const Step3 = ({
     }
   }, [error]);
 
-  const transaction = true;
+  const transaction = false;
 
   return (
     <Container>
@@ -201,7 +201,7 @@ const Step3 = ({
               ) : (
                 <>
                   <Typography className={classes.sendModalTitle}>{t('send.transactionInProgress')}</Typography>
-                  <Typography>{t('send.doNotClose')}</Typography>
+                  <Typography className={classes.modalWarning}>{t('send.doNotClose')}</Typography>
                 </>
               )}
             </div>
