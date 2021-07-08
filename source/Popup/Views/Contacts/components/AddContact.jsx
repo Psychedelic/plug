@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import FleekImg from '@assets/icons/Fleek.svg';
 import Grid from '@material-ui/core/Grid';
 import {
   FormItem, Container, Button, TextInput,
@@ -7,6 +6,17 @@ import {
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { validateAccountId, validatePrincipalId } from '../../Send/hooks/utils';
+
+const EMOJIS = ['😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '🥲',
+  '😊', '😇', '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😙', '😚',
+  '😋', '😛', '😝', '😜', '🤪', '🤨', '🧐', '🤓', '😎', '🥸', '🤩', '🥳',
+  '😏', '😒', '😞', '😔', '😟', '😕', '🙁', '☹️', '😣', '😖', '😫', '😩',
+  '🥺', '😢', '😭', '😤', '😠', '😡', '🤬', '🤯', '😳', '🥵', '🥶', '😱',
+  '😨', '😰', '😥', '😓', '🤗', '🤔', '🤭', '🤫', '🤥', '😶', '😐', '😑',
+  '😬', '🙄', '😯', '😦', '😧', '😮', '😲', '🥱', '😴', '🤤', '😪', '😵',
+  '🤐', '🥴', '🤢', '🤮', '🤧', '😷', '🤒', '🤕', '🤑', '🤠', '😈', '👿',
+  '👹', '👺', '🤡', '💩', '👻', '💀', '☠️', '👽', '👾', '🤖', '🎃', '😺',
+  '😸', '😹', '😻', '😼', '😽', '🙀', '😿', '😾'];
 
 const AddContact = ({ handleAddContact }) => {
   const { t } = useTranslation();
@@ -35,6 +45,7 @@ const AddContact = ({ handleAddContact }) => {
                 fullWidth
                 value={name}
                 onChange={handleChangeName}
+                inputProps={{ maxLength: 25 }}
                 type="text"
               />
             )}
@@ -68,7 +79,7 @@ const AddContact = ({ handleAddContact }) => {
             onClick={() => handleAddContact({
               name,
               id,
-              image: FleekImg,
+              image: EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
             })}
           />
         </Grid>
