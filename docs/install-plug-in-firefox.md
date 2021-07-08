@@ -2,6 +2,8 @@
 
 The Plug Firefox addon is currently installed from a developer build.
 
+> **NOTE:** Firefox only allows the installation of temporary developer extensions (they will not persist between firefox restarts). You may wish to install plug with Chrome until it becomes available in Firefox addons as a signed extension. An alternative is to use the Firefox Developer or Nightly editions and turn off the [extension signing requirement](http://mzl.la/1J7Lcsp).
+
 ## Download the latest version of plug 
 
 Download the latest plug firefox xpi file  from the our Github [releases page](https://github.com/Psychedelic/plug/releases):
