@@ -52,6 +52,7 @@ export const walletSlice = createSlice({
           to: trx?.to,
           plug: null,
           from: trx?.from,
+          hash: trx?.hash,
         };
         return transaction;
       };

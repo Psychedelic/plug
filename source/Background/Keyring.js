@@ -97,9 +97,10 @@ export const getKeyringHandler = (type, keyring) => ({
     try {
       await keyring.sendICP(to, BigInt(amount));
       const e8s = await keyring.getBalance();
-      return { assets: formatAssets(e8s) };
+      const transactions = await keyring.getTransactions();
+      return { assets: formatAssets(e8s), transactions: recursiveParseBigint(transactions) };
     } catch (e) {
-      return { error: true, assets: [] };
+      return { error: true, assets: [], transactions: [] };
     }
   },
 }[type]);

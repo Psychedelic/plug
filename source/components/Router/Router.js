@@ -5,13 +5,17 @@ export const RouteContext = React.createContext();
 export const RouteUpdateContext = React.createContext();
 
 const ROUTER_KEY = 'router';
+const TAB_KEY = 'tab';
 
 const Router = (props) => {
   const { storage, children, initialRouteName } = props;
 
   const [route, setRoute] = useState(initialRouteName);
-  const navigate = (routeName) => storage.local.set({
+  const [tabIndex, setTabIndex] = useState(0);
+
+  const navigate = (routeName, tab = 0) => storage.local.set({
     [ROUTER_KEY]: routeName,
+    [TAB_KEY]: tab,
   });
 
   const navigationObject = {
@@ -22,12 +26,14 @@ const Router = (props) => {
     storage.onChanged.addListener((changeObject) => {
       if (changeObject[ROUTER_KEY]) {
         setRoute(changeObject[ROUTER_KEY].newValue);
+        setTabIndex(changeObject[TAB_KEY].newValue);
       }
     });
 
     storage.local.get([ROUTER_KEY], (routerState) => {
       if (routerState[ROUTER_KEY]) {
         setRoute(routerState[ROUTER_KEY]);
+        setTabIndex(routerState[TAB_KEY]);
       }
     });
   }, []);
@@ -41,7 +47,7 @@ const Router = (props) => {
   });
 
   return (
-    <RouteContext.Provider value={route}>
+    <RouteContext.Provider value={{ route, tabIndex }}>
       <RouteUpdateContext.Provider value={navigationObject}>
         {content}
       </RouteUpdateContext.Provider>

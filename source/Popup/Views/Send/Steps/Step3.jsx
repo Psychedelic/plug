@@ -23,15 +23,13 @@ import { icIdsUrl } from '@shared/constants/urls';
 import browser from 'webextension-polyfill';
 import ArrowUpRight from '@assets/icons/arrow-up-right.png';
 import clsx from 'clsx';
-import { useRouter } from '@components';
+import { useRouter, Plug } from '@components';
 
 import { ADDRESS_TYPES, DEFAULT_FEE } from '../hooks/constants';
 import useStyles from '../styles';
 
-const openTwoIdsBlog = () => browser.tabs.create({ url: icIdsUrl });
-
 const Step3 = ({
-  asset, amount, address, addressInfo, handleSendClick, error,
+  asset, amount, address, addressInfo, handleSendClick, error, transaction,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -39,14 +37,38 @@ const Step3 = ({
   const { navigator } = useRouter();
   const [accountId, setAccountId] = useState('');
 
-  const [open, setOpen] = useState(false);
+  const [ICPModalOpen, setOpenICPModal] = useState(false);
+  const [sendingModalOpen, setSendingModalOpen] = useState(false);
 
   const subtotal = amount * asset.price;
   const fee = +(asset?.price * DEFAULT_FEE).toFixed(5);
 
+  const openSendModal = () => {
+    setOpenICPModal(false);
+    setSendingModalOpen(true);
+  };
+
   const onClick = () => {
     setLoading(true);
+    openSendModal();
     handleSendClick();
+  };
+
+  const redirectToICRocks = () => {
+    if (!loading) {
+      browser.tabs.create({ url: `https://ic.rocks/account/${accountId}` });
+    }
+  };
+
+  const openICRocksTx = () => {
+    navigator.navigate('home');
+    browser.tabs.create({ url: `https://ic.rocks/transaction/${transaction.hash}` });
+  };
+
+  const openTwoIdsBlog = () => {
+    if (!loading) {
+      browser.tabs.create({ url: icIdsUrl });
+    }
   };
 
   useEffect(() => {
@@ -100,7 +122,7 @@ const Step3 = ({
                           {t('send.accountId')}
                         </div>
                         <Info
-                          onClick={() => setOpen(true)}
+                          onClick={() => setOpenICPModal(true)}
                           color="#3574F4"
                           size={16}
                           className={classes.infoIcon}
@@ -122,7 +144,7 @@ const Step3 = ({
                         <img
                           src={ArrowUpRight}
                           className={classes.arrowUpRight}
-                          onClick={() => browser.tabs.create({ url: `https://ic.rocks/account/${accountId}` })}
+                          onClick={redirectToICRocks}
                         />
                       </div>
                     </div>
@@ -148,16 +170,47 @@ const Step3 = ({
 
         <Dialog
           title={t('send.icpModalTitle')}
-          onClose={() => setOpen(false)}
-          open={open}
+          onClose={() => setOpenICPModal(false)}
+          open={ICPModalOpen}
           component={(
             <div className={classes.modal}>
               <Typography>{t('send.icpModalText')}</Typography>
-              <Button variant="rainbow" value={t('send.icpModalButton1')} onClick={() => setOpen(false)} fullWidth />
+              <Button
+                variant="rainbow"
+                value={t('send.icpModalButton1')}
+                onClick={() => setOpenICPModal(false)}
+                fullWidth
+                disabled={loading}
+              />
               <LinkButton
                 value={t('send.icpModalButton2')}
                 onClick={openTwoIdsBlog}
               />
+            </div>
+          )}
+        />
+        <Dialog
+          closeable={false}
+          open={sendingModalOpen}
+          component={(
+            <div className={classes.sendingModal}>
+              <Plug size="big" message={t(`send.plug${transaction ? 'LetsGo' : 'Chill'}`)} />
+              {transaction ? (
+                <>
+                  <Typography className={classes.sendModalTitle}>{t('send.transactionSuccess')}</Typography>
+                  <Button
+                    variant="rainbow"
+                    value={t('send.returnHome')}
+                    onClick={() => navigator.navigate('home', 1)}
+                  />
+                  <LinkButton onClick={openICRocksTx} value={t('send.viewTxOnICRocks')} />
+                </>
+              ) : (
+                <>
+                  <Typography className={classes.sendModalTitle}>{t('send.transactionInProgress')}</Typography>
+                  <Typography className={classes.modalWarning}>{t('send.doNotClose')}</Typography>
+                </>
+              )}
             </div>
           )}
         />
@@ -196,7 +249,6 @@ const Step3 = ({
             loading={loading}
           />
         </Grid>
-
       </Grid>
     </Container>
   );
@@ -209,6 +261,7 @@ Step3.propTypes = {
   addressInfo: PropTypes.objectOf(PropTypes.object).isRequired,
   handleSendClick: PropTypes.func.isRequired,
   error: PropTypes.bool,
+  transaction: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 Step3.defaultProps = {
