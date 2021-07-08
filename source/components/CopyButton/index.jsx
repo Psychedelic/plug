@@ -36,8 +36,8 @@ const CopyButton = ({ text, placement, ...other }) => {
       classes={{
         tooltipPlacementBottom: classes.tooltip,
         tooltipPlacementTop: classes.tooltip,
-        tooltipPlacementLeft: classes.tooltip,
-        tooltipPlacementRight: classes.tooltip,
+        tooltipPlacementLeft: classes.tooltipSides,
+        tooltipPlacementRight: classes.tooltipSides,
       }}
       title={tooltipText}
       arrow
