@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import FleekImg from '@assets/icons/Fleek.svg';
 
 import { useContacts } from '@hooks';
 import { ActionDialog, IDInput } from '@components';
+import EMOJIS from '@shared/constants/emojis';
 import {
   FormItem, MultiInput, Container, Button, Dialog, Alert, TextInput,
 } from '@ui';
@@ -46,7 +46,7 @@ const Step1 = ({
     const contact = {
       name: contactName,
       id: address,
-      image: FleekImg,
+      image: EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
     };
     handleAddContact(contact);
     setSelectedContact(contact);
