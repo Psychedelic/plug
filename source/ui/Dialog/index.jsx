@@ -9,20 +9,21 @@ import MenuItem from '../MenuItem';
 import useStyles from './styles';
 
 const Dialog = ({
-  title, items, onClose, selectedValue, open, component,
+  title, items, onClose, selectedValue, open, component, closeable,
 }) => {
   const classes = useStyles();
 
   const handleClose = () => {
+    if (!closeable) return;
     if (selectedValue) {
-      onClose(selectedValue);
+      onClose?.(selectedValue);
     } else {
-      onClose();
+      onClose?.();
     }
   };
 
   const handleItemClick = (value) => {
-    onClose(value);
+    onClose?.(value);
   };
 
   return (
@@ -65,6 +66,7 @@ export default Dialog;
 Dialog.defaultProps = {
   component: null,
   selectedValue: null,
+  closeable: true,
 };
 
 Dialog.propTypes = {
@@ -77,4 +79,5 @@ Dialog.propTypes = {
   open: PropTypes.bool.isRequired,
   selectedValue: PropTypes.string,
   component: PropTypes.node,
+  closeable: PropTypes.bool,
 };
