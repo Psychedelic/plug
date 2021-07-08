@@ -11,7 +11,7 @@ export const walletSlice = createSlice({
     name: 'Main IC Wallet',
     principalId: '',
     accountId: '',
-    emoji: '🔌',
+    emoji: '👽',
     transactions: [],
     assets: [],
   },
@@ -26,9 +26,13 @@ export const walletSlice = createSlice({
       const {
         accountId, icon, name, identity,
       } = action.payload;
+      /* eslint-disable no-underscore-dangle */
       const id = Array.isArray(identity)
         ? Ed25519KeyIdentity.fromParsedJson(identity)
-        : Ed25519KeyIdentity.fromParsedJson([identity._publicKey.derKey, identity._privateKey]); // eslint-disable-line
+        : Ed25519KeyIdentity.fromParsedJson([
+          identity._publicKey.derKey,
+          identity._privateKey,
+        ]);
       const principalId = id.getPrincipal().toString();
       state.accountId = accountId;
       state.icon = icon;
@@ -47,6 +51,7 @@ export const walletSlice = createSlice({
           status: ACTIVITY_STATUS[trx?.status],
           to: trx?.to,
           plug: null,
+          from: trx?.from,
         };
         return transaction;
       };

@@ -82,7 +82,8 @@
     "documentation": "Documentation",
     "blog": "Blog",
     "followUs": "Follow us on Twitter",
-    "review": "Review Plug"
+    "review": "Review Plug",
+    "discord": "Join our Discord"
   },
   "settings": {
     "title": "Settings",
@@ -120,10 +121,10 @@
     "runCommandTitle": "Run the following command",
     "runCommandSubtitle": "To deposit Cycles from a Cycles Wallet you need to run a DFX CLI command.",
     "runCommandButton": "Ok, I ran the command.",
-    "depositIcpTitle1": "1. Deposit Using Principal ID 😎",
-    "depositIcpSubtitle1": "Use when receiving from Plug accounts & users, or other apps that support sending directly to Principal ID's.",
-    "depositIcpTitle2": "2. Deposit Using Account ID 😑",
-    "depositIcpSubtitle2": "Use when receiving from exchanges or other apps that only support sending to Account ID’s.",
+    "depositIcpTitle1": "From another Plug Account",
+    "depositIcpSubtitle1": "Use when receiving from Plug accounts or other apps that support sending directly to Principal ID's.",
+    "depositIcpTitle2": "From Exchange, DFX, or Account ID",
+    "depositIcpSubtitle2": "Use when receiving from exchanges or other apps that only support sending to Account ID's.",
     "scanQrCode": "Scan QR Code"
   },
   "swap": {
@@ -143,7 +144,7 @@
     "asset": "Asset",
     "to": "To:",
     "inputId": "Enter Principal ID or Account ID",
-    "available": "available to send",
+    "available": "available to send \n(considering fees)",
     "selectAsset": "Select asset you're sending",
     "moreComingSoon": "MORE COMING SOON",
     "payWith": "Pay with:",

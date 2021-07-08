@@ -87,7 +87,7 @@ const Step1 = ({
             )}
             subtitle={(
               <div className={classes.subtitle}>
-                <Typography variant="subtitle2">
+                <Typography variant="subtitle2" className={classes.pre}>
                   <NumberFormat
                     value={availableAmount.amount}
                     decimalScale={5}

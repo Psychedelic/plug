@@ -140,7 +140,13 @@ const useSteps = () => {
         params: {},
       }, (keyringAssets) => {
         dispatch(setAssets(keyringAssets));
-        setAvailableAmount(keyringAssets?.[0]?.amount);
+        setAvailableAmount(
+          {
+            amount: keyringAssets?.[0]?.amount,
+            prefix: primaryValue.prefix,
+            suffix: primaryValue.suffix,
+          },
+        );
       });
     }
   }, []);

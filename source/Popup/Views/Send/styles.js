@@ -142,4 +142,7 @@ export default makeStyles((theme) => ({
     flexDirection: 'column',
     marginTop: -16,
   },
+  pre: {
+    whiteSpace: 'pre',
+  },
 }));

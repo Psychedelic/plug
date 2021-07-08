@@ -24,6 +24,7 @@ const Activity = () => {
         });
     }
   }, [icpPrice]);
+
   return (
     <LoadingWrapper loading={!transactions.length && transactionsLoading}>
       <div className={classes.root}>
@@ -33,7 +34,7 @@ const Activity = () => {
               <ActivityItem key={index.toString()} {...item} />
             ))
             : <EmptyState />
-          }
+        }
       </div>
     </LoadingWrapper>
   );

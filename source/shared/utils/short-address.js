@@ -1,6 +1,6 @@
 const defaultConfig = {
-  leftSize: 6,
-  rightSize: 4,
+  leftSize: 5,
+  rightSize: 3,
   separator: '...',
   replace: [[/-/g, '']],
 };

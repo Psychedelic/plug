@@ -33,7 +33,7 @@ export default makeStyles((theme) => ({
   iconQrCode: {
     width: 18,
     height: 18,
-    marginRight: 6,
+    marginRight: 12,
     color: '#367FF8',
   },
   orContainer: {
@@ -50,5 +50,19 @@ export default makeStyles((theme) => ({
     height: 1,
     borderBottom: '1px solid #D1D5DB',
     flex: 1,
+  },
+  badge: {
+    marginRight: 12,
+    borderRadius: 6,
+    width: 'fit-content',
+    padding: '2px 8px',
+  },
+  principalBadge: {
+    background: '#D7FFDC',
+    color: '#009612',
+  },
+  accountBadge: {
+    background: '#D3E1FF',
+    color: '#3574F4',
   },
 }));
