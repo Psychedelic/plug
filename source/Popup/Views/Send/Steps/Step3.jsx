@@ -190,7 +190,7 @@ const Step3 = ({
           )}
         />
         <Dialog
-          onClose={() => setSendingModalOpen(false)}
+          closeable={false}
           open={sendingModalOpen}
           component={(
             <div className={classes.sendingModal}>
