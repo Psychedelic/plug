@@ -201,7 +201,7 @@ const Step3 = ({
                   <Button
                     variant="rainbow"
                     value={t('send.returnHome')}
-                    onClick={() => navigator.navigate('home')}
+                    onClick={() => navigator.navigate('home', 1)}
                   />
                   <LinkButton onClick={openICRocksTx} value={t('send.viewTxOnICRocks')} />
                 </>
