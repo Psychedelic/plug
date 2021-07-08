@@ -5,6 +5,10 @@ export default makeStyles((theme) => ({
     width: 32,
     height: 45,
   },
+  medium: {
+    width: 50,
+    height: 73,
+  },
   big: {
     width: 80,
     height: 116,
