@@ -6,7 +6,7 @@ The Plug Firefox addon is currently installed from a developer build.
 
 ## Download the latest version of plug 
 
-Download the latest plug firefox xpi file  from the our Github [releases page](https://github.com/Psychedelic/plug/releases):
+Download (right click and `Save Link As...`) the latest plug firefox xpi file  from the our Github [releases page](https://github.com/Psychedelic/plug/releases):
 
 ![GitHub releases page]('./../images/github_releases_page.png)
 
