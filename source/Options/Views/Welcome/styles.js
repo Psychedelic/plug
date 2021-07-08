@@ -15,6 +15,10 @@ export default makeStyles((theme) => ({
     zIndex: 2,
     backdropFilter: 'blur(7px)',
     borderRadius: 10,
+
+    '@supports ( -moz-appearance:none )': {
+      background: 'white',
+    },
   },
   marginBottom: {
     marginBottom: theme.spacing(2),

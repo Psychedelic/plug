@@ -49,7 +49,7 @@ export default makeStyles((theme) => ({
     },
   },
   cancelable: {
-    padding: '0 16px 0 12px',
+    padding: '0 8px 0 16px',
     height: '100%',
     width: '100%',
   },
