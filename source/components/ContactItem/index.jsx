@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import shortAddress from '@shared/utils/short-address';
 import { Typography } from '@material-ui/core';
 import { Trash2, X } from 'react-feather';
-import { UserIcon } from '@components';
+import UserIcon from '../UserIcon';
 import CopyButton from '../CopyButton';
 import useStyles from './styles';
 
