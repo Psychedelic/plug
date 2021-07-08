@@ -51,6 +51,7 @@ export const walletSlice = createSlice({
           status: ACTIVITY_STATUS[trx?.status],
           to: trx?.to,
           plug: null,
+          from: trx?.from,
         };
         return transaction;
       };
