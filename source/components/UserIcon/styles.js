@@ -14,13 +14,13 @@ export default makeStyles({
     cursor: 'pointer',
   },
   big: {
-    width: 58,
-    height: 58,
-    fontSize: 34,
+    width: 50,
+    height: 50,
+    fontSize: 25,
   },
   small: {
-    width: 37,
-    height: 37,
-    fontSize: 20,
+    width: 40,
+    height: 40,
+    fontSize: 22,
   },
 });

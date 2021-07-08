@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import FleekImg from '@assets/icons/Fleek.svg';
 import Grid from '@material-ui/core/Grid';
 import {
   FormItem, Container, Button, TextInput,
 } from '@ui';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import EMOJIS from '@shared/constants/emojis';
 import { validateAccountId, validatePrincipalId } from '../../Send/hooks/utils';
 
 const AddContact = ({ handleAddContact }) => {
@@ -35,6 +35,7 @@ const AddContact = ({ handleAddContact }) => {
                 fullWidth
                 value={name}
                 onChange={handleChangeName}
+                inputProps={{ maxLength: 25 }}
                 type="text"
               />
             )}
@@ -68,7 +69,7 @@ const AddContact = ({ handleAddContact }) => {
             onClick={() => handleAddContact({
               name,
               id,
-              image: FleekImg,
+              image: EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
             })}
           />
         </Grid>

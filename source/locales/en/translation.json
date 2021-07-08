@@ -165,7 +165,14 @@
     "icpModalButton1": "Ok, I understand",
     "icpModalButton2": "Learn more about the two ID's",
     "icpAlertText": "You’re sending ICP to an Account ID",
-    "icpAlertButton": "Learn more"
+    "icpAlertButton": "Learn more",
+    "transactionInProgress": "Transaction in Progress...",
+    "transactionSuccess": "Transaction successful",
+    "returnHome": "Return home",
+    "viewTxOnICRocks": "View tx on ic.rocks",
+    "doNotClose": "Don't click away from this screen for a few seconds while your transaction is being sent to the network. If you do your tx won't be processed.",
+    "plugChill": "Chill for a sec...",
+    "plugLetsGo": "Let's go!! 😎"
   },
   "cycleTransactions": {
     "details": "Details",
