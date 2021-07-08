@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import shortAddress from '@shared/utils/short-address';
 import { Typography } from '@material-ui/core';
 import { Trash2, X } from 'react-feather';
+import { UserIcon } from '@components';
 import CopyButton from '../CopyButton';
 import useStyles from './styles';
 
@@ -18,10 +19,7 @@ const ContactItem = ({
         handleCancel ? classes.cancelable : classes.border)}
       onClick={() => handleClick(contact)}
     >
-      <img
-        src={contact.image}
-        className={handleCancel ? classes.smallImage : classes.image}
-      />
+      <UserIcon icon={contact.image} />
       <div className={classes.nameContainer}>
         <Typography variant="h5">{contact.name}</Typography>
         <Typography variant="subtitle1">{shortAddress(contact.id)}</Typography>
