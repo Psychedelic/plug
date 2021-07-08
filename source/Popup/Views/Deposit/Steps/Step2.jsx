@@ -9,6 +9,7 @@ import { Typography } from '@material-ui/core';
 import shortAddress from '@shared/utils/short-address';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import clsx from 'clsx';
 import useStyles from '../styles';
 import { currencyPropTypes } from '../../../../shared/constants/currencies';
 import { sourcePropTypes } from '../../../../shared/constants/sources';
@@ -58,6 +59,9 @@ const Step2 = ({ selectedSource, selectedAsset }) => {
               <InputBase>
                 <div className={classes.addressContainer}>
                   <Typography variant="h4" style={{ marginRight: 'auto' }}>{shortAddress(principalId)}</Typography>
+                  <div className={clsx(classes.badge, classes.principalBadge)}>
+                    {t('send.principalId')}
+                  </div>
                   <IconQrCode
                     onClick={() => setOpenQr(true)}
                     classes={classes}
@@ -93,6 +97,9 @@ const Step2 = ({ selectedSource, selectedAsset }) => {
               <InputBase>
                 <div className={classes.addressContainer}>
                   <Typography variant="h4" style={{ marginRight: 'auto' }}>{shortAddress(accountId)}</Typography>
+                  <div className={clsx(classes.badge, classes.accountBadge)}>
+                    {t('send.accountId')}
+                  </div>
                   <CopyButton text={accountId} placement="top" />
                 </div>
               </InputBase>
