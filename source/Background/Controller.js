@@ -149,9 +149,9 @@ backgroundController.exposeController(
   async (opts, accountId) => {
     const { callback } = opts;
     const keyringHandler = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
-    const response = await keyringHandler();
+    const icpBalance = await keyringHandler();
 
-    callback(null, response);
+    callback(null, icpBalance);
   },
 );
 
@@ -160,9 +160,9 @@ backgroundController.exposeController(
   async (opts, to, amount, params) => {
     const { callback } = opts;
     const keyringHandler = getKeyringHandler(HANDLER_TYPES.SEND_ICP, keyring);
-    const response = await keyringHandler({ to, amount }); // await is necessary
+    const txnResponse = await keyringHandler({ to, amount, args });
 
-    callback(null, response);
+    callback(null, txnResponse);
   },
 );
 
