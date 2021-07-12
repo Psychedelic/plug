@@ -69,5 +69,5 @@ TabPanel.propTypes = {
   children: PropTypes.node.isRequired,
   value: PropTypes.number.isRequired,
   index: PropTypes.number.isRequired,
-  classes: PropTypes.objectOf(PropTypes.object).isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
 };
