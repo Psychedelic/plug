@@ -49,7 +49,7 @@ const AddContact = ({ handleAddContact, contacts }) => {
   };
 
   useEffect(() => {
-    if (id !== null && id !== '') {
+    if (id) {
       validateContact();
     } else {
       setInvalidReason('');
