@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import useStyles from './styles';
 
 const MenuItem = ({
-  name, image, onClick, size, border, disabled,
+  name, image, onClick, size, border, disabled, alignLeft,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -17,7 +17,7 @@ const MenuItem = ({
       key={name}
       onClick={onClick}
       disabled={disabled}
-      className={clsx(size !== 'small' ? classes.big : classes.small, border && classes.border)}
+      className={clsx(size !== 'small' ? classes.big : classes.small, border && classes.border, alignLeft && classes.alignLeft)}
     >
       <ListItemIcon className={classes.icon}>
         <img src={image} className={size === 'large' ? classes.bigImage : classes.smallImage} />
@@ -43,6 +43,7 @@ MenuItem.defaultProps = {
   border: false,
   size: 'medium',
   disabled: false,
+  alignLeft: false,
 };
 
 MenuItem.propTypes = {
@@ -52,4 +53,5 @@ MenuItem.propTypes = {
   size: PropTypes.oneOf(['small', 'medium', 'large']),
   border: PropTypes.bool,
   disabled: PropTypes.bool,
+  alignLeft: PropTypes.bool,
 };
