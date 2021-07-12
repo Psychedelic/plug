@@ -66,6 +66,7 @@ const Profile = () => {
                         key={item.name}
                         name={item.name}
                         image={item.image}
+                        alignLeft={item.alignLeft}
                         onClick={(e) => { item.onClick(); handleClose(e); }}
                       />
                     ))
