@@ -15,9 +15,7 @@
 
   "permissions": [
     "activeTab",
-    "storage",
-    "http://*/*",
-    "https://*/*"
+    "storage"
   ],
 
   "content_security_policy": "script-src 'self' 'wasm-eval'; object-src 'self'",

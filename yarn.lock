@@ -1659,10 +1659,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.9.2.tgz#adea7b6953cbb34651766b0548468e743c6a2353"
   integrity sha512-VZMYa7+fXHdwIq1TDhSXoVmSPEGM/aa+6Aiq3nVVJ9bXr24zScr+NlKFKC3iPljA7ho/GAZr+d2jOf5GIRC30Q==
 
-"@psychedelic/plug-controller@0.0.13":
-  version "0.0.13"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.0.13/a4d1bf2ad52d555119e5ad1223925f3e24a62a9c1a0a4bbd66725aa4a677340c#9ea3059e79670a7d59bd60a1eea51bf65349eb57"
-  integrity sha512-bD0ups+lQQbz9fweTEXCXBgvqFfs9JlLdJluoV2gmalOlCM0czTHv47g/EFXoaenn40o81zR1WEmGpzyfPk4/w==
+"@psychedelic/plug-controller@0.1.1":
+  version "0.1.1"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.1.1/013ee4c613a5f7d3654ca562d606b0c0dcb7bfbe2519fadc0a892b6b9a283282#670d74142edda7526cb70f3c3773d923adf55764"
+  integrity sha512-+7M7VNEfOnBZYqimAEHiXFD+g9YWIkeFVOaNOCqrcyp6IjSzqisiQgeM6ElVZ/RZ9Evz1kV3E7x7wY407tzMfA==
   dependencies:
     "@babel/preset-env" "^7.14.4"
     "@dfinity/agent" "^0.8.9"
