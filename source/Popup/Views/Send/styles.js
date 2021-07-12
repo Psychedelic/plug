@@ -149,6 +149,7 @@ export default makeStyles((theme) => ({
     whiteSpace: 'pre',
   },
   sendingModal: {
+    padding: 16,
     height: 320,
     margin: '-10px 0',
     display: 'flex',
