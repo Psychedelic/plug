@@ -17,10 +17,10 @@ const MenuItem = ({
       key={name}
       onClick={onClick}
       disabled={disabled}
-      className={clsx(size !== 'small' ? classes.big : classes.small, border && classes.border, alignLeft && classes.alignLeft)}
+      className={clsx(size !== 'small' ? classes.big : classes.small, border && classes.border)}
     >
       <ListItemIcon className={classes.icon}>
-        <img src={image} className={size === 'large' ? classes.bigImage : classes.smallImage} />
+        <img src={image} className={clsx(size === 'large' ? classes.bigImage : classes.smallImage, alignLeft && classes.alignLeft)} />
       </ListItemIcon>
       <Typography variant="h5" className={classes.text}>{name}</Typography>
 
