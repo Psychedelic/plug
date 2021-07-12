@@ -3,7 +3,7 @@ import React from 'react';
 import { string } from 'prop-types';
 import PlugLogo from '@assets/icons/plug.svg';
 
-import styles from './styles.module.scss';
+import styles from './styles.module.css';
 
 function Loading({ className }) {
   return (
