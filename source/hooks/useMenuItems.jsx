@@ -13,6 +13,7 @@ const useMenuItems = () => {
     {
       image: SettingsIcon,
       name: t('profile.settings'),
+      alignLeft: true,
       onClick: () => navigator.navigate('settings'),
     },
     {
