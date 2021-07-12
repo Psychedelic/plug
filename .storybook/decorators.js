@@ -4,12 +4,11 @@ import { theme } from '../source/ui';
 // TODO: Mock store
 import store from '../source/redux/store';
 
-// const store = configureStore({
-//   reducer: {
-//     wallet: {},
-//     icp: {},
-//   }
-// });
+import {
+  Route,
+  Router,
+  StorageMock,
+} from '../source/components';
 
 export const withProvider = (story) => (
   <ProviderWrapper
@@ -18,4 +17,18 @@ export const withProvider = (story) => (
   >
     { story() }
   </ProviderWrapper>
+);
+
+const storageMock = new StorageMock();
+
+export const RouterWrapper = ({ story }) => (
+  <Router
+    initialRouteName="home"
+    storage={storageMock}
+  >
+    <Route
+      name="home"
+      component={story}
+    />
+  </Router>
 );
