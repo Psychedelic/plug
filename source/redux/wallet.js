@@ -23,12 +23,12 @@ export const walletSlice = createSlice({
     setAccountInfo: (state, action) => {
       // Chrome serializes everything with toJSON
       const {
-        accountId, icon, name, principalId,
+        accountId, icon, name, principal,
       } = action.payload;
       state.accountId = accountId;
       state.icon = icon;
       state.name = name;
-      state.principalId = principalId;
+      state.principalId = principal;
     },
     setTransactions: (state, action) => {
       const mapTransaction = (trx) => {
