@@ -33,19 +33,17 @@ Ensure you have
 - [Node.js](https://nodejs.org) 10 or later installed
 - [Yarn](https://yarnpkg.com) v1 or v2 installed
 
-Authenticate to Github registry by:
+You need a **personal access token** to install some of our npm packages. 
+
+The token must have the `repo` and `read:packages` scopes to login to the [GitHub Package Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages).
+
+If you don't have one, create the personal access token [in the developer settings](https://github.com/settings/tokens).
+
+Run the following command to authenticate, using the **personal access token** as your **password**:
 
 ```
 npm login --registry=https://npm.pkg.github.com --scope=@Psychedelic
 ```
-
-This because the packages under the organisation scope [@Psychedelic](https://github.com/Psychedelic) are published under the [Psychedelic packages](https://github.com/orgs/Psychedelic/packages), as you can see in the `.npmrc`:
-
-```
-@psychedelic:registry=https://npm.pkg.github.com
-```
-
-Choose the github username that you use as a member of @Psychedelic and for the password, a [personal access token](https://github.com/settings/tokens), with the `repo` and `read:packages` scopes (permissions).
 
 Then run the following:
 
