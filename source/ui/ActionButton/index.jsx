@@ -47,29 +47,49 @@ const ActionButton = ({ type, onClick }) => {
   const onMouseOver = () => setHovered(true);
   const onMouseLeave = () => setHovered(false);
 
+  if (tooltip !== undefined) {
+    return (
+      <HoverAnimation disabled={disabled}>
+        <Tooltip
+          classes={{ tooltipPlacementTop: classes.tooltip }}
+          title={tooltip}
+          arrow
+          open={!!tooltip && hovered}
+          placement="top"
+        >
+          <div
+            className={classes.root}
+            onClick={onClick}
+            onMouseEnter={onMouseOver}
+            onMouseLeave={onMouseLeave}
+          >
+            <IconButton className={clsx(classes.icon, classes[iconClass])} disabled={disabled}>
+              {icon}
+            </IconButton>
+            <span className={clsx(classes.text, classes[textClass])}>
+              {name}
+            </span>
+          </div>
+        </Tooltip>
+      </HoverAnimation>
+    );
+  }
+
   return (
     <HoverAnimation disabled={disabled}>
-      <Tooltip
-        classes={{ tooltipPlacementTop: classes.tooltip }}
-        title={tooltip}
-        arrow
-        open={!!tooltip && hovered}
-        placement="top"
+      <div
+        className={classes.root}
+        onClick={onClick}
+        onMouseEnter={onMouseOver}
+        onMouseLeave={onMouseLeave}
       >
-        <div
-          className={classes.root}
-          onClick={onClick}
-          onMouseEnter={onMouseOver}
-          onMouseLeave={onMouseLeave}
-        >
-          <IconButton className={clsx(classes.icon, classes[iconClass])} disabled={disabled}>
-            {icon}
-          </IconButton>
-          <span className={clsx(classes.text, classes[textClass])}>
-            {name}
-          </span>
-        </div>
-      </Tooltip>
+        <IconButton className={clsx(classes.icon, classes[iconClass])} disabled={disabled}>
+          {icon}
+        </IconButton>
+        <span className={clsx(classes.text, classes[textClass])}>
+          {name}
+        </span>
+      </div>
     </HoverAnimation>
   );
 };
