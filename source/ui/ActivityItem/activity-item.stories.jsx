@@ -12,7 +12,12 @@ const Template = (args) => <ActivityItem {...args} />;
 export const Default = Template.bind({});
 Default.args = {
   type: ACTIVITY_TYPES.SEND,
-  currency: CURRENCIES.ICP,
+  currency: {
+    id: 1,
+    name: 'ICP',
+    value: CURRENCIES.ICP,
+    image: '', // TODO: add missing
+  },
   wallet: 'rwlgt...ii-cai',
   amount: -182.27,
   value: 2129.12,

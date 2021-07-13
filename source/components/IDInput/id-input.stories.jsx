@@ -8,4 +8,9 @@ export default {
 const Template = (args) => <div style={{ width: 420 }}><IDInput {...args} /></div>;
 
 export const Default = Template.bind({});
-Default.args = {};
+Default.args = {
+  addressInfo: {
+    isValid: true,
+  },
+  contacts: [],
+};
