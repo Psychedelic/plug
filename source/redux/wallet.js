@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Ed25519KeyIdentity } from '@dfinity/identity';
 import { ACTIVITY_STATUS, ACTIVITY_TYPES } from '@shared/constants/activity';
 import { CURRENCIES } from '@shared/constants/currencies';
 import { E8S_PER_ICP, NANOS_PER_SECOND } from '@background/Keyring';
@@ -26,23 +25,12 @@ export const walletSlice = createSlice({
 
       // Chrome serializes everything with toJSON
       const {
-        accountId,
-        icon,
-        name,
-        identity,
+        accountId, icon, name, principal,
       } = action.payload;
-      /* eslint-disable no-underscore-dangle */
-      const id = Array.isArray(identity)
-        ? Ed25519KeyIdentity.fromParsedJson(identity)
-        : Ed25519KeyIdentity.fromParsedJson([
-          identity._publicKey.derKey,
-          identity._privateKey,
-        ]);
-      const principalId = id.getPrincipal().toString();
       state.accountId = accountId;
       state.icon = icon;
       state.name = name;
-      state.principalId = principalId;
+      state.principalId = principal;
     },
     setTransactions: (state, action) => {
       const mapTransaction = (trx) => {
