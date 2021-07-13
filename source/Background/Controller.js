@@ -148,8 +148,8 @@ backgroundController.exposeController(
   'requestBalance',
   async (opts, metadata, accountId) => {
     const { callback, message, sender } = opts;
-    const { callId } = message.data.data;
-    const { portId } = sender.id;
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
 
     const keyringHandler = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
     const icpBalance = await keyringHandler(accountId);
@@ -162,8 +162,8 @@ backgroundController.exposeController(
   'requestTransfer',
   async (opts, metadata, args) => {
     const { callback, message, sender } = opts;
-    const { callId } = message.data.data;
-    const { portId } = sender.id;
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
 
     const url = qs.stringifyUrl({
       url: 'transfer-icp.html',
