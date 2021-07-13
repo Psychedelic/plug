@@ -146,23 +146,49 @@ backgroundController.exposeController(
 
 backgroundController.exposeController(
   'requestBalance',
-  async (opts, accountId) => {
-    const { callback } = opts;
-    const keyringHandler = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
-    const icpBalance = await keyringHandler();
+  async (opts, metadata, accountId) => {
+    const { callback, message, sender } = opts;
+    const { callId } = message.data.data;
+    const { portId } = sender.id;
 
-    callback(null, icpBalance);
+    const keyringHandler = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
+    const icpBalance = await keyringHandler(accountId);
+
+    callback(null, icpBalance, [{ portId, callId }]);
   },
 );
 
 backgroundController.exposeController(
   'requestTransfer',
-  async (opts, to, amount, params) => {
-    const { callback } = opts;
-    const keyringHandler = getKeyringHandler(HANDLER_TYPES.SEND_ICP, keyring);
-    const txnResponse = await keyringHandler({ to, amount, args });
+  async (opts, metadata, args) => {
+    const { callback, message, sender } = opts;
+    const { callId } = message.data.data;
+    const { portId } = sender.id;
 
-    callback(null, txnResponse);
+    const url = qs.stringifyUrl({
+      url: 'transfer-icp.html',
+      query: {
+        callId,
+        portId,
+        metadataJson: JSON.stringify(metadata),
+        // incomingRequestsJson: JSON.stringify(requests),
+      },
+    });
+
+    // extension.windows.create({
+    //   url,
+    //   type: 'popup',
+    //   width: CYCLE_WITHDRAWAL_SIZES.width,
+    //   height:
+    //     requests.length > 1
+    //       ? CYCLE_WITHDRAWAL_SIZES.detailsHeightBig
+    //       : CYCLE_WITHDRAWAL_SIZES.detailHeightSmall,
+    // });
+
+    const keyringHandler = getKeyringHandler(HANDLER_TYPES.SEND_ICP, keyring);
+    const transferResponse = await keyringHandler(args);
+
+    callback(null, transferResponse, [{ portId, callId }]);
   },
 );
 

@@ -90,8 +90,12 @@ export const getKeyringHandler = (type, keyring) => ({
     return formatAssets(e8s, icpPrice);
   },
   [HANDLER_TYPES.GET_BALANCE]: async (accountId) => {
-    const e8s = await keyring.getBalance();
-    return formatAssets(e8s);
+    try {
+      const e8s = await keyring.getBalance(accountId);
+      return formatAssets(e8s);
+    } catch (error) {
+      return error; // ToDo: improve error message from plug controller
+    }
   },
   [HANDLER_TYPES.SEND_ICP]: async ({ to, amount }) => {
     try {
