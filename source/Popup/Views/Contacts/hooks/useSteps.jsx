@@ -61,8 +61,6 @@ const useSteps = () => {
     },
   ];
 
-  console.log('contacts hook', contacts);
-
   return views[currentView];
 };
 
