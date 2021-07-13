@@ -32,5 +32,5 @@ GenericIcon.defaultProps = {
 
 GenericIcon.propTypes = {
   image: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(Object.keys(ACTIVITY_TYPES)),
+  type: PropTypes.oneOf(Object.values(ACTIVITY_TYPES)),
 };

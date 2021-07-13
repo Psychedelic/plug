@@ -38,6 +38,10 @@ export default makeStyles((theme) => ({
       borderBottom: '1px solid #E8EBEF',
     },
   },
+  alignLeft: {
+    marginLeft: -3,
+    marginRight: 3,
+  },
   comingSoon: {
     marginLeft: 'auto',
   },

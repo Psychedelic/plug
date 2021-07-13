@@ -74,6 +74,7 @@ export default makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
+    alignItems: 'flex-end',
   },
   flex: {
     display: 'flex',
@@ -90,7 +91,7 @@ export default makeStyles((theme) => ({
   arrowUpRight: {
     cursor: 'pointer',
     position: 'absolute',
-    right: -20,
+    right: -15,
   },
   to: {
     width: 38,
@@ -114,8 +115,10 @@ export default makeStyles((theme) => ({
   },
   principalText: {
     color: '#7A818E',
+    paddingRight: 5,
   },
   accountText: {
+    padding: 5,
     color: '#111827',
   },
   alertContainer: {
@@ -146,6 +149,7 @@ export default makeStyles((theme) => ({
     whiteSpace: 'pre',
   },
   sendingModal: {
+    padding: 16,
     height: 320,
     margin: '-10px 0',
     display: 'flex',

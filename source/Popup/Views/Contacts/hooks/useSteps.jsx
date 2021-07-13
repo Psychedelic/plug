@@ -9,7 +9,9 @@ import AddContact from '../components/AddContact';
 import Home from '../components/Home';
 
 const useSteps = () => {
-  const { contacts, handleAddContact, handleRemoveContact } = useContacts();
+  const {
+    contacts, handleAddContact, handleRemoveContact, ungroupedContacts,
+  } = useContacts();
   const [currentView, setCurrentView] = useState(0);
 
   const { navigator } = useRouter();
@@ -52,12 +54,14 @@ const useSteps = () => {
       ...firstView,
     },
     {
-      component: <AddContact handleAddContact={addContact} />,
+      component: <AddContact handleAddContact={addContact} contacts={ungroupedContacts} />,
       left: leftButton(() => handleChangeView(0)),
       right: null,
       center: t('contacts.addContact'),
     },
   ];
+
+  console.log('contacts hook', contacts);
 
   return views[currentView];
 };

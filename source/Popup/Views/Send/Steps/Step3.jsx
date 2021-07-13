@@ -43,6 +43,13 @@ const Step3 = ({
   const subtotal = amount * asset.price;
   const fee = +(asset?.price * DEFAULT_FEE).toFixed(5);
 
+  const shortAddressConfig = {
+    leftSize: 8,
+    rightSize: 3,
+    separator: '...',
+    replace: [],
+  };
+
   const openSendModal = () => {
     setOpenICPModal(false);
     setSendingModalOpen(true);
@@ -131,14 +138,19 @@ const Step3 = ({
                     </div>
                     <div className={classes.addressContainer}>
                       <div className={clsx(classes.flex, classes.margin)}>
-                        <img className={classes.image} src={AccountImg} />
-                        <Typography variant="subtitle1" className={classes.principalText}>{shortAddress(address)}</Typography>
+                        <Typography
+                          variant="subtitle1"
+                          className={classes.principalText}
+                        >
+                          {
+                            shortAddress(address, shortAddressConfig)
+                          }
+                        </Typography>
                       </div>
                       <div className={clsx(classes.flex, classes.margin)}>
-                        <img className={classes.image} src={AccountImg} />
                         <Typography variant="subtitle1" className={classes.accountText}>
                           {
-                            shortAddress(accountId)
+                            shortAddress(accountId, shortAddressConfig)
                           }
                         </Typography>
                         <img
@@ -202,6 +214,7 @@ const Step3 = ({
                     variant="rainbow"
                     value={t('send.returnHome')}
                     onClick={() => navigator.navigate('home', 1)}
+                    fullWidth
                   />
                   <LinkButton onClick={openICRocksTx} value={t('send.viewTxOnICRocks')} />
                 </>

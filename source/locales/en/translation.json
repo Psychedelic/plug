@@ -166,7 +166,7 @@
     "icpModalButton2": "Learn more about the two ID's",
     "icpAlertText": "You’re sending ICP to an Account ID",
     "icpAlertButton": "Learn more",
-    "transactionInProgress": "Transaction in Progress...",
+    "transactionInProgress": "Transaction in progress...",
     "transactionSuccess": "Transaction successful",
     "returnHome": "Return home",
     "viewTxOnICRocks": "View tx on ic.rocks",
@@ -233,7 +233,9 @@
     "deleteText": "Are you sure you want to delete",
     "deleteButton": "Delete",
     "newAddress": "New Address Detected!",
-    "addToContacts": "Add to Contacts"
+    "addToContacts": "Add to Contacts",
+    "errorId": "Incorrect ID format.",
+    "errorExists": "This contact already exists under \"{name}\"."
   },
   "addToken": {
     "title": "Add Token",

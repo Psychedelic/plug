@@ -1,14 +1,12 @@
 import React, { StrictMode, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
 import i18n from 'i18next';
-import { ThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import { initReactI18next } from 'react-i18next';
 import browser from 'webextension-polyfill';
 
 import { theme } from '@ui';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import ProviderWrapper from '../shared/ProviderWrapper';
 import Popup from './Popup';
 import initConfig from '../locales';
 import store from '../redux/store';
@@ -36,12 +34,12 @@ const App = () => {
     initialRoute
     && (
       <StrictMode>
-        <Provider store={store}>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Popup initialRoute={initialRoute} />
-          </ThemeProvider>
-        </Provider>
+        <ProviderWrapper
+          store={store}
+          theme={theme}
+        >
+          <Popup initialRoute={initialRoute} />
+        </ProviderWrapper>
       </StrictMode>
     )
   );

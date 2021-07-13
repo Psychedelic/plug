@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 export const IconQrCode = ({ classes, ...props }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    ariaHidden="true"
+    aria-hidden="true"
     className={clsx(classes.icon, classes.iconQrCode)}
     data-icon="qrcode"
     data-prefix="far"
@@ -23,8 +23,8 @@ export const IconQrCode = ({ classes, ...props }) => (
 IconQrCode.propTypes = {
   classes: PropTypes.shape({
     // eslint-disable-next-line react/forbid-prop-types
-    icon: PropTypes.object,
+    icon: PropTypes.string,
     // eslint-disable-next-line react/forbid-prop-types
-    iconQrCode: PropTypes.object,
+    iconQrCode: PropTypes.string,
   }).isRequired,
 };

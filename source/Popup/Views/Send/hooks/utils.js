@@ -3,7 +3,9 @@ import { ALPHANUM_REGEX, PRINCIPAL_REGEX } from './constants';
 
 export const validatePrincipalId = (text) => {
   try {
-    return PRINCIPAL_REGEX.test(text) && Principal.fromText(text);
+    const validRegex = PRINCIPAL_REGEX.test(text);
+    const validPrincipal = text === Principal.fromText(text).toString();
+    return validRegex && validPrincipal;
   } catch (e) {
     return false;
   }

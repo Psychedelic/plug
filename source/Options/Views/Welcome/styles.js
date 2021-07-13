@@ -37,6 +37,7 @@ export default makeStyles((theme) => ({
     width: '100%',
     background: 'white',
     borderRadius: 5,
+    display: 'flex',
   },
   meme: {
     width: '100%',

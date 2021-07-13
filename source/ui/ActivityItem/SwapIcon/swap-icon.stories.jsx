@@ -10,7 +10,17 @@ const Template = (args) => <SwapIcon {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
-  fromCurrency: CURRENCIES.ICP,
-  toCurrency: CURRENCIES.CYCLES,
+  fromCurrency: {
+    id: 1,
+    name: 'ICP',
+    value: CURRENCIES.ICP,
+    image: '', // TODO: add image
+  },
+  toCurrency: {
+    id: 1,
+    name: 'CYCLES',
+    value: CURRENCIES.CYCLES,
+    image: '', // TODO: add image
+  },
   handleChangeSwap: () => null,
 };

@@ -16,4 +16,10 @@ export const Default = Template.bind({});
 Default.args = {
   image: CyclesImg,
   name: 'Cycles',
+  primaryValue: {
+    prefix: '', // TODO: add business logic
+  },
+  secondaryValue: {
+    prefix: '', // TODO: add business logic
+  },
 };

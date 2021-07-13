@@ -42,7 +42,9 @@ const useContacts = () => {
       }, []));
   }, [contacts]);
 
-  return { contacts: groupedContacts, handleAddContact, handleRemoveContact };
+  return {
+    contacts: groupedContacts, handleAddContact, handleRemoveContact, ungroupedContacts: contacts,
+  };
 };
 
 export default useContacts;
