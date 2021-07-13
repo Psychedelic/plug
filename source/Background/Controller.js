@@ -3,7 +3,7 @@ import extension from 'extensionizer';
 import { BackgroundController } from '@fleekhq/browser-rpc';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import PlugController from '@psychedelic/plug-controller';
-import CYCLE_WITHDRAWAL_SIZES from '../Pages/CycleWithdrawal/constants';
+import TRANSFER_SIZES from '../Pages/Transfer/constants';
 import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
 
 const storage = extension.storage.local;
@@ -16,7 +16,7 @@ const backgroundController = new BackgroundController({
     'plug-content-script',
     'notification-port',
     'app-connection-port',
-    'cycle-withdrawal-port',
+    'transfer-port',
   ],
 });
 
@@ -34,7 +34,7 @@ extension.runtime.onMessage.addListener((message, _, sendResponse) => {
   if (!keyringHandler) return;
   keyringHandler(params).then((response) => sendResponse(response));
   // Usually we would not return, but it seems firefox needs us to
-  return true; // eslint-disable-line 
+  return true; // eslint-disable-line
 });
 
 backgroundController.exposeController('isConnected', (opts, url) => {
@@ -107,6 +107,7 @@ backgroundController.exposeController(
   },
 );
 
+/*
 backgroundController.exposeController(
   'requestCycleWithdrawal',
   (opts, metadata, requests) => {
@@ -143,6 +144,7 @@ backgroundController.exposeController(
     callback(null, requests, [{ portId, callId }]);
   },
 );
+*/
 
 backgroundController.exposeController(
   'requestBalance',
@@ -151,7 +153,10 @@ backgroundController.exposeController(
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
 
-    const keyringHandler = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
+    const keyringHandler = getKeyringHandler(
+      HANDLER_TYPES.GET_BALANCE,
+      keyring,
+    );
     const icpBalance = await keyringHandler(accountId);
 
     callback(null, icpBalance, [{ portId, callId }]);
@@ -161,33 +166,42 @@ backgroundController.exposeController(
 backgroundController.exposeController(
   'requestTransfer',
   async (opts, metadata, args) => {
-    const { callback, message, sender } = opts;
+    const { message, sender } = opts;
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
 
     const url = qs.stringifyUrl({
-      url: 'transfer-icp.html',
+      url: 'transfer.html',
       query: {
         callId,
         portId,
         metadataJson: JSON.stringify(metadata),
-        // incomingRequestsJson: JSON.stringify(requests),
+        argsJson: JSON.stringify(args),
       },
     });
 
-    // extension.windows.create({
-    //   url,
-    //   type: 'popup',
-    //   width: CYCLE_WITHDRAWAL_SIZES.width,
-    //   height:
-    //     requests.length > 1
-    //       ? CYCLE_WITHDRAWAL_SIZES.detailsHeightBig
-    //       : CYCLE_WITHDRAWAL_SIZES.detailHeightSmall,
-    // });
+    extension.windows.create({
+      url,
+      type: 'popup',
+      width: TRANSFER_SIZES.width,
+      height: TRANSFER_SIZES.detailHeightSmall,
+      top: 65,
+      left: metadata.pageWidth - TRANSFER_SIZES.width,
+    });
+  },
+);
+
+backgroundController.exposeController(
+  'handleRequestTransfer',
+  async (opts, args, callId, portId) => {
+    const { callback } = opts;
+
+    let transferResponse = null;
 
     const keyringHandler = getKeyringHandler(HANDLER_TYPES.SEND_ICP, keyring);
-    const transferResponse = await keyringHandler(args);
+    transferResponse = await keyringHandler(args);
 
+    callback(null, true);
     callback(null, transferResponse, [{ portId, callId }]);
   },
 );

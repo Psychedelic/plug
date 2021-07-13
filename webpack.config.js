@@ -70,12 +70,7 @@ module.exports = {
     inpage: path.join(sourcePath, 'Inpage', 'index.js'),
     notification: path.join(sourcePath, 'Pages', 'Notification', 'index.js'),
     appConnection: path.join(sourcePath, 'Pages', 'AppConnection', 'index.jsx'),
-    cycleWithdrawal: path.join(
-      sourcePath,
-      'Pages',
-      'CycleWithdrawal',
-      'index.jsx',
-    ),
+    transfer: path.join(sourcePath, 'Pages', 'Transfer', 'login.jsx'),
   },
   node: {
     fs: 'empty',
@@ -218,11 +213,11 @@ module.exports = {
       filename: 'notification.html',
     }),
     new HtmlWebpackPlugin({
-      template: path.join(viewsPath, 'cycle-withdrawal.html'),
+      template: path.join(viewsPath, 'transfer.html'),
       inject: 'body',
-      chunks: ['cycleWithdrawal'],
+      chunks: ['transfer'],
       hash: true,
-      filename: 'cycle-withdrawal.html',
+      filename: 'transfer.html',
     }),
     // write css file(s) to build folder
     new MiniCssExtractPlugin({ filename: 'css/[name].css' }),
@@ -235,7 +230,7 @@ module.exports = {
   ],
 
   optimization: {
-    minimize: nodeEnv !== 'development',
+    minimize: false,
     minimizer: [
       new TerserPlugin({
         parallel: true,

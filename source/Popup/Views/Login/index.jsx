@@ -7,12 +7,13 @@ import { Plug } from '@components';
 import { LinkButton, Button, FormInput } from '@ui';
 import { useRouter } from '@components/Router';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import PropTypes from 'prop-types';
 import useStyles from './styles';
 
-const Login = () => {
+const Login = ({ redirect }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { navigator } = useRouter();
+  const { navigator } = redirect ? {} : useRouter();
 
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
@@ -26,7 +27,12 @@ const Login = () => {
     sendMessage({
       type: HANDLER_TYPES.UNLOCK,
       params: { password },
-    }, (unlocked) => (unlocked ? navigator.navigate('home') : setError(true)));
+      /* eslint-disable-next-line no-nested-ternary */
+    }, (unlocked) => (unlocked
+      ? (redirect
+        ? redirect()
+        : navigator.navigate('home'))
+      : setError(true)));
   };
 
   const handleKeyPress = (e) => e.key === 'Enter' && handleLogin();
@@ -71,3 +77,11 @@ const Login = () => {
 };
 
 export default Login;
+
+Login.propTypes = {
+  redirect: PropTypes.func,
+};
+
+Login.defaultProps = {
+  redirect: null,
+};
