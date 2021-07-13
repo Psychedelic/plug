@@ -21,14 +21,14 @@ export const walletSlice = createSlice({
       state.emoji = emoji;
     },
     setAccountInfo: (state, action) => {
-      if (action.payload === undefined) return;
+      if (!action.payload) return;
 
       // Chrome serializes everything with toJSON
       const {
         accountId, icon, name, principal,
       } = action.payload;
       state.accountId = accountId;
-      state.icon = icon;
+      state.emoji = icon;
       state.name = name;
       state.principalId = principal;
     },
