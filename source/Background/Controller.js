@@ -4,7 +4,7 @@ import { BackgroundController } from '@fleekhq/browser-rpc';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import PlugController from '@psychedelic/plug-controller';
 import CYCLE_WITHDRAWAL_SIZES from '../Pages/CycleWithdrawal/constants';
-import { getKeyringHandler } from './Keyring';
+import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
 
 const storage = extension.storage.local;
 
@@ -141,6 +141,54 @@ backgroundController.exposeController(
 
     callback(null, true);
     callback(null, requests, [{ portId, callId }]);
+  },
+);
+
+backgroundController.exposeController(
+  'requestBalance',
+  async (opts, metadata, accountId) => {
+    const { callback, message, sender } = opts;
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
+
+    const keyringHandler = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
+    const icpBalance = await keyringHandler(accountId);
+
+    callback(null, icpBalance, [{ portId, callId }]);
+  },
+);
+
+backgroundController.exposeController(
+  'requestTransfer',
+  async (opts, metadata, args) => {
+    const { callback, message, sender } = opts;
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
+
+    const url = qs.stringifyUrl({
+      url: 'transfer-icp.html',
+      query: {
+        callId,
+        portId,
+        metadataJson: JSON.stringify(metadata),
+        // incomingRequestsJson: JSON.stringify(requests),
+      },
+    });
+
+    // extension.windows.create({
+    //   url,
+    //   type: 'popup',
+    //   width: CYCLE_WITHDRAWAL_SIZES.width,
+    //   height:
+    //     requests.length > 1
+    //       ? CYCLE_WITHDRAWAL_SIZES.detailsHeightBig
+    //       : CYCLE_WITHDRAWAL_SIZES.detailHeightSmall,
+    // });
+
+    const keyringHandler = getKeyringHandler(HANDLER_TYPES.SEND_ICP, keyring);
+    const transferResponse = await keyringHandler(args);
+
+    callback(null, transferResponse, [{ portId, callId }]);
   },
 );
 
