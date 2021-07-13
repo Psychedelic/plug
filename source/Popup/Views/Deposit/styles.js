@@ -24,10 +24,10 @@ export default makeStyles((theme) => ({
     fontSize: 18,
     marginRight: theme.spacing(1),
     cursor: 'pointer',
-    transition: 'transform 0.3s',
+    transition: 'opacity 0.3s',
 
     '&:hover': {
-      transform: 'scale(1.03)',
+      opacity: 0.75,
     },
   },
   iconQrCode: {
