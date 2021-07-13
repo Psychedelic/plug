@@ -57,4 +57,23 @@ export default makeStyles((theme) => ({
     borderTop: '1px solid #E5E7EB',
     width: '100%',
   },
+  '@keyframes appear': {
+    '0%': {
+      opacity: '0',
+      height: 0,
+      padding: 0,
+    },
+    '100%': {
+      opacity: '1',
+      height: 43,
+      padding: 12,
+    },
+  },
+  appearAnimation: {
+    animationName: '$appear',
+    animationDuration: '0.5s',
+  },
+  danger: {
+    color: 'rgb(220, 38, 38)',
+  },
 }));

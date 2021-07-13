@@ -214,6 +214,7 @@ const Step3 = ({
                     variant="rainbow"
                     value={t('send.returnHome')}
                     onClick={() => navigator.navigate('home', 1)}
+                    fullWidth
                   />
                   <LinkButton onClick={openICRocksTx} value={t('send.viewTxOnICRocks')} />
                 </>

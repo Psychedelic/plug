@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import {
   FormItem, Container, Button, TextInput,
@@ -6,22 +6,55 @@ import {
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import EMOJIS from '@shared/constants/emojis';
+import { Typography } from '@material-ui/core';
 import { validateAccountId, validatePrincipalId } from '../../Send/hooks/utils';
+import useStyles from '../styles';
 
-const AddContact = ({ handleAddContact }) => {
+const AddContact = ({ handleAddContact, contacts }) => {
   const { t } = useTranslation();
+  const classes = useStyles();
 
   const [name, setName] = useState('');
-  const [id, setId] = useState('');
+  const [id, setId] = useState(null);
   const [isValidId, setIsValidId] = useState(null);
+  const [invalidReason, setInvalidReason] = useState('');
 
   const handleChangeName = (e) => setName(e.target.value);
 
   const handleChangeId = (e) => {
     const { value } = e.target;
     setId(value);
-    setIsValidId(validatePrincipalId(value) || validateAccountId(value));
   };
+
+  const validateContact = () => {
+    const isValid = validatePrincipalId(id) || validateAccountId(id);
+
+    if (isValid) {
+      setIsValidId(true);
+      setInvalidReason('');
+    } else {
+      setIsValidId(false);
+      setInvalidReason(
+        t('contacts.errorId'),
+      );
+    }
+
+    if (contacts.some((c) => c.id === id)) {
+      const existingContact = contacts.find((c) => c.id === id);
+      setIsValidId(false);
+      setInvalidReason(
+        t('contacts.errorExists').replace('{name}', existingContact.name),
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      validateContact();
+    } else {
+      setInvalidReason('');
+    }
+  }, [id]);
 
   return (
     <Container>
@@ -56,6 +89,14 @@ const AddContact = ({ handleAddContact }) => {
             )}
           />
         </Grid>
+        {
+          invalidReason
+          && (
+          <Grid item xs={12} className={classes.appearAnimation}>
+            <Typography variant="subtitle1" className={classes.danger}>{invalidReason}</Typography>
+          </Grid>
+          )
+        }
         <Grid item xs={12}>
           <Button
             fullWidth
@@ -82,4 +123,5 @@ export default AddContact;
 
 AddContact.propTypes = {
   handleAddContact: PropTypes.func.isRequired,
+  contacts: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
