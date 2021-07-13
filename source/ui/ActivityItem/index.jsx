@@ -134,7 +134,7 @@ ActivityItem.propTypes = {
   amount: PropTypes.number,
   value: PropTypes.number,
   status: PropTypes.number,
-  date: PropTypes.string.isRequired,
+  date: PropTypes.instanceOf(Date).isRequired,
   plug: PropTypes.shape({
     name: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
@@ -144,6 +144,6 @@ ActivityItem.propTypes = {
     amount: PropTypes.number.isRequired,
     value: PropTypes.number.isRequired,
     status: PropTypes.oneOf(Object.keys(ACTIVITY_STATUS)).isRequired,
-    date: PropTypes.string.isRequired,
+    date: PropTypes.instanceOf(Date).isRequired,
   }),
 };
