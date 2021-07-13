@@ -13,6 +13,7 @@ const useMenuItems = () => {
     {
       image: SettingsIcon,
       name: t('profile.settings'),
+      alignLeft: true,
       onClick: () => navigator.navigate('settings'),
     },
     {
@@ -23,6 +24,7 @@ const useMenuItems = () => {
     {
       image: LockIcon,
       name: t('profile.lock'),
+      alignLeft: true,
       onClick: (() => {
         sendMessage({ type: HANDLER_TYPES.LOCK, params: {} }, () => {
           navigator.navigate('login');
