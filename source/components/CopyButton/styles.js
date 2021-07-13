@@ -4,10 +4,10 @@ export default makeStyles({
   icon: {
     cursor: 'pointer',
     fontSize: 18,
-    transition: 'transform 0.3s',
+    transition: 'opacity 0.3s',
 
     '&:hover': {
-      transform: 'scale(1.03)',
+      opacity: 0.75,
     },
   },
   copyIcon: {
