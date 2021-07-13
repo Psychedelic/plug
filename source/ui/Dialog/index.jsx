@@ -77,7 +77,7 @@ Dialog.propTypes = {
   })).isRequired,
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
-  selectedValue: PropTypes.string,
+  selectedValue: PropTypes.objectOf(PropTypes.string).isRequired,
   component: PropTypes.node,
   closeable: PropTypes.bool,
 };
