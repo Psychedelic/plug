@@ -153,8 +153,6 @@ backgroundController.exposeController(
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
 
-    // Check connection
-    // Get status
     const keyringHandler = getKeyringHandler(
       HANDLER_TYPES.GET_BALANCE,
       keyring,
@@ -172,7 +170,6 @@ backgroundController.exposeController(
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
 
-    // Check connection
     const url = qs.stringifyUrl({
       url: 'transfer.html',
       query: {
