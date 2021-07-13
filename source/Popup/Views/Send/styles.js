@@ -166,4 +166,8 @@ export default makeStyles((theme) => ({
     padding: '0px 40px',
     textAlign: 'center',
   },
+  sameAddressFromTo: {
+    padding: '0 12px 12px',
+    color: '#DC2626',
+  },
 }));

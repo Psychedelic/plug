@@ -125,7 +125,8 @@
     "depositIcpSubtitle1": "Use when receiving from Plug accounts or other apps that support sending directly to Principal ID's.",
     "depositIcpTitle2": "From Exchange, DFX, or Account ID",
     "depositIcpSubtitle2": "Use when receiving from exchanges or other apps that only support sending to Account ID's.",
-    "scanQrCode": "Scan QR Code"
+    "scanQrCode": "Scan QR Code",
+    "sameAddressFromTo": "Oops! The ID is the same to send and receive."
   },
   "swap": {
     "title": "Swap",
