@@ -42,11 +42,11 @@ const Step1 = ({
 
   const handleSelectedContact = (contact) => setSelectedContact(contact);
 
-  const { principalId } = useSelector((state) => state.wallet);
+  const { principalId, accountId } = useSelector((state) => state.wallet);
 
   const { contacts, handleAddContact, handleRemoveContact } = useContacts();
 
-  const isUserAddress = address === principalId;
+  const isUserAddress = [principalId, accountId].includes(address);
 
   const addContact = () => {
     const contact = {
