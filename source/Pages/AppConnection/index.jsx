@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import qs from 'query-string';
 import { useTranslation, initReactI18next } from 'react-i18next';
-import { Layout } from '@components';
 import {
   Button, Container, IncomingAction, theme,
 } from '@ui';
@@ -54,15 +53,13 @@ const AppConnection = () => {
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Layout>
-          <Container>
-            <IncomingAction url={url} image={icon} action={t('appConnection.connect')} />
-            <div className={classes.buttonContainer}>
-              <Button variant="default" value={t('common.decline')} onClick={() => onClickHandler(CONNECTION_STATUS.rejected)} style={{ width: '48%' }} />
-              <Button variant="rainbow" value={t('common.allow')} onClick={() => onClickHandler(CONNECTION_STATUS.accepted)} style={{ width: '48%' }} />
-            </div>
-          </Container>
-        </Layout>
+        <Container>
+          <IncomingAction url={url} image={icon} action={t('appConnection.connect')} />
+          <div className={classes.buttonContainer}>
+            <Button variant="default" value={t('common.decline')} onClick={() => onClickHandler(CONNECTION_STATUS.rejected)} style={{ width: '48%' }} />
+            <Button variant="rainbow" value={t('common.allow')} onClick={() => onClickHandler(CONNECTION_STATUS.accepted)} style={{ width: '48%' }} />
+          </div>
+        </Container>
       </ThemeProvider>
     </Provider>
   );

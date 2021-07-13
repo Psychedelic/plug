@@ -43,7 +43,7 @@ const Transfer = ({
       component: <Details
         url={url}
         image={icons[0] || null}
-        cycles={requestCount > 0 ? requests[currentRequest].cycles : 0}
+        amount={requestCount > 0 ? requests[currentRequest].amount : 0}
         requestCount={requestCount}
       />,
     },

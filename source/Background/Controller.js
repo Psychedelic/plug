@@ -153,6 +153,8 @@ backgroundController.exposeController(
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
 
+    // Check connection
+    // Get status
     const keyringHandler = getKeyringHandler(
       HANDLER_TYPES.GET_BALANCE,
       keyring,
@@ -170,6 +172,7 @@ backgroundController.exposeController(
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
 
+    // Check connection
     const url = qs.stringifyUrl({
       url: 'transfer.html',
       query: {
@@ -196,10 +199,9 @@ backgroundController.exposeController(
   async (opts, args, callId, portId) => {
     const { callback } = opts;
 
-    let transferResponse = null;
-
+    const [transfer] = args;
     const keyringHandler = getKeyringHandler(HANDLER_TYPES.SEND_ICP, keyring);
-    transferResponse = await keyringHandler(args);
+    const transferResponse = await keyringHandler(transfer);
 
     callback(null, true);
     callback(null, transferResponse, [{ portId, callId }]);

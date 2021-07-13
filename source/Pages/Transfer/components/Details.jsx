@@ -9,13 +9,13 @@ import useStyles from '../styles';
 import SIZES from '../constants';
 
 const Details = ({
-  cycles, image, url, requestCount,
+  amount, image, url, requestCount,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
 
   const asset = CURRENCIES.get('CYCLES');
-  const value = cycles * asset.price;
+  const value = amount * asset.price;
 
   window.resizeTo(SIZES.width, requestCount > 1
     ? SIZES.detailsHeightBig
@@ -30,7 +30,7 @@ const Details = ({
 
         <div className={classes.amountContainer}>
           <span className={classes.amount}>
-            <NumberFormat value={cycles} displayType="text" thousandSeparator="," decimalScale={2} fixedDecimalScale />
+            <NumberFormat value={amount} displayType="text" thousandSeparator="," decimalScale={2} fixedDecimalScale />
             <span className={classes.trillion}>T</span>
           </span>
           <Typography variant="subtitle1">
@@ -46,7 +46,7 @@ const Details = ({
 export default Details;
 
 Details.propTypes = {
-  cycles: PropTypes.number.isRequired,
+  amount: PropTypes.number.isRequired,
   image: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
   requestCount: PropTypes.number.isRequired,
