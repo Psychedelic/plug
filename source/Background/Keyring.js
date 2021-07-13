@@ -47,6 +47,7 @@ export const HANDLER_TYPES = {
   GET_ASSETS: 'get-keyring-assets',
   GET_BALANCE: 'get-balance',
   SEND_ICP: 'send-icp',
+  EDIT_PRINCIPAL: 'edit-principal',
 };
 
 export const sendMessage = (args, callback) => {
@@ -107,4 +108,7 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: true, assets: [], transactions: [] };
     }
   },
+  [HANDLER_TYPES.EDIT_PRINCIPAL]: async ({ walletNumber, name, emoji }) => (
+    keyring.editPrincipal(walletNumber, { name, emoji })
+  ),
 }[type]);
