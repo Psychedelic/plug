@@ -20,7 +20,7 @@ const useSteps = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const { assets, principalId } = useSelector((state) => state.wallet);
+  const { assets, principalId, accountId } = useSelector((state) => state.wallet);
   const { icpPrice } = useSelector((state) => state.icp);
   const [selectedAsset, setSelectedAsset] = useState(CURRENCIES.get('ICP'));
   const [amount, setAmount] = useState(null);
@@ -62,7 +62,7 @@ const useSteps = () => {
 
   useEffect(() => {
     if (address !== null) {
-      const isUserAddress = address === principalId;
+      const isUserAddress = [principalId, accountId].includes(address);
       let isValid = !isUserAddress && (validatePrincipalId(address) || validateAccountId(address));
       const type = validatePrincipalId(address) ? ADDRESS_TYPES.PRINCIPAL : ADDRESS_TYPES.ACCOUNT;
       // check for accountId if cycles selected
