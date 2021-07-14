@@ -131,7 +131,7 @@
     "depositIcpTitle2": "From Exchange, DFX, or Account ID",
     "depositIcpSubtitle2": "Use when receiving from exchanges or other apps that only support sending to Account ID's.",
     "scanQrCode": "Scan QR Code",
-    "sameAddressFromTo": "Oops! The ID is the same to send and receive."
+    "sameAddressFromTo": "Oops! You're trying to send to your own ID"
   },
   "swap": {
     "title": "Swap",
