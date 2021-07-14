@@ -149,7 +149,7 @@ const WalletDetails = () => {
               value={t('common.save')}
               variant="rainbow"
               fullWidth
-              onClick={() => onSave()}
+              onClick={onSave}
               disabled={disabled}
             />
           </Grid>

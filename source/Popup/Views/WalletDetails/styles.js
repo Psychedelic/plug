@@ -18,6 +18,6 @@ export default makeStyles((theme) => ({
   },
   accountBadge: {
     background: '#D3E1FF',
-    color: '#3574F4',
+    color: theme.palette.common.blue,
   },
 }));
