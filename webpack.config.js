@@ -230,7 +230,7 @@ module.exports = {
   ],
 
   optimization: {
-    minimize: false,
+    minimize: nodeEnv !== 'development',
     minimizer: [
       new TerserPlugin({
         parallel: true,
