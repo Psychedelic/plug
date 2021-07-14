@@ -3,6 +3,7 @@ import { DataDisplay } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { PortRPC } from '@fleekhq/browser-rpc';
 import { v4 as uuidv4 } from 'uuid';
+import { DEFAULT_FEE } from '../../../Popup/Views/Send/hooks/constants';
 
 const portRPC = new PortRPC({
   name: 'transfer-port',
@@ -55,26 +56,19 @@ const useRequests = (incomingRequests, callId, portId) => {
     setRequests(requests.filter((r) => r.id !== request.id));
   };
 
-  const requestCount = requests.length;
-
-  const validData = (property) => (
-    requestCount > 0
-      ? requests[currentRequest][property]
-      : ''
-  );
-
   const data = [
     {
-      label: t('cycleTransactions.canisterId'),
-      component: <DataDisplay value={validData('canisterId')} />,
+      label: t('common.accountId'),
+      component: <DataDisplay value={requests[currentRequest].to} />,
     },
     {
-      label: t('cycleTransactions.methodName'),
-      component: <DataDisplay value={validData('methodName')} />,
+      label: t('common.fee'),
+      component: <DataDisplay value={requests[currentRequest].args?.fee || DEFAULT_FEE} />,
     },
+
     {
-      label: t('cycleTransactions.parameters'),
-      component: <DataDisplay value={validData('parameters')} big />,
+      label: t('common.memo'),
+      component: <DataDisplay value={requests[currentRequest].args?.memo || t('common.null')} />,
     },
   ];
 

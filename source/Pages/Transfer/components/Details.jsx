@@ -14,7 +14,7 @@ const Details = ({
   const { t } = useTranslation();
   const classes = useStyles();
 
-  const asset = CURRENCIES.get('CYCLES');
+  const asset = CURRENCIES.get('ICP');
   const value = amount * asset.price;
 
   window.resizeTo(SIZES.width, requestCount > 1
@@ -23,15 +23,15 @@ const Details = ({
 
   return (
     <div className={classes.innerContainer}>
-      <IncomingAction image={image} url={url} action={t('cycleTransactions.withdraw')} />
+      <IncomingAction image={image} url={url} action={t('transfer.withdraw')} />
 
       <div className={classes.cyclesContainer}>
-        <Typography variant="h3">{t('cycleTransactions.amount')}</Typography>
+        <Typography variant="h3">{t('transfer.amount').replace('{token}', asset.name)}</Typography>
 
         <div className={classes.amountContainer}>
           <span className={classes.amount}>
             <NumberFormat value={amount} displayType="text" thousandSeparator="," decimalScale={2} fixedDecimalScale />
-            <span className={classes.trillion}>T</span>
+            <span className={classes.trillion}>{asset.value}</span>
           </span>
           <Typography variant="subtitle1">
             <USDFormat value={value} />
