@@ -95,7 +95,7 @@ const WalletDetails = () => {
           </Grid>
           <Grid item xs={12}>
             <FormItem
-              label={t('walletDetails.accountId')}
+              label={t('common.accountId')}
               smallLabel
               component={(
                 <Alert

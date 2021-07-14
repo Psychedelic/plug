@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation, initReactI18next } from 'react-i18next';
 import {
   Button, Container, Tabs, LinkButton,
@@ -6,6 +6,10 @@ import {
 import i18n from 'i18next';
 import { useTabs } from '@hooks';
 import PropTypes from 'prop-types';
+import { Layout } from '@components';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import { setAccountInfo } from '@redux/wallet';
+import { useDispatch } from 'react-redux';
 import initConfig from '../../locales';
 import useStyles from './styles';
 import RequestHandler from './components/RequestHandler';
@@ -20,7 +24,7 @@ const Transfer = ({
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
-
+  const dispatch = useDispatch();
   const { url, icons } = metadata;
 
   const { selectedTab, handleChangeTab } = useTabs();
@@ -39,7 +43,7 @@ const Transfer = ({
 
   const tabs = [
     {
-      label: t('cycleTransactions.details'),
+      label: t('transfer.details'),
       component: <Details
         url={url}
         image={icons[0] || null}
@@ -48,7 +52,7 @@ const Transfer = ({
       />,
     },
     {
-      label: t('cycleTransactions.data'),
+      label: t('transfer.data'),
       component: <Data
         data={data}
         requestCount={requestCount}
@@ -56,8 +60,15 @@ const Transfer = ({
     },
   ];
 
+  useEffect(() => {
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
+      (state) => {
+        dispatch(setAccountInfo(state.wallets[0]));
+      });
+  }, []);
+
   return (
-    <>
+    <Layout disableProfile>
       {
         requestCount > 1
         && (
@@ -76,14 +87,27 @@ const Transfer = ({
             <Tabs tabs={tabs} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
             <Container>
               <div className={classes.buttonContainer}>
-                <Button variant="default" value={t('common.decline')} onClick={() => handleRequest(requests[currentRequest], 'declined')} style={{ width: '48%' }} />
-                <Button variant="rainbow" value={t('common.confirm')} onClick={() => handleRequest(requests[currentRequest], 'accepted')} style={{ width: '48%' }} />
+                <Button
+                  variant="default"
+                  value={t('common.decline')}
+                  onClick={() => handleRequest(requests[currentRequest], 'declined')}
+                  fullWidth
+                  style={{ width: '96%' }}
+                />
+                <Button
+                  variant="rainbow"
+                  value={t('common.confirm')}
+                  onClick={() => handleRequest(requests[currentRequest], 'accepted')}
+                  fullWidth
+                  style={{ width: '96%' }}
+                  wrapperStyle={{ textAlign: 'right' }}
+                />
               </div>
               {
                 requestCount > 1
                 && (
                   <LinkButton
-                    value={`${t('cycleTransactions.decline')} ${requestCount} ${t('cycleTransactions.transactions')}`}
+                    value={`${t('transfer.decline')} ${requestCount} ${t('transfer.transactions')}`}
                     onClick={() => handleDeclineAll()}
                     style={{ marginTop: 24 }}
                   />
@@ -93,7 +117,7 @@ const Transfer = ({
           </>
         )
       }
-    </>
+    </Layout>
   );
 };
 
