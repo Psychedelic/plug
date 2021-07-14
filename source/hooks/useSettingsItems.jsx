@@ -1,4 +1,4 @@
-// import PenIcon from '@assets/icons/settings/pen.svg';
+import PenIcon from '@assets/icons/settings/pen.svg';
 import KeyIcon from '@assets/icons/settings/old-key.svg';
 import NotebookIcon from '@assets/icons/settings/notebook.svg';
 import { useTranslation } from 'react-i18next';
@@ -9,14 +9,12 @@ const useSettingsItems = () => {
   const { t } = useTranslation();
 
   return [
-    /*
     {
       image: PenIcon,
       name: t('settings.walletDetails'),
       description: t('settings.walletDetailsDescription'),
       onClick: (() => navigator.navigate('wallet-details')),
     },
-    */
     {
       image: NotebookIcon,
       name: t('settings.contacts'),
