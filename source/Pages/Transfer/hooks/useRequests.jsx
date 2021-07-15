@@ -55,19 +55,24 @@ const useRequests = (incomingRequests, callId, portId, icpPrice) => {
   useEffect(async () => {
     if (requests.length === 0) {
       setLoading(true);
-      sendMessage({
-        type: HANDLER_TYPES.SEND_ICP,
-        params: response?.[0],
-      }, async (sendResponse) => {
-        const { error, assets: keyringAssets, transactions } = sendResponse || {};
-        if (!error) {
-          dispatch(setAssets(keyringAssets));
-          dispatch(setTransactions({ ...transactions, icpPrice }));
-        }
-        await portRPC.call('handleRequestTransfer', [!error, callId, portId]);
-        setLoading(false);
+      if (response?.[0]?.status === 'declined') {
+        await portRPC.call('handleRequestTransfer', [{ ok: false, error: 'The transaction was rejected' }, callId, portId]);
         window.close();
-      });
+      } else {
+        sendMessage({
+          type: HANDLER_TYPES.SEND_ICP,
+          params: response?.[0],
+        }, async (sendResponse) => {
+          const { error, assets: keyringAssets, transactions } = sendResponse || {};
+          if (!error) {
+            dispatch(setAssets(keyringAssets));
+            dispatch(setTransactions({ ...transactions, icpPrice }));
+          }
+          await portRPC.call('handleRequestTransfer', [{ ok: !error, error, response: sendResponse }, callId, portId]);
+          setLoading(false);
+          window.close();
+        });
+      }
     }
   }, [requests]);
 
