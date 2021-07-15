@@ -21,6 +21,7 @@ const backgroundController = new BackgroundController({
 });
 
 backgroundController.start();
+const CONNECTION_ERROR = { code: 401, message: 'You are not connected. You must call window.ic.plug.requestConnect() and have the user accept the popup before you call this method.' };
 
 export const init = async () => {
   keyring = new PlugController.PlugKeyRing();
@@ -110,7 +111,9 @@ backgroundController.exposeController(
 backgroundController.exposeController(
   'requestBalance',
   async (opts, metadata, accountId) => {
-    const { callback } = opts;
+    const { callback, message, sender } = opts;
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
 
     // TODO: Move this to keyring to prevent weird async flows
     storage.get([metadata.url], async (state) => {
@@ -120,10 +123,13 @@ backgroundController.exposeController(
           keyring,
         );
         const icpBalance = await keyringHandler(accountId);
-        callback(null, icpBalance);
+        if (icpBalance.error) {
+          callback({ message: icpBalance.error, code: 500 }, null);
+        } else {
+          callback(null, icpBalance);
+        }
       } else {
-        const error = { code: 401, message: 'You are not connected. You must call window.ic.plug.requestConnect() and have the user accept the popup before you call this method.' };
-        callback(error, null);
+        callback(CONNECTION_ERROR, null);
       }
     });
   },

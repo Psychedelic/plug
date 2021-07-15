@@ -91,15 +91,19 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.GET_BALANCE]: async (accountId) => {
     try {
+      await keyring.getState();
       const e8s = await keyring.getBalance(accountId);
+
       return formatAssets(e8s);
     } catch (error) {
-      return error; // ToDo: improve error message from plug controller
+      return { error: error.message };
     }
   },
   [HANDLER_TYPES.SEND_ICP]: async ({ to, amount }) => {
     try {
+      await keyring.getState();
       await keyring.sendICP(to, BigInt(amount));
+
       const e8s = await keyring.getBalance();
       const transactions = await keyring.getTransactions();
       return { assets: formatAssets(e8s), transactions: recursiveParseBigint(transactions) };
