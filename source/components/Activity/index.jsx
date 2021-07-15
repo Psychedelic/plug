@@ -30,7 +30,7 @@ const Activity = () => {
       <div className={classes.root}>
         {
           transactions && transactions.length > 0
-            ? transactions.map((item, index) => (
+            ? transactions.reverse().map((item, index) => (
               <ActivityItem key={index.toString()} {...item} />
             ))
             : <EmptyState />

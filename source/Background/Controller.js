@@ -3,7 +3,7 @@ import extension from 'extensionizer';
 import { BackgroundController } from '@fleekhq/browser-rpc';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import PlugController from '@psychedelic/plug-controller';
-import TRANSFER_SIZES from '../Pages/Transfer/constants';
+import SIZES from '../Pages/Notification/Views/Transfer/constants';
 import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
 
 const storage = extension.storage.local;
@@ -71,14 +71,17 @@ backgroundController.exposeController(
         portId: sender.id,
         url: domainUrl,
         icon,
+        type: 'connect',
       },
     });
+
+    const height = keyring?.isUnlocked ? SIZES.appConnectHeight : SIZES.loginHeight;
 
     extension.windows.create({
       url,
       type: 'popup',
-      width: 436,
-      height: 401,
+      width: SIZES.width,
+      height,
     });
   },
 );
@@ -144,21 +147,22 @@ backgroundController.exposeController(
     storage.get([metadata.url], async (state) => {
       if (state?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
         const url = qs.stringifyUrl({
-          url: 'transfer.html',
+          url: 'notification.html',
           query: {
             callId,
             portId,
             metadataJson: JSON.stringify(metadata),
             argsJson: JSON.stringify(args),
+            type: 'transfer',
           },
         });
         extension.windows.create({
           url,
           type: 'popup',
-          width: TRANSFER_SIZES.width,
-          height: TRANSFER_SIZES.detailHeightSmall,
+          width: SIZES.width,
+          height: SIZES.detailHeightSmall,
           top: 65,
-          left: metadata.pageWidth - TRANSFER_SIZES.width,
+          left: metadata.pageWidth - SIZES.width,
         });
       } else {
         const error = { code: 401, message: 'You are not connected. You must call window.ic.plug.requestConnect() and have the user accept the popup before you call this method.' };

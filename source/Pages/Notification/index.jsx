@@ -4,15 +4,16 @@ import ReactDOM from 'react-dom';
 import qs from 'query-string';
 import browser from 'webextension-polyfill';
 import { theme } from '@ui';
-import Transfer from './Views/Transfer';
 import store from '../../redux/store';
 import ProviderWrapper from '../../shared/ProviderWrapper';
 import Login from '../../Popup/Views/Login';
+import AppConnection from './Views/AppConnection';
+import Transfer from './Views/Transfer';
 
 const NOTIFICATION_COMPONENTS = {
   transfer: Transfer,
   balance: '',
-  connect: '',
+  connect: AppConnection,
 };
 
 const NotificationContainer = () => {
@@ -21,13 +22,11 @@ const NotificationContainer = () => {
   const { query } = qs.parseUrl(window.location.href);
 
   const {
-    callId, metadataJson, argsJson, type,
+    callId, metadataJson = '{}', argsJson = '{}', type, portId,
   } = query;
 
   const metadata = JSON.parse(metadataJson);
   const args = JSON.parse(argsJson); // single request for now
-
-  const portId = parseInt(query.portId, 10);
 
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_LOCKS, params: {} }, (locks) => {
@@ -66,4 +65,4 @@ const NotificationContainer = () => {
   );
 };
 
-ReactDOM.render(<NotificationContainer />, document.getElementById('transfer-root'));
+ReactDOM.render(<NotificationContainer />, document.getElementById('notification-root'));

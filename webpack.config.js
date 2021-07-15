@@ -69,8 +69,6 @@ module.exports = {
     options: path.join(sourcePath, 'Options', 'index.jsx'),
     inpage: path.join(sourcePath, 'Inpage', 'index.js'),
     notification: path.join(sourcePath, 'Pages', 'Notification', 'index.jsx'),
-    appConnection: path.join(sourcePath, 'Pages', 'AppConnection', 'index.jsx'),
-    transfer: path.join(sourcePath, 'Pages', 'Transfer', 'login.jsx'),
   },
   node: {
     fs: 'empty',
@@ -204,20 +202,6 @@ module.exports = {
       chunks: ['notification'],
       hash: true,
       filename: 'notification.html',
-    }),
-    new HtmlWebpackPlugin({
-      template: path.join(viewsPath, 'notification.html'),
-      inject: 'body',
-      chunks: ['appConnection'],
-      hash: true,
-      filename: 'notification.html',
-    }),
-    new HtmlWebpackPlugin({
-      template: path.join(viewsPath, 'transfer.html'),
-      inject: 'body',
-      chunks: ['transfer'],
-      hash: true,
-      filename: 'transfer.html',
     }),
     // write css file(s) to build folder
     new MiniCssExtractPlugin({ filename: 'css/[name].css' }),
