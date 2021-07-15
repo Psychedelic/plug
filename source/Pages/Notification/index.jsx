@@ -21,13 +21,11 @@ const NotificationContainer = () => {
   const { query } = qs.parseUrl(window.location.href);
 
   const {
-    callId, metadataJson, argsJson, type,
+    callId, metadataJson, argsJson, type, portId,
   } = query;
 
   const metadata = JSON.parse(metadataJson);
   const args = JSON.parse(argsJson); // single request for now
-
-  const portId = parseInt(query.portId, 10);
 
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_LOCKS, params: {} }, (locks) => {
@@ -66,4 +64,4 @@ const NotificationContainer = () => {
   );
 };
 
-ReactDOM.render(<NotificationContainer />, document.getElementById('transfer-root'));
+ReactDOM.render(<NotificationContainer />, document.getElementById('notification-root'));

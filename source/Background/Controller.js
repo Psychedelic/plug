@@ -144,12 +144,13 @@ backgroundController.exposeController(
     storage.get([metadata.url], async (state) => {
       if (state?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
         const url = qs.stringifyUrl({
-          url: 'transfer.html',
+          url: 'notification.html',
           query: {
             callId,
             portId,
             metadataJson: JSON.stringify(metadata),
             argsJson: JSON.stringify(args),
+            type: 'transfer',
           },
         });
         extension.windows.create({
