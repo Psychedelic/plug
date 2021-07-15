@@ -1,5 +1,4 @@
 import React from 'react';
-// import ReactDOM from 'react-dom';
 import qs from 'query-string';
 import { useTranslation, initReactI18next } from 'react-i18next';
 import {
@@ -12,9 +11,11 @@ import i18n from 'i18next';
 
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { Provider } from 'react-redux';
-import store from '../../redux/store';
-import initConfig from '../../locales';
+import store from '../../../../redux/store';
+import initConfig from '../../../../locales';
 import useStyles from './styles';
+import SIZES from '../Transfer/constants';
+import { Layout } from '../../../../components';
 
 i18n.use(initReactI18next).init(initConfig);
 
@@ -49,21 +50,37 @@ const AppConnection = () => {
   //  onClickHandler(CONNECTION_STATUS.rejected);
   // };
 
+  window.resizeTo(SIZES.width, SIZES.appConnectHeight);
+
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Container>
-          <IncomingAction url={url} image={icon} action={t('appConnection.connect')} />
-          <div className={classes.buttonContainer}>
-            <Button variant="default" value={t('common.decline')} onClick={() => onClickHandler(CONNECTION_STATUS.rejected)} style={{ width: '48%' }} />
-            <Button variant="rainbow" value={t('common.allow')} onClick={() => onClickHandler(CONNECTION_STATUS.accepted)} style={{ width: '48%' }} />
-          </div>
-        </Container>
+        <Layout disableProfile>
+          <Container>
+            <IncomingAction url={url} image={icon} action={t('appConnection.connect')} />
+            <div className={classes.buttonContainer}>
+              <Button
+                variant="default"
+                value={t('common.decline')}
+                onClick={() => onClickHandler(CONNECTION_STATUS.rejected)}
+                style={{ width: '96%' }}
+                fullWidth
+              />
+              <Button
+                variant="rainbow"
+                value={t('common.allow')}
+                onClick={() => onClickHandler(CONNECTION_STATUS.accepted)}
+                fullWidth
+                style={{ width: '96%' }}
+                wrapperStyle={{ textAlign: 'right' }}
+              />
+            </div>
+          </Container>
+        </Layout>
       </ThemeProvider>
     </Provider>
   );
 };
 
-// ReactDOM.render(<AppConnection />, document.getElementById('old-notification-root'));
 export default AppConnection;
