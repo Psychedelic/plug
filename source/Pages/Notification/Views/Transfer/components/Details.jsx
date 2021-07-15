@@ -37,6 +37,7 @@ const Details = ({
             <USDFormat value={value} />
           </Typography>
         </div>
+
       </div>
     </div>
   );

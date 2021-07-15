@@ -12,7 +12,7 @@ import { setAccountInfo } from '@redux/wallet';
 import { useDispatch, useSelector } from 'react-redux';
 import getICPPrice from '@shared/services/ICPPrice';
 import { setICPPrice } from '@redux/icp';
-import initConfig from '../../locales';
+import initConfig from '../../../../locales';
 import useStyles from './styles';
 import RequestHandler from './components/RequestHandler';
 import useRequests from './hooks/useRequests';
@@ -22,7 +22,7 @@ import Data from './components/Data';
 i18n.use(initReactI18next).init(initConfig);
 
 const Transfer = ({
-  incomingRequests, callId, portId, metadata,
+  args, callId, portId, metadata,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -40,7 +40,7 @@ const Transfer = ({
     handleRequest,
     handleDeclineAll,
     principalId,
-  } = useRequests(incomingRequests, callId, portId);
+  } = useRequests([args], callId, portId);
 
   const requestCount = requests.length;
 
@@ -70,7 +70,7 @@ const Transfer = ({
       getICPPrice()
         .then(({ price }) => {
           dispatch(
-            setICPPrice(price?.['internet-computer']?.usd || 1),
+            setICPPrice(price['internet-computer'].usd),
           );
         });
     } catch (err) {
@@ -145,7 +145,7 @@ const Transfer = ({
 export default Transfer;
 
 Transfer.propTypes = {
-  incomingRequests: PropTypes.arrayOf(PropTypes.string).isRequired,
+  args: PropTypes.arrayOf(PropTypes.string).isRequired,
   callId: PropTypes.string.isRequired,
   portId: PropTypes.string.isRequired,
   metadata: PropTypes.arrayOf(PropTypes.string).isRequired,
