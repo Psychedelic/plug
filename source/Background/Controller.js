@@ -3,7 +3,7 @@ import extension from 'extensionizer';
 import { BackgroundController } from '@fleekhq/browser-rpc';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import PlugController from '@psychedelic/plug-controller';
-import SIZES from '../Pages/Notification/Views/Transfer/constants';
+import SIZES from '../Pages/Notification/components/Transfer/constants';
 import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
 
 const storage = extension.storage.local;
@@ -24,6 +24,9 @@ backgroundController.start();
 export const init = async () => {
   keyring = new PlugController.PlugKeyRing();
   await keyring.init();
+  if (keyring.isUnlocked) {
+    await keyring.getState();
+  }
 };
 
 // keyring handlers
@@ -116,28 +119,73 @@ backgroundController.exposeController(
   },
 );
 
+const requestBalance = (metadata, accountId, callback) => {
+  storage.get([metadata.url], async (state) => {
+    if (state?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
+      const getBalance = getKeyringHandler(
+        HANDLER_TYPES.GET_BALANCE,
+        keyring,
+      );
+      const icpBalance = await getBalance(accountId);
+      if (icpBalance.error) {
+        callback({ message: icpBalance.error, code: 500 }, null);
+      } else {
+        callback(null, icpBalance);
+      }
+    } else {
+      callback(CONNECTION_ERROR, null);
+    }
+  });
+};
+
 backgroundController.exposeController(
   'requestBalance',
   async (opts, metadata, accountId) => {
-    const { callback } = opts;
+    const { callback, message, sender } = opts;
+    if (!keyring.isUnlocked) {
+      const url = qs.stringifyUrl({
+        url: 'notification.html',
+        query: {
+          callId: message.data.data.id,
+          portId: sender.id,
+          type: 'balance',
+          argsJson: accountId,
+          metadataJson: JSON.stringify(metadata),
+        },
+      });
 
-    // TODO: Move this to keyring to prevent weird async flows
-    storage.get([metadata.url], async (state) => {
-      if (state?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
-        const keyringHandler = getKeyringHandler(
+      extension.windows.create({
+        url,
+        type: 'popup',
+        width: SIZES.width,
+        height: SIZES.loginHeight,
+      });
+    } else {
+      requestBalance(metadata, accountId, callback);
+    }
+  },
+);
+
+backgroundController.exposeController(
+  'handleRequestBalance',
+  async (opts, url, accountId, callId, portId) => {
+    console.log('arrived at background', url);
+    const { callback } = opts;
+    storage.get([url], async (state) => {
+      callback(null, true);
+      if (state?.[url]?.status === CONNECTION_STATUS.accepted) {
+        const getBalance = getKeyringHandler(
           HANDLER_TYPES.GET_BALANCE,
           keyring,
         );
-        const icpBalance = await keyringHandler(accountId);
-
+        const icpBalance = await getBalance(accountId);
         if (icpBalance.error) {
-          callback({ message: icpBalance.error, code: 500 }, null);
+          callback({ message: icpBalance.error, code: 500 }, null, [{ portId, callId }]);
         } else {
           callback(null, icpBalance, [{ portId, callId }]);
         }
       } else {
-        const error = { code: 401, message: 'You are not connected. You must call window.ic.plug.requestConnect() and have the user accept the popup before you call this method.' };
-        callback(error, null);
+        callback(CONNECTION_ERROR, null, [{ portId, callId }]);
       }
     });
   },
