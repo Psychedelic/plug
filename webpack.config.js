@@ -68,7 +68,7 @@ module.exports = {
     popup: path.join(sourcePath, 'Popup', 'index.jsx'),
     options: path.join(sourcePath, 'Options', 'index.jsx'),
     inpage: path.join(sourcePath, 'Inpage', 'index.js'),
-    notification: path.join(sourcePath, 'Pages', 'Notification', 'index.js'),
+    notification: path.join(sourcePath, 'Pages', 'Notification', 'index.jsx'),
     appConnection: path.join(sourcePath, 'Pages', 'AppConnection', 'index.jsx'),
     transfer: path.join(sourcePath, 'Pages', 'Transfer', 'login.jsx'),
   },

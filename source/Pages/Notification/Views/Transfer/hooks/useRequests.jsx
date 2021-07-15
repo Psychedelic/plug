@@ -94,11 +94,11 @@ const useRequests = (incomingRequests, callId, portId) => {
   data.push(...[
     {
       label: t('common.fee'),
-      component: <DataDisplay value={<AssetFormat value={requests[currentRequest]?.args?.fee || DEFAULT_FEE} asset={CURRENCIES.get('ICP').value} />} />,
+      component: <DataDisplay value={<AssetFormat value={requests[currentRequest].args?.fee || DEFAULT_FEE} asset={CURRENCIES.get('ICP').value} />} />,
     },
     {
       label: t('common.memo'),
-      component: <DataDisplay value={requests[currentRequest]?.args?.memo || t('common.null')} />,
+      component: <DataDisplay value={requests[currentRequest].args?.memo || t('common.null')} />,
     },
   ]);
 

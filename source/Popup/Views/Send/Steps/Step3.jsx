@@ -25,7 +25,7 @@ import ArrowUpRight from '@assets/icons/arrow-up-right.png';
 import clsx from 'clsx';
 import { useRouter, Plug } from '@components';
 
-import { ADDRESS_TYPES, DEFAULT_FEE } from '../hooks/constants';
+import { ADDRESS_TYPES, DEFAULT_FEE } from '@shared/constants/addresses';
 import useStyles from '../styles';
 
 const Step3 = ({

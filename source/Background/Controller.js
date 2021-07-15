@@ -37,16 +37,6 @@ extension.runtime.onMessage.addListener((message, _, sendResponse) => {
   return true; // eslint-disable-line
 });
 
-const getConnectedFromStorage = (url) => storage.get([url], (state) => ((state[url])
-  ? state[url].status === CONNECTION_STATUS.accepted : false));
-
-const checkConnected = (url) => {
-  if (!getConnectedFromStorage(url)) {
-    return { connected: false, error: { code: 401, message: 'You are not connected. You must call window.ic.plug.requestConnect() and have the user accept the popup before you call this method.' } };
-  }
-  return { connected: true };
-};
-
 backgroundController.exposeController('isConnected', (opts, url) => {
   const { callback } = opts;
 
@@ -122,18 +112,20 @@ backgroundController.exposeController(
   async (opts, metadata, accountId) => {
     const { callback } = opts;
 
-    // Check that it's connected and get the balance
-    const { connected, error } = checkConnected(metadata.url);
-    if (connected) {
-      const keyringHandler = getKeyringHandler(
-        HANDLER_TYPES.GET_BALANCE,
-        keyring,
-      );
-      const icpBalance = await keyringHandler(accountId);
-      callback(null, icpBalance);
-    } else {
-      callback(error, null);
-    }
+    // TODO: Move this to keyring to prevent weird async flows
+    storage.get([metadata.url], async (state) => {
+      if (state?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
+        const keyringHandler = getKeyringHandler(
+          HANDLER_TYPES.GET_BALANCE,
+          keyring,
+        );
+        const icpBalance = await keyringHandler(accountId);
+        callback(null, icpBalance);
+      } else {
+        const error = { code: 401, message: 'You are not connected. You must call window.ic.plug.requestConnect() and have the user accept the popup before you call this method.' };
+        callback(error, null);
+      }
+    });
   },
 );
 
@@ -144,28 +136,30 @@ backgroundController.exposeController(
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
 
-    const { connected, error } = checkConnected(metadata.url);
-    if (connected) {
-      const url = qs.stringifyUrl({
-        url: 'transfer.html',
-        query: {
-          callId,
-          portId,
-          metadataJson: JSON.stringify(metadata),
-          argsJson: JSON.stringify(args),
-        },
-      });
-      extension.windows.create({
-        url,
-        type: 'popup',
-        width: TRANSFER_SIZES.width,
-        height: TRANSFER_SIZES.detailHeightSmall,
-        top: 65,
-        left: metadata.pageWidth - TRANSFER_SIZES.width,
-      });
-    } else {
-      callback(error, null);
-    }
+    storage.get([metadata.url], async (state) => {
+      if (state?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
+        const url = qs.stringifyUrl({
+          url: 'transfer.html',
+          query: {
+            callId,
+            portId,
+            metadataJson: JSON.stringify(metadata),
+            argsJson: JSON.stringify(args),
+          },
+        });
+        extension.windows.create({
+          url,
+          type: 'popup',
+          width: TRANSFER_SIZES.width,
+          height: TRANSFER_SIZES.detailHeightSmall,
+          top: 65,
+          left: metadata.pageWidth - TRANSFER_SIZES.width,
+        });
+      } else {
+        const error = { code: 401, message: 'You are not connected. You must call window.ic.plug.requestConnect() and have the user accept the popup before you call this method.' };
+        callback(error, null);
+      }
+    });
   },
 );
 
@@ -173,7 +167,6 @@ backgroundController.exposeController(
   'handleRequestTransfer',
   async (opts, args, callId, portId) => {
     const { callback } = opts;
-
     const [transfer] = args;
     const keyringHandler = getKeyringHandler(HANDLER_TYPES.SEND_ICP, keyring);
     const transferResponse = await keyringHandler(transfer);
