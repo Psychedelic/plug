@@ -1,24 +1,44 @@
-import React, { useState } from 'react';
-import { Layout, UserIcon } from '@components';
+import React, { useState, useEffect } from 'react';
+import clsx from 'clsx';
+import { useRouter } from '@components/Router';
 import {
-  Header, LinkButton, FormInput, Button, Container, FormItem, Alert,
+  Layout,
+  UserIcon,
+  CopyButton,
+} from '@components';
+import {
+  Header,
+  LinkButton,
+  FormInput,
+  Button,
+  Container,
+  FormItem,
 } from '@ui';
 import { useTranslation } from 'react-i18next';
-import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import Picker from 'emoji-picker-react';
 import Grid from '@material-ui/core/Grid';
+import { Typography } from '@material-ui/core';
+import shortAddress from '@shared/utils/short-address';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateWalletDetails } from '../../../redux/wallet';
+import useStyles from './styles';
 
 const WalletDetails = () => {
-  const { name, emoji } = useSelector((state) => state.wallet);
-
+  const classes = useStyles();
+  const { name, emoji, accountId } = useSelector((state) => state.wallet);
   const { navigator } = useRouter();
   const { t } = useTranslation();
   const [openEmojis, setOpenEmojis] = useState(false);
   const [walletName, setWalletName] = useState(name);
   const [currentEmoji, setCurrentEmoji] = useState(emoji);
+  const [disabled, setDisabled] = useState(false);
+
+  useEffect(() => {
+    setCurrentEmoji(emoji);
+    setWalletName(name);
+  }, [name, emoji]);
 
   const dispatch = useDispatch();
 
@@ -30,10 +50,26 @@ const WalletDetails = () => {
   };
 
   const onSave = () => {
-    dispatch(updateWalletDetails({
-      name: walletName,
-      emoji: currentEmoji,
-    }));
+    setDisabled(true);
+    sendMessage(
+      {
+        type: HANDLER_TYPES.EDIT_PRINCIPAL,
+        params: {
+          walletNumber: 0,
+          name: walletName,
+          emoji: currentEmoji,
+        },
+      },
+      () => {
+        dispatch(updateWalletDetails({
+          name: walletName,
+          emoji: currentEmoji,
+        }));
+        setWalletName(walletName);
+        setCurrentEmoji(currentEmoji);
+        setDisabled(false);
+      },
+    );
   };
 
   return (
@@ -98,16 +134,24 @@ const WalletDetails = () => {
               label={t('common.accountId')}
               smallLabel
               component={(
-                <Alert
-                  title="rwlgt-iiaaa-aaaaa-aaaaa-cai"
-                  type="info"
-                  endIcon
-                />
+                <div className={classes.addressContainer}>
+                  <Typography variant="h4" style={{ marginRight: 'auto' }}>{shortAddress(accountId)}</Typography>
+                  <div className={clsx(classes.badge, classes.accountBadge)}>
+                    {t('send.accountId')}
+                  </div>
+                  <CopyButton text={accountId} placement="top" />
+                </div>
               )}
             />
           </Grid>
           <Grid item xs={12}>
-            <Button value={t('common.save')} variant="rainbow" fullWidth onClick={() => onSave()} />
+            <Button
+              value={t('common.save')}
+              variant="rainbow"
+              fullWidth
+              onClick={onSave}
+              disabled={disabled}
+            />
           </Grid>
         </Grid>
       </Container>
