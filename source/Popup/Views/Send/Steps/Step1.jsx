@@ -12,6 +12,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
 import NumberFormat from 'react-number-format';
+import { useSelector } from 'react-redux';
 import useStyles from '../styles';
 
 const Step1 = ({
@@ -41,7 +42,12 @@ const Step1 = ({
 
   const handleSelectedContact = (contact) => setSelectedContact(contact);
 
+  const { principalId, accountId } = useSelector((state) => state.wallet);
+
   const { contacts, handleAddContact, handleRemoveContact } = useContacts();
+
+  const isUserAddress = [principalId, accountId].includes(address);
+
   const addContact = () => {
     const contact = {
       name: contactName,
@@ -151,9 +157,14 @@ const Step1 = ({
           )
         }
         {
+          isUserAddress
+          && <span className={classes.sameAddressFromTo}>{t('deposit.sameAddressFromTo')}</span>
+        }
+        {
           (address !== ''
             && addressInfo.isValid
             && !contacts.flatMap((c) => c.contacts).map((c) => c.id).includes(address))
+            && !isUserAddress
           && (
             <Grid item xs={12}>
               <div className={clsx(classes.newAddress, classes.appearAnimation)}>
