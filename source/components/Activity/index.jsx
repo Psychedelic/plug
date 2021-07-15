@@ -24,13 +24,12 @@ const Activity = () => {
         });
     }
   }, [icpPrice]);
-
   return (
     <LoadingWrapper loading={!transactions.length && transactionsLoading}>
       <div className={classes.root}>
         {
           transactions && transactions.length > 0
-            ? transactions.reverse().map((item, index) => (
+            ? transactions.map((item, index) => (
               <ActivityItem key={index.toString()} {...item} />
             ))
             : <EmptyState />

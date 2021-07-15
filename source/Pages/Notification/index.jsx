@@ -7,12 +7,13 @@ import { theme } from '@ui';
 import store from '../../redux/store';
 import ProviderWrapper from '../../shared/ProviderWrapper';
 import Login from '../../Popup/Views/Login';
-import AppConnection from './Views/AppConnection';
-import Transfer from './Views/Transfer';
+import AppConnection from './components/AppConnection';
+import Transfer from './components/Transfer';
+import Balance from './components/Balance';
 
 const NOTIFICATION_COMPONENTS = {
   transfer: Transfer,
-  balance: '',
+  balance: Balance,
   connect: AppConnection,
 };
 
