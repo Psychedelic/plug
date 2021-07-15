@@ -14,12 +14,12 @@ const TransferLogin = () => {
 
   const { query } = qs.parseUrl(window.location.href);
 
-  const { callId, metadataJson, argsJson } = query;
+  const {
+    callId, metadataJson, argsJson, portId,
+  } = query;
 
   const metadata = JSON.parse(metadataJson);
   const incomingRequests = JSON.parse(argsJson); // single request for now
-
-  const portId = parseInt(query.portId, 10);
 
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_LOCKS, params: {} }, (locks) => {

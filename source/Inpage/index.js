@@ -4,7 +4,7 @@ import { Provider } from '@fleekhq/plug-inpage-provider';
 const clientRPC = new BrowserRPC(window, {
   name: 'plug-inpage-provider',
   target: 'plug-content-script',
-  timeout: 5000,
+  timeout: 20000,
 });
 
 clientRPC.start();

@@ -6,7 +6,7 @@ import {
 import i18n from 'i18next';
 import { useTabs } from '@hooks';
 import PropTypes from 'prop-types';
-import { Layout } from '@components';
+import { Layout, LoadingWrapper } from '@components';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,6 +31,29 @@ const Transfer = ({
   const { icpPrice } = useSelector((state) => state.icp);
   const { selectedTab, handleChangeTab } = useTabs();
 
+  useEffect(() => {
+    try {
+      getICPPrice()
+        .then(({ price }) => {
+          dispatch(
+            setICPPrice(price?.['internet-computer']?.usd || 1),
+          );
+        });
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.warn(err);
+    }
+
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
+      (state) => {
+        if (!state?.wallets?.length) {
+          sendMessage({ type: HANDLER_TYPES.LOCK, params: {} },
+            () => navigator.navigate('login'));
+        }
+        dispatch(setAccountInfo(state.wallets[0]));
+      });
+  }, []);
+
   const {
     requests,
     currentRequest,
@@ -40,7 +63,8 @@ const Transfer = ({
     handleRequest,
     handleDeclineAll,
     principalId,
-  } = useRequests(incomingRequests, callId, portId);
+    loading,
+  } = useRequests(incomingRequests, callId, portId, icpPrice);
 
   const requestCount = requests.length;
 
@@ -65,32 +89,11 @@ const Transfer = ({
     },
   ];
 
-  useEffect(() => {
-    try {
-      getICPPrice()
-        .then(({ price }) => {
-          dispatch(
-            setICPPrice(price?.['internet-computer']?.usd || 1),
-          );
-        });
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.warn(err);
-    }
-
-    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
-      (state) => {
-        if (!state?.wallets?.length) {
-          sendMessage({ type: HANDLER_TYPES.LOCK, params: {} },
-            () => navigator.navigate('login'));
-        }
-        dispatch(setAccountInfo(state.wallets[0]));
-      });
-  }, []);
-
   return (
     <Layout disableProfile>
-      {
+      <LoadingWrapper loading={loading}>
+
+        {
         requestCount > 1
         && (
           <RequestHandler
@@ -100,8 +103,8 @@ const Transfer = ({
             handleNext={handleSetNextRequest}
           />
         )
-      }
-      {
+        }
+        {
         requestCount > 0
         && (
           <>
@@ -133,11 +136,12 @@ const Transfer = ({
                     style={{ marginTop: 24 }}
                   />
                 )
-              }
+                }
             </Container>
           </>
         )
       }
+      </LoadingWrapper>
     </Layout>
   );
 };
