@@ -24,6 +24,7 @@ const Login = ({ redirect }) => {
   };
 
   const handleLogin = () => {
+    console.log(redirect);
     sendMessage({
       type: HANDLER_TYPES.UNLOCK,
       params: { password },

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import qs from 'query-string';
 import { useTranslation, initReactI18next } from 'react-i18next';
 import {
@@ -65,4 +65,5 @@ const AppConnection = () => {
   );
 };
 
-ReactDOM.render(<AppConnection />, document.getElementById('notification-root'));
+// ReactDOM.render(<AppConnection />, document.getElementById('old-notification-root'));
+export default AppConnection;
