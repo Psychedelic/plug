@@ -9,13 +9,13 @@ import useStyles from '../styles';
 import SIZES from '../constants';
 
 const Details = ({
-  amount, image, url, requestCount,
+  amount, image, url, requestCount, icpPrice,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
 
-  const asset = CURRENCIES.get('CYCLES');
-  const value = amount * asset.price;
+  const asset = CURRENCIES.get('ICP');
+  const value = amount * icpPrice;
 
   window.resizeTo(SIZES.width, requestCount > 1
     ? SIZES.detailsHeightBig
@@ -23,15 +23,15 @@ const Details = ({
 
   return (
     <div className={classes.innerContainer}>
-      <IncomingAction image={image} url={url} action={t('cycleTransactions.withdraw')} />
+      <IncomingAction image={image} url={url} action={t('transfer.withdraw')} />
 
       <div className={classes.cyclesContainer}>
-        <Typography variant="h3">{t('cycleTransactions.amount')}</Typography>
+        <Typography variant="h3">{t('transfer.amount').replace('{token}', asset.name)}</Typography>
 
         <div className={classes.amountContainer}>
           <span className={classes.amount}>
             <NumberFormat value={amount} displayType="text" thousandSeparator="," decimalScale={2} fixedDecimalScale />
-            <span className={classes.trillion}>T</span>
+            <span className={classes.trillion}>{asset.value}</span>
           </span>
           <Typography variant="subtitle1">
             <USDFormat value={value} />
@@ -50,4 +50,5 @@ Details.propTypes = {
   image: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
   requestCount: PropTypes.number.isRequired,
+  icpPrice: PropTypes.number.isRequired,
 };

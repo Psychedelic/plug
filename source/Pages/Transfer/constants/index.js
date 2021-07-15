@@ -1,7 +1,7 @@
 const SIZES = {
   width: 436,
-  dataHeightBig: 732,
-  dataHeightSmall: 649,
+  dataHeightBig: 632,
+  dataHeightSmall: 549,
   detailsHeightBig: 649,
   detailHeightSmall: 564,
 };
