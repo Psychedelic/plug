@@ -4,22 +4,30 @@ import ReactDOM from 'react-dom';
 import qs from 'query-string';
 import browser from 'webextension-polyfill';
 import { theme } from '@ui';
-import Transfer from './index';
+import Transfer from './Views/Transfer';
 import store from '../../redux/store';
 import ProviderWrapper from '../../shared/ProviderWrapper';
 import Login from '../../Popup/Views/Login';
 
-const TransferLogin = () => {
+const NOTIFICATION_COMPONENTS = {
+  transfer: Transfer,
+  balance: '',
+  connect: '',
+};
+
+const NotificationContainer = () => {
   const [loggedIn, setLoggedIn] = useState(null);
 
   const { query } = qs.parseUrl(window.location.href);
 
   const {
-    callId, metadataJson, argsJson, portId,
+    callId, metadataJson, argsJson, type,
   } = query;
 
   const metadata = JSON.parse(metadataJson);
-  const incomingRequests = JSON.parse(argsJson); // single request for now
+  const args = JSON.parse(argsJson); // single request for now
+
+  const portId = parseInt(query.portId, 10);
 
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_LOCKS, params: {} }, (locks) => {
@@ -36,7 +44,7 @@ const TransferLogin = () => {
   });
 
   const handleLogin = () => setLoggedIn(true);
-
+  const Component = NOTIFICATION_COMPONENTS[type];
   return (
     <ProviderWrapper
       store={store}
@@ -45,8 +53,8 @@ const TransferLogin = () => {
       {
         loggedIn
           ? (
-            <Transfer
-              incomingRequests={[incomingRequests]}
+            <Component
+              args={args}
               callId={callId}
               portId={portId}
               metadata={metadata}
@@ -58,4 +66,4 @@ const TransferLogin = () => {
   );
 };
 
-ReactDOM.render(<TransferLogin />, document.getElementById('transfer-root'));
+ReactDOM.render(<NotificationContainer />, document.getElementById('transfer-root'));

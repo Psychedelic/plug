@@ -18,7 +18,7 @@ i18n.use(initReactI18next).init(initConfig);
 const portRPC = new PortRPC({
   name: 'notification-port',
   target: 'bg-script',
-  timeout: 5000,
+  timeout: 20000,
 });
 
 portRPC.start();

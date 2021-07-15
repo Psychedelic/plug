@@ -108,7 +108,7 @@ export const getKeyringHandler = (type, keyring) => ({
       const transactions = await keyring.getTransactions();
       return { assets: formatAssets(e8s), transactions: recursiveParseBigint(transactions) };
     } catch (e) {
-      return { error: true, assets: [], transactions: [] };
+      return { error: e, assets: [], transactions: [] };
     }
   },
 }[type]);

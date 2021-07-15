@@ -6,13 +6,13 @@ import {
 import i18n from 'i18next';
 import { useTabs } from '@hooks';
 import PropTypes from 'prop-types';
-import { Layout, LoadingWrapper } from '@components';
+import { Layout } from '@components';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
 import { useDispatch, useSelector } from 'react-redux';
 import getICPPrice from '@shared/services/ICPPrice';
 import { setICPPrice } from '@redux/icp';
-import initConfig from '../../locales';
+import initConfig from '../../../../locales';
 import useStyles from './styles';
 import RequestHandler from './components/RequestHandler';
 import useRequests from './hooks/useRequests';
@@ -22,7 +22,7 @@ import Data from './components/Data';
 i18n.use(initReactI18next).init(initConfig);
 
 const Transfer = ({
-  incomingRequests, callId, portId, metadata,
+  args, callId, portId, metadata,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -30,29 +30,6 @@ const Transfer = ({
   const { url, icons } = metadata;
   const { icpPrice } = useSelector((state) => state.icp);
   const { selectedTab, handleChangeTab } = useTabs();
-
-  useEffect(() => {
-    try {
-      getICPPrice()
-        .then(({ price }) => {
-          dispatch(
-            setICPPrice(price?.['internet-computer']?.usd || 1),
-          );
-        });
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.warn(err);
-    }
-
-    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
-      (state) => {
-        if (!state?.wallets?.length) {
-          sendMessage({ type: HANDLER_TYPES.LOCK, params: {} },
-            () => navigator.navigate('login'));
-        }
-        dispatch(setAccountInfo(state.wallets[0]));
-      });
-  }, []);
 
   const {
     requests,
@@ -63,8 +40,7 @@ const Transfer = ({
     handleRequest,
     handleDeclineAll,
     principalId,
-    loading,
-  } = useRequests(incomingRequests, callId, portId, icpPrice);
+  } = useRequests([args], callId, portId);
 
   const requestCount = requests.length;
 
@@ -89,11 +65,32 @@ const Transfer = ({
     },
   ];
 
+  useEffect(() => {
+    try {
+      getICPPrice()
+        .then(({ price }) => {
+          dispatch(
+            setICPPrice(price['internet-computer'].usd),
+          );
+        });
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.warn(err);
+    }
+
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
+      (state) => {
+        if (!state?.wallets?.length) {
+          sendMessage({ type: HANDLER_TYPES.LOCK, params: {} },
+            () => navigator.navigate('login'));
+        }
+        dispatch(setAccountInfo(state.wallets[0]));
+      });
+  }, []);
+
   return (
     <Layout disableProfile>
-      <LoadingWrapper loading={loading}>
-
-        {
+      {
         requestCount > 1
         && (
           <RequestHandler
@@ -103,8 +100,8 @@ const Transfer = ({
             handleNext={handleSetNextRequest}
           />
         )
-        }
-        {
+      }
+      {
         requestCount > 0
         && (
           <>
@@ -136,12 +133,11 @@ const Transfer = ({
                     style={{ marginTop: 24 }}
                   />
                 )
-                }
+              }
             </Container>
           </>
         )
       }
-      </LoadingWrapper>
     </Layout>
   );
 };
@@ -149,7 +145,7 @@ const Transfer = ({
 export default Transfer;
 
 Transfer.propTypes = {
-  incomingRequests: PropTypes.arrayOf(PropTypes.string).isRequired,
+  args: PropTypes.arrayOf(PropTypes.string).isRequired,
   callId: PropTypes.string.isRequired,
   portId: PropTypes.string.isRequired,
   metadata: PropTypes.arrayOf(PropTypes.string).isRequired,

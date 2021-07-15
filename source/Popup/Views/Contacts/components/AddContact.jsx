@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import EMOJIS from '@shared/constants/emojis';
 import { Typography } from '@material-ui/core';
-import { validateAccountId, validatePrincipalId } from '../../Send/hooks/utils';
+import { validatePrincipalId, validateAccountId } from '@shared/utils/ids';
 import useStyles from '../styles';
 
 const AddContact = ({ handleAddContact, contacts }) => {

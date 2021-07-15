@@ -19,6 +19,7 @@ export { default as ContactItem } from './ContactItem';
 export { default as ContactList } from './ContactList';
 export { default as UserIcon } from './UserIcon';
 export { default as CopyButton } from './CopyButton';
+export { default as LoadingWrapper } from './LoadingWrapper';
 export { IconQrCode } from './Icons';
 
 export * from './Router';
