@@ -9,13 +9,13 @@ import useStyles from '../styles';
 import SIZES from '../constants';
 
 const Details = ({
-  amount, image, url, requestCount,
+  amount, image, url, requestCount, icpPrice,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
 
   const asset = CURRENCIES.get('ICP');
-  const value = amount * asset.price;
+  const value = amount * icpPrice;
 
   window.resizeTo(SIZES.width, requestCount > 1
     ? SIZES.detailsHeightBig
@@ -50,4 +50,5 @@ Details.propTypes = {
   image: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
   requestCount: PropTypes.number.isRequired,
+  icpPrice: PropTypes.number.isRequired,
 };

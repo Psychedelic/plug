@@ -9,7 +9,9 @@ import PropTypes from 'prop-types';
 import { Layout } from '@components';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import getICPPrice from '@shared/services/ICPPrice';
+import { setICPPrice } from '@redux/icp';
 import initConfig from '../../locales';
 import useStyles from './styles';
 import RequestHandler from './components/RequestHandler';
@@ -26,7 +28,7 @@ const Transfer = ({
   const classes = useStyles();
   const dispatch = useDispatch();
   const { url, icons } = metadata;
-
+  const { icpPrice } = useSelector((state) => state.icp);
   const { selectedTab, handleChangeTab } = useTabs();
 
   const {
@@ -37,6 +39,7 @@ const Transfer = ({
     handleSetNextRequest,
     handleRequest,
     handleDeclineAll,
+    principalId,
   } = useRequests(incomingRequests, callId, portId);
 
   const requestCount = requests.length;
@@ -49,6 +52,7 @@ const Transfer = ({
         image={icons[0] || null}
         amount={requestCount > 0 ? requests[currentRequest].amount : 0}
         requestCount={requestCount}
+        icpPrice={icpPrice}
       />,
     },
     {
@@ -56,13 +60,30 @@ const Transfer = ({
       component: <Data
         data={data}
         requestCount={requestCount}
+        principalId={principalId}
       />,
     },
   ];
 
   useEffect(() => {
+    try {
+      getICPPrice()
+        .then(({ price }) => {
+          dispatch(
+            setICPPrice(price['internet-computer'].usd),
+          );
+        });
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.warn(err);
+    }
+
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
       (state) => {
+        if (!state?.wallets?.length) {
+          sendMessage({ type: HANDLER_TYPES.LOCK, params: {} },
+            () => navigator.navigate('login'));
+        }
         dispatch(setAccountInfo(state.wallets[0]));
       });
   }, []);
