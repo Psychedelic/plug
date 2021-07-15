@@ -108,8 +108,8 @@ export const getKeyringHandler = (type, keyring) => ({
       const e8s = await keyring.getBalance();
       const transactions = await keyring.getTransactions();
       return { assets: formatAssets(e8s), transactions: recursiveParseBigint(transactions) };
-    } catch (e) {
-      return { error: e, assets: [], transactions: [] };
+    } catch (error) {
+      return { error: error.message, assets: [], transactions: [] };
     }
   },
   [HANDLER_TYPES.EDIT_PRINCIPAL]: async ({ walletNumber, name, emoji }) => (

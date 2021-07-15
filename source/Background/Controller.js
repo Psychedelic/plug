@@ -126,7 +126,7 @@ backgroundController.exposeController(
         if (icpBalance.error) {
           callback({ message: icpBalance.error, code: 500 }, null);
         } else {
-          callback(null, icpBalance);
+          callback(null, icpBalance, [{ portId, callId }]);
         }
       } else {
         callback(CONNECTION_ERROR, null);
