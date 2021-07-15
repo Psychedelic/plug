@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { DataDisplay } from '@ui';
+import { DataDisplay, AssetFormat } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { PortRPC } from '@fleekhq/browser-rpc';
 import { v4 as uuidv4 } from 'uuid';
+import { CURRENCIES } from '@shared/constants/currencies';
+import shortAddress from '@shared/utils/short-address';
+import PlugController from '@psychedelic/plug-controller';
+import { Principal } from '@dfinity/agent';
+import { validatePrincipalId } from '../../../Popup/Views/Send/hooks/utils';
 import { DEFAULT_FEE } from '../../../Popup/Views/Send/hooks/constants';
 
 const portRPC = new PortRPC({
@@ -15,18 +20,32 @@ portRPC.start();
 
 const useRequests = (incomingRequests, callId, portId) => {
   const { t } = useTranslation();
+  const [currentRequest, setCurrentRequest] = useState(0);
+  const [requests, setRequests] = useState(incomingRequests);
 
+  const [response, setResponse] = useState([]);
+
+  const [accountId, setAccountId] = useState(null);
+  const [principalId, setPrincipalId] = useState(null);
   /* eslint-disable no-param-reassign */
   useEffect(() => {
     incomingRequests.map((item) => (
       { ...item, id: uuidv4() }
     ));
+
+    const address = requests[currentRequest].to;
+
+    if (validatePrincipalId(address)) {
+      setPrincipalId(address);
+      setAccountId(
+        PlugController.getAccountId(
+          Principal.fromText(address),
+        ),
+      );
+    } else {
+      setAccountId(address);
+    }
   }, []);
-
-  const [currentRequest, setCurrentRequest] = useState(0);
-  const [requests, setRequests] = useState(incomingRequests);
-
-  const [response, setResponse] = useState([]);
 
   useEffect(async () => {
     if (requests.length === 0) {
@@ -56,21 +75,32 @@ const useRequests = (incomingRequests, callId, portId) => {
     setRequests(requests.filter((r) => r.id !== request.id));
   };
 
-  const data = [
-    {
+  const data = [];
+
+  if (principalId) {
+    data.push({
+      label: t('common.principalId'),
+      component: <DataDisplay value={shortAddress(principalId)} />,
+    });
+  }
+
+  if (accountId) {
+    data.push({
       label: t('common.accountId'),
-      component: <DataDisplay value={requests[currentRequest].to} />,
-    },
+      component: <DataDisplay value={shortAddress(accountId)} />,
+    });
+  }
+
+  data.push(...[
     {
       label: t('common.fee'),
-      component: <DataDisplay value={requests[currentRequest].args?.fee || DEFAULT_FEE} />,
+      component: <DataDisplay value={<AssetFormat value={requests[currentRequest].args?.fee || DEFAULT_FEE} asset={CURRENCIES.get('ICP').value} />} />,
     },
-
     {
       label: t('common.memo'),
       component: <DataDisplay value={requests[currentRequest].args?.memo || t('common.null')} />,
     },
-  ];
+  ]);
 
   return {
     requests,
@@ -80,6 +110,7 @@ const useRequests = (incomingRequests, callId, portId) => {
     handleSetPreviousRequest,
     handleRequest,
     handleDeclineAll,
+    principalId,
   };
 };
 

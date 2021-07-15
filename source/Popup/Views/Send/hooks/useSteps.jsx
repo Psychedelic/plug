@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { LinkButton } from '@ui';
 import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';
