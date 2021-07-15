@@ -9,19 +9,24 @@ import PlugController from '@psychedelic/plug-controller';
 import { Principal } from '@dfinity/agent';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { DEFAULT_FEE } from '@shared/constants/addresses';
+import { setAssets, setTransactions } from '@redux/wallet';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import { useDispatch } from 'react-redux';
 
 const portRPC = new PortRPC({
   name: 'transfer-port',
   target: 'bg-script',
-  timeout: 5000,
+  timeout: 20000,
 });
 
 portRPC.start();
 
-const useRequests = (incomingRequests, callId, portId) => {
+const useRequests = (incomingRequests, callId, portId, icpPrice) => {
   const { t } = useTranslation();
   const [currentRequest, setCurrentRequest] = useState(0);
   const [requests, setRequests] = useState(incomingRequests);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const [response, setResponse] = useState([]);
 
@@ -49,8 +54,20 @@ const useRequests = (incomingRequests, callId, portId) => {
 
   useEffect(async () => {
     if (requests.length === 0) {
-      await portRPC.call('handleRequestTransfer', [response, callId, portId]);
-      window.close();
+      setLoading(true);
+      sendMessage({
+        type: HANDLER_TYPES.SEND_ICP,
+        params: response?.[0],
+      }, async (sendResponse) => {
+        const { error, assets: keyringAssets, transactions } = sendResponse || {};
+        if (!error) {
+          dispatch(setAssets(keyringAssets));
+          dispatch(setTransactions({ ...transactions, icpPrice }));
+        }
+        await portRPC.call('handleRequestTransfer', [!error, callId, portId]);
+        setLoading(false);
+        window.close();
+      });
     }
   }, [requests]);
 
@@ -111,6 +128,7 @@ const useRequests = (incomingRequests, callId, portId) => {
     handleRequest,
     handleDeclineAll,
     principalId,
+    loading,
   };
 };
 

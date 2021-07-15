@@ -13,7 +13,7 @@ import { DEFAULT_FEE } from '@shared/constants/addresses';
 const portRPC = new PortRPC({
   name: 'transfer-port',
   target: 'bg-script',
-  timeout: 5000,
+  timeout: 20000,
 });
 
 portRPC.start();

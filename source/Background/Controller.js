@@ -135,7 +135,7 @@ backgroundController.exposeController(
     const { message, sender, callback } = opts;
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
-
+    console.log('request', callId, portId);
     storage.get([metadata.url], async (state) => {
       if (state?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
         const url = qs.stringifyUrl({
@@ -165,14 +165,11 @@ backgroundController.exposeController(
 
 backgroundController.exposeController(
   'handleRequestTransfer',
-  async (opts, args, callId, portId) => {
+  async (opts, ok, callId, portId) => {
+    console.log('handle', callId, portId);
     const { callback } = opts;
-    const [transfer] = args;
-    const keyringHandler = getKeyringHandler(HANDLER_TYPES.SEND_ICP, keyring);
-    const transferResponse = await keyringHandler(transfer);
-
     callback(null, true);
-    callback(null, transferResponse, [{ portId, callId }]);
+    callback(null, ok, [{ portId, callId }]);
   },
 );
 
