@@ -141,7 +141,6 @@ backgroundController.exposeController(
     const { message, sender, callback } = opts;
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
-    console.log('request', callId, portId);
     storage.get([metadata.url], async (state) => {
       if (state?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
         const url = qs.stringifyUrl({
@@ -171,11 +170,15 @@ backgroundController.exposeController(
 
 backgroundController.exposeController(
   'handleRequestTransfer',
-  async (opts, ok, callId, portId) => {
-    console.log('handle', callId, portId);
+  async (opts, response, callId, portId) => {
     const { callback } = opts;
     callback(null, true);
-    callback(null, ok, [{ portId, callId }]);
+
+    if (response.ok) {
+      callback(null, response, [{ portId, callId }]);
+    } else {
+      callback({ code: 500, message: response.error }, null, [{ portId, callId }]);
+    }
   },
 );
 
