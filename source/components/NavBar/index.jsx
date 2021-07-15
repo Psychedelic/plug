@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Plug from '../Plug';
 import Profile from '../Profile';
 import WalletInfo from '../WalletInfo';
 import useStyles from './styles';
 
-const NavBar = () => {
+const NavBar = ({ disableProfile }) => {
   const classes = useStyles();
 
   return (
@@ -16,10 +17,14 @@ const NavBar = () => {
         <WalletInfo />
       </div>
       <div className={classes.flex}>
-        <Profile />
+        <Profile disableProfile={disableProfile} />
       </div>
     </div>
   );
 };
 
 export default NavBar;
+
+NavBar.propTypes = {
+  disableProfile: PropTypes.bool.isRequired,
+};

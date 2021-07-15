@@ -4,10 +4,10 @@ import { FormItem } from '@ui';
 import useStyles from '../styles';
 import SIZES from '../constants';
 
-const Data = ({ data, requestCount }) => {
+const Data = ({ data, principalId }) => {
   const classes = useStyles();
 
-  window.resizeTo(SIZES.width, requestCount > 1
+  window.resizeTo(SIZES.width, principalId
     ? SIZES.dataHeightBig
     : SIZES.dataHeightSmall);
 
@@ -36,5 +36,5 @@ Data.propTypes = {
       component: PropTypes.node.isRequired,
     }),
   ).isRequired,
-  requestCount: PropTypes.number.isRequired,
+  principalId: PropTypes.objectOf(PropTypes.object).isRequired,
 };

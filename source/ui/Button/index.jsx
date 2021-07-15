@@ -26,12 +26,15 @@ const VARIANTS = {
 };
 
 const Button = ({
-  value, onClick, variant, loading, disabled, fullWidth, ...other
+  value, onClick, variant, loading, disabled, fullWidth, wrapperStyle, ...other
 }) => {
   const classes = useStyles();
 
   return (
-    <div className={clsx(classes.wrapper, fullWidth && classes.fullWidth)}>
+    <div
+      className={clsx(classes.wrapper, fullWidth && classes.fullWidth)}
+      style={{ ...wrapperStyle }}
+    >
       <MuiButton
         onClick={onClick}
         className={clsx(classes.root, classes[variant])}
@@ -56,6 +59,7 @@ Button.defaultProps = {
   loading: false,
   disabled: false,
   fullWidth: false,
+  wrapperStyle: null,
 };
 
 Button.propTypes = {
@@ -65,4 +69,5 @@ Button.propTypes = {
   loading: PropTypes.bool,
   disabled: PropTypes.bool,
   fullWidth: PropTypes.bool,
+  wrapperStyle: PropTypes.objectOf(PropTypes.object),
 };

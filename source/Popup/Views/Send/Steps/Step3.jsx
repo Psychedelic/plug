@@ -120,13 +120,13 @@ const Step3 = ({
                       <div className={classes.flex}>
                         <Typography variant="subtitle1" className={classes.to}>{t('send.to')}</Typography>
                         <div className={clsx(classes.badge, classes.principalBadge)}>
-                          {t('send.principalId')}
+                          {t('common.principalId')}
                         </div>
                       </div>
                       <div className={classes.titleContainer}>
                         <img src={ArrowImg} className={classes.arrow} />
                         <div className={clsx(classes.badge, classes.accountBadge)}>
-                          {t('send.accountId')}
+                          {t('common.accountId')}
                         </div>
                         <Info
                           onClick={() => setOpenICPModal(true)}
@@ -167,7 +167,7 @@ const Step3 = ({
                     <div className={classes.flex}>
                       <Typography variant="subtitle1" className={classes.to}>{t('send.to')}</Typography>
                       <div className={clsx(classes.badge, classes.accountBadge)}>
-                        {t('send.accountId')}
+                        {t('common.accountId')}
                       </div>
                     </div>
                     <div className={classes.flex}>

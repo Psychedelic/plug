@@ -16,18 +16,18 @@ const RequestHandler = ({
         currentRequest > 1
         && (
         <span className={clsx(classes.arrow, classes.left)} onClick={handlePrevious}>
-          {t('cycleTransactions.previous')}
+          {t('transfer.previous')}
         </span>
         )
       }
       <span className={classes.requestCenter}>
-        <b>{currentRequest} {t('cycleTransactions.of')} {requests}</b> {t('cycleTransactions.transactions')}
+        <b>{currentRequest} {t('transfer.of')} {requests}</b> {t('transfer.transactions')}
       </span>
       {
         currentRequest < requests
         && (
         <span className={clsx(classes.arrow, classes.right)} onClick={handleNext}>
-          {t('cycleTransactions.next')}
+          {t('transfer.next')}
         </span>
         )
       }
