@@ -27,12 +27,17 @@ const Login = ({ redirect }) => {
     sendMessage({
       type: HANDLER_TYPES.UNLOCK,
       params: { password },
-      /* eslint-disable-next-line no-nested-ternary */
-    }, (unlocked) => (unlocked
-      ? (redirect
-        ? redirect()
-        : navigator.navigate('home'))
-      : setError(true)));
+    }, (unlocked) => {
+      if (unlocked) {
+        if (redirect) {
+          redirect();
+        } else {
+          navigator.navigate('home');
+        }
+      } else {
+        setError(true);
+      }
+    });
   };
 
   const handleKeyPress = (e) => e.key === 'Enter' && handleLogin();
