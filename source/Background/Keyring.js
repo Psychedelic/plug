@@ -70,6 +70,12 @@ export const getKeyringHandler = (type, keyring) => ({
     let unlocked = false;
     try {
       unlocked = await keyring.unlock(params?.password);
+
+      if (unlocked) {
+        extension.storage.local.set({
+          router: 'home',
+        });
+      }
     } catch (e) {
       unlocked = false;
     }
