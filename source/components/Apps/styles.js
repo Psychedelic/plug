@@ -23,7 +23,7 @@ export default makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: `${theme.spacing(1)}px ${theme.spacing(4)}px`,
-    height: 144,
+    height: 110,
     textAlign: 'center',
     whiteSpace: 'pre-line',
   },

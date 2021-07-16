@@ -7,7 +7,6 @@ import SIZES from '../Pages/Notification/components/Transfer/constants';
 import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
 
 const storage = extension.storage.local;
-
 let keyring;
 
 const backgroundController = new BackgroundController({
@@ -58,13 +57,18 @@ backgroundController.exposeController(
   (opts, domainUrl, name, icon) => {
     const { message, sender } = opts;
 
-    storage.set({
-      [domainUrl]: {
-        url: domainUrl,
-        name,
-        status: CONNECTION_STATUS.pending,
-        icon,
-      },
+    storage.get('apps', (response) => {
+      const apps = {
+        ...response.apps,
+        [domainUrl]: {
+          url: domainUrl,
+          name,
+          status: CONNECTION_STATUS.pending,
+          icon,
+        },
+      };
+
+      storage.set({ apps });
     });
 
     const url = qs.stringifyUrl({
@@ -94,19 +98,21 @@ backgroundController.exposeController(
   async (opts, url, status, callId, portId) => {
     const { callback } = opts;
 
-    let connection = null;
+    storage.get('apps', (response) => {
+      const apps = response.apps || {};
 
-    storage.get([url], (state) => {
-      if (state[url]) {
-        connection = state[url];
-        connection.status = status;
+      const newApps = Object.keys(apps).reduce((obj, key) => {
+        const newObj = { ...obj };
+        newObj[key] = apps[key];
 
-        storage.set({
-          [url]: {
-            ...connection,
-          },
-        });
-      }
+        if (key === url) {
+          newObj[key].status = status;
+        }
+
+        return newObj;
+      }, {});
+
+      storage.set({ apps: newApps });
     });
 
     callback(null, true);
