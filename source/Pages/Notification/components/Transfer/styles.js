@@ -14,21 +14,20 @@ export default makeStyles((theme) => ({
   cyclesContainer: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(2.5),
   },
   amountContainer: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    height: 60,
+    height: 50,
   },
   amount: {
     color: theme.palette.common.blue,
-    fontSize: 30,
-    lineHeight: '36px',
+    fontSize: '25px',
+    lineHeight: '25px',
     fontWeight: 800,
   },
   trillion: {
@@ -62,5 +61,8 @@ export default makeStyles((theme) => ({
   },
   right: {
     right: theme.spacing(2),
+  },
+  buttonsWrapper: {
+    padding: '0 24px',
   },
 }));

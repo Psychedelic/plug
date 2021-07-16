@@ -57,26 +57,28 @@ const AppConnection = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Layout disableProfile>
-          <Container>
-            <IncomingAction url={url} image={icon} action={t('appConnection.connect')} />
-            <div className={classes.buttonContainer}>
-              <Button
-                variant="default"
-                value={t('common.decline')}
-                onClick={() => onClickHandler(CONNECTION_STATUS.rejected)}
-                style={{ width: '96%' }}
-                fullWidth
-              />
-              <Button
-                variant="rainbow"
-                value={t('common.allow')}
-                onClick={() => onClickHandler(CONNECTION_STATUS.accepted)}
-                fullWidth
-                style={{ width: '96%' }}
-                wrapperStyle={{ textAlign: 'right' }}
-              />
-            </div>
-          </Container>
+          <div className={classes.padTop}>
+            <Container>
+              <IncomingAction url={url} image={icon} action={t('appConnection.connect')} />
+              <div className={classes.buttonContainer}>
+                <Button
+                  variant="default"
+                  value={t('common.decline')}
+                  onClick={() => onClickHandler(CONNECTION_STATUS.rejected)}
+                  style={{ width: '96%' }}
+                  fullWidth
+                />
+                <Button
+                  variant="rainbow"
+                  value={t('common.allow')}
+                  onClick={() => onClickHandler(CONNECTION_STATUS.accepted)}
+                  fullWidth
+                  style={{ width: '96%' }}
+                  wrapperStyle={{ textAlign: 'right' }}
+                />
+              </div>
+            </Container>
+          </div>
         </Layout>
       </ThemeProvider>
     </Provider>

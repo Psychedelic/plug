@@ -14,6 +14,6 @@ export default makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     height: 120,
-    margin: `${theme.spacing(2.5)}px 0 `,
+    marginBottom: `${theme.spacing(3)}px`,
   },
 }));

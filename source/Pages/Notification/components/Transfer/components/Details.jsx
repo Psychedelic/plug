@@ -4,6 +4,7 @@ import { IncomingAction, USDFormat } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
 import { CURRENCIES } from '@shared/constants/currencies';
+import { E8S_PER_ICP } from '@background/Keyring';
 import NumberFormat from 'react-number-format';
 import useStyles from '../styles';
 import SIZES from '../constants';
@@ -15,7 +16,7 @@ const Details = ({
   const classes = useStyles();
 
   const asset = CURRENCIES.get('ICP');
-  const value = amount * icpPrice;
+  const value = (amount * icpPrice) / E8S_PER_ICP;
 
   window.resizeTo(SIZES.width, requestCount > 1
     ? SIZES.detailsHeightBig
@@ -26,7 +27,7 @@ const Details = ({
       <IncomingAction image={image} url={url} action={t('transfer.withdraw')} />
 
       <div className={classes.cyclesContainer}>
-        <Typography variant="h3">{t('transfer.amount').replace('{token}', asset.name)}</Typography>
+        <Typography variant="h4">{t('transfer.amount').replace('{token}', asset.name)}</Typography>
 
         <div className={classes.amountContainer}>
           <span className={classes.amount}>

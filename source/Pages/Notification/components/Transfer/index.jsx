@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useTranslation, initReactI18next } from 'react-i18next';
 import {
-  Button, Container, Tabs, LinkButton,
+  Button, Tabs, LinkButton,
 } from '@ui';
 import i18n from 'i18next';
 import { useTabs } from '@hooks';
@@ -109,7 +109,7 @@ const Transfer = ({
         && (
           <>
             <Tabs tabs={tabs} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
-            <Container>
+            <div className={classes.buttonsWrapper}>
               <div className={classes.buttonContainer}>
                 <Button
                   variant="default"
@@ -137,7 +137,7 @@ const Transfer = ({
                   />
                 )
                 }
-            </Container>
+            </div>
           </>
         )
       }

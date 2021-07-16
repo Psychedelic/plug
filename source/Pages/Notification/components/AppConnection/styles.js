@@ -6,4 +6,7 @@ export default makeStyles({
     display: 'flex',
     justifyContent: 'space-between',
   },
+  padTop: {
+    paddingTop: 35,
+  },
 });
