@@ -1,5 +1,4 @@
-import React from 'react';
-import DefaultIcon from '@assets/icons/account-circle.png';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
@@ -10,19 +9,21 @@ const UserIcon = ({ big, icon }) => {
 
   const classes = useStyles();
 
-  let displayIcon = null;
+  const [displayIcon, setDisplayIcon] = useState('👽');
 
-  if (icon) {
-    displayIcon = <span>{icon}</span>;
-  } else if (emoji) {
-    displayIcon = <span>{emoji}</span>;
-  } else {
-    displayIcon = <img src={DefaultIcon} alt="Icon" />;
-  }
+  useEffect(() => {
+    if (icon) {
+      setDisplayIcon(icon);
+    } else if (emoji) {
+      setDisplayIcon(emoji);
+    }
+  }, [icon, emoji]);
 
   return (
     <div className={clsx(classes.fancyCircle, big ? classes.big : classes.small)}>
-      {displayIcon}
+      <span>
+        {displayIcon}
+      </span>
     </div>
   );
 };

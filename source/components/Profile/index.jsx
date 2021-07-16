@@ -6,17 +6,18 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import MenuList from '@material-ui/core/MenuList';
 import Button from '@material-ui/core/Button';
 import { HoverAnimation, MenuItem } from '@ui';
+import PropTypes from 'prop-types';
 import UserIcon from '../UserIcon';
 import useStyles from './styles';
 import useMenuItems from '../../hooks/useMenuItems';
 
-const Profile = () => {
+const Profile = ({ disableProfile }) => {
   const classes = useStyles();
 
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
 
-  const menuItems = useMenuItems();
+  const menuItems = disableProfile ? [] : useMenuItems();
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -32,7 +33,9 @@ const Profile = () => {
 
   return (
     <>
-      <HoverAnimation>
+      <HoverAnimation
+        disabled={disableProfile}
+      >
         <Button
           ref={anchorRef}
           onClick={handleToggle}
@@ -40,6 +43,7 @@ const Profile = () => {
           classes={{
             label: classes.label,
           }}
+          disabled={disableProfile}
         >
           <UserIcon />
         </Button>
@@ -82,3 +86,7 @@ const Profile = () => {
 };
 
 export default Profile;
+
+Profile.propTypes = {
+  disableProfile: PropTypes.bool.isRequired,
+};

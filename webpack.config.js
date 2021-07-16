@@ -68,14 +68,7 @@ module.exports = {
     popup: path.join(sourcePath, 'Popup', 'index.jsx'),
     options: path.join(sourcePath, 'Options', 'index.jsx'),
     inpage: path.join(sourcePath, 'Inpage', 'index.js'),
-    notification: path.join(sourcePath, 'Pages', 'Notification', 'index.js'),
-    appConnection: path.join(sourcePath, 'Pages', 'AppConnection', 'index.jsx'),
-    cycleWithdrawal: path.join(
-      sourcePath,
-      'Pages',
-      'CycleWithdrawal',
-      'index.jsx',
-    ),
+    notification: path.join(sourcePath, 'Pages', 'Notification', 'index.jsx'),
   },
   node: {
     fs: 'empty',
@@ -209,20 +202,6 @@ module.exports = {
       chunks: ['notification'],
       hash: true,
       filename: 'notification.html',
-    }),
-    new HtmlWebpackPlugin({
-      template: path.join(viewsPath, 'notification.html'),
-      inject: 'body',
-      chunks: ['appConnection'],
-      hash: true,
-      filename: 'notification.html',
-    }),
-    new HtmlWebpackPlugin({
-      template: path.join(viewsPath, 'cycle-withdrawal.html'),
-      inject: 'body',
-      chunks: ['cycleWithdrawal'],
-      hash: true,
-      filename: 'cycle-withdrawal.html',
     }),
     // write css file(s) to build folder
     new MiniCssExtractPlugin({ filename: 'css/[name].css' }),

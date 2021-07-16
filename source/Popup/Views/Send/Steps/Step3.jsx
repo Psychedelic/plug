@@ -25,7 +25,7 @@ import ArrowUpRight from '@assets/icons/arrow-up-right.png';
 import clsx from 'clsx';
 import { useRouter, Plug } from '@components';
 
-import { ADDRESS_TYPES, DEFAULT_FEE } from '../hooks/constants';
+import { ADDRESS_TYPES, DEFAULT_FEE } from '@shared/constants/addresses';
 import useStyles from '../styles';
 
 const Step3 = ({
@@ -120,13 +120,13 @@ const Step3 = ({
                       <div className={classes.flex}>
                         <Typography variant="subtitle1" className={classes.to}>{t('send.to')}</Typography>
                         <div className={clsx(classes.badge, classes.principalBadge)}>
-                          {t('send.principalId')}
+                          {t('common.principalId')}
                         </div>
                       </div>
                       <div className={classes.titleContainer}>
                         <img src={ArrowImg} className={classes.arrow} />
                         <div className={clsx(classes.badge, classes.accountBadge)}>
-                          {t('send.accountId')}
+                          {t('common.accountId')}
                         </div>
                         <Info
                           onClick={() => setOpenICPModal(true)}
@@ -167,7 +167,7 @@ const Step3 = ({
                     <div className={classes.flex}>
                       <Typography variant="subtitle1" className={classes.to}>{t('send.to')}</Typography>
                       <div className={clsx(classes.badge, classes.accountBadge)}>
-                        {t('send.accountId')}
+                        {t('common.accountId')}
                       </div>
                     </div>
                     <div className={classes.flex}>

@@ -60,7 +60,7 @@ const Step2 = ({ selectedSource, selectedAsset }) => {
                 <div className={classes.addressContainer}>
                   <Typography variant="h4" style={{ marginRight: 'auto' }}>{shortAddress(principalId)}</Typography>
                   <div className={clsx(classes.badge, classes.principalBadge)}>
-                    {t('send.principalId')}
+                    {t('common.principalId')}
                   </div>
                   <IconQrCode
                     onClick={() => setOpenQr(true)}
@@ -98,7 +98,7 @@ const Step2 = ({ selectedSource, selectedAsset }) => {
                 <div className={classes.addressContainer}>
                   <Typography variant="h4" style={{ marginRight: 'auto' }}>{shortAddress(accountId)}</Typography>
                   <div className={clsx(classes.badge, classes.accountBadge)}>
-                    {t('send.accountId')}
+                    {t('common.accountId')}
                   </div>
                   <CopyButton text={accountId} placement="top" />
                 </div>

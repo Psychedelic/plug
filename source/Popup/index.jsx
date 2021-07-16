@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import browser from 'webextension-polyfill';
-
 import { theme } from '@ui';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import ProviderWrapper from '../shared/ProviderWrapper';

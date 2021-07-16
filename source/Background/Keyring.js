@@ -45,6 +45,7 @@ export const HANDLER_TYPES = {
   GET_STATE: 'get-keyring-state',
   GET_TRANSACTIONS: 'get-keyring-transactions',
   GET_ASSETS: 'get-keyring-assets',
+  GET_BALANCE: 'get-balance',
   SEND_ICP: 'send-icp',
   EDIT_PRINCIPAL: 'edit-principal',
 };
@@ -69,6 +70,12 @@ export const getKeyringHandler = (type, keyring) => ({
     let unlocked = false;
     try {
       unlocked = await keyring.unlock(params?.password);
+
+      if (unlocked) {
+        extension.storage.local.set({
+          router: 'home',
+        });
+      }
     } catch (e) {
       unlocked = false;
     }
@@ -89,14 +96,26 @@ export const getKeyringHandler = (type, keyring) => ({
     const e8s = await keyring.getBalance();
     return formatAssets(e8s, icpPrice);
   },
+  [HANDLER_TYPES.GET_BALANCE]: async (accountId) => {
+    try {
+      await keyring.getState();
+      const e8s = await keyring.getBalance(accountId);
+
+      return formatAssets(e8s);
+    } catch (error) {
+      return { error: error.message };
+    }
+  },
   [HANDLER_TYPES.SEND_ICP]: async ({ to, amount }) => {
     try {
+      await keyring.getState();
       await keyring.sendICP(to, BigInt(amount));
+
       const e8s = await keyring.getBalance();
       const transactions = await keyring.getTransactions();
       return { assets: formatAssets(e8s), transactions: recursiveParseBigint(transactions) };
-    } catch (e) {
-      return { error: true, assets: [], transactions: [] };
+    } catch (error) {
+      return { error: error.message, assets: [], transactions: [] };
     }
   },
   [HANDLER_TYPES.EDIT_PRINCIPAL]: async ({ walletNumber, name, emoji }) => (

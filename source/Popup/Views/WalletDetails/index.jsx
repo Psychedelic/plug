@@ -131,13 +131,13 @@ const WalletDetails = () => {
           </Grid>
           <Grid item xs={12}>
             <FormItem
-              label={t('walletDetails.accountId')}
+              label={t('common.accountId')}
               smallLabel
               component={(
                 <div className={classes.addressContainer}>
                   <Typography variant="h4" style={{ marginRight: 'auto' }}>{shortAddress(accountId)}</Typography>
                   <div className={clsx(classes.badge, classes.accountBadge)}>
-                    {t('send.accountId')}
+                    {t('common.accountId')}
                   </div>
                   <CopyButton text={accountId} placement="top" />
                 </div>

@@ -1,5 +1,5 @@
 import { Principal } from '@dfinity/agent';
-import { ALPHANUM_REGEX, PRINCIPAL_REGEX } from './constants';
+import { ALPHANUM_REGEX, PRINCIPAL_REGEX } from '../constants/addresses';
 
 export const validatePrincipalId = (text) => {
   try {

@@ -1,23 +1,23 @@
-// import { ProxyRPC } from '@fleekhq/browser-rpc';
+import { ProxyRPC } from '@fleekhq/browser-rpc';
 
-// // import { injectScript } from './utils';
+import { injectScript } from './utils';
 
-// const serverRPC = new ProxyRPC(window, {
-//   name: 'plug-content-script',
-//   target: 'plug-inpage-provider',
-// });
+const serverRPC = new ProxyRPC(window, {
+  name: 'plug-content-script',
+  target: 'plug-inpage-provider',
+});
 
-// serverRPC.exposeHandler('test', (props, name) => {
-//   const { callback } = props;
-//   const result = `hello ${name}!!!`;
-//   callback(null, result);
-// });
+serverRPC.exposeHandler('test', (props, name) => {
+  const { callback } = props;
+  const result = `hello ${name}!!!`;
+  callback(null, result);
+});
 
-// serverRPC.start();
+serverRPC.start();
 
-// // injectScript(null, INPAGE_SCRIPT);
+injectScript(null, INPAGE_SCRIPT);
 
-// /* eslint-disable no-console */
-// console.log('helloworld from content script');
+/* eslint-disable no-console */
+console.log('helloworld from content script');
 
 export {};

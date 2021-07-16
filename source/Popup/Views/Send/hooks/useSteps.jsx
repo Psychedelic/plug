@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { LinkButton } from '@ui';
 import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';
 import { setAssets, setTransactions } from '@redux/wallet';
 import { HANDLER_TYPES, E8S_PER_ICP, sendMessage } from '@background/Keyring';
+import { CURRENCIES } from '@shared/constants/currencies';
+import { validateAccountId, validatePrincipalId } from '@shared/utils/ids';
+import { ADDRESS_TYPES, DEFAULT_FEE } from '@shared/constants/addresses';
 import Step1 from '../Steps/Step1';
 import Step2a from '../Steps/Step2a';
 import Step2b from '../Steps/Step2b';
 import Step3 from '../Steps/Step3';
-import { CURRENCIES } from '../../../../shared/constants/currencies';
-import { validateAccountId, validatePrincipalId } from './utils';
-import { ADDRESS_TYPES, DEFAULT_FEE } from './constants';
 
 const useSteps = () => {
   const [step, setStep] = useState(0);
