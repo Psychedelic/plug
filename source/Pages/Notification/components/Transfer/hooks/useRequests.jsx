@@ -9,9 +9,6 @@ import PlugController from '@psychedelic/plug-controller';
 import { Principal } from '@dfinity/agent';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { DEFAULT_FEE } from '@shared/constants/addresses';
-import { setAssets, setTransactions } from '@redux/wallet';
-import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { useDispatch } from 'react-redux';
 
 const portRPC = new PortRPC({
   name: 'transfer-port',
@@ -21,12 +18,10 @@ const portRPC = new PortRPC({
 
 portRPC.start();
 
-const useRequests = (incomingRequests, callId, portId, icpPrice) => {
+const useRequests = (incomingRequests, callId, portId) => {
   const { t } = useTranslation();
   const [currentRequest, setCurrentRequest] = useState(0);
   const [requests, setRequests] = useState(incomingRequests);
-  const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
 
   const [response, setResponse] = useState([]);
 
@@ -54,25 +49,8 @@ const useRequests = (incomingRequests, callId, portId, icpPrice) => {
 
   useEffect(async () => {
     if (requests.length === 0) {
-      setLoading(true);
-      if (response?.[0]?.status === 'declined') {
-        await portRPC.call('handleRequestTransfer', [{ ok: false, error: 'The transaction was rejected' }, callId, portId]);
-        window.close();
-      } else {
-        sendMessage({
-          type: HANDLER_TYPES.SEND_ICP,
-          params: response?.[0],
-        }, async (sendResponse) => {
-          const { error, assets: keyringAssets, transactions } = sendResponse || {};
-          if (!error) {
-            dispatch(setAssets(keyringAssets));
-            dispatch(setTransactions({ ...transactions, icpPrice }));
-          }
-          await portRPC.call('handleRequestTransfer', [{ ok: !error, error, response: sendResponse }, callId, portId]);
-          setLoading(false);
-          window.close();
-        });
-      }
+      await portRPC.call('handleRequestTransfer', [response, callId, portId]);
+      window.close();
     }
   }, [requests]);
 
@@ -133,7 +111,6 @@ const useRequests = (incomingRequests, callId, portId, icpPrice) => {
     handleRequest,
     handleDeclineAll,
     principalId,
-    loading,
   };
 };
 

@@ -25,7 +25,7 @@ export const init = async () => {
   keyring = new PlugController.PlugKeyRing();
   await keyring.init();
   if (keyring.isUnlocked) {
-    await keyring.getState();
+    await keyring?.getState();
   }
 };
 
@@ -227,14 +227,23 @@ backgroundController.exposeController(
 
 backgroundController.exposeController(
   'handleRequestTransfer',
-  async (opts, response, callId, portId) => {
+  async (opts, transferRequests, callId, portId) => {
     const { callback } = opts;
+    const transfer = transferRequests?.[0];
+
+    // Answer this callback no matter if the transfer succeeds or not.
     callback(null, true);
 
-    if (response.ok) {
-      callback(null, response, [{ portId, callId }]);
+    if (transfer?.status === 'declined') {
+      callback({ code: 401, message: 'The transactions was rejected' }, null);
     } else {
-      callback({ code: 500, message: response.error }, null, [{ portId, callId }]);
+      const sendICP = getKeyringHandler(HANDLER_TYPES.SEND_ICP, keyring);
+      const response = await sendICP(transfer);
+      if (response.error) {
+        callback({ code: 500, message: response.error }, null, [{ portId, callId }]);
+      } else {
+        callback(null, response, [{ portId, callId }]);
+      }
     }
   },
 );
