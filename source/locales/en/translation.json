@@ -210,7 +210,7 @@
     "passwordWarning": "Don't forget your password, otherwise you'll need to reimport your wallet using your Secret Recovery Phrase.",
     "importSubtitle": "Please enter your 12 word Secret Recovery Phrase.",
     "importMessage": "Paste that sh*t",
-    "importLabel": "Secret Recovery Phrase or Private Key",
+    "importLabel": "Secret Recovery Phrase",
     "importButton": "Okay, I entered it.",
     "memeTitle": "You're good to go!",
     "memeSubtitle": "Peep your extensions and Plug should be there.",

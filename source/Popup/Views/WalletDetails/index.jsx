@@ -137,7 +137,7 @@ const WalletDetails = () => {
                 <div className={classes.addressContainer}>
                   <Typography variant="h4" style={{ marginRight: 'auto' }}>{shortAddress(accountId)}</Typography>
                   <div className={clsx(classes.badge, classes.accountBadge)}>
-                    {t('send.accountId')}
+                    {t('common.accountId')}
                   </div>
                   <CopyButton text={accountId} placement="top" />
                 </div>

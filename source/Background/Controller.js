@@ -164,7 +164,6 @@ backgroundController.exposeController(
 backgroundController.exposeController(
   'handleRequestBalance',
   async (opts, url, accountId, callId, portId) => {
-    console.log('arrived at background', url);
     const { callback } = opts;
     storage.get([url], async (state) => {
       callback(null, true);
@@ -204,11 +203,13 @@ backgroundController.exposeController(
             type: 'transfer',
           },
         });
+
+        const height = keyring?.isUnlocked ? SIZES.detailHeightSmall : SIZES.loginHeight;
         extension.windows.create({
           url,
           type: 'popup',
           width: SIZES.width,
-          height: SIZES.detailHeightSmall,
+          height,
           top: 65,
           left: metadata.pageWidth - SIZES.width,
         });
