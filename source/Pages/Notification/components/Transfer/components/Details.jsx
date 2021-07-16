@@ -10,13 +10,14 @@ import useStyles from '../styles';
 import SIZES from '../constants';
 
 const Details = ({
-  amount, image, url, requestCount, icpPrice,
+  amount: e8s, image, url, requestCount, icpPrice,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
 
   const asset = CURRENCIES.get('ICP');
-  const value = (amount * icpPrice) / E8S_PER_ICP;
+  const amount = e8s / E8S_PER_ICP;
+  const value = (amount * icpPrice);
 
   window.resizeTo(SIZES.width, requestCount > 1
     ? SIZES.detailsHeightBig
@@ -31,7 +32,7 @@ const Details = ({
 
         <div className={classes.amountContainer}>
           <span className={classes.amount}>
-            <NumberFormat value={amount} displayType="text" thousandSeparator="," decimalScale={2} fixedDecimalScale />
+            <NumberFormat value={amount} displayType="text" thousandSeparator="," />
             <span className={classes.trillion}>{asset.value}</span>
           </span>
           <Typography variant="subtitle1">

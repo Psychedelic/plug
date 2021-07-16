@@ -6,7 +6,7 @@ import {
 import i18n from 'i18next';
 import { useTabs } from '@hooks';
 import PropTypes from 'prop-types';
-import { Layout, LoadingWrapper } from '@components';
+import { Layout } from '@components';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
 import { useDispatch, useSelector } from 'react-redux';
@@ -63,8 +63,7 @@ const Transfer = ({
     handleRequest,
     handleDeclineAll,
     principalId,
-    loading,
-  } = useRequests([args], callId, portId, icpPrice);
+  } = useRequests([args], callId, portId);
 
   const requestCount = requests.length;
 
@@ -91,9 +90,8 @@ const Transfer = ({
 
   return (
     <Layout disableProfile>
-      <LoadingWrapper loading={loading}>
 
-        {
+      {
         requestCount > 1
         && (
           <RequestHandler
@@ -104,7 +102,7 @@ const Transfer = ({
           />
         )
         }
-        {
+      {
         requestCount > 0
         && (
           <>
@@ -141,7 +139,6 @@ const Transfer = ({
           </>
         )
       }
-      </LoadingWrapper>
     </Layout>
   );
 };

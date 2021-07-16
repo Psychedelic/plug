@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { PortRPC } from '@fleekhq/browser-rpc';
 
 const portRPC = new PortRPC({
-  name: 'transfer-port',
+  name: 'notification-port',
   target: 'bg-script',
   timeout: 20000,
 });
@@ -11,14 +11,14 @@ const portRPC = new PortRPC({
 portRPC.start();
 
 const Balance = ({
-  args: accountId, metadata, callId, portId,
+  args: subaccount, metadata, callId, portId,
 }) => {
   useEffect(async () => {
-    if (metadata && accountId !== undefined && callId && portId) {
-      await portRPC.call('handleRequestBalance', [metadata.url, accountId, callId, portId]);
+    if (metadata && subaccount && callId && portId) {
+      await portRPC.call('handleRequestBalance', [metadata.url, subaccount || 0, callId, portId]);
       window.close();
     }
-  }, [metadata, accountId, callId, portId]);
+  }, [metadata, subaccount, callId, portId]);
   return <div style={{ display: 'none' }} />;
 };
 

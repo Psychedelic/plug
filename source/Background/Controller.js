@@ -14,8 +14,6 @@ const backgroundController = new BackgroundController({
   trustedSources: [
     'plug-content-script',
     'notification-port',
-    'app-connection-port',
-    'transfer-port',
   ],
 });
 
@@ -43,9 +41,9 @@ extension.runtime.onMessage.addListener((message, _, sendResponse) => {
 backgroundController.exposeController('isConnected', (opts, url) => {
   const { callback } = opts;
 
-  storage.get([url], (state) => {
-    if (state[url]) {
-      callback(null, state[url].status === CONNECTION_STATUS.accepted);
+  storage.get('apps', (state) => {
+    if (state?.apps?.[url]) {
+      callback(null, state?.apps?.apps?.[url].status === CONNECTION_STATUS.accepted);
     } else {
       callback(null, false);
     }
@@ -121,8 +119,8 @@ backgroundController.exposeController(
 );
 
 const requestBalance = (metadata, accountId, callback) => {
-  storage.get([metadata.url], async (state) => {
-    if (state?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
+  storage.get('apps', async (state) => {
+    if (state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
       const getBalance = getKeyringHandler(
         HANDLER_TYPES.GET_BALANCE,
         keyring,
@@ -171,9 +169,9 @@ backgroundController.exposeController(
   'handleRequestBalance',
   async (opts, url, accountId, callId, portId) => {
     const { callback } = opts;
-    storage.get([url], async (state) => {
+    storage.get('apps', async (state) => {
       callback(null, true);
-      if (state?.[url]?.status === CONNECTION_STATUS.accepted) {
+      if (state?.apps?.[url]?.status === CONNECTION_STATUS.accepted) {
         const getBalance = getKeyringHandler(
           HANDLER_TYPES.GET_BALANCE,
           keyring,
@@ -197,8 +195,8 @@ backgroundController.exposeController(
     const { message, sender, callback } = opts;
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
-    storage.get([metadata.url], async (state) => {
-      if (state?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
+    storage.get('apps', async (state) => {
+      if (state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
         const url = qs.stringifyUrl({
           url: 'notification.html',
           query: {
@@ -235,9 +233,8 @@ backgroundController.exposeController(
 
     // Answer this callback no matter if the transfer succeeds or not.
     callback(null, true);
-
     if (transfer?.status === 'declined') {
-      callback({ code: 401, message: 'The transactions was rejected' }, null);
+      callback({ code: 401, message: 'The transactions was rejected' }, null, [{ portId, callId }]);
     } else {
       const sendICP = getKeyringHandler(HANDLER_TYPES.SEND_ICP, keyring);
       const response = await sendICP(transfer);

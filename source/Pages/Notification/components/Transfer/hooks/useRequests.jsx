@@ -11,7 +11,7 @@ import { validatePrincipalId } from '@shared/utils/ids';
 import { DEFAULT_FEE } from '@shared/constants/addresses';
 
 const portRPC = new PortRPC({
-  name: 'transfer-port',
+  name: 'notification-port',
   target: 'bg-script',
   timeout: 20000,
 });
@@ -75,32 +75,23 @@ const useRequests = (incomingRequests, callId, portId) => {
     setRequests(requests.filter((r) => r.id !== request.id));
   };
 
-  const data = [];
-
+  let config = [
+    { label: 'accountId', value: shortAddress(accountId) },
+    {
+      label: 'fee',
+      value: <AssetFormat value={requests[currentRequest]?.args?.fee || DEFAULT_FEE} asset={CURRENCIES.get('ICP')?.value} />,
+    },
+    { label: 'memo', value: requests[currentRequest]?.args?.memo || t('common.null') },
+  ];
   if (principalId) {
-    data.push({
-      label: t('common.principalId'),
-      component: <DataDisplay value={shortAddress(principalId)} />,
-    });
+    config = [{ label: 'principalId', value: shortAddress(principalId) }, ...config];
   }
-
-  if (accountId) {
-    data.push({
-      label: t('common.accountId'),
-      component: <DataDisplay value={shortAddress(accountId)} />,
-    });
-  }
-
-  data.push(...[
+  const data = config.map(({ label, value }) => (
     {
-      label: t('common.fee'),
-      component: <DataDisplay value={<AssetFormat value={requests[currentRequest]?.args?.fee || DEFAULT_FEE} asset={CURRENCIES.get('ICP').value} />} />,
-    },
-    {
-      label: t('common.memo'),
-      component: <DataDisplay value={requests[currentRequest]?.args?.memo || t('common.null')} />,
-    },
-  ]);
+      label: t(`common.${label}`),
+      component: <DataDisplay value={value} />,
+    }
+  ));
 
   return {
     requests,

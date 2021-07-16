@@ -1,26 +1,26 @@
 import React from 'react';
 import qs from 'query-string';
 import { useTranslation, initReactI18next } from 'react-i18next';
-import {
-  Button, Container, IncomingAction, theme,
-} from '@ui';
 import { PortRPC } from '@fleekhq/browser-rpc';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import i18n from 'i18next';
-
-import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { Provider } from 'react-redux';
-import store from '../../../../redux/store';
+
+import {
+  Button, Container, IncomingAction, theme,
+} from '@ui';
+import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import store from '@redux/store';
+import { Layout } from '@components';
 import initConfig from '../../../../locales';
-import useStyles from './styles';
 import SIZES from '../Transfer/constants';
-import { Layout } from '../../../../components';
+import useStyles from './styles';
 
 i18n.use(initReactI18next).init(initConfig);
 
 const portRPC = new PortRPC({
-  name: 'app-connection-port',
+  name: 'notification-port',
   target: 'bg-script',
   timeout: 20000,
 });
