@@ -44,23 +44,22 @@ extension.runtime.onMessage.addListener((message, _, sendResponse) => {
   return true; // eslint-disable-line
 });
 
-const isInitialized = () => {
-  let initialized = false;
+const isInitialized = async () => {
   const keyringHandler = getKeyringHandler(HANDLER_TYPES.GET_LOCKS, keyring);
 
   if (!keyringHandler) return false;
 
-  keyringHandler({}).then((locks) => {
-    initialized = locks?.isInitialized;
-  });
+  const locks = await keyringHandler();
 
-  return initialized;
+  return locks?.isInitialized;
 };
 
-backgroundController.exposeController('isConnected', (opts, url) => {
+backgroundController.exposeController('isConnected', async (opts, url) => {
   const { callback } = opts;
 
-  if (!isInitialized()) {
+  const initialized = await isInitialized();
+
+  if (!initialized) {
     extension.tabs.create({
       url: 'options.html',
     });
@@ -82,10 +81,12 @@ backgroundController.exposeController('isConnected', (opts, url) => {
 
 backgroundController.exposeController(
   'requestConnect',
-  (opts, domainUrl, name, icon) => {
+  async (opts, domainUrl, name, icon) => {
     const { callback, message, sender } = opts;
 
-    if (!isInitialized()) {
+    const initialized = await isInitialized();
+
+    if (!initialized) {
       extension.tabs.create({
         url: 'options.html',
       });
@@ -173,7 +174,9 @@ backgroundController.exposeController(
   async (opts, metadata, accountId) => {
     const { callback, message, sender } = opts;
 
-    if (!isInitialized()) {
+    const initialized = await isInitialized();
+
+    if (!initialized) {
       extension.tabs.create({
         url: 'options.html',
       });
@@ -242,7 +245,9 @@ backgroundController.exposeController(
   async (opts, metadata, args) => {
     const { message, sender, callback } = opts;
 
-    if (!isInitialized()) {
+    const initialized = await isInitialized();
+
+    if (!initialized) {
       extension.tabs.create({
         url: 'options.html',
       });
