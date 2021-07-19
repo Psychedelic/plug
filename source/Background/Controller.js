@@ -11,14 +11,15 @@ let keyring;
 
 const backgroundController = new BackgroundController({
   name: 'bg-script',
-  trustedSources: [
-    'plug-content-script',
-    'notification-port',
-  ],
+  trustedSources: ['plug-content-script', 'notification-port'],
 });
 
 backgroundController.start();
-const CONNECTION_ERROR = { code: 401, message: 'You are not connected. You must call window.ic.plug.requestConnect() and have the user accept the popup before you call this method.' };
+const CONNECTION_ERROR = {
+  code: 401,
+  message:
+    'You are not connected. You must call window.ic.plug.requestConnect() and have the user accept the popup before you call this method.',
+};
 
 export const init = async () => {
   keyring = new PlugController.PlugKeyRing();
@@ -43,7 +44,10 @@ backgroundController.exposeController('isConnected', (opts, url) => {
 
   storage.get('apps', (state) => {
     if (state?.apps?.[url]) {
-      callback(null, state?.apps?.apps?.[url].status === CONNECTION_STATUS.accepted);
+      callback(
+        null,
+        state?.apps?.apps?.[url].status === CONNECTION_STATUS.accepted,
+      );
     } else {
       callback(null, false);
     }
@@ -80,7 +84,9 @@ backgroundController.exposeController(
       },
     });
 
-    const height = keyring?.isUnlocked ? SIZES.appConnectHeight : SIZES.loginHeight;
+    const height = keyring?.isUnlocked
+      ? SIZES.appConnectHeight
+      : SIZES.loginHeight;
 
     extension.windows.create({
       url,
@@ -118,50 +124,48 @@ backgroundController.exposeController(
   },
 );
 
-const requestBalance = (metadata, accountId, callback) => {
-  storage.get('apps', async (state) => {
-    if (state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
-      const getBalance = getKeyringHandler(
-        HANDLER_TYPES.GET_BALANCE,
-        keyring,
-      );
-      const icpBalance = await getBalance(accountId);
-      if (icpBalance.error) {
-        callback({ message: icpBalance.error, code: 500 }, null);
-      } else {
-        callback(null, icpBalance);
-      }
-    } else {
-      callback(CONNECTION_ERROR, null);
-    }
-  });
+const requestBalance = async (accountId, callback) => {
+  const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
+  const icpBalance = await getBalance(accountId);
+  if (icpBalance.error) {
+    callback({ message: icpBalance.error, code: 500 }, null);
+  } else {
+    callback(null, icpBalance);
+  }
 };
 
 backgroundController.exposeController(
   'requestBalance',
   async (opts, metadata, accountId) => {
     const { callback, message, sender } = opts;
-    if (!keyring.isUnlocked) {
-      const url = qs.stringifyUrl({
-        url: 'notification.html',
-        query: {
-          callId: message.data.data.id,
-          portId: sender.id,
-          type: 'balance',
-          argsJson: accountId,
-          metadataJson: JSON.stringify(metadata),
-        },
-      });
 
-      extension.windows.create({
-        url,
-        type: 'popup',
-        width: SIZES.width,
-        height: SIZES.loginHeight,
-      });
-    } else {
-      requestBalance(metadata, accountId, callback);
-    }
+    storage.get('apps', async (state) => {
+      if (state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
+        if (!keyring.isUnlocked) {
+          const url = qs.stringifyUrl({
+            url: 'notification.html',
+            query: {
+              callId: message.data.data.id,
+              portId: sender.id,
+              type: 'balance',
+              argsJson: accountId,
+              metadataJson: JSON.stringify(metadata),
+            },
+          });
+
+          extension.windows.create({
+            url,
+            type: 'popup',
+            width: SIZES.width,
+            height: SIZES.loginHeight,
+          });
+        } else {
+          requestBalance(accountId, callback);
+        }
+      } else {
+        callback(CONNECTION_ERROR, null);
+      }
+    });
   },
 );
 
@@ -178,7 +182,9 @@ backgroundController.exposeController(
         );
         const icpBalance = await getBalance(accountId);
         if (icpBalance.error) {
-          callback({ message: icpBalance.error, code: 500 }, null, [{ portId, callId }]);
+          callback({ message: icpBalance.error, code: 500 }, null, [
+            { portId, callId },
+          ]);
         } else {
           callback(null, icpBalance, [{ portId, callId }]);
         }
@@ -208,7 +214,9 @@ backgroundController.exposeController(
           },
         });
 
-        const height = keyring?.isUnlocked ? SIZES.detailHeightSmall : SIZES.loginHeight;
+        const height = keyring?.isUnlocked
+          ? SIZES.detailHeightSmall
+          : SIZES.loginHeight;
         extension.windows.create({
           url,
           type: 'popup',
@@ -218,7 +226,11 @@ backgroundController.exposeController(
           left: metadata.pageWidth - SIZES.width,
         });
       } else {
-        const error = { code: 401, message: 'You are not connected. You must call window.ic.plug.requestConnect() and have the user accept the popup before you call this method.' };
+        const error = {
+          code: 401,
+          message:
+            'You are not connected. You must call window.ic.plug.requestConnect() and have the user accept the popup before you call this method.',
+        };
         callback(error, null);
       }
     });
@@ -234,12 +246,16 @@ backgroundController.exposeController(
     // Answer this callback no matter if the transfer succeeds or not.
     callback(null, true);
     if (transfer?.status === 'declined') {
-      callback({ code: 401, message: 'The transactions was rejected' }, null, [{ portId, callId }]);
+      callback({ code: 401, message: 'The transactions was rejected' }, null, [
+        { portId, callId },
+      ]);
     } else {
       const sendICP = getKeyringHandler(HANDLER_TYPES.SEND_ICP, keyring);
       const response = await sendICP(transfer);
       if (response.error) {
-        callback({ code: 500, message: response.error }, null, [{ portId, callId }]);
+        callback({ code: 500, message: response.error }, null, [
+          { portId, callId },
+        ]);
       } else {
         callback(null, response, [{ portId, callId }]);
       }
