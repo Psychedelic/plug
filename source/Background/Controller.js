@@ -5,6 +5,7 @@ import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import PlugController from '@psychedelic/plug-controller';
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
+import { validateTransferArgs } from './utils';
 
 const storage = extension.storage.local;
 let keyring;
@@ -46,7 +47,7 @@ backgroundController.exposeController('isConnected', (opts, url) => {
     if (state?.apps?.[url]) {
       callback(
         null,
-        state?.apps?.apps?.[url].status === CONNECTION_STATUS.accepted,
+        state?.apps?.[url].status === CONNECTION_STATUS.accepted,
       );
     } else {
       callback(null, false);
@@ -203,6 +204,11 @@ backgroundController.exposeController(
     const { id: portId } = sender;
     storage.get('apps', async (state) => {
       if (state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
+        const argsError = validateTransferArgs(args);
+        if (argsError) {
+          callback(argsError, null);
+          return;
+        }
         const url = qs.stringifyUrl({
           url: 'notification.html',
           query: {
@@ -226,12 +232,7 @@ backgroundController.exposeController(
           left: metadata.pageWidth - SIZES.width,
         });
       } else {
-        const error = {
-          code: 401,
-          message:
-            'You are not connected. You must call window.ic.plug.requestConnect() and have the user accept the popup before you call this method.',
-        };
-        callback(error, null);
+        callback(CONNECTION_ERROR, null);
       }
     });
   },
