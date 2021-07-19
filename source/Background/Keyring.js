@@ -109,13 +109,11 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.SEND_ICP]: async ({ to, amount }) => {
     try {
       await keyring.getState();
-      await keyring.sendICP(to, BigInt(amount));
+      const height = await keyring.sendICP(to, BigInt(amount));
 
-      const e8s = await keyring.getBalance();
-      const transactions = await keyring.getTransactions();
-      return { assets: formatAssets(e8s), transactions: recursiveParseBigint(transactions) };
+      return { height: parseInt(height.toString(), 10) };
     } catch (error) {
-      return { error: error.message, assets: [], transactions: [] };
+      return { error: error.message, height: null };
     }
   },
   [HANDLER_TYPES.EDIT_PRINCIPAL]: async ({ walletNumber, name, emoji }) => (
