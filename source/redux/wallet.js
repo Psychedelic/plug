@@ -50,7 +50,7 @@ export const walletSlice = createSlice({
         return transaction;
       };
       const parsedTrx = action.payload?.transactions?.map(mapTransaction) || [];
-      state.transactions = parsedTrx.reverse();
+      state.transactions = parsedTrx.slice(0, 50); // TODO: Move paging to BE
     },
     setAssets: (state, action) => {
       state.assets = action.payload;

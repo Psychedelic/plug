@@ -98,9 +98,7 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.GET_BALANCE]: async (accountId) => {
     try {
-      await keyring.getState();
       const e8s = await keyring.getBalance(accountId);
-
       return formatAssets(e8s);
     } catch (error) {
       return { error: error.message };
@@ -108,9 +106,7 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.SEND_ICP]: async ({ to, amount }) => {
     try {
-      await keyring.getState();
       const height = await keyring.sendICP(to, BigInt(amount));
-
       return { height: parseInt(height.toString(), 10) };
     } catch (error) {
       return { error: error.message, height: null };
