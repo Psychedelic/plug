@@ -251,14 +251,21 @@ backgroundController.exposeController(
         { portId, callId },
       ]);
     } else {
+      const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
       const sendICP = getKeyringHandler(HANDLER_TYPES.SEND_ICP, keyring);
-      const response = await sendICP(transfer);
-      if (response.error) {
-        callback({ code: 500, message: response.error }, null, [
-          { portId, callId },
-        ]);
+      const balance = await getBalance();
+
+      if (balance > transfer.amount) {
+        const response = await sendICP(transfer);
+        if (response.error) {
+          callback({ code: 500, message: response.error }, null, [
+            { portId, callId },
+          ]);
+        } else {
+          callback(null, response, [{ portId, callId }]);
+        }
       } else {
-        callback(null, response, [{ portId, callId }]);
+        callback({ code: 400, message: 'Insufficient balance' }, null, [{ portId, callId }]);
       }
     }
   },
