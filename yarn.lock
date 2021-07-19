@@ -1359,14 +1359,6 @@
     joi "^17.4.0"
     uuid "^8.3.2"
 
-"@fleekhq/plug-inpage-provider@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@fleekhq/plug-inpage-provider/-/plug-inpage-provider-1.0.1.tgz#b86ff73a309f73b22569222cb71d54b1866cdde3"
-  integrity sha512-p2C+oaxGLG9F4//5GsZB87Ukjv18XCVOBF1dvC6wS5ukWY/KApQbSj6A6FS6Mqym/4dX2QIvrdnHljWCxTCpbQ==
-  dependencies:
-    "@dfinity/agent" "^0.7.1"
-    "@fleekhq/browser-rpc" "^2.0.2"
-
 "@hapi/hoek@^9.0.0":
   version "9.2.0"
   resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.2.0.tgz#f3933a44e365864f4dad5db94158106d511e8131"
@@ -1683,6 +1675,14 @@
     text-encoding "^0.7.0"
     tweetnacl "^1.0.3"
     webpack-dotenv "^0.0.2"
+
+"@psychedelic/plug-inpage-provider@1.0.3":
+  version "1.0.3"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/1.0.3/02e38b86cc93c92ac54fc15b19b8e828248dad4f6791890d64938a52cbf063ed#eaef2bd405ef723ef88813e59136c1e378ffb661"
+  integrity sha512-LVXRvor2QuJO2Li9JSuPnBDYxJVMD97izcY0tOdF+0eyNGZ0LL29dgFywM4JieNN7yAkRyUpqNfngvd5myfCjQ==
+  dependencies:
+    "@dfinity/agent" "^0.7.1"
+    "@fleekhq/browser-rpc" "^2.0.2"
 
 "@reach/router@^1.3.4":
   version "1.3.4"
