@@ -147,6 +147,7 @@ backgroundController.exposeController(
 
         if (key === url) {
           newObj[key].status = status;
+          newObj[key].date = new Date().toISOString();
         }
 
         return newObj;

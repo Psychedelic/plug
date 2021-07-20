@@ -59,6 +59,8 @@ const ActivityItem = ({
   date,
   plug,
   swapData,
+  icon,
+  name,
 }) => {
   const { t } = useTranslation();
   const [showSwap, setShowSwap] = useState(false);
@@ -66,6 +68,22 @@ const ActivityItem = ({
   const handleShowSwap = (show) => { setShowSwap(show); };
 
   const classes = useStyles();
+
+  if (type === ACTIVITY_TYPES.PLUG) {
+    return (
+      <div className={classes.root}>
+        <img className={classes.image} src={icon} />
+        <div className={classes.leftContainer}>
+          <Typography variant="h5" className={classes.pluggedTitle}>
+            {`${t('activity.title.pluggedInto')} ${name}`}
+          </Typography>
+          <Typography variant="subtitle2">
+            {moment(Date.parse(date)).format('MMMM Do')}
+          </Typography>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={classes.root}>
@@ -95,21 +113,14 @@ const ActivityItem = ({
           {getStatus(status, classes, t)}{getSubtitle(type, status, date, to, from, t)}
         </Typography>
       </div>
-
-      {
-        type !== ACTIVITY_TYPES.PLUG
-        && (
-          <div className={classes.rightContainer}>
-            <Typography variant="h5">
-              <NumberFormat value={showSwap ? swapData.amount : amount} displayType="text" thousandSeparator="," suffix={` ${showSwap ? swapData.currency.value : currency.value}`} decimalScale={5} />
-            </Typography>
-            <Typography variant="subtitle2">
-              <NumberFormat value={showSwap ? swapData.value : value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" decimalScale={2} />
-            </Typography>
-          </div>
-        )
-      }
-
+      <div className={classes.rightContainer}>
+        <Typography variant="h5">
+          <NumberFormat value={showSwap ? swapData.amount : amount} displayType="text" thousandSeparator="," suffix={` ${showSwap ? swapData.currency.value : currency.value}`} decimalScale={5} />
+        </Typography>
+        <Typography variant="subtitle2">
+          <NumberFormat value={showSwap ? swapData.value : value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" decimalScale={2} />
+        </Typography>
+      </div>
     </div>
   );
 };
@@ -124,17 +135,23 @@ ActivityItem.defaultProps = {
   status: null,
   plug: null,
   swapData: null,
+  icon: null,
+  name: null,
+  type: ACTIVITY_TYPES.PLUG,
 };
 
 ActivityItem.propTypes = {
-  type: PropTypes.number.isRequired,
+  type: PropTypes.number,
   currency: PropTypes.shape(currencyPropTypes).isRequired,
   to: PropTypes.string,
   from: PropTypes.string,
   amount: PropTypes.number,
   value: PropTypes.number,
   status: PropTypes.number,
-  date: PropTypes.instanceOf(Date).isRequired,
+  date: PropTypes.oneOfType([
+    PropTypes.instanceOf(Date),
+    PropTypes.string,
+  ]).isRequired,
   plug: PropTypes.shape({
     name: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
@@ -146,4 +163,6 @@ ActivityItem.propTypes = {
     status: PropTypes.oneOf(Object.keys(ACTIVITY_STATUS)).isRequired,
     date: PropTypes.instanceOf(Date).isRequired,
   }),
+  icon: PropTypes.string,
+  name: PropTypes.string,
 };

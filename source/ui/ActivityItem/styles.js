@@ -33,4 +33,10 @@ export default makeStyles((theme) => ({
     marginLeft: 'auto',
     textAlign: 'end',
   },
+  pluggedTitle: {
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    width: 331,
+  },
 }));
