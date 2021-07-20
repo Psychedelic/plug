@@ -260,8 +260,8 @@ backgroundController.exposeController(
     } else {
       const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
       const sendICP = getKeyringHandler(HANDLER_TYPES.SEND_ICP, keyring);
-      const balance = await getBalance();
-      if (balance?.[0]?.amount * E8S_PER_ICP > transfer.amount) {
+      const assets = await getBalance();
+      if (assets?.[0]?.amount * E8S_PER_ICP > transfer.amount) {
         const response = await sendICP(transfer);
         if (response.error) {
           callback(ERRORS.SERVER_ERROR(response.error), null, [
