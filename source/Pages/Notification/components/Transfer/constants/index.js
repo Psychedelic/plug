@@ -1,11 +1,11 @@
 const SIZES = {
   width: 436,
-  dataHeightBig: 612,
-  dataHeightSmall: 529,
-  detailsHeightBig: 649,
-  detailHeightSmall: 514,
-  loginHeight: 572,
-  appConnectHeight: 401,
+  dataHeightBig: 621,
+  dataHeightSmall: 538,
+  detailsHeightBig: 656,
+  detailHeightSmall: 523,
+  loginHeight: 581,
+  appConnectHeight: 410,
 };
 
 export default SIZES;
