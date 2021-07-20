@@ -54,9 +54,7 @@ const isInitialized = async () => {
   return locks?.isInitialized;
 };
 
-backgroundController.exposeController('isConnected', async (opts, url) => {
-  const { callback } = opts;
-
+const secureController = async (callback, controller) => {
   const initialized = await isInitialized();
 
   if (!initialized) {
@@ -66,6 +64,11 @@ backgroundController.exposeController('isConnected', async (opts, url) => {
     callback(INITIALIZED_ERROR, null);
     return;
   }
+  controller();
+};
+
+backgroundController.exposeController('isConnected', async (opts, url) => secureController(opts.callback, async () => {
+  const { callback } = opts;
 
   storage.get('apps', (state) => {
     if (state?.apps?.[url]) {
@@ -77,87 +80,70 @@ backgroundController.exposeController('isConnected', async (opts, url) => {
       callback(null, false);
     }
   });
-});
+}));
 
-backgroundController.exposeController(
-  'requestConnect',
-  async (opts, domainUrl, name, icon) => {
-    const { callback, message, sender } = opts;
-
-    const initialized = await isInitialized();
-
-    if (!initialized) {
-      extension.tabs.create({
-        url: 'options.html',
-      });
-      callback(INITIALIZED_ERROR, null);
-      return;
-    }
-
-    storage.get('apps', (response) => {
-      const apps = {
-        ...response.apps,
-        [domainUrl]: {
-          url: domainUrl,
-          name,
-          status: CONNECTION_STATUS.pending,
-          icon,
-        },
-      };
-
-      storage.set({ apps });
-    });
-
-    const url = qs.stringifyUrl({
-      url: 'notification.html',
-      query: {
-        callId: message.data.data.id,
-        portId: sender.id,
+backgroundController.exposeController('requestConnect', async (opts, domainUrl, name, icon) => secureController(opts.callback, async () => {
+  const { message, sender } = opts;
+  storage.get('apps', (response) => {
+    const apps = {
+      ...response.apps,
+      [domainUrl]: {
         url: domainUrl,
+        name,
+        status: CONNECTION_STATUS.pending,
         icon,
-        type: 'connect',
       },
-    });
+    };
 
-    const height = keyring?.isUnlocked
-      ? SIZES.appConnectHeight
-      : SIZES.loginHeight;
+    storage.set({ apps });
+  });
 
-    extension.windows.create({
-      url,
-      type: 'popup',
-      width: SIZES.width,
-      height,
-    });
-  },
-);
+  const url = qs.stringifyUrl({
+    url: 'notification.html',
+    query: {
+      callId: message.data.data.id,
+      portId: sender.id,
+      url: domainUrl,
+      icon,
+      type: 'connect',
+    },
+  });
 
-backgroundController.exposeController(
-  'handleAppConnect',
-  async (opts, url, status, callId, portId) => {
-    const { callback } = opts;
+  const height = keyring?.isUnlocked
+    ? SIZES.appConnectHeight
+    : SIZES.loginHeight;
 
-    storage.get('apps', (response) => {
-      const apps = response.apps || {};
+  extension.windows.create({
+    url,
+    type: 'popup',
+    width: SIZES.width,
+    height,
+  });
+}));
 
-      const newApps = Object.keys(apps).reduce((obj, key) => {
-        const newObj = { ...obj };
-        newObj[key] = apps[key];
+backgroundController.exposeController('handleAppConnect', async (opts, url, status, callId, portId) => secureController(opts.callback, async () => {
+  const { callback } = opts;
 
-        if (key === url) {
-          newObj[key].status = status;
-        }
+  storage.get('apps', (response) => {
+    const apps = response.apps || {};
 
-        return newObj;
-      }, {});
+    const newApps = Object.keys(apps).reduce((obj, key) => {
+      const newObj = { ...obj };
+      newObj[key] = apps[key];
 
-      storage.set({ apps: newApps });
-    });
+      if (key === url) {
+        newObj[key].status = status;
+      }
 
-    callback(null, true);
-    callback(null, status === CONNECTION_STATUS.accepted, [{ portId, callId }]);
-  },
-);
+      return newObj;
+    }, {});
+
+    storage.set({ apps: newApps });
+  });
+
+  callback(null, true);
+  callback(null, status === CONNECTION_STATUS.accepted, [{ portId, callId }]);
+}));
 
 const requestBalance = async (accountId, callback) => {
   const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
@@ -169,50 +155,37 @@ const requestBalance = async (accountId, callback) => {
   }
 };
 
-backgroundController.exposeController(
-  'requestBalance',
-  async (opts, metadata, accountId) => {
-    const { callback, message, sender } = opts;
+backgroundController.exposeController('requestBalance', async (opts, metadata, accountId) => secureController(opts.callback, async () => {
+  const { callback, message, sender } = opts;
 
-    const initialized = await isInitialized();
+  storage.get('apps', async (state) => {
+    if (state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
+      if (!keyring.isUnlocked) {
+        const url = qs.stringifyUrl({
+          url: 'notification.html',
+          query: {
+            callId: message.data.data.id,
+            portId: sender.id,
+            type: 'balance',
+            argsJson: accountId,
+            metadataJson: JSON.stringify(metadata),
+          },
+        });
 
-    if (!initialized) {
-      extension.tabs.create({
-        url: 'options.html',
-      });
-      callback(INITIALIZED_ERROR, null);
-      return;
-    }
-
-    storage.get('apps', async (state) => {
-      if (state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
-        if (!keyring.isUnlocked) {
-          const url = qs.stringifyUrl({
-            url: 'notification.html',
-            query: {
-              callId: message.data.data.id,
-              portId: sender.id,
-              type: 'balance',
-              argsJson: accountId,
-              metadataJson: JSON.stringify(metadata),
-            },
-          });
-
-          extension.windows.create({
-            url,
-            type: 'popup',
-            width: SIZES.width,
-            height: SIZES.loginHeight,
-          });
-        } else {
-          requestBalance(accountId, callback);
-        }
+        extension.windows.create({
+          url,
+          type: 'popup',
+          width: SIZES.width,
+          height: SIZES.loginHeight,
+        });
       } else {
-        callback(CONNECTION_ERROR, null);
+        requestBalance(accountId, callback);
       }
-    });
-  },
-);
+    } else {
+      callback(CONNECTION_ERROR, null);
+    }
+  });
+}));
 
 backgroundController.exposeController(
   'handleRequestBalance',
@@ -240,53 +213,50 @@ backgroundController.exposeController(
   },
 );
 
-backgroundController.exposeController(
-  'requestTransfer',
-  async (opts, metadata, args) => {
-    const { message, sender, callback } = opts;
+backgroundController.exposeController('requestTransfer', async (opts, metadata, args) => secureController(opts.callback, async () => {
+  const { message, sender, callback } = opts;
 
-    const initialized = await isInitialized();
+  const initialized = await isInitialized();
 
-    if (!initialized) {
-      extension.tabs.create({
-        url: 'options.html',
-      });
-      callback(INITIALIZED_ERROR, null);
-      return;
-    }
-
-    const { id: callId } = message.data.data;
-    const { id: portId } = sender;
-    storage.get('apps', async (state) => {
-      if (state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
-        const url = qs.stringifyUrl({
-          url: 'notification.html',
-          query: {
-            callId,
-            portId,
-            metadataJson: JSON.stringify(metadata),
-            argsJson: JSON.stringify(args),
-            type: 'transfer',
-          },
-        });
-
-        const height = keyring?.isUnlocked
-          ? SIZES.detailHeightSmall
-          : SIZES.loginHeight;
-        extension.windows.create({
-          url,
-          type: 'popup',
-          width: SIZES.width,
-          height,
-          top: 65,
-          left: metadata.pageWidth - SIZES.width,
-        });
-      } else {
-        callback(CONNECTION_ERROR, null);
-      }
+  if (!initialized) {
+    extension.tabs.create({
+      url: 'options.html',
     });
-  },
-);
+    callback(INITIALIZED_ERROR, null);
+    return;
+  }
+
+  const { id: callId } = message.data.data;
+  const { id: portId } = sender;
+  storage.get('apps', async (state) => {
+    if (state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
+      const url = qs.stringifyUrl({
+        url: 'notification.html',
+        query: {
+          callId,
+          portId,
+          metadataJson: JSON.stringify(metadata),
+          argsJson: JSON.stringify(args),
+          type: 'transfer',
+        },
+      });
+
+      const height = keyring?.isUnlocked
+        ? SIZES.detailHeightSmall
+        : SIZES.loginHeight;
+      extension.windows.create({
+        url,
+        type: 'popup',
+        width: SIZES.width,
+        height,
+        top: 65,
+        left: metadata.pageWidth - SIZES.width,
+      });
+    } else {
+      callback(CONNECTION_ERROR, null);
+    }
+  });
+}));
 
 backgroundController.exposeController(
   'handleRequestTransfer',
