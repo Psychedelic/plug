@@ -5,6 +5,7 @@ import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import PlugController from '@psychedelic/plug-controller';
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
+import { validateTransferArgs } from './utils';
 
 const storage = extension.storage.local;
 let keyring;
@@ -70,11 +71,21 @@ const secureController = async (callback, controller) => {
 backgroundController.exposeController('isConnected', async (opts, url) => secureController(opts.callback, async () => {
   const { callback } = opts;
 
+  const initialized = await isInitialized();
+
+  if (!initialized) {
+    extension.tabs.create({
+      url: 'options.html',
+    });
+    callback(INITIALIZED_ERROR, null);
+    return;
+  }
+
   storage.get('apps', (state) => {
     if (state?.apps?.[url]) {
       callback(
         null,
-        state?.apps?.apps?.[url].status === CONNECTION_STATUS.accepted,
+        state?.apps?.[url].status === CONNECTION_STATUS.accepted,
       );
     } else {
       callback(null, false);
@@ -230,6 +241,11 @@ backgroundController.exposeController('requestTransfer', async (opts, metadata, 
   const { id: portId } = sender;
   storage.get('apps', async (state) => {
     if (state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
+      const argsError = validateTransferArgs(args);
+      if (argsError) {
+        callback(argsError, null);
+        return;
+      }
       const url = qs.stringifyUrl({
         url: 'notification.html',
         query: {
