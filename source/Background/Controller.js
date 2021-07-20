@@ -4,7 +4,7 @@ import { BackgroundController } from '@fleekhq/browser-rpc';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import PlugController from '@psychedelic/plug-controller';
 import SIZES from '../Pages/Notification/components/Transfer/constants';
-import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
+import { E8S_PER_ICP, getKeyringHandler, HANDLER_TYPES } from './Keyring';
 import { validateTransferArgs } from './utils';
 import ERRORS from './errors';
 
@@ -261,8 +261,7 @@ backgroundController.exposeController(
       const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
       const sendICP = getKeyringHandler(HANDLER_TYPES.SEND_ICP, keyring);
       const balance = await getBalance();
-
-      if (balance > transfer.amount) {
+      if (balance?.[0]?.amount * E8S_PER_ICP > transfer.amount) {
         const response = await sendICP(transfer);
         if (response.error) {
           callback(ERRORS.SERVER_ERROR(response.error), null, [
