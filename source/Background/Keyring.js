@@ -71,7 +71,7 @@ export const getKeyringHandler = (type, keyring) => ({
     try {
       unlocked = await keyring.unlock(params?.password);
 
-      if (unlocked) {
+      if (unlocked && params?.redirect) {
         extension.storage.local.set({
           router: 'home',
         });
@@ -112,7 +112,8 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: error.message, height: null };
     }
   },
-  [HANDLER_TYPES.EDIT_PRINCIPAL]: async ({ walletNumber, name, emoji }) => (
-    keyring.editPrincipal(walletNumber, { name, emoji })
-  ),
+  [HANDLER_TYPES.EDIT_PRINCIPAL]:
+    async ({ walletNumber, name, emoji }) => (
+      keyring.editPrincipal(walletNumber, { name, emoji })
+    ),
 }[type]);

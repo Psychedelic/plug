@@ -16,4 +16,11 @@ export default makeStyles((theme) => ({
     height: 120,
     marginBottom: `${theme.spacing(3)}px`,
   },
+  title: {
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    width: 370,
+    textAlign: 'center',
+  },
 }));

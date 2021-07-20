@@ -9,7 +9,7 @@ const IncomingAction = ({ image, url, action }) => {
   return (
     <div className={classes.infoContainer}>
       <img src={image} className={classes.image} />
-      <Typography variant="h2">{url}</Typography>
+      <Typography variant="h2" className={classes.title}>{url}</Typography>
       <Typography variant="subtitle1">{action}</Typography>
     </div>
   );
