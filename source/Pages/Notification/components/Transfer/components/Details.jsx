@@ -6,6 +6,7 @@ import { Typography } from '@material-ui/core';
 import { CURRENCIES } from '@shared/constants/currencies';
 import { E8S_PER_ICP } from '@background/Keyring';
 import NumberFormat from 'react-number-format';
+import extension from 'extensionizer';
 import useStyles from '../styles';
 import SIZES from '../constants';
 
@@ -19,9 +20,18 @@ const Details = ({
   const amount = e8s / E8S_PER_ICP;
   const value = (amount * icpPrice);
 
-  window.resizeTo(SIZES.width, requestCount > 1
-    ? SIZES.detailsHeightBig
-    : SIZES.detailHeightSmall);
+  // window.resizeTo(SIZES.width, requestCount > 1
+  //   ? SIZES.detailsHeightBig
+  //   : SIZES.detailHeightSmall);
+
+  extension.windows.update(
+    extension.windows.WINDOW_ID_CURRENT,
+    {
+      height: requestCount > 1
+        ? SIZES.detailsHeightBig
+        : SIZES.detailHeightSmall,
+    },
+  );
 
   return (
     <div className={classes.innerContainer}>
