@@ -24,7 +24,7 @@ const Step2 = ({ handleChangeStep }) => {
   const handleLogin = () => {
     sendMessage({
       type: HANDLER_TYPES.UNLOCK,
-      params: { password },
+      params: { password, redirect: false },
     }, (unlocked) => (unlocked ? handleChangeStep() : setError(true)));
   };
 

@@ -21,5 +21,6 @@ export default makeStyles((theme) => ({
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     width: 370,
+    textAlign: 'center',
   },
 }));

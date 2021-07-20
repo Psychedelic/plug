@@ -26,7 +26,7 @@ const Login = ({ redirect }) => {
   const handleLogin = () => {
     sendMessage({
       type: HANDLER_TYPES.UNLOCK,
-      params: { password },
+      params: { password, redirect: true },
     }, (unlocked) => {
       if (unlocked) {
         if (redirect) {
