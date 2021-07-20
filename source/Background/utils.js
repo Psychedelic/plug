@@ -1,5 +1,7 @@
 import { validatePrincipalId, validateAccountId } from '@shared/utils/ids';
 
+import ERRORS from './errors';
+
 // eslint-disable-next-line
 export const validateTransferArgs = ({ to, amount }) => {
   let message = null;
@@ -9,5 +11,5 @@ export const validateTransferArgs = ({ to, amount }) => {
   if (!validatePrincipalId(to) && !validateAccountId(to)) {
     message = 'Invalid to address. The address must be a principal Id or an account Id';
   }
-  return message ? { code: 400, message } : null;
+  return message ? ERRORS.CLIENT_ERROR(message) : null;
 };
