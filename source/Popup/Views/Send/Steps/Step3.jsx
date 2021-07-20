@@ -29,7 +29,7 @@ import { ADDRESS_TYPES, DEFAULT_FEE } from '@shared/constants/addresses';
 import useStyles from '../styles';
 
 const Step3 = ({
-  asset, amount, address, addressInfo, handleSendClick, error, transaction,
+  asset, amount, address, addressInfo, handleSendClick, error, transaction, trxComplete,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -207,7 +207,7 @@ const Step3 = ({
           component={(
             <div className={classes.sendingModal}>
               <Plug size="big" message={t(`send.plug${transaction ? 'LetsGo' : 'Chill'}`)} />
-              {transaction ? (
+              {trxComplete ? (
                 <>
                   <Typography className={classes.sendModalTitle}>{t('send.transactionSuccess')}</Typography>
                   <Button
@@ -216,7 +216,7 @@ const Step3 = ({
                     onClick={() => navigator.navigate('home', 1)}
                     fullWidth
                   />
-                  <LinkButton onClick={openICRocksTx} value={t('send.viewTxOnICRocks')} />
+                  {transaction && <LinkButton onClick={openICRocksTx} value={t('send.viewTxOnICRocks')} />}
                 </>
               ) : (
                 <>
@@ -275,6 +275,7 @@ Step3.propTypes = {
   handleSendClick: PropTypes.func.isRequired,
   error: PropTypes.bool,
   transaction: PropTypes.objectOf(PropTypes.string).isRequired,
+  trxComplete: PropTypes.bool.isRequired,
 };
 
 Step3.defaultProps = {

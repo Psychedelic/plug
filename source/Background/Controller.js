@@ -6,6 +6,7 @@ import PlugController from '@psychedelic/plug-controller';
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
 import { validateTransferArgs } from './utils';
+import ERRORS from './errors';
 
 const storage = extension.storage.local;
 let keyring;
@@ -16,11 +17,6 @@ const backgroundController = new BackgroundController({
 });
 
 backgroundController.start();
-const CONNECTION_ERROR = {
-  code: 401,
-  message:
-    'You are not connected. You must call window.ic.plug.requestConnect() and have the user accept the popup before you call this method.',
-};
 
 const INITIALIZED_ERROR = {
   code: 403,
@@ -165,7 +161,7 @@ const requestBalance = async (accountId, callback) => {
   const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
   const icpBalance = await getBalance(accountId);
   if (icpBalance.error) {
-    callback({ message: icpBalance.error, code: 500 }, null);
+    callback(ERRORS.SERVER_ERROR(icpBalance.error), null);
   } else {
     callback(null, icpBalance);
   }
@@ -210,7 +206,7 @@ backgroundController.exposeController(
           requestBalance(accountId, callback);
         }
       } else {
-        callback(CONNECTION_ERROR, null);
+        callback(ERRORS.CONNECTION_ERROR, null);
       }
     });
   },
@@ -229,14 +225,14 @@ backgroundController.exposeController(
         );
         const icpBalance = await getBalance(accountId);
         if (icpBalance.error) {
-          callback({ message: icpBalance.error, code: 500 }, null, [
+          callback(ERRORS.SERVER_ERROR(icpBalance.error), null, [
             { portId, callId },
           ]);
         } else {
           callback(null, icpBalance, [{ portId, callId }]);
         }
       } else {
-        callback(CONNECTION_ERROR, null, [{ portId, callId }]);
+        callback(ERRORS.CONNECTION_ERROR, null, [{ portId, callId }]);
       }
     });
   },
@@ -289,7 +285,7 @@ backgroundController.exposeController(
           left: metadata.pageWidth - SIZES.width,
         });
       } else {
-        callback(CONNECTION_ERROR, null);
+        callback(ERRORS.CONNECTION_ERROR, null);
       }
     });
   },
@@ -304,18 +300,25 @@ backgroundController.exposeController(
     // Answer this callback no matter if the transfer succeeds or not.
     callback(null, true);
     if (transfer?.status === 'declined') {
-      callback({ code: 401, message: 'The transactions was rejected' }, null, [
+      callback(ERRORS.TRANSACTION_REJECTED, null, [
         { portId, callId },
       ]);
     } else {
+      const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
       const sendICP = getKeyringHandler(HANDLER_TYPES.SEND_ICP, keyring);
-      const response = await sendICP(transfer);
-      if (response.error) {
-        callback({ code: 500, message: response.error }, null, [
-          { portId, callId },
-        ]);
+      const balance = await getBalance();
+
+      if (balance > transfer.amount) {
+        const response = await sendICP(transfer);
+        if (response.error) {
+          callback(ERRORS.SERVER_ERROR(response.error), null, [
+            { portId, callId },
+          ]);
+        } else {
+          callback(null, response, [{ portId, callId }]);
+        }
       } else {
-        callback(null, response, [{ portId, callId }]);
+        callback(ERRORS.BALANCE_ERROR, null, [{ portId, callId }]);
       }
     }
   },

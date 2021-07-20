@@ -96,11 +96,9 @@ export const getKeyringHandler = (type, keyring) => ({
     const e8s = await keyring.getBalance();
     return formatAssets(e8s, icpPrice);
   },
-  [HANDLER_TYPES.GET_BALANCE]: async (accountId) => {
+  [HANDLER_TYPES.GET_BALANCE]: async (subaccount) => {
     try {
-      await keyring.getState();
-      const e8s = await keyring.getBalance(accountId);
-
+      const e8s = await keyring.getBalance(subaccount);
       return formatAssets(e8s);
     } catch (error) {
       return { error: error.message };
@@ -108,14 +106,10 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.SEND_ICP]: async ({ to, amount }) => {
     try {
-      await keyring.getState();
-      await keyring.sendICP(to, BigInt(amount));
-
-      const e8s = await keyring.getBalance();
-      const transactions = await keyring.getTransactions();
-      return { assets: formatAssets(e8s), transactions: recursiveParseBigint(transactions) };
+      const height = await keyring.sendICP(to, BigInt(amount));
+      return { height: parseInt(height.toString(), 10) };
     } catch (error) {
-      return { error: error.message, assets: [], transactions: [] };
+      return { error: error.message, height: null };
     }
   },
   [HANDLER_TYPES.EDIT_PRINCIPAL]: async ({ walletNumber, name, emoji }) => (
