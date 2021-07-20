@@ -27,6 +27,7 @@ const useSteps = () => {
   const [transaction, setTransaction] = useState(null);
   const [address, setAddress] = useState(null);
   const [addressInfo, setAddressInfo] = useState({ isValid: null, type: null });
+  const [trxComplete, setTrxComplete] = useState(false);
 
   const [destination, setDestination] = useState('dank');
   const [sendError, setError] = useState(false);
@@ -43,14 +44,17 @@ const useSteps = () => {
       type: HANDLER_TYPES.SEND_ICP,
       params: { to: address, amount: e8s },
     }, (response) => {
-      const { error, assets: keyringAssets, transactions } = response || {};
+      const { error } = response || {};
       if (error) {
         setError(true);
       } else {
-        dispatch(setAssets(keyringAssets));
-        dispatch(setTransactions({ ...transactions, icpPrice }));
-        setTransaction(transactions?.transactions[transactions?.total - 1]);
+        setTrxComplete(true);
       }
+      sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: {} },
+        (transactions) => {
+          dispatch(setTransactions({ ...transactions, icpPrice }));
+          setTransaction(transactions?.transactions[transactions?.total - 1]);
+        });
     });
   };
 
@@ -255,6 +259,7 @@ const useSteps = () => {
         handleSendClick={handleSendClick}
         error={sendError}
         transaction={transaction}
+        trxComplete={trxComplete}
       />,
       left: <LinkButton value={t('common.back')} onClick={() => handlePreviousStep()} startIcon={BackIcon} />,
       right: rightButton,

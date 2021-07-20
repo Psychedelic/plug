@@ -5,6 +5,8 @@ import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import PlugController from '@psychedelic/plug-controller';
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
+import { validateTransferArgs } from './utils';
+import ERRORS from './errors';
 
 const storage = extension.storage.local;
 let keyring;
@@ -15,11 +17,6 @@ const backgroundController = new BackgroundController({
 });
 
 backgroundController.start();
-const CONNECTION_ERROR = {
-  code: 401,
-  message:
-    'You are not connected. You must call window.ic.plug.requestConnect() and have the user accept the popup before you call this method.',
-};
 
 export const init = async () => {
   keyring = new PlugController.PlugKeyRing();
@@ -39,135 +36,148 @@ extension.runtime.onMessage.addListener((message, _, sendResponse) => {
   return true; // eslint-disable-line
 });
 
-backgroundController.exposeController('isConnected', (opts, url) => {
+const isInitialized = async () => {
+  const keyringHandler = getKeyringHandler(HANDLER_TYPES.GET_LOCKS, keyring);
+
+  if (!keyringHandler) return false;
+
+  const locks = await keyringHandler();
+
+  return locks?.isInitialized;
+};
+
+const secureController = async (callback, controller) => {
+  const initialized = await isInitialized();
+
+  if (!initialized) {
+    extension.tabs.create({
+      url: 'options.html',
+    });
+    callback(ERRORS.INITIALIZED_ERROR, null);
+    return;
+  }
+  controller();
+};
+
+backgroundController.exposeController('isConnected', async (opts, url) => secureController(opts.callback, async () => {
   const { callback } = opts;
 
   storage.get('apps', (state) => {
     if (state?.apps?.[url]) {
       callback(
         null,
-        state?.apps?.apps?.[url].status === CONNECTION_STATUS.accepted,
+        state?.apps?.[url].status === CONNECTION_STATUS.accepted,
       );
     } else {
       callback(null, false);
     }
   });
-});
+}));
 
-backgroundController.exposeController(
-  'requestConnect',
-  (opts, domainUrl, name, icon) => {
-    const { message, sender } = opts;
-
-    storage.get('apps', (response) => {
-      const apps = {
-        ...response.apps,
-        [domainUrl]: {
-          url: domainUrl,
-          name,
-          status: CONNECTION_STATUS.pending,
-          icon,
-        },
-      };
-
-      storage.set({ apps });
-    });
-
-    const url = qs.stringifyUrl({
-      url: 'notification.html',
-      query: {
-        callId: message.data.data.id,
-        portId: sender.id,
+backgroundController.exposeController('requestConnect', async (opts, domainUrl, name, icon) => secureController(opts.callback, async () => {
+  const { message, sender } = opts;
+  storage.get('apps', (response) => {
+    const apps = {
+      ...response.apps,
+      [domainUrl]: {
         url: domainUrl,
+        name,
+        status: CONNECTION_STATUS.pending,
         icon,
-        type: 'connect',
       },
-    });
+    };
 
-    const height = keyring?.isUnlocked
-      ? SIZES.appConnectHeight
-      : SIZES.loginHeight;
+    storage.set({ apps });
+  });
 
-    extension.windows.create({
-      url,
-      type: 'popup',
-      width: SIZES.width,
-      height,
-    });
-  },
-);
+  const url = qs.stringifyUrl({
+    url: 'notification.html',
+    query: {
+      callId: message.data.data.id,
+      portId: sender.id,
+      url: domainUrl,
+      icon,
+      type: 'connect',
+    },
+  });
 
-backgroundController.exposeController(
-  'handleAppConnect',
-  async (opts, url, status, callId, portId) => {
-    const { callback } = opts;
+  const height = keyring?.isUnlocked
+    ? SIZES.appConnectHeight
+    : SIZES.loginHeight;
 
-    storage.get('apps', (response) => {
-      const apps = response.apps || {};
+  extension.windows.create({
+    url,
+    type: 'popup',
+    width: SIZES.width,
+    height,
+  });
+}));
 
-      const newApps = Object.keys(apps).reduce((obj, key) => {
-        const newObj = { ...obj };
-        newObj[key] = apps[key];
+backgroundController.exposeController('handleAppConnect', async (opts, url, status, callId, portId) => secureController(opts.callback, async () => {
+  const { callback } = opts;
 
-        if (key === url) {
-          newObj[key].status = status;
-        }
+  storage.get('apps', (response) => {
+    const apps = response.apps || {};
 
-        return newObj;
-      }, {});
+    const newApps = Object.keys(apps).reduce((obj, key) => {
+      const newObj = { ...obj };
+      newObj[key] = apps[key];
+      if (key === url) {
+        newObj[key].status = status;
+        newObj[key].date = new Date().toISOString();
+      }
 
-      storage.set({ apps: newApps });
-    });
+      return newObj;
+    }, {});
 
-    callback(null, true);
-    callback(null, status === CONNECTION_STATUS.accepted, [{ portId, callId }]);
-  },
-);
+    storage.set({ apps: newApps });
+  });
+
+  callback(null, true);
+  callback(null, status === CONNECTION_STATUS.accepted, [{ portId, callId }]);
+}));
 
 const requestBalance = async (accountId, callback) => {
   const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
   const icpBalance = await getBalance(accountId);
   if (icpBalance.error) {
-    callback({ message: icpBalance.error, code: 500 }, null);
+    callback(ERRORS.SERVER_ERROR(icpBalance.error), null);
   } else {
     callback(null, icpBalance);
   }
 };
 
-backgroundController.exposeController(
-  'requestBalance',
-  async (opts, metadata, accountId) => {
-    const { callback, message, sender } = opts;
+backgroundController.exposeController('requestBalance', async (opts, metadata, accountId) => secureController(opts.callback, async () => {
+  const { callback, message, sender } = opts;
 
-    storage.get('apps', async (state) => {
-      if (state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
-        if (!keyring.isUnlocked) {
-          const url = qs.stringifyUrl({
-            url: 'notification.html',
-            query: {
-              callId: message.data.data.id,
-              portId: sender.id,
-              type: 'balance',
-              argsJson: accountId,
-              metadataJson: JSON.stringify(metadata),
-            },
-          });
+  storage.get('apps', async (state) => {
+    if (state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
+      if (!keyring.isUnlocked) {
+        const url = qs.stringifyUrl({
+          url: 'notification.html',
+          query: {
+            callId: message.data.data.id,
+            portId: sender.id,
+            type: 'balance',
+            argsJson: accountId,
+            metadataJson: JSON.stringify(metadata),
+          },
+        });
 
-          extension.windows.create({
-            url,
-            type: 'popup',
-            width: SIZES.width,
-            height: SIZES.loginHeight,
-          });
-        } else {
-          requestBalance(accountId, callback);
-        }
+        extension.windows.create({
+          url,
+          type: 'popup',
+          width: SIZES.width,
+          height: SIZES.loginHeight,
+        });
       } else {
-        callback(CONNECTION_ERROR, null);
+        requestBalance(accountId, callback);
       }
-    });
-  },
-);
+    } else {
+      callback(ERRORS.CONNECTION_ERROR, null);
+    }
+  });
+}));
 
 backgroundController.exposeController(
   'handleRequestBalance',
@@ -182,60 +192,58 @@ backgroundController.exposeController(
         );
         const icpBalance = await getBalance(accountId);
         if (icpBalance.error) {
-          callback({ message: icpBalance.error, code: 500 }, null, [
+          callback(ERRORS.SERVER_ERROR(icpBalance.error), null, [
             { portId, callId },
           ]);
         } else {
           callback(null, icpBalance, [{ portId, callId }]);
         }
       } else {
-        callback(CONNECTION_ERROR, null, [{ portId, callId }]);
+        callback(ERRORS.CONNECTION_ERROR, null, [{ portId, callId }]);
       }
     });
   },
 );
 
-backgroundController.exposeController(
-  'requestTransfer',
-  async (opts, metadata, args) => {
-    const { message, sender, callback } = opts;
-    const { id: callId } = message.data.data;
-    const { id: portId } = sender;
-    storage.get('apps', async (state) => {
-      if (state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
-        const url = qs.stringifyUrl({
-          url: 'notification.html',
-          query: {
-            callId,
-            portId,
-            metadataJson: JSON.stringify(metadata),
-            argsJson: JSON.stringify(args),
-            type: 'transfer',
-          },
-        });
+backgroundController.exposeController('requestTransfer', async (opts, metadata, args) => secureController(opts.callback, async () => {
+  const { message, sender, callback } = opts;
 
-        const height = keyring?.isUnlocked
-          ? SIZES.detailHeightSmall
-          : SIZES.loginHeight;
-        extension.windows.create({
-          url,
-          type: 'popup',
-          width: SIZES.width,
-          height,
-          top: 65,
-          left: metadata.pageWidth - SIZES.width,
-        });
-      } else {
-        const error = {
-          code: 401,
-          message:
-            'You are not connected. You must call window.ic.plug.requestConnect() and have the user accept the popup before you call this method.',
-        };
-        callback(error, null);
+  const { id: callId } = message.data.data;
+  const { id: portId } = sender;
+  storage.get('apps', async (state) => {
+    if (state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
+      const argsError = validateTransferArgs(args);
+      if (argsError) {
+        callback(argsError, null);
+        return;
       }
-    });
-  },
-);
+      const url = qs.stringifyUrl({
+        url: 'notification.html',
+        query: {
+          callId,
+          portId,
+          metadataJson: JSON.stringify(metadata),
+          argsJson: JSON.stringify(args),
+          type: 'transfer',
+        },
+      });
+
+      const height = keyring?.isUnlocked
+        ? SIZES.detailHeightSmall
+        : SIZES.loginHeight;
+      extension.windows.create({
+        url,
+        type: 'popup',
+        width: SIZES.width,
+        height,
+        top: 65,
+        left: metadata.pageWidth - SIZES.width,
+      });
+    } else {
+      callback(ERRORS.CONNECTION_ERROR, null);
+    }
+  });
+}));
 
 backgroundController.exposeController(
   'handleRequestTransfer',
@@ -246,18 +254,25 @@ backgroundController.exposeController(
     // Answer this callback no matter if the transfer succeeds or not.
     callback(null, true);
     if (transfer?.status === 'declined') {
-      callback({ code: 401, message: 'The transactions was rejected' }, null, [
+      callback(ERRORS.TRANSACTION_REJECTED, null, [
         { portId, callId },
       ]);
     } else {
+      const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
       const sendICP = getKeyringHandler(HANDLER_TYPES.SEND_ICP, keyring);
-      const response = await sendICP(transfer);
-      if (response.error) {
-        callback({ code: 500, message: response.error }, null, [
-          { portId, callId },
-        ]);
+      const balance = await getBalance();
+
+      if (balance > transfer.amount) {
+        const response = await sendICP(transfer);
+        if (response.error) {
+          callback(ERRORS.SERVER_ERROR(response.error), null, [
+            { portId, callId },
+          ]);
+        } else {
+          callback(null, response, [{ portId, callId }]);
+        }
       } else {
-        callback(null, response, [{ portId, callId }]);
+        callback(ERRORS.BALANCE_ERROR, null, [{ portId, callId }]);
       }
     }
   },

@@ -4,6 +4,7 @@ import { ActivityItem } from '@ui';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 
 import LoadingWrapper from '@components/LoadingWrapper';
+import { useActivity } from '@hooks';
 import { setTransactions } from '../../redux/wallet';
 import useStyles from './styles';
 import EmptyState from './components/EmptyState';
@@ -14,6 +15,7 @@ const Activity = () => {
   const [transactionsLoading, setLoading] = useState(true);
   const { icpPrice } = useSelector((state) => state.icp);
   const dispatch = useDispatch();
+  const activity = useActivity(transactions);
 
   useEffect(() => {
     if (icpPrice) {
@@ -28,8 +30,8 @@ const Activity = () => {
     <LoadingWrapper loading={!transactions.length && transactionsLoading}>
       <div className={classes.root}>
         {
-          transactions && transactions.length > 0
-            ? transactions.map((item, index) => (
+          activity && activity.length > 0
+            ? activity.map((item, index) => (
               <ActivityItem key={index.toString()} {...item} />
             ))
             : <EmptyState />
