@@ -22,6 +22,11 @@ const CONNECTION_ERROR = {
     'You are not connected. You must call window.ic.plug.requestConnect() and have the user accept the popup before you call this method.',
 };
 
+const INITIALIZED_ERROR = {
+  code: 403,
+  message: 'Plug must be initialized.',
+};
+
 export const init = async () => {
   keyring = new PlugController.PlugKeyRing();
   await keyring.init();
@@ -40,8 +45,28 @@ extension.runtime.onMessage.addListener((message, _, sendResponse) => {
   return true; // eslint-disable-line
 });
 
-backgroundController.exposeController('isConnected', (opts, url) => {
+const isInitialized = async () => {
+  const keyringHandler = getKeyringHandler(HANDLER_TYPES.GET_LOCKS, keyring);
+
+  if (!keyringHandler) return false;
+
+  const locks = await keyringHandler();
+
+  return locks?.isInitialized;
+};
+
+backgroundController.exposeController('isConnected', async (opts, url) => {
   const { callback } = opts;
+
+  const initialized = await isInitialized();
+
+  if (!initialized) {
+    extension.tabs.create({
+      url: 'options.html',
+    });
+    callback(INITIALIZED_ERROR, null);
+    return;
+  }
 
   storage.get('apps', (state) => {
     if (state?.apps?.[url]) {
@@ -57,8 +82,18 @@ backgroundController.exposeController('isConnected', (opts, url) => {
 
 backgroundController.exposeController(
   'requestConnect',
-  (opts, domainUrl, name, icon) => {
-    const { message, sender } = opts;
+  async (opts, domainUrl, name, icon) => {
+    const { callback, message, sender } = opts;
+
+    const initialized = await isInitialized();
+
+    if (!initialized) {
+      extension.tabs.create({
+        url: 'options.html',
+      });
+      callback(INITIALIZED_ERROR, null);
+      return;
+    }
 
     storage.get('apps', (response) => {
       const apps = {
@@ -140,6 +175,16 @@ backgroundController.exposeController(
   async (opts, metadata, accountId) => {
     const { callback, message, sender } = opts;
 
+    const initialized = await isInitialized();
+
+    if (!initialized) {
+      extension.tabs.create({
+        url: 'options.html',
+      });
+      callback(INITIALIZED_ERROR, null);
+      return;
+    }
+
     storage.get('apps', async (state) => {
       if (state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
         if (!keyring.isUnlocked) {
@@ -200,6 +245,17 @@ backgroundController.exposeController(
   'requestTransfer',
   async (opts, metadata, args) => {
     const { message, sender, callback } = opts;
+
+    const initialized = await isInitialized();
+
+    if (!initialized) {
+      extension.tabs.create({
+        url: 'options.html',
+      });
+      callback(INITIALIZED_ERROR, null);
+      return;
+    }
+
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
     storage.get('apps', async (state) => {

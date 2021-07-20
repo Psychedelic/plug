@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import ReactDOM from 'react-dom';
 import qs from 'query-string';
-import browser from 'webextension-polyfill';
 import { theme } from '@ui';
 import store from '../../redux/store';
 import ProviderWrapper from '../../shared/ProviderWrapper';
@@ -31,14 +30,10 @@ const NotificationContainer = () => {
 
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_LOCKS, params: {} }, (locks) => {
-      if (locks?.isInitialized) {
-        if (locks?.isUnlocked) {
-          setLoggedIn(true);
-        } else {
-          setLoggedIn(false);
-        }
+      if (locks?.isUnlocked) {
+        setLoggedIn(true);
       } else {
-        browser.tabs.create({ url: 'options.html' });
+        setLoggedIn(false);
       }
     });
   });
