@@ -17,7 +17,4 @@ serverRPC.start();
 
 injectScript(null, INPAGE_SCRIPT);
 
-/* eslint-disable no-console */
-console.log('helloworld from content script');
-
 export {};

@@ -13,6 +13,7 @@ import {
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import store from '@redux/store';
 import { Layout } from '@components';
+import extension from 'extensionizer';
 import initConfig from '../../../../locales';
 import SIZES from '../Transfer/constants';
 import useStyles from './styles';
@@ -50,7 +51,12 @@ const AppConnection = () => {
   //  onClickHandler(CONNECTION_STATUS.rejected);
   // };
 
-  window.resizeTo(SIZES.width, SIZES.appConnectHeight);
+  extension.windows.update(
+    extension.windows.WINDOW_ID_CURRENT,
+    {
+      height: SIZES.appConnectHeight,
+    },
+  );
 
   return (
     <Provider store={store}>
