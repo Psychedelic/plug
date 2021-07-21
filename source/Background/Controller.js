@@ -159,12 +159,13 @@ backgroundController.exposeController(
   'requestBalance',
   async (opts, metadata, accountId) => secureController(opts.callback, async () => {
     const { callback, message, sender } = opts;
-
     storage.get('apps', async (state) => {
       if (
         state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted
       ) {
-        if (!keyring.isUnlocked) {
+        if (Number.isNaN(parseInt(accountId, 10))) {
+          callback(ERRORS.CLIENT_ERROR('Invalid account id'), null);
+        } else if (!keyring.isUnlocked) {
           const url = qs.stringifyUrl({
             url: 'notification.html',
             query: {
