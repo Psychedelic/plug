@@ -13,7 +13,6 @@ export default makeStyles((theme) => ({
     justifyContent: 'space-between',
     flexDirection: 'column',
     alignItems: 'center',
-    height: 120,
     marginBottom: `${theme.spacing(3)}px`,
   },
   title: {
