@@ -30,7 +30,8 @@ const Apps = () => {
     return (
       <div className={classes.emptyState}>
         <img src={ThinkingEmoji} className={classes.image} />
-        <Typography variant="h4">{t('apps.emptyTitle')}</Typography>
+        <Typography className={classes.emptyTitle} variant="h4">{t('apps.emptyTitle')}</Typography>
+        <Typography className={classes.emptyText} variant="subtitle2">{t('apps.emptyText')}</Typography>
       </div>
     );
   }
