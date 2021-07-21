@@ -4,7 +4,7 @@ import { BackgroundController } from '@fleekhq/browser-rpc';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import PlugController from '@psychedelic/plug-controller';
 import SIZES from '../Pages/Notification/components/Transfer/constants';
-import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
+import { E8S_PER_ICP, getKeyringHandler, HANDLER_TYPES } from './Keyring';
 import { validateTransferArgs } from './utils';
 import ERRORS from './errors';
 
@@ -17,11 +17,6 @@ const backgroundController = new BackgroundController({
 });
 
 backgroundController.start();
-
-const INITIALIZED_ERROR = {
-  code: 403,
-  message: 'Plug must be initialized.',
-};
 
 export const init = async () => {
   keyring = new PlugController.PlugKeyRing();
@@ -51,18 +46,21 @@ const isInitialized = async () => {
   return locks?.isInitialized;
 };
 
-backgroundController.exposeController('isConnected', async (opts, url) => {
-  const { callback } = opts;
-
+const secureController = async (callback, controller) => {
   const initialized = await isInitialized();
 
   if (!initialized) {
     extension.tabs.create({
       url: 'options.html',
     });
-    callback(INITIALIZED_ERROR, null);
+    callback(ERRORS.INITIALIZED_ERROR, null);
     return;
   }
+  controller();
+};
+
+backgroundController.exposeController('isConnected', async (opts, url) => secureController(opts.callback, async () => {
+  const { callback } = opts;
 
   storage.get('apps', (state) => {
     if (state?.apps?.[url]) {
@@ -74,23 +72,12 @@ backgroundController.exposeController('isConnected', async (opts, url) => {
       callback(null, false);
     }
   });
-});
+}));
 
 backgroundController.exposeController(
   'requestConnect',
-  async (opts, domainUrl, name, icon) => {
-    const { callback, message, sender } = opts;
-
-    const initialized = await isInitialized();
-
-    if (!initialized) {
-      extension.tabs.create({
-        url: 'options.html',
-      });
-      callback(INITIALIZED_ERROR, null);
-      return;
-    }
-
+  async (opts, domainUrl, name, icon) => secureController(opts.callback, async () => {
+    const { message, sender } = opts;
     storage.get('apps', (response) => {
       const apps = {
         ...response.apps,
@@ -126,12 +113,12 @@ backgroundController.exposeController(
       width: SIZES.width,
       height,
     });
-  },
+  }),
 );
 
 backgroundController.exposeController(
   'handleAppConnect',
-  async (opts, url, status, callId, portId) => {
+  async (opts, url, status, callId, portId) => secureController(opts.callback, async () => {
     const { callback } = opts;
 
     storage.get('apps', (response) => {
@@ -140,7 +127,6 @@ backgroundController.exposeController(
       const newApps = Object.keys(apps).reduce((obj, key) => {
         const newObj = { ...obj };
         newObj[key] = apps[key];
-
         if (key === url) {
           newObj[key].status = status;
           newObj[key].date = new Date().toISOString();
@@ -153,8 +139,10 @@ backgroundController.exposeController(
     });
 
     callback(null, true);
-    callback(null, status === CONNECTION_STATUS.accepted, [{ portId, callId }]);
-  },
+    callback(null, status === CONNECTION_STATUS.accepted, [
+      { portId, callId },
+    ]);
+  }),
 );
 
 const requestBalance = async (accountId, callback) => {
@@ -169,21 +157,13 @@ const requestBalance = async (accountId, callback) => {
 
 backgroundController.exposeController(
   'requestBalance',
-  async (opts, metadata, accountId) => {
+  async (opts, metadata, accountId) => secureController(opts.callback, async () => {
     const { callback, message, sender } = opts;
 
-    const initialized = await isInitialized();
-
-    if (!initialized) {
-      extension.tabs.create({
-        url: 'options.html',
-      });
-      callback(INITIALIZED_ERROR, null);
-      return;
-    }
-
     storage.get('apps', async (state) => {
-      if (state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
+      if (
+        state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted
+      ) {
         if (!keyring.isUnlocked) {
           const url = qs.stringifyUrl({
             url: 'notification.html',
@@ -209,7 +189,7 @@ backgroundController.exposeController(
         callback(ERRORS.CONNECTION_ERROR, null);
       }
     });
-  },
+  }),
 );
 
 backgroundController.exposeController(
@@ -240,23 +220,15 @@ backgroundController.exposeController(
 
 backgroundController.exposeController(
   'requestTransfer',
-  async (opts, metadata, args) => {
+  async (opts, metadata, args) => secureController(opts.callback, async () => {
     const { message, sender, callback } = opts;
-
-    const initialized = await isInitialized();
-
-    if (!initialized) {
-      extension.tabs.create({
-        url: 'options.html',
-      });
-      callback(INITIALIZED_ERROR, null);
-      return;
-    }
 
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
     storage.get('apps', async (state) => {
-      if (state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
+      if (
+        state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted
+      ) {
         const argsError = validateTransferArgs(args);
         if (argsError) {
           callback(argsError, null);
@@ -288,7 +260,7 @@ backgroundController.exposeController(
         callback(ERRORS.CONNECTION_ERROR, null);
       }
     });
-  },
+  }),
 );
 
 backgroundController.exposeController(
@@ -300,15 +272,12 @@ backgroundController.exposeController(
     // Answer this callback no matter if the transfer succeeds or not.
     callback(null, true);
     if (transfer?.status === 'declined') {
-      callback(ERRORS.TRANSACTION_REJECTED, null, [
-        { portId, callId },
-      ]);
+      callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
     } else {
       const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
       const sendICP = getKeyringHandler(HANDLER_TYPES.SEND_ICP, keyring);
-      const balance = await getBalance();
-
-      if (balance > transfer.amount) {
+      const assets = await getBalance();
+      if (assets?.[0]?.amount * E8S_PER_ICP > transfer.amount) {
         const response = await sendICP(transfer);
         if (response.error) {
           callback(ERRORS.SERVER_ERROR(response.error), null, [

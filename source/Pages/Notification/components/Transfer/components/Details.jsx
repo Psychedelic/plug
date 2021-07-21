@@ -20,10 +20,6 @@ const Details = ({
   const amount = e8s / E8S_PER_ICP;
   const value = (amount * icpPrice);
 
-  // window.resizeTo(SIZES.width, requestCount > 1
-  //   ? SIZES.detailsHeightBig
-  //   : SIZES.detailHeightSmall);
-
   extension.windows.update(
     extension.windows.WINDOW_ID_CURRENT,
     {

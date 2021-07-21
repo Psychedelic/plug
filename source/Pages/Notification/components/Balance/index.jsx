@@ -14,7 +14,7 @@ const Balance = ({
   args: subaccount, metadata, callId, portId,
 }) => {
   useEffect(async () => {
-    if (metadata && subaccount && callId && portId) {
+    if (metadata && callId && portId) {
       await portRPC.call('handleRequestBalance', [metadata.url, subaccount || 0, callId, portId]);
       window.close();
     }

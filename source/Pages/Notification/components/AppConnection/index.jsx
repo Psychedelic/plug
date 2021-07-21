@@ -51,8 +51,6 @@ const AppConnection = () => {
   //  onClickHandler(CONNECTION_STATUS.rejected);
   // };
 
-  // window.resizeTo(SIZES.width, SIZES.appConnectHeight);
-
   extension.windows.update(
     extension.windows.WINDOW_ID_CURRENT,
     {

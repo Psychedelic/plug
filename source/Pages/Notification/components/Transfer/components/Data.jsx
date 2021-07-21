@@ -8,10 +8,6 @@ import SIZES from '../constants';
 const Data = ({ data, principalId }) => {
   const classes = useStyles();
 
-  // window.resizeTo(SIZES.width, principalId
-  //  ? SIZES.dataHeightBig
-  //  : SIZES.dataHeightSmall);
-
   extension.windows.update(
     extension.windows.WINDOW_ID_CURRENT,
     {
