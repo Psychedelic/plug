@@ -69,8 +69,8 @@
     "subtitle": "Main IC Wallet is connected to these sites.",
     "disconnectTitle": "Disconnect from Site",
     "disconnectText": "Are you sure you want to disconnect from",
-    "emptyTitle": "You aren’t connected to any apps yet.",
-    "emptyText": "Explore a list of all apps that use Plug and find your first in",
+    "emptyTitle": "You have no apps connected.",
+    "emptyText": "When you connect to an app they will be displayed here, with the ability to remove them.",
     "emptyLink": "our docs.",
     "comingSoonTitle": "Coming soon!",
     "comingSoonSubtitle": "Plug will allow you to connect\nand log into IC Apps."

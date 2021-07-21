@@ -23,7 +23,6 @@ export default makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: `${theme.spacing(1)}px ${theme.spacing(4)}px`,
-    height: 110,
     textAlign: 'center',
     whiteSpace: 'pre-line',
   },
@@ -38,5 +37,11 @@ export default makeStyles((theme) => ({
     '&:hover': {
       opacity: 0.9,
     },
+  },
+  emptyText: {
+    marginTop: 10,
+  },
+  emptyTitle: {
+    marginTop: 10,
   },
 }));
