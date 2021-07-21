@@ -128,7 +128,7 @@ backgroundController.exposeController(
         const newObj = { ...obj };
         newObj[key] = apps[key];
         if (key === url) {
-          newObj[key].status = status;
+          newObj[key].status = status || CONNECTION_STATUS.rejected;
           newObj[key].date = new Date().toISOString();
         }
 
