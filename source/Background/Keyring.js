@@ -48,6 +48,7 @@ export const HANDLER_TYPES = {
   GET_BALANCE: 'get-balance',
   SEND_ICP: 'send-icp',
   EDIT_PRINCIPAL: 'edit-principal',
+  GET_PUBLIC_KEY: 'get-public-key',
 };
 
 export const sendMessage = (args, callback) => {
@@ -116,4 +117,6 @@ export const getKeyringHandler = (type, keyring) => ({
     async ({ walletNumber, name, emoji }) => (
       keyring.editPrincipal(walletNumber, { name, emoji })
     ),
+  [HANDLER_TYPES.GET_PUBLIC_KEY]:
+      async () => keyring.getPublicKey(),
 }[type]);

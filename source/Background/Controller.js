@@ -294,4 +294,30 @@ backgroundController.exposeController(
   },
 );
 
+backgroundController.exposeController(
+  'sign',
+  async (opts, payload, callId, portId) => {
+    const { callback } = opts;
+    try {
+      const signed = await keyring.sign(payload);
+      callback(null, signed, [{ portId, callId }]);
+    } catch (e) {
+      callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
+    }
+  },
+);
+
+backgroundController.exposeController(
+  'getPublicKey',
+  async (opts) => {
+    const { callback } = opts;
+    try {
+      const publicKey = await keyring.getPublicKey();
+      callback(null, publicKey);
+    } catch (e) {
+      callback(ERRORS.SERVER_ERROR(e), null);
+    }
+  },
+);
+
 export default backgroundController;

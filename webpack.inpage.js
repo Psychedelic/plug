@@ -28,6 +28,18 @@ module.exports = {
 
   resolve: {
     extensions: ['.js', '.jsx', '.json'],
+    alias: {
+      '@ui': path.join(path.resolve(__dirname, './source/ui')),
+      '@components': path.join(path.resolve(__dirname, './source/components')),
+      '@assets': path.join(path.resolve(__dirname, './source/assets')),
+      '@shared': path.join(path.resolve(__dirname, './source/shared')),
+      '@hooks': path.join(path.resolve(__dirname, './source/hooks')),
+      '@redux': path.join(path.resolve(__dirname, './source/redux')),
+      '@background': path.join(path.resolve(__dirname, './source/Background')),
+      'webextension-polyfill': path.resolve(
+        path.join(__dirname, 'node_modules', 'webextension-polyfill'),
+      ),
+    },
   },
 
   module: {
@@ -48,6 +60,13 @@ module.exports = {
         test: /\.(js|ts)x?$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
+      },
+      {
+        test: /\.(png|jpe?g|gif|jp2|webp|svg)$/,
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]',
+        },
       },
     ],
   },
