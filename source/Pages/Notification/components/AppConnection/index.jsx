@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import qs from 'query-string';
 import { useTranslation, initReactI18next } from 'react-i18next';
 import { PortRPC } from '@fleekhq/browser-rpc';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import i18n from 'i18next';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 
 import {
   Button, Container, IncomingAction, theme,
@@ -14,6 +14,8 @@ import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import store from '@redux/store';
 import { Layout } from '@components';
 import extension from 'extensionizer';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import { setAccountInfo } from '@redux/wallet';
 import initConfig from '../../../../locales';
 import SIZES from '../Transfer/constants';
 import useStyles from './styles';
@@ -31,6 +33,7 @@ portRPC.start();
 const AppConnection = () => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const { query } = qs.parseUrl(window.location.href);
 
@@ -51,12 +54,23 @@ const AppConnection = () => {
   //  onClickHandler(CONNECTION_STATUS.rejected);
   // };
 
-  extension.windows.update(
-    extension.windows.WINDOW_ID_CURRENT,
-    {
-      height: SIZES.appConnectHeight,
-    },
-  );
+  useEffect(() => {
+    extension.windows.update(
+      extension.windows.WINDOW_ID_CURRENT,
+      {
+        height: SIZES.appConnectHeight,
+      },
+    );
+
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
+      (state) => {
+        if (!state?.wallets?.length) {
+          sendMessage({ type: HANDLER_TYPES.LOCK, params: {} },
+            () => navigator.navigate('login'));
+        }
+        dispatch(setAccountInfo(state.wallets[0]));
+      });
+  }, []);
 
   return (
     <Provider store={store}>
