@@ -4,7 +4,7 @@ import { PortRPC } from '@fleekhq/browser-rpc';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import i18n from 'i18next';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import {
   Button, Container, IncomingAction, theme,
 } from '@ui';
@@ -12,6 +12,9 @@ import store from '@redux/store';
 import { Layout } from '@components';
 import extension from 'extensionizer';
 import PropTypes from 'prop-types';
+
+import { setAccountInfo } from '@redux/wallet';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import initConfig from '../../../../locales';
 import WhitelistContainer from './components/WhitelistContainer';
 import WhitelistItem from './components/WhitelistItem';
@@ -32,6 +35,7 @@ const AllowAgent = ({
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const {
     url,
@@ -50,6 +54,13 @@ const AllowAgent = ({
         height: Math.min(422 + 37 * whitelist.length, 600),
       },
     );
+
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
+      (state) => {
+        if (state?.wallets?.length) {
+          dispatch(setAccountInfo(state.wallets[0]));
+        }
+      });
   }, []);
 
   return (
