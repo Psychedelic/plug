@@ -59,7 +59,10 @@ module.exports = {
       {
         test: /\.(js|ts)x?$/,
         loader: 'babel-loader',
-        exclude: /node_modules/,
+        // exclude: /node_modules/,
+        options: {
+          plugins: ['@babel/plugin-proposal-export-namespace-from'],
+        },
       },
       {
         test: /\.(png|jpe?g|gif|jp2|webp|svg)$/,

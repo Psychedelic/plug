@@ -45,6 +45,7 @@
     "emoji-picker-react": "^3.4.7",
     "extensionizer": "^1.0.1",
     "i18next": "^20.2.1",
+    "moment": "^2.29.1",
     "qrcode": "^1.4.4",
     "query-string": "^7.0.0",
     "react": "^17.0.1",
