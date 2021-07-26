@@ -296,12 +296,13 @@ backgroundController.exposeController(
 
 backgroundController.exposeController(
   'sign',
-  async (opts, payload) => {
+  async (opts, payload, metadata) => {
     const { callback } = opts;
     try {
-      console.log('calling sign in FE');
-      const signed = await keyring.sign(payload);
-      console.log(signed);
+      const parsedPayload = payload instanceof Buffer
+        ? payload
+        : Buffer.from(Object.values(payload));
+      const signed = await keyring.sign(parsedPayload);
       callback(null, [...new Uint8Array(signed)]);
     } catch (e) {
       callback(ERRORS.SERVER_ERROR(e), null);
@@ -314,9 +315,7 @@ backgroundController.exposeController(
   async (opts) => {
     const { callback } = opts;
     try {
-      console.log('getting public key');
       const publicKey = await keyring.getPublicKey();
-      console.log('got public key', publicKey.rawKey.toString('hex'));
       callback(null, publicKey);
     } catch (e) {
       callback(ERRORS.SERVER_ERROR(e), null);
