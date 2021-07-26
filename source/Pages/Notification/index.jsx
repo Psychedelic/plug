@@ -3,21 +3,26 @@ import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import ReactDOM from 'react-dom';
 import qs from 'query-string';
 import { theme } from '@ui';
+import { useDispatch } from 'react-redux';
+import { setAccountInfo } from '@redux/wallet';
 import store from '../../redux/store';
 import ProviderWrapper from '../../shared/ProviderWrapper';
 import Login from '../../Popup/Views/Login';
 import AppConnection from './components/AppConnection';
 import Transfer from './components/Transfer';
 import Balance from './components/Balance';
+import AllowAgent from './components/AllowAgent';
 
 const NOTIFICATION_COMPONENTS = {
   transfer: Transfer,
   balance: Balance,
   connect: AppConnection,
+  allowAgent: AllowAgent,
 };
 
 const NotificationContainer = () => {
   const [loggedIn, setLoggedIn] = useState(null);
+  const dispatch = useDispatch();
 
   const { query } = qs.parseUrl(window.location.href);
 
@@ -36,7 +41,14 @@ const NotificationContainer = () => {
         setLoggedIn(false);
       }
     });
-  });
+
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
+      (state) => {
+        if (state?.wallets?.length) {
+          dispatch(setAccountInfo(state.wallets[0]));
+        }
+      });
+  }, []);
 
   const handleLogin = () => setLoggedIn(true);
   const Component = NOTIFICATION_COMPONENTS[type];

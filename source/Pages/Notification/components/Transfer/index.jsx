@@ -7,8 +7,6 @@ import i18n from 'i18next';
 import { useTabs } from '@hooks';
 import PropTypes from 'prop-types';
 import { Layout } from '@components';
-import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { setAccountInfo } from '@redux/wallet';
 import { useDispatch, useSelector } from 'react-redux';
 import getICPPrice from '@shared/services/ICPPrice';
 import { setICPPrice } from '@redux/icp';
@@ -43,15 +41,6 @@ const Transfer = ({
       // eslint-disable-next-line no-console
       console.warn(err);
     }
-
-    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
-      (state) => {
-        if (!state?.wallets?.length) {
-          sendMessage({ type: HANDLER_TYPES.LOCK, params: {} },
-            () => navigator.navigate('login'));
-        }
-        dispatch(setAccountInfo(state.wallets[0]));
-      });
   }, []);
 
   const {
