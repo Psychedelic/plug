@@ -95,6 +95,9 @@
     "wext-manifest-loader": "^2.2.1",
     "wext-manifest-webpack-plugin": "^1.2.1"
   },
+  "resolutions": {
+    "glob-parent": "5.1.2"
+  },
   "lint-staged": {
     "*.{js,jsx}": "eslint --cache --fix",
     "*.{js,css,md}": "prettier --write"
