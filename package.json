@@ -24,17 +24,15 @@
     "build:inpage": "webpack --config ./webpack.inpage.js",
     "lint": "eslint ./source --ext .js,.jsx",
     "lint:fix": "eslint ./source --ext .js,.jsx --fix",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
     "prepare": "husky install"
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
     "@fleekhq/browser-rpc": "^2.0.2",
-    "@psychedelic/plug-inpage-provider": "1.0.3",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@psychedelic/plug-controller": "0.1.2",
+    "@psychedelic/plug-inpage-provider": "1.0.3",
     "@reduxjs/toolkit": "^1.6.0",
     "advanced-css-reset": "^1.2.2",
     "axios": "^0.21.1",
@@ -54,6 +52,7 @@
     "react-number-format": "^4.5.5",
     "react-redux": "^7.2.4",
     "react-swipeable-views": "^0.13.9",
+    "uuid": "8.3.2",
     "webext-base-css": "^1.2.0",
     "webextension-polyfill": "^0.7.0"
   },
@@ -65,10 +64,6 @@
     "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/preset-env": "^7.12.1",
     "@babel/preset-react": "^7.12.5",
-    "@storybook/addon-actions": "^6.2.8",
-    "@storybook/addon-essentials": "^6.2.8",
-    "@storybook/addon-links": "^6.2.8",
-    "@storybook/react": "^6.2.8",
     "autoprefixer": "^10.0.2",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.1",
@@ -83,7 +78,7 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.22.0",
     "file-loader": "^6.2.0",
-    "filemanager-webpack-plugin": "^3.0.0-alpha.7",
+    "filemanager-webpack-plugin": "6.1.4",
     "html-webpack-plugin": "^4.5.0",
     "husky": ">=6",
     "lint-staged": ">=10",
@@ -99,6 +94,9 @@
     "webpack-extension-reloader": "^1.1.4",
     "wext-manifest-loader": "^2.2.1",
     "wext-manifest-webpack-plugin": "^1.2.1"
+  },
+  "resolutions": {
+    "glob-parent": "5.1.2"
   },
   "lint-staged": {
     "*.{js,jsx}": "eslint --cache --fix",
