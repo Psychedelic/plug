@@ -53,9 +53,11 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
     handleNextStep();
   };
 
+  const handleKeyPress = (e) => e.key === 'Enter' && handleCreateAccount();
+
   return (
     <>
-      <Grid item xs={12}>
+      <Grid item xs={12} onKeyPress={handleKeyPress}>
         <FormItem
           label={t('welcome.passwordLabel')}
           component={(
@@ -68,7 +70,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
           )}
         />
       </Grid>
-      <Grid item xs={12} className={classes.marginBottom}>
+      <Grid item xs={12} className={classes.marginBottom} onKeyPress={handleKeyPress}>
         <FormItem
           style={{ marginTop: -24 }}
           label={t('welcome.passwordConfirmLabel')}
