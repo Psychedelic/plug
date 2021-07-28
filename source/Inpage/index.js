@@ -18,3 +18,5 @@ window.ic = {
   ...ic,
   plug: plugProvider,
 };
+
+export default plugProvider;
