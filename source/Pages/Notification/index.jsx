@@ -9,11 +9,13 @@ import Login from '../../Popup/Views/Login';
 import AppConnection from './components/AppConnection';
 import Transfer from './components/Transfer';
 import Balance from './components/Balance';
+import AllowAgent from './components/AllowAgent';
 
 const NOTIFICATION_COMPONENTS = {
   transfer: Transfer,
   balance: Balance,
   connect: AppConnection,
+  allowAgent: AllowAgent,
 };
 
 const NotificationContainer = () => {
@@ -36,7 +38,7 @@ const NotificationContainer = () => {
         setLoggedIn(false);
       }
     });
-  });
+  }, []);
 
   const handleLogin = () => setLoggedIn(true);
   const Component = NOTIFICATION_COMPONENTS[type];

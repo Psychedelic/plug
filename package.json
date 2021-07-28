@@ -31,8 +31,8 @@
     "@fleekhq/browser-rpc": "^2.0.2",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
-    "@psychedelic/plug-controller": "0.1.2",
-    "@psychedelic/plug-inpage-provider": "1.0.3",
+    "@psychedelic/plug-controller": "0.2.0",
+    "@psychedelic/plug-inpage-provider": "1.1.5",
     "@reduxjs/toolkit": "^1.6.0",
     "advanced-css-reset": "^1.2.2",
     "axios": "^0.21.1",
@@ -43,6 +43,7 @@
     "emoji-picker-react": "^3.4.7",
     "extensionizer": "^1.0.1",
     "i18next": "^20.2.1",
+    "moment": "^2.29.1",
     "qrcode": "^1.4.4",
     "query-string": "^7.0.0",
     "react": "^17.0.1",
@@ -93,7 +94,8 @@
     "webpack-cli": "^4.2.0",
     "webpack-extension-reloader": "^1.1.4",
     "wext-manifest-loader": "^2.2.1",
-    "wext-manifest-webpack-plugin": "^1.2.1"
+    "wext-manifest-webpack-plugin": "^1.2.1",
+    "yarn-audit-fix": "^6.3.6"
   },
   "resolutions": {
     "glob-parent": "5.1.2"

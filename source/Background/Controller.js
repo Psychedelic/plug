@@ -294,4 +294,86 @@ backgroundController.exposeController(
   },
 );
 
+backgroundController.exposeController('sign', async (opts, payload) => {
+  const { callback } = opts;
+  try {
+    const parsedPayload = payload instanceof Buffer ? payload : Buffer.from(Object.values(payload));
+    const signed = await keyring.sign(parsedPayload);
+    callback(null, [...new Uint8Array(signed)]);
+  } catch (e) {
+    callback(ERRORS.SERVER_ERROR(e), null);
+  }
+});
+
+backgroundController.exposeController('getPublicKey', async (opts) => {
+  const { callback } = opts;
+  try {
+    const publicKey = await keyring.getPublicKey();
+    callback(null, publicKey);
+  } catch (e) {
+    callback(ERRORS.SERVER_ERROR(e), null);
+  }
+});
+
+backgroundController.exposeController(
+  'allowAgent',
+  async (opts, metadata, whitelist) => {
+    const { message, sender, callback } = opts;
+
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
+
+    storage.get('apps', async (state) => {
+      if (state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
+        const url = qs.stringifyUrl({
+          url: 'notification.html',
+          query: {
+            callId,
+            portId,
+            metadataJson: JSON.stringify(metadata),
+            argsJson: JSON.stringify(whitelist),
+            type: 'allowAgent',
+          },
+        });
+
+        const height = keyring?.isUnlocked
+          ? Math.min(422 + 37 * whitelist.length, 600)
+          : SIZES.loginHeight;
+
+        extension.windows.create({
+          url,
+          type: 'popup',
+          width: SIZES.width,
+          height,
+          top: 65,
+          left: metadata.pageWidth - SIZES.width,
+        });
+      } else {
+        callback(ERRORS.CONNECTION_ERROR, null);
+      }
+    });
+  },
+);
+
+backgroundController.exposeController(
+  'handleAllowAgent',
+  async (opts, response, callId, portId) => {
+    const { callback } = opts;
+
+    // Answer this callback no matter if the transfer succeeds or not.
+    callback(null, true);
+
+    if (response) {
+      try {
+        const publicKey = await keyring.getPublicKey();
+        callback(null, publicKey, [{ portId, callId }]);
+      } catch (e) {
+        callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
+      }
+    } else {
+      callback(ERRORS.AGENT_REJECTED, null, [{ portId, callId }]);
+    }
+  },
+);
+
 export default backgroundController;

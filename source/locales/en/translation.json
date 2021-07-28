@@ -63,7 +63,8 @@
     "memo": "Memo",
     "null": "null",
     "accountId": "Account ID",
-    "principalId": "Principal ID"
+    "principalId": "Principal ID",
+    "sign": "Sign"
   },
   "apps": {
     "title": "Connected Apps",
@@ -255,5 +256,8 @@
     "errorTitle": "Something went wrong",
     "errorBody": "We’re sorry, something weird happened. \nReturn home and retry the action.",
     "returnHome": "Return Home"
+  },
+  "whitelist":{
+    "title": "wants to allow calls to the folowing canisters:"
   }
 }
