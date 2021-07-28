@@ -94,7 +94,7 @@ const useSteps = () => {
       conversionRate: selectedAsset.price,
     },
   );
-  const available = (assets[0]?.amount || 0) - DEFAULT_FEE; // Only ICP supported for now
+  const available = (assets?.[0]?.amount || 0) - DEFAULT_FEE; // Only ICP supported for now
   const convertedAmount = Math.max(available * primaryValue.conversionRate, 0);
   const [availableAmount, setAvailableAmount] = useState({
     amount: convertedAmount,

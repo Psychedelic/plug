@@ -5,7 +5,7 @@ import browser from 'webextension-polyfill';
 import PropTypes from 'prop-types';
 import useStyles from '../styles';
 
-const redirectToICRocks = (canisterId) => {
+const redirectToICRocks = (canisterId) => () => {
   browser.tabs.create({ url: `https://ic.rocks/principal/${canisterId}` });
 };
 
@@ -18,7 +18,7 @@ const WhitelistItem = ({ canisterId }) => {
       <img
         src={ArrowUpRight}
         className={classes.arrowUpRight}
-        onClick={() => redirectToICRocks(canisterId)}
+        onClick={redirectToICRocks(canisterId)}
       />
     </div>
   );
