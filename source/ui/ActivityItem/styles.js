@@ -28,8 +28,7 @@ export default makeStyles((theme) => ({
   },
   rightContainer: {
     display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
+    flexDirection: 'row',
     marginLeft: 'auto',
     textAlign: 'end',
   },
@@ -38,5 +37,35 @@ export default makeStyles((theme) => ({
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     width: 331,
+  },
+  pointer: {
+    cursor: 'pointer',
+
+    '&:hover': {
+      backgroundColor: '#F3F4F6',
+    },
+  },
+  iconContainer: {
+    width: 0,
+    opacity: 0,
+    transition: '0.6s',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer',
+    marginLeft: 6,
+  },
+  iconContainerAnimation: {
+    width: 24,
+    opacity: 1,
+  },
+  values: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    textAlign: 'end',
+  },
+  tooltip: {
+    margin: '8px 0',
   },
 }));

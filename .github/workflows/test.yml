@@ -35,5 +35,8 @@ jobs:
     - name: Install Dependencies
       run: yarn
 
+    - name: Audit
+      run: yarn audit
+
     - name: Run ESLint
       run: yarn lint

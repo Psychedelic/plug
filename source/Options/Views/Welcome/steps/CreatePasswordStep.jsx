@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import extension from 'extensionizer';
 import Grid from '@material-ui/core/Grid';
 import { useTranslation } from 'react-i18next';
 import {
@@ -7,7 +8,6 @@ import {
 } from '@ui';
 import { sendMessage } from '@background/Keyring';
 import facepalmEmoji from '@assets/icons/facepalm.svg';
-
 import useStyles from '../styles';
 
 const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => {
@@ -45,6 +45,9 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
       return;
     }
 
+    // clean the storage before initiating keyring
+    extension.storage.local.clear();
+
     const type = mnemonic ? 'import-keyring' : 'create-keyring';
     const params = { password, mnemonic };
     sendMessage({ type, params }, (response) => {
@@ -53,9 +56,11 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
     handleNextStep();
   };
 
+  const handleKeyPress = (e) => e.key === 'Enter' && handleCreateAccount();
+
   return (
     <>
-      <Grid item xs={12}>
+      <Grid item xs={12} onKeyPress={handleKeyPress}>
         <FormItem
           label={t('welcome.passwordLabel')}
           component={(
@@ -68,7 +73,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
           )}
         />
       </Grid>
-      <Grid item xs={12} className={classes.marginBottom}>
+      <Grid item xs={12} className={classes.marginBottom} onKeyPress={handleKeyPress}>
         <FormItem
           style={{ marginTop: -24 }}
           label={t('welcome.passwordConfirmLabel')}

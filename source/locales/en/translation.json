@@ -6,6 +6,7 @@
   },
   "copy": {
     "copyText": "Copy to clipboard",
+    "copyTextAddress": "Copy address to clipboard",
     "copiedText": "Copied!"
   },
   "profile": {

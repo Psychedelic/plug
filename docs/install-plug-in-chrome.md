@@ -20,12 +20,17 @@ To install a developer extension build, developer mode must be enabled by checki
 
 ![developer mode]('./../images/developer_mode.png)
 
-
 ## Load the Extension
 
-Drag the downloaded plug zip file, from the download folder over the chrome extensions page.
+With `developer mode` enabled, you need to load the extension. Either by dragging the downloaded plug zip file into chrome or by explicitly unzipping the download and using the `load unpacked` button.
+
+To drag the downloaded plug zip file: open the download folder, find the plug zip file and drag it over the chrome extensions page in the Chrome window.
 
 ![load the extension]('./../images/load_the_extension.png)
+
+Alternatively, to explicitly load via the `load unpacked` button: open the download folder, find the plug zip file, extract its contents to a folder, then in the chrome extensions page click on the `Load unpacked` button and select the unzipped folder.
+
+![load unpacked]('./../images/load_unpacked.png)
 
 ## Pin Plug
 
