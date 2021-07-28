@@ -3,6 +3,10 @@ import NumberFormat from 'react-number-format';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import clsx from 'clsx';
+import browser from 'webextension-polyfill';
+import Tooltip from '@material-ui/core/Tooltip';
+import ArrowUpRight from '@assets/icons/arrow-up-right.png';
 
 import { ACTIVITY_TYPES, ACTIVITY_STATUS } from '@shared/constants/activity';
 import { currencyPropTypes } from '@shared/constants/currencies';
@@ -39,13 +43,26 @@ const getStatus = (status, classes, t) => {
   }
 };
 
-const getSubtitle = (type, status, date, to, from, t) => {
-  let subtitle = '';
-  if (status === ACTIVITY_STATUS.COMPLETED) subtitle += moment(date).format('MMMM Do');
-  if (type === ACTIVITY_TYPES.SEND) subtitle += ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`;
-  if (type === ACTIVITY_TYPES.RECEIVE) subtitle += ` · ${t('activity.subtitle.from')}: ${shortAddress(from)}`;
+const getDate = (status, date) => (
+  status === ACTIVITY_STATUS.COMPLETED
+    ? moment(date).format('MMMM Do')
+    : ''
+);
 
-  return subtitle;
+const getSubtitle = (type, to, from, t) => ({
+  [ACTIVITY_TYPES.SEND]: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
+  [ACTIVITY_TYPES.RECEIVE]: ` · ${t('activity.subtitle.from')}: ${shortAddress(from)}`,
+})[type] || '';
+
+const getAddress = (type, to, from) => (
+  {
+    [ACTIVITY_TYPES.SEND]: to,
+    [ACTIVITY_TYPES.RECEIVE]: from,
+  }
+)[type] || '';
+
+const openICRocksTx = (hash) => {
+  browser.tabs.create({ url: `https://ic.rocks/transaction/${hash}` });
 };
 
 const ActivityItem = ({
@@ -61,13 +78,43 @@ const ActivityItem = ({
   swapData,
   icon,
   name,
+  hash,
 }) => {
   const { t } = useTranslation();
   const [showSwap, setShowSwap] = useState(false);
+  const [hover, setHover] = useState(false);
 
   const handleShowSwap = (show) => { setShowSwap(show); };
 
   const classes = useStyles();
+
+  const [copied, setCopied] = useState(false);
+
+  const copyText = t('copy.copyTextAddress');
+  const copiedText = t('copy.copiedText');
+
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [tooltipText, setTooltipText] = useState(copyText);
+
+  const handleClickCopy = (e) => {
+    e.stopPropagation();
+
+    /* eslint-disable no-nested-ternary */
+    navigator.clipboard.writeText(
+      getAddress(type, to, from),
+    );
+
+    setCopied(true);
+    setTooltipText(copiedText);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 1000);
+
+    setTimeout(() => {
+      setTooltipText(copyText);
+    }, 1500);
+  };
 
   if (type === ACTIVITY_TYPES.PLUG) {
     return (
@@ -85,9 +132,15 @@ const ActivityItem = ({
     );
   }
 
-  return (
-    <div className={classes.root}>
+  const isTransaction = [ACTIVITY_TYPES.SEND, ACTIVITY_TYPES.RECEIVE].includes(type);
 
+  return (
+    <div
+      className={clsx(classes.root, isTransaction && classes.pointer)}
+      onClick={() => openICRocksTx(hash)}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
       {
         type === ACTIVITY_TYPES.SWAP
           ? (
@@ -104,23 +157,50 @@ const ActivityItem = ({
             />
           )
       }
-
       <div className={classes.leftContainer}>
         <Typography variant="h5">
           {getTitle(type, currency, swapData, plug, t)}
         </Typography>
-        <Typography variant="subtitle2">
-          {getStatus(status, classes, t)}{getSubtitle(type, status, date, to, from, t)}
+        <Typography
+          variant="subtitle2"
+          onClick={handleClickCopy}
+          onMouseOver={() => setShowTooltip(true)}
+          onMouseLeave={() => setShowTooltip(false)}
+        >
+          {getStatus(status, classes, t)}{getDate(status, date)}
+          <Tooltip
+            classes={{ tooltipPlacementBottom: classes.tooltip }}
+            title={tooltipText}
+            arrow
+            open={showTooltip || copied}
+            placement="bottom"
+          >
+            <span>{getSubtitle(type, to, from, t)}</span>
+          </Tooltip>
         </Typography>
       </div>
       <div className={classes.rightContainer}>
-        <Typography variant="h5">
-          <NumberFormat value={showSwap ? swapData.amount : amount} displayType="text" thousandSeparator="," suffix={` ${showSwap ? swapData.currency.value : currency.value}`} decimalScale={5} />
-        </Typography>
-        <Typography variant="subtitle2">
-          <NumberFormat value={showSwap ? swapData.value : value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" decimalScale={2} />
-        </Typography>
+        <div>
+          <Typography variant="h5">
+            <NumberFormat value={showSwap ? swapData.amount : amount} displayType="text" thousandSeparator="," suffix={` ${showSwap ? swapData.currency.value : currency.value}`} decimalScale={5} />
+          </Typography>
+          <Typography variant="subtitle2">
+            <NumberFormat value={showSwap ? swapData.value : value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" decimalScale={2} />
+          </Typography>
+        </div>
+        <div className={
+          clsx(
+            classes.iconContainer,
+            (isTransaction && hover) && classes.iconContainerAnimation,
+          )
+        }
+        >
+          <img
+            src={ArrowUpRight}
+          />
+        </div>
       </div>
+
     </div>
   );
 };
@@ -138,6 +218,7 @@ ActivityItem.defaultProps = {
   icon: null,
   name: null,
   type: ACTIVITY_TYPES.PLUG,
+  hash: null,
 };
 
 ActivityItem.propTypes = {
@@ -165,4 +246,5 @@ ActivityItem.propTypes = {
   }),
   icon: PropTypes.string,
   name: PropTypes.string,
+  hash: PropTypes.string,
 };
