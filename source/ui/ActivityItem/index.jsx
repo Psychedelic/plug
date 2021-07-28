@@ -49,14 +49,17 @@ const getDate = (status, date) => (
     : ''
 );
 
-const getSubtitle = (type, to, from, t) => (
-  /* eslint-disable no-nested-ternary */
-  type === ACTIVITY_TYPES.SEND
-    ? ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`
-    : (type === ACTIVITY_TYPES.RECEIVE)
-      ? ` · ${t('activity.subtitle.from')}: ${shortAddress(from)}`
-      : ''
-);
+const getSubtitle = (type, to, from, t) => ({
+  [ACTIVITY_TYPES.SEND]: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
+  [ACTIVITY_TYPES.RECEIVE]: ` · ${t('activity.subtitle.from')}: ${shortAddress(from)}`,
+})[type] || '';
+
+const getAddress = (type, to, from) => (
+  {
+    [ACTIVITY_TYPES.SEND]: to,
+    [ACTIVITY_TYPES.RECEIVE]: from,
+  }
+)[type] || '';
 
 const openICRocksTx = (hash) => {
   browser.tabs.create({ url: `https://ic.rocks/transaction/${hash}` });
@@ -98,11 +101,7 @@ const ActivityItem = ({
 
     /* eslint-disable no-nested-ternary */
     navigator.clipboard.writeText(
-      type === ACTIVITY_TYPES.SEND
-        ? to
-        : type === ACTIVITY_TYPES.RECEIVE
-          ? from
-          : '',
+      getAddress(type, to, from),
     );
 
     setCopied(true);
