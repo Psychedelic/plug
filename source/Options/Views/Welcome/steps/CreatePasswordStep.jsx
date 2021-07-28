@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import extension from 'extensionizer';
 import Grid from '@material-ui/core/Grid';
 import { useTranslation } from 'react-i18next';
 import {
@@ -7,7 +8,6 @@ import {
 } from '@ui';
 import { sendMessage } from '@background/Keyring';
 import facepalmEmoji from '@assets/icons/facepalm.svg';
-
 import useStyles from '../styles';
 
 const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => {
@@ -44,6 +44,9 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
       setPasswordError(passwordValidation);
       return;
     }
+
+    // clean the storage before initiating keyring
+    extension.storage.local.clear();
 
     const type = mnemonic ? 'import-keyring' : 'create-keyring';
     const params = { password, mnemonic };
