@@ -1370,8 +1370,10 @@
     node-gyp "^7.1.0"
     read-package-json-fast "^2.0.1"
 
-"@psychedelic/plug-controller@../plug-wallet-controller":
-  version "0.1.2"
+"@psychedelic/plug-controller@0.2.1":
+  version "0.2.1"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.2.1/2215c5e33d3f50c78e2b0b78e637c01999b95bcc74379c6fa1df7903a87c7601#ee066587e1c74e260f5e47899b5df5e4f291506d"
+  integrity sha512-FUwNzZ0qdFzmL8OZlNyi90ppGBiR7pCdloxKUk8HQYYlydjv4gHFj2IREBGYwXS7Jgdz/fS6V1REhBYcZjOg5g==
   dependencies:
     "@babel/preset-env" "^7.14.4"
     "@dfinity/agent" "^0.8.9"
@@ -1397,10 +1399,10 @@
     tweetnacl "^1.0.3"
     webpack-dotenv "^0.0.2"
 
-"@psychedelic/plug-inpage-provider@1.1.5":
-  version "1.1.5"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/1.1.5/69dfe0dd920b9f8ed2515a3048cd34ad4b67ec55f7d692b4bc9d91d2f0252cf4#31436b541374d3e9d5d5083c2e7e5e8b75365185"
-  integrity sha512-ouAxBLVtzHhff1PJPRo3plbWhXnykO0cX/SRqD6VvIGuHIowqtIvWmpAxtpJMGkt8ZVEXgS0rtQYAoO4iy0Wbg==
+"@psychedelic/plug-inpage-provider@1.1.7":
+  version "1.1.7"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/1.1.7/25d35e69f6ea081e92d949612a2314d9a4d88c81c97259fbe1ac279a7a62e46d#cd609dee724b1d02b43fad407335422192ccc65c"
+  integrity sha512-+QK5ONf0HmZt8R8jCx20HwPG92NnFGL4urjigH4egYl9ZWNWR4wiRFPhC4055yrbPR40jmSpdWMV6n576Xfhww==
   dependencies:
     "@dfinity/agent" "^0.9.2"
     "@dfinity/candid" "^0.9.2"
