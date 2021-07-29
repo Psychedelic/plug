@@ -40,13 +40,10 @@ const AllowAgent = ({
   const {
     url,
     icons,
-    requestConnect,
   } = metadata;
 
   const onClickHandler = async (response) => {
-    if (requestConnect) await portRPC.call('handleAllowAgentConnect', [url, response, callId, portId]);
-    else await portRPC.call('handleAllowAgent', [response, callId, portId]);
-
+    await portRPC.call('handleAllowAgent', [response, callId, portId]);
     window.close();
   };
 

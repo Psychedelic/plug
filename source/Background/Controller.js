@@ -354,68 +354,7 @@ backgroundController.exposeController('getPublicKey', async (opts) => {
 });
 
 backgroundController.exposeController(
-  'allowAgent',
-  async (opts, metadata, whitelist) => {
-    const { message, sender, callback } = opts;
-
-    const { id: callId } = message.data.data;
-    const { id: portId } = sender;
-
-    storage.get('apps', async (state) => {
-      if (state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
-        const url = qs.stringifyUrl({
-          url: 'notification.html',
-          query: {
-            callId,
-            portId,
-            metadataJson: JSON.stringify(metadata),
-            argsJson: JSON.stringify(whitelist),
-            type: 'allowAgent',
-          },
-        });
-
-        const height = keyring?.isUnlocked
-          ? Math.min(422 + 37 * whitelist.length, 600)
-          : SIZES.loginHeight;
-
-        extension.windows.create({
-          url,
-          type: 'popup',
-          width: SIZES.width,
-          height,
-          top: 65,
-          left: metadata.pageWidth - SIZES.width,
-        });
-      } else {
-        callback(ERRORS.CONNECTION_ERROR, null);
-      }
-    });
-  },
-);
-
-backgroundController.exposeController(
   'handleAllowAgent',
-  async (opts, response, callId, portId) => {
-    const { callback } = opts;
-
-    // Answer this callback no matter if the transfer succeeds or not.
-    callback(null, true);
-
-    if (response) {
-      try {
-        const publicKey = await keyring.getPublicKey();
-        callback(null, publicKey, [{ portId, callId }]);
-      } catch (e) {
-        callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
-      }
-    } else {
-      callback(ERRORS.AGENT_REJECTED, null, [{ portId, callId }]);
-    }
-  },
-);
-
-backgroundController.exposeController(
-  'handleAllowAgentConnect',
   async (opts, url, response, callId, portId) => {
     const { callback } = opts;
 
