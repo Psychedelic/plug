@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import extension from 'extensionizer';
+import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import plugProvider from '../Inpage/index';
 
 const storage = extension.storage.local;
 
@@ -17,6 +19,7 @@ const useApps = () => {
       }, {});
 
     setApps(filteredApps);
+    plugProvider.deleteAgent();
   };
 
   useEffect(() => {
@@ -33,7 +36,9 @@ const useApps = () => {
       apps,
     });
 
-    setParsedApps(Object.values(apps));
+    const parsed = Object.values(apps);
+    const filtered = parsed.filter((a) => a.status === CONNECTION_STATUS.accepted);
+    setParsedApps(filtered);
   }, [apps]);
 
   return {

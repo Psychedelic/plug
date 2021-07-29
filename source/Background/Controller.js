@@ -7,6 +7,7 @@ import SIZES from '../Pages/Notification/components/Transfer/constants';
 import { E8S_PER_ICP, getKeyringHandler, HANDLER_TYPES } from './Keyring';
 import { validateTransferArgs } from './utils';
 import ERRORS from './errors';
+import plugProvider from '../Inpage/index';
 
 const storage = extension.storage.local;
 let keyring;
@@ -76,8 +77,12 @@ backgroundController.exposeController('isConnected', async (opts, url) => secure
 
 backgroundController.exposeController(
   'requestConnect',
-  async (opts, domainUrl, name, icon) => secureController(opts.callback, async () => {
+  async (opts, metadata, whitelist) => secureController(opts.callback, async () => {
     const { message, sender } = opts;
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
+    const { url: domainUrl, name, icons } = metadata;
+
     storage.get('apps', (response) => {
       const apps = {
         ...response.apps,
@@ -85,34 +90,63 @@ backgroundController.exposeController(
           url: domainUrl,
           name,
           status: CONNECTION_STATUS.pending,
-          icon,
+          icon: icons[0] || null,
         },
       };
 
       storage.set({ apps });
     });
 
-    const url = qs.stringifyUrl({
-      url: 'notification.html',
-      query: {
-        callId: message.data.data.id,
-        portId: sender.id,
-        url: domainUrl,
-        icon,
-        type: 'connect',
-      },
-    });
+    // if we receive a whitelist, we create agent
+    if (whitelist && whitelist.length > 0) {
+      const newMetadata = { ...metadata, requestConnect: true };
 
-    const height = keyring?.isUnlocked
-      ? SIZES.appConnectHeight
-      : SIZES.loginHeight;
+      const url = qs.stringifyUrl({
+        url: 'notification.html',
+        query: {
+          callId,
+          portId,
+          metadataJson: JSON.stringify(newMetadata),
+          argsJson: JSON.stringify(whitelist),
+          type: 'allowAgent',
+        },
+      });
 
-    extension.windows.create({
-      url,
-      type: 'popup',
-      width: SIZES.width,
-      height,
-    });
+      const height = keyring?.isUnlocked
+        ? Math.min(422 + 37 * whitelist.length, 600)
+        : SIZES.loginHeight;
+
+      extension.windows.create({
+        url,
+        type: 'popup',
+        width: SIZES.width,
+        height,
+        top: 65,
+        left: metadata.pageWidth - SIZES.width,
+      });
+    } else {
+      const url = qs.stringifyUrl({
+        url: 'notification.html',
+        query: {
+          callId,
+          portId,
+          url: domainUrl,
+          icon: icons[0] || null,
+          type: 'connect',
+        },
+      });
+
+      const height = keyring?.isUnlocked
+        ? SIZES.appConnectHeight
+        : SIZES.loginHeight;
+
+      extension.windows.create({
+        url,
+        type: 'popup',
+        width: SIZES.width,
+        height,
+      });
+    }
   }),
 );
 
@@ -137,6 +171,10 @@ backgroundController.exposeController(
 
       storage.set({ apps: newApps });
     });
+
+    if (status === CONNECTION_STATUS.rejected) {
+      plugProvider.deleteAgent();
+    }
 
     callback(null, true);
     callback(null, status === CONNECTION_STATUS.accepted, [
@@ -316,52 +354,31 @@ backgroundController.exposeController('getPublicKey', async (opts) => {
 });
 
 backgroundController.exposeController(
-  'allowAgent',
-  async (opts, metadata, whitelist) => {
-    const { message, sender, callback } = opts;
-
-    const { id: callId } = message.data.data;
-    const { id: portId } = sender;
-
-    storage.get('apps', async (state) => {
-      if (state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
-        const url = qs.stringifyUrl({
-          url: 'notification.html',
-          query: {
-            callId,
-            portId,
-            metadataJson: JSON.stringify(metadata),
-            argsJson: JSON.stringify(whitelist),
-            type: 'allowAgent',
-          },
-        });
-
-        const height = keyring?.isUnlocked
-          ? Math.min(422 + 37 * whitelist.length, 600)
-          : SIZES.loginHeight;
-
-        extension.windows.create({
-          url,
-          type: 'popup',
-          width: SIZES.width,
-          height,
-          top: 65,
-          left: metadata.pageWidth - SIZES.width,
-        });
-      } else {
-        callback(ERRORS.CONNECTION_ERROR, null);
-      }
-    });
-  },
-);
-
-backgroundController.exposeController(
   'handleAllowAgent',
-  async (opts, response, callId, portId) => {
+  async (opts, url, response, callId, portId) => {
     const { callback } = opts;
 
     // Answer this callback no matter if the transfer succeeds or not.
     callback(null, true);
+
+    storage.get('apps', (state) => {
+      const apps = state.apps || {};
+
+      const newApps = Object.keys(apps).reduce((obj, key) => {
+        const newObj = { ...obj };
+        newObj[key] = apps[key];
+        if (key === url) {
+          newObj[key].status = response
+            ? CONNECTION_STATUS.accepted
+            : CONNECTION_STATUS.rejected;
+          newObj[key].date = new Date().toISOString();
+        }
+
+        return newObj;
+      }, {});
+
+      storage.set({ apps: newApps });
+    });
 
     if (response) {
       try {
