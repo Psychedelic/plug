@@ -151,39 +151,6 @@ backgroundController.exposeController(
   }),
 );
 
-backgroundController.exposeController(
-  'handleAppConnect',
-  async (opts, url, status, callId, portId) => secureController(opts.callback, async () => {
-    const { callback } = opts;
-
-    storage.get('apps', (response) => {
-      const apps = response.apps || {};
-
-      const newApps = Object.keys(apps).reduce((obj, key) => {
-        const newObj = { ...obj };
-        newObj[key] = apps[key];
-        if (key === url) {
-          newObj[key].status = status || CONNECTION_STATUS.rejected;
-          newObj[key].date = new Date().toISOString();
-        }
-
-        return newObj;
-      }, {});
-
-      storage.set({ apps: newApps });
-    });
-
-    if (status === CONNECTION_STATUS.rejected) {
-      plugProvider.deleteAgent();
-    }
-
-    callback(null, true);
-    callback(null, status === CONNECTION_STATUS.accepted, [
-      { portId, callId },
-    ]);
-  }),
-);
-
 const requestBalance = async (accountId, callback) => {
   const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
   const icpBalance = await getBalance(accountId);
@@ -358,7 +325,6 @@ backgroundController.exposeController(
   'handleAllowAgent',
   async (opts, url, response, callId, portId) => {
     const { callback } = opts;
-
     storage.get('apps', (state) => {
       const apps = state.apps || {};
 
@@ -366,9 +332,7 @@ backgroundController.exposeController(
         const newObj = { ...obj };
         newObj[key] = apps[key];
         if (key === url) {
-          newObj[key].status = response
-            ? CONNECTION_STATUS.accepted
-            : CONNECTION_STATUS.rejected;
+          newObj[key].status = response.status || CONNECTION_STATUS.rejected;
           newObj[key].date = new Date().toISOString();
         }
 
@@ -377,8 +341,7 @@ backgroundController.exposeController(
 
       storage.set({ apps: newApps });
     });
-
-    if (response?.accepted) {
+    if (response?.status === CONNECTION_STATUS.accepted) {
       try {
         const publicKey = await keyring.getPublicKey();
         callback(null, publicKey, [{ portId, callId }]);
@@ -388,6 +351,7 @@ backgroundController.exposeController(
         callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
       }
     } else {
+      plugProvider.deleteAgent();
       callback(ERRORS.AGENT_REJECTED, null);
       callback(ERRORS.AGENT_REJECTED, null, [{ portId, callId }]);
     }

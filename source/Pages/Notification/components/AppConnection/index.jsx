@@ -42,14 +42,9 @@ const AppConnection = () => {
   } = query;
 
   const onClickHandler = async (status) => {
-    await portRPC.call('handleAppConnect', [url, status, callId, portId]);
+    await portRPC.call('handleAllowAgent', [url, { status, whitelist: [] }, callId, portId]);
     window.close();
   };
-
-  // find way to do this
-  // window.onbeforeunload = () => { // if user closes the window, reject connection
-  //  onClickHandler(CONNECTION_STATUS.rejected);
-  // };
 
   extension.windows.update(
     extension.windows.WINDOW_ID_CURRENT,
