@@ -46,7 +46,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
     }
 
     // clean the storage before initiating keyring
-    extension.storage.local.clear();
+    extension.storage.local.set({ contacts: [] });
 
     const type = mnemonic ? 'import-keyring' : 'create-keyring';
     const params = { password, mnemonic };
