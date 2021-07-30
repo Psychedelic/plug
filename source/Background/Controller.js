@@ -380,9 +380,6 @@ backgroundController.exposeController(
     if (response?.accepted) {
       try {
         const publicKey = await keyring.getPublicKey();
-        // console.log('allow agent public key', publicKey, response);
-        // await plugProvider.createAgent(response.whitelist, response.host);
-        // console.log('call finished');
         callback(null, publicKey, [{ portId, callId }]);
         callback(null, true);
       } catch (e) {
