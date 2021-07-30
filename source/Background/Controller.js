@@ -347,13 +347,13 @@ backgroundController.exposeController(
         callback(null, publicKey, [{ portId, callId }]);
         callback(null, true);
       } catch (e) {
-        callback(ERRORS.SERVER_ERROR(e), null);
         callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
+        callback(null, false);
       }
     } else {
       plugProvider.deleteAgent();
-      callback(ERRORS.AGENT_REJECTED, null);
       callback(ERRORS.AGENT_REJECTED, null, [{ portId, callId }]);
+      callback(null, false);
     }
   },
 );
