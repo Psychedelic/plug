@@ -341,14 +341,15 @@ backgroundController.exposeController(
 
       storage.set({ apps: newApps });
     });
+    console.log(response.status);
     if (response?.status === CONNECTION_STATUS.accepted) {
       try {
         const publicKey = await keyring.getPublicKey();
         callback(null, publicKey, [{ portId, callId }]);
         callback(null, true);
       } catch (e) {
-        callback(ERRORS.SERVER_ERROR(e), null);
         callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
+        callback(null, false);
       }
     } else {
       plugProvider.deleteAgent();
