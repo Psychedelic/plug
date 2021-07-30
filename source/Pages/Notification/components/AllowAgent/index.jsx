@@ -42,8 +42,8 @@ const AllowAgent = ({
     icons,
   } = metadata;
 
-  const onClickHandler = async (response) => {
-    await portRPC.call('handleAllowAgent', [response, callId, portId]);
+  const onClickHandler = async (accepted) => {
+    await portRPC.call('handleAllowAgent', [url, { accepted, whitelist }, callId, portId]);
     window.close();
   };
 

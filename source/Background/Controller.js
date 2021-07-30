@@ -358,9 +358,6 @@ backgroundController.exposeController(
   async (opts, url, response, callId, portId) => {
     const { callback } = opts;
 
-    // Answer this callback no matter if the transfer succeeds or not.
-    callback(null, true);
-
     storage.get('apps', (state) => {
       const apps = state.apps || {};
 
@@ -380,14 +377,20 @@ backgroundController.exposeController(
       storage.set({ apps: newApps });
     });
 
-    if (response) {
+    if (response?.accepted) {
       try {
         const publicKey = await keyring.getPublicKey();
+        // console.log('allow agent public key', publicKey, response);
+        // await plugProvider.createAgent(response.whitelist, response.host);
+        // console.log('call finished');
         callback(null, publicKey, [{ portId, callId }]);
+        callback(null, true);
       } catch (e) {
+        callback(ERRORS.SERVER_ERROR(e), null);
         callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
       }
     } else {
+      callback(ERRORS.AGENT_REJECTED, null);
       callback(ERRORS.AGENT_REJECTED, null, [{ portId, callId }]);
     }
   },
