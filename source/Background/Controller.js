@@ -300,12 +300,22 @@ backgroundController.exposeController(
   },
 );
 
-backgroundController.exposeController('sign', async (opts, payload) => {
+backgroundController.exposeController('sign', async (opts, payload, metadata) => {
   const { callback } = opts;
   try {
-    const parsedPayload = payload instanceof Buffer ? payload : Buffer.from(Object.values(payload));
-    const signed = await keyring.sign(parsedPayload);
-    callback(null, [...new Uint8Array(signed)]);
+    storage.get('apps', async (state) => {
+      if (
+        state?.apps?.[metadata.url]?.status !== CONNECTION_STATUS.accepted
+      ) {
+        callback(ERRORS.CONNECTION_ERROR, null);
+        return;
+      }
+      const parsedPayload = payload instanceof Buffer
+        ? payload
+        : Buffer.from(Object.values(payload));
+      const signed = await keyring.sign(parsedPayload);
+      callback(null, [...new Uint8Array(signed)]);
+    });
   } catch (e) {
     callback(ERRORS.SERVER_ERROR(e), null);
   }
