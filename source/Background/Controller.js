@@ -341,7 +341,6 @@ backgroundController.exposeController(
 
       storage.set({ apps: newApps });
     });
-    console.log(response.status);
     if (response?.status === CONNECTION_STATUS.accepted) {
       try {
         const publicKey = await keyring.getPublicKey();
