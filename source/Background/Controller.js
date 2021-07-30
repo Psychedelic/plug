@@ -352,8 +352,8 @@ backgroundController.exposeController(
       }
     } else {
       plugProvider.deleteAgent();
-      callback(ERRORS.AGENT_REJECTED, null);
       callback(ERRORS.AGENT_REJECTED, null, [{ portId, callId }]);
+      callback(null, false);
     }
   },
 );
