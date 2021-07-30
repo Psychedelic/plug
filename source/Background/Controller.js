@@ -78,6 +78,7 @@ backgroundController.exposeController('isConnected', async (opts, url) => secure
 backgroundController.exposeController(
   'requestConnect',
   async (opts, metadata, whitelist) => secureController(opts.callback, async () => {
+    const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
     const { message, sender } = opts;
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
@@ -98,7 +99,7 @@ backgroundController.exposeController(
     });
 
     // if we receive a whitelist, we create agent
-    if (whitelist && whitelist.length > 0) {
+    if (isValidWhitelist) {
       const newMetadata = { ...metadata, requestConnect: true };
 
       const url = qs.stringifyUrl({
@@ -147,39 +148,6 @@ backgroundController.exposeController(
         height,
       });
     }
-  }),
-);
-
-backgroundController.exposeController(
-  'handleAppConnect',
-  async (opts, url, status, callId, portId) => secureController(opts.callback, async () => {
-    const { callback } = opts;
-
-    storage.get('apps', (response) => {
-      const apps = response.apps || {};
-
-      const newApps = Object.keys(apps).reduce((obj, key) => {
-        const newObj = { ...obj };
-        newObj[key] = apps[key];
-        if (key === url) {
-          newObj[key].status = status || CONNECTION_STATUS.rejected;
-          newObj[key].date = new Date().toISOString();
-        }
-
-        return newObj;
-      }, {});
-
-      storage.set({ apps: newApps });
-    });
-
-    if (status === CONNECTION_STATUS.rejected) {
-      plugProvider.deleteAgent();
-    }
-
-    callback(null, true);
-    callback(null, status === CONNECTION_STATUS.accepted, [
-      { portId, callId },
-    ]);
   }),
 );
 
@@ -357,10 +325,6 @@ backgroundController.exposeController(
   'handleAllowAgent',
   async (opts, url, response, callId, portId) => {
     const { callback } = opts;
-
-    // Answer this callback no matter if the transfer succeeds or not.
-    callback(null, true);
-
     storage.get('apps', (state) => {
       const apps = state.apps || {};
 
@@ -368,9 +332,7 @@ backgroundController.exposeController(
         const newObj = { ...obj };
         newObj[key] = apps[key];
         if (key === url) {
-          newObj[key].status = response
-            ? CONNECTION_STATUS.accepted
-            : CONNECTION_STATUS.rejected;
+          newObj[key].status = response.status || CONNECTION_STATUS.rejected;
           newObj[key].date = new Date().toISOString();
         }
 
@@ -379,15 +341,18 @@ backgroundController.exposeController(
 
       storage.set({ apps: newApps });
     });
-
-    if (response) {
+    if (response?.status === CONNECTION_STATUS.accepted) {
       try {
         const publicKey = await keyring.getPublicKey();
         callback(null, publicKey, [{ portId, callId }]);
+        callback(null, true);
       } catch (e) {
+        callback(ERRORS.SERVER_ERROR(e), null);
         callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
       }
     } else {
+      plugProvider.deleteAgent();
+      callback(ERRORS.AGENT_REJECTED, null);
       callback(ERRORS.AGENT_REJECTED, null, [{ portId, callId }]);
     }
   },
