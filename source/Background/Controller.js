@@ -78,6 +78,7 @@ backgroundController.exposeController('isConnected', async (opts, url) => secure
 backgroundController.exposeController(
   'requestConnect',
   async (opts, metadata, whitelist) => secureController(opts.callback, async () => {
+    const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
     const { message, sender } = opts;
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
@@ -98,7 +99,7 @@ backgroundController.exposeController(
     });
 
     // if we receive a whitelist, we create agent
-    if (whitelist && whitelist.length > 0) {
+    if (isValidWhitelist) {
       const newMetadata = { ...metadata, requestConnect: true };
 
       const url = qs.stringifyUrl({
