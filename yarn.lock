@@ -1413,10 +1413,10 @@
     tweetnacl "^1.0.3"
     webpack-dotenv "^0.0.2"
 
-"@psychedelic/plug-inpage-provider@1.1.13":
-  version "1.1.13"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/1.1.13/c64724492d9fc9dfc773b78cf3b8212f8883971da87382aa96834ef75e2166c5#75e3c332f04ed133ff314c7f6f7959199360ff81"
-  integrity sha512-s2Ml6zHbBZSMWp5c50gwxWmTsfoqxZuQv5Xf8lXucVVL2pi9H10L3Ha70SNWml0BAMUeOsb0yx5TT3jGEBHbuw==
+"@psychedelic/plug-inpage-provider@1.1.14":
+  version "1.1.14"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/1.1.14/b7109bc1097900a6ce2a791f8c8a167dc38dfddcc0a4808ae68e629a1147bcd0#bb11acdb0af47ae384063068095ac89c957b872d"
+  integrity sha512-wPo/bd19orDZ40LCwjQuZ4ecIbykpJYsdbHkawpHhy9t6jFAu/mrAJId8ePAku58iZOfhQzPiz/Yp/2x27qUmw==
   dependencies:
     "@dfinity/agent" "^0.9.2"
     "@dfinity/candid" "^0.9.2"
