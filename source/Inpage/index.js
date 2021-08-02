@@ -8,9 +8,7 @@ const clientRPC = new BrowserRPC(window, {
 });
 
 clientRPC.start();
-
 const plugProvider = new Provider(clientRPC);
-
 const ic = window.ic || {};
 
 /* eslint-disable no-console */

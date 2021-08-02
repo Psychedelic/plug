@@ -32,7 +32,7 @@ const portRPC = new PortRPC({
 portRPC.start();
 
 const AllowAgent = ({
-  args: whitelist, metadata, callId, portId,
+  args, metadata, callId, portId,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
@@ -41,30 +41,33 @@ const AllowAgent = ({
   const {
     url,
     icons,
-  } = metadata;
+  } = metadata || {};
 
-  const onClickHandler = async (status) => {
-    await portRPC.call('handleAllowAgent', [url, { status, whitelist }, callId, portId]);
+  const handleAllowAgent = async (status) => {
+    await portRPC.call('handleAllowAgent', [url, { status, whitelist: args?.whitelist }, callId, portId]);
     window.close();
   };
 
   useEffect(() => {
-    extension.windows.update(
-      extension.windows.WINDOW_ID_CURRENT,
-      {
-        height: Math.min(422 + 37 * whitelist.length, 600),
-      },
-    );
-
-    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
-      (state) => {
-        if (state?.wallets?.length) {
-          dispatch(setAccountInfo(state.wallets[0]));
-        }
-      });
+    if (!args?.updateWhitelist || args?.showList) {
+      extension.windows.update(
+        extension.windows.WINDOW_ID_CURRENT,
+        {
+          height: Math.min(422 + 37 * args?.whitelist.length || 0, 600),
+        },
+      );
+      sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
+        (state) => {
+          if (state?.wallets?.length) {
+            dispatch(setAccountInfo(state.wallets[0]));
+          }
+        });
+    } else {
+      handleAllowAgent(CONNECTION_STATUS.accepted).then(() => window?.close?.());
+    }
   }, []);
 
-  return (
+  return !args?.updateWhitelist || args?.showList ? (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
@@ -75,7 +78,7 @@ const AllowAgent = ({
 
               <WhitelistContainer>
                 {
-                  whitelist.map((id) => <WhitelistItem canisterId={id} />)
+                  args?.whitelist.map((id) => <WhitelistItem canisterId={id} />)
                 }
               </WhitelistContainer>
 
@@ -83,14 +86,18 @@ const AllowAgent = ({
                 <Button
                   variant="default"
                   value={t('common.decline')}
-                  onClick={() => onClickHandler(CONNECTION_STATUS.rejected)}
+                  onClick={() => handleAllowAgent(
+                    args?.updateWhitelist
+                      ? CONNECTION_STATUS.rejectedAgent
+                      : CONNECTION_STATUS.rejected,
+                  )}
                   style={{ width: '96%' }}
                   fullWidth
                 />
                 <Button
                   variant="rainbow"
                   value={t('common.allow')}
-                  onClick={() => onClickHandler(CONNECTION_STATUS.accepted)}
+                  onClick={() => handleAllowAgent(CONNECTION_STATUS.accepted)}
                   fullWidth
                   style={{ width: '96%' }}
                   wrapperStyle={{ textAlign: 'right' }}
@@ -101,7 +108,7 @@ const AllowAgent = ({
         </Layout>
       </ThemeProvider>
     </Provider>
-  );
+  ) : <div style={{ display: 'none' }} />;
 };
 
 export default AllowAgent;
