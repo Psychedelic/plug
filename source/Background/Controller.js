@@ -2,6 +2,7 @@ import qs from 'query-string';
 import extension from 'extensionizer';
 import { BackgroundController } from '@fleekhq/browser-rpc';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import { areAllElementsIn } from '@shared/utils/array';
 import PlugController from '@psychedelic/plug-controller';
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import { E8S_PER_ICP, getKeyringHandler, HANDLER_TYPES } from './Keyring';
@@ -108,7 +109,7 @@ backgroundController.exposeController(
           callId,
           portId,
           metadataJson: JSON.stringify(newMetadata),
-          argsJson: JSON.stringify(whitelist),
+          argsJson: JSON.stringify({ whitelist }),
           type: 'allowAgent',
         },
       });
@@ -332,20 +333,92 @@ backgroundController.exposeController('getPublicKey', async (opts) => {
 });
 
 backgroundController.exposeController(
+  'verifyWhitelist',
+  async (opts, metadata, whitelist) => secureController(opts.callback, async () => {
+    const { message, sender, callback } = opts;
+
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
+    storage.get('apps', async (state) => {
+      const app = state?.apps?.[metadata.url];
+      if (
+        app?.status === CONNECTION_STATUS.accepted
+      ) {
+        const allWhitelisted = areAllElementsIn(whitelist, app?.whitelist);
+        const height = keyring?.isUnlocked
+          ? SIZES.detailHeightSmall
+          : SIZES.loginHeight;
+
+        if (allWhitelisted) {
+          if (!keyring.isUnlocked) {
+            const url = qs.stringifyUrl({
+              url: 'notification.html',
+              query: {
+                callId,
+                portId,
+                metadataJson: JSON.stringify(metadata),
+                argsJson: JSON.stringify({ whitelist, updateWhitelist: true, showList: false }),
+                type: 'allowAgent',
+              },
+            });
+
+            extension.windows.create({
+              url,
+              type: 'popup',
+              width: SIZES.width,
+              height,
+              top: 65,
+              left: metadata.pageWidth - SIZES.width,
+            });
+          }
+          const publicKey = await keyring.getPublicKey();
+          callback(null, publicKey);
+        } else {
+          const url = qs.stringifyUrl({
+            url: 'notification.html',
+            query: {
+              callId,
+              portId,
+              metadataJson: JSON.stringify(metadata),
+              argsJson: JSON.stringify({ whitelist, updateWhitelist: true, showList: true }),
+              type: 'allowAgent',
+            },
+          });
+
+          extension.windows.create({
+            url,
+            type: 'popup',
+            width: SIZES.width,
+            height,
+            top: 65,
+            left: metadata.pageWidth - SIZES.width,
+          });
+        }
+      } else {
+        callback(ERRORS.CONNECTION_ERROR, null);
+      }
+    });
+  }),
+);
+
+backgroundController.exposeController(
   'handleAllowAgent',
   async (opts, url, response, callId, portId) => {
     const { callback } = opts;
     storage.get('apps', (state) => {
       const apps = state.apps || {};
+      const status = response.status === CONNECTION_STATUS.rejectedAgent
+        ? CONNECTION_STATUS.accepted : response.status;
+      const whitelist = response.status === CONNECTION_STATUS.accepted ? response.whitelist : [];
 
       const newApps = Object.keys(apps).reduce((obj, key) => {
         const newObj = { ...obj };
         newObj[key] = apps[key];
         if (key === url) {
-          newObj[key].status = response.status || CONNECTION_STATUS.rejected;
+          newObj[key].status = status || CONNECTION_STATUS.rejected;
           newObj[key].date = new Date().toISOString();
+          newObj[key].whitelist = whitelist;
         }
-
         return newObj;
       }, {});
 
