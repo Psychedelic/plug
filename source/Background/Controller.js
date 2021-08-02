@@ -4,7 +4,7 @@ import { BackgroundController } from '@fleekhq/browser-rpc';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { areAllElementsIn } from '@shared/utils/array';
 import PlugController from '@psychedelic/plug-controller';
-import { validatePrincipalId } from '@shared/utils/ids';
+import { validateCanisterId } from '@shared/utils/ids';
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import { E8S_PER_ICP, getKeyringHandler, HANDLER_TYPES } from './Keyring';
 import { validateTransferArgs } from './utils';
@@ -82,7 +82,7 @@ backgroundController.exposeController(
   async (opts, metadata, whitelist) => secureController(opts.callback, async () => {
     const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
 
-    if (!whitelist.every((i) => validatePrincipalId(i))) {
+    if (!whitelist.every((i) => validateCanisterId(i))) {
       opts.callback(ERRORS.CANISTER_ID_ERROR, null);
       return;
     }
@@ -350,7 +350,7 @@ backgroundController.exposeController(
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
 
-    if (!whitelist.every((i) => validatePrincipalId(i))) {
+    if (!whitelist.every((i) => validateCanisterId(i))) {
       callback(ERRORS.CANISTER_ID_ERROR, null);
       return;
     }

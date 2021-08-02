@@ -12,3 +12,5 @@ export const validatePrincipalId = (text) => {
 };
 
 export const validateAccountId = (text) => text.length === 64 && ALPHANUM_REGEX.test(text);
+
+export const validateCanisterId = (text) => text === Principal.fromText(text).toString();
