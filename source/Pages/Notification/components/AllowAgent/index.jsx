@@ -49,6 +49,13 @@ const AllowAgent = ({
   };
 
   useEffect(() => {
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
+      (state) => {
+        if (state?.wallets?.length) {
+          dispatch(setAccountInfo(state.wallets[0]));
+        }
+      });
+
     if (!args?.updateWhitelist || args?.showList) {
       extension.windows.update(
         extension.windows.WINDOW_ID_CURRENT,
@@ -56,12 +63,6 @@ const AllowAgent = ({
           height: Math.min(422 + 37 * args?.whitelist.length || 0, 600),
         },
       );
-      sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
-        (state) => {
-          if (state?.wallets?.length) {
-            dispatch(setAccountInfo(state.wallets[0]));
-          }
-        });
     } else {
       handleAllowAgent(CONNECTION_STATUS.accepted).then(() => window?.close?.());
     }

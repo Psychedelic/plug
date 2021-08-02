@@ -1,10 +1,10 @@
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createTheme } from '@material-ui/core/styles';
 
 const primaryFontColor = '#111827';
 const secondaryFontColor = '#374151';
 const tertiaryFontColor = '#3574F4';
 
-const theme = createMuiTheme({
+const theme = createTheme({
   overrides: {
     MuiCssBaseline: {
       '@global': {
