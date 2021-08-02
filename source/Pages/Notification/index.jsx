@@ -20,7 +20,6 @@ const NOTIFICATION_COMPONENTS = {
 
 const NotificationContainer = () => {
   const [loggedIn, setLoggedIn] = useState(null);
-
   const { query } = qs.parseUrl(window.location.href);
 
   const {

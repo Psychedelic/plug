@@ -1,11 +1,9 @@
 import { Principal } from '@dfinity/agent';
-import { ALPHANUM_REGEX, PRINCIPAL_REGEX } from '../constants/addresses';
+import { ALPHANUM_REGEX } from '../constants/addresses';
 
 export const validatePrincipalId = (text) => {
   try {
-    const validRegex = PRINCIPAL_REGEX.test(text);
-    const validPrincipal = text === Principal.fromText(text).toString();
-    return validRegex && validPrincipal;
+    return text === Principal.fromText(text).toString();
   } catch (e) {
     return false;
   }
