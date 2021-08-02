@@ -4,6 +4,7 @@ import { BackgroundController } from '@fleekhq/browser-rpc';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { areAllElementsIn } from '@shared/utils/array';
 import PlugController from '@psychedelic/plug-controller';
+import { validatePrincipalId } from '@shared/utils/ids';
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import { E8S_PER_ICP, getKeyringHandler, HANDLER_TYPES } from './Keyring';
 import { validateTransferArgs } from './utils';
@@ -80,6 +81,12 @@ backgroundController.exposeController(
   'requestConnect',
   async (opts, metadata, whitelist) => secureController(opts.callback, async () => {
     const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
+
+    if (!whitelist.every((i) => validatePrincipalId(i))) {
+      opts.callback(ERRORS.CANISTER_ID_ERROR, null);
+      return;
+    }
+
     const { message, sender } = opts;
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
@@ -301,26 +308,29 @@ backgroundController.exposeController(
   },
 );
 
-backgroundController.exposeController('sign', async (opts, payload, metadata) => {
-  const { callback } = opts;
-  try {
-    storage.get('apps', async (state) => {
-      if (
-        state?.apps?.[metadata.url]?.status !== CONNECTION_STATUS.accepted
-      ) {
-        callback(ERRORS.CONNECTION_ERROR, null);
-        return;
-      }
-      const parsedPayload = payload instanceof Buffer
-        ? payload
-        : Buffer.from(Object.values(payload));
-      const signed = await keyring.sign(parsedPayload);
-      callback(null, [...new Uint8Array(signed)]);
-    });
-  } catch (e) {
-    callback(ERRORS.SERVER_ERROR(e), null);
-  }
-});
+backgroundController.exposeController(
+  'sign',
+  async (opts, payload, metadata) => {
+    const { callback } = opts;
+    try {
+      storage.get('apps', async (state) => {
+        if (
+          state?.apps?.[metadata.url]?.status !== CONNECTION_STATUS.accepted
+        ) {
+          callback(ERRORS.CONNECTION_ERROR, null);
+          return;
+        }
+        const parsedPayload = payload instanceof Buffer
+          ? payload
+          : Buffer.from(Object.values(payload));
+        const signed = await keyring.sign(parsedPayload);
+        callback(null, [...new Uint8Array(signed)]);
+      });
+    } catch (e) {
+      callback(ERRORS.SERVER_ERROR(e), null);
+    }
+  },
+);
 
 backgroundController.exposeController('getPublicKey', async (opts) => {
   const { callback } = opts;
@@ -339,11 +349,15 @@ backgroundController.exposeController(
 
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
+
+    if (!whitelist.every((i) => validatePrincipalId(i))) {
+      callback(ERRORS.CANISTER_ID_ERROR, null);
+      return;
+    }
+
     storage.get('apps', async (state) => {
       const app = state?.apps?.[metadata.url];
-      if (
-        app?.status === CONNECTION_STATUS.accepted
-      ) {
+      if (app?.status === CONNECTION_STATUS.accepted) {
         const allWhitelisted = areAllElementsIn(whitelist, app?.whitelist);
         const height = keyring?.isUnlocked
           ? SIZES.detailHeightSmall
@@ -357,7 +371,11 @@ backgroundController.exposeController(
                 callId,
                 portId,
                 metadataJson: JSON.stringify(metadata),
-                argsJson: JSON.stringify({ whitelist, updateWhitelist: true, showList: false }),
+                argsJson: JSON.stringify({
+                  whitelist,
+                  updateWhitelist: true,
+                  showList: false,
+                }),
                 type: 'allowAgent',
               },
             });
@@ -380,7 +398,11 @@ backgroundController.exposeController(
               callId,
               portId,
               metadataJson: JSON.stringify(metadata),
-              argsJson: JSON.stringify({ whitelist, updateWhitelist: true, showList: true }),
+              argsJson: JSON.stringify({
+                whitelist,
+                updateWhitelist: true,
+                showList: true,
+              }),
               type: 'allowAgent',
             },
           });
@@ -408,8 +430,11 @@ backgroundController.exposeController(
     storage.get('apps', (state) => {
       const apps = state.apps || {};
       const status = response.status === CONNECTION_STATUS.rejectedAgent
-        ? CONNECTION_STATUS.accepted : response.status;
-      const whitelist = response.status === CONNECTION_STATUS.accepted ? response.whitelist : [];
+        ? CONNECTION_STATUS.accepted
+        : response.status;
+      const whitelist = response.status === CONNECTION_STATUS.accepted
+        ? response.whitelist
+        : [];
 
       const newApps = Object.keys(apps).reduce((obj, key) => {
         const newObj = { ...obj };
