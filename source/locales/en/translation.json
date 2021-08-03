@@ -75,7 +75,8 @@
     "emptyText": "When you connect to an app they will be displayed here, with the ability to remove them.",
     "emptyLink": "our docs.",
     "comingSoonTitle": "Coming soon!",
-    "comingSoonSubtitle": "Plug will allow you to connect\nand log into IC Apps."
+    "comingSoonSubtitle": "Plug will allow you to connect\nand log into IC Apps.",
+    "whitelistTitle": "Approved canister IDs"
   },
   "login": {
     "title": "Welcome Back!",

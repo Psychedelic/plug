@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography';
-import { AppItem } from '@ui';
-import DeleteImg from '@assets/icons/delete.svg';
+import {
+  AppItem, Dialog, WhitelistContainer, WhitelistItem,
+} from '@ui';
 import ThinkingEmoji from '@assets/icons/thinking-emoji.svg';
 import { useApps } from '@hooks';
 import ActionDialog from '../ActionDialog';
@@ -13,17 +14,25 @@ const Apps = () => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { parsedApps: apps, removeApp } = useApps();
-  const [open, setOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const [selectedApp, setSelectedApp] = useState(null);
+
+  const [openDetail, setOpenDetail] = useState(false);
+  const [whitelist, setWhitelist] = useState([]);
 
   const handleRemoveApp = (app) => {
     removeApp(app.url);
-    setOpen(false);
+    setOpenDelete(false);
   };
 
-  const handleOpenDialog = (app) => {
+  const handleOpenDelete = (app) => () => {
     setSelectedApp(app);
-    setOpen(true);
+    setOpenDelete(true);
+  };
+
+  const handleOpenDetail = (app) => () => {
+    setWhitelist(app.whitelist);
+    setOpenDetail(true);
   };
 
   if (!apps.length) {
@@ -50,9 +59,8 @@ const Apps = () => {
                 {apps.map((app, index) => (
                   <AppItem
                     key={index.toString()}
-                    onClick={() => handleOpenDialog(app)}
-                    deleteIcon={DeleteImg}
-                    action={t('common.delete')}
+                    onDelete={handleOpenDelete(app)}
+                    onDetail={handleOpenDetail(app)}
                     {...app}
                   />
                 ))}
@@ -62,16 +70,33 @@ const Apps = () => {
         }
       </div>
       {
-        open
+        openDelete
         && (
           <ActionDialog
-            open={open}
+            open={openDelete}
             title={t('apps.disconnectTitle')}
             content={<Typography>{t('apps.disconnectText')} <b>{selectedApp.name}</b>?</Typography>}
             button={t('common.disconnect')}
             buttonVariant="danger"
             onClick={() => handleRemoveApp(selectedApp)}
-            onClose={() => setOpen(false)}
+            onClose={() => setOpenDelete(false)}
+          />
+        )
+      }
+      {
+        openDetail
+        && (
+          <Dialog
+            title={t('apps.whitelistTitle')}
+            onClose={() => setOpenDetail(false)}
+            open={openDetail}
+            component={(
+              <WhitelistContainer style={{ padding: '0 24px' }}>
+                {
+                  whitelist.map((id) => <WhitelistItem canisterId={id} />)
+                }
+              </WhitelistContainer>
+            )}
           />
         )
       }

@@ -7,6 +7,7 @@ import i18n from 'i18next';
 import { Provider, useDispatch } from 'react-redux';
 import {
   Button, Container, IncomingAction, theme,
+  WhitelistContainer, WhitelistItem,
 } from '@ui';
 import store from '@redux/store';
 import { Layout } from '@components';
@@ -17,8 +18,7 @@ import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { setAccountInfo } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import initConfig from '../../../../locales';
-import WhitelistContainer from './components/WhitelistContainer';
-import WhitelistItem from './components/WhitelistItem';
+
 import useStyles from './styles';
 
 i18n.use(initReactI18next).init(initConfig);
