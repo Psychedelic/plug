@@ -9,9 +9,22 @@ export default makeStyles((theme) => ({
     alignItems: 'center',
   },
   icon: {
-    marginLeft: 'auto',
+    width: 40,
+    height: 40,
+    color: '#111827',
+    opacity: 0,
+    transition: 'opacity .6s',
   },
   title: {
     marginLeft: theme.spacing(1),
+    width: 240,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  firstIcon: {
+    marginLeft: 'auto',
+  },
+  visible: {
+    opacity: 1,
   },
 }));
