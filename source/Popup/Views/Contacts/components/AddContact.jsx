@@ -23,7 +23,7 @@ const AddContact = ({ handleAddContact, contacts }) => {
 
   const handleChangeId = (e) => {
     const { value } = e.target;
-    setId(value);
+    setId(value.trim());
   };
 
   const validateContact = () => {
