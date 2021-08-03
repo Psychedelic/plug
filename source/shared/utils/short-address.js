@@ -1,8 +1,8 @@
 const defaultConfig = {
-  leftSize: 5,
+  leftSize: 11,
   rightSize: 3,
   separator: '...',
-  replace: [[/-/g, '']],
+  replace: [],
 };
 
 const shortAddress = (address, config = defaultConfig) => {
