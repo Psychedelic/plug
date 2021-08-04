@@ -53,7 +53,7 @@ const useSteps = () => {
       sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: {} },
         (transactions) => {
           dispatch(setTransactions({ ...transactions, icpPrice }));
-          setTransaction(transactions?.transactions[transactions?.total - 1]);
+          setTransaction(transactions?.transactions[0]);
         });
     });
   };
