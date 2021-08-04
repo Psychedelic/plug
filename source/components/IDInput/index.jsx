@@ -59,7 +59,7 @@ const IDInput = ({
                 fullWidth
                 value={value}
                 type="text"
-                onChange={(e) => onChange(e.target.value)}
+                onChange={(e) => onChange(e.target.value.trim())}
                 placeholder={t('send.inputId')}
               />
               <div className={classes.iconContainer}>

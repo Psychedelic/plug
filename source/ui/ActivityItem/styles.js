@@ -50,13 +50,12 @@ export default makeStyles((theme) => ({
     opacity: 0,
     transition: '0.6s',
     display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center',
     cursor: 'pointer',
     marginLeft: 6,
   },
   iconContainerAnimation: {
-    width: 24,
+    width: 12,
     opacity: 1,
   },
   values: {

@@ -13,7 +13,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
   const [invalidToken, setInvalidToken] = useState(false);
 
   const handleChangeToken = (e) => {
-    setToken(e.target.value);
+    setToken(e.target.value.trim());
   };
 
   useEffect(() => {
