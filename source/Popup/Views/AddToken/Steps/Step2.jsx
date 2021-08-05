@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { Typography } from '@material-ui/core';
@@ -9,6 +9,7 @@ import {
 
 } from '@ui';
 import useStyles from '../styles';
+import { HANDLER_TYPES, sendMessage } from '../../../../Background/Keyring';
 
 const USD_PER_TC = 1.426560;
 const cyclesToTC = cycles => cycles ? cycles / 1000000000000 : 0; // eslint-disable-line
@@ -22,7 +23,19 @@ const parseXTCInfo = (info) => ({
 const Step2 = ({ selectedToken, handleClose }) => {
   const { t } = useTranslation();
   const classes = useStyles();
+  const [loading, setLoading] = useState(false);
   const displayToken = selectedToken?.token?.symbol === 'XTC' ? parseXTCInfo(selectedToken) : selectedToken;
+  const registerToken = () => {
+    setLoading(true);
+    sendMessage({
+      type: HANDLER_TYPES.ADD_CUSTOM_TOKEN,
+      params: selectedToken?.token.canisterId,
+    }, async (registeredTokens) => {
+      console.log(registeredTokens);
+      handleClose();
+      setLoading(false);
+    });
+  };
   return (
     <Container>
       <Grid container spacing={2}>
@@ -45,7 +58,9 @@ const Step2 = ({ selectedToken, handleClose }) => {
           <Button
             variant="rainbow"
             value={t('common.add')}
-            onClick={handleClose}
+            onClick={registerToken}
+            loading={loading}
+            disabled={loading}
             fullWidth
           />
         </Grid>

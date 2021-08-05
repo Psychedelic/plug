@@ -51,6 +51,7 @@ export const HANDLER_TYPES = {
   EDIT_PRINCIPAL: 'edit-principal',
   GET_PUBLIC_KEY: 'get-public-key',
   GET_TOKEN_INFO: 'get-token-info',
+  ADD_CUSTOM_TOKEN: 'add-custom-token',
 };
 
 export const sendMessage = (args, callback) => {
@@ -127,6 +128,17 @@ export const getKeyringHandler = (type, keyring) => ({
           const tokenInfo = await keyring.getTokenInfo(canisterId);
           return { ...tokenInfo, amount: parseInt(tokenInfo.amount.toString(), 10) };
         } catch (e) {
+          return { error: e.message };
+        }
+      },
+  [HANDLER_TYPES.ADD_CUSTOM_TOKEN]:
+      async (canisterId) => {
+        try {
+          const response = await keyring.registerToken(canisterId);
+          console.log('register token response', response);
+          return response;
+        } catch (e) {
+          console.log('register token error', e);
           return { error: e.message };
         }
       },

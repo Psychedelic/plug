@@ -12,6 +12,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
   const { t } = useTranslation();
   const [token, setToken] = useState('');
   const [invalidToken, setInvalidToken] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChangeToken = (e) => {
     setToken(e.target.value.trim());
@@ -22,8 +23,10 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
   }, [token]);
 
   const handleSubmit = () => {
+    setLoading(true);
     sendMessage({ type: HANDLER_TYPES.GET_TOKEN_INFO, params: token }, async (tokenInfo) => {
       handleChangeSelectedToken(tokenInfo)();
+      setLoading(false);
     });
   };
 
@@ -51,7 +54,8 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
             value={t('common.continue')}
             onClick={handleSubmit}
             fullWidth
-            disabled={!token || invalidToken}
+            disabled={!token || invalidToken || loading}
+            loading={loading}
           />
         </Grid>
       </Grid>
