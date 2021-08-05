@@ -21,18 +21,19 @@ const recursiveParseBigint = (obj) => Object.entries(obj).reduce(
   { ...obj },
 );
 
-const formatAssets = (e8s, icpPrice) => {
+const formatAssets = (balances, icpPrice) => {
   // The result is in e8s and a bigint. We parse it and transform to ICP
-  const icpBalance = parseInt(e8s.toString(), 10) / E8S_PER_ICP;
-  const assets = [
-    {
-      image: CURRENCIES.get('ICP').image,
-      name: CURRENCIES.get('ICP').name,
-      amount: icpBalance,
-      value: icpBalance * icpPrice || icpBalance,
-      currency: CURRENCIES.get('ICP').value,
-    },
-  ];
+  const assets = balances.map(({ amount, name, symbol }) => {
+    const balance = name === 'ICP' ? parseInt(amount.toString(), 10) / E8S_PER_ICP : amount; // TODO: fetch value from dex;
+    return (
+      {
+        image: CURRENCIES.get('ICP').image, // TODO: see what we can do about this.
+        name,
+        amount: balance,
+        value: name === 'ICP' && icpPrice ? balance * icpPrice : balance,
+        currency: symbol,
+      });
+  });
   return assets;
 };
 
@@ -94,13 +95,13 @@ export const getKeyringHandler = (type, keyring) => ({
     return recursiveParseBigint(response);
   },
   [HANDLER_TYPES.GET_ASSETS]: async (icpPrice) => {
-    const e8s = await keyring.getBalance();
-    return formatAssets(e8s, icpPrice);
+    const balances = await keyring.getBalance();
+    return formatAssets(balances, icpPrice);
   },
   [HANDLER_TYPES.GET_BALANCE]: async (subaccount) => {
     try {
-      const e8s = await keyring.getBalance(subaccount);
-      return formatAssets(e8s);
+      const balances = await keyring.getBalance(subaccount);
+      return formatAssets(balances);
     } catch (error) {
       return { error: error.message };
     }

@@ -19,9 +19,9 @@ const TOKENS = [
   },
   {
     image: DfinityImg,
-    name: 'Ethereum',
-    token: 'ETH',
-    verified: false,
+    name: 'Cycles Token',
+    token: 'XTC',
+    verified: true,
   },
 ];
 

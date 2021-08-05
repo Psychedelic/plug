@@ -6,6 +6,7 @@ import {
   Button, FormItem, TextInput, Container,
 } from '@ui';
 import DfinityImg from '@assets/icons/Dfinity.svg';
+import { validatePrincipalId } from '@shared/utils/ids';
 
 const CustomToken = ({ handleChangeSelectedToken }) => {
   const { t } = useTranslation();
@@ -17,7 +18,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
   };
 
   useEffect(() => {
-    setInvalidToken(token.length > 10); // token validation here
+    setInvalidToken(token.length > 27 || !validatePrincipalId(token)); // token validation here
   }, [token]);
 
   return (

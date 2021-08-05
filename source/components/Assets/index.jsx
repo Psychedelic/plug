@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AssetItem } from '@ui';
+import { useTranslation } from 'react-i18next';
+import { AssetItem, Button } from '@ui';
 import { setAssets } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import LoadingWrapper from '@components/LoadingWrapper';
+import { useRouter } from '@components/Router';
 import useStyles from './styles';
 
 const Assets = () => {
@@ -12,7 +14,8 @@ const Assets = () => {
   const [assetsLoading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const { icpPrice } = useSelector((state) => state.icp);
-
+  const { t } = useTranslation();
+  const { navigator } = useRouter();
   useEffect(() => {
     if (icpPrice) {
       sendMessage({
@@ -33,22 +36,18 @@ const Assets = () => {
           <AssetItem {...asset} key={asset.name} />
         ))
         }
-        {
-        /*
         <Button
-        variant="rainbowOutlined"
-        value={t('addToken.title')}
-        onClick={() => navigator.navigate('add-token')}
-        style={{
-          width: 166,
-          height: 42,
-          borderRadius: 10,
-          alignSelf: 'center',
-          marginTop: 12,
-        }}
+          variant="rainbowOutlined"
+          value={t('addToken.title')}
+          onClick={() => navigator.navigate('add-token')}
+          style={{
+            width: 166,
+            height: 42,
+            borderRadius: 10,
+            alignSelf: 'center',
+            marginTop: 12,
+          }}
         />
-        */
-      }
       </div>
     </LoadingWrapper>
   );
