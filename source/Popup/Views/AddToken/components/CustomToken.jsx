@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next';
 import {
   Button, FormItem, TextInput, Container,
 } from '@ui';
-import DfinityImg from '@assets/icons/Dfinity.svg';
 import { validatePrincipalId } from '@shared/utils/ids';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 
 const CustomToken = ({ handleChangeSelectedToken }) => {
   const { t } = useTranslation();
@@ -20,6 +20,12 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
   useEffect(() => {
     setInvalidToken(token.length > 27 || !validatePrincipalId(token)); // token validation here
   }, [token]);
+
+  const handleSubmit = () => {
+    sendMessage({ type: HANDLER_TYPES.GET_TOKEN_INFO, params: token }, async (tokenInfo) => {
+      handleChangeSelectedToken(tokenInfo)();
+    });
+  };
 
   return (
     <Container>
@@ -43,11 +49,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
           <Button
             variant="rainbow"
             value={t('common.continue')}
-            onClick={handleChangeSelectedToken({
-              image: DfinityImg,
-              name: 'Internet Computer',
-              token: 'ICP',
-            })}
+            onClick={handleSubmit}
             fullWidth
             disabled={!token || invalidToken}
           />

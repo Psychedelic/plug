@@ -50,6 +50,7 @@ export const HANDLER_TYPES = {
   SEND_ICP: 'send-icp',
   EDIT_PRINCIPAL: 'edit-principal',
   GET_PUBLIC_KEY: 'get-public-key',
+  GET_TOKEN_INFO: 'get-token-info',
 };
 
 export const sendMessage = (args, callback) => {
@@ -120,4 +121,13 @@ export const getKeyringHandler = (type, keyring) => ({
     ),
   [HANDLER_TYPES.GET_PUBLIC_KEY]:
       async () => keyring.getPublicKey(),
+  [HANDLER_TYPES.GET_TOKEN_INFO]:
+      async (canisterId) => {
+        try {
+          const tokenInfo = await keyring.getTokenInfo(canisterId);
+          return { ...tokenInfo, amount: parseInt(tokenInfo.amount.toString(), 10) };
+        } catch (e) {
+          return { error: e.message };
+        }
+      },
 }[type]);

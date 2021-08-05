@@ -14,14 +14,15 @@ const TOKENS = [
   {
     image: DfinityImg,
     name: 'Internet Computer',
-    token: 'ICP',
+    symbol: 'ICP',
     verified: true,
   },
   {
     image: DfinityImg,
     name: 'Cycles Token',
-    token: 'XTC',
+    symbol: 'XTC',
     verified: true,
+    canisterId: 'aanaa-xaaaa-aaaah-aaeiq-cai',
   },
 ];
 
@@ -41,7 +42,7 @@ const SearchToken = ({ handleChangeSelectedToken, handleChangeTab }) => {
     setFilteredTokens(
       TOKENS.filter(
         (token) => lowerSearch.includes(token.name.toLowerCase())
-          || lowerSearch.includes(token.token.toLowerCase()),
+          || lowerSearch.includes(token.symbol.toLowerCase()),
       ),
     );
   }, [search]);
