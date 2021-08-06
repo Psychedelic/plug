@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ACTIVITY_STATUS, ACTIVITY_TYPES } from '@shared/constants/activity';
-import { CURRENCIES } from '@shared/constants/currencies';
-import { E8S_PER_ICP, NANOS_PER_SECOND } from '@background/Keyring';
+import { CURRENCIES, E8S_PER_ICP } from '@shared/constants/currencies';
+import { NANOS_PER_SECOND } from '@background/Keyring';
 
 /* eslint-disable no-param-reassign */
 export const walletSlice = createSlice({

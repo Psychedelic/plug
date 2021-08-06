@@ -36,18 +36,20 @@ const Assets = () => {
           <AssetItem {...asset} key={asset.name} />
         ))
         }
-        <Button
-          variant="rainbowOutlined"
-          value={t('addToken.title')}
-          onClick={() => navigator.navigate('add-token')}
-          style={{
-            width: 166,
-            height: 42,
-            borderRadius: 10,
-            alignSelf: 'center',
-            marginTop: 12,
-          }}
-        />
+        <div className={classes.buttonWrapper}>
+          <Button
+            variant="rainbowOutlined"
+            value={t('addToken.title')}
+            onClick={() => navigator.navigate('add-token')}
+            style={{
+              width: 166,
+              height: 42,
+              borderRadius: 10,
+              alignSelf: 'center',
+              marginTop: 12,
+            }}
+          />
+        </div>
       </div>
     </LoadingWrapper>
   );

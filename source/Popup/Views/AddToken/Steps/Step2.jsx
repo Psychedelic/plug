@@ -8,10 +8,10 @@ import {
   Button, Container, USDFormat, AssetFormat,
 
 } from '@ui';
+import { USD_PER_TC } from '@shared/constants/currencies';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import useStyles from '../styles';
-import { HANDLER_TYPES, sendMessage } from '../../../../Background/Keyring';
 
-const USD_PER_TC = 1.426560;
 const cyclesToTC = cycles => cycles ? cycles / 1000000000000 : 0; // eslint-disable-line
 const parseXTCInfo = (info) => ({
   ...info?.token,
@@ -30,10 +30,9 @@ const Step2 = ({ selectedToken, handleClose }) => {
     sendMessage({
       type: HANDLER_TYPES.ADD_CUSTOM_TOKEN,
       params: selectedToken?.token.canisterId,
-    }, async (registeredTokens) => {
-      console.log(registeredTokens);
-      handleClose();
+    }, async () => {
       setLoading(false);
+      handleClose();
     });
   };
   return (

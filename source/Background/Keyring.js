@@ -1,7 +1,7 @@
-import { CURRENCIES } from '@shared/constants/currencies';
+import { CURRENCIES, E8S_PER_ICP } from '@shared/constants/currencies';
 import extension from 'extensionizer';
+import { USD_PER_TC } from '../shared/constants/currencies';
 
-export const E8S_PER_ICP = 100_000_000;
 export const NANOS_PER_SECOND = 1_000_000;
 export const BALANCE_ERROR = 'You have tried to spend more than the balance of your account';
 
@@ -21,20 +21,31 @@ const recursiveParseBigint = (obj) => Object.entries(obj).reduce(
   { ...obj },
 );
 
+const formatAssetBySymbol = (amount, symbol) => ({
+  ICP: parseInt(amount.toString(), 10) / E8S_PER_ICP,
+  XTC: parseInt(amount.toString(), 10) / 1_000_000_000_000,
+  default: amount,
+})[symbol || 'default'] || amount;
+
+const formatValueBySymbol = (balance, symbol, icpPrice) => ({
+  ICP: balance * icpPrice,
+  XTC: balance * USD_PER_TC,
+  default: balance,
+})[symbol || 'default'] || balance;
+
 const formatAssets = (balances, icpPrice) => {
-  // The result is in e8s and a bigint. We parse it and transform to ICP
-  const assets = balances.map(({ amount, name, symbol }) => {
-    const balance = name === 'ICP' ? parseInt(amount.toString(), 10) / E8S_PER_ICP : amount; // TODO: fetch value from dex;
-    return (
-      {
-        image: CURRENCIES.get('ICP').image, // TODO: see what we can do about this.
-        name,
-        amount: balance,
-        value: name === 'ICP' && icpPrice ? balance * icpPrice : balance,
-        currency: symbol,
-      });
+  const mappedAssets = balances.map(({ amount, name, symbol }) => {
+    const balance = formatAssetBySymbol(amount, symbol);
+    const value = formatValueBySymbol(balance, symbol, icpPrice);
+    return {
+      image: CURRENCIES.get(symbol).image, // TODO: see what we can do about this.
+      amount: balance,
+      currency: symbol,
+      name,
+      value,
+    };
   });
-  return assets;
+  return mappedAssets;
 };
 
 export const HANDLER_TYPES = {
@@ -135,10 +146,8 @@ export const getKeyringHandler = (type, keyring) => ({
       async (canisterId) => {
         try {
           const response = await keyring.registerToken(canisterId);
-          console.log('register token response', response);
           return response;
         } catch (e) {
-          console.log('register token error', e);
           return { error: e.message };
         }
       },

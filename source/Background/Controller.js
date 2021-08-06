@@ -5,8 +5,10 @@ import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { areAllElementsIn } from '@shared/utils/array';
 import PlugController from '@psychedelic/plug-controller';
 import { validatePrincipalId } from '@shared/utils/ids';
+import { E8S_PER_ICP } from '@shared/constants/currencies';
+
 import SIZES from '../Pages/Notification/components/Transfer/constants';
-import { E8S_PER_ICP, getKeyringHandler, HANDLER_TYPES } from './Keyring';
+import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
 import { validateTransferArgs } from './utils';
 import ERRORS from './errors';
 import plugProvider from '../Inpage/index';
