@@ -1,7 +1,9 @@
 import DfinityImg from '@assets/icons/Dfinity.svg';
-import CyclesImg from '@assets/icons/Cycles.svg';
+import XTCImg from '@assets/icons/XTC.svg';
 import PropTypes from 'prop-types';
 
+export const USD_PER_TC = 1.426560;
+export const E8S_PER_ICP = 100_000_000;
 export const CURRENCIES = new Map([
   [
     'ICP',
@@ -15,13 +17,13 @@ export const CURRENCIES = new Map([
     },
   ],
   [
-    'CYCLES',
+    'XTC',
     {
-      id: 'CYCLES',
+      id: 'XTC',
       name: 'Cycles',
-      value: 'TC',
-      image: CyclesImg,
-      price: 0.6,
+      value: 'XTC',
+      image: XTCImg,
+      price: USD_PER_TC,
       disabled: true,
     },
   ],
