@@ -5,4 +5,9 @@ export default makeStyles({
     display: 'flex',
     flexDirection: 'column',
   },
+  buttonWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    width: '100%',
+  },
 });

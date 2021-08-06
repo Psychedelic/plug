@@ -1,7 +1,7 @@
-import { CURRENCIES } from '@shared/constants/currencies';
+import { CURRENCIES, E8S_PER_ICP } from '@shared/constants/currencies';
 import extension from 'extensionizer';
+import { USD_PER_TC } from '../shared/constants/currencies';
 
-export const E8S_PER_ICP = 100_000_000;
 export const NANOS_PER_SECOND = 1_000_000;
 export const BALANCE_ERROR = 'You have tried to spend more than the balance of your account';
 
@@ -21,19 +21,31 @@ const recursiveParseBigint = (obj) => Object.entries(obj).reduce(
   { ...obj },
 );
 
-const formatAssets = (e8s, icpPrice) => {
-  // The result is in e8s and a bigint. We parse it and transform to ICP
-  const icpBalance = parseInt(e8s.toString(), 10) / E8S_PER_ICP;
-  const assets = [
-    {
-      image: CURRENCIES.get('ICP').image,
-      name: CURRENCIES.get('ICP').name,
-      amount: icpBalance,
-      value: icpBalance * icpPrice || icpBalance,
-      currency: CURRENCIES.get('ICP').value,
-    },
-  ];
-  return assets;
+const formatAssetBySymbol = (amount, symbol) => ({
+  ICP: parseInt(amount.toString(), 10) / E8S_PER_ICP,
+  XTC: parseInt(amount.toString(), 10) / 1_000_000_000_000,
+  default: amount,
+})[symbol || 'default'] || amount;
+
+const formatValueBySymbol = (balance, symbol, icpPrice) => ({
+  ICP: balance * icpPrice,
+  XTC: balance * USD_PER_TC,
+  default: balance,
+})[symbol || 'default'] || balance;
+
+const formatAssets = (balances, icpPrice) => {
+  const mappedAssets = balances.map(({ amount, name, symbol }) => {
+    const balance = formatAssetBySymbol(amount, symbol);
+    const value = formatValueBySymbol(balance, symbol, icpPrice);
+    return {
+      image: CURRENCIES.get(symbol).image, // TODO: see what we can do about this.
+      amount: balance,
+      currency: symbol,
+      name,
+      value,
+    };
+  });
+  return mappedAssets;
 };
 
 export const HANDLER_TYPES = {
@@ -49,6 +61,8 @@ export const HANDLER_TYPES = {
   SEND: 'send',
   EDIT_PRINCIPAL: 'edit-principal',
   GET_PUBLIC_KEY: 'get-public-key',
+  GET_TOKEN_INFO: 'get-token-info',
+  ADD_CUSTOM_TOKEN: 'add-custom-token',
 };
 
 export const sendMessage = (args, callback) => {
@@ -94,13 +108,13 @@ export const getKeyringHandler = (type, keyring) => ({
     return recursiveParseBigint(response);
   },
   [HANDLER_TYPES.GET_ASSETS]: async (icpPrice) => {
-    const e8s = await keyring.getBalance();
-    return formatAssets(e8s, icpPrice);
+    const balances = await keyring.getBalance();
+    return formatAssets(balances, icpPrice);
   },
   [HANDLER_TYPES.GET_BALANCE]: async (subaccount) => {
     try {
-      const e8s = await keyring.getBalance(subaccount);
-      return formatAssets(e8s);
+      const balances = await keyring.getBalance(subaccount);
+      return formatAssets(balances);
     } catch (error) {
       return { error: error.message };
     }
@@ -119,4 +133,22 @@ export const getKeyringHandler = (type, keyring) => ({
     ),
   [HANDLER_TYPES.GET_PUBLIC_KEY]:
       async () => keyring.getPublicKey(),
+  [HANDLER_TYPES.GET_TOKEN_INFO]:
+      async (canisterId) => {
+        try {
+          const tokenInfo = await keyring.getTokenInfo(canisterId);
+          return { ...tokenInfo, amount: parseInt(tokenInfo.amount.toString(), 10) };
+        } catch (e) {
+          return { error: e.message };
+        }
+      },
+  [HANDLER_TYPES.ADD_CUSTOM_TOKEN]:
+      async (canisterId) => {
+        try {
+          const response = await keyring.registerToken(canisterId);
+          return response;
+        } catch (e) {
+          return { error: e.message };
+        }
+      },
 }[type]);

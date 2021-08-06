@@ -5,20 +5,30 @@ import { useTranslation } from 'react-i18next';
 import {
   Button, FormItem, TextInput, Container,
 } from '@ui';
-import DfinityImg from '@assets/icons/Dfinity.svg';
+import { validatePrincipalId } from '@shared/utils/ids';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 
 const CustomToken = ({ handleChangeSelectedToken }) => {
   const { t } = useTranslation();
   const [token, setToken] = useState('');
   const [invalidToken, setInvalidToken] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChangeToken = (e) => {
     setToken(e.target.value.trim());
   };
 
   useEffect(() => {
-    setInvalidToken(token.length > 10); // token validation here
+    setInvalidToken(token.length > 27 || !validatePrincipalId(token)); // token validation here
   }, [token]);
+
+  const handleSubmit = () => {
+    setLoading(true);
+    sendMessage({ type: HANDLER_TYPES.GET_TOKEN_INFO, params: token }, async (tokenInfo) => {
+      handleChangeSelectedToken(tokenInfo)();
+      setLoading(false);
+    });
+  };
 
   return (
     <Container>
@@ -42,13 +52,10 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
           <Button
             variant="rainbow"
             value={t('common.continue')}
-            onClick={handleChangeSelectedToken({
-              image: DfinityImg,
-              name: 'Internet Computer',
-              token: 'ICP',
-            })}
+            onClick={handleSubmit}
             fullWidth
-            disabled={!token || invalidToken}
+            disabled={!token || invalidToken || loading}
+            loading={loading}
           />
         </Grid>
       </Grid>
