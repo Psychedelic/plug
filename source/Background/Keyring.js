@@ -46,7 +46,7 @@ export const HANDLER_TYPES = {
   GET_TRANSACTIONS: 'get-keyring-transactions',
   GET_ASSETS: 'get-keyring-assets',
   GET_BALANCE: 'get-balance',
-  SEND_ICP: 'send-icp',
+  SEND: 'send',
   EDIT_PRINCIPAL: 'edit-principal',
   GET_PUBLIC_KEY: 'get-public-key',
 };
@@ -105,9 +105,9 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: error.message };
     }
   },
-  [HANDLER_TYPES.SEND_ICP]: async ({ to, amount }) => {
+  [HANDLER_TYPES.SEND]: async ({ to, amount, canisterId = null }) => {
     try {
-      const height = await keyring.sendICP(to, BigInt(amount));
+      const height = await keyring.send(to, BigInt(amount), canisterId);
       return { height: parseInt(height.toString(), 10) };
     } catch (error) {
       return { error: error.message, height: null };

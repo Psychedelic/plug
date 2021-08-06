@@ -41,7 +41,7 @@ const useSteps = () => {
   const handleSendClick = () => {
     const e8s = parseInt(amount * E8S_PER_ICP, 10);
     sendMessage({
-      type: HANDLER_TYPES.SEND_ICP,
+      type: HANDLER_TYPES.SEND,
       params: { to: address, amount: e8s },
     }, (response) => {
       const { error } = response || {};
