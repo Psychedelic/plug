@@ -1,5 +1,5 @@
 const defaultConfig = {
-  leftSize: 11,
+  leftSize: 5,
   rightSize: 3,
   separator: '...',
   replace: [],
