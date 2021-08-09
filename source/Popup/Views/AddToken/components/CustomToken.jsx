@@ -25,6 +25,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
   const handleSubmit = () => {
     setLoading(true);
     sendMessage({ type: HANDLER_TYPES.GET_TOKEN_INFO, params: token }, async (tokenInfo) => {
+      console.log('tokenInfo', tokenInfo);
       handleChangeSelectedToken(tokenInfo)();
       setLoading(false);
     });

@@ -39,7 +39,7 @@ const formatAssets = (balances, icpPrice) => {
     return {
       image: CURRENCIES.get(symbol).image, // TODO: see what we can do about this.
       amount: balance,
-      currency: symbol,
+      symbol,
       name,
       value,
     };
