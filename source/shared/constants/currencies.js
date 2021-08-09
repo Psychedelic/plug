@@ -10,7 +10,7 @@ export const CURRENCIES = new Map([
     {
       id: 'ICP',
       name: 'ICP',
-      value: 'ICP',
+      symbol: 'ICP',
       image: DfinityImg,
       price: 120,
       disabled: false,
@@ -21,7 +21,7 @@ export const CURRENCIES = new Map([
     {
       id: 'XTC',
       name: 'Cycles',
-      value: 'XTC',
+      symbol: 'XTC',
       image: XTCImg,
       price: USD_PER_TC,
       disabled: true,

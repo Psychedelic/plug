@@ -9,6 +9,7 @@ import PlugController from '@psychedelic/plug-controller';
 import { Principal } from '@dfinity/agent';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { DEFAULT_FEE } from '@shared/constants/addresses';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 
 const portRPC = new PortRPC({
   name: 'notification-port',
@@ -27,6 +28,8 @@ const useRequests = (incomingRequests, callId, portId) => {
 
   const [accountId, setAccountId] = useState(null);
   const [principalId, setPrincipalId] = useState(null);
+  const [token, setToken] = useState(null);
+
   /* eslint-disable no-param-reassign */
   useEffect(() => {
     incomingRequests.map((item) => (
@@ -44,6 +47,19 @@ const useRequests = (incomingRequests, callId, portId) => {
       );
     } else {
       setAccountId(address);
+    }
+
+    const tokenId = incomingRequests[0].canisterId;
+
+    console.log('tokenId', tokenId);
+
+    if (tokenId) {
+      sendMessage({ type: HANDLER_TYPES.GET_TOKEN_INFO, params: tokenId }, async (tokenInfo) => {
+        setToken(tokenInfo);
+      });
+    } else {
+      setToken(CURRENCIES.get('ICP'));
+      console.log(CURRENCIES.get('ICP'));
     }
   }, []);
 
@@ -102,6 +118,7 @@ const useRequests = (incomingRequests, callId, portId) => {
     handleRequest,
     handleDeclineAll,
     principalId,
+    token,
   };
 };
 

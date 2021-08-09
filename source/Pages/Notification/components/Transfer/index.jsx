@@ -32,9 +32,9 @@ const Transfer = ({
   useEffect(() => {
     try {
       getICPPrice()
-        .then(({ data: price }) => {
+        .then(({ data }) => {
           dispatch(
-            setICPPrice(price?.['internet-computer']?.usd || 1),
+            setICPPrice(data?.['internet-computer']?.usd || 1),
           );
         });
     } catch (err) {
@@ -52,6 +52,7 @@ const Transfer = ({
     handleRequest,
     handleDeclineAll,
     principalId,
+    token,
   } = useRequests([args], callId, portId);
 
   const requestCount = requests.length;
@@ -64,7 +65,8 @@ const Transfer = ({
         image={icons[0] || null}
         amount={requestCount > 0 ? requests[currentRequest].amount : 0}
         requestCount={requestCount}
-        icpPrice={icpPrice}
+        price={icpPrice || 0}
+        token={token}
       />,
     },
     {
@@ -76,6 +78,8 @@ const Transfer = ({
       />,
     },
   ];
+
+  if (!token) return null;
 
   return (
     <Layout disableProfile>
@@ -90,7 +94,7 @@ const Transfer = ({
             handleNext={handleSetNextRequest}
           />
         )
-        }
+      }
       {
         requestCount > 0
         && (
@@ -123,7 +127,7 @@ const Transfer = ({
                     style={{ marginTop: 24 }}
                   />
                 )
-                }
+              }
             </div>
           </>
         )

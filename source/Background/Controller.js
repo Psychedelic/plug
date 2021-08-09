@@ -242,6 +242,7 @@ backgroundController.exposeController(
 
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
+
     storage.get('apps', async (state) => {
       if (
         state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted
@@ -251,6 +252,24 @@ backgroundController.exposeController(
           callback(argsError, null);
           return;
         }
+
+        if (args.canisterId) {
+          const getBalance = getKeyringHandler(
+            HANDLER_TYPES.GET_BALANCE,
+            keyring,
+          );
+          const assets = await getBalance(0);
+
+          console.log('assets', assets);
+
+          const validToken = assets.some((t) => t.canisterId === args.canisterId);
+
+          if (!validToken) {
+            callback(ERRORS.TOKEN_ERROR, null);
+            return;
+          }
+        }
+
         const url = qs.stringifyUrl({
           url: 'notification.html',
           query: {
