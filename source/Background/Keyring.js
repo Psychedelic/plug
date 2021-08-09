@@ -1,6 +1,5 @@
-import { CURRENCIES, E8S_PER_ICP } from '@shared/constants/currencies';
+import { CURRENCIES, E8S_PER_ICP, USD_PER_TC } from '@shared/constants/currencies';
 import extension from 'extensionizer';
-import { USD_PER_TC } from '../shared/constants/currencies';
 
 export const NANOS_PER_SECOND = 1_000_000;
 export const BALANCE_ERROR = 'You have tried to spend more than the balance of your account';
