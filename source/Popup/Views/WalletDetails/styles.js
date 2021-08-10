@@ -1,15 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
-  addressContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'row',
-    width: '100%',
-    padding: theme.spacing(1),
-    border: '1px solid #D1D5DB',
-    borderRadius: '6px',
-  },
   badge: {
     marginRight: 12,
     borderRadius: 6,
@@ -20,4 +11,99 @@ export default makeStyles((theme) => ({
     background: '#D3E1FF',
     color: theme.palette.common.blue,
   },
+  detailsContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    borderRadius: 10,
+    width: 370,
+    height: 92,
+  },
+  dcEdit: {
+    background: '#F3F4F6',
+    border: '1px solid #F3F4F6',
+  },
+  dcNormal: {
+    background: '#FFFFFF',
+    border: '1px solid #D1D5DB',
+  },
+  name: {
+    width: 231,
+    height: 41,
+    padding: '0 12px',
+    border: '1px solid #FFFFFF',
+    borderRadius: 6,
+    color: '#111827',
+    fontWeight: 600,
+    fontSize: 20,
+  },
+  nameEdit: {
+    background: '#FFFFFF',
+    border: '1px solid #D1D5DB',
+    boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
+  },
+  icon: {
+    marginRight: 12,
+    cursor: 'pointer',
+  },
+  info: {
+    marginLeft: 9
+  },
+  globe: {
+    marginLeft: 15,
+    marginRight: 9
+  },
+  accountContainer: {
+    width: 370,
+    height: 53,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    borderRadius: 10,
+    fontSize: 16,
+    fontWeight: 500,
+    transition: theme.transitions.create(['background', 'color'])
+  },
+  publicAccount: {
+    background: '#E1EAFE',
+    color: '#3574F4',
+  },
+  privateAccount: {
+    background: '#F3F4F6',
+    color: '#6B7280',
+  },
+  ids: {
+    width: '100%',
+    background: '#F3F4F6',
+    borderRadius: 10,
+    padding: '9px 85px 9px 15px',
+    wordBreak: 'break-all',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  id: {
+    fontSize: 14,
+    color: '#000000',
+  },
+  viewMore: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: '#6B7280',
+    cursor: 'pointer',
+    fontSize: 16,
+  },
+  chevron: {
+    transition: 'transform .2s ease-in-out',
+  },
+  rotate: {
+    transform: 'rotate(180deg)',
+  },
+  idInfoIcon: {
+    position: 'absolute',
+    right: 15,
+  }
 }));
