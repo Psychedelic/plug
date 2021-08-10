@@ -49,16 +49,9 @@ const getDate = (status, date) => (
     : ''
 );
 
-const shortAddressConfig = {
-  leftSize: 5,
-  rightSize: 3,
-  separator: '...',
-  replace: [],
-};
-
 const getSubtitle = (type, to, from, t) => ({
-  [ACTIVITY_TYPES.SEND]: ` · ${t('activity.subtitle.to')}: ${shortAddress(to, shortAddressConfig)}`,
-  [ACTIVITY_TYPES.RECEIVE]: ` · ${t('activity.subtitle.from')}: ${shortAddress(from, shortAddressConfig)}`,
+  [ACTIVITY_TYPES.SEND]: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
+  [ACTIVITY_TYPES.RECEIVE]: ` · ${t('activity.subtitle.from')}: ${shortAddress(from)}`,
 })[type] || '';
 
 const getAddress = (type, to, from) => (
