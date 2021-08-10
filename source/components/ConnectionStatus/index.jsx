@@ -1,47 +1,83 @@
-import React from 'react';
-// import PropTypes from 'prop-types';
-// import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-// import { useTranslation } from 'react-i18next';
+import React, { useEffect, useState } from 'react';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
+import extension from 'extensionizer';
+import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import PropTypes from 'prop-types';
 import useStyles from './styles';
 
-/* const CONNECTION_CONFIG = {
-  plugged: (t) => ({
+const CONNECTION_CONFIG = {
+  [CONNECTION_STATUS.accepted]: {
     icon: <CheckCircleIcon style={{ fontSize: 16, marginRight: 2 }} />,
-    label: t('connectionStatus.plugged'),
+    label: 'connectionStatus.plugged',
     className: 'active',
-  }),
-  notPlugged: (t) => ({
+  },
+  [CONNECTION_STATUS.rejected]: {
     icon: null,
-    label: t('connectionStatus.notPlugged'),
+    label: 'connectionStatus.notPlugged',
     className: 'inactive',
-  }),
-  incomingConnection: (t) => ({
+  },
+  [CONNECTION_STATUS.pending]: {
     icon: null,
-    label: t('connectionStatus.incomingConnection'),
+    label: 'connectionStatus.incomingConnection',
     className: 'active',
-  }),
-}; */
+  },
+};
 
-const ConnectionStatus = () => {
+const beautifyUrl = (url) => (
+  url.replace(/^(?:https?:\/\/)?(?:www\.)?/i, '').split('/')[0]
+);
+
+const ConnectionStatus = ({ incStatus = null }) => {
   const classes = useStyles();
-  /* const { t } = useTranslation();
+  const { t } = useTranslation();
+  const [status, setStatus] = useState(incStatus);
+  const [activeTab, setActiveTab] = useState(null);
+
+  useEffect(() => {
+    if (!incStatus) {
+      extension.tabs.query({ currentWindow: true, active: true },
+        (res) => {
+          setActiveTab(beautifyUrl(res[0].url));
+        });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (activeTab && !incStatus) {
+      extension.storage.local.get('apps', (state) => {
+        setStatus(state?.apps?.[activeTab]?.status || CONNECTION_STATUS.rejected);
+      });
+    }
+  }, [activeTab]);
+
+  if (!status) return null;
 
   const {
     icon,
     label,
     className,
-  } = CONNECTION_CONFIG[status](t); */
+  } = CONNECTION_CONFIG[status];
 
   return (
-    <div className={clsx(classes.root, classes.rainbow)}>
-      <span className={classes.web}>Plug - Alpha Version</span>
+    <div className={clsx(classes.root, classes[className])}>
+      {icon}
+      <span>{t(label)}</span>
+      {
+        status === CONNECTION_STATUS.accepted
+        && <span className={classes.web}>&nbsp;{activeTab}</span>
+      }
     </div>
   );
 };
 
 export default ConnectionStatus;
 
+ConnectionStatus.defaultProps = {
+  incStatus: null,
+};
+
 ConnectionStatus.propTypes = {
-  // status: PropTypes.oneOf(['plugged', 'notPlugged', 'incomingConnection']).isRequired,
+  incStatus: PropTypes.string,
 };
