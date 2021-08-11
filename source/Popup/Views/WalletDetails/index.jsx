@@ -18,8 +18,6 @@ import Picker from 'emoji-picker-react';
 import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateWalletDetails } from '../../../redux/wallet';
-import useStyles from './styles';
 import InputBase from '@material-ui/core/InputBase';
 import Pencil from '@assets/icons/pencil.svg';
 import BlueCheck from '@assets/icons/blue-check.svg';
@@ -27,6 +25,8 @@ import { Info, Globe, ChevronDown } from 'react-feather';
 import MuiSwitch from '@material-ui/core/Switch';
 import { withStyles } from '@material-ui/core/styles';
 import extension from 'extensionizer';
+import useStyles from './styles';
+import { updateWalletDetails } from '../../../redux/wallet';
 
 const Switch = withStyles((theme) => ({
   root: {
@@ -60,33 +60,33 @@ const Switch = withStyles((theme) => ({
   },
   track: {
     borderRadius: 24 / 2,
-    border: `1px solid #9CA3AF`,
+    border: '1px solid #9CA3AF',
     backgroundColor: '#9CA3AF',
     opacity: 1,
     transition: theme.transitions.create(['background-color', 'border']),
   },
   checked: {},
   focusVisible: {},
-}))(({ classes, ...props }) => {
-  return (
-    <MuiSwitch
-      focusVisibleClassName={classes.focusVisible}
-      disableRipple
-      classes={{
-        root: classes.root,
-        switchBase: classes.switchBase,
-        thumb: classes.thumb,
-        track: classes.track,
-        checked: classes.checked,
-      }}
-      {...props}
-    />
-  );
-});
+}))(({ classes, ...props }) => (
+  <MuiSwitch
+    focusVisibleClassName={classes.focusVisible}
+    disableRipple
+    classes={{
+      root: classes.root,
+      switchBase: classes.switchBase,
+      thumb: classes.thumb,
+      track: classes.track,
+      checked: classes.checked,
+    }}
+    {...props}
+  />
+));
 
 const WalletDetails = () => {
   const classes = useStyles();
-  const { name, emoji, accountId, principalId } = useSelector((state) => state.wallet);
+  const {
+    name, emoji, accountId, principalId,
+  } = useSelector((state) => state.wallet);
   const { navigator } = useRouter();
   const { t } = useTranslation();
   const [openEmojis, setOpenEmojis] = useState(false);
@@ -98,7 +98,7 @@ const WalletDetails = () => {
 
   const handleChangePublicAccount = (event) => setPublicAccount(event.target.checked);
 
-  let textInput = useRef(null);
+  const textInput = useRef(null);
 
   useEffect(() => {
     setCurrentEmoji(emoji);
@@ -114,7 +114,7 @@ const WalletDetails = () => {
     extension.windows.update(
       extension.windows.WINDOW_ID_CURRENT,
       {
-        height
+        height,
       },
     );
     setExpand(!expand);
@@ -179,13 +179,15 @@ const WalletDetails = () => {
             <div className={
               clsx(
                 classes.detailsContainer,
-                edit ? classes.dcEdit : classes.dcNormal
-              )}
+                edit ? classes.dcEdit : classes.dcNormal,
+              )
+            }
             >
               <UserIcon
                 style={{ margin: '0 12px' }}
-                big icon={currentEmoji}
-                onClick={() => { edit && setOpenEmojis(!openEmojis) }}
+                big
+                icon={currentEmoji}
+                onClick={() => (edit ? setOpenEmojis(!openEmojis) : null)}
                 edit={edit}
               />
               <InputBase
@@ -193,25 +195,43 @@ const WalletDetails = () => {
                   root: clsx(classes.name, edit && classes.nameEdit),
                 }}
                 value={walletName}
-                type='text'
+                type="text"
                 onChange={handleChange}
                 readOnly={!edit}
                 inputRef={textInput}
-              >
-                <img />
-              </InputBase>
+              />
               {
                 edit
-                  ? <img className={classes.icon} src={BlueCheck} onClick={() => { setEdit(false); onSave() }} />
-                  : <img className={classes.icon} src={Pencil} onClick={() => { setEdit(true); textInput.current.focus(); }} />
+                  ? (
+                    <img
+                      className={classes.icon}
+                      src={BlueCheck}
+                      onClick={() => { setEdit(false); setOpenEmojis(false); onSave(); }}
+                    />
+                  )
+                  : (
+                    <img
+                      className={classes.icon}
+                      src={Pencil}
+                      onClick={() => { setEdit(true); textInput.current.focus(); }}
+                    />
+                  )
               }
             </div>
           </Grid>
           {
-            openEmojis
+            openEmojis && edit
             && (
               <Picker
-                pickerStyle={{ width: '100%', height: 266, position: 'absolute', top: 50 }}
+                pickerStyle={{
+                  height: 157,
+                  width: 'auto',
+                  position: 'absolute',
+                  top: 145,
+                  left: 40,
+                  right: 40,
+                  zIndex: 1,
+                }}
                 onEmojiClick={onEmojiClick}
                 native
                 disableSearchBar
@@ -223,7 +243,11 @@ const WalletDetails = () => {
             )
           }
           <Grid item xs={12}>
-            <div className={clsx(classes.accountContainer, publicAccount ? classes.publicAccount : classes.privateAccount)}>
+            <div className={clsx(
+              classes.accountContainer,
+              publicAccount ? classes.publicAccount : classes.privateAccount,
+            )}
+            >
               <Globe
                 className={classes.globe}
                 size={20}
@@ -244,7 +268,8 @@ const WalletDetails = () => {
             <div
               className={classes.viewMore}
               onClick={handleChangeExpand}
-              variant="subtitle1">
+              variant="subtitle1"
+            >
               <span>{t('walletDetails.viewMore')}</span>
               <ChevronDown
                 className={clsx(classes.chevron, expand && classes.rotate)}
@@ -255,45 +280,45 @@ const WalletDetails = () => {
 
           {
             expand
-            && <>
-              <Grid item xs={12}>
-                <FormItem
-                  label={t('common.principalId')}
-                  smallLabel
-                  component={(
-                    <div className={classes.ids}>
-                      <Typography variant="subtitle2" className={classes.id}>{principalId}</Typography>
-                      <Info
-                        className={classes.idInfoIcon}
-                        size={20}
-                      />
-                    </div>
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormItem
-                  label={t('walletDetails.accountId')}
-                  smallLabel
-                  component={(
-                    <div className={classes.ids}>
-                      <Typography variant="subtitle2" className={classes.id}>{accountId}</Typography>
-                      <Info
-                        className={classes.idInfoIcon}
-                        size={20}
-                      />
-                    </div>
-                  )}
-                />
-              </Grid>
-            </>
+            && (
+              <>
+                <Grid item xs={12}>
+                  <FormItem
+                    label={t('common.principalId')}
+                    smallLabel
+                    component={(
+                      <div className={classes.ids}>
+                        <Typography variant="subtitle2" className={classes.id}>{principalId}</Typography>
+                        <Info
+                          className={classes.idInfoIcon}
+                          size={20}
+                        />
+                      </div>
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={12} style={{ marginTop: -10 }}>
+                  <FormItem
+                    label={t('walletDetails.accountId')}
+                    smallLabel
+                    component={(
+                      <div className={classes.ids}>
+                        <Typography variant="subtitle2" className={classes.id}>{accountId}</Typography>
+                        <Info
+                          className={classes.idInfoIcon}
+                          size={20}
+                        />
+                      </div>
+                    )}
+                  />
+                </Grid>
+              </>
+            )
           }
-
-
 
         </Grid>
       </Container>
-    </Layout >
+    </Layout>
   );
 };
 

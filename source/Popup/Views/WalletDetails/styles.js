@@ -27,6 +27,8 @@ export default makeStyles((theme) => ({
   dcNormal: {
     background: '#FFFFFF',
     border: '1px solid #D1D5DB',
+    boxShadow:
+      '0px 0px 0px rgba(6, 44, 82, 0.1), 0px 1px 3px rgba(64, 66, 69, 0.12), 0px 2px 16px rgba(33, 43, 54, 0.08)',
   },
   name: {
     width: 231,
@@ -48,11 +50,11 @@ export default makeStyles((theme) => ({
     cursor: 'pointer',
   },
   info: {
-    marginLeft: 9
+    marginLeft: 9,
   },
   globe: {
     marginLeft: 15,
-    marginRight: 9
+    marginRight: 9,
   },
   accountContainer: {
     width: 370,
@@ -63,7 +65,7 @@ export default makeStyles((theme) => ({
     borderRadius: 10,
     fontSize: 16,
     fontWeight: 500,
-    transition: theme.transitions.create(['background', 'color'])
+    transition: theme.transitions.create(['background', 'color']),
   },
   publicAccount: {
     background: '#E1EAFE',
@@ -105,5 +107,5 @@ export default makeStyles((theme) => ({
   idInfoIcon: {
     position: 'absolute',
     right: 15,
-  }
+  },
 }));
