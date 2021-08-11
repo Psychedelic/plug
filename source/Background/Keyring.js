@@ -1,4 +1,4 @@
-import { CURRENCIES, E8S_PER_ICP, USD_PER_TC } from '@shared/constants/currencies';
+import { E8S_PER_ICP, TOKEN_IMAGES, USD_PER_TC } from '@shared/constants/currencies';
 import extension from 'extensionizer';
 
 export const NANOS_PER_SECOND = 1_000_000;
@@ -20,28 +20,30 @@ const recursiveParseBigint = (obj) => Object.entries(obj).reduce(
   { ...obj },
 );
 
-const formatAssetBySymbol = (amount, symbol) => ({
-  ICP: parseInt(amount.toString(), 10) / E8S_PER_ICP,
-  XTC: parseInt(amount.toString(), 10) / 1_000_000_000_000,
-  default: amount,
-})[symbol || 'default'] || amount;
-
-const formatValueBySymbol = (balance, symbol, icpPrice) => ({
-  ICP: balance * icpPrice,
-  XTC: balance * USD_PER_TC,
-  default: balance,
-})[symbol || 'default'] || balance;
+const formatAssetBySymbol = (_amount, symbol, icpPrice) => {
+  const amount = parseInt(_amount.toString(), 10);
+  return ({
+    ICP: {
+      amount: amount / E8S_PER_ICP,
+      value: (amount * icpPrice) / E8S_PER_ICP,
+      image: TOKEN_IMAGES.ICP,
+    },
+    XTC: {
+      amount: amount / 1_000_000_000_000,
+      value: (amount * USD_PER_TC) / 1_000_000_000_000,
+      image: TOKEN_IMAGES.XTC,
+    },
+    default: { amount, value: amount },
+  })[symbol || 'default'] || { amount, value: amount, image: TOKEN_IMAGES.ICP };
+};
 
 const formatAssets = (balances, icpPrice) => {
   const mappedAssets = balances.map(({ amount, name, symbol }) => {
-    const balance = formatAssetBySymbol(amount, symbol);
-    const value = formatValueBySymbol(balance, symbol, icpPrice);
+    const asset = formatAssetBySymbol(amount, symbol, icpPrice);
     return {
-      image: CURRENCIES.get(symbol).image, // TODO: see what we can do about this.
-      amount: balance,
-      currency: symbol,
+      ...asset,
       name,
-      value,
+      currency: symbol,
     };
   });
   return mappedAssets;
@@ -57,7 +59,7 @@ export const HANDLER_TYPES = {
   GET_TRANSACTIONS: 'get-keyring-transactions',
   GET_ASSETS: 'get-keyring-assets',
   GET_BALANCE: 'get-balance',
-  SEND_ICP: 'send-icp',
+  SEND_TOKEN: 'send-token',
   EDIT_PRINCIPAL: 'edit-principal',
   GET_PUBLIC_KEY: 'get-public-key',
   GET_TOKEN_INFO: 'get-token-info',
@@ -118,9 +120,9 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: error.message };
     }
   },
-  [HANDLER_TYPES.SEND_ICP]: async ({ to, amount }) => {
+  [HANDLER_TYPES.SEND_TOKEN]: async ({ to, amount }) => {
     try {
-      const height = await keyring.sendICP(to, BigInt(amount));
+      const height = await keyring.send(to, BigInt(amount));
       return { height: parseInt(height.toString(), 10) };
     } catch (error) {
       return { error: error.message, height: null };

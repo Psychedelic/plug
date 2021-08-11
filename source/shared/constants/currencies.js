@@ -12,8 +12,6 @@ export const CURRENCIES = new Map([
       name: 'ICP',
       value: 'ICP',
       image: DfinityImg,
-      price: 120,
-      disabled: false,
     },
   ],
   [
@@ -24,10 +22,14 @@ export const CURRENCIES = new Map([
       value: 'XTC',
       image: XTCImg,
       price: USD_PER_TC,
-      disabled: true,
     },
   ],
 ]);
+
+export const TOKEN_IMAGES = {
+  XTC: XTCImg,
+  ICP: DfinityImg,
+};
 
 export const currencyPropTypes = {
   id: PropTypes.string.isRequired,
