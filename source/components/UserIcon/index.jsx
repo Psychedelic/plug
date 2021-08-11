@@ -5,7 +5,9 @@ import { useSelector } from 'react-redux';
 import WhitePencil from '@assets/icons/white-pencil.svg';
 import useStyles from './styles';
 
-const UserIcon = ({ big, icon, edit, ...other }) => {
+const UserIcon = ({
+  big, icon, edit, ...other
+}) => {
   const { emoji } = useSelector((state) => state.wallet);
 
   const classes = useStyles();
@@ -25,15 +27,18 @@ const UserIcon = ({ big, icon, edit, ...other }) => {
       className={
         clsx(
           classes.fancyCircle,
-          big ? classes.big : classes.small
-        )}
+          big ? classes.big : classes.small,
+        )
+}
       {...other}
     >
       {
         edit
-        && <div className={classes.edit}>
+        && (
+        <div className={classes.edit}>
           <img src={WhitePencil} />
         </div>
+        )
       }
 
       <span>
