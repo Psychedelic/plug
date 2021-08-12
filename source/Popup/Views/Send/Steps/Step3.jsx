@@ -40,7 +40,7 @@ const Step3 = ({
   const [ICPModalOpen, setOpenICPModal] = useState(false);
   const [sendingModalOpen, setSendingModalOpen] = useState(false);
 
-  const subtotal = amount * asset.price;
+  const subtotal = amount * asset?.value;
   const fee = +(asset?.price * DEFAULT_FEE).toFixed(5);
 
   const openSendModal = () => {

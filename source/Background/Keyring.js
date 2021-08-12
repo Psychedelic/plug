@@ -43,7 +43,7 @@ const formatAssets = (balances, icpPrice) => {
     return {
       ...asset,
       name,
-      currency: symbol,
+      symbol,
     };
   });
   return mappedAssets;

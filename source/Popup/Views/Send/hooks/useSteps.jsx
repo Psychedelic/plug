@@ -6,7 +6,7 @@ import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';
 import { setAssets, setTransactions } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { CURRENCIES, E8S_PER_ICP } from '@shared/constants/currencies';
+import { E8S_PER_ICP } from '@shared/constants/currencies';
 import { validateAccountId, validatePrincipalId } from '@shared/utils/ids';
 import { ADDRESS_TYPES, DEFAULT_FEE } from '@shared/constants/addresses';
 import Step1 from '../Steps/Step1';
@@ -22,8 +22,8 @@ const useSteps = () => {
 
   const { assets, principalId, accountId } = useSelector((state) => state.wallet);
   const { icpPrice } = useSelector((state) => state.icp);
-  const [selectedAsset, setSelectedAsset] = useState(CURRENCIES.get('ICP'));
-  const [amount, setAmount] = useState(null);
+  const [selectedAsset, setSelectedAsset] = useState(assets?.[0]);
+  const [amount, setAmount] = useState(0);
   const [transaction, setTransaction] = useState(null);
   const [address, setAddress] = useState(null);
   const [addressInfo, setAddressInfo] = useState({ isValid: null, type: null });
@@ -59,7 +59,7 @@ const useSteps = () => {
   };
 
   useEffect(() => {
-    if (selectedAsset.name === 'ICP') {
+    if (selectedAsset?.symbol === 'ICP') {
       setSelectedAsset({ ...selectedAsset, price: icpPrice });
     } // TODO: Add corresponding sentence for cycles
   }, [icpPrice]);
@@ -70,7 +70,7 @@ const useSteps = () => {
       let isValid = !isUserAddress && (validatePrincipalId(address) || validateAccountId(address));
       const type = validatePrincipalId(address) ? ADDRESS_TYPES.PRINCIPAL : ADDRESS_TYPES.ACCOUNT;
       // check for accountId if cycles selected
-      if (type === ADDRESS_TYPES.ACCOUNT && selectedAsset.id === 'CYCLES') {
+      if (type === ADDRESS_TYPES.ACCOUNT && selectedAsset?.symbol === 'XTC') {
         isValid = false;
       }
       handleChangeAddressInfo({ isValid, type });
@@ -80,8 +80,8 @@ const useSteps = () => {
   const [primaryValue, setPrimaryValue] = useState(
     {
       prefix: '',
-      suffix: ` ${selectedAsset.value}`,
-      price: selectedAsset.price,
+      suffix: ` ${selectedAsset?.symbol}`,
+      value: selectedAsset?.value,
       conversionRate: 1,
     },
   );
@@ -90,11 +90,11 @@ const useSteps = () => {
     {
       prefix: '$',
       suffix: ' USD',
-      price: 1 / selectedAsset.price,
-      conversionRate: selectedAsset.price,
+      value: 1 / selectedAsset?.value,
+      conversionRate: selectedAsset?.value,
     },
   );
-  const available = (assets?.[0]?.amount || 0) - DEFAULT_FEE; // Only ICP supported for now
+  const available = (selectedAsset?.amount || 0) - DEFAULT_FEE; // Only ICP supported for now
   const convertedAmount = Math.max(available * primaryValue.conversionRate, 0);
   const [availableAmount, setAvailableAmount] = useState({
     amount: convertedAmount,
@@ -122,8 +122,9 @@ const useSteps = () => {
     setPrimaryValue(
       {
         prefix: '',
-        suffix: ` ${selectedAsset.value}`,
-        price: selectedAsset.price,
+        suffix: ` ${selectedAsset?.symbol}`,
+        value: selectedAsset?.value,
+        price: selectedAsset?.value / selectedAsset?.amount,
         conversionRate: 1,
       },
     );
@@ -132,8 +133,9 @@ const useSteps = () => {
       {
         prefix: '$',
         suffix: ' USD',
-        price: 1 / selectedAsset.price,
-        conversionRate: selectedAsset.price,
+        price: 1 / selectedAsset?.price,
+        value: 1 / selectedAsset?.value,
+        conversionRate: selectedAsset?.price,
       },
     );
   }, [selectedAsset]);
@@ -199,9 +201,9 @@ const useSteps = () => {
 
   let step2;
 
-  if (selectedAsset.id === 'CYCLES') {
+  if (selectedAsset?.symbol === 'XTC') {
     step2 = step2a;
-  } else if (selectedAsset.id === 'ICP') {
+  } else if (selectedAsset?.symbol === 'ICP') {
     step2 = step2b;
   }
 
@@ -233,7 +235,7 @@ const useSteps = () => {
         handleSwapValues={handleSwapValues}
         amount={amount}
         handleChangeAmount={handleChangeAmount}
-        assets={Array.from(CURRENCIES.values())}
+        assets={assets}
         selectedAsset={selectedAsset}
         availableAmount={availableAmount}
         handleChangeAsset={handleChangeAsset}

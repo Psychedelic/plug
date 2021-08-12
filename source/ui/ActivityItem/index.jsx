@@ -83,7 +83,6 @@ const ActivityItem = ({
   const { t } = useTranslation();
   const [showSwap, setShowSwap] = useState(false);
   const [hover, setHover] = useState(false);
-  console.log('activity name', symbol);
   const handleShowSwap = (show) => { setShowSwap(show); };
 
   const classes = useStyles();
@@ -222,7 +221,6 @@ ActivityItem.defaultProps = {
 
 ActivityItem.propTypes = {
   type: PropTypes.number,
-  currency: PropTypes.shape(currencyPropTypes).isRequired,
   to: PropTypes.string,
   from: PropTypes.string,
   amount: PropTypes.number,

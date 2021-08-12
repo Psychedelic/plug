@@ -78,8 +78,8 @@ const Step1 = ({
             label={t('send.asset')}
             component={(
               <MultiInput
-                name={selectedAsset.name}
-                image={selectedAsset.image}
+                name={selectedAsset?.name}
+                image={selectedAsset?.image}
                 onClick={() => setOpenAssets(true)}
                 value={amount}
                 onChange={handleChangeAmount}
