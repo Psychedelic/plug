@@ -7,13 +7,13 @@ import { create, act } from 'react-test-renderer';
 import extension from 'extensionizer';
 
 jest.mock('webextension-polyfill', () => ({
-  __esModule: true, // this property makes it work
+  __esModule: true,
   default: global.browser,
   namedExport: jest.fn(),
 }));
 
 jest.mock('extensionizer', () => ({
-  __esModule: true, // this property makes it work
+  __esModule: true,
   default: {
     ...global.browser,
     runtime: {
@@ -33,6 +33,6 @@ describe("Login flow", () => {
     });
 
     expect(extension.runtime.sendMessage.mock.calls.length).toBe(1);
-    expect(browser.tabs.create.withArgs({url: 'options.html'}).calledOnce).toBe(true);
+    expect(browser.tabs.create.withArgs({ url: 'options.html' }).calledOnce).toBe(true);
   });
 });
