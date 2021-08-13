@@ -4,32 +4,50 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { useTranslation } from 'react-i18next';
 import useStyles from './styles';
 
 const MenuItem = ({
-  name, image, onClick, size, border, disabled, alignLeft,
+  name,
+  image,
+  onClick,
+  size,
+  border,
+  disabled,
+  alignLeft,
+  icon,
+  selected,
+  endIcon,
 }) => {
-  const { t } = useTranslation();
   const classes = useStyles();
+
   return (
     <MuiMenuItem
       key={name}
       onClick={onClick}
       disabled={disabled}
       className={clsx(size !== 'small' ? classes.big : classes.small, border && classes.border)}
+      classes={{
+        root: selected ? classes.selected : null,
+      }}
     >
-      <ListItemIcon className={classes.icon}>
-        <img src={image} className={clsx(size === 'large' ? classes.bigImage : classes.smallImage, alignLeft && classes.alignLeft)} />
-      </ListItemIcon>
-      <Typography variant="h5" className={classes.text}>{name}</Typography>
-
       {
-        disabled
+        icon
+      }
+      {
+        image
         && (
-        <div className={classes.comingSoon}>
-          <Typography variant="h5" className={classes.comingSoon}>{t('common.comingSoon')}</Typography>
-        </div>
+        <ListItemIcon className={classes.icon}>
+          <img src={image} className={clsx(size === 'large' ? classes.bigImage : classes.smallImage, alignLeft && classes.alignLeft)} />
+        </ListItemIcon>
+        )
+      }
+      <Typography variant={size === 'small' ? 'h6' : 'h5'} className={classes.text}>{name}</Typography>
+      {
+        (endIcon && selected)
+        && (
+          <div className={classes.comingSoon}>
+            {endIcon}
+          </div>
         )
       }
 
@@ -44,6 +62,9 @@ MenuItem.defaultProps = {
   size: 'medium',
   disabled: false,
   alignLeft: false,
+  icon: null,
+  endIcon: null,
+  selected: false,
 };
 
 MenuItem.propTypes = {
@@ -54,4 +75,7 @@ MenuItem.propTypes = {
   border: PropTypes.bool,
   disabled: PropTypes.bool,
   alignLeft: PropTypes.bool,
+  icon: PropTypes.node,
+  endIcon: PropTypes.node,
+  selected: PropTypes.bool,
 };

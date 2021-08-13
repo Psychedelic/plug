@@ -5,7 +5,7 @@ import {
 } from '@ui';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
-import EMOJIS from '@shared/constants/emojis';
+import { getRandomEmoji } from '@shared/constants/emojis';
 import { Typography } from '@material-ui/core';
 import { validatePrincipalId, validateAccountId } from '@shared/utils/ids';
 import useStyles from '../styles';
@@ -92,9 +92,9 @@ const AddContact = ({ handleAddContact, contacts }) => {
         {
           invalidReason
           && (
-          <Grid item xs={12} className={classes.appearAnimation}>
-            <Typography variant="subtitle1" className={classes.danger}>{invalidReason}</Typography>
-          </Grid>
+            <Grid item xs={12} className={classes.appearAnimation}>
+              <Typography variant="subtitle1" className={classes.danger}>{invalidReason}</Typography>
+            </Grid>
           )
         }
         <Grid item xs={12}>
@@ -110,7 +110,7 @@ const AddContact = ({ handleAddContact, contacts }) => {
             onClick={() => handleAddContact({
               name,
               id,
-              image: EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
+              image: getRandomEmoji(),
             })}
           />
         </Grid>

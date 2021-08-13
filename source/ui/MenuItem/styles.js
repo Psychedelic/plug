@@ -19,8 +19,8 @@ export default makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
   },
   smallImage: {
-    width: 30,
-    height: 30,
+    width: 22,
+    height: 22,
   },
   bigImage: {
     width: 41,
@@ -44,5 +44,9 @@ export default makeStyles((theme) => ({
   },
   comingSoon: {
     marginLeft: 'auto',
+    display: 'flex',
+  },
+  selected: {
+    background: 'linear-gradient(94.95deg, rgba(255, 231, 1, .2) -1.41%, rgba(250, 81, 211, 0.2) 34.12%, rgba(16, 217, 237, .2) 70.19%, rgba(82, 255, 83, .2) 101.95%)',
   },
 }));

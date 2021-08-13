@@ -5,7 +5,7 @@ import clsx from 'clsx';
 
 import { useContacts } from '@hooks';
 import { ActionDialog, IDInput } from '@components';
-import EMOJIS from '@shared/constants/emojis';
+import { getRandomEmoji } from '@shared/constants/emojis';
 import {
   FormItem, MultiInput, Container, Button, Dialog, Alert, TextInput,
 } from '@ui';
@@ -52,7 +52,7 @@ const Step1 = ({
     const contact = {
       name: contactName,
       id: address,
-      image: EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
+      image: getRandomEmoji(),
     };
     handleAddContact(contact);
     setSelectedContact(contact);
@@ -164,7 +164,7 @@ const Step1 = ({
           (address !== ''
             && addressInfo.isValid
             && !contacts.flatMap((c) => c.contacts).map((c) => c.id).includes(address))
-            && !isUserAddress
+          && !isUserAddress
           && (
             <Grid item xs={12}>
               <div className={clsx(classes.newAddress, classes.appearAnimation)}>
