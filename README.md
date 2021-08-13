@@ -9,7 +9,7 @@
 
 Welcome to Plug! An [Internet Computer](https://dfinity.org/) crypto wallet and authentication provider as a browser extension. Find our latest version in this repository's releases, or on our [website](https://plugwallet.ooo/). You can go to our [documentation](https://docs.plugwallet.ooo/) to learn more about how to interact with Plug as a developer.
 
-> **Warning: Plug is still alpha software - treat it as a hot wallet for small amounts of ICP**
+> **Warning: Plug is still alpha software - treat it as a hot wallet.**
 
 This repository is the frontend for Plug's browser extension. It uses the [Plug Controller](https://github.com/Psychedelic/plug-controller) and the [Plug Inpage Provider](https://github.com/Psychedelic/plug-inpage-provider) to power the features in Plug and all its interactions with the Internet Computer.
 
@@ -21,10 +21,15 @@ This repository is the frontend for Plug's browser extension. It uses the [Plug 
 
 ## 🚀 Install
 
-Plug must currently be installed as development builds from our release page:
+Plug can be installed in two ways. You can get it from the official **Chrome Extension Store or the Firefox Add-on Store** (recommended, receives auto-updates):
 
-- [Install Plug in Chrome](./docs/install-plug-in-chrome.md)
-- [Install Plug in Firefox](./docs/install-plug-in-firefox.md)
+- [Get from Chrome Extension Store (Chrome, Brave, Chromium)](https://chrome.google.com/webstore/detail/plug/cfbfdhimifdmdehjmkdobpcjfefblkjm)
+- [Get from Firefox Add-on Store (Firefox browser)](https://addons.mozilla.org/en-US/firefox/addon/plug/)
+
+Or download the latest version's build in this **repository's releases**, and follow the guides below for a manual installation (doesn't auto-update):
+
+- [Install Plug in Chrome (GitHub build)](./docs/install-plug-in-chrome.md)
+- [Install Plug in Firefox (GitHub build)](./docs/install-plug-in-firefox.md)
 
 ## 🏗️ Development Quick Start
 
