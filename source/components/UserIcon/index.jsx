@@ -21,15 +21,7 @@ const UserIcon = ({ size, icon, ...other }) => {
 
   return (
     <div
-      className={
-        clsx(classes.fancyCircle,
-          // eslint-disable-next-line no-nested-ternary
-          size === 'big'
-            ? classes.big
-            : size === 'small'
-              ? classes.small
-              : classes.medium)
-      }
+      className={clsx(classes.fancyCircle, classes[size])}
       {...other}
     >
       <span>

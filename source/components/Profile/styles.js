@@ -38,7 +38,6 @@ export default makeStyles({
     padding: '16px 0px 8px 16px',
   },
   paper: {
-    borderRadius: 10,
     width: 293,
   },
   accountContainer: {

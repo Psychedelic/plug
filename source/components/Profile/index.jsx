@@ -14,6 +14,7 @@ import Plus from '@assets/icons/plus.svg';
 import { setAccountInfo } from '@redux/wallet';
 import { useDispatch, useSelector } from 'react-redux';
 import BluePencil from '@assets/icons/blue-pencil.svg';
+import { getRandomEmoji } from '@shared/constants/emojis';
 import clsx from 'clsx';
 import { useRouter } from '../Router';
 import ActionDialog from '../ActionDialog';
@@ -55,11 +56,16 @@ const Profile = ({ disableProfile }) => {
   };
 
   const handleCreateAccount = () => {
-    sendMessage({ type: HANDLER_TYPES.CREATE_PRINCIPAL, params: {} },
+    sendMessage({
+      type: HANDLER_TYPES.CREATE_PRINCIPAL,
+      params: { name: accountName, icon: getRandomEmoji() }
+    },
       (wallet) => {
         if (wallet) {
           setAccounts([...accounts, wallet]);
         }
+        setAccountName('');
+        setOpenCreateAccount(false);
       });
   };
 
@@ -78,7 +84,6 @@ const Profile = ({ disableProfile }) => {
         disabled={disableProfile}
       >
         <Button
-          // ref={anchorRef}
           onClick={handleToggle}
           className={classes.button}
           classes={{
@@ -108,7 +113,7 @@ const Profile = ({ disableProfile }) => {
         )}
         button={t('common.create')}
         buttonVariant="rainbow"
-        onClick={() => handleCreateAccount()}
+        onClick={handleCreateAccount}
         onClose={() => setOpenCreateAccount(false)}
       />
 

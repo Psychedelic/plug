@@ -98,7 +98,7 @@ export const getKeyringHandler = (type, keyring) => ({
     return unlocked;
   },
   [HANDLER_TYPES.CREATE]: async (params) => keyring.create(params),
-  [HANDLER_TYPES.CREATE_PRINCIPAL]: async () => keyring.createPrincipal(),
+  [HANDLER_TYPES.CREATE_PRINCIPAL]: async (params) => keyring.createPrincipal(params),
   [HANDLER_TYPES.SET_CURRENT_PRINCIPAL]:
     async (walletNumber) => {
       await keyring.setCurrentPrincipal(walletNumber);
