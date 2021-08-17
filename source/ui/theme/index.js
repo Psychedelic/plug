@@ -11,6 +11,9 @@ const theme = createTheme({
         body: {
           fontFamily: 'Inter',
         },
+        '.emoji-picker-react .emoji-categories': {
+          display: 'none',
+        },
       },
     },
   },
