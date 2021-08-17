@@ -33,6 +33,11 @@ const formatAssetBySymbol = (_amount, symbol, icpPrice) => {
       value: (amount * USD_PER_TC) / 1_000_000_000_000,
       image: TOKEN_IMAGES.XTC,
     },
+    WTC: {
+      amount: amount / 1_000_000_000_000,
+      value: (amount * USD_PER_TC) / 1_000_000_000_000,
+      image: TOKEN_IMAGES.ICP, // TODO: Add token images
+    },
     default: { amount, value: amount },
   })[symbol || 'default'] || { amount, value: amount, image: TOKEN_IMAGES.ICP };
 };
