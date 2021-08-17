@@ -19,8 +19,8 @@ export default makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
   },
   smallImage: {
-    width: 30,
-    height: 30,
+    width: 22,
+    height: 22,
   },
   bigImage: {
     width: 41,
@@ -44,5 +44,9 @@ export default makeStyles((theme) => ({
   },
   comingSoon: {
     marginLeft: 'auto',
+    display: 'flex',
+  },
+  selected: {
+    background: theme.palette.primary.darkGradient,
   },
 }));

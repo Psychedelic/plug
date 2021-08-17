@@ -69,6 +69,8 @@ export const HANDLER_TYPES = {
   GET_PUBLIC_KEY: 'get-public-key',
   GET_TOKEN_INFO: 'get-token-info',
   ADD_CUSTOM_TOKEN: 'add-custom-token',
+  CREATE_PRINCIPAL: 'create-principal',
+  SET_CURRENT_PRINCIPAL: 'set-current-principal',
 };
 
 export const sendMessage = (args, callback) => {
@@ -103,6 +105,13 @@ export const getKeyringHandler = (type, keyring) => ({
     return unlocked;
   },
   [HANDLER_TYPES.CREATE]: async (params) => keyring.create(params),
+  [HANDLER_TYPES.CREATE_PRINCIPAL]: async (params) => keyring.createPrincipal(params),
+  [HANDLER_TYPES.SET_CURRENT_PRINCIPAL]:
+    async (walletNumber) => {
+      await keyring.setCurrentPrincipal(walletNumber);
+
+      return keyring.getState();
+    },
   [HANDLER_TYPES.IMPORT]: async (params) => keyring.importMnemonic(params),
   [HANDLER_TYPES.GET_LOCKS]: async () => ({
     isUnlocked: keyring?.isUnlocked,
@@ -138,23 +147,23 @@ export const getKeyringHandler = (type, keyring) => ({
       keyring.editPrincipal(walletNumber, { name, emoji })
     ),
   [HANDLER_TYPES.GET_PUBLIC_KEY]:
-      async () => keyring.getPublicKey(),
+    async () => keyring.getPublicKey(),
   [HANDLER_TYPES.GET_TOKEN_INFO]:
-      async (canisterId) => {
-        try {
-          const tokenInfo = await keyring.getTokenInfo(canisterId);
-          return { ...tokenInfo, amount: parseInt(tokenInfo.amount.toString(), 10) };
-        } catch (e) {
-          return { error: e.message };
-        }
-      },
+    async (canisterId) => {
+      try {
+        const tokenInfo = await keyring.getTokenInfo(canisterId);
+        return { ...tokenInfo, amount: parseInt(tokenInfo.amount.toString(), 10) };
+      } catch (e) {
+        return { error: e.message };
+      }
+    },
   [HANDLER_TYPES.ADD_CUSTOM_TOKEN]:
-      async (canisterId) => {
-        try {
-          const response = await keyring.registerToken(canisterId);
-          return response;
-        } catch (e) {
-          return { error: e.message };
-        }
-      },
+    async (canisterId) => {
+      try {
+        const response = await keyring.registerToken(canisterId);
+        return response;
+      } catch (e) {
+        return { error: e.message };
+      }
+    },
 }[type]);

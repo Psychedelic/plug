@@ -57,7 +57,7 @@ const Home = () => {
           sendMessage({ type: HANDLER_TYPES.LOCK, params: {} },
             () => navigator.navigate('login'));
         }
-        dispatch(setAccountInfo(state.wallets[0]));
+        dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
       });
   }, []);
 

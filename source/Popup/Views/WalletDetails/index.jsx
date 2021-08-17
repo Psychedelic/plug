@@ -27,7 +27,9 @@ import useStyles from './styles';
 
 const WalletDetails = () => {
   const classes = useStyles();
-  const { name, emoji, accountId } = useSelector((state) => state.wallet);
+  const {
+    name, emoji, accountId, walletNumber,
+  } = useSelector((state) => state.wallet);
   const { navigator } = useRouter();
   const { t } = useTranslation();
   const [openEmojis, setOpenEmojis] = useState(false);
@@ -55,7 +57,7 @@ const WalletDetails = () => {
       {
         type: HANDLER_TYPES.EDIT_PRINCIPAL,
         params: {
-          walletNumber: 0,
+          walletNumber,
           name: walletName,
           emoji: currentEmoji,
         },

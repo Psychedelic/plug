@@ -22,6 +22,7 @@ export default makeStyles((theme) => ({
   },
   icon: {
     paddingBottom: theme.spacing(2),
+    width: 20,
   },
   textContainer: {
     height: 60,

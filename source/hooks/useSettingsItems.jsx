@@ -1,4 +1,4 @@
-import PenIcon from '@assets/icons/settings/pen.svg';
+import HelpIcon from '@assets/icons/help.png';
 import KeyIcon from '@assets/icons/settings/old-key.svg';
 import NotebookIcon from '@assets/icons/settings/notebook.svg';
 import { useTranslation } from 'react-i18next';
@@ -10,12 +10,6 @@ const useSettingsItems = () => {
 
   return [
     {
-      image: PenIcon,
-      name: t('settings.walletDetails'),
-      description: t('settings.walletDetailsDescription'),
-      onClick: (() => navigator.navigate('wallet-details')),
-    },
-    {
       image: NotebookIcon,
       name: t('settings.contacts'),
       description: t('settings.contactsDescription'),
@@ -26,6 +20,12 @@ const useSettingsItems = () => {
       name: t('settings.seedPhrase'),
       description: t('settings.seedPhraseDescription'),
       onClick: (() => navigator.navigate('seed-phrase')),
+    },
+    {
+      image: HelpIcon,
+      name: t('profile.help'),
+      description: t('settings.helpDescription'),
+      onClick: () => navigator.navigate('help'),
     },
   ];
 };
