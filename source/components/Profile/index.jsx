@@ -26,7 +26,7 @@ const Profile = ({ disableProfile }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { navigator } = useRouter();
+  const { navigator } = disableProfile ? {} : useRouter();
 
   const { walletNumber } = useSelector((state) => state.wallet);
 
@@ -58,15 +58,15 @@ const Profile = ({ disableProfile }) => {
   const handleCreateAccount = () => {
     sendMessage({
       type: HANDLER_TYPES.CREATE_PRINCIPAL,
-      params: { name: accountName, icon: getRandomEmoji() }
+      params: { name: accountName, icon: getRandomEmoji() },
     },
-      (wallet) => {
-        if (wallet) {
-          setAccounts([...accounts, wallet]);
-        }
-        setAccountName('');
-        setOpenCreateAccount(false);
-      });
+    (wallet) => {
+      if (wallet) {
+        setAccounts([...accounts, wallet]);
+      }
+      setAccountName('');
+      setOpenCreateAccount(false);
+    });
   };
 
   const handleChangeAccount = (wallet) => () => {
@@ -117,64 +117,68 @@ const Profile = ({ disableProfile }) => {
         onClose={() => setOpenCreateAccount(false)}
       />
 
-      <Drawer
-        anchor="right"
-        open={open}
-        onClose={handleToggle}
-        classes={{
-          root: classes.drawer,
-          paper: classes.paper,
-        }}
-      >
-        <div className={classes.container}>
-          <Typography variant="h5" className={classes.myAccounts}>My Accounts</Typography>
-          <MenuList className={clsx(classes.accountContainer, classes.menu)}>
-            {
-              accounts.map((account) => (
-                <MenuItem
-                  size="small"
-                  key={account.walletNumber}
-                  name={account.name}
-                  icon={<UserIcon size="small" icon={account.icon || '👽'} style={{ marginLeft: -6, marginRight: 12 }} />}
-                  onClick={handleChangeAccount(account.walletNumber)}
-                  selected={account.walletNumber === walletNumber}
-                  endIcon={(
-                    <img
-                      src={BluePencil}
-                      onClick={() => navigator.navigate('wallet-details')}
-                    />
-                  )}
-                />
-              ))
-            }
-          </MenuList>
-          <MenuList className={clsx(classes.settingContainer, classes.menu)}>
-            <Divider style={{ marginBottom: 6 }} />
-            <MenuItem
-              size="small"
-              key="createAccount"
-              name="Create Account"
-              alignLeft
-              image={Plus}
-              onClick={() => setOpenCreateAccount(true)}
-            />
-            <Divider style={{ margin: '6px 0' }} />
-            {
-              menuItems.map((item) => (
-                <MenuItem
-                  size="small"
-                  key={item.name}
-                  name={item.name}
-                  image={item.image}
-                  alignLeft={item.alignLeft}
-                  onClick={() => item.onClick()}
-                />
-              ))
-            }
-          </MenuList>
-        </div>
-      </Drawer>
-
+      {
+        !disableProfile
+        && (
+        <Drawer
+          anchor="right"
+          open={open}
+          onClose={handleToggle}
+          classes={{
+            root: classes.drawer,
+            paper: classes.paper,
+          }}
+        >
+          <div className={classes.container}>
+            <Typography variant="h5" className={classes.myAccounts}>My Accounts</Typography>
+            <MenuList className={clsx(classes.accountContainer, classes.menu)}>
+              {
+                accounts.map((account) => (
+                  <MenuItem
+                    size="small"
+                    key={account.walletNumber}
+                    name={account.name}
+                    icon={<UserIcon size="small" icon={account.icon || '👽'} style={{ marginLeft: -6, marginRight: 12 }} />}
+                    onClick={handleChangeAccount(account.walletNumber)}
+                    selected={account.walletNumber === walletNumber}
+                    endIcon={(
+                      <img
+                        src={BluePencil}
+                        onClick={() => navigator.navigate('wallet-details')}
+                      />
+                    )}
+                  />
+                ))
+              }
+            </MenuList>
+            <MenuList className={clsx(classes.settingContainer, classes.menu)}>
+              <Divider style={{ marginBottom: 6 }} />
+              <MenuItem
+                size="small"
+                key="createAccount"
+                name="Create Account"
+                alignLeft
+                image={Plus}
+                onClick={() => setOpenCreateAccount(true)}
+              />
+              <Divider style={{ margin: '6px 0' }} />
+              {
+                menuItems.map((item) => (
+                  <MenuItem
+                    size="small"
+                    key={item.name}
+                    name={item.name}
+                    image={item.image}
+                    alignLeft={item.alignLeft}
+                    onClick={() => item.onClick()}
+                  />
+                ))
+              }
+            </MenuList>
+          </div>
+        </Drawer>
+        )
+      }
     </>
   );
 };
