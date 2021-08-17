@@ -99,8 +99,8 @@
   },
   "settings": {
     "title": "Settings",
-    "walletDetails": "Wallet Details",
-    "walletDetailsDescription": "Change the name & pic of your wallet.",
+    "walletDetails": "Account Details",
+    "walletDetailsDescription": "Change the name & pic on your account.",
     "contacts": "Contacts",
     "contactsDescription": "Add, edit, remove and manage contacts.",
     "seedPhrase": "Secret Recovery Phrase",
@@ -110,10 +110,12 @@
     "createAccountTitle": "Create Account"
   },
   "walletDetails": {
-    "title": "Wallet Details",
+    "title": "Account Details",
     "name": "Name",
     "editWalletPic": "Edit Wallet Pic",
-    "accountId": "ICP Account ID"
+    "accountId": "ICP Account ID",
+    "publicAccount": "Public Account",
+    "viewMore": "View additional wallet details"
   },
   "seedPhrase": {
     "title": "Secret Recovery Phrase",
