@@ -18,9 +18,14 @@ export default makeStyles({
     height: 50,
     fontSize: 25,
   },
-  small: {
+  medium: {
     width: 40,
     height: 40,
     fontSize: 22,
+  },
+  small: {
+    width: 30,
+    height: 30,
+    fontSize: 16,
   },
 });

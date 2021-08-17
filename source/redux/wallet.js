@@ -13,6 +13,7 @@ export const walletSlice = createSlice({
     emoji: '👽',
     transactions: [],
     assets: [],
+    walletNumber: 0,
   },
   reducers: {
     updateWalletDetails: (state, action) => {
@@ -25,12 +26,13 @@ export const walletSlice = createSlice({
 
       // Chrome serializes everything with toJSON
       const {
-        accountId, icon, name, principal,
+        accountId, icon, name, principal, walletNumber,
       } = action.payload;
       state.accountId = accountId;
       state.emoji = icon;
       state.name = name;
       state.principalId = principal;
+      state.walletNumber = walletNumber;
     },
     setTransactions: (state, action) => {
       const mapTransaction = (trx) => {

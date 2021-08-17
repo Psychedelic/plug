@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 import useStyles from './styles';
 
-const UserIcon = ({ big, icon }) => {
+const UserIcon = ({ size, icon, ...other }) => {
   const { emoji } = useSelector((state) => state.wallet);
 
   const classes = useStyles();
@@ -20,7 +20,10 @@ const UserIcon = ({ big, icon }) => {
   }, [icon, emoji]);
 
   return (
-    <div className={clsx(classes.fancyCircle, big ? classes.big : classes.small)}>
+    <div
+      className={clsx(classes.fancyCircle, classes[size])}
+      {...other}
+    >
       <span>
         {displayIcon}
       </span>
@@ -31,11 +34,11 @@ const UserIcon = ({ big, icon }) => {
 export default UserIcon;
 
 UserIcon.defaultProps = {
-  big: false,
+  size: 'medium',
   icon: null,
 };
 
 UserIcon.propTypes = {
-  big: PropTypes.bool,
+  size: PropTypes.string,
   icon: PropTypes.string,
 };
