@@ -26,7 +26,7 @@ import clsx from 'clsx';
 import { useRouter, Plug } from '@components';
 
 import { ADDRESS_TYPES, DEFAULT_FEE } from '@shared/constants/addresses';
-import useStyles from '../styles';
+import useStyles from '../../styles';
 
 const Step3 = ({
   asset, amount, address, addressInfo, handleSendClick, error, transaction, trxComplete,
@@ -36,6 +36,7 @@ const Step3 = ({
   const [loading, setLoading] = useState(false);
   const { navigator } = useRouter();
   const [accountId, setAccountId] = useState('');
+  const isICP = asset?.symbol === 'ICP';
 
   const [ICPModalOpen, setOpenICPModal] = useState(false);
   const [sendingModalOpen, setSendingModalOpen] = useState(false);
@@ -95,7 +96,7 @@ const Step3 = ({
           <div className={classes.asset}>
             <img src={asset.image} className={classes.image} />
             <Typography variant="h1">
-              <AssetFormat value={amount} asset={asset.value} />
+              <AssetFormat value={amount} asset={asset?.symbol} />
             </Typography>
           </div>
           <Typography variant="subtitle1">
@@ -106,7 +107,7 @@ const Step3 = ({
         <Grid item xs={12}>
           <Card>
             {
-              addressInfo.type === ADDRESS_TYPES.PRINCIPAL
+              addressInfo.type === ADDRESS_TYPES.PRINCIPAL && isICP
                 ? (
                   <div className={classes.accountIdContainer}>
                     <div>
@@ -160,7 +161,7 @@ const Step3 = ({
                     <div className={classes.flex}>
                       <Typography variant="subtitle1" className={classes.to}>{t('send.to')}</Typography>
                       <div className={clsx(classes.badge, classes.accountBadge)}>
-                        {t('common.accountId')}
+                        {t(`common.${isICP ? 'accountId' : 'principalId'}`)}
                       </div>
                     </div>
                     <div className={classes.flex}>
@@ -222,7 +223,7 @@ const Step3 = ({
         />
 
         {
-          addressInfo.type === ADDRESS_TYPES.PRINCIPAL
+          addressInfo.type === ADDRESS_TYPES.PRINCIPAL && asset.symbol === 'ICP'
           && (
           <Grid item xs={12}>
             <div className={classes.alertContainer}>
@@ -237,11 +238,11 @@ const Step3 = ({
           </Grid>
           )
         }
-
-        <Grid item xs={12}>
-          <InfoRow name={t('common.taxFee')} value={`${DEFAULT_FEE} ICP ($${fee})`} />
-        </Grid>
-
+        {isICP && (
+          <Grid item xs={12}>
+            <InfoRow name={t('common.taxFee')} value={`${DEFAULT_FEE} ICP ($${fee})`} />
+          </Grid>
+        )}
         <Grid item xs={12}>
           <InfoRow name={t('common.total')} value={<USDFormat value={subtotal + fee} />} total />
         </Grid>
