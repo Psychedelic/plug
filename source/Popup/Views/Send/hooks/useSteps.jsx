@@ -6,7 +6,7 @@ import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';
 import { setAssets, setTransactions } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { E8S_PER_ICP } from '@shared/constants/currencies';
+import { CURRENCIES, E8S_PER_ICP, USD_PER_TC } from '@shared/constants/currencies';
 import { validateAccountId, validatePrincipalId } from '@shared/utils/ids';
 import { ADDRESS_TYPES, DEFAULT_FEE } from '@shared/constants/addresses';
 import Step1 from '../Steps/Step1';
@@ -22,7 +22,8 @@ const useSteps = () => {
 
   const { assets, principalId, accountId } = useSelector((state) => state.wallet);
   const { icpPrice } = useSelector((state) => state.icp);
-  const [selectedAsset, setSelectedAsset] = useState(assets?.[0]);
+  const [selectedAsset, setSelectedAsset] = useState(assets?.[0] || CURRENCIES.get('ICP'));
+
   const [amount, setAmount] = useState(0);
   const [transaction, setTransaction] = useState(null);
   const [address, setAddress] = useState(null);
@@ -34,7 +35,10 @@ const useSteps = () => {
 
   const handleChangeAddress = (value) => setAddress(value.trim());
   const handleChangeAddressInfo = (value) => setAddressInfo(value);
-  const handleChangeAsset = (value) => setSelectedAsset(value);
+  const handleChangeAsset = (value) => setSelectedAsset({
+    ...value,
+    price: { ICP: icpPrice, XTC: USD_PER_TC, WTC: USD_PER_TC }[value?.symbol] || 1,
+  });
   const handleChangeStep = (index) => setStep(index);
   const handleChangeAmount = (value) => setAmount(value);
   const handleChangeDestination = (value) => setDestination(value);
@@ -59,9 +63,8 @@ const useSteps = () => {
   };
 
   useEffect(() => {
-    if (selectedAsset?.symbol === 'ICP') {
-      setSelectedAsset({ ...selectedAsset, price: icpPrice });
-    } // TODO: Add corresponding sentence for cycles
+    const price = { ICP: icpPrice, XTC: USD_PER_TC, WTC: USD_PER_TC }[selectedAsset?.symbol] || 1;
+    setSelectedAsset({ ...selectedAsset, price });
   }, [icpPrice]);
 
   useEffect(() => {
@@ -70,7 +73,7 @@ const useSteps = () => {
       let isValid = !isUserAddress && (validatePrincipalId(address) || validateAccountId(address));
       const type = validatePrincipalId(address) ? ADDRESS_TYPES.PRINCIPAL : ADDRESS_TYPES.ACCOUNT;
       // check for accountId if cycles selected
-      if (type === ADDRESS_TYPES.ACCOUNT && selectedAsset?.symbol === 'XTC') {
+      if (type === ADDRESS_TYPES.ACCOUNT && selectedAsset?.symbol !== 'ICP') {
         isValid = false;
       }
       handleChangeAddressInfo({ isValid, type });
