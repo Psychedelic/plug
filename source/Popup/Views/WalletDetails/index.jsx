@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import clsx from 'clsx';
 import { useRouter } from '@components/Router';
 import {
@@ -21,13 +21,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import InputBase from '@material-ui/core/InputBase';
 import Pencil from '@assets/icons/pencil.svg';
 import BlueCheck from '@assets/icons/blue-check.svg';
-import { Info, Globe, ChevronDown } from 'react-feather';
-import MuiSwitch from '@material-ui/core/Switch';
-import { withStyles } from '@material-ui/core/styles';
+import { Info, /* Globe, */ ChevronDown } from 'react-feather';
+// import MuiSwitch from '@material-ui/core/Switch';
+// import { withStyles } from '@material-ui/core/styles';
 import extension from 'extensionizer';
 import useStyles from './styles';
 import { updateWalletDetails } from '../../../redux/wallet';
 
+/*
 const Switch = withStyles((theme) => ({
   root: {
     width: 44,
@@ -81,11 +82,12 @@ const Switch = withStyles((theme) => ({
     {...props}
   />
 ));
+*/
 
 const WalletDetails = () => {
   const classes = useStyles();
   const {
-    name, emoji, accountId, principalId,
+    name, emoji, accountId, principalId, walletNumber,
   } = useSelector((state) => state.wallet);
   const { navigator } = useRouter();
   const { t } = useTranslation();
@@ -93,17 +95,12 @@ const WalletDetails = () => {
   const [walletName, setWalletName] = useState(name);
   const [currentEmoji, setCurrentEmoji] = useState(emoji);
   const [edit, setEdit] = useState(false);
-  const [publicAccount, setPublicAccount] = useState(true);
+  // const [publicAccount, setPublicAccount] = useState(true);
   const [expand, setExpand] = useState(false);
 
-  const handleChangePublicAccount = (event) => setPublicAccount(event.target.checked);
+  // const handleChangePublicAccount = (event) => setPublicAccount(event.target.checked);
 
   const textInput = useRef(null);
-
-  useEffect(() => {
-    setCurrentEmoji(emoji);
-    setWalletName(name);
-  }, [name, emoji]);
 
   const dispatch = useDispatch();
 
@@ -129,7 +126,7 @@ const WalletDetails = () => {
       {
         type: HANDLER_TYPES.EDIT_PRINCIPAL,
         params: {
-          walletNumber: 0,
+          walletNumber,
           name: walletName,
           emoji: currentEmoji,
         },
@@ -185,7 +182,7 @@ const WalletDetails = () => {
             >
               <UserIcon
                 style={{ margin: '0 12px' }}
-                big
+                size="big"
                 icon={currentEmoji}
                 onClick={() => (edit ? setOpenEmojis(!openEmojis) : null)}
                 edit={edit}
@@ -242,7 +239,9 @@ const WalletDetails = () => {
               />
             )
           }
-          <Grid item xs={12}>
+          {
+            /*
+            <Grid item xs={12}>
             <div className={clsx(
               classes.accountContainer,
               publicAccount ? classes.publicAccount : classes.privateAccount,
@@ -263,7 +262,8 @@ const WalletDetails = () => {
               />
             </div>
           </Grid>
-
+            */
+          }
           <Grid item xs={12}>
             <div
               className={classes.viewMore}

@@ -28,7 +28,24 @@ export default makeStyles({
   menu: {
     zIndex: 1,
   },
+  drawer: {
+    zIndex: '500 !important',
+  },
+  container: {
+    paddingTop: 108,
+  },
+  myAccounts: {
+    padding: '16px 0px 8px 16px',
+  },
   paper: {
-    borderRadius: 10,
+    width: 293,
+  },
+  accountContainer: {
+    maxHeight: 155,
+    overflow: 'auto',
+    paddingBottom: 0,
+  },
+  settingContainer: {
+    paddingTop: 0,
   },
 });

@@ -31,6 +31,8 @@ const theme = createTheme({
         'linear-gradient(94.95deg, rgba(255, 231, 1, 0.5) -1.41%, rgba(250, 81, 211, 0.5) 34.12%, rgba(16, 217, 237, 0.5) 70.19%, rgba(82, 255, 83, 0.5) 101.95%)',
       mainGradient:
         'linear-gradient(94.95deg, #FFE701 -1.41%, #FA51D3 34.12%, #10D9ED 70.19%, #52FF53 101.95%)',
+      darkGradient:
+        'linear-gradient(94.95deg, rgba(255, 231, 1, .2) -1.41%, rgba(250, 81, 211, 0.2) 34.12%, rgba(16, 217, 237, .2) 70.19%, rgba(82, 255, 83, .2) 101.95%)',
     },
     danger: {
       light: 'rgba(220, 38, 38, 0.5)',

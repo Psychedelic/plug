@@ -29,8 +29,21 @@ const ActionDialog = ({
         {content}
 
         <div className={classes.buttonContainer}>
-          <Button variant="default" value="Cancel" onClick={onClose} style={{ width: '48%' }} />
-          <Button variant={buttonVariant} value={button} onClick={onClick} style={{ width: '48%' }} />
+          <Button
+            variant="default"
+            value="Cancel"
+            onClick={onClose}
+            style={{ width: '96%' }}
+            fullWidth
+          />
+          <Button
+            variant={buttonVariant}
+            value={button}
+            onClick={onClick}
+            style={{ width: '96%' }}
+            wrapperStyle={{ textAlign: 'right' }}
+            fullWidth
+          />
         </div>
       </DialogContent>
     </Dialog>
