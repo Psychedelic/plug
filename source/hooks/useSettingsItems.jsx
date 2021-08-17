@@ -22,6 +22,12 @@ const useSettingsItems = () => {
       onClick: (() => navigator.navigate('seed-phrase')),
     },
     {
+      image: KeyIcon,
+      name: t('settings.exportIdentity'),
+      description: t('settings.exportIdentityDescription'),
+      onClick: (() => navigator.navigate('export-identity')),
+    },
+    {
       image: HelpIcon,
       name: t('profile.help'),
       description: t('settings.helpDescription'),

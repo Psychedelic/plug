@@ -33,12 +33,12 @@ const Dialog = ({
       PaperProps={{ className: classes.paper }}
     >
       {title && (
-      <DialogTitle disableTypography>
-        <span className={classes.title}>{title}</span>
-        <IconButton className={classes.closeButton} onClick={handleClose}>
-          <CloseIcon />
-        </IconButton>
-      </DialogTitle>
+        <DialogTitle disableTypography>
+          <span className={classes.title}>{title}</span>
+          <IconButton className={classes.closeButton} onClick={handleClose}>
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
       )}
       <MenuList>
         {
@@ -46,12 +46,10 @@ const Dialog = ({
             ? items.map((item, index) => (
               <MenuItem
                 key={index.toString()}
-                name={item.name}
-                image={item.image}
                 onClick={() => handleItemClick(item)}
                 border={index !== items.length - 1}
                 size="medium"
-                disabled={item.disabled}
+                {...item}
               />
             ))
             : component

@@ -64,6 +64,7 @@ export const HANDLER_TYPES = {
   ADD_CUSTOM_TOKEN: 'add-custom-token',
   CREATE_PRINCIPAL: 'create-principal',
   SET_CURRENT_PRINCIPAL: 'set-current-principal',
+  GET_PEM_FILE: 'get-pem-file',
 };
 
 export const sendMessage = (args, callback) => {
@@ -159,4 +160,6 @@ export const getKeyringHandler = (type, keyring) => ({
         return { error: e.message };
       }
     },
+  [HANDLER_TYPES.GET_PEM_FILE]:
+    async (walletNumber) => keyring.getPemFile(walletNumber),
 }[type]);

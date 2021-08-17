@@ -68,7 +68,8 @@
     "principalId": "Principal ID",
     "sign": "Sign",
     "name": "Name",
-    "create": "Create"
+    "create": "Create",
+    "account": "Account"
   },
   "apps": {
     "title": "Connected Apps",
@@ -107,7 +108,10 @@
     "seedPhraseDescription": "View and backup your secret phrase.",
     "resetAccount": "Reset Account",
     "resetAccountDescription": "Reset all Transactions and Linked Apps.",
-    "createAccountTitle": "Create Account"
+    "createAccountTitle": "Create Account",
+    "helpDescription": "Resources to better understand Plug.",
+    "exportIdentity": "Export DFX Identity",
+    "exportIdentityDescription": "Get a pem file to use in DFX."
   },
   "walletDetails": {
     "title": "Account Details",
@@ -267,5 +271,15 @@
   },
   "whitelist": {
     "title": "wants to allow calls to the folowing canisters:"
+  },
+  "exportIdentity": {
+    "title": "Export DFX Identity",
+    "checkbox": "I will be safe with my DFX identity.",
+    "download": "Download .pem file",
+    "runCommand": "Run the following command",
+    "runCommandDescription": "In order to use your account in DFX, run the following command, using the .pem file download as route.",
+    "dfxImport": "dfx identity import <identity name> <route to pem>",
+    "dfxUse": "dfx identity use <identity name>",
+    "selectAccount": "Select Account"
   }
 }

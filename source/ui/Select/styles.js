@@ -28,4 +28,9 @@ export default makeStyles((theme) => ({
   alignRight: {
     marginLeft: 'auto',
   },
+  textContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
 }));
