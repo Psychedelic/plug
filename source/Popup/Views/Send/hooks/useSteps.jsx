@@ -44,9 +44,10 @@ const useSteps = () => {
   const handleChangeDestination = (value) => setDestination(value);
   const handleSendClick = () => {
     const e8s = parseInt(amount * E8S_PER_ICP, 10);
+    console.log('selectedAsset', selectedAsset);
     sendMessage({
       type: HANDLER_TYPES.SEND_TOKEN,
-      params: { to: address, amount: e8s },
+      params: { to: address, amount: e8s, canisterId: selectedAsset?.canisterId },
     }, (response) => {
       const { error } = response || {};
       if (error) {

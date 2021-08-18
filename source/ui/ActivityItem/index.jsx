@@ -181,7 +181,7 @@ const ActivityItem = ({
       <div className={classes.rightContainer}>
         <div>
           <Typography variant="h5">
-            <NumberFormat value={showSwap ? swapData.amount : amount} displayType="text" thousandSeparator="," suffix={` ${showSwap ? swapData.currency.value : value}`} decimalScale={5} />
+            <NumberFormat value={showSwap ? swapData.amount : amount} displayType="text" thousandSeparator="," suffix={` ${showSwap ? swapData.currency.name : symbol}`} decimalScale={5} />
           </Typography>
           <Typography variant="subtitle2">
             <NumberFormat value={showSwap ? swapData.value : value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" decimalScale={2} />

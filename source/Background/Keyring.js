@@ -43,12 +43,15 @@ const formatAssetBySymbol = (_amount, symbol, icpPrice) => {
 };
 
 const formatAssets = (balances, icpPrice) => {
-  const mappedAssets = balances.map(({ amount, name, symbol }) => {
+  const mappedAssets = balances.map(({
+    amount, name, symbol, canisterId,
+  }) => {
     const asset = formatAssetBySymbol(amount, symbol, icpPrice);
     return {
       ...asset,
       name,
       symbol,
+      canisterId,
     };
   });
   return mappedAssets;
@@ -134,11 +137,12 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: error.message };
     }
   },
-  [HANDLER_TYPES.SEND_TOKEN]: async ({ to, amount }) => {
+  [HANDLER_TYPES.SEND_TOKEN]: async ({ to, amount, canisterId }) => {
     try {
-      const height = await keyring.send(to, BigInt(amount));
+      const height = await keyring.send(to, BigInt(amount), canisterId);
       return { height: parseInt(height.toString(), 10) };
     } catch (error) {
+      console.log('send error', error);
       return { error: error.message, height: null };
     }
   },
