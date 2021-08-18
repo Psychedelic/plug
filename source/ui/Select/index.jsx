@@ -7,19 +7,34 @@ import InputBase from '../InputBase';
 import useStyles from './styles';
 
 const Select = ({
-  image, name, shadow, onClick, text,
+  image, name, shadow, onClick, text, icon,
 }) => {
   const classes = useStyles();
   return (
     <InputBase>
       <div className={classes.root} onClick={onClick}>
-        <img alt={name} src={image} className={clsx(classes.icon, shadow && classes.iconShadow)} />
-        <Typography variant="h4">{name}</Typography>
         {
-          text
-            ? <Typography variant="subtitle2" className={classes.alignRight}>{text}</Typography>
-            : <img src={ChevronDown} className={classes.alignRight} />
+          icon
         }
+        {
+          image
+          && (
+          <img
+            alt={name}
+            src={image}
+            className={clsx(classes.icon, shadow && classes.iconShadow)}
+          />
+          )
+        }
+        <div className={classes.textContainer}>
+          <Typography variant="h4">{name}</Typography>
+          {
+            text
+            && <Typography variant="subtitle2" style={{ marginTop: 4 }}>{text}</Typography>
+          }
+        </div>
+
+        <img src={ChevronDown} className={classes.alignRight} />
       </div>
     </InputBase>
   );
@@ -31,6 +46,7 @@ Select.defaultProps = {
   shadow: false,
   text: null,
   onClick: null,
+  icon: null,
 };
 
 Select.propTypes = {
@@ -39,4 +55,5 @@ Select.propTypes = {
   shadow: PropTypes.bool,
   onClick: PropTypes.func,
   text: PropTypes.string,
+  icon: PropTypes.node,
 };

@@ -84,6 +84,9 @@ const Switch = withStyles((theme) => ({
 ));
 */
 
+const EXPANDED_HEIGHT = 667;
+const SHRINKED_HEIGHT = 460;
+
 const WalletDetails = () => {
   const classes = useStyles();
   const {
@@ -107,7 +110,7 @@ const WalletDetails = () => {
   const handleChange = (e) => setWalletName(e.target.value);
 
   const handleChangeExpand = () => {
-    const height = expand ? 460 : 667;
+    const height = expand ? SHRINKED_HEIGHT : EXPANDED_HEIGHT;
     extension.windows.update(
       extension.windows.WINDOW_ID_CURRENT,
       {
