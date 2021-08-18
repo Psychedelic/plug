@@ -13,18 +13,26 @@ import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import useStyles from '../styles';
 
 const cyclesToTC = cycles => cycles ? cycles / 1000000000000 : 0; // eslint-disable-line
-const parseXTCInfo = (info) => ({
-  ...info?.token,
-  amount: cyclesToTC(info.amount),
-  image: XTCIcon,
-  price: cyclesToTC(info.amount) * USD_PER_TC,
-});
+
+const parseTokenBySymbol = (token) => ({
+  XTC: {
+    ...token?.token,
+    amount: cyclesToTC(token.amount),
+    image: XTCIcon,
+    price: cyclesToTC(token.amount) * USD_PER_TC,
+  },
+  WTC: {
+    ...token?.token,
+    amount: cyclesToTC(token.amount),
+    price: cyclesToTC(token.amount) * USD_PER_TC,
+  },
+})[token?.token?.symbol] || token;
 
 const Step2 = ({ selectedToken, handleClose }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
-  const displayToken = selectedToken?.token?.symbol === 'XTC' ? parseXTCInfo(selectedToken) : selectedToken;
+  const displayToken = parseTokenBySymbol(selectedToken);
   const registerToken = () => {
     setLoading(true);
     sendMessage({
@@ -48,9 +56,11 @@ const Step2 = ({ selectedToken, handleClose }) => {
               <Typography variant="h4">{displayToken.name}</Typography>
               <Typography variant="subtitle1"><AssetFormat value={displayToken?.amount} asset={displayToken?.symbol} /></Typography>
             </div>
-            <div className={classes.rightContainer}>
-              <Typography variant="h4"><USDFormat value={displayToken?.price} /></Typography>
-            </div>
+            {displayToken.price && (
+              <div className={classes.rightContainer}>
+                <Typography variant="h4"><USDFormat value={displayToken?.price} /></Typography>
+              </div>
+            )}
           </div>
         </Grid>
         <Grid item xs={12}>
