@@ -1,6 +1,7 @@
 import HelpIcon from '@assets/icons/help.png';
 import KeyIcon from '@assets/icons/settings/old-key.svg';
 import NotebookIcon from '@assets/icons/settings/notebook.svg';
+import ArrowUpIcon from '@assets/icons/settings/arrow-up.svg';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from '@components/Router';
 
@@ -22,7 +23,7 @@ const useSettingsItems = () => {
       onClick: (() => navigator.navigate('seed-phrase')),
     },
     {
-      image: KeyIcon,
+      image: ArrowUpIcon,
       name: t('settings.exportIdentity'),
       description: t('settings.exportIdentityDescription'),
       onClick: (() => navigator.navigate('export-identity')),
