@@ -191,8 +191,7 @@
     "sendXtc": "Send Cycles (keep as XTC)",
     "sendCycles": "Send Raw Cycles (convert XTC)",
     "choose": "Select one",
-    "xtcModalText": "If you want to send cycles to a canister to top/refill it and pay for its computation, select Raw Cycles. Otherwise, pick 'keep as XTC' if you want the canister to own a balance of tokenized cycles (XTC) on the XTC ledger.",
-    "xtcModalButton": "Learn more about XTC",
+    "xtcModalText": "If you want to send cycles to a canister to top/refill it and pay for its computation, select Raw Cycles. Otherwise, pick 'keep as XTC' if you want the canister to own a balance of tokenized cycles (XTC).",
     "xtcModalTitle": "XTC vs Cycles"
   },
   "transfer": {
