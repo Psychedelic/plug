@@ -7,12 +7,14 @@ import BackIcon from '@assets/icons/back.svg';
 import { setAssets, setTransactions } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { CURRENCIES, E8S_PER_ICP, USD_PER_TC } from '@shared/constants/currencies';
-import { validateAccountId, validatePrincipalId } from '@shared/utils/ids';
+import { validateAccountId, validateCanisterId, validatePrincipalId } from '@shared/utils/ids';
 import { ADDRESS_TYPES, DEFAULT_FEE } from '@shared/constants/addresses';
 import Step1 from '../Steps/Step1';
-import Step2a from '../Steps/Step2a';
-import Step2b from '../Steps/Step2b';
+// import Step2a from '../Steps/Step2a';
+// import Step2b from '../Steps/Step2b';
+import Step2c from '../Steps/Step2c';
 import Step3 from '../Steps/Step3';
+import XTC_OPTIONS from '../constants/xtc';
 
 const useSteps = () => {
   const [step, setStep] = useState(0);
@@ -30,8 +32,10 @@ const useSteps = () => {
   const [addressInfo, setAddressInfo] = useState({ isValid: null, type: null });
   const [trxComplete, setTrxComplete] = useState(false);
 
-  const [destination, setDestination] = useState('dank');
+  const [destination, setDestination] = useState(XTC_OPTIONS.SEND);
   const [sendError, setError] = useState(false);
+
+  const [sendingXTCtoCanister, setSendingXTCtoCanister] = useState(false);
 
   const handleChangeAddress = (value) => setAddress(value.trim());
   const handleChangeAddressInfo = (value) => setAddressInfo(value);
@@ -42,25 +46,31 @@ const useSteps = () => {
   const handleChangeStep = (index) => setStep(index);
   const handleChangeAmount = (value) => setAmount(value);
   const handleChangeDestination = (value) => setDestination(value);
+
   const handleSendClick = () => {
     const e8s = parseInt(amount * E8S_PER_ICP, 10);
-    console.log('selectedAsset', selectedAsset);
-    sendMessage({
-      type: HANDLER_TYPES.SEND_TOKEN,
-      params: { to: address, amount: e8s, canisterId: selectedAsset?.canisterId },
-    }, (response) => {
-      const { error } = response || {};
-      if (error) {
-        setError(true);
-      } else {
-        setTrxComplete(true);
-      }
-      sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: {} },
-        (transactions) => {
-          dispatch(setTransactions({ ...transactions, icpPrice }));
-          setTransaction(transactions?.transactions[0]);
-        });
-    });
+
+    if (sendingXTCtoCanister && destination === XTC_OPTIONS.BURN) {
+      /* eslint-disable-next-line no-console */
+      console.log('burned 🔥');
+    } else {
+      sendMessage({
+        type: HANDLER_TYPES.SEND_TOKEN,
+        params: { to: address, amount: e8s, canisterId: selectedAsset?.canisterId },
+      }, (response) => {
+        const { error } = response || {};
+        if (error) {
+          setError(true);
+        } else {
+          setTrxComplete(true);
+        }
+        sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: {} },
+          (transactions) => {
+            dispatch(setTransactions({ ...transactions, icpPrice }));
+            setTransaction(transactions?.transactions[0]);
+          });
+      });
+    }
   };
 
   useEffect(() => {
@@ -78,6 +88,8 @@ const useSteps = () => {
         isValid = false;
       }
       handleChangeAddressInfo({ isValid, type });
+
+      setSendingXTCtoCanister(selectedAsset?.symbol === 'XTC' && validateCanisterId(address));
     }
   }, [address, selectedAsset]);
 
@@ -183,13 +195,15 @@ const useSteps = () => {
 
   const rightButton = <LinkButton value={t('common.cancel')} onClick={() => navigator.navigate('home')} />;
 
+  /*
   const step2a = {
     component: <Step2a
       destination={destination}
       handleChangeDestination={handleChangeDestination}
       handleChangeStep={() => handleChangeStep(2)}
     />,
-    left: <LinkButton value={t('common.back')} onClick={() => { convertToSecondaryAsset(); handleChangeStep(0); }} startIcon={BackIcon} />,
+    left: <LinkButton value={t('common.back')}
+    onClick={() => { convertToSecondaryAsset(); handleChangeStep(0); }} startIcon={BackIcon} />,
     right: rightButton,
     center: `${t('send.review')}`,
   };
@@ -198,23 +212,34 @@ const useSteps = () => {
     component: <Step2b
       handleChangeStep={() => handleChangeStep(2)}
     />,
-    left: <LinkButton value={t('common.back')} onClick={() => { convertToSecondaryAsset(); handleChangeStep(0); }} startIcon={BackIcon} />,
+    left: <LinkButton value={t('common.back')}
+    onClick={() => { convertToSecondaryAsset(); handleChangeStep(0); }} startIcon={BackIcon} />,
     right: rightButton,
     center: `${t('send.warning')}`,
+  };
+  */
+
+  const step2c = {
+    component: <Step2c
+      handleChangeStep={() => handleChangeStep(2)}
+      destination={destination}
+      handleChangeDestination={handleChangeDestination}
+    />,
+    left: <LinkButton value={t('common.back')} onClick={() => { convertToSecondaryAsset(); handleChangeStep(0); }} startIcon={BackIcon} />,
+    right: rightButton,
+    center: `${t('send.choose')}`,
   };
 
   let step2;
 
-  if (selectedAsset?.symbol === 'XTC') {
-    step2 = step2a;
-  } else if (selectedAsset?.symbol === 'ICP') {
-    step2 = step2b;
+  if (sendingXTCtoCanister) {
+    step2 = step2c;
   }
 
   const handleNextStep = () => {
     convertToPrimaryAsset();
 
-    if (addressInfo.type === 'canister') {
+    if (sendingXTCtoCanister) {
       handleChangeStep(1);
     } else {
       handleChangeStep(2);
@@ -222,7 +247,7 @@ const useSteps = () => {
   };
 
   const handlePreviousStep = () => {
-    if (addressInfo.type === 'canister') {
+    if (sendingXTCtoCanister) {
       handleChangeStep(1);
     } else {
       convertToSecondaryAsset();

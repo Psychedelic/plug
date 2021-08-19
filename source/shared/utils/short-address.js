@@ -1,4 +1,4 @@
-import { validateAccountId } from "./ids";
+import { validateAccountId } from './ids';
 
 const defaultConfig = {
   leftSize: 5,

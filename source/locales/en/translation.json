@@ -186,7 +186,14 @@
     "viewTxOnICRocks": "View tx on ic.rocks",
     "doNotClose": "Don't click away from this screen for a few seconds while your transaction is being sent to the network. If you do your tx won't be processed.",
     "plugChill": "Chill for a sec...",
-    "plugLetsGo": "Let's go!! 😎"
+    "plugLetsGo": "Let's go!! 😎",
+    "xtcCanisterDetected": "We detected the recipient ID you entered is a Canister, please confirm what you want to send.",
+    "sendXtc": "Send Cycles (keep as XTC)",
+    "sendCycles": "Send Raw Cycles (convert XTC)",
+    "choose": "Select one",
+    "xtcModalText": "If you want to send cycles to a canister to top/refill it and pay for its computation, select Raw Cycles. Otherwise, pick 'keep as XTC' if you want the canister to own a balance of tokenized cycles (XTC) on the XTC ledger.",
+    "xtcModalButton": "Learn more about XTC",
+    "xtcModalTitle": "XTC vs Cycles"
   },
   "transfer": {
     "details": "Details",
