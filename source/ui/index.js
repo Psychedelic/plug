@@ -35,3 +35,4 @@ export { default as ActionCard } from './ActionCard';
 export { default as Alert } from './Alert';
 export { default as WhitelistContainer } from './WhitelistContainer';
 export { default as WhitelistItem } from './WhitelistItem';
+export { default as TokenIcon } from './TokenIcon';

@@ -38,10 +38,9 @@ const formatAssetBySymbol = (_amount, symbol, icpPrice) => {
     WTC: {
       amount: amount / CYCLES_PER_TC,
       value: (amount * USD_PER_TC) / CYCLES_PER_TC,
-      image: TOKEN_IMAGES.ICP, // TODO: Add token images
     },
     default: { amount, value: amount },
-  })[symbol || 'default'] || { amount, value: amount, image: TOKEN_IMAGES.ICP };
+  })[symbol || 'default'] || { amount, value: amount };
 };
 
 const formatAssets = (balances, icpPrice) => {

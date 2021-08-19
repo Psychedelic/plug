@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ExchangeIcon from '@assets/icons/exchange-arrows.svg';
 import InputBase from '../InputBase';
 import useStyles from './styles';
+import { TokenIcon } from '@ui';
 
 const NumberFormatCustom = (props) => {
   const {
@@ -55,7 +56,7 @@ const MultiInput = ({
   return (
     <InputBase>
       <div className={classes.leftContainer} onClick={onClick}>
-        <img src={image} className={classes.icon} />
+        <TokenIcon image={image} className={classes.icon} symbol="TODO" />
         <Typography variant="h4">{name}</Typography>
         <img src={ChevronDown} className={classes.alignRight} />
       </div>

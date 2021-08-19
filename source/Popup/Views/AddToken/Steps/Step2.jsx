@@ -5,7 +5,7 @@ import { Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import XTCIcon from '@assets/icons/XTC.svg';
 import {
-  Button, Container, USDFormat, AssetFormat,
+  Button, Container, USDFormat, AssetFormat, TokenIcon,
 
 } from '@ui';
 import { USD_PER_TC } from '@shared/constants/currencies';
@@ -51,7 +51,11 @@ const Step2 = ({ selectedToken, handleClose }) => {
         </Grid>
         <Grid item xs={12}>
           <div className={classes.confirmToken}>
-            <img src={displayToken.image} className={classes.tokenImage} />
+            <TokenIcon
+              image={displayToken.image}
+              className={classes.tokenImage}
+              symbol={displayToken?.symbol}
+            />
             <div className={classes.leftContainer}>
               <Typography variant="h4">{displayToken.name}</Typography>
               <Typography variant="subtitle1"><AssetFormat value={displayToken?.amount} asset={displayToken?.symbol} /></Typography>

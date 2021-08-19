@@ -11,6 +11,7 @@ import {
   USDFormat,
   Dialog,
   LinkButton,
+  TokenIcon,
 } from '@ui';
 import { Typography } from '@material-ui/core';
 import AccountImg from '@assets/icons/account.svg';
@@ -94,7 +95,7 @@ const Step3 = ({
 
         <Grid item xs={12} style={{ textAlign: 'center' }}>
           <div className={classes.asset}>
-            <img src={asset.image} className={classes.image} />
+            <TokenIcon image={asset.image} className={classes.image} symbol={asset.symbol} />
             <Typography variant="h1">
               <AssetFormat value={amount} asset={asset?.symbol} />
             </Typography>
