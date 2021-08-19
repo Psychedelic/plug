@@ -61,10 +61,6 @@ const Step2c = ({ destination, handleChangeDestination, handleChangeStep }) => {
                 onClick={() => setOpen(false)}
                 fullWidth
               />
-              <LinkButton
-                value={t('send.xtcModalButton')}
-                onClick={() => null}
-              />
             </div>
           )}
         />
