@@ -6,7 +6,7 @@ import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';
 import { setAssets, setTransactions } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { CURRENCIES, E8S_PER_ICP, USD_PER_TC } from '@shared/constants/currencies';
+import { CURRENCIES, CYCLES_PER_TC, E8S_PER_ICP, USD_PER_TC } from '@shared/constants/currencies';
 import { validateAccountId, validateCanisterId, validatePrincipalId } from '@shared/utils/ids';
 import { ADDRESS_TYPES, DEFAULT_FEE } from '@shared/constants/addresses';
 import Step1 from '../Steps/Step1';
@@ -46,24 +46,32 @@ const useSteps = () => {
   const handleChangeStep = (index) => setStep(index);
   const handleChangeAmount = (value) => setAmount(value);
   const handleChangeDestination = (value) => setDestination(value);
+  const parseSendResponse = (response) => {
+    const { error } = response || {};
+    if (error) {
+      setError(true);
+    } else {
+      setTrxComplete(true);
+    }
+  };
 
   const handleSendClick = () => {
-    const e8s = parseInt(amount * E8S_PER_ICP, 10);
-
+    const sendAmount = {
+      ICP: parseInt(amount * E8S_PER_ICP, 10),
+      XTC: parseInt(amount * CYCLES_PER_TC, 10),
+      WTC: parseInt(amount * CYCLES_PER_TC, 10),
+    }[selectedAsset?.symbol] || amount;
     if (sendingXTCtoCanister && destination === XTC_OPTIONS.BURN) {
-      console.log('burnnn');
+      sendMessage({
+        type: HANDLER_TYPES.BURN_XTC,
+        params: { to: address, amount: sendAmount },
+      }, parseSendResponse);
     } else {
-      console.log('selectedAsset', selectedAsset);
       sendMessage({
         type: HANDLER_TYPES.SEND_TOKEN,
-        params: { to: address, amount: e8s, canisterId: selectedAsset?.canisterId },
+        params: { to: address, amount: sendAmount, canisterId: selectedAsset?.canisterId },
       }, (response) => {
-        const { error } = response || {};
-        if (error) {
-          setError(true);
-        } else {
-          setTrxComplete(true);
-        }
+        parseSendResponse(response);
         if (!selectedAsset) {
           sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: {} },
             (transactions) => {

@@ -39,3 +39,4 @@ export const currencyPropTypes = {
   value: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
 };
+export const CYCLES_PER_TC = 1_000_000_000_000;

@@ -1,4 +1,6 @@
-import { E8S_PER_ICP, TOKEN_IMAGES, USD_PER_TC } from '@shared/constants/currencies';
+import {
+  E8S_PER_ICP, TOKEN_IMAGES, USD_PER_TC, CYCLES_PER_TC,
+} from '@shared/constants/currencies';
 import extension from 'extensionizer';
 
 export const NANOS_PER_SECOND = 1_000_000;
@@ -29,13 +31,13 @@ const formatAssetBySymbol = (_amount, symbol, icpPrice) => {
       image: TOKEN_IMAGES.ICP,
     },
     XTC: {
-      amount: amount / 1_000_000_000_000,
-      value: (amount * USD_PER_TC) / 1_000_000_000_000,
+      amount: amount / CYCLES_PER_TC,
+      value: (amount * USD_PER_TC) / CYCLES_PER_TC,
       image: TOKEN_IMAGES.XTC,
     },
     WTC: {
-      amount: amount / 1_000_000_000_000,
-      value: (amount * USD_PER_TC) / 1_000_000_000_000,
+      amount: amount / CYCLES_PER_TC,
+      value: (amount * USD_PER_TC) / CYCLES_PER_TC,
       image: TOKEN_IMAGES.ICP, // TODO: Add token images
     },
     default: { amount, value: amount },
@@ -74,6 +76,7 @@ export const HANDLER_TYPES = {
   ADD_CUSTOM_TOKEN: 'add-custom-token',
   CREATE_PRINCIPAL: 'create-principal',
   SET_CURRENT_PRINCIPAL: 'set-current-principal',
+  BURN_XTC: 'burn-xtc',
 };
 
 export const sendMessage = (args, callback) => {
@@ -142,7 +145,6 @@ export const getKeyringHandler = (type, keyring) => ({
       const height = await keyring.send(to, BigInt(amount), canisterId);
       return { height: parseInt(height.toString(), 10) };
     } catch (error) {
-      console.log('send error', error);
       return { error: error.message, height: null };
     }
   },
@@ -166,6 +168,15 @@ export const getKeyringHandler = (type, keyring) => ({
       try {
         const response = await keyring.registerToken(canisterId);
         return response;
+      } catch (e) {
+        return { error: e.message };
+      }
+    },
+  [HANDLER_TYPES.BURN_XTC]:
+    async ({ to, amount }) => {
+      try {
+        const response = await keyring.burnXTC({ to, amount });
+        return recursiveParseBigint(response);
       } catch (e) {
         return { error: e.message };
       }
