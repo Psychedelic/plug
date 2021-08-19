@@ -6,7 +6,9 @@ import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';
 import { setAssets, setTransactions } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { CURRENCIES, CYCLES_PER_TC, E8S_PER_ICP, USD_PER_TC } from '@shared/constants/currencies';
+import {
+  CURRENCIES, CYCLES_PER_TC, E8S_PER_ICP, USD_PER_TC,
+} from '@shared/constants/currencies';
 import { validateAccountId, validateCanisterId, validatePrincipalId } from '@shared/utils/ids';
 import { ADDRESS_TYPES, DEFAULT_FEE } from '@shared/constants/addresses';
 import Step1 from '../Steps/Step1';
