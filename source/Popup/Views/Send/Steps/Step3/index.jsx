@@ -17,7 +17,7 @@ import AccountImg from '@assets/icons/account.svg';
 import ArrowImg from '@assets/icons/send-arrow.png';
 import shortAddress from '@shared/utils/short-address';
 import PlugController from '@psychedelic/plug-controller';
-import { Principal } from '@dfinity/agent';
+import { Principal } from '@dfinity/principal';
 import { Info } from 'react-feather';
 import { icIdsUrl } from '@shared/constants/urls';
 import browser from 'webextension-polyfill';

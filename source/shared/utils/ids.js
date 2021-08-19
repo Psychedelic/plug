@@ -1,4 +1,4 @@
-import { Principal } from '@dfinity/agent';
+import { Principal } from '@dfinity/principal';
 import { ALPHANUM_REGEX } from '../constants/addresses';
 
 export const validatePrincipalId = (text) => {
