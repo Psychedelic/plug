@@ -16,6 +16,7 @@ import Deposit from './Views/Deposit';
 import Send from './Views/Send';
 import Contacts from './Views/Contacts';
 import AddToken from './Views/AddToken';
+import ExportIdentity from './Views/ExportIdentity';
 import Login from './Views/Login';
 import ErrorScreen from './Views/Error';
 
@@ -33,6 +34,7 @@ const Popup = ({ storage, initialRoute }) => (
     <Route name="contacts" component={Contacts} />
     <Route name="error" component={ErrorScreen} />
     <Route name="add-token" component={AddToken} />
+    <Route name="export-identity" component={ExportIdentity} />
   </Router>
 );
 

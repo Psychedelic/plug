@@ -50,10 +50,11 @@ export default makeStyles((theme) => ({
   },
   codeContainer: {
     fontWeight: 700,
-    fontSize: '14px',
+    fontSize: '13px',
     lineHeight: '20px',
     color: '#FFFFFF',
     marginTop: '12px',
+    whiteSpace: 'pre-line',
   },
   '@keyframes copied': {
     '0% 100%': {

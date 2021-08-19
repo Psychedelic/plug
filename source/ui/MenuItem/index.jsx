@@ -17,6 +17,7 @@ const MenuItem = ({
   icon,
   selected,
   endIcon,
+  endText,
 }) => {
   const classes = useStyles();
 
@@ -36,9 +37,9 @@ const MenuItem = ({
       {
         image
         && (
-        <ListItemIcon className={classes.icon}>
-          <img src={image} className={clsx(size === 'large' ? classes.bigImage : classes.smallImage, alignLeft && classes.alignLeft)} />
-        </ListItemIcon>
+          <ListItemIcon className={classes.icon}>
+            <img src={image} className={clsx(size === 'large' ? classes.bigImage : classes.smallImage, alignLeft && classes.alignLeft)} />
+          </ListItemIcon>
         )
       }
       <Typography variant={size === 'small' ? 'h6' : 'h5'} className={classes.text}>{name}</Typography>
@@ -48,6 +49,14 @@ const MenuItem = ({
           <div className={classes.comingSoon}>
             {endIcon}
           </div>
+        )
+      }
+      {
+        endText
+        && (
+        <div className={classes.comingSoon}>
+          <Typography variant="subtitle2">{endText}</Typography>
+        </div>
         )
       }
 
@@ -65,6 +74,7 @@ MenuItem.defaultProps = {
   icon: null,
   endIcon: null,
   selected: false,
+  endText: null,
 };
 
 MenuItem.propTypes = {
@@ -78,4 +88,5 @@ MenuItem.propTypes = {
   icon: PropTypes.node,
   endIcon: PropTypes.node,
   selected: PropTypes.bool,
+  endText: PropTypes.string,
 };
