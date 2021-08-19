@@ -6,13 +6,17 @@ import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';
 import { setAssets, setTransactions } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { CURRENCIES, E8S_PER_ICP } from '@shared/constants/currencies';
-import { validateAccountId, validatePrincipalId } from '@shared/utils/ids';
+import {
+  CURRENCIES, CYCLES_PER_TC, E8S_PER_ICP, USD_PER_TC,
+} from '@shared/constants/currencies';
+import { validateAccountId, validateCanisterId, validatePrincipalId } from '@shared/utils/ids';
 import { ADDRESS_TYPES, DEFAULT_FEE } from '@shared/constants/addresses';
 import Step1 from '../Steps/Step1';
-import Step2a from '../Steps/Step2a';
-import Step2b from '../Steps/Step2b';
+// import Step2a from '../Steps/Step2a';
+// import Step2b from '../Steps/Step2b';
+import Step2c from '../Steps/Step2c';
 import Step3 from '../Steps/Step3';
+import XTC_OPTIONS from '../constants/xtc';
 
 const useSteps = () => {
   const [step, setStep] = useState(0);
@@ -22,46 +26,68 @@ const useSteps = () => {
 
   const { assets, principalId, accountId } = useSelector((state) => state.wallet);
   const { icpPrice } = useSelector((state) => state.icp);
-  const [selectedAsset, setSelectedAsset] = useState(CURRENCIES.get('ICP'));
-  const [amount, setAmount] = useState(null);
+  const [selectedAsset, setSelectedAsset] = useState(assets?.[0] || CURRENCIES.get('ICP'));
+
+  const [amount, setAmount] = useState(0);
   const [transaction, setTransaction] = useState(null);
   const [address, setAddress] = useState(null);
   const [addressInfo, setAddressInfo] = useState({ isValid: null, type: null });
   const [trxComplete, setTrxComplete] = useState(false);
 
-  const [destination, setDestination] = useState('dank');
+  const [destination, setDestination] = useState(XTC_OPTIONS.SEND);
   const [sendError, setError] = useState(false);
+
+  const [sendingXTCtoCanister, setSendingXTCtoCanister] = useState(false);
 
   const handleChangeAddress = (value) => setAddress(value.trim());
   const handleChangeAddressInfo = (value) => setAddressInfo(value);
-  const handleChangeAsset = (value) => setSelectedAsset(value);
+  const handleChangeAsset = (value) => setSelectedAsset({
+    ...value,
+    price: { ICP: icpPrice, XTC: USD_PER_TC, WTC: USD_PER_TC }[value?.symbol] || 1,
+  });
   const handleChangeStep = (index) => setStep(index);
   const handleChangeAmount = (value) => setAmount(value);
   const handleChangeDestination = (value) => setDestination(value);
+  const parseSendResponse = (response) => {
+    const { error } = response || {};
+    if (error) {
+      setError(true);
+    } else {
+      setTrxComplete(true);
+    }
+  };
+
   const handleSendClick = () => {
-    const e8s = parseInt(amount * E8S_PER_ICP, 10);
-    sendMessage({
-      type: HANDLER_TYPES.SEND_ICP,
-      params: { to: address, amount: e8s },
-    }, (response) => {
-      const { error } = response || {};
-      if (error) {
-        setError(true);
-      } else {
-        setTrxComplete(true);
-      }
-      sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: {} },
-        (transactions) => {
-          dispatch(setTransactions({ ...transactions, icpPrice }));
-          setTransaction(transactions?.transactions[0]);
-        });
-    });
+    const sendAmount = {
+      ICP: parseInt(amount * E8S_PER_ICP, 10),
+      XTC: parseInt(amount * CYCLES_PER_TC, 10),
+      WTC: parseInt(amount * CYCLES_PER_TC, 10),
+    }[selectedAsset?.symbol] || amount;
+    if (sendingXTCtoCanister && destination === XTC_OPTIONS.BURN) {
+      sendMessage({
+        type: HANDLER_TYPES.BURN_XTC,
+        params: { to: address, amount: sendAmount },
+      }, parseSendResponse);
+    } else {
+      sendMessage({
+        type: HANDLER_TYPES.SEND_TOKEN,
+        params: { to: address, amount: sendAmount, canisterId: selectedAsset?.canisterId },
+      }, (response) => {
+        parseSendResponse(response);
+        if (!selectedAsset) {
+          sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: {} },
+            (transactions) => {
+              dispatch(setTransactions({ ...transactions, icpPrice }));
+              setTransaction(transactions?.transactions[0]);
+            });
+        }
+      });
+    }
   };
 
   useEffect(() => {
-    if (selectedAsset.name === 'ICP') {
-      setSelectedAsset({ ...selectedAsset, price: icpPrice });
-    } // TODO: Add corresponding sentence for cycles
+    const price = { ICP: icpPrice, XTC: USD_PER_TC, WTC: USD_PER_TC }[selectedAsset?.symbol] || 1;
+    setSelectedAsset({ ...selectedAsset, price });
   }, [icpPrice]);
 
   useEffect(() => {
@@ -70,18 +96,20 @@ const useSteps = () => {
       let isValid = !isUserAddress && (validatePrincipalId(address) || validateAccountId(address));
       const type = validatePrincipalId(address) ? ADDRESS_TYPES.PRINCIPAL : ADDRESS_TYPES.ACCOUNT;
       // check for accountId if cycles selected
-      if (type === ADDRESS_TYPES.ACCOUNT && selectedAsset.id === 'CYCLES') {
+      if (type === ADDRESS_TYPES.ACCOUNT && selectedAsset?.symbol !== 'ICP') {
         isValid = false;
       }
       handleChangeAddressInfo({ isValid, type });
+
+      setSendingXTCtoCanister(selectedAsset?.symbol === 'XTC' && validateCanisterId(address));
     }
   }, [address, selectedAsset]);
 
   const [primaryValue, setPrimaryValue] = useState(
     {
       prefix: '',
-      suffix: ` ${selectedAsset.value}`,
-      price: selectedAsset.price,
+      suffix: ` ${selectedAsset?.symbol}`,
+      value: selectedAsset?.value,
       conversionRate: 1,
     },
   );
@@ -90,11 +118,11 @@ const useSteps = () => {
     {
       prefix: '$',
       suffix: ' USD',
-      price: 1 / selectedAsset.price,
-      conversionRate: selectedAsset.price,
+      value: 1 / selectedAsset?.value,
+      conversionRate: selectedAsset?.value,
     },
   );
-  const available = (assets?.[0]?.amount || 0) - DEFAULT_FEE; // Only ICP supported for now
+  const available = (selectedAsset?.amount || 0) - (selectedAsset?.symbol === 'ICP' ? DEFAULT_FEE : 0); // Only ICP supported for now
   const convertedAmount = Math.max(available * primaryValue.conversionRate, 0);
   const [availableAmount, setAvailableAmount] = useState({
     amount: convertedAmount,
@@ -122,8 +150,9 @@ const useSteps = () => {
     setPrimaryValue(
       {
         prefix: '',
-        suffix: ` ${selectedAsset.value}`,
-        price: selectedAsset.price,
+        suffix: ` ${selectedAsset?.symbol}`,
+        value: selectedAsset?.value,
+        price: selectedAsset?.value / selectedAsset?.amount,
         conversionRate: 1,
       },
     );
@@ -132,8 +161,9 @@ const useSteps = () => {
       {
         prefix: '$',
         suffix: ' USD',
-        price: 1 / selectedAsset.price,
-        conversionRate: selectedAsset.price,
+        price: 1 / selectedAsset?.price,
+        value: 1 / selectedAsset?.value,
+        conversionRate: selectedAsset?.price,
       },
     );
   }, [selectedAsset]);
@@ -177,13 +207,15 @@ const useSteps = () => {
 
   const rightButton = <LinkButton value={t('common.cancel')} onClick={() => navigator.navigate('home')} />;
 
+  /*
   const step2a = {
     component: <Step2a
       destination={destination}
       handleChangeDestination={handleChangeDestination}
       handleChangeStep={() => handleChangeStep(2)}
     />,
-    left: <LinkButton value={t('common.back')} onClick={() => { convertToSecondaryAsset(); handleChangeStep(0); }} startIcon={BackIcon} />,
+    left: <LinkButton value={t('common.back')}
+    onClick={() => { convertToSecondaryAsset(); handleChangeStep(0); }} startIcon={BackIcon} />,
     right: rightButton,
     center: `${t('send.review')}`,
   };
@@ -192,23 +224,34 @@ const useSteps = () => {
     component: <Step2b
       handleChangeStep={() => handleChangeStep(2)}
     />,
-    left: <LinkButton value={t('common.back')} onClick={() => { convertToSecondaryAsset(); handleChangeStep(0); }} startIcon={BackIcon} />,
+    left: <LinkButton value={t('common.back')}
+    onClick={() => { convertToSecondaryAsset(); handleChangeStep(0); }} startIcon={BackIcon} />,
     right: rightButton,
     center: `${t('send.warning')}`,
+  };
+  */
+
+  const step2c = {
+    component: <Step2c
+      handleChangeStep={() => handleChangeStep(2)}
+      destination={destination}
+      handleChangeDestination={handleChangeDestination}
+    />,
+    left: <LinkButton value={t('common.back')} onClick={() => { convertToSecondaryAsset(); handleChangeStep(0); }} startIcon={BackIcon} />,
+    right: rightButton,
+    center: `${t('send.choose')}`,
   };
 
   let step2;
 
-  if (selectedAsset.id === 'CYCLES') {
-    step2 = step2a;
-  } else if (selectedAsset.id === 'ICP') {
-    step2 = step2b;
+  if (sendingXTCtoCanister) {
+    step2 = step2c;
   }
 
   const handleNextStep = () => {
     convertToPrimaryAsset();
 
-    if (addressInfo.type === 'canister') {
+    if (sendingXTCtoCanister) {
       handleChangeStep(1);
     } else {
       handleChangeStep(2);
@@ -216,7 +259,7 @@ const useSteps = () => {
   };
 
   const handlePreviousStep = () => {
-    if (addressInfo.type === 'canister') {
+    if (sendingXTCtoCanister) {
       handleChangeStep(1);
     } else {
       convertToSecondaryAsset();
@@ -233,7 +276,7 @@ const useSteps = () => {
         handleSwapValues={handleSwapValues}
         amount={amount}
         handleChangeAmount={handleChangeAmount}
-        assets={Array.from(CURRENCIES.values())}
+        assets={assets}
         selectedAsset={selectedAsset}
         availableAmount={availableAmount}
         handleChangeAsset={handleChangeAsset}

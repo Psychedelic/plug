@@ -11,9 +11,8 @@ export const CURRENCIES = new Map([
       id: 'ICP',
       name: 'ICP',
       value: 'ICP',
+      symbol: 'ICP',
       image: DfinityImg,
-      price: 120,
-      disabled: false,
     },
   ],
   [
@@ -23,11 +22,16 @@ export const CURRENCIES = new Map([
       name: 'Cycles',
       value: 'XTC',
       image: XTCImg,
+      symbol: 'XTC',
       price: USD_PER_TC,
-      disabled: true,
     },
   ],
 ]);
+
+export const TOKEN_IMAGES = {
+  XTC: XTCImg,
+  ICP: DfinityImg,
+};
 
 export const currencyPropTypes = {
   id: PropTypes.string.isRequired,
@@ -35,3 +39,4 @@ export const currencyPropTypes = {
   value: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
 };
+export const CYCLES_PER_TC = 1_000_000_000_000;

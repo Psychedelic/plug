@@ -1,5 +1,5 @@
-import { Principal } from '@dfinity/agent';
-import { ALPHANUM_REGEX } from '../constants/addresses';
+import { Principal } from '@dfinity/principal';
+import { ALPHANUM_REGEX, CANISTER_MAX_LENGTH } from '../constants/addresses';
 
 export const validatePrincipalId = (text) => {
   try {
@@ -10,3 +10,11 @@ export const validatePrincipalId = (text) => {
 };
 
 export const validateAccountId = (text) => text.length === 64 && ALPHANUM_REGEX.test(text);
+
+export const validateCanisterId = (text) => {
+  try {
+    return text.length <= CANISTER_MAX_LENGTH && validatePrincipalId(text);
+  } catch (e) {
+    return false;
+  }
+};

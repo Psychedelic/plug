@@ -17,14 +17,14 @@ import GenericIcon from '../GenericIcon';
 import SwapIcon from './SwapIcon';
 import useStyles from './styles';
 
-const getTitle = (type, currency, swapData, plug, t) => {
+const getTitle = (type, symbol, swapData, plug, t) => {
   switch (type) {
     case ACTIVITY_TYPES.SEND:
-      return `${t('activity.title.send')} ${currency.name}`;
+      return `${t('activity.title.send')} ${symbol}`;
     case ACTIVITY_TYPES.RECEIVE:
-      return `${t('activity.title.receive')} ${currency.name}`;
+      return `${t('activity.title.receive')} ${symbol}`;
     case ACTIVITY_TYPES.SWAP:
-      return `${t('activity.title.swap')} ${currency.name} ${t('activity.title.for')} ${swapData.currency.name}`;
+      return `${t('activity.title.swap')} ${symbol} ${t('activity.title.for')} ${swapData.currency.name}`;
     case ACTIVITY_TYPES.PLUG:
       return `${t('activity.title.pluggedInto')} ${plug.name}`;
     default:
@@ -67,7 +67,6 @@ const openICRocksTx = (hash) => {
 
 const ActivityItem = ({
   type,
-  currency,
   to,
   from,
   amount,
@@ -77,13 +76,13 @@ const ActivityItem = ({
   plug,
   swapData,
   icon,
-  name,
+  symbol,
   hash,
+  image,
 }) => {
   const { t } = useTranslation();
   const [showSwap, setShowSwap] = useState(false);
   const [hover, setHover] = useState(false);
-
   const handleShowSwap = (show) => { setShowSwap(show); };
 
   const classes = useStyles();
@@ -122,7 +121,7 @@ const ActivityItem = ({
         <img className={classes.image} src={icon} />
         <div className={classes.leftContainer}>
           <Typography variant="h5" className={classes.pluggedTitle}>
-            {`${t('activity.title.pluggedInto')} ${name}`}
+            {`${t('activity.title.pluggedInto')} ${symbol}`}
           </Typography>
           <Typography variant="subtitle2">
             {moment(Date.parse(date)).format('MMMM Do')}
@@ -145,21 +144,21 @@ const ActivityItem = ({
         type === ACTIVITY_TYPES.SWAP
           ? (
             <SwapIcon
-              fromCurrency={currency}
+              fromCurrency={{ symbol, value, amount }}
               toCurrency={swapData.currency}
               handleShowSwap={handleShowSwap}
             />
           )
           : (
             <GenericIcon
-              image={plug?.image || currency.image}
+              image={plug?.image || image}
               type={type}
             />
           )
       }
       <div className={classes.leftContainer}>
         <Typography variant="h5">
-          {getTitle(type, currency, swapData, plug, t)}
+          {getTitle(type, symbol, swapData, plug, t)}
         </Typography>
         <Typography
           variant="subtitle2"
@@ -182,7 +181,7 @@ const ActivityItem = ({
       <div className={classes.rightContainer}>
         <div>
           <Typography variant="h5">
-            <NumberFormat value={showSwap ? swapData.amount : amount} displayType="text" thousandSeparator="," suffix={` ${showSwap ? swapData.currency.value : currency.value}`} decimalScale={5} />
+            <NumberFormat value={showSwap ? swapData.amount : amount} displayType="text" thousandSeparator="," suffix={` ${showSwap ? swapData.currency.name : symbol}`} decimalScale={5} />
           </Typography>
           <Typography variant="subtitle2">
             <NumberFormat value={showSwap ? swapData.value : value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" decimalScale={2} />
@@ -216,19 +215,19 @@ ActivityItem.defaultProps = {
   plug: null,
   swapData: null,
   icon: null,
-  name: null,
   type: ACTIVITY_TYPES.PLUG,
   hash: null,
 };
 
 ActivityItem.propTypes = {
   type: PropTypes.number,
-  currency: PropTypes.shape(currencyPropTypes).isRequired,
   to: PropTypes.string,
   from: PropTypes.string,
   amount: PropTypes.number,
   value: PropTypes.number,
   status: PropTypes.number,
+  symbol: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
   date: PropTypes.oneOfType([
     PropTypes.instanceOf(Date),
     PropTypes.string,
@@ -245,6 +244,5 @@ ActivityItem.propTypes = {
     date: PropTypes.instanceOf(Date).isRequired,
   }),
   icon: PropTypes.string,
-  name: PropTypes.string,
   hash: PropTypes.string,
 };
