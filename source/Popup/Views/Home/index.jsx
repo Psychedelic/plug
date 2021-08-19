@@ -63,7 +63,7 @@ const Home = () => {
 
   return (
     <Layout>
-      <Actions />
+      <Actions visible={selectedTab === 0} />
       <Tabs tabs={getTabs(t)} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
     </Layout>
   );

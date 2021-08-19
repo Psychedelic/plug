@@ -35,13 +35,14 @@ export default makeStyles({
     paddingTop: 108,
   },
   myAccounts: {
+    fontWeight: 600,
     padding: '16px 0px 8px 16px',
   },
   paper: {
     width: 293,
   },
   accountContainer: {
-    maxHeight: 155,
+    maxHeight: 284,
     overflow: 'auto',
     paddingBottom: 0,
   },

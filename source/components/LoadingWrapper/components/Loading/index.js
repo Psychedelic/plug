@@ -7,7 +7,7 @@ import styles from './styles.module.css';
 
 function Loading({ className }) {
   return (
-    <div className={`${styles.container} ${className}`}>
+    <div className={`${styles.container} ${styles[className]}`}>
       <img src={PlugLogo} className={styles.spinnerLogo} alt="logo" />
     </div>
   );

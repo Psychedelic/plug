@@ -27,7 +27,7 @@ const Activity = () => {
     }
   }, [icpPrice]);
   return (
-    <LoadingWrapper loading={!transactions.length && transactionsLoading}>
+    <LoadingWrapper loading={!transactions.length && transactionsLoading} className="big">
       <div className={classes.root}>
         {
           activity && activity.length > 0

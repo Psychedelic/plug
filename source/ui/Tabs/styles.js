@@ -8,6 +8,7 @@ export default makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.main,
   },
   tabPanel: {
-    padding: `${theme.spacing(2)}px 0`,
+    // padding: `${theme.spacing(2)}px 0`,
+    // height: 320,
   },
 }));
