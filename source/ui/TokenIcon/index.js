@@ -8,7 +8,6 @@ const useStyles = makeStyles(() => ({
     width: '41px',
     height: '41px',
     textAlign: 'center',
-    border: '1px solid silver',
     borderRadius: '50%',
     display: 'flex',
     justifyContent: 'center',
