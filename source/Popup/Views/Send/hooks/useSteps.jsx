@@ -55,11 +55,13 @@ const useSteps = () => {
       } else {
         setTrxComplete(true);
       }
-      sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: {} },
-        (transactions) => {
-          dispatch(setTransactions({ ...transactions, icpPrice }));
-          setTransaction(transactions?.transactions[0]);
-        });
+      if (!selectedAsset) {
+        sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: {} },
+          (transactions) => {
+            dispatch(setTransactions({ ...transactions, icpPrice }));
+            setTransaction(transactions?.transactions[0]);
+          });
+      }
     });
   };
 
