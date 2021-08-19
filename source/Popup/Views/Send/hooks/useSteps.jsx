@@ -51,9 +51,9 @@ const useSteps = () => {
     const e8s = parseInt(amount * E8S_PER_ICP, 10);
 
     if (sendingXTCtoCanister && destination === XTC_OPTIONS.BURN) {
-      /* eslint-disable-next-line no-console */
-      console.log('burned 🔥');
+      console.log('burnnn');
     } else {
+      console.log('selectedAsset', selectedAsset);
       sendMessage({
         type: HANDLER_TYPES.SEND_TOKEN,
         params: { to: address, amount: e8s, canisterId: selectedAsset?.canisterId },
@@ -64,11 +64,13 @@ const useSteps = () => {
         } else {
           setTrxComplete(true);
         }
-        sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: {} },
-          (transactions) => {
-            dispatch(setTransactions({ ...transactions, icpPrice }));
-            setTransaction(transactions?.transactions[0]);
-          });
+        if (!selectedAsset) {
+          sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: {} },
+            (transactions) => {
+              dispatch(setTransactions({ ...transactions, icpPrice }));
+              setTransaction(transactions?.transactions[0]);
+            });
+        }
       });
     }
   };
