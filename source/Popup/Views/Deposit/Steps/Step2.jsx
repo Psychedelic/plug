@@ -22,11 +22,12 @@ const Step2 = ({ selectedSource, selectedAsset }) => {
   const { name, principalId, accountId } = useSelector((state) => state.wallet);
 
   const code = 'dfx canister --no-wallet call $(dfx identity get-wallet) wallet_call "(record { canister=(principal "<dank-canister-id>"); method_name="deposit"; args=(blob "(principal "<user-pulg-principal>")"); cycles=<amount> })"';
-
+  console.log('selectedSource', selectedSource);
+  console.log('selectedAsset', selectedAsset);
   return (
     <Container>
       {
-        (selectedSource.id === 'PLUG_ACCOUNT' && selectedAsset.id === 'CYCLES')
+        (selectedSource.id === 'PLUG_ACCOUNT' && selectedAsset.id === 'XTC')
         && (
           <Grid container spacing={2} style={{ textAlign: 'center' }}>
             <Grid item xs={12}>
