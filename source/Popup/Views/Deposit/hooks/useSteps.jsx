@@ -45,7 +45,7 @@ const useSteps = () => {
       component: <Step2 selectedSource={selectedSource} selectedAsset={selectedAsset} />,
       left: <LinkButton value={t('common.back')} onClick={() => handleChangeStep(0)} startIcon={BackIcon} />,
       right: rightButton(t('common.done')),
-      center: `${t('deposit.title')} ${selectedAsset.name}`,
+      center: `${t('deposit.title')} ${selectedAsset.symbol}`,
     },
   ];
 
