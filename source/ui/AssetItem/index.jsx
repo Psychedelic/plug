@@ -2,7 +2,7 @@ import React from 'react';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
-import { TokenIcon } from '@ui';
+import { TokenIcon } from '@components';
 
 import useStyles from './styles';
 

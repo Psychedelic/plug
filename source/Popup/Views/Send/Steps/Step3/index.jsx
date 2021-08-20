@@ -11,7 +11,6 @@ import {
   USDFormat,
   Dialog,
   LinkButton,
-  TokenIcon,
 } from '@ui';
 import { Typography } from '@material-ui/core';
 import AccountImg from '@assets/icons/account.svg';
@@ -24,7 +23,7 @@ import { icIdsUrl } from '@shared/constants/urls';
 import browser from 'webextension-polyfill';
 import ArrowUpRight from '@assets/icons/arrow-up-right.png';
 import clsx from 'clsx';
-import { useRouter, Plug } from '@components';
+import { useRouter, Plug, TokenIcon } from '@components';
 
 import { ADDRESS_TYPES, DEFAULT_FEE } from '@shared/constants/addresses';
 import useStyles from '../../styles';

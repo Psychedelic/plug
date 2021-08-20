@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import MuiMenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
-import TokenIcon from '@components/TokenIcon';
+import { TokenIcon } from '@components';
 import useStyles from './styles';
 
 const MenuItem = ({

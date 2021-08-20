@@ -5,9 +5,10 @@ import { Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import XTCIcon from '@assets/icons/XTC.svg';
 import {
-  Button, Container, USDFormat, AssetFormat, TokenIcon,
+  Button, Container, USDFormat, AssetFormat,
 
 } from '@ui';
+import { TokenIcon } from '@components';
 import { USD_PER_TC } from '@shared/constants/currencies';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import useStyles from '../styles';

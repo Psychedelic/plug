@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Container, LinkButton, TextInput, TokenIcon,
+  Container, LinkButton, TextInput,
 } from '@ui';
+import { TokenIcon } from '@components';
 import Grid from '@material-ui/core/Grid';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';

@@ -1,11 +1,12 @@
 import React from 'react';
-import SwapArrowImg from '@assets/icons/swap-arrow.svg';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import SwapArrowImg from '@assets/icons/swap-arrow.svg';
 import { currencyPropTypes } from '@shared/constants/currencies';
+import { TokenIcon } from '@components';
+
 import useStyles from './styles';
-import { TokenIcon } from '@ui';
 
 const SwapIcon = ({ fromCurrency, toCurrency, handleShowSwap }) => {
   const classes = useStyles();
