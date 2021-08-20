@@ -3,28 +3,14 @@ import { Container, LinkButton, TextInput } from '@ui';
 import Grid from '@material-ui/core/Grid';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
-import DfinityImg from '@assets/icons/Dfinity.svg';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
 import VerifiedImg from '@assets/icons/verified.svg';
 import PropTypes from 'prop-types';
 import useStyles from '../styles';
+import DabComingSoon from './DabComingSoon';
 
-const TOKENS = [
-  {
-    image: DfinityImg,
-    name: 'Internet Computer',
-    symbol: 'ICP',
-    verified: true,
-  },
-  {
-    image: DfinityImg,
-    name: 'Cycles Token',
-    symbol: 'XTC',
-    verified: true,
-    canisterId: 'aanaa-xaaaa-aaaah-aaeiq-cai',
-  },
-];
+const TOKENS = []; // fetch from DAB when available
 
 const SearchToken = ({ handleChangeSelectedToken, handleChangeTab }) => {
   const { t } = useTranslation();
@@ -52,6 +38,7 @@ const SearchToken = ({ handleChangeSelectedToken, handleChangeTab }) => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <TextInput
+            disabled
             type="text"
             value={search}
             startIcon={(
@@ -66,48 +53,56 @@ const SearchToken = ({ handleChangeSelectedToken, handleChangeTab }) => {
         </Grid>
         {
           /* eslint-disable no-nested-ternary */
-          !search
+          !TOKENS.length
             ? (
-              <>
-                <Grid item xs={12}>
-                  <Typography variant="subtitle1" className={classes.centered}>{t('addToken.searchText')}</Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <LinkButton value={t('addToken.searchLink')} onClick={() => null} />
-                </Grid>
-              </>
+              <Grid item xs={12}>
+                <DabComingSoon />
+              </Grid>
             )
-            : filteredTokens.length > 0
-              ? (
-                <Grid item xs={12}>
-                  {filteredTokens.map((ft) => (
-                    <div
-                      className={classes.tokenItem}
-                      onClick={handleChangeSelectedToken(ft)}
-                    >
-                      <div className={classes.tokenImage}>
-                        <img src={ft.image} />
-                        {
-                          ft.verified
-                          && <img src={VerifiedImg} className={classes.verified} />
-                        }
-                      </div>
-                      <Typography variant="h4">{ft.name} ({ft.token})</Typography>
+            : (
+              !search
+                ? (
+                  <>
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle1" className={classes.centered}>{t('addToken.searchText')}</Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <LinkButton value={t('addToken.searchLink')} onClick={() => null} />
+                    </Grid>
+                  </>
+                )
+                : filteredTokens.length > 0
+                  ? (
+                    <Grid item xs={12}>
+                      {filteredTokens.map((ft) => (
+                        <div
+                          className={classes.tokenItem}
+                          onClick={handleChangeSelectedToken(ft)}
+                        >
+                          <div className={classes.tokenImage}>
+                            <img src={ft.image} />
+                            {
+                              ft.verified
+                              && <img src={VerifiedImg} className={classes.verified} />
+                            }
+                          </div>
+                          <Typography variant="h4">{ft.name} ({ft.token})</Typography>
+                        </div>
+                      ))}
+                    </Grid>
+                  )
+                  : (
+                    <div className={classes.emptyResults}>
+                      <span className={classes.emoji}>🤔</span>
+                      <Typography variant="h5">{t('addToken.emptyResults')}</Typography>
+                      <LinkButton
+                        style={{ marginTop: 6 }}
+                        value={t('addToken.addCustomToken')}
+                        onClick={() => handleChangeTab(1)}
+                      />
                     </div>
-                  ))}
-                </Grid>
-              )
-              : (
-                <div className={classes.emptyResults}>
-                  <span className={classes.emoji}>🤔</span>
-                  <Typography variant="h5">{t('addToken.emptyResults')}</Typography>
-                  <LinkButton
-                    style={{ marginTop: 6 }}
-                    value={t('addToken.addCustomToken')}
-                    onClick={() => handleChangeTab(1)}
-                  />
-                </div>
-              )
+                  )
+            )
         }
       </Grid>
     </Container>
