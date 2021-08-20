@@ -5,8 +5,8 @@ import {
 } from '@ui';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
-import { currencyPropTypes } from '../../../../shared/constants/currencies';
-import { sourcePropTypes } from '../../../../shared/constants/sources';
+import { currencyPropTypes } from '@shared/constants/currencies';
+import { sourcePropTypes } from '@shared/constants/sources';
 
 const Step1 = ({
   assets,
@@ -31,7 +31,6 @@ const Step1 = ({
     setOpenSources(false);
     setSelectedSource(value);
   };
-
   return (
     <Container>
       <Grid container spacing={2}>
