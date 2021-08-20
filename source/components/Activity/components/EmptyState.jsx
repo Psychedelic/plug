@@ -11,8 +11,8 @@ const EmptyState = () => {
   return (
     <div className={classes.emptyState}>
       <img src={ThinkingEmoji} className={classes.image} />
-      <Typography variant="h4">{t('activity.noActivityTitle')}</Typography>
-      <Typography variant="subtitle2">{t('activity.noActivityText')}</Typography>
+      <Typography className={classes.emptyTitle} variant="h4">{t('activity.noActivityTitle')}</Typography>
+      <Typography className={classes.emptyText} variant="subtitle2">{t('activity.noActivityText')}</Typography>
     </div>
   );
 };

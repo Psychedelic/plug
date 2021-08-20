@@ -69,7 +69,8 @@
     "sign": "Sign",
     "name": "Name",
     "create": "Create",
-    "account": "Account"
+    "account": "Account",
+    "learnMore": "Learn more"
   },
   "apps": {
     "title": "Connected Apps",
@@ -268,7 +269,11 @@
     "confirmText": "Token Safety Alert: For your security, make sure to do proper research before interacting with any token.",
     "emptyResults": "No search results found",
     "searchTokens": "Search Tokens",
-    "addCustomToken": "Add Custom Token"
+    "addCustomToken": "Add Custom Token",
+    "comingSoon": "COMING SOON",
+    "dabTitle": "DAB Token List",
+    "dabText": "Helping improve discoverability, reputation, and trust in IC tokens.",
+    "tokenError": "Invalid Canister ID. No Token Interface Detected."
   },
   "error": {
     "errorTitle": "Something went wrong",
