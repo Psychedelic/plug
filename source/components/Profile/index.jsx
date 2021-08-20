@@ -55,6 +55,13 @@ const Profile = ({ disableProfile }) => {
     setAccountName(e.target.value);
   };
 
+  const handleEditAccount = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setOpen(false);
+    navigator.navigate('wallet-details');
+  };
+
   const handleCreateAccount = () => {
     sendMessage({
       type: HANDLER_TYPES.CREATE_PRINCIPAL,
@@ -74,6 +81,9 @@ const Profile = ({ disableProfile }) => {
       (state) => {
         if (state?.wallets?.length) {
           dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
+
+          setOpen(false);
+          navigator.navigate('home');
         }
       });
   };
@@ -101,6 +111,7 @@ const Profile = ({ disableProfile }) => {
         content={(
           <FormItem
             label={t('common.name')}
+            smallLabel
             component={(
               <TextInput
                 fullWidth
@@ -144,7 +155,7 @@ const Profile = ({ disableProfile }) => {
                       endIcon={(
                         <img
                           src={BluePencil}
-                          onClick={() => navigator.navigate('wallet-details')}
+                          onClick={handleEditAccount}
                         />
                       )}
                     />

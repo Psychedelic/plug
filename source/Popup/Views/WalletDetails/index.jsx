@@ -21,10 +21,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import InputBase from '@material-ui/core/InputBase';
 import Pencil from '@assets/icons/pencil.svg';
 import BlueCheck from '@assets/icons/blue-check.svg';
-import { Info, /* Globe, */ ChevronDown } from 'react-feather';
+import { Info /* , Globe,  ChevronDown */ } from 'react-feather';
 // import MuiSwitch from '@material-ui/core/Switch';
 // import { withStyles } from '@material-ui/core/styles';
-import extension from 'extensionizer';
+// import extension from 'extensionizer';
 import useStyles from './styles';
 import { updateWalletDetails } from '../../../redux/wallet';
 
@@ -84,8 +84,8 @@ const Switch = withStyles((theme) => ({
 ));
 */
 
-const EXPANDED_HEIGHT = 667;
-const SHRINKED_HEIGHT = 460;
+// const EXPANDED_HEIGHT = 667;
+// const SHRINKED_HEIGHT = 460;
 
 const WalletDetails = () => {
   const classes = useStyles();
@@ -99,7 +99,7 @@ const WalletDetails = () => {
   const [currentEmoji, setCurrentEmoji] = useState(emoji);
   const [edit, setEdit] = useState(false);
   // const [publicAccount, setPublicAccount] = useState(true);
-  const [expand, setExpand] = useState(false);
+  // const [expand, setExpand] = useState(false);
 
   // const handleChangePublicAccount = (event) => setPublicAccount(event.target.checked);
 
@@ -109,7 +109,7 @@ const WalletDetails = () => {
 
   const handleChange = (e) => setWalletName(e.target.value);
 
-  const handleChangeExpand = () => {
+  /* const handleChangeExpand = () => {
     const height = expand ? SHRINKED_HEIGHT : EXPANDED_HEIGHT;
     extension.windows.update(
       extension.windows.WINDOW_ID_CURRENT,
@@ -118,7 +118,7 @@ const WalletDetails = () => {
       },
     );
     setExpand(!expand);
-  };
+  }; */
   const onEmojiClick = (_event, emojiObject) => {
     setCurrentEmoji(emojiObject.emoji);
     setOpenEmojis(false);
@@ -265,8 +265,7 @@ const WalletDetails = () => {
               />
             </div>
           </Grid>
-            */
-          }
+
           <Grid item xs={12}>
             <div
               className={classes.viewMore}
@@ -280,44 +279,39 @@ const WalletDetails = () => {
               />
             </div>
           </Grid>
-
-          {
-            expand
-            && (
-              <>
-                <Grid item xs={12}>
-                  <FormItem
-                    label={t('common.principalId')}
-                    smallLabel
-                    component={(
-                      <div className={classes.ids}>
-                        <Typography variant="subtitle2" className={classes.id}>{principalId}</Typography>
-                        <Info
-                          className={classes.idInfoIcon}
-                          size={20}
-                        />
-                      </div>
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12} style={{ marginTop: -10 }}>
-                  <FormItem
-                    label={t('walletDetails.accountId')}
-                    smallLabel
-                    component={(
-                      <div className={classes.ids}>
-                        <Typography variant="subtitle2" className={classes.id}>{accountId}</Typography>
-                        <Info
-                          className={classes.idInfoIcon}
-                          size={20}
-                        />
-                      </div>
-                    )}
-                  />
-                </Grid>
-              </>
-            )
+          */
           }
+
+          <Grid item xs={12}>
+            <FormItem
+              label={t('common.principalId')}
+              smallLabel
+              component={(
+                <div className={classes.ids}>
+                  <Typography variant="subtitle2" className={classes.id}>{principalId}</Typography>
+                  <Info
+                    className={classes.idInfoIcon}
+                    size={20}
+                  />
+                </div>
+              )}
+            />
+          </Grid>
+          <Grid item xs={12} style={{ marginTop: -10 }}>
+            <FormItem
+              label={t('walletDetails.accountId')}
+              smallLabel
+              component={(
+                <div className={classes.ids}>
+                  <Typography variant="subtitle2" className={classes.id}>{accountId}</Typography>
+                  <Info
+                    className={classes.idInfoIcon}
+                    size={20}
+                  />
+                </div>
+              )}
+            />
+          </Grid>
 
         </Grid>
       </Container>

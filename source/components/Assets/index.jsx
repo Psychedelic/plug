@@ -29,12 +29,12 @@ const Assets = () => {
   }, [icpPrice]);
   console.log(assets);
   return (
-    <LoadingWrapper loading={!assets?.length && assetsLoading}>
+    <LoadingWrapper loading={!assets?.length && assetsLoading} className="small">
       <div className={classes.root}>
         {
-        assets?.map((asset) => (
-          <AssetItem {...asset} key={asset.name} />
-        ))
+          assets?.map((asset) => (
+            <AssetItem {...asset} key={asset.name} />
+          ))
         }
         <div className={classes.buttonWrapper}>
           <Button
@@ -46,7 +46,6 @@ const Assets = () => {
               height: 42,
               borderRadius: 10,
               alignSelf: 'center',
-              marginTop: 12,
             }}
           />
         </div>

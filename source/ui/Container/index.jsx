@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import useStyles from './styles';
 
-const Container = ({ children, big }) => {
+const Container = ({ children, big, ...other }) => {
   const classes = useStyles();
   return (
-    <div className={clsx(classes.root, big ? classes.big : classes.small)}>
+    <div className={clsx(classes.root, big ? classes.big : classes.small)} {...other}>
       {children}
     </div>
   );

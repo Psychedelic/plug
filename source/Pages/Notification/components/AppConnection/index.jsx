@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import qs from 'query-string';
 import { useTranslation, initReactI18next } from 'react-i18next';
 import { PortRPC } from '@fleekhq/browser-rpc';
@@ -31,6 +31,7 @@ portRPC.start();
 const AppConnection = () => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const [status, setStatus] = useState(null);
 
   const { query } = qs.parseUrl(window.location.href);
 
@@ -41,7 +42,7 @@ const AppConnection = () => {
     portId,
   } = query;
 
-  const onClickHandler = async (status) => {
+  const handleResponse = async () => {
     await portRPC.call('handleAllowAgent', [url, { status, whitelist: [] }, callId, portId]);
     window.close();
   };
@@ -52,6 +53,18 @@ const AppConnection = () => {
       height: SIZES.appConnectHeight,
     },
   );
+
+  useEffect(async () => {
+    if (status) {
+      await handleResponse();
+    }
+  }, [status]);
+
+  window.onbeforeunload = () => {
+    if (status === null) {
+      setStatus(CONNECTION_STATUS.rejected);
+    }
+  };
 
   return (
     <Provider store={store}>
@@ -65,14 +78,14 @@ const AppConnection = () => {
                 <Button
                   variant="default"
                   value={t('common.decline')}
-                  onClick={() => onClickHandler(CONNECTION_STATUS.rejected)}
+                  onClick={() => setStatus(CONNECTION_STATUS.rejected)}
                   style={{ width: '96%' }}
                   fullWidth
                 />
                 <Button
                   variant="rainbow"
                   value={t('common.allow')}
-                  onClick={() => onClickHandler(CONNECTION_STATUS.accepted)}
+                  onClick={() => setStatus(CONNECTION_STATUS.accepted)}
                   fullWidth
                   style={{ width: '96%' }}
                   wrapperStyle={{ textAlign: 'right' }}

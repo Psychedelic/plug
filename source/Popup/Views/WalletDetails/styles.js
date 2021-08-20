@@ -46,6 +46,7 @@ export default makeStyles((theme) => ({
     boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
   },
   icon: {
+    marginLeft: 3,
     marginRight: 12,
     cursor: 'pointer',
   },
