@@ -24,7 +24,7 @@ const Select = ({
             alt={name}
             image={image}
             className={clsx(classes.icon, shadow && classes.iconShadow)}
-            symbol="TODO"
+            symbol={name}
           />
           )
         }

@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import clsx from 'clsx';
 import MuiMenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
+import TokenIcon from '@ui/TokenIcon';
 import useStyles from './styles';
 
 const MenuItem = ({
@@ -18,6 +19,7 @@ const MenuItem = ({
   selected,
   endIcon,
   endText,
+  symbol,
 }) => {
   const classes = useStyles();
 
@@ -35,10 +37,15 @@ const MenuItem = ({
         icon
       }
       {
-        image
+        !icon
         && (
           <ListItemIcon className={classes.icon}>
-            <img src={image} className={clsx(size === 'large' ? classes.bigImage : classes.smallImage, alignLeft && classes.alignLeft)} />
+            <TokenIcon
+              image={image}
+              symbol={symbol}
+              className={clsx(size === 'large' ? classes.bigImage : classes.smallImage, alignLeft && classes.alignLeft)}
+              tokenClassName={classes.token}
+            />
           </ListItemIcon>
         )
       }
@@ -75,6 +82,7 @@ MenuItem.defaultProps = {
   endIcon: null,
   selected: false,
   endText: null,
+  symbol: ''
 };
 
 MenuItem.propTypes = {
@@ -89,4 +97,5 @@ MenuItem.propTypes = {
   endIcon: PropTypes.node,
   selected: PropTypes.bool,
   endText: PropTypes.string,
+  symbol: PropTypes.string,
 };

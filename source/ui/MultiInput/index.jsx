@@ -56,7 +56,7 @@ const MultiInput = ({
   return (
     <InputBase>
       <div className={classes.leftContainer} onClick={onClick}>
-        <TokenIcon image={image} className={classes.icon} symbol="TODO" />
+        <TokenIcon image={image} className={classes.icon} symbol={name} />
         <Typography variant="h4">{name}</Typography>
         <img src={ChevronDown} className={classes.alignRight} />
       </div>
