@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { useTranslation } from 'react-i18next';
 import {
-  Button, FormItem, TextInput, Container, Alert
+  Button, FormItem, TextInput, Container, Alert,
 } from '@ui';
 import { validateCanisterId } from '@shared/utils/ids';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
@@ -35,8 +35,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
       if (tokenInfo?.error) {
         setTokenError(true);
         setInvalidToken(true);
-      }
-      else {
+      } else {
         handleChangeSelectedToken(tokenInfo)();
       }
       setLoading(false);
@@ -63,11 +62,12 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
         </Grid>
         {
           tokenError
-          && <Grid item xs={12}>
+          && (
+          <Grid item xs={12}>
             <div className={classes.appearAnimation}>
               <Alert
                 type="danger"
-                title={
+                title={(
                   <div>
                     <span>{t('addToken.tokenError')}</span>
                     <br />
@@ -78,10 +78,11 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
                       {t('common.learnMore')}
                     </span>
                   </div>
-                }
+                )}
               />
             </div>
           </Grid>
+          )
         }
         <Grid item xs={12}>
           <Button

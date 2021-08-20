@@ -14,7 +14,11 @@ const DabComingSoon = () => {
   return (
     <div className={classes.dabTokenContainer}>
       <div className={classes.comingSoon}>{t('addToken.comingSoon')}</div>
-      <img src={DabIcon} className={classes.dabImage} onClick={() => browser.tabs.create({ url: dabUrl })} />
+      <img
+        src={DabIcon}
+        className={classes.dabImage}
+        onClick={() => browser.tabs.create({ url: dabUrl })}
+      />
       <Typography variant="h3">{t('addToken.dabTitle')}</Typography>
       <Typography variant="subtitle1">{t('addToken.dabText')}</Typography>
       <LinkButton value={t('common.learnMore')} onClick={() => browser.tabs.create({ url: dabForm })} />
