@@ -22,4 +22,13 @@ export default makeStyles((theme) => ({
     fontWeight: 500,
     lineHeight: '16.8px',
   },
+  titleContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  endIcon: {
+    marginLeft: 'auto',
+  },
 }));

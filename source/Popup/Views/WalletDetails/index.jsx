@@ -4,15 +4,17 @@ import { useRouter } from '@components/Router';
 import {
   Layout,
   UserIcon,
+  CopyButton,
 } from '@components';
 import {
   Header,
   LinkButton,
   Container,
   FormItem,
+  Dialog,
+  Button,
 } from '@ui';
 import { useTranslation } from 'react-i18next';
-import BackIcon from '@assets/icons/back.svg';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import Picker from 'emoji-picker-react';
 import Grid from '@material-ui/core/Grid';
@@ -25,6 +27,8 @@ import { Info /* , Globe,  ChevronDown */ } from 'react-feather';
 // import MuiSwitch from '@material-ui/core/Switch';
 // import { withStyles } from '@material-ui/core/styles';
 // import extension from 'extensionizer';
+import { icIdsUrl } from '@shared/constants/urls';
+import browser from 'webextension-polyfill';
 import useStyles from './styles';
 import { updateWalletDetails } from '../../../redux/wallet';
 
@@ -103,6 +107,9 @@ const WalletDetails = () => {
 
   // const handleChangePublicAccount = (event) => setPublicAccount(event.target.checked);
 
+  const [openAccount, setOpenAccount] = useState(false);
+  const [openPrincipal, setOpenPrincipal] = useState(false);
+
   const textInput = useRef(null);
 
   const dispatch = useDispatch();
@@ -148,17 +155,10 @@ const WalletDetails = () => {
   return (
     <Layout>
       <Header
-        left={(
-          <LinkButton
-            value={t('common.back')}
-            onClick={() => navigator.navigate('settings')}
-            startIcon={BackIcon}
-          />
-        )}
         center={t('walletDetails.title')}
         right={(
           <LinkButton
-            value={t('common.close')}
+            value={t('common.done')}
             onClick={() => navigator.navigate('home')}
           />
         )}
@@ -281,17 +281,38 @@ const WalletDetails = () => {
           </Grid>
           */
           }
-
           <Grid item xs={12}>
             <FormItem
               label={t('common.principalId')}
               smallLabel
+              endIcon={<CopyButton color="black" label="Copy" text={principalId} placement="left" />}
               component={(
                 <div className={classes.ids}>
                   <Typography variant="subtitle2" className={classes.id}>{principalId}</Typography>
                   <Info
                     className={classes.idInfoIcon}
                     size={20}
+                    onClick={() => setOpenPrincipal(true)}
+                  />
+                </div>
+              )}
+            />
+            <Dialog
+              title={t('walletDetails.whatIsPrincipal')}
+              onClose={() => setOpenPrincipal(false)}
+              open={openPrincipal}
+              component={(
+                <div className={classes.modal}>
+                  <Typography>{t('walletDetails.principalDescription')}</Typography>
+                  <Button
+                    variant="rainbow"
+                    value={t('send.icpModalButton1')}
+                    onClick={() => setOpenPrincipal(false)}
+                    fullWidth
+                  />
+                  <LinkButton
+                    value={t('walletDetails.learnMorePrincipal')}
+                    onClick={() => browser.tabs.create({ url: icIdsUrl })}
                   />
                 </div>
               )}
@@ -301,18 +322,39 @@ const WalletDetails = () => {
             <FormItem
               label={t('walletDetails.accountId')}
               smallLabel
+              endIcon={<CopyButton color="black" label="Copy" text={accountId} placement="left" />}
               component={(
                 <div className={classes.ids}>
                   <Typography variant="subtitle2" className={classes.id}>{accountId}</Typography>
                   <Info
                     className={classes.idInfoIcon}
                     size={20}
+                    onClick={() => setOpenAccount(true)}
+                  />
+                </div>
+              )}
+            />
+            <Dialog
+              title={t('walletDetails.whatIsAccount')}
+              onClose={() => setOpenAccount(false)}
+              open={openAccount}
+              component={(
+                <div className={classes.modal}>
+                  <Typography>{t('walletDetails.accountDescription')}</Typography>
+                  <Button
+                    variant="rainbow"
+                    value={t('send.icpModalButton1')}
+                    onClick={() => setOpenAccount(false)}
+                    fullWidth
+                  />
+                  <LinkButton
+                    value={t('walletDetails.learnMoreAccount')}
+                    onClick={() => browser.tabs.create({ url: icIdsUrl })}
                   />
                 </div>
               )}
             />
           </Grid>
-
         </Grid>
       </Container>
     </Layout>
