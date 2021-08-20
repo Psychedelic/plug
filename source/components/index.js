@@ -21,6 +21,6 @@ export { default as UserIcon } from './UserIcon';
 export { default as CopyButton } from './CopyButton';
 export { default as LoadingWrapper } from './LoadingWrapper';
 export { IconQrCode } from './Icons';
-export { default as TokenIcon } from './TokenIcon'; 
+export { default as TokenIcon } from './TokenIcon';
 
 export * from './Router';

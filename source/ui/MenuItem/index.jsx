@@ -82,7 +82,7 @@ MenuItem.defaultProps = {
   endIcon: null,
   selected: false,
   endText: null,
-  symbol: ''
+  symbol: '',
 };
 
 MenuItem.propTypes = {
