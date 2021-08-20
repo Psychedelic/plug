@@ -14,6 +14,7 @@ export const walletSlice = createSlice({
     transactions: [],
     assets: [],
     walletNumber: 0,
+    assetsLoading: true,
   },
   reducers: {
     updateWalletDetails: (state, action) => {
@@ -58,6 +59,9 @@ export const walletSlice = createSlice({
     setAssets: (state, action) => {
       state.assets = action.payload;
     },
+    setAssetsLoading: (state, action) => {
+      state.assetsLoading = action.payload;
+    },
   },
 });
 
@@ -66,6 +70,7 @@ export const {
   setAccountInfo,
   setTransactions,
   setAssets,
+  setAssetsLoading,
 } = walletSlice.actions;
 
 export default walletSlice.reducer;
