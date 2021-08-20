@@ -31,7 +31,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
   };
 
   return (
-    <Container>
+    <Container style={{ paddingTop: 24 }}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <FormItem

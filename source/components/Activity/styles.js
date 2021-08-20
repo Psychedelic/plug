@@ -4,6 +4,8 @@ export default makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
+    padding: `${theme.spacing(2)}px 0`,
+    height: 320 + 118,
   },
   emptyState: {
     display: 'flex',

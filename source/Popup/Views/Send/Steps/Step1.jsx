@@ -188,6 +188,7 @@ const Step1 = ({
                       content={(
                         <FormItem
                           label={t('contacts.name')}
+                          smallLabel
                           component={(
                             <TextInput
                               fullWidth

@@ -11,6 +11,14 @@
   align-items: center;
 }
 
+.small {
+  height: 320px;
+}
+
+.big {
+  height: 438px;
+}
+
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -18,4 +26,4 @@
   to {
     transform: rotate(360deg);
   }
-} 
+}

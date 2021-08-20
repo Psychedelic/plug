@@ -4,6 +4,8 @@ export default makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
+    padding: `${theme.spacing(2)}px 0`,
+    height: 320 + 118,
   },
   textContainer: {
     display: 'flex',
@@ -23,9 +25,10 @@ export default makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     padding: `${theme.spacing(1)}px ${theme.spacing(4)}px`,
     textAlign: 'center',
+    height: 320 + 118,
     whiteSpace: 'pre-line',
   },
   image: {
