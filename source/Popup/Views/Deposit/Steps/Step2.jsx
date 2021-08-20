@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import browser from 'webextension-polyfill';
 import {
   Container, Button, LinkButton, CodeBox, InputBase, Dialog,
 } from '@ui';
@@ -10,9 +11,10 @@ import shortAddress from '@shared/utils/short-address';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import clsx from 'clsx';
+import { currencyPropTypes } from '@shared/constants/currencies';
+import { sourcePropTypes } from '@shared/constants/sources';
+import { buyCyclesUrl } from '@shared/constants/urls';
 import useStyles from '../styles';
-import { currencyPropTypes } from '../../../../shared/constants/currencies';
-import { sourcePropTypes } from '../../../../shared/constants/sources';
 
 const Step2 = ({ selectedSource, selectedAsset }) => {
   const classes = useStyles();
@@ -39,7 +41,7 @@ const Step2 = ({ selectedSource, selectedAsset }) => {
               <Button variant="rainbow" value={t('deposit.copyAddress')} onClick={() => navigator.clipboard.writeText(principalId)} />
             </Grid>
             <Grid item xs={12}>
-              <LinkButton value={`${t('deposit.learnMore')} ${selectedAsset.name}`} />
+              <LinkButton value={`${t('deposit.learnMore')} ${selectedAsset.name}`} onClick={() => browser.tabs.create({ url: buyCyclesUrl })} />
             </Grid>
           </Grid>
         )
