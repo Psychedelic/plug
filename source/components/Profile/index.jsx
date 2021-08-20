@@ -55,6 +55,13 @@ const Profile = ({ disableProfile }) => {
     setAccountName(e.target.value);
   };
 
+  const handleEditAccount = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setOpen(false);
+    navigator.navigate('wallet-details');
+  };
+
   const handleCreateAccount = () => {
     sendMessage({
       type: HANDLER_TYPES.CREATE_PRINCIPAL,
@@ -148,7 +155,7 @@ const Profile = ({ disableProfile }) => {
                       endIcon={(
                         <img
                           src={BluePencil}
-                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen(false); navigator.navigate('wallet-details'); }}
+                          onClick={handleEditAccount}
                         />
                       )}
                     />

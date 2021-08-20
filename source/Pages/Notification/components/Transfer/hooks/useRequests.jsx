@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { CURRENCIES } from '@shared/constants/currencies';
 import shortAddress from '@shared/utils/short-address';
 import PlugController from '@psychedelic/plug-controller';
-import { Principal } from '@dfinity/agent';
+import { Principal } from '@dfinity/principal';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { DEFAULT_FEE } from '@shared/constants/addresses';
 

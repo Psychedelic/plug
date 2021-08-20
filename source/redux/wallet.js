@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ACTIVITY_STATUS, ACTIVITY_TYPES } from '@shared/constants/activity';
-import { CURRENCIES, E8S_PER_ICP } from '@shared/constants/currencies';
+import { E8S_PER_ICP, TOKEN_IMAGES } from '@shared/constants/currencies';
 import { NANOS_PER_SECOND } from '@background/Keyring';
 
 /* eslint-disable no-param-reassign */
@@ -39,7 +39,6 @@ export const walletSlice = createSlice({
         const amount = parseInt(trx?.amount?.toString(), 10) / E8S_PER_ICP;
         const transaction = {
           type: ACTIVITY_TYPES[trx?.type],
-          currency: CURRENCIES.get(trx?.currency?.symbol),
           amount,
           date: new Date(trx?.timestamp / NANOS_PER_SECOND),
           value: amount * action?.payload?.icpPrice,
@@ -48,6 +47,8 @@ export const walletSlice = createSlice({
           plug: null,
           from: trx?.from,
           hash: trx?.hash,
+          image: TOKEN_IMAGES[trx?.currency?.symbol] || '',
+          symbol: trx?.currency?.symbol,
         };
         return transaction;
       };

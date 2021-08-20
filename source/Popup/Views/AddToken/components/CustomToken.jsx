@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import {
   Button, FormItem, TextInput, Container,
 } from '@ui';
-import { validatePrincipalId } from '@shared/utils/ids';
+import { validateCanisterId } from '@shared/utils/ids';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 
 const CustomToken = ({ handleChangeSelectedToken }) => {
@@ -19,7 +19,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
   };
 
   useEffect(() => {
-    setInvalidToken(token.length > 27 || !validatePrincipalId(token)); // token validation here
+    setInvalidToken(!validateCanisterId(token)); // token validation here
   }, [token]);
 
   const handleSubmit = () => {

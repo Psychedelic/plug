@@ -292,10 +292,10 @@ backgroundController.exposeController(
       callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
     } else {
       const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
-      const sendICP = getKeyringHandler(HANDLER_TYPES.SEND_ICP, keyring);
+      const sendToken = getKeyringHandler(HANDLER_TYPES.SEND_TOKEN, keyring);
       const assets = await getBalance();
       if (assets?.[0]?.amount * E8S_PER_ICP > transfer.amount) {
-        const response = await sendICP(transfer);
+        const response = await sendToken(transfer);
         if (response.error) {
           callback(ERRORS.SERVER_ERROR(response.error), null, [
             { portId, callId },

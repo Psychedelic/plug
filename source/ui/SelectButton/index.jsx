@@ -13,7 +13,10 @@ const SelectButton = ({
     <div className={clsx(classes.root, selected && classes.selected)} onClick={onClick}>
       <img src={startImage} className={classes.iconLeft} />
       <Typography variant="h4">{value}</Typography>
-      <img src={endImage} className={classes.iconRight} onClick={onEndImageClick} />
+      {
+        endImage
+        && <img src={endImage} className={classes.iconRight} onClick={onEndImageClick} />
+      }
     </div>
   );
 };
