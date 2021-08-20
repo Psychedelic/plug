@@ -27,7 +27,6 @@ const Assets = () => {
       });
     }
   }, [icpPrice]);
-  console.log(assets);
   return (
     <LoadingWrapper loading={!assets?.length && assetsLoading} className="small">
       <div className={classes.root}>

@@ -10,7 +10,6 @@ const AssetItem = ({
   image, name, amount, value, symbol,
 }) => {
   const classes = useStyles();
-  console.log(image);
   return (
     <div className={classes.root}>
       <TokenIcon className={classes.image} image={image} alt={name} symbol={symbol} />
