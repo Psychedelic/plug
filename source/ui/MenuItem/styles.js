@@ -49,4 +49,16 @@ export default makeStyles((theme) => ({
   selected: {
     background: theme.palette.primary.darkGradient,
   },
+  token: {
+    width: '22px',
+    height: '22px',
+    textAlign: 'center',
+    borderRadius: '50%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: '6px',
+    lineHeight: '10px',
+    fontWeight: 'bold',
+  },
 }));

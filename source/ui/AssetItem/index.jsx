@@ -2,6 +2,7 @@ import React from 'react';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
+import { TokenIcon } from '@components';
 
 import useStyles from './styles';
 
@@ -9,10 +10,9 @@ const AssetItem = ({
   image, name, amount, value, symbol,
 }) => {
   const classes = useStyles();
-
   return (
     <div className={classes.root}>
-      <img className={classes.image} src={image} alt={name} />
+      <TokenIcon className={classes.image} image={image} alt={name} symbol={symbol} />
       <div className={classes.leftContainer}>
         <Typography variant="h5">{name}</Typography>
         <Typography variant="subtitle2">{amount} {symbol}</Typography>

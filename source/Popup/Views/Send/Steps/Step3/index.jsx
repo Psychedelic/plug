@@ -23,7 +23,7 @@ import { icIdsUrl } from '@shared/constants/urls';
 import browser from 'webextension-polyfill';
 import ArrowUpRight from '@assets/icons/arrow-up-right.png';
 import clsx from 'clsx';
-import { useRouter, Plug } from '@components';
+import { useRouter, Plug, TokenIcon } from '@components';
 
 import { ADDRESS_TYPES, DEFAULT_FEE } from '@shared/constants/addresses';
 import useStyles from '../../styles';
@@ -94,7 +94,7 @@ const Step3 = ({
 
         <Grid item xs={12} style={{ textAlign: 'center' }}>
           <div className={classes.asset}>
-            <img src={asset.image} className={classes.image} />
+            <TokenIcon image={asset.image} className={classes.image} symbol={asset.symbol} />
             <Typography variant="h1">
               <AssetFormat value={amount} asset={asset?.symbol} />
             </Typography>
