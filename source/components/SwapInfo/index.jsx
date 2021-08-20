@@ -4,7 +4,7 @@ import DoubleArrowImg from '@assets/icons/double-arrow-right.svg';
 import { Typography } from '@material-ui/core';
 import NumberFormat from 'react-number-format';
 import { currencyPropTypes } from '@shared/constants/currencies';
-import TokenIcon from '@ui/TokenIcon';
+import TokenIcon from '@components/TokenIcon';
 import useStyles from './styles';
 
 const AssetInfo = ({ asset, amount, classes }) => (
