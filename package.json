@@ -46,6 +46,7 @@
     "moment": "^2.29.1",
     "qrcode": "^1.4.4",
     "query-string": "^7.0.0",
+    "random-color": "^1.0.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-feather": "^2.0.9",

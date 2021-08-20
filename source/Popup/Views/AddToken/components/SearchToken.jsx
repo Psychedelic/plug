@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Container, LinkButton, TextInput } from '@ui';
+import {
+  Container, LinkButton, TextInput,
+} from '@ui';
+import { TokenIcon } from '@components';
 import Grid from '@material-ui/core/Grid';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
@@ -7,6 +10,7 @@ import DfinityImg from '@assets/icons/Dfinity.svg';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
 import VerifiedImg from '@assets/icons/verified.svg';
+
 import PropTypes from 'prop-types';
 import useStyles from '../styles';
 
@@ -86,7 +90,7 @@ const SearchToken = ({ handleChangeSelectedToken, handleChangeTab }) => {
                       onClick={handleChangeSelectedToken(ft)}
                     >
                       <div className={classes.tokenImage}>
-                        <img src={ft.image} />
+                        <TokenIcon image={ft.image} symbol={ft.symbol} />
                         {
                           ft.verified
                           && <img src={VerifiedImg} className={classes.verified} />
