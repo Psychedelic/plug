@@ -12,9 +12,3 @@ extension.runtime.onStartup.addListener(async () => {
   /* eslint-disable-next-line no-console */
   console.log('controller started');
 });
-
-extension.runtime.onConnect.addListener(async () => {
-  await init();
-  /* eslint-disable-next-line no-console */
-  console.log('controller started');
-});
