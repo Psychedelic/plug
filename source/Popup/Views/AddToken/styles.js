@@ -82,5 +82,24 @@ export default makeStyles((theme) => ({
   dabImage: {
     height: 57,
     width: 57,
+    cursor: 'pointer',
+  },
+  '@keyframes appear': {
+    '0%': {
+      opacity: '0',
+      height: 0,
+    },
+    '100%': {
+      opacity: '1',
+      height: 51,
+    },
+  },
+  appearAnimation: {
+    animationName: '$appear',
+    animationDuration: '0.5s',
+  },
+  learnMore: {
+    textDecoration: 'underline',
+    cursor: 'pointer',
   },
 }));
