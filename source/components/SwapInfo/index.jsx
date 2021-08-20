@@ -4,11 +4,12 @@ import DoubleArrowImg from '@assets/icons/double-arrow-right.svg';
 import { Typography } from '@material-ui/core';
 import NumberFormat from 'react-number-format';
 import { currencyPropTypes } from '@shared/constants/currencies';
+import TokenIcon from '@components/TokenIcon';
 import useStyles from './styles';
 
 const AssetInfo = ({ asset, amount, classes }) => (
   <div className={classes.assetInfo}>
-    <img src={asset.image} className={classes.icon} />
+    <TokenIcon image={asset.image} className={classes.icon} symbol={asset?.symbol} />
     <Typography variant="h3" className={classes.asset}>
       <NumberFormat value={amount} displayType="text" thousandSeparator="," suffix={` ${asset.value}`} />
     </Typography>

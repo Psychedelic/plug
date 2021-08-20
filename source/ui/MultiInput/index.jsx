@@ -6,6 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import ExchangeIcon from '@assets/icons/exchange-arrows.svg';
+import { TokenIcon } from '@components';
+
 import InputBase from '../InputBase';
 import useStyles from './styles';
 
@@ -55,7 +57,7 @@ const MultiInput = ({
   return (
     <InputBase>
       <div className={classes.leftContainer} onClick={onClick}>
-        <img src={image} className={classes.icon} />
+        <TokenIcon image={image} className={classes.icon} symbol={name} />
         <Typography variant="h4">{name}</Typography>
         <img src={ChevronDown} className={classes.alignRight} />
       </div>

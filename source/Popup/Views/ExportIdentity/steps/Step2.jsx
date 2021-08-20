@@ -25,7 +25,7 @@ const Step2 = () => {
     sendMessage({ type: HANDLER_TYPES.GET_PEM_FILE, params: selectedAccountNumber },
       (state) => {
         if (state) {
-          download('identity', state);
+          download('identity.pem', state);
         }
       });
   };
