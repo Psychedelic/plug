@@ -1,9 +1,11 @@
 import React from 'react';
-import SwapArrowImg from '@assets/icons/swap-arrow.svg';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import SwapArrowImg from '@assets/icons/swap-arrow.svg';
 import { currencyPropTypes } from '@shared/constants/currencies';
+import { TokenIcon } from '@components';
+
 import useStyles from './styles';
 
 const SwapIcon = ({ fromCurrency, toCurrency, handleShowSwap }) => {
@@ -12,9 +14,9 @@ const SwapIcon = ({ fromCurrency, toCurrency, handleShowSwap }) => {
 
   return (
     <div className={classes.root}>
-      <img
+      <TokenIcon
         className={clsx(classes.image, classes.fromImage)}
-        src={fromCurrency.image}
+        image={fromCurrency.image}
         alt={fromCurrency.name}
       />
       <img
@@ -22,9 +24,9 @@ const SwapIcon = ({ fromCurrency, toCurrency, handleShowSwap }) => {
         src={SwapArrowImg}
         alt={t('common.to')}
       />
-      <img
+      <TokenIcon
         className={clsx(classes.image, classes.toImage)}
-        src={toCurrency.image}
+        image={toCurrency.image}
         alt={toCurrency.name}
         onMouseEnter={() => handleShowSwap(true)}
         onMouseLeave={() => handleShowSwap(false)}

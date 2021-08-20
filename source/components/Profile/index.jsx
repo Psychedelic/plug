@@ -11,7 +11,7 @@ import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import Plus from '@assets/icons/plus.svg';
-import { setAccountInfo } from '@redux/wallet';
+import { setAccountInfo, setAssets, setAssetsLoading } from '@redux/wallet';
 import { useDispatch, useSelector } from 'react-redux';
 import BluePencil from '@assets/icons/blue-pencil.svg';
 import { getRandomEmoji } from '@shared/constants/emojis';
@@ -27,6 +27,7 @@ const Profile = ({ disableProfile }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { navigator } = disableProfile ? {} : useRouter();
+  const { icpPrice } = useSelector((state) => state.icp);
 
   const { walletNumber } = useSelector((state) => state.wallet);
 
@@ -81,7 +82,14 @@ const Profile = ({ disableProfile }) => {
       (state) => {
         if (state?.wallets?.length) {
           dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
-
+          dispatch(setAssetsLoading(true));
+          sendMessage({
+            type: HANDLER_TYPES.GET_ASSETS,
+            params: icpPrice,
+          }, (keyringAssets) => {
+            dispatch(setAssets(keyringAssets));
+            dispatch(setAssetsLoading(false));
+          });
           setOpen(false);
           navigator.navigate('home');
         }

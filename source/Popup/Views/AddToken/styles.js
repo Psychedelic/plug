@@ -53,4 +53,53 @@ export default makeStyles((theme) => ({
     marginBottom: 12,
     fontSize: 32,
   },
+  dabTokenContainer: {
+    height: 227,
+    margin: '12px 0',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    position: 'relative',
+    alignItems: 'center',
+    textAlign: 'center',
+    padding: '0 12px',
+  },
+  comingSoon: {
+    position: 'absolute',
+    top: 12,
+    right: 18,
+    transform: 'rotate(20.66deg)',
+    borderRadius: 10,
+    color: '#000000',
+    fontWeight: 500,
+    padding: '3px 9px',
+    border: 'double 2px transparent',
+    backgroundImage:
+      'linear-gradient(white, white), radial-gradient(circle at top left,#FFE701,#FA51D3,#10D9ED,#53FF54)',
+    backgroundOrigin: 'border-box',
+    backgroundClip: 'padding-box, border-box',
+  },
+  dabImage: {
+    height: 57,
+    width: 57,
+    cursor: 'pointer',
+  },
+  '@keyframes appear': {
+    '0%': {
+      opacity: '0',
+      height: 0,
+    },
+    '100%': {
+      opacity: '1',
+      height: 51,
+    },
+  },
+  appearAnimation: {
+    animationName: '$appear',
+    animationDuration: '0.5s',
+  },
+  learnMore: {
+    textDecoration: 'underline',
+    cursor: 'pointer',
+  },
 }));

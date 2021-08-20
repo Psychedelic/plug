@@ -3,29 +3,41 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { useTranslation } from 'react-i18next';
 import {
-  Button, FormItem, TextInput, Container,
+  Button, FormItem, TextInput, Container, Alert,
 } from '@ui';
 import { validateCanisterId } from '@shared/utils/ids';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import browser from 'webextension-polyfill';
+import { customTokensUrl } from '@shared/constants/urls';
+import useStyles from '../styles';
 
 const CustomToken = ({ handleChangeSelectedToken }) => {
   const { t } = useTranslation();
   const [token, setToken] = useState('');
-  const [invalidToken, setInvalidToken] = useState(false);
+  const [invalidToken, setInvalidToken] = useState(null);
+  const [tokenError, setTokenError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const classes = useStyles();
 
   const handleChangeToken = (e) => {
     setToken(e.target.value.trim());
   };
 
   useEffect(() => {
-    setInvalidToken(!validateCanisterId(token)); // token validation here
+    if (token) {
+      setInvalidToken(!validateCanisterId(token));
+    }
   }, [token]);
 
   const handleSubmit = () => {
     setLoading(true);
     sendMessage({ type: HANDLER_TYPES.GET_TOKEN_INFO, params: token }, async (tokenInfo) => {
-      handleChangeSelectedToken(tokenInfo)();
+      if (tokenInfo?.error) {
+        setTokenError(true);
+        setInvalidToken(true);
+      } else {
+        handleChangeSelectedToken(tokenInfo)();
+      }
       setLoading(false);
     });
   };
@@ -48,13 +60,37 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
             )}
           />
         </Grid>
+        {
+          tokenError
+          && (
+          <Grid item xs={12}>
+            <div className={classes.appearAnimation}>
+              <Alert
+                type="danger"
+                title={(
+                  <div>
+                    <span>{t('addToken.tokenError')}</span>
+                    <br />
+                    <span
+                      className={classes.learnMore}
+                      onClick={() => browser.tabs.create({ url: customTokensUrl })}
+                    >
+                      {t('common.learnMore')}
+                    </span>
+                  </div>
+                )}
+              />
+            </div>
+          </Grid>
+          )
+        }
         <Grid item xs={12}>
           <Button
             variant="rainbow"
             value={t('common.continue')}
             onClick={handleSubmit}
             fullWidth
-            disabled={!token || invalidToken || loading}
+            disabled={!token || invalidToken || loading || tokenError}
             loading={loading}
           />
         </Grid>

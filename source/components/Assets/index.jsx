@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { AssetItem, Button } from '@ui';
-import { setAssets } from '@redux/wallet';
+import { setAssets, setAssetsLoading } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import LoadingWrapper from '@components/LoadingWrapper';
 import { useRouter } from '@components/Router';
@@ -10,8 +10,8 @@ import useStyles from './styles';
 
 const Assets = () => {
   const classes = useStyles();
-  const { assets } = useSelector((state) => state.wallet);
-  const [assetsLoading, setLoading] = useState(true);
+  const { assets, assetsLoading } = useSelector((state) => state.wallet);
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const { icpPrice } = useSelector((state) => state.icp);
   const { t } = useTranslation();
@@ -23,13 +23,18 @@ const Assets = () => {
         params: icpPrice,
       }, (keyringAssets) => {
         dispatch(setAssets(keyringAssets));
+        dispatch(setAssetsLoading(false));
         setLoading(false);
       });
     }
   }, [icpPrice]);
 
+  useEffect(() => {
+    setLoading(assetsLoading);
+  }, [assetsLoading]);
+
   return (
-    <LoadingWrapper loading={!assets?.length && assetsLoading} className="small">
+    <LoadingWrapper loading={loading} className="small">
       <div className={classes.root}>
         {
           assets?.map((asset) => (

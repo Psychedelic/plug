@@ -11,9 +11,10 @@ const shortAddress = (address, config = defaultConfig) => {
   if (!address) return '';
   if (typeof address !== 'string') return '';
 
-  const leftSize = config.leftSize || defaultConfig.leftSize;
+  let leftSize = config.leftSize || defaultConfig.leftSize;
   let rightSize = config.rightSize || defaultConfig.rightSize;
   if (validateAccountId(address)) {
+    leftSize = 4;
     rightSize = 4;
   }
 

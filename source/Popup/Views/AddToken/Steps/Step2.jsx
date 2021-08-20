@@ -8,6 +8,7 @@ import {
   Button, Container, USDFormat, AssetFormat,
 
 } from '@ui';
+import { TokenIcon } from '@components';
 import { USD_PER_TC } from '@shared/constants/currencies';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import useStyles from '../styles';
@@ -51,7 +52,11 @@ const Step2 = ({ selectedToken, handleClose }) => {
         </Grid>
         <Grid item xs={12}>
           <div className={classes.confirmToken}>
-            <img src={displayToken.image} className={classes.tokenImage} />
+            <TokenIcon
+              image={displayToken.image}
+              className={classes.tokenImage}
+              symbol={displayToken?.symbol}
+            />
             <div className={classes.leftContainer}>
               <Typography variant="h4">{displayToken.name}</Typography>
               <Typography variant="subtitle1"><AssetFormat value={displayToken?.amount} asset={displayToken?.symbol} /></Typography>
