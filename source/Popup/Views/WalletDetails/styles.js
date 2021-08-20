@@ -108,5 +108,14 @@ export default makeStyles((theme) => ({
   idInfoIcon: {
     position: 'absolute',
     right: 15,
+    cursor: 'pointer',
+  },
+  modal: {
+    height: 220,
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    padding: '0 20px',
+    flexDirection: 'column',
+    marginTop: -16,
   },
 }));

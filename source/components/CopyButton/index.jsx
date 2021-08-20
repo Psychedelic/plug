@@ -3,9 +3,13 @@ import { useTranslation } from 'react-i18next';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Copy } from 'react-feather';
 import PropTypes from 'prop-types';
+import { Typography } from '@material-ui/core';
+import clsx from 'clsx';
 import useStyles from './styles';
 
-const CopyButton = ({ text, placement, ...other }) => {
+const CopyButton = ({
+  text, placement, label, color, ...other
+}) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -45,13 +49,17 @@ const CopyButton = ({ text, placement, ...other }) => {
       placement={placement}
     >
       <div
-        className={classes.copyIcon}
+        className={clsx(classes.container, color === 'blue' ? classes.blue : classes.black)}
         onClick={() => handleCopy(text)}
         onMouseOver={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
         {...other}
       >
-        <Copy size="18" className={classes.icon} />
+        <Copy size="16" className={classes.icon} />
+        {
+          label
+          && <Typography variant="subtitle2" className={classes.label}>{label}</Typography>
+        }
       </div>
     </Tooltip>
   );
@@ -59,7 +67,14 @@ const CopyButton = ({ text, placement, ...other }) => {
 
 export default CopyButton;
 
+CopyButton.defaultProps = {
+  label: null,
+  color: 'blue',
+};
+
 CopyButton.propTypes = {
   text: PropTypes.string.isRequired,
   placement: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  color: PropTypes.string,
 };

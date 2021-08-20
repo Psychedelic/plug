@@ -1,7 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles({
-  icon: {
+  container: {
+    height: 18,
+    display: 'flex',
     cursor: 'pointer',
     fontSize: 18,
     transition: 'opacity 0.3s',
@@ -10,14 +12,19 @@ export default makeStyles({
       opacity: 0.75,
     },
   },
-  copyIcon: {
-    color: '#367FF8',
-    height: 18,
-  },
   tooltip: {
     margin: '8px 0',
   },
   tooltipSides: {
     margin: '0 8px',
+  },
+  label: {
+    marginLeft: 3,
+  },
+  black: {
+    color: '#374151',
+  },
+  blue: {
+    color: '#367FF8',
   },
 });

@@ -120,7 +120,13 @@
     "editWalletPic": "Edit Wallet Pic",
     "accountId": "ICP Account ID",
     "publicAccount": "Public Account",
-    "viewMore": "View additional wallet details"
+    "viewMore": "View additional wallet details",
+    "whatIsPrincipal": "What is a Principal ID?",
+    "principalDescription": "It is your main unique identifier on the Internet Computer, and your wallet's main address in Plug.",
+    "learnMorePrincipal": "Learn more about Principal ID's",
+    "whatIsAccount": "What is an Account ID?",
+    "accountDescription": "An Account ID is an address derived from your Principal ID, that represents your ICP balance on the ledger.",
+    "learnMoreAccount": "Learn more about Account ID's"
   },
   "seedPhrase": {
     "title": "Secret Recovery Phrase",

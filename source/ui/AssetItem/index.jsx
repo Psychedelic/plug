@@ -15,7 +15,9 @@ const AssetItem = ({
       <TokenIcon className={classes.image} image={image} alt={name} symbol={symbol} />
       <div className={classes.leftContainer}>
         <Typography variant="h5">{name}</Typography>
-        <Typography variant="subtitle2">{amount} {symbol}</Typography>
+        <Typography variant="subtitle2">
+          <NumberFormat value={amount} displayType="text" decimalScale={5} fixedDecimalScale thousandSeparator="," suffix={` ${symbol}`} />
+        </Typography>
       </div>
       <Typography variant="h5" className={classes.value}>
         <NumberFormat value={value} displayType="text" decimalScale={2} fixedDecimalScale thousandSeparator="," prefix="$" />
