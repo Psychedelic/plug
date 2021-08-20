@@ -18,10 +18,9 @@ const useStyles = makeStyles(() => ({
 }));
 
 function TokenIcon({
-  image, symbol, className, tokenClassName, ...props
+  image, symbol, className, tokenClassName, color, ...props
 }) {
   const classes = useStyles();
-  const color = randomColor({ luminosity: 'light' });
   const backgroundColor = `rgb(${color.values.rgb.join(',')})`;
   return (
 
@@ -41,12 +40,18 @@ TokenIcon.propTypes = {
   image: PropTypes.string,
   className: PropTypes.string,
   tokenClassName: PropTypes.string,
+  color: PropTypes.shape({
+    values: PropTypes.shape({
+      rgb: PropTypes.arrayOf(PropTypes.string),
+    }),
+  }),
 };
 
 TokenIcon.defaultProps = {
   image: null,
   className: '',
   tokenClassName: '',
+  color: randomColor({ luminosity: 'light' }),
 };
 
 export default TokenIcon;

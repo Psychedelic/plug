@@ -1369,10 +1369,10 @@
     node-gyp "^7.1.0"
     read-package-json-fast "^2.0.1"
 
-"@psychedelic/plug-controller@0.3.0":
-  version "0.3.0"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.3.0/48044ca2adc5d27b0b9ef6a04be6b950edb7cc5cb21c3fe7e355cc110c9d3b39#767e9e4cc5a9af3e0b9fe3b2c84cebf180fb2a8f"
-  integrity sha512-S99Mw7nkImehd7Nml9/YWhebFQ9F8ZIttZlLVcsZ9y1xZ4G1uLH+gBFQN4anjoMbVSPhMymXgBl4yPn26baYew==
+"@psychedelic/plug-controller@0.3.1":
+  version "0.3.1"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.3.1/63ec48c53591a9adce85d033092f8f2ac571acccb9eeabe04f074bf4a645eecf#c7095604b05027e39d52dc66b9bf7c51c81249a6"
+  integrity sha512-QQbxcR6ObsMU40OHhcmqRx+pBU+IFZ3v5LRyQjsuM2hiSkU8WL1sYDpoQJd9+dsYuiCvg47NQuUyqqbaAsEZ9A==
   dependencies:
     "@babel/preset-env" "^7.14.4"
     "@dfinity/agent" "^0.9.3"
@@ -1392,6 +1392,7 @@
     hdkey "^2.0.1"
     js-sha256 "^0.9.0"
     random-bigint "^0.0.1"
+    random-color "^1.0.1"
     reflect-metadata "^0.1.13"
     secp256k1 "^4.0.2"
     text-encoding "^0.7.0"

@@ -77,7 +77,7 @@
     "subtitle": "Main IC Wallet is connected to these sites.",
     "disconnectTitle": "Disconnect from Site",
     "disconnectText": "Are you sure you want to disconnect from",
-    "emptyTitle": "You have no apps connected.",
+    "emptyTitle": "You have no apps connected",
     "emptyText": "When you connect to an app they will be displayed here, with the ability to remove them.",
     "emptyLink": "our docs.",
     "comingSoonTitle": "Coming soon!",

@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
   innerContainer: {
-    padding: `0px ${theme.spacing(2)}px`,
+    padding: `${theme.spacing(2)}px ${theme.spacing(2)}px 0`,
   },
   buttonContainer: {
     width: '100%',
@@ -64,5 +64,6 @@ export default makeStyles((theme) => ({
   },
   buttonsWrapper: {
     padding: '0 24px',
+    marginTop: '20px',
   },
 }));
