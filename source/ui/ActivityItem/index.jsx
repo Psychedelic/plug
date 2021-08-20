@@ -79,6 +79,7 @@ const ActivityItem = ({
   symbol,
   hash,
   image,
+  name,
 }) => {
   const { t } = useTranslation();
   const [showSwap, setShowSwap] = useState(false);
@@ -121,7 +122,7 @@ const ActivityItem = ({
         <img className={classes.image} src={icon} />
         <div className={classes.leftContainer}>
           <Typography variant="h5" className={classes.pluggedTitle}>
-            {`${t('activity.title.pluggedInto')} ${symbol}`}
+            {`${t('activity.title.pluggedInto')} ${name}`}
           </Typography>
           <Typography variant="subtitle2">
             {moment(Date.parse(date)).format('MMMM Do')}
@@ -217,6 +218,7 @@ ActivityItem.defaultProps = {
   icon: null,
   type: ACTIVITY_TYPES.PLUG,
   hash: null,
+  name: null,
 };
 
 ActivityItem.propTypes = {
@@ -245,4 +247,5 @@ ActivityItem.propTypes = {
   }),
   icon: PropTypes.string,
   hash: PropTypes.string,
+  name: PropTypes.string,
 };
