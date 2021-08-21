@@ -284,7 +284,8 @@
   "error": {
     "errorTitle": "Something went wrong",
     "errorBody": "We’re sorry, something weird happened. \nReturn home and retry the action.",
-    "returnHome": "Return Home"
+    "returnHome": "Return Home",
+    "notificationError": "We’re sorry, something weird happened. Please close the pop up and try again"
   },
   "whitelist": {
     "title": "wants to allow calls to the folowing canisters:"

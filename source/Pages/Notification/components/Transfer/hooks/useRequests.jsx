@@ -24,6 +24,7 @@ const useRequests = (incomingRequests, callId, portId) => {
   const [requests, setRequests] = useState(incomingRequests);
 
   const [response, setResponse] = useState([]);
+  const [error, setError] = useState(false);
 
   const [accountId, setAccountId] = useState(null);
   const [principalId, setPrincipalId] = useState(null);
@@ -49,8 +50,11 @@ const useRequests = (incomingRequests, callId, portId) => {
 
   useEffect(async () => {
     if (requests.length === 0) {
-      await portRPC.call('handleRequestTransfer', [response, callId, portId]);
-      window.close();
+      const success = await portRPC.call('handleRequestTransfer', [response, callId, portId]);
+      if (success) {
+        window.close();
+      }
+      setError(!success);
     }
   }, [requests]);
 
@@ -102,6 +106,7 @@ const useRequests = (incomingRequests, callId, portId) => {
     handleRequest,
     handleDeclineAll,
     principalId,
+    error,
   };
 };
 

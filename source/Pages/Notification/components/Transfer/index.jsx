@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import getICPPrice from '@shared/services/ICPPrice';
 import { setICPPrice } from '@redux/icp';
 import initConfig from '../../../../locales';
+import ErrorScreen from '../NotificationError';
 import useStyles from './styles';
 import RequestHandler from './components/RequestHandler';
 import useRequests from './hooks/useRequests';
@@ -52,6 +53,7 @@ const Transfer = ({
     handleRequest,
     handleDeclineAll,
     principalId,
+    error,
   } = useRequests([args], callId, portId);
 
   const requestCount = requests.length;
@@ -80,7 +82,9 @@ const Transfer = ({
   return (
     <Layout disableProfile>
 
-      {
+      {error ? <ErrorScreen /> : (
+        <>
+          {
         requestCount > 1
         && (
           <RequestHandler
@@ -91,7 +95,7 @@ const Transfer = ({
           />
         )
         }
-      {
+          {
         requestCount > 0
         && (
           <>
@@ -128,6 +132,8 @@ const Transfer = ({
           </>
         )
       }
+        </>
+      )}
     </Layout>
   );
 };
