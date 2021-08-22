@@ -1,10 +1,38 @@
-const regeneratorRuntime = require("regenerator-runtime");
 const JsConfigPathsMapper = require('jsconfig-paths-jest-mapper');
+const regeneratorRuntime = require("regenerator-runtime");
 const chrome = require('sinon-chrome/extensions');
+const firefox = require('selenium-webdriver/firefox');
 const browser = require('sinon-chrome/webextensions');
+const webdriver = require('selenium-webdriver');
+const { Builder, By, Key, Capabilities, until } = require('selenium-webdriver');
+const { Options: ChromeOptions } = require('selenium-webdriver/chrome');
+const { Options: FirefoxOptions } = require('selenium-webdriver/firefox');
+const path = require('path');
 
-if (!chrome.runtime) chrome.runtime = {};
-if (!chrome.runtime.id) chrome.runtime.id = "history-delete";
+const instantiateSeleniumDriver = async () => {
+  const seleniumChrome = webdriver.Capabilities.chrome();
+  const seleniumFirefox = webdriver.Capabilities.firefox();
+
+  const chromeOptions = new ChromeOptions();
+  const firefoxOptions = new FirefoxOptions();
+
+  chromeOptions.addArguments("--load-extension=" + path.resolve(__dirname, 'extension', 'chrome'));
+  firefoxOptions.setPreference("xpinstall.signatures.required", true);
+
+  const chromeDriver = new webdriver.Builder()
+    .withCapabilities(seleniumChrome)
+    .setChromeOptions(chromeOptions)
+    .build();
+
+  const firefoxDriver = new webdriver.Builder()
+    .forBrowser('firefox')
+    .setFirefoxOptions(firefoxOptions)
+    .build();
+
+  //await firefoxDriver.installAddon(path.resolve(__dirname, 'extension', 'firefox.xpi'));
+
+  return [chromeDriver, firefoxDriver];
+};
 
 module.exports = {
   moduleFileExtensions: ["js", "jsx"],
@@ -16,7 +44,11 @@ module.exports = {
   globals: {
     chrome,
     browser,
-    regeneratorRuntime
+    regeneratorRuntime,
+    getDrivers: instantiateSeleniumDriver,
+    closeDriver: (drivers) => {
+      drivers.forEach(driver => driver.quit());
+    },
   },
   moduleNameMapper: new JsConfigPathsMapper({ configFileName: "./jsconfig.json" }),
 };
