@@ -11,7 +11,7 @@ import useStyles from './styles';
 function ErrorScreen() {
   const { t } = useTranslation();
   const { navigator } = useRouter();
-  const navigateHome = () => navigator.navigate('home');
+  const navigateHome = () => navigator?.navigate?.('home');
   const styles = useStyles();
   return (
     <Layout>

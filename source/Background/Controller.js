@@ -42,11 +42,12 @@ extension.runtime.onMessage.addListener((message, _, sendResponse) => {
 });
 
 const isInitialized = async () => {
-  const keyringHandler = getKeyringHandler(HANDLER_TYPES.GET_LOCKS, keyring);
+  await keyring?.init();
+  const getLocks = getKeyringHandler(HANDLER_TYPES.GET_LOCKS, keyring);
 
-  if (!keyringHandler) return false;
+  if (!getLocks) return false;
 
-  const locks = await keyringHandler();
+  const locks = await getLocks();
 
   return locks?.isInitialized;
 };
@@ -289,6 +290,7 @@ backgroundController.exposeController(
     // Answer this callback no matter if the transfer succeeds or not.
     callback(null, true);
     if (transfer?.status === 'declined') {
+      callback(null, true);
       callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
     } else {
       const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
@@ -297,13 +299,16 @@ backgroundController.exposeController(
       if (assets?.[0]?.amount * E8S_PER_ICP > transfer.amount) {
         const response = await sendToken(transfer);
         if (response.error) {
+          callback(null, false);
           callback(ERRORS.SERVER_ERROR(response.error), null, [
             { portId, callId },
           ]);
         } else {
+          callback(null, true);
           callback(null, response, [{ portId, callId }]);
         }
       } else {
+        callback(null, false);
         callback(ERRORS.BALANCE_ERROR, null, [{ portId, callId }]);
       }
     }
@@ -463,7 +468,7 @@ backgroundController.exposeController(
     } else {
       plugProvider.deleteAgent();
       callback(ERRORS.AGENT_REJECTED, null, [{ portId, callId }]);
-      callback(null, false);
+      callback(null, true); // Return true to close the modal
     }
   },
 );

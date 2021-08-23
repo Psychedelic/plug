@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation, initReactI18next } from 'react-i18next';
 import { PortRPC } from '@fleekhq/browser-rpc';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -17,6 +17,7 @@ import PropTypes from 'prop-types';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { setAccountInfo } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import ErrorScreen from '../NotificationError';
 import initConfig from '../../../../locales';
 
 import useStyles from './styles';
@@ -37,6 +38,7 @@ const AllowAgent = ({
   const classes = useStyles();
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const [error, setError] = useState(false);
 
   const {
     url,
@@ -44,8 +46,11 @@ const AllowAgent = ({
   } = metadata || {};
 
   const handleAllowAgent = async (status) => {
-    await portRPC.call('handleAllowAgent', [url, { status, whitelist: args?.whitelist }, callId, portId]);
-    window.close();
+    const success = await portRPC.call('handleAllowAgent', [url, { status, whitelist: args?.whitelist }, callId, portId]);
+    if (success) {
+      window.close();
+    }
+    setError(!success);
   };
 
   useEffect(() => {
@@ -73,39 +78,41 @@ const AllowAgent = ({
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Layout disableProfile>
-          <div className={classes.padTop}>
-            <Container>
-              <IncomingAction url={url} image={icons[0] || null} action={t('whitelist.title')} />
+          {error ? <ErrorScreen /> : (
+            <div className={classes.padTop}>
+              <Container>
+                <IncomingAction url={url} image={icons[0] || null} action={t('whitelist.title')} />
 
-              <WhitelistContainer>
-                {
+                <WhitelistContainer>
+                  {
                   args?.whitelist.map((id) => <WhitelistItem canisterId={id} />)
                 }
-              </WhitelistContainer>
+                </WhitelistContainer>
 
-              <div className={classes.buttonContainer}>
-                <Button
-                  variant="default"
-                  value={t('common.decline')}
-                  onClick={() => handleAllowAgent(
-                    args?.updateWhitelist
-                      ? CONNECTION_STATUS.rejectedAgent
-                      : CONNECTION_STATUS.rejected,
-                  )}
-                  style={{ width: '96%' }}
-                  fullWidth
-                />
-                <Button
-                  variant="rainbow"
-                  value={t('common.allow')}
-                  onClick={() => handleAllowAgent(CONNECTION_STATUS.accepted)}
-                  fullWidth
-                  style={{ width: '96%' }}
-                  wrapperStyle={{ textAlign: 'right' }}
-                />
-              </div>
-            </Container>
-          </div>
+                <div className={classes.buttonContainer}>
+                  <Button
+                    variant="default"
+                    value={t('common.decline')}
+                    onClick={() => handleAllowAgent(
+                      args?.updateWhitelist
+                        ? CONNECTION_STATUS.rejectedAgent
+                        : CONNECTION_STATUS.rejected,
+                    )}
+                    style={{ width: '96%' }}
+                    fullWidth
+                  />
+                  <Button
+                    variant="rainbow"
+                    value={t('common.allow')}
+                    onClick={() => handleAllowAgent(CONNECTION_STATUS.accepted)}
+                    fullWidth
+                    style={{ width: '96%' }}
+                    wrapperStyle={{ textAlign: 'right' }}
+                  />
+                </div>
+              </Container>
+            </div>
+          )}
         </Layout>
       </ThemeProvider>
     </Provider>
