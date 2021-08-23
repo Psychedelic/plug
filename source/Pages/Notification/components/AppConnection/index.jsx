@@ -16,6 +16,7 @@ import { Layout } from '@components';
 import extension from 'extensionizer';
 import initConfig from '../../../../locales';
 import SIZES from '../Transfer/constants';
+import ErrorScreen from '../NotificationError';
 import useStyles from './styles';
 
 i18n.use(initReactI18next).init(initConfig);
@@ -32,6 +33,7 @@ const AppConnection = () => {
   const classes = useStyles();
   const { t } = useTranslation();
   const [status, setStatus] = useState(null);
+  const [error, setError] = useState(false);
 
   const { query } = qs.parseUrl(window.location.href);
 
@@ -43,8 +45,11 @@ const AppConnection = () => {
   } = query;
 
   const handleResponse = async () => {
-    await portRPC.call('handleAllowAgent', [url, { status, whitelist: [] }, callId, portId]);
-    window.close();
+    const success = await portRPC.call('handleAllowAgent', [url, { status, whitelist: [] }, callId, portId]);
+    if (success) {
+      window.close();
+    }
+    setError(!success);
   };
 
   extension.windows.update(
@@ -71,28 +76,30 @@ const AppConnection = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Layout disableProfile>
-          <div className={classes.padTop}>
-            <Container>
-              <IncomingAction url={url} image={icon} action={t('appConnection.connect')} />
-              <div className={classes.buttonContainer}>
-                <Button
-                  variant="default"
-                  value={t('common.decline')}
-                  onClick={() => setStatus(CONNECTION_STATUS.rejected)}
-                  style={{ width: '96%' }}
-                  fullWidth
-                />
-                <Button
-                  variant="rainbow"
-                  value={t('common.allow')}
-                  onClick={() => setStatus(CONNECTION_STATUS.accepted)}
-                  fullWidth
-                  style={{ width: '96%' }}
-                  wrapperStyle={{ textAlign: 'right' }}
-                />
-              </div>
-            </Container>
-          </div>
+          {error ? <ErrorScreen /> : (
+            <div className={classes.padTop}>
+              <Container>
+                <IncomingAction url={url} image={icon} action={t('appConnection.connect')} />
+                <div className={classes.buttonContainer}>
+                  <Button
+                    variant="default"
+                    value={t('common.decline')}
+                    onClick={() => setStatus(CONNECTION_STATUS.rejected)}
+                    style={{ width: '96%' }}
+                    fullWidth
+                  />
+                  <Button
+                    variant="rainbow"
+                    value={t('common.allow')}
+                    onClick={() => setStatus(CONNECTION_STATUS.accepted)}
+                    fullWidth
+                    style={{ width: '96%' }}
+                    wrapperStyle={{ textAlign: 'right' }}
+                  />
+                </div>
+              </Container>
+            </div>
+          )}
         </Layout>
       </ThemeProvider>
     </Provider>
