@@ -4,7 +4,10 @@ export default {
     message:
       'You are not connected. You must call window.ic.plug.requestConnect() and have the user accept the popup before you call this method.',
   },
-  BALANCE_ERROR: { code: 400, message: 'Insufficient balance.' },
+  BALANCE_ERROR: {
+    code: 400,
+    message: 'Insufficient balance or balance unavailable.',
+  },
   CANISTER_ID_ERROR: { code: 400, message: 'Invalid canister id/s.' },
   TRANSACTION_REJECTED: {
     code: 401,
