@@ -17,7 +17,7 @@ const instantiateSeleniumDriver = async () => {
   const firefoxOptions = new FirefoxOptions();
 
   chromeOptions.addArguments("--load-extension=" + path.resolve(__dirname, 'extension', 'chrome'));
-  firefoxOptions.setPreference("xpinstall.signatures.required", true);
+  firefoxOptions.setPreference("xpinstall.signatures.required", false);
 
   const chromeDriver = new webdriver.Builder()
     .withCapabilities(seleniumChrome)
