@@ -20,6 +20,10 @@ export default makeStyles((theme) => ({
   },
   web: {
     fontWeight: 700,
+    textOverflow: 'ellipsis',
+    width: 200,
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
   },
   rainbow: {
     background:

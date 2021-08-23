@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import useStyles from './styles';
 
 const TextInput = ({
-  value, type, onChange, startIcon, error, ...other
+  value, type, onChange, startIcon, error, disabled, ...other
 }) => {
   const classes = useStyles();
 
@@ -15,6 +15,7 @@ const TextInput = ({
     <InputBase
       classes={{
         root: clsx(classes.root,
+          !disabled && classes.hover,
           (isFocus && !error) && classes.focus,
           error && classes.error),
       }}
@@ -24,6 +25,7 @@ const TextInput = ({
       startAdornment={startIcon}
       onFocus={() => setIsFocus(true)}
       onBlur={() => setIsFocus(false)}
+      disabled={disabled}
       {...other}
     >
       <img />
@@ -36,6 +38,7 @@ export default TextInput;
 TextInput.defaultProps = {
   error: false,
   startIcon: null,
+  disabled: false,
 };
 
 TextInput.propTypes = {
@@ -44,4 +47,5 @@ TextInput.propTypes = {
   onChange: PropTypes.func.isRequired,
   startIcon: PropTypes.node,
   error: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
