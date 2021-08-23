@@ -81,7 +81,6 @@ const Transfer = ({
 
   return (
     <Layout disableProfile>
-
       {error ? <ErrorScreen /> : (
         <>
           {
@@ -95,7 +94,6 @@ const Transfer = ({
           />
         )
         }
-
           <>
             <Tabs tabs={tabs} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
             <div className={classes.buttonsWrapper}>
@@ -130,8 +128,6 @@ const Transfer = ({
                 }
             </div>
           </>
-          )
-
         </>
       )}
     </Layout>
