@@ -27,6 +27,10 @@ const getTitle = (type, symbol, swapData, plug, t) => {
       return `${t('activity.title.swap')} ${symbol} ${t('activity.title.for')} ${swapData.currency.name}`;
     case ACTIVITY_TYPES.PLUG:
       return `${t('activity.title.pluggedInto')} ${plug.name}`;
+    case ACTIVITY_TYPES.BURN:
+      return `${t('activity.title.burn')} ${symbol}`;
+    case ACTIVITY_TYPES.MINT:
+      return `${t('activity.title.mint')} ${symbol}`;
     default:
       return '';
   }
@@ -52,12 +56,14 @@ const getDate = (status, date) => (
 const getSubtitle = (type, to, from, t) => ({
   [ACTIVITY_TYPES.SEND]: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
   [ACTIVITY_TYPES.RECEIVE]: ` · ${t('activity.subtitle.from')}: ${shortAddress(from)}`,
+  [ACTIVITY_TYPES.BURN]: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
 })[type] || '';
 
 const getAddress = (type, to, from) => (
   {
     [ACTIVITY_TYPES.SEND]: to,
     [ACTIVITY_TYPES.RECEIVE]: from,
+    [ACTIVITY_TYPES.BURN]: to,
   }
 )[type] || '';
 

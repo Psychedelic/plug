@@ -27,7 +27,9 @@
       "receive": "Receive",
       "swap": "Swap",
       "for": "for",
-      "pluggedInto": "Plugged into"
+      "pluggedInto": "Plugged into",
+      "mint": "Mint",
+      "burn": "Burn"
     },
     "subtitle": {
       "to": "To",

@@ -3,6 +3,8 @@ export const ACTIVITY_TYPES = {
   RECEIVE: 1,
   SWAP: 2,
   PLUG: 3,
+  BURN: 4,
+  MINT: 5,
 };
 
 export const ACTIVITY_STATUS = {
