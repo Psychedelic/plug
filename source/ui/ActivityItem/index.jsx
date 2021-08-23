@@ -101,6 +101,11 @@ const ActivityItem = ({
 
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipText, setTooltipText] = useState(copyText);
+  const handleItemClick = () => {
+    if (symbol === 'ICP') {
+      openICRocksTx(hash);
+    }
+  };
 
   const handleClickCopy = (e) => {
     e.stopPropagation();
@@ -138,12 +143,12 @@ const ActivityItem = ({
     );
   }
 
-  const isTransaction = [ACTIVITY_TYPES.SEND, ACTIVITY_TYPES.RECEIVE].includes(type);
+  const isTransaction = [ACTIVITY_TYPES.SEND, ACTIVITY_TYPES.RECEIVE].includes(type) && symbol === 'ICP';
 
   return (
     <div
       className={clsx(classes.root, isTransaction && classes.pointer)}
-      onClick={() => openICRocksTx(hash)}
+      onClick={handleItemClick}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
