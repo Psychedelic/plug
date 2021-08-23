@@ -54,17 +54,17 @@ const Transfer = ({
     handleDeclineAll,
     principalId,
     error,
+    loading,
   } = useRequests([args], callId, portId);
 
   const requestCount = requests.length;
-
   const tabs = [
     {
       label: t('transfer.details'),
       component: <Details
         url={url}
         image={icons[0] || null}
-        amount={requestCount > 0 ? requests[currentRequest].amount : 0}
+        amount={(requests?.[currentRequest] || args)?.amount}
         requestCount={requestCount}
         icpPrice={icpPrice}
       />,
@@ -95,9 +95,7 @@ const Transfer = ({
           />
         )
         }
-          {
-        requestCount > 0
-        && (
+
           <>
             <Tabs tabs={tabs} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
             <div className={classes.buttonsWrapper}>
@@ -108,6 +106,7 @@ const Transfer = ({
                   onClick={() => handleRequest(requests[currentRequest], 'declined')}
                   fullWidth
                   style={{ width: '96%' }}
+                  disabled={loading}
                 />
                 <Button
                   variant="rainbow"
@@ -116,6 +115,7 @@ const Transfer = ({
                   fullWidth
                   style={{ width: '96%' }}
                   wrapperStyle={{ textAlign: 'right' }}
+                  loading={loading}
                 />
               </div>
               {
@@ -130,8 +130,8 @@ const Transfer = ({
                 }
             </div>
           </>
-        )
-      }
+          )
+
         </>
       )}
     </Layout>
