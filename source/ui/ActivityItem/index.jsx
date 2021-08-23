@@ -30,7 +30,7 @@ const getTitle = (type, symbol, swapData, plug, t) => {
     case ACTIVITY_TYPES.BURN:
       return `${t('activity.title.burn')} ${symbol}`;
     case ACTIVITY_TYPES.MINT:
-      return `${t('activity.title.mint')} ${symbol}`;
+      return `${t('activity.title.receive')} ${symbol}`;
     default:
       return '';
   }
