@@ -11,20 +11,21 @@ export default makeStyles((theme) => ({
     padding: '4px 12px',
     boxShadow: '0px 1px 2px rgb(0 0 0 / 5%)',
 
-    '&:hover': {
-      border: 'double 1px transparent',
-      backgroundImage:
-        'linear-gradient(white, white), radial-gradient(circle at top left,#FFE701,#FA51D3,#10D9ED,#53FF54)',
-      backgroundOrigin: 'border-box',
-      backgroundClip: 'padding-box, border-box',
-    },
-
     '&:focus': {
       border: 'none',
     },
 
     'label + &': {
       marginTop: theme.spacing(2),
+    },
+  },
+  hover: {
+    '&:hover': {
+      border: 'double 1px transparent',
+      backgroundImage:
+        'linear-gradient(white, white), radial-gradient(circle at top left,#FFE701,#FA51D3,#10D9ED,#53FF54)',
+      backgroundOrigin: 'border-box',
+      backgroundClip: 'padding-box, border-box',
     },
   },
   error: {

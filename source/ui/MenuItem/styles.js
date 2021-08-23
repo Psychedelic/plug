@@ -21,6 +21,7 @@ export default makeStyles((theme) => ({
   smallImage: {
     width: 22,
     height: 22,
+    fontSize: 6,
   },
   bigImage: {
     width: 41,
@@ -48,17 +49,5 @@ export default makeStyles((theme) => ({
   },
   selected: {
     background: theme.palette.primary.darkGradient,
-  },
-  token: {
-    width: '22px',
-    height: '22px',
-    textAlign: 'center',
-    borderRadius: '50%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: '6px',
-    lineHeight: '10px',
-    fontWeight: 'bold',
   },
 }));
