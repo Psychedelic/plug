@@ -288,7 +288,6 @@ backgroundController.exposeController(
     const transfer = transferRequests?.[0];
 
     // Answer this callback no matter if the transfer succeeds or not.
-    callback(null, true);
     if (transfer?.status === 'declined') {
       callback(null, true);
       callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);

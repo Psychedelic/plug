@@ -21,6 +21,7 @@ portRPC.start();
 const useRequests = (incomingRequests, callId, portId) => {
   const { t } = useTranslation();
   const [currentRequest, setCurrentRequest] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [requests, setRequests] = useState(incomingRequests);
 
   const [response, setResponse] = useState([]);
@@ -50,11 +51,13 @@ const useRequests = (incomingRequests, callId, portId) => {
 
   useEffect(async () => {
     if (requests.length === 0) {
+      setLoading(true);
       const success = await portRPC.call('handleRequestTransfer', [response, callId, portId]);
       if (success) {
         window.close();
       }
       setError(!success);
+      setLoading(false);
     }
   }, [requests]);
 
@@ -107,6 +110,7 @@ const useRequests = (incomingRequests, callId, portId) => {
     handleDeclineAll,
     principalId,
     error,
+    loading,
   };
 };
 
