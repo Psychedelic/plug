@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ACTIVITY_STATUS, ACTIVITY_TYPES } from '@shared/constants/activity';
-import { E8S_PER_ICP, formatAssetBySymbol, TOKEN_IMAGES } from '@shared/constants/currencies';
+import { formatAssetBySymbol, TOKEN_IMAGES } from '@shared/constants/currencies';
 
 /* eslint-disable no-param-reassign */
 export const walletSlice = createSlice({
@@ -37,7 +37,7 @@ export const walletSlice = createSlice({
     setTransactions: (state, action) => {
       const mapTransaction = (trx) => {
         const asset = formatAssetBySymbol(
-          trx?.amount, trx?.currency?.symbol, action?.payload?.icpPrice
+          trx?.amount, trx?.currency?.symbol, action?.payload?.icpPrice,
         );
         const transaction = {
           ...asset,
