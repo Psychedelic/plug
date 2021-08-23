@@ -44,7 +44,6 @@ const MenuItem = ({
               image={image}
               symbol={symbol}
               className={clsx(size === 'large' ? classes.bigImage : classes.smallImage, alignLeft && classes.alignLeft)}
-              tokenClassName={classes.token}
             />
           </ListItemIcon>
         )
@@ -61,9 +60,9 @@ const MenuItem = ({
       {
         endText
         && (
-        <div className={classes.comingSoon}>
-          <Typography variant="subtitle2">{endText}</Typography>
-        </div>
+          <div className={classes.comingSoon}>
+            <Typography variant="subtitle2">{endText}</Typography>
+          </div>
         )
       }
 
