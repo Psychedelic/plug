@@ -49,7 +49,7 @@ describe("Inpage", () => {
     expect(browser.tabs.create.withArgs({ url: 'options.html' }).calledOnce).toBe(true);
   });
 
-  it("Sets initial route to 'home' on locked keyring", () => {
+  it("Sets initial route to 'login' on locked keyring", () => {
     extension.runtime.sendMessage.mockImplementationOnce((args, cb) => cb({ isInitialized: true }));
 
     let component;
@@ -63,7 +63,7 @@ describe("Inpage", () => {
   });
 
   /*
-  it("Sets initial route to 'login' on unlocked keyring", () => {
+  it("Sets initial route to 'home' on unlocked keyring", () => {
     extension.runtime.sendMessage.mockImplementationOnce((args, cb) => cb({
       isInitialized: true,
       isUnlocked: true,
