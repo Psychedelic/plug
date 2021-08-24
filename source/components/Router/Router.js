@@ -6,17 +6,22 @@ export const RouteUpdateContext = React.createContext();
 
 const ROUTER_KEY = 'router';
 const TAB_KEY = 'tab';
+const PROPS_KEY = 'routeProps';
 
 const Router = (props) => {
   const { storage, children, initialRouteName } = props;
 
   const [route, setRoute] = useState(initialRouteName);
   const [tabIndex, setTabIndex] = useState(0);
+  const [routeProps, setProps] = useState({});
 
-  const navigate = (routeName, tab = 0) => storage.local.set({
-    [ROUTER_KEY]: routeName,
-    [TAB_KEY]: tab,
-  });
+  const navigate = (routeName, tab = 0, navProps) => {
+    storage.local.set({
+      [ROUTER_KEY]: routeName,
+      [TAB_KEY]: tab,
+      [PROPS_KEY]: navProps,
+    });
+  };
 
   const navigationObject = {
     navigate,
@@ -27,6 +32,7 @@ const Router = (props) => {
       if (changeObject[ROUTER_KEY]) {
         setRoute(changeObject[ROUTER_KEY].newValue);
         setTabIndex(changeObject[TAB_KEY].newValue);
+        setProps(changeObject[PROPS_KEY].newValue);
       }
     });
 
@@ -34,6 +40,7 @@ const Router = (props) => {
       if (routerState[ROUTER_KEY]) {
         setRoute(routerState[ROUTER_KEY]);
         setTabIndex(routerState[TAB_KEY]);
+        setProps(routerState[PROPS_KEY].newValue);
       }
     });
   }, []);
@@ -42,12 +49,11 @@ const Router = (props) => {
     if (component.type.componentName !== 'Route') {
       throw new Error("Router children isn't a valid Route component");
     }
-
     return route === component.props.name;
   });
 
   return (
-    <RouteContext.Provider value={{ route, tabIndex }}>
+    <RouteContext.Provider value={{ route, tabIndex, routeProps }}>
       <RouteUpdateContext.Provider value={navigationObject}>
         {content}
       </RouteUpdateContext.Provider>

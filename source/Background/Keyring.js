@@ -54,6 +54,7 @@ export const HANDLER_TYPES = {
   SET_CURRENT_PRINCIPAL: 'set-current-principal',
   GET_PEM_FILE: 'get-pem-file',
   BURN_XTC: 'burn-xtc',
+  GET_LOCKS: 'get-keyring-locks',
 };
 
 export const sendMessage = (args, callback) => {

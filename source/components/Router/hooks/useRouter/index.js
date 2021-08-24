@@ -6,12 +6,13 @@ const useRouter = () => {
   const routeContext = useContext(RouteContext);
   const navigator = useContext(RouteUpdateContext);
 
-  const { route, tabIndex } = routeContext;
+  const { route, tabIndex, routeProps } = routeContext;
 
   return {
     route,
     navigator,
     tabIndex,
+    routeProps,
   };
 };
 
