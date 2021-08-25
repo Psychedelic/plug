@@ -34,9 +34,6 @@ const NFTs = () => {
     setLoading(nftsLoading);
   }, [nftsLoading]);
 
-  console.log('nfts', nfts);
-  console.log('nfts loading', nftsLoading);
-
   return (
     <LoadingWrapper loading={loading} className="small">
       <div className={classes.root}>

@@ -73,7 +73,8 @@
     "name": "Name",
     "create": "Create",
     "account": "Account",
-    "learnMore": "Learn more"
+    "learnMore": "Learn more",
+    "send": "Send"
   },
   "apps": {
     "title": "Connected Apps",
