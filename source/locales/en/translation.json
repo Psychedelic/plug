@@ -17,7 +17,8 @@
     "lock": "Lock"
   },
   "tabs": {
-    "assets": "Assets",
+    "tokens": "Tokens",
+    "nfts": "NFTs",
     "activity": "Activity",
     "apps": "Apps"
   },
@@ -301,5 +302,12 @@
     "dfxImport": "dfx identity import <identity name> <route to pem>",
     "dfxUse": "dfx identity use <identity name>",
     "selectAccount": "Select Account"
+  },
+  "nfts": {
+    "allNfts": "All NFTs",
+    "goToMarketplace": "Go to Marketplace",
+    "collection": "Collection",
+    "description": "Description",
+    "attributes": "Attributes"
   }
 }
