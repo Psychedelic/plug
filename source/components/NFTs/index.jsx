@@ -1,152 +1,61 @@
 import React, { useEffect, useState } from 'react';
-import Icon from '@assets/icons/plug.svg';
 import { Typography } from '@material-ui/core';
 import { useRouter } from '@components/Router';
+import { useDispatch, useSelector } from 'react-redux';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import LoadingWrapper from '@components/LoadingWrapper';
+import { setNfts, setSelectedNft, setNftsLoading } from '../../redux/nfts';
 import useStyles from './styles';
-
-const nfts = [{
-  id: 1671,
-  url: '1',
-  img: Icon,
-  owner: 1,
-  desc: 'Desacccc',
-  name: 'ICPunk #10',
-  properties: [
-    {
-      name: 'background',
-      value: 'yellow',
-    },
-  ],
-},
-{
-  id: 1672,
-  url: '1',
-  img: Icon,
-  owner: 1,
-  desc: 'Desacccc',
-  name: 'ICPunk #10',
-  properties: [
-    {
-      name: 'background',
-      value: 'yellow',
-    },
-  ],
-}, {
-  id: 1673,
-  url: '1',
-  img: Icon,
-  owner: 1,
-  desc: 'Desacccc',
-  name: 'ICPunk #10',
-  properties: [
-    {
-      name: 'background',
-      value: 'yellow',
-    },
-  ],
-}, {
-  id: 1674,
-  url: '1',
-  img: Icon,
-  owner: 1,
-  desc: 'Desacccc',
-  name: 'ICPunk #10',
-  properties: [
-    {
-      name: 'background',
-      value: 'yellow',
-    },
-  ],
-}, {
-  id: 1675,
-  url: '1',
-  img: Icon,
-  owner: 1,
-  desc: 'Desacccc',
-  name: 'ICPunk #10',
-  properties: [
-    {
-      name: 'background',
-      value: 'yellow',
-    },
-  ],
-}, {
-  id: 1676,
-  url: '1',
-  img: Icon,
-  owner: 1,
-  desc: 'Desacccc',
-  name: 'ICPunk #10',
-  properties: [
-    {
-      name: 'background',
-      value: 'yellow',
-    },
-  ],
-}, {
-  id: 1677,
-  url: '1',
-  img: Icon,
-  owner: 1,
-  desc: 'Desacccc',
-  name: 'ICPunk #10',
-  properties: [
-    {
-      name: 'background',
-      value: 'yellow',
-    },
-  ],
-}, {
-  id: 1678,
-  url: '1',
-  img: Icon,
-  owner: 1,
-  desc: 'Desacccc',
-  name: 'ICPunk #10',
-  properties: [
-    {
-      name: 'background',
-      value: 'yellow',
-    },
-  ],
-}, {
-  id: 1679,
-  url: '1',
-  img: Icon,
-  owner: 1,
-  desc: 'Desacccc',
-  name: 'ICPunk #10',
-  properties: [
-    {
-      name: 'background',
-      value: 'yellow',
-    },
-  ],
-},
-];
 
 const NFTs = () => {
   const classes = useStyles();
   const { navigator } = useRouter();
+  const dispatch = useDispatch();
+
+  const { nfts, nftsLoading } = useSelector((state) => state.nfts);
+  const [loading, setLoading] = useState(true);
+
+  const handleNftClick = (nft) => {
+    dispatch(setSelectedNft(nft));
+    navigator.navigate('nft-details');
+  };
+
+  useEffect(() => {
+    sendMessage({
+      type: HANDLER_TYPES.GET_NFTS,
+    }, (myNfts) => {
+      console.log('mynfts', myNfts);
+      dispatch(setNfts(myNfts));
+      dispatch(setNftsLoading(false));
+    });
+  }, []);
+
+  useEffect(() => {
+    setLoading(nftsLoading);
+  }, [nftsLoading]);
+
+  console.log('nfts', nfts);
+  console.log('nfts loading', nftsLoading);
 
   return (
-    <div className={classes.root}>
-      <Typography variant="h5" className={classes.title}>All NFTs</Typography>
-      <div className={classes.grid}>
-        {
-          nfts?.map((nft) => (
-            <div
-              className={classes.nftContainer}
-              onClick={() => navigator.navigate('send-nft')}
-            >
-              <img src={nft.img} className={classes.nft} />
-              <Typography className={classes.id} variant="subtitle1">{nft.id}</Typography>
-            </div>
-          ))
-        }
+    <LoadingWrapper loading={loading} className="small">
+      <div className={classes.root}>
+        <Typography variant="h5" className={classes.title}>All NFTs</Typography>
+        <div className={classes.grid}>
+          {
+            nfts?.map((nft) => (
+              <div
+                className={classes.nftContainer}
+                onClick={() => handleNftClick(nft)}
+              >
+                <img src={nft.img} className={classes.nft} />
+                <Typography className={classes.id} variant="subtitle1">{nft.id}</Typography>
+              </div>
+            ))
+          }
+        </div>
       </div>
-    </div>
-
+    </LoadingWrapper>
   );
 };
 
