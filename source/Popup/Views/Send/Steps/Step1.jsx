@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
 
-import { useContacts } from '@hooks';
-import { ActionDialog, IDInput } from '@components';
-import { getRandomEmoji } from '@shared/constants/emojis';
+import { IDInput } from '@components';
 import {
-  FormItem, MultiInput, Container, Button, Dialog, Alert, TextInput,
+  FormItem, MultiInput, Container, Button, Dialog, Alert,
 } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
@@ -30,40 +27,14 @@ const Step1 = ({
   address,
   handleChangeAddress,
   addressInfo,
-  handleChangeAddressInfo,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const [openAssets, setOpenAssets] = useState(false);
-  const [openAddContact, setOpenAddContact] = useState(false);
-  const [contactName, setContactName] = useState('');
-
-  const [selectedContact, setSelectedContact] = useState(null);
-
-  const handleSelectedContact = (contact) => setSelectedContact(contact);
 
   const { principalId, accountId } = useSelector((state) => state.wallet);
 
-  const { contacts, handleAddContact, handleRemoveContact } = useContacts();
-
   const isUserAddress = [principalId, accountId].includes(address);
-
-  const addContact = () => {
-    const contact = {
-      name: contactName,
-      id: address,
-      image: getRandomEmoji(),
-    };
-    handleAddContact(contact);
-    setSelectedContact(contact);
-    handleChangeAddress(contact.id);
-    setOpenAddContact(false);
-    setContactName('');
-  };
-
-  const handleChangeContactName = (e) => {
-    setContactName(e.target.value);
-  };
 
   const handleCloseAssets = (value) => {
     setOpenAssets(false);
@@ -131,13 +102,7 @@ const Step1 = ({
               <IDInput
                 value={address}
                 onChange={handleChangeAddress}
-                addressInfo={addressInfo}
-                handleChangeAddressInfo={handleChangeAddressInfo}
-                contacts={contacts}
-                handleRemoveContact={handleRemoveContact}
-                selectedContact={selectedContact}
-                handleSelectedContact={handleSelectedContact}
-                selectedAsset={selectedAsset}
+                isValid={addressInfo.isValid}
               />
             )}
           />
@@ -160,56 +125,7 @@ const Step1 = ({
           isUserAddress
           && <span className={classes.sameAddressFromTo}>{t('deposit.sameAddressFromTo')}</span>
         }
-        {
-          (address !== ''
-            && addressInfo.isValid
-            && !contacts.flatMap((c) => c.contacts).map((c) => c.id).includes(address))
-          && !isUserAddress
-          && (
-            <Grid item xs={12}>
-              <div className={clsx(classes.newAddress, classes.appearAnimation)}>
-                <span className={classes.newAddressTitle}>{t('contacts.newAddress')}</span>
-                <Button
-                  variant="primary"
-                  value={t('contacts.addContact')}
-                  onClick={() => setOpenAddContact(true)}
-                  style={{
-                    minWidth: 118,
-                    height: 27,
-                    borderRadius: 6,
-                  }}
-                />
-                {
-                  openAddContact
-                  && (
-                    <ActionDialog
-                      open={openAddContact}
-                      title={t('contacts.addToContacts')}
-                      content={(
-                        <FormItem
-                          label={t('contacts.name')}
-                          smallLabel
-                          component={(
-                            <TextInput
-                              fullWidth
-                              value={contactName}
-                              onChange={handleChangeContactName}
-                              type="text"
-                            />
-                          )}
-                        />
-                      )}
-                      button={t('common.add')}
-                      buttonVariant="rainbow"
-                      onClick={() => addContact()}
-                      onClose={() => setOpenAddContact(false)}
-                    />
-                  )
-                }
-              </div>
-            </Grid>
-          )
-        }
+
         <Grid item xs={12}>
           <Button
             variant="rainbow"
@@ -246,5 +162,4 @@ Step1.propTypes = {
   address: PropTypes.objectOf(PropTypes.object).isRequired,
   handleChangeAddress: PropTypes.func.isRequired,
   addressInfo: PropTypes.objectOf(PropTypes.object).isRequired,
-  handleChangeAddressInfo: PropTypes.func.isRequired,
 };

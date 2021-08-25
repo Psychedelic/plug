@@ -9,12 +9,12 @@ import InputBase from '../InputBase';
 import useStyles from './styles';
 
 const Select = ({
-  image, name, shadow, onClick, text, icon,
+  image, name, shadow, onClick, text, icon, readonly, imageClassName,
 }) => {
   const classes = useStyles();
   return (
     <InputBase>
-      <div className={classes.root} onClick={onClick}>
+      <div className={clsx(classes.root, readonly && classes.readonly)} onClick={onClick}>
         {
           icon
         }
@@ -24,7 +24,9 @@ const Select = ({
           <TokenIcon
             alt={name}
             image={image}
-            className={clsx(classes.icon, shadow && classes.iconShadow)}
+            className={
+              clsx(classes.icon, shadow && classes.iconShadow, imageClassName && imageClassName)
+            }
             symbol={name}
           />
           )
@@ -37,7 +39,7 @@ const Select = ({
           }
         </div>
 
-        <img src={ChevronDown} className={classes.alignRight} />
+        {!readonly && (<img src={ChevronDown} className={classes.alignRight} />)}
       </div>
     </InputBase>
   );
@@ -50,6 +52,8 @@ Select.defaultProps = {
   text: null,
   onClick: null,
   icon: null,
+  readonly: false,
+  imageClassName: '',
 };
 
 Select.propTypes = {
@@ -59,4 +63,6 @@ Select.propTypes = {
   onClick: PropTypes.func,
   text: PropTypes.string,
   icon: PropTypes.node,
+  readonly: PropTypes.bool,
+  imageClassName: PropTypes.string,
 };
