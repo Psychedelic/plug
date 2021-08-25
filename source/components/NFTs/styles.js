@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles((theme) => ({
+export default makeStyles({
   root: {
     padding: '18px 6px',
     minHeight: 320 + 118,
@@ -31,4 +31,4 @@ export default makeStyles((theme) => ({
     paddingTop: 6,
     paddingBottom: 6,
   },
-}));
+});

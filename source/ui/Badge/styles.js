@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles((theme) => ({
+export default makeStyles({
   root: {
     width: 'fit-content',
     padding: '16px 12px',
@@ -20,4 +20,16 @@ export default makeStyles((theme) => ({
     fontSize: 14,
     color: '#000000',
   },
-}));
+  valueContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icon: {
+    background: 'white',
+    width: 31,
+    height: 31,
+    borderRadius: 31,
+    marginRight: 8,
+  },
+});

@@ -54,6 +54,7 @@ export const HANDLER_TYPES = {
   SET_CURRENT_PRINCIPAL: 'set-current-principal',
   GET_PEM_FILE: 'get-pem-file',
   BURN_XTC: 'burn-xtc',
+  GET_NFTS: 'get-nfts',
 };
 
 export const sendMessage = (args, callback) => {
@@ -163,4 +164,5 @@ export const getKeyringHandler = (type, keyring) => ({
         return { error: e.message };
       }
     },
+  [HANDLER_TYPES.GET_NFTS]: async () => keyring.getNFTs(),
 }[type]);
