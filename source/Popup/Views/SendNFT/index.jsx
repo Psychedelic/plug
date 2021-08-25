@@ -11,15 +11,7 @@ import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-
-const MOCK_NFT = {
-  name: 'Punk #10',
-  id: 10,
-  url: 'https://icpunks.com/img/Clown1.png',
-  desc: 'One of the first minted punks',
-  owner: 'ogkan-uvha2-mbm2l-isqcz-odcvg-szdx6-qj5tg-ydzjf-qrwe2-lbzwp-7qe',
-  properties: [],
-};
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(() => ({
   appearAnimation: {
@@ -38,7 +30,7 @@ const SendNFT = () => {
   const [address, setAddress] = useState();
   const { navigator } = useRouter();
   const [error, setError] = useState(false);
-  const nft = MOCK_NFT;
+  const { selectedNft: nft } = useSelector((state) => state.nfts);
   const classes = useStyles();
   const transferNFT = () => {
     sendMessage({ type: HANDLER_TYPES.TRANSFER_NFT, params: { nft, to: address } },
@@ -65,9 +57,9 @@ const SendNFT = () => {
               label={t('nfts.nft')}
               component={(
                 <Select
-                  image="https://icpunks.com/img/Clown1.png"
-                  name="Punk #10"
-                  text="#10"
+                  image={nft?.url}
+                  name={nft?.name}
+                  text={`#${nft?.id}`}
                   imageClassName={classes.nftImage}
                   readonly
                   shadow

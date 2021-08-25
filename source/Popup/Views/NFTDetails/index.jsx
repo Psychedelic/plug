@@ -69,6 +69,7 @@ const NFTDetails = () => {
             style={{ width: '96%' }}
             wrapperStyle={{ textAlign: 'right' }}
             fullWidth
+            onClick={() => navigator.navigate('send-nft')}
           />
         </div>
 
