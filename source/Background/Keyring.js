@@ -45,6 +45,7 @@ export const HANDLER_TYPES = {
   GET_TRANSACTIONS: 'get-keyring-transactions',
   GET_ASSETS: 'get-keyring-assets',
   GET_BALANCE: 'get-balance',
+  GET_LOCKS: 'get-locks',
   SEND_TOKEN: 'send-token',
   EDIT_PRINCIPAL: 'edit-principal',
   GET_PUBLIC_KEY: 'get-public-key',
