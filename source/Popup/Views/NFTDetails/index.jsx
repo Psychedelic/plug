@@ -20,7 +20,9 @@ const Section = ({ icon, title, children }) => {
   return (
     <div className={classes.section}>
       <Title icon={icon} value={title} />
-      {children}
+      <div className={classes.content}>
+        {children}
+      </div>
     </div>
   );
 };
@@ -59,6 +61,7 @@ const NFTDetails = () => {
             value={t('nfts.goToMarketplace')}
             style={{ width: '96%' }}
             fullWidth
+            disabled
           />
           <Button
             variant="rainbow"
@@ -75,7 +78,7 @@ const NFTDetails = () => {
         </Section>
 
         <Section icon={DescriptionImg} title={t('nfts.description')}>
-          <Typography variant="subtitle1" value={nft?.desc} />
+          <Typography variant="subtitle1">{nft?.desc}</Typography>
         </Section>
 
         <Section icon={AttributesImg} title={t('nfts.attributes')}>
