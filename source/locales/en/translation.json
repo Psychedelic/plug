@@ -309,6 +309,11 @@
     "goToMarketplace": "Go to Marketplace",
     "collection": "Collection",
     "description": "Description",
-    "attributes": "Attributes"
+    "attributes": "Attributes",
+    "send": "Send NFT",
+    "sendTo": "To",
+    "nft": "NFT",
+    "inputPrincipalId": "Enter Principal ID",
+    "transferError": "Something went wrong while attempting to send the NFT"
   }
 }
