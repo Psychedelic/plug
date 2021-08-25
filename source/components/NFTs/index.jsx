@@ -127,6 +127,7 @@ const nfts = [{
 
 const NFTs = () => {
   const classes = useStyles();
+  const { navigator } = useRouter();
 
   return (
     <div className={classes.root}>
@@ -136,6 +137,7 @@ const NFTs = () => {
           nfts?.map((nft) => (
             <div
               className={classes.nftContainer}
+              onClick={() => navigator.navigate('send-nft')}
             >
               <img src={nft.img} className={classes.nft} />
               <Typography className={classes.id} variant="subtitle1">{nft.id}</Typography>

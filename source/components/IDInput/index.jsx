@@ -19,6 +19,7 @@ const IDInput = ({
   contacts,
   selectedContact,
   handleSelectedContact,
+  placeholder,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
@@ -60,7 +61,7 @@ const IDInput = ({
                 value={value}
                 type="text"
                 onChange={(e) => onChange(e.target.value.trim())}
-                placeholder={t('send.inputId')}
+                placeholder={placeholder || t('send.inputId')}
               />
               <div className={classes.iconContainer}>
                 {
@@ -103,4 +104,5 @@ IDInput.propTypes = {
   contacts: PropTypes.arrayOf(PropTypes.object).isRequired,
   selectedContact: PropTypes.objectOf(PropTypes.object).isRequired,
   handleSelectedContact: PropTypes.func.isRequired,
+  placeholder: PropTypes.string.isRequired,
 };
