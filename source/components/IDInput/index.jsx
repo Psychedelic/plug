@@ -128,7 +128,7 @@ const IDInput = ({
           )
       }
       {
-          (value !== ''
+          (value !== null
             && isValid
             && !contacts.flatMap((c) => c.contacts).map((c) => c.id).includes(value))
             && !isUserAddress
