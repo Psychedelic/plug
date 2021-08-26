@@ -91,7 +91,7 @@ const Profile = ({ disableProfile }) => {
             dispatch(setAssetsLoading(false));
           });
           setOpen(false);
-          navigator.navigate('home');
+          navigator.navigate('home', 0);
         }
       });
   };

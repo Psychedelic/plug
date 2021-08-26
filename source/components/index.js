@@ -5,7 +5,7 @@ export { default as WalletInfo } from './WalletInfo';
 export { default as NavBar } from './NavBar';
 export { default as Layout } from './Layout';
 export { default as Actions } from './Actions';
-export { default as Assets } from './Assets';
+export { default as Tokens } from './Tokens';
 export { default as Activity } from './Activity';
 export { default as Apps } from './Apps';
 export { default as RevealSeedPhrase } from './RevealSeedPhrase';
@@ -22,5 +22,6 @@ export { default as CopyButton } from './CopyButton';
 export { default as LoadingWrapper } from './LoadingWrapper';
 export { IconQrCode } from './Icons';
 export { default as TokenIcon } from './TokenIcon';
+export { default as NFTs } from './NFTs';
 
 export * from './Router';

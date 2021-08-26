@@ -2,7 +2,8 @@
   "connectionStatus": {
     "plugged": "You're plugged into",
     "notPlugged": "You're not plugged in",
-    "incomingConnection": "Incoming connection!"
+    "incomingConnection": "Incoming connection!",
+    "alpha": "Plug Alpha Release"
   },
   "copy": {
     "copyText": "Copy to clipboard",
@@ -17,7 +18,8 @@
     "lock": "Lock"
   },
   "tabs": {
-    "assets": "Assets",
+    "tokens": "Tokens",
+    "nfts": "NFTs",
     "activity": "Activity",
     "apps": "Apps"
   },
@@ -72,7 +74,8 @@
     "name": "Name",
     "create": "Create",
     "account": "Account",
-    "learnMore": "Learn more"
+    "learnMore": "Learn more",
+    "send": "Send"
   },
   "apps": {
     "title": "Connected Apps",
@@ -301,5 +304,19 @@
     "dfxImport": "dfx identity import <identity name> <route to pem>",
     "dfxUse": "dfx identity use <identity name>",
     "selectAccount": "Select Account"
+  },
+  "nfts": {
+    "allNfts": "All NFTs",
+    "goToMarketplace": "Go to Marketplace",
+    "collection": "Collection",
+    "description": "Description",
+    "attributes": "Attributes",
+    "send": "Send NFT",
+    "sendTo": "To",
+    "nft": "NFT",
+    "inputPrincipalId": "Enter Principal ID",
+    "transferError": "Something went wrong while attempting to send the NFT",
+    "emptyTitle": "You don't own any NFTs yet",
+    "emptyText": "When you do, they'll show here, where you will see their traits and send them."
   }
 }

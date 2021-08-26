@@ -5,7 +5,7 @@ export default makeStyles((theme) => ({
     textTransform: 'none',
     fontSize: 16,
     color: theme.palette.common.gray,
-    marginLeft: theme.spacing(2),
+    marginLeft: theme.spacing(1.5),
     minWidth: 72,
 
     '&:hover': {
