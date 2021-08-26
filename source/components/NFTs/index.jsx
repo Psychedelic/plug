@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Typography } from '@material-ui/core';
-import { useRouter } from '@components/Router';
 import { useDispatch, useSelector } from 'react-redux';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import LoadingWrapper from '@components/LoadingWrapper';
 import { useTranslation } from 'react-i18next';
+import LoadingWrapper from '../LoadingWrapper';
+import { useRouter } from '../Router';
 import { setNfts, setSelectedNft, setNftsLoading } from '../../redux/nfts';
 import useStyles from './styles';
 import EmptyState from './components/EmptyState';

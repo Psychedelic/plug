@@ -12,11 +12,10 @@ import {
   InputBase,
   TextInput,
 } from '@ui';
-import { ActionDialog } from '@components';
 import { Grid } from '@material-ui/core';
 import { useContacts } from '@hooks';
 import { getRandomEmoji } from '@shared/constants/emojis';
-
+import ActionDialog from '../ActionDialog';
 import ContactItem from '../ContactItem';
 import ContactList from '../ContactList';
 import useStyles from './styles';
