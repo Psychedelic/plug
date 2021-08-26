@@ -8,7 +8,7 @@ import LoadingWrapper from '@components/LoadingWrapper';
 import { useRouter } from '@components/Router';
 import useStyles from './styles';
 
-const Assets = () => {
+const Tokens = () => {
   const classes = useStyles();
   const { assets, assetsLoading } = useSelector((state) => state.wallet);
   const [loading, setLoading] = useState(true);
@@ -59,4 +59,4 @@ const Assets = () => {
   );
 };
 
-export default Assets;
+export default Tokens;
