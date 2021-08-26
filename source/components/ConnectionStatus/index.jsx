@@ -15,8 +15,8 @@ const CONNECTION_CONFIG = {
   },
   [CONNECTION_STATUS.rejected]: {
     icon: null,
-    label: 'connectionStatus.notPlugged',
-    className: 'inactive',
+    label: 'connectionStatus.alpha',
+    className: 'rainbow',
   },
   [CONNECTION_STATUS.pending]: {
     icon: null,

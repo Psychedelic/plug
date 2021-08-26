@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import BackIcon from '@assets/icons/back.svg';
@@ -27,7 +27,7 @@ const useStyles = makeStyles(() => ({
 
 const SendNFT = () => {
   const { t } = useTranslation();
-  const [address, setAddress] = useState();
+  const [address, setAddress] = useState(null);
   const { navigator } = useRouter();
   const [error, setError] = useState(false);
   const { selectedNft: nft } = useSelector((state) => state.nfts);
@@ -43,6 +43,11 @@ const SendNFT = () => {
       });
   };
   const handleAddressChange = (val) => setAddress(val);
+  useEffect(() => {
+    if (!nft) {
+      navigator.navigate('home', 1);
+    }
+  }, [nft]);
   return (
     <Layout>
       <Header
@@ -74,7 +79,7 @@ const SendNFT = () => {
                 <IDInput
                   value={address}
                   onChange={handleAddressChange}
-                  isValid={validatePrincipalId(address)}
+                  isValid={address === null || validatePrincipalId(address)}
                   placeholder={t('nfts.inputPrincipalId')}
                 />
             )}
@@ -86,8 +91,8 @@ const SendNFT = () => {
               value={t('common.continue')}
               fullWidth
               disabled={
-                !validatePrincipalId(address)
-                || address === null
+                address === null
+                || !validatePrincipalId(address)
                 || address === ''
               }
               onClick={transferNFT}
