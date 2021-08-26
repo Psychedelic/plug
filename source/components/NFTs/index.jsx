@@ -46,16 +46,16 @@ const NFTs = () => {
               <Typography variant="h5" className={classes.title}>{t('nfts.allNfts')}</Typography>
               <div className={classes.grid}>
                 {
-                nfts?.map((nft) => (
-                  <div
-                    className={classes.nftContainer}
-                    onClick={() => handleNftClick(nft)}
-                  >
-                    <img src={nft.url} className={classes.nft} />
-                    <Typography className={classes.id} variant="subtitle1">{nft.id}</Typography>
-                  </div>
-                ))
-              }
+                  nfts?.map((nft) => (
+                    <div
+                      className={classes.nftContainer}
+                      onClick={() => handleNftClick(nft)}
+                    >
+                      <img src={nft.url} className={classes.nft} />
+                      <Typography className={classes.id} variant="subtitle1">{nft.name}</Typography>
+                    </div>
+                  ))
+                }
               </div>
             </div>
           )
