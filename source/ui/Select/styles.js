@@ -15,6 +15,9 @@ export default makeStyles((theme) => ({
       background: '#F3F4F6',
     },
   },
+  readonly: {
+    pointer: 'none',
+  },
   icon: {
     height: 29,
     width: 29,

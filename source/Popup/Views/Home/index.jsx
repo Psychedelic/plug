@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import {
-  Actions, Assets, Activity, Apps, Layout, useRouter,
+  Actions, Tokens, Activity, Apps, Layout, useRouter, NFTs,
 } from '@components';
 import { Tabs } from '@ui';
 import { useTabs } from '@hooks';
@@ -13,8 +13,12 @@ import { setICPPrice } from '@redux/icp';
 
 const getTabs = (t) => [
   {
-    label: t('tabs.assets'),
-    component: <Assets />,
+    label: t('tabs.tokens'),
+    component: <Tokens />,
+  },
+  {
+    label: t('tabs.nfts'),
+    component: <NFTs />,
   },
   {
     label: t('tabs.activity'),

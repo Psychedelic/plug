@@ -62,4 +62,34 @@ export default makeStyles((theme) => ({
       border: `2px solid ${theme.palette.danger.main}`,
     },
   },
+  newAddress: {
+    height: 51,
+    width: '100%',
+    borderRadius: 10,
+    background: '#E1EAFE',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: `0 ${theme.spacing(1)}px`,
+    marginTop: 20,
+  },
+  newAddressTitle: {
+    color: theme.palette.common.blue,
+    fontWeight: 500,
+    fontSize: 14,
+  },
+  '@keyframes appear': {
+    '0%': {
+      opacity: '0',
+      height: 0,
+    },
+    '100%': {
+      opacity: '1',
+      height: 51,
+    },
+  },
+  appearAnimation: {
+    animationName: '$appear',
+    animationDuration: '0.5s',
+  },
 }));

@@ -55,6 +55,8 @@ export const HANDLER_TYPES = {
   SET_CURRENT_PRINCIPAL: 'set-current-principal',
   GET_PEM_FILE: 'get-pem-file',
   BURN_XTC: 'burn-xtc',
+  GET_NFTS: 'get-nfts',
+  TRANSFER_NFT: 'transfer-nft',
 };
 
 export const sendMessage = (args, callback) => {
@@ -164,4 +166,17 @@ export const getKeyringHandler = (type, keyring) => ({
         return { error: e.message };
       }
     },
+  [HANDLER_TYPES.GET_NFTS]: async () => {
+    const nfts = await keyring.getNFTs();
+    return nfts.map((nft) => ({ ...nft, id: parseInt(nft.id.toString(), 10) }));
+  },
+  [HANDLER_TYPES.TRANSFER_NFT]:
+  async ({ to, nft }) => {
+    try {
+      const response = await keyring.transferNFT({ to, id: BigInt(nft.id) });
+      return recursiveParseBigint(response);
+    } catch (e) {
+      return { error: e.message };
+    }
+  },
 }[type]);
