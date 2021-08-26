@@ -1368,10 +1368,10 @@
     node-gyp "^7.1.0"
     read-package-json-fast "^2.0.1"
 
-"@psychedelic/plug-controller@0.4.0":
-  version "0.4.0"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.4.0/44c8a4790b6d5a8f684b93c9fc47b2368bdbd17bade797b025fd9ff9a30edb44#973f54d4a8e95d57a3c5ea99b87372da4028c450"
-  integrity sha512-M5MLoZOCItLS+wCm1xG9XeDm6+xaGV2EjB+2KnZyjx/QbWfN9f9TgLhcAcdGmakz9TGUC5z+DvKerC1WL0YwIg==
+"@psychedelic/plug-controller@0.4.1":
+  version "0.4.1"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.4.1/c30f4029333102b54b71bf1f4ecb4e21b7ae13ae46684e2984d8cafe9e0e6bfe#661cfdc73925da02b47d57bf1aca784bce6cea53"
+  integrity sha512-QQTrQP+rwkHQJUNF2l0rKr5s2dbHVxeehxj5nrbwDapIzsQyY6V63CBBXvenv4Wq8gfHWCyk1THhmX7rrF9dxA==
   dependencies:
     "@babel/preset-env" "^7.14.4"
     "@dfinity/agent" "^0.9.3"
