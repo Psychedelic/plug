@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout } from '@components';
 import {
-  Header, Button, Badge, Title, LinkButton,
+  Header, Button, Badge, LinkButton,
 } from '@ui';
 import { useTranslation } from 'react-i18next';
 import BackIcon from '@assets/icons/back.svg';
@@ -11,27 +11,10 @@ import ICPunksLogo from '@assets/icons/nfts/icpunks.png';
 import CollectionImg from '@assets/icons/nfts/collection.png';
 import DescriptionImg from '@assets/icons/nfts/description.png';
 import AttributesImg from '@assets/icons/nfts/attributes.png';
+import AboutImg from '@assets/icons/nfts/about.png';
 import { Typography } from '@material-ui/core';
-import PropTypes from 'prop-types';
+import Section from './components/section';
 import useStyles from './styles';
-
-const Section = ({ icon, title, children }) => {
-  const classes = useStyles();
-  return (
-    <div className={classes.section}>
-      <Title icon={icon} value={title} />
-      <div className={classes.content}>
-        {children}
-      </div>
-    </div>
-  );
-};
-
-Section.propTypes = {
-  icon: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-};
 
 const NFTDetails = () => {
   const { t } = useTranslation();
@@ -53,7 +36,7 @@ const NFTDetails = () => {
       />
       <div className={classes.container}>
 
-        <img src={nft?.img} className={classes.image} />
+        <img src={nft?.url} className={classes.image} />
 
         <div className={classes.buttonContainer}>
           <Button
@@ -91,6 +74,15 @@ const NFTDetails = () => {
               />
             ))
           }
+        </Section>
+
+        <Section icon={AboutImg} title="About ICPunks">
+          <Typography variant="subtitle1">
+            10,000 randomly generated, unique collectible clowns
+            with proof of ownership stored on the Internet Computer blockchain.
+            Created as a reference to a meme comparing the Internet Computer token (ICP) with the
+            Insane Clown Posse - an American hip hop duo founded in 1989.
+          </Typography>
         </Section>
 
       </div>

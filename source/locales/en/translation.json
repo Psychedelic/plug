@@ -315,6 +315,8 @@
     "sendTo": "To",
     "nft": "NFT",
     "inputPrincipalId": "Enter Principal ID",
-    "transferError": "Something went wrong while attempting to send the NFT"
+    "transferError": "Something went wrong while attempting to send the NFT",
+    "emptyTitle": "You don't own any NFTs yet",
+    "emptyText": "When you do, they'll show here, where you will see their traits and send them."
   }
 }

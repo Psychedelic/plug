@@ -3,10 +3,10 @@ import { makeStyles } from '@material-ui/core/styles';
 export default makeStyles(() => ({
   image: {
     borderRadius: 15,
-    filter: 'drop-shadow(0px 0px 24px rgba(0, 0, 0, 0.25))',
     width: 280,
     height: 280,
     margin: 'auto',
+    boxShadow: 'rgb(37 41 46 / 20%) 0px 10px 30px',
   },
   buttonContainer: {
     width: '100%',
