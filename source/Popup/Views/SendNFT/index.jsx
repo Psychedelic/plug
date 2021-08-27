@@ -69,7 +69,7 @@ const SendNFT = () => {
                   readonly
                   shadow
                 />
-            )}
+              )}
             />
           </Grid>
           <Grid item xs={12}>
@@ -82,7 +82,7 @@ const SendNFT = () => {
                   isValid={address === null || validatePrincipalId(address)}
                   placeholder={t('nfts.inputPrincipalId')}
                 />
-            )}
+              )}
             />
           </Grid>
           <Grid item xs={12}>
@@ -99,16 +99,16 @@ const SendNFT = () => {
             />
           </Grid>
           {error && (
-          <Grid item xs={12}>
-            <div className={classes.appearAnimation}>
-              <Alert
-                type="danger"
-                title={(
-                  <span>{t('nfts.transferError')}</span>
-                )}
-              />
-            </div>
-          </Grid>
+            <Grid item xs={12}>
+              <div className={classes.appearAnimation}>
+                <Alert
+                  type="danger"
+                  title={(
+                    <span>{t('nfts.transferError')}</span>
+                  )}
+                />
+              </div>
+            </Grid>
           )}
         </Grid>
       </Container>
