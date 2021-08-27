@@ -5,14 +5,15 @@ import {
 } from '@ui';
 import { useTranslation } from 'react-i18next';
 import BackIcon from '@assets/icons/back.svg';
-import { useSelector } from 'react-redux';
-import { useRouter } from '@components/Router';
+import { useDispatch, useSelector } from 'react-redux';
+import { TABS, useRouter } from '@components/Router';
 import ICPunksLogo from '@assets/icons/nfts/icpunks.png';
 import CollectionImg from '@assets/icons/nfts/collection.png';
 import DescriptionImg from '@assets/icons/nfts/description.png';
 import AttributesImg from '@assets/icons/nfts/attributes.png';
 import AboutImg from '@assets/icons/nfts/about.png';
 import { Typography } from '@material-ui/core';
+import { setSelectedNft } from '@redux/nfts';
 import Section from './components/section';
 import useStyles from './styles';
 
@@ -21,16 +22,22 @@ const NFTDetails = () => {
   const { selectedNft: nft } = useSelector((state) => state.nfts);
   const { navigator } = useRouter();
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   if (!nft) {
     navigator.navigate('home');
     return null;
   }
 
+  const handleBack = () => {
+    dispatch(setSelectedNft(null));
+    navigator.navigate('home', TABS.NFTS);
+  };
+
   return (
     <Layout>
       <Header
-        left={<LinkButton value={t('common.back')} onClick={() => navigator.navigate('home', 1)} startIcon={BackIcon} />}
+        left={<LinkButton value={t('common.back')} onClick={handleBack} startIcon={BackIcon} />}
         center={nft?.name}
         right={null}
       />
