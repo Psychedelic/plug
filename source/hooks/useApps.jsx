@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import extension from 'extensionizer';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
-import plugProvider from '../Inpage/index';
 
 const storage = extension.storage.local;
 
