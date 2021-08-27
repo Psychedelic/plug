@@ -23,7 +23,9 @@ import { icIdsUrl } from '@shared/constants/urls';
 import browser from 'webextension-polyfill';
 import ArrowUpRight from '@assets/icons/arrow-up-right.png';
 import clsx from 'clsx';
-import { useRouter, Plug, TokenIcon } from '@components';
+import {
+  useRouter, Plug, TokenIcon, TABS,
+} from '@components';
 
 import { ADDRESS_TYPES, DEFAULT_FEE } from '@shared/constants/addresses';
 import useStyles from '../../styles';
@@ -103,7 +105,6 @@ const Step3 = ({
             <USDFormat value={subtotal} />
           </Typography>
         </Grid>
-
         <Grid item xs={12}>
           <Card>
             {
@@ -207,7 +208,7 @@ const Step3 = ({
                   <Button
                     variant="rainbow"
                     value={t('send.returnHome')}
-                    onClick={() => navigator.navigate('home', 1)}
+                    onClick={() => navigator.navigate('home', TABS.ACTIVITY)}
                     fullWidth
                   />
                   {transaction && <LinkButton onClick={openICRocksTx} value={t('send.viewTxOnICRocks')} />}

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 
 import BackIcon from '@assets/icons/back.svg';
 import { Layout, IDInput } from '@components';
-import { useRouter } from '@components/Router';
+import { TABS, useRouter } from '@components/Router';
 import {
   Header, LinkButton, Container, FormItem, Select, Button, Alert,
 } from '@ui';
@@ -11,7 +12,7 @@ import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { useSelector } from 'react-redux';
+import { setSelectedNft, setNfts } from '@redux/nfts';
 
 const useStyles = makeStyles(() => ({
   appearAnimation: {
@@ -28,24 +29,32 @@ const useStyles = makeStyles(() => ({
 const SendNFT = () => {
   const { t } = useTranslation();
   const [address, setAddress] = useState(null);
+  const [loading, setLoading] = useState(false);
   const { navigator } = useRouter();
   const [error, setError] = useState(false);
-  const { selectedNft: nft } = useSelector((state) => state.nfts);
+  const dispatch = useDispatch();
+  const { selectedNft: nft, nfts } = useSelector((state) => state.nfts);
   const classes = useStyles();
   const transferNFT = () => {
+    setLoading(true);
+    setError(false);
     sendMessage({ type: HANDLER_TYPES.TRANSFER_NFT, params: { nft, to: address } },
       (success) => {
+        setLoading(false);
         if (success) {
-          navigator.navigate('home', 1);
+          dispatch(setNfts(nfts.filter((token) => token.id !== nft.id)));
+          dispatch(setSelectedNft(null));
+          navigator.navigate('home', TABS.NFTS);
         } else {
           setError(true);
         }
       });
   };
+  const fallbackNftUrl = (url) => (url?.includes?.('https') ? url : `https://qcg3w-tyaaa-aaaah-qakea-cai.raw.ic0.app${url}`);
   const handleAddressChange = (val) => setAddress(val);
   useEffect(() => {
     if (!nft) {
-      navigator.navigate('home', 1);
+      navigator.navigate('home', TABS.NFTS);
     }
   }, [nft]);
   return (
@@ -62,7 +71,7 @@ const SendNFT = () => {
               label={t('nfts.nft')}
               component={(
                 <Select
-                  image={nft?.url}
+                  image={fallbackNftUrl(nft?.url)}
                   name={nft?.name}
                   text={`#${nft?.id}`}
                   imageClassName={classes.nftImage}
@@ -96,6 +105,7 @@ const SendNFT = () => {
                 || address === ''
               }
               onClick={transferNFT}
+              loading={loading}
             />
           </Grid>
           {error && (

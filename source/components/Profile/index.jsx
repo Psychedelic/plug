@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import BluePencil from '@assets/icons/blue-pencil.svg';
 import { getRandomEmoji } from '@shared/constants/emojis';
 import clsx from 'clsx';
-import { useRouter } from '../Router';
+import { TABS, useRouter } from '../Router';
 import ActionDialog from '../ActionDialog';
 import useMenuItems from '../../hooks/useMenuItems';
 import useStyles from './styles';
@@ -91,7 +91,7 @@ const Profile = ({ disableProfile }) => {
             dispatch(setAssetsLoading(false));
           });
           setOpen(false);
-          navigator.navigate('home', 0);
+          navigator.navigate('home', TABS.TOKENS);
         }
       });
   };
