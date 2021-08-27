@@ -67,4 +67,9 @@ export default makeStyles((theme) => ({
   tooltip: {
     margin: '8px 0',
   },
+  amountContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+  },
 }));
