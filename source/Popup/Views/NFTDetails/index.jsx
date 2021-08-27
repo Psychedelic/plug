@@ -34,6 +34,8 @@ const NFTDetails = () => {
     navigator.navigate('home', TABS.NFTS);
   };
 
+  const fallbackNftUrl = (url) => (url?.includes?.('https') ? url : `https://qcg3w-tyaaa-aaaah-qakea-cai.raw.ic0.app${url}`);
+
   return (
     <Layout>
       <Header
@@ -43,7 +45,7 @@ const NFTDetails = () => {
       />
       <div className={classes.container}>
 
-        <img src={nft?.url} className={classes.image} />
+        <img src={fallbackNftUrl(nft?.url)} className={classes.image} />
 
         <div className={classes.buttonContainer}>
           <Button
