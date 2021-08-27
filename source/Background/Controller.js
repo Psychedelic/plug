@@ -68,11 +68,12 @@ const secureController = async (callback, controller) => {
 backgroundController.exposeController('isConnected', async (opts, url) => secureController(opts.callback, async () => {
   const { callback } = opts;
 
-  storage.get('apps', (state) => {
-    if (state?.apps?.[url]) {
+  storage.get(keyring.currentWalletId.toString(), (state) => {
+    const apps = state?.[keyring.currentWalletId]?.apps || {};
+    if (apps?.[url]) {
       callback(
         null,
-        state?.apps?.[url].status === CONNECTION_STATUS.accepted,
+        apps?.[url].status === CONNECTION_STATUS.accepted,
       );
     } else {
       callback(null, false);
@@ -95,9 +96,9 @@ backgroundController.exposeController(
     const { id: portId } = sender;
     const { url: domainUrl, name, icons } = metadata;
 
-    storage.get('apps', (response) => {
+    storage.get(keyring.currentWalletId.toString(), (response) => {
       const apps = {
-        ...response.apps,
+        ...response?.[keyring.currentWalletId]?.apps,
         [domainUrl]: {
           url: domainUrl,
           name,
@@ -106,7 +107,7 @@ backgroundController.exposeController(
         },
       };
 
-      storage.set({ apps });
+      storage.set({ [keyring.currentWalletId]: { apps } });
     });
 
     // if we receive a whitelist, we create agent
@@ -176,9 +177,10 @@ backgroundController.exposeController(
   'requestBalance',
   async (opts, metadata, accountId) => secureController(opts.callback, async () => {
     const { callback, message, sender } = opts;
-    storage.get('apps', async (state) => {
+    storage.get(keyring.currentWalletId.toString(), async (state) => {
+      const apps = state?.[keyring.currentWalletId]?.apps || {};
       if (
-        state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted
+        apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted
       ) {
         if (Number.isNaN(parseInt(accountId, 10))) {
           callback(ERRORS.CLIENT_ERROR('Invalid account id'), null);
@@ -214,9 +216,10 @@ backgroundController.exposeController(
   'handleRequestBalance',
   async (opts, url, accountId, callId, portId) => {
     const { callback } = opts;
-    storage.get('apps', async (state) => {
+    storage.get(keyring.currentWalletId.toString(), async (state) => {
+      const apps = state?.[keyring.currentWalletId]?.apps || {};
       callback(null, true);
-      if (state?.apps?.[url]?.status === CONNECTION_STATUS.accepted) {
+      if (apps?.[url]?.status === CONNECTION_STATUS.accepted) {
         const getBalance = getKeyringHandler(
           HANDLER_TYPES.GET_BALANCE,
           keyring,
@@ -243,9 +246,10 @@ backgroundController.exposeController(
 
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
-    storage.get('apps', async (state) => {
+    storage.get(keyring.currentWalletId.toString(), async (state) => {
+      const apps = state?.[keyring.currentWalletId]?.apps || {};
       if (
-        state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted
+        apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted
       ) {
         const argsError = validateTransferArgs(args);
         if (argsError) {
@@ -319,9 +323,10 @@ backgroundController.exposeController(
   async (opts, payload, metadata) => {
     const { callback } = opts;
     try {
-      storage.get('apps', async (state) => {
+      storage.get(keyring.currentWalletId.toString(), async (state) => {
+        const apps = state?.[keyring.currentWalletId]?.apps || {};
         if (
-          state?.apps?.[metadata.url]?.status !== CONNECTION_STATUS.accepted
+          apps?.[metadata.url]?.status !== CONNECTION_STATUS.accepted
         ) {
           callback(ERRORS.CONNECTION_ERROR, null);
           return;
@@ -361,8 +366,8 @@ backgroundController.exposeController(
       return;
     }
 
-    storage.get('apps', async (state) => {
-      const app = state?.apps?.[metadata.url];
+    storage.get(keyring.currentWalletId.toString(), async (state) => {
+      const app = state?.[keyring.currentWalletId]?.apps?.[metadata.url] || {};
       if (app?.status === CONNECTION_STATUS.accepted) {
         const allWhitelisted = areAllElementsIn(whitelist, app?.whitelist);
         const height = keyring?.isUnlocked
@@ -433,27 +438,24 @@ backgroundController.exposeController(
   'handleAllowAgent',
   async (opts, url, response, callId, portId) => {
     const { callback } = opts;
-    storage.get('apps', (state) => {
-      const apps = state.apps || {};
+    storage.get(keyring.currentWalletId.toString(), (state) => {
+      const apps = state?.[keyring.currentWalletId]?.apps || {};
       const status = response.status === CONNECTION_STATUS.rejectedAgent
         ? CONNECTION_STATUS.accepted
         : response.status;
       const whitelist = response.status === CONNECTION_STATUS.accepted
         ? response.whitelist
         : [];
-
-      const newApps = Object.keys(apps).reduce((obj, key) => {
-        const newObj = { ...obj };
-        newObj[key] = apps[key];
-        if (key === url) {
-          newObj[key].status = status || CONNECTION_STATUS.rejected;
-          newObj[key].date = new Date().toISOString();
-          newObj[key].whitelist = whitelist;
-        }
-        return newObj;
-      }, {});
-
-      storage.set({ apps: newApps });
+      const newApps = {
+        ...apps,
+        [url]: {
+          ...apps[url],
+          status: status || CONNECTION_STATUS.rejected,
+          date: new Date().toISOString(),
+          whitelist,
+        },
+      };
+      storage.set({ [keyring.currentWalletId]: { apps: newApps } });
     });
     if (response?.status === CONNECTION_STATUS.accepted) {
       try {
