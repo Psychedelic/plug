@@ -7,13 +7,20 @@ export const RouteUpdateContext = React.createContext();
 const ROUTER_KEY = 'router';
 const TAB_KEY = 'tab';
 
+export const TABS = {
+  TOKENS: 0,
+  NFTS: 1,
+  ACTIVITY: 2,
+  APPS: 3,
+};
+
 const Router = (props) => {
   const { storage, children, initialRouteName } = props;
 
   const [route, setRoute] = useState(initialRouteName);
-  const [tabIndex, setTabIndex] = useState(0);
+  const [tabIndex, setTabIndex] = useState(TABS.TOKENS);
 
-  const navigate = (routeName, tab = 0) => storage.local.set({
+  const navigate = (routeName, tab = TABS.TOKENS) => storage.local.set({
     [ROUTER_KEY]: routeName,
     [TAB_KEY]: tab,
   });
