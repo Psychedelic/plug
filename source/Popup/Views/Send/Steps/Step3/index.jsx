@@ -23,7 +23,9 @@ import { icIdsUrl } from '@shared/constants/urls';
 import browser from 'webextension-polyfill';
 import ArrowUpRight from '@assets/icons/arrow-up-right.png';
 import clsx from 'clsx';
-import { useRouter, Plug, TokenIcon, TABS } from '@components';
+import {
+  useRouter, Plug, TokenIcon, TABS,
+} from '@components';
 
 import { ADDRESS_TYPES, DEFAULT_FEE } from '@shared/constants/addresses';
 import useStyles from '../../styles';
