@@ -37,7 +37,7 @@ const NFTs = () => {
   }, [nftsLoading]);
 
   return (
-    <LoadingWrapper loading={loading} className="small">
+    <LoadingWrapper loading={loading} className="big">
       {
         !nfts?.length
           ? <EmptyState />
