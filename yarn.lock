@@ -1381,8 +1381,10 @@
     node-gyp "^7.1.0"
     read-package-json-fast "^2.0.1"
 
-"@psychedelic/plug-controller@../plug-wallet-controller":
+"@psychedelic/plug-controller@0.4.4":
   version "0.4.4"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.4.4/10a120203f480b94d3e0b12d1313f2ea03902d208d7b815900a65c73152ecf02#d406980cc59bf7dd2218f590318736887322eae7"
+  integrity sha512-/lo3K0g2VCZR4ZNMPYqpK+uzHV3Hs8LlDyRmNa9lCcEYekrM8Qtchlqb7elqbfTieSnqw8ALH2f0IAUjCvb2Iw==
   dependencies:
     "@babel/preset-env" "^7.14.4"
     "@dfinity/agent" "^0.9.3"
