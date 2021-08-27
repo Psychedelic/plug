@@ -57,7 +57,7 @@ const AllowAgent = ({
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
       (state) => {
         if (state?.wallets?.length) {
-          dispatch(setAccountInfo(state.wallets[0]));
+          dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
         }
       });
 
