@@ -85,7 +85,7 @@ const NFTDetails = () => {
           }
         </Section>
 
-        <Section icon={AboutImg} title="About ICPunks">
+        <Section icon={AboutImg} title="About ICPunks" style={{ paddingBottom: 24 }}>
           <Typography variant="subtitle1">
             10,000 randomly generated, unique collectible clowns
             with proof of ownership stored on the Internet Computer blockchain.
