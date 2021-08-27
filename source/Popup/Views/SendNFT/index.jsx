@@ -50,6 +50,7 @@ const SendNFT = () => {
         }
       });
   };
+  const fallbackNftUrl = (url) => (url?.includes?.('https') ? url : `https://qcg3w-tyaaa-aaaah-qakea-cai.raw.ic0.app${url}`);
   const handleAddressChange = (val) => setAddress(val);
   useEffect(() => {
     if (!nft) {
@@ -70,7 +71,7 @@ const SendNFT = () => {
               label={t('nfts.nft')}
               component={(
                 <Select
-                  image={nft?.url}
+                  image={fallbackNftUrl(nft?.url)}
                   name={nft?.name}
                   text={`#${nft?.id}`}
                   imageClassName={classes.nftImage}

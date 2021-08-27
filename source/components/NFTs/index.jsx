@@ -35,7 +35,7 @@ const NFTs = () => {
   useEffect(() => {
     setLoading(nftsLoading);
   }, [nftsLoading]);
-
+  const fallbackNftUrl = (url) => (url?.includes?.('https') ? url : `https://qcg3w-tyaaa-aaaah-qakea-cai.raw.ic0.app${url}`);
   return (
     <LoadingWrapper loading={loading} className="big">
       {
@@ -51,7 +51,7 @@ const NFTs = () => {
                       className={classes.nftContainer}
                       onClick={() => handleNftClick(nft)}
                     >
-                      <img src={nft.url} className={classes.nft} />
+                      <img src={fallbackNftUrl(nft?.url)} className={classes.nft} />
                       <Typography className={classes.id} variant="subtitle1">{nft.name}</Typography>
                     </div>
                   ))
