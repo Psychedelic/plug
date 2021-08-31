@@ -31,14 +31,25 @@ export const init = async () => {
   }
 };
 
-// keyring handlers
-extension.runtime.onMessage.addListener((message, _, sendResponse) => {
-  const { params, type } = message;
+const handleKeyringMessage = (type, params, sendResponse) => {
   const keyringHandler = getKeyringHandler(type, keyring);
   if (!keyringHandler) return;
   keyringHandler(params).then((response) => sendResponse(response));
   // Usually we would not return, but it seems firefox needs us to
-  return true; // eslint-disable-line
+};
+
+// keyring handlers
+extension.runtime.onMessage.addListener((message, _, sendResponse) => { // eslint-disable-line
+  const { params, type } = message;
+  if (!keyring) {
+    init().then(() => {
+      handleKeyringMessage(type, params, sendResponse);
+      return true;
+    });
+  } else {
+    handleKeyringMessage(type, params, sendResponse);
+    return true;
+  }
 });
 
 const isInitialized = async () => {

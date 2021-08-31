@@ -70,9 +70,11 @@ const NFTDetails = () => {
           <Badge value={`#${nft?.id}`} />
         </Section>
 
-        <Section icon={DescriptionImg} title={t('nfts.description')}>
-          <Typography variant="subtitle1">{nft?.desc}</Typography>
-        </Section>
+        {nft?.desc && (
+          <Section icon={DescriptionImg} title={t('nfts.description')}>
+            <Typography variant="subtitle1">{nft?.desc}</Typography>
+          </Section>
+        )}
 
         <Section icon={AttributesImg} title={t('nfts.attributes')}>
           {
