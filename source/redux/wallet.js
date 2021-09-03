@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ACTIVITY_STATUS, ACTIVITY_TYPES } from '@shared/constants/activity';
-import { formatAssetBySymbol, TOKEN_IMAGES } from '@shared/constants/currencies';
+import { formatAssetBySymbol, TOKENS, TOKEN_IMAGES } from '@shared/constants/currencies';
 
 /* eslint-disable no-param-reassign */
 export const walletSlice = createSlice({
@@ -11,7 +11,7 @@ export const walletSlice = createSlice({
     accountId: '',
     emoji: '👽',
     transactions: [],
-    assets: [],
+    assets: Object.values(TOKENS),
     walletNumber: 0,
     assetsLoading: true,
   },
@@ -23,7 +23,6 @@ export const walletSlice = createSlice({
     },
     setAccountInfo: (state, action) => {
       if (!action.payload) return;
-
       // Chrome serializes everything with toJSON
       const {
         accountId, icon, name, principal, walletNumber,
