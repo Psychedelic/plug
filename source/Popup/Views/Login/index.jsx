@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import browser from 'webextension-polyfill';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
@@ -7,6 +8,7 @@ import { Plug } from '@components';
 import { LinkButton, Button, FormInput } from '@ui';
 import { useRouter } from '@components/Router';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import { setAccountInfo } from '@redux/wallet';
 import PropTypes from 'prop-types';
 import useStyles from './styles';
 
@@ -14,6 +16,7 @@ const Login = ({ redirect }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { navigator } = redirect ? {} : useRouter();
+  const dispatch = useDispatch();
 
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
@@ -29,6 +32,14 @@ const Login = ({ redirect }) => {
       params: { password, redirect: true },
     }, (unlocked) => {
       if (unlocked) {
+        sendMessage({
+          type: HANDLER_TYPES.GET_STATE,
+          params: { },
+        }, (state) => {
+          if (state?.wallets?.length) {
+            dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
+          }
+        });
         if (redirect) {
           redirect();
         } else {

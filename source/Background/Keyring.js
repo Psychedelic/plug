@@ -102,14 +102,23 @@ export const getKeyringHandler = (type, keyring) => ({
     isUnlocked: keyring?.isUnlocked,
     isInitialized: keyring?.isInitialized,
   }),
-  [HANDLER_TYPES.GET_STATE]: async () => keyring.getState(),
+  [HANDLER_TYPES.GET_STATE]: async () => {
+    const response = await keyring.getState();
+    return recursiveParseBigint(response);
+  },
   [HANDLER_TYPES.GET_TRANSACTIONS]: async () => {
     const response = await keyring.getTransactions();
     return recursiveParseBigint(response);
   },
   [HANDLER_TYPES.GET_ASSETS]: async (icpPrice) => {
-    const balances = await keyring.getBalance();
-    return formatAssets(balances, icpPrice);
+    const { wallets, currentWalletId } = await keyring.getState();
+    let assets = wallets?.[currentWalletId]?.assets;
+    if (assets.every((asset) => !asset.amount)) {
+      assets = await keyring.getBalance();
+    } else {
+      keyring.getBalance();
+    }
+    return formatAssets(assets, icpPrice);
   },
   [HANDLER_TYPES.GET_BALANCE]: async (subaccount) => {
     try {
