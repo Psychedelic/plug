@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { AssetItem, Button } from '@ui';
 import { setAssets, setAssetsLoading } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import LoadingWrapper from '@components/LoadingWrapper';
 import { useRouter } from '@components/Router';
 import useStyles from './styles';
 
@@ -34,28 +33,26 @@ const Tokens = () => {
   }, [assetsLoading]);
 
   return (
-    <LoadingWrapper loading={loading} className="small">
-      <div className={classes.root}>
-        {
+    <div className={classes.root}>
+      {
           assets?.map((asset) => (
-            <AssetItem {...asset} key={asset.name} />
+            <AssetItem {...asset} key={asset.name} loading={loading} />
           ))
         }
-        <div className={classes.buttonWrapper}>
-          <Button
-            variant="rainbowOutlined"
-            value={t('addToken.title')}
-            onClick={() => navigator.navigate('add-token')}
-            style={{
-              width: 166,
-              height: 42,
-              borderRadius: 10,
-              alignSelf: 'center',
-            }}
-          />
-        </div>
+      <div className={classes.buttonWrapper}>
+        <Button
+          variant="rainbowOutlined"
+          value={t('addToken.title')}
+          onClick={() => navigator.navigate('add-token')}
+          style={{
+            width: 166,
+            height: 42,
+            borderRadius: 10,
+            alignSelf: 'center',
+          }}
+        />
       </div>
-    </LoadingWrapper>
+    </div>
   );
 };
 

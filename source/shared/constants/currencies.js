@@ -61,3 +61,24 @@ export const formatAssetBySymbol = (_amount, symbol, icpPrice) => {
     default: { amount, value: amount },
   })[symbol || 'default'] || { amount, value: amount };
 };
+
+export const TOKENS = {
+  ICP: {
+    symbol: 'ICP',
+    canisterId: null,
+    name: 'ICP',
+    decimals: 5,
+    amount: 0,
+    value: 0,
+    image: TOKEN_IMAGES.ICP,
+  },
+  XTC: {
+    symbol: 'XTC',
+    canisterId: 'aanaa-xaaaa-aaaah-aaeiq-cai',
+    name: 'Cycles',
+    decimals: 5,
+    amount: 0,
+    value: 0,
+    image: TOKEN_IMAGES.XTC,
+  },
+};

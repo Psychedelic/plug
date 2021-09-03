@@ -24,4 +24,19 @@ export default makeStyles((theme) => ({
     marginLeft: 'auto',
     alignSelf: 'flex-start',
   },
+  '@keyframes pulse': {
+    '0%': {
+      opacity: 0.6,
+    },
+    '70%': {
+      opacity: 1,
+    },
+    '100%': {
+      opacity: 0.6,
+    },
+  },
+  pulse: {
+    opacity: 1,
+    animation: '$pulse 2s infinite',
+  },
 }));

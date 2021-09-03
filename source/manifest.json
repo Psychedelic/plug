@@ -15,7 +15,8 @@
 
   "permissions": [
     "storage",
-    "tabs"
+    "tabs",
+    "https://gxdmhoifte.execute-api.us-west-2.amazonaws.com/prod"
   ],
 
   "content_security_policy": "script-src 'self' 'wasm-eval'; object-src 'self'",
