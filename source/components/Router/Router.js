@@ -5,7 +5,6 @@ export const RouteContext = React.createContext();
 export const RouteUpdateContext = React.createContext();
 
 const ROUTER_KEY = 'router';
-const TAB_KEY = 'tab';
 
 export const TABS = {
   TOKENS: 0,
@@ -20,30 +19,20 @@ const Router = (props) => {
   const [route, setRoute] = useState(initialRouteName);
   const [tabIndex, setTabIndex] = useState(TABS.TOKENS);
 
-  const navigate = (routeName, tab = TABS.TOKENS) => storage.local.set({
-    [ROUTER_KEY]: routeName,
-    [TAB_KEY]: tab,
-  });
+  const navigate = (routeName, tab = TABS.TOKENS) => {
+    setRoute(routeName);
+    setTabIndex(tab);
+  };
 
   const navigationObject = {
     navigate,
   };
 
   useEffect(() => {
-    storage.onChanged.addListener((changeObject) => {
-      if (changeObject[ROUTER_KEY]) {
-        setRoute(changeObject[ROUTER_KEY].newValue);
-        setTabIndex(changeObject[TAB_KEY].newValue);
-      }
+    storage.local.set({
+      [ROUTER_KEY]: route,
     });
-
-    storage.local.get([ROUTER_KEY], (routerState) => {
-      if (routerState[ROUTER_KEY]) {
-        setRoute(routerState[ROUTER_KEY]);
-        setTabIndex(routerState[TAB_KEY]);
-      }
-    });
-  }, []);
+  }, [route]);
 
   const content = React.Children.toArray(children).filter((component) => {
     if (component.type.componentName !== 'Route') {

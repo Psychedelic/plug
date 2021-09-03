@@ -5,7 +5,6 @@ import {
   Actions, Tokens, Activity, Apps, Layout, useRouter, NFTs,
 } from '@components';
 import { Tabs } from '@ui';
-import { useTabs } from '@hooks';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import getICPPrice from '@shared/services/ICPPrice';
 import { setAccountInfo } from '@redux/wallet';
@@ -32,13 +31,12 @@ const getTabs = (t) => [
 
 const Home = () => {
   const { t } = useTranslation();
-  const { selectedTab, handleChangeTab } = useTabs();
   const dispatch = useDispatch();
   const { navigator, tabIndex } = useRouter();
 
-  useEffect(() => {
-    handleChangeTab(tabIndex || 0);
-  }, [tabIndex]);
+  const onChangeTab = (index) => {
+    navigator.navigate('home', index);
+  };
 
   useEffect(() => {
     try {
@@ -67,8 +65,8 @@ const Home = () => {
 
   return (
     <Layout>
-      <Actions visible={selectedTab === 0} />
-      <Tabs tabs={getTabs(t)} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
+      <Actions visible={tabIndex === 0} />
+      <Tabs tabs={getTabs(t)} selectedTab={tabIndex} handleChangeTab={onChangeTab} />
     </Layout>
   );
 };
