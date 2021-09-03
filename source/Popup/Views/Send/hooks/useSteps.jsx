@@ -144,7 +144,7 @@ const useSteps = () => {
     if (amount > maxAmount) {
       setAmount(maxAmount);
     }
-  }, [primaryValue]);
+  }, [primaryValue, convertedAmount]);
 
   useEffect(() => {
     setPrimaryValue(
@@ -177,7 +177,7 @@ const useSteps = () => {
         dispatch(setAssets(keyringAssets));
         setAvailableAmount(
           {
-            amount: keyringAssets?.[0]?.amount,
+            amount: keyringAssets?.[0]?.amount - (selectedAsset?.symbol === 'ICP' ? DEFAULT_FEE : 0),
             prefix: primaryValue.prefix,
             suffix: primaryValue.suffix,
           },
