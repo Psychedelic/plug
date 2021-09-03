@@ -6,3 +6,4 @@ export const dabUrl = 'https://dab.ooo/';
 export const dabForm = 'https://forms.gle/dhYeCBj7Zj3N2f7Q7';
 export const customTokensUrl = 'https://docs.plugwallet.ooo/getting-started/custom-tokens/';
 export const buyCyclesUrl = 'https://docs.plugwallet.ooo/resources/buying-cycles/';
+export const icPunksUrl = 'https://icpunks.com/market';
