@@ -26,6 +26,7 @@ const Data = ({ data, principalId }) => {
             label={item.label}
             component={item.component}
             style={{ marginBottom: 24 }}
+            smallLabel
           />
         ))
       }
