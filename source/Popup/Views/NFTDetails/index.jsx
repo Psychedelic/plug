@@ -14,6 +14,9 @@ import AttributesImg from '@assets/icons/nfts/attributes.png';
 import AboutImg from '@assets/icons/nfts/about.png';
 import { Typography } from '@material-ui/core';
 import { setSelectedNft } from '@redux/nfts';
+import { icPunksUrl } from '@shared/constants/urls';
+import browser from 'webextension-polyfill';
+
 import Section from './components/section';
 import useStyles from './styles';
 
@@ -35,7 +38,7 @@ const NFTDetails = () => {
   };
 
   const fallbackNftUrl = (url) => (url?.includes?.('https') ? url : `https://qcg3w-tyaaa-aaaah-qakea-cai.raw.ic0.app${url}`);
-
+  const openICPunks = () => browser.tabs.create({ url: icPunksUrl });
   return (
     <Layout>
       <Header
@@ -53,7 +56,7 @@ const NFTDetails = () => {
             value={t('nfts.goToMarketplace')}
             style={{ width: '96%' }}
             fullWidth
-            disabled
+            onClick={openICPunks}
           />
           <Button
             variant="rainbow"
