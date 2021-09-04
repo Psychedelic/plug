@@ -1,0 +1,113 @@
+import React from 'react';
+import { useTranslation, initReactI18next } from 'react-i18next';
+import {
+  Button, Tabs,
+} from '@ui';
+import i18n from 'i18next';
+import { useTabs } from '@hooks';
+import PropTypes from 'prop-types';
+import { Layout } from '@components';
+import initConfig from '../../../../locales';
+import ErrorScreen from '../NotificationError';
+import useStyles from './styles';
+import RequestHandler from './components/RequestHandler';
+import useRequests from './hooks/useRequests';
+import Details from './components/Details';
+import Data from './components/Data';
+
+i18n.use(initReactI18next).init(initConfig);
+
+const BurnXTC = ({
+  args, callId, portId, metadata,
+}) => {
+  const { t } = useTranslation();
+  const classes = useStyles();
+  const { url, icons } = metadata;
+  const { selectedTab, handleChangeTab } = useTabs();
+
+  const {
+    requests,
+    currentRequest,
+    data,
+    handleSetPreviousRequest,
+    handleSetNextRequest,
+    handleRequest,
+    principalId,
+    error,
+    loading,
+  } = useRequests([args], callId, portId);
+
+  const requestCount = requests.length;
+  const tabs = [
+    {
+      label: t('transfer.details'),
+      component: <Details
+        url={url}
+        image={icons[0] || null}
+        amount={(requests?.[currentRequest] || args)?.amount}
+        canisterId={args.to}
+        requestCount={requestCount}
+      />,
+    },
+    {
+      label: t('transfer.data'),
+      component: <Data
+        data={data}
+        principalId={principalId}
+      />,
+    },
+  ];
+
+  return (
+    <Layout disableProfile>
+      {error ? <ErrorScreen /> : (
+        <>
+          {
+        requestCount > 1
+        && (
+          <RequestHandler
+            currentRequest={currentRequest + 1}
+            requests={requestCount}
+            handlePrevious={handleSetPreviousRequest}
+            handleNext={handleSetNextRequest}
+          />
+        )
+        }
+          <>
+            <Tabs tabs={tabs} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
+            <div className={classes.buttonsWrapper}>
+              <div className={classes.buttonContainer}>
+                <Button
+                  variant="default"
+                  value={t('common.decline')}
+                  onClick={() => handleRequest(requests[currentRequest], 'declined')}
+                  fullWidth
+                  style={{ width: '96%' }}
+                  disabled={loading}
+                />
+                <Button
+                  variant="rainbow"
+                  value={t('common.confirm')}
+                  onClick={() => handleRequest(requests[currentRequest], 'accepted')}
+                  fullWidth
+                  style={{ width: '96%' }}
+                  wrapperStyle={{ textAlign: 'right' }}
+                  loading={loading}
+                />
+              </div>
+            </div>
+          </>
+        </>
+      )}
+    </Layout>
+  );
+};
+
+export default BurnXTC;
+
+BurnXTC.propTypes = {
+  args: PropTypes.arrayOf(PropTypes.string).isRequired,
+  callId: PropTypes.string.isRequired,
+  portId: PropTypes.string.isRequired,
+  metadata: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
