@@ -70,6 +70,7 @@
     "null": "null",
     "accountId": "Account ID",
     "principalId": "Principal ID",
+    "canisterId": "Canister ID",
     "sign": "Sign",
     "name": "Name",
     "create": "Create",
@@ -318,5 +319,10 @@
     "transferError": "Something went wrong while attempting to send the NFT",
     "emptyTitle": "You don't own any NFTs yet",
     "emptyText": "When you do, they'll show here, where you will see their traits and send them."
+  },
+  "burn": {
+    "title": "wants to burn XTC to transfer cycles to a canister",
+    "amount": "Amount of {token}",
+    "canister": "Canister ID"
   }
 }
