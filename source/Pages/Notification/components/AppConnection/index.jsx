@@ -5,7 +5,7 @@ import { PortRPC } from '@fleekhq/browser-rpc';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import i18n from 'i18next';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 
 import {
   Button, Container, IncomingAction, theme,
@@ -14,6 +14,8 @@ import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import store from '@redux/store';
 import { Layout } from '@components';
 import extension from 'extensionizer';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import { setAccountInfo } from '@redux/wallet';
 import initConfig from '../../../../locales';
 import SIZES from '../Transfer/constants';
 import ErrorScreen from '../NotificationError';
@@ -34,6 +36,7 @@ const AppConnection = () => {
   const { t } = useTranslation();
   const [status, setStatus] = useState(null);
   const [error, setError] = useState(false);
+  const dispatch = useDispatch();
 
   const { query } = qs.parseUrl(window.location.href);
 
@@ -71,11 +74,20 @@ const AppConnection = () => {
     }
   };
 
+  useEffect(() => {
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
+      (state) => {
+        if (state?.wallets?.length) {
+          dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
+        }
+      });
+  }, []);
+
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Layout disableProfile>
+        <Layout disableProfile incStatus>
           {error ? <ErrorScreen /> : (
             <div className={classes.padTop}>
               <Container>

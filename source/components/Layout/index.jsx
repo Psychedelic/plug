@@ -5,13 +5,13 @@ import ConnectionStatus from '../ConnectionStatus';
 import NavBar from '../NavBar';
 import useStyles from './styles';
 
-const Layout = ({ children, disableProfile }) => {
+const Layout = ({ children, disableProfile, incStatus }) => {
   const classes = useStyles();
 
   return (
     <>
       <div className={classes.stickyHeader}>
-        <ConnectionStatus incStatus={disableProfile ? CONNECTION_STATUS.pending : null} />
+        <ConnectionStatus incStatus={incStatus ? CONNECTION_STATUS.pending : null} />
         <NavBar disableProfile={disableProfile} />
       </div>
       <div className={classes.root}>
@@ -25,9 +25,11 @@ export default Layout;
 
 Layout.defaultProps = {
   disableProfile: false,
+  incStatus: false,
 };
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
   disableProfile: PropTypes.bool,
+  incStatus: PropTypes.bool,
 };

@@ -10,6 +10,8 @@ import { Layout } from '@components';
 import { useDispatch, useSelector } from 'react-redux';
 import getICPPrice from '@shared/services/ICPPrice';
 import { setICPPrice } from '@redux/icp';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import { setAccountInfo } from '@redux/wallet';
 import initConfig from '../../../../locales';
 import ErrorScreen from '../NotificationError';
 import useStyles from './styles';
@@ -42,6 +44,13 @@ const Transfer = ({
       // eslint-disable-next-line no-console
       console.warn(err);
     }
+
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
+      (state) => {
+        if (state?.wallets?.length) {
+          dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
+        }
+      });
   }, []);
 
   const {
@@ -84,16 +93,16 @@ const Transfer = ({
       {error ? <ErrorScreen /> : (
         <>
           {
-        requestCount > 1
-        && (
-          <RequestHandler
-            currentRequest={currentRequest + 1}
-            requests={requestCount}
-            handlePrevious={handleSetPreviousRequest}
-            handleNext={handleSetNextRequest}
-          />
-        )
-        }
+            requestCount > 1
+            && (
+              <RequestHandler
+                currentRequest={currentRequest + 1}
+                requests={requestCount}
+                handlePrevious={handleSetPreviousRequest}
+                handleNext={handleSetNextRequest}
+              />
+            )
+          }
           <>
             <Tabs tabs={tabs} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
             <div className={classes.buttonsWrapper}>
@@ -125,7 +134,7 @@ const Transfer = ({
                     style={{ marginTop: 24 }}
                   />
                 )
-                }
+              }
             </div>
           </>
         </>
