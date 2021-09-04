@@ -9,7 +9,7 @@ import { E8S_PER_ICP } from '@shared/constants/currencies';
 
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
-import { validateTransferArgs } from './utils';
+import { validateTransferArgs, validateBurnArgs } from './utils';
 import ERRORS from './errors';
 import plugProvider from '../Inpage/index';
 
@@ -470,6 +470,86 @@ backgroundController.exposeController(
       plugProvider.deleteAgent();
       callback(ERRORS.AGENT_REJECTED, null, [{ portId, callId }]);
       callback(null, true); // Return true to close the modal
+    }
+  },
+);
+
+backgroundController.exposeController(
+  'requestBurnXTC',
+  async (opts, metadata, args) => secureController(opts.callback, async () => {
+    const { message, sender, callback } = opts;
+
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
+    storage.get(keyring.currentWalletId.toString(), async (state) => {
+      const apps = state?.[keyring.currentWalletId]?.apps || {};
+      if (
+        apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted
+      ) {
+        const argsError = validateBurnArgs(args);
+        if (argsError) {
+          callback(argsError, null);
+          return;
+        }
+        const url = qs.stringifyUrl({
+          url: 'notification.html',
+          query: {
+            callId,
+            portId,
+            metadataJson: JSON.stringify(metadata),
+            argsJson: JSON.stringify(args),
+            type: 'burnXTC',
+          },
+        });
+
+        const height = keyring?.isUnlocked
+          ? SIZES.detailHeightSmall
+          : SIZES.loginHeight;
+        extension.windows.create({
+          url,
+          type: 'popup',
+          width: SIZES.width,
+          height,
+          top: 65,
+          left: metadata.pageWidth - SIZES.width,
+        });
+      } else {
+        callback(ERRORS.CONNECTION_ERROR, null);
+      }
+    });
+  }),
+);
+
+backgroundController.exposeController(
+  'handleRequestBurnXTC',
+  async (opts, transferRequests, callId, portId) => {
+    const { callback } = opts;
+    const transfer = transferRequests?.[0];
+
+    // Answer this callback no matter if the transfer succeeds or not.
+    if (transfer?.status === 'declined') {
+      callback(null, true);
+      callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
+    } else {
+      const burnXTC = getKeyringHandler(HANDLER_TYPES.BURN_XTC, keyring);
+      const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
+      const assets = await getBalance();
+
+      if (assets?.[1]?.amount > transfer.amount) {
+        const response = await burnXTC(transfer);
+        if (response.error) {
+          callback(null, false);
+          callback(ERRORS.SERVER_ERROR(response.error), null, [
+            { portId, callId },
+          ]);
+        } else {
+          callback(null, true);
+          callback(null, response, [{ portId, callId }]);
+        }
+      } else {
+        callback(null, false);
+        callback(ERRORS.BALANCE_ERROR, null, [{ portId, callId }]);
+      }
     }
   },
 );
