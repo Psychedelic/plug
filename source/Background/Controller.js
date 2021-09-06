@@ -5,7 +5,7 @@ import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { areAllElementsIn } from '@shared/utils/array';
 import PlugController from '@psychedelic/plug-controller';
 import { validatePrincipalId } from '@shared/utils/ids';
-import { E8S_PER_ICP } from '@shared/constants/currencies';
+import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
 
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
@@ -535,7 +535,7 @@ backgroundController.exposeController(
       const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
       const assets = await getBalance();
 
-      if (assets?.[1]?.amount > transfer.amount) {
+      if (assets?.[1]?.amount * CYCLES_PER_TC > transfer.amount) {
         const response = await burnXTC(transfer);
         if (response.error) {
           callback(null, false);
@@ -543,8 +543,10 @@ backgroundController.exposeController(
             { portId, callId },
           ]);
         } else {
+          const transactionId = response?.Ok;
+
           callback(null, true);
-          callback(null, response, [{ portId, callId }]);
+          callback(null, transactionId, [{ portId, callId }]);
         }
       } else {
         callback(null, false);
