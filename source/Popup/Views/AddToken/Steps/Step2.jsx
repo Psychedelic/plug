@@ -61,7 +61,7 @@ const Step2 = ({ selectedToken, handleClose }) => {
               <Typography variant="h4">{displayToken.name}</Typography>
               <Typography variant="subtitle1"><AssetFormat value={displayToken?.amount} asset={displayToken?.symbol} /></Typography>
             </div>
-            {displayToken.price && (
+            {!!displayToken.price && (
               <div className={classes.rightContainer}>
                 <Typography variant="h4"><USDFormat value={displayToken?.price} /></Typography>
               </div>
