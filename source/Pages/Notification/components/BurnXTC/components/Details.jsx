@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { IncomingAction } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
-import { CURRENCIES } from '@shared/constants/currencies';
+import { CURRENCIES, CYCLES_PER_TC } from '@shared/constants/currencies';
 import shortAddress from '@shared/utils/short-address';
 import NumberFormat from 'react-number-format';
 import extension from 'extensionizer';
@@ -11,12 +11,13 @@ import useStyles from '../styles';
 import SIZES from '../constants';
 
 const Details = ({
-  canisterId, amount, image, url,
+  canisterId, amount: cycles, image, url,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
 
   const asset = CURRENCIES.get('XTC');
+  const amount = cycles / CYCLES_PER_TC;
 
   extension.windows.update(
     extension.windows.WINDOW_ID_CURRENT,
