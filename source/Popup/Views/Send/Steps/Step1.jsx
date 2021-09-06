@@ -80,7 +80,7 @@ const Step1 = ({
                 <Button
                   variant="primaryOutlined"
                   value={t('common.max')}
-                  onClick={() => handleChangeAmount(availableAmount.amount)}
+                  onClick={() => handleChangeAmount(availableAmount.amount.toFixed(5))}
                 />
               </div>
             )}
