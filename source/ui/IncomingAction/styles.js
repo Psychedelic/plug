@@ -14,6 +14,7 @@ export default makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     marginBottom: `${theme.spacing(3)}px`,
+    textAlign: 'center',
   },
   title: {
     textOverflow: 'ellipsis',
