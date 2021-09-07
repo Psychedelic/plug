@@ -6,6 +6,7 @@ import { areAllElementsIn } from '@shared/utils/array';
 import PlugController from '@psychedelic/plug-controller';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
+import { XTC_FEE } from '@shared/constants/addresses';
 
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
@@ -535,7 +536,7 @@ backgroundController.exposeController(
       const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
       const assets = await getBalance();
 
-      if (assets?.[1]?.amount * CYCLES_PER_TC > transfer.amount) {
+      if ((assets?.[1]?.amount * CYCLES_PER_TC) - XTC_FEE > transfer.amount) {
         const response = await burnXTC(transfer);
         if (response.error) {
           callback(null, false);
