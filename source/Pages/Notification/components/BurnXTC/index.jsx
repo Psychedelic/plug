@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation, initReactI18next } from 'react-i18next';
 import {
   Button, Tabs,
 } from '@ui';
 import i18n from 'i18next';
 import { useTabs } from '@hooks';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import { setAccountInfo } from '@redux/wallet';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Layout } from '@components';
 import initConfig from '../../../../locales';
@@ -22,6 +25,7 @@ const BurnXTC = ({
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
+  const dispatch = useDispatch();
   const { url, icons } = metadata;
   const { selectedTab, handleChangeTab } = useTabs();
 
@@ -36,6 +40,15 @@ const BurnXTC = ({
     error,
     loading,
   } = useRequests([args], callId, portId);
+
+  useEffect(() => {
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
+      (state) => {
+        if (state?.wallets?.length) {
+          dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
+        }
+      });
+  }, []);
 
   const requestCount = requests.length;
   const tabs = [
