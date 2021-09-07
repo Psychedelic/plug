@@ -190,7 +190,7 @@ const useSteps = () => {
     if (!assets?.length) {
       sendMessage({
         type: HANDLER_TYPES.GET_ASSETS,
-        params: {},
+        params: { icpPrice },
       }, (keyringAssets) => {
         dispatch(setAssets(keyringAssets));
         setAvailableAmount(

@@ -19,7 +19,7 @@ const Tokens = () => {
     if (icpPrice) {
       sendMessage({
         type: HANDLER_TYPES.GET_ASSETS,
-        params: icpPrice,
+        params: { icpPrice },
       }, (keyringAssets) => {
         dispatch(setAssets(keyringAssets));
         dispatch(setAssetsLoading(false));
