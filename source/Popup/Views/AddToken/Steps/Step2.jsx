@@ -12,7 +12,8 @@ import { TokenIcon } from '@components';
 import { USD_PER_TC, CYCLES_PER_TC } from '@shared/constants/currencies';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAssets, setAssetsLoading } from '@redux/wallet';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 import useStyles from '../styles';
 
 const cyclesToTC = cycles => cycles ? cycles / CYCLES_PER_TC : 0; // eslint-disable-line
@@ -37,6 +38,7 @@ const Step2 = ({ selectedToken, handleClose }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const displayToken = parseTokenBySymbol(selectedToken);
+  const { icpPrice } = useSelector((state) => state.icp);
   const registerToken = () => {
     setLoading(true);
     sendMessage({
@@ -44,7 +46,8 @@ const Step2 = ({ selectedToken, handleClose }) => {
       params: selectedToken?.token.canisterId,
     }, async () => {
       sendMessage({
-        type: HANDLER_TYPES.GET_BALANCE,
+        type: HANDLER_TYPES.GET_ASSETS,
+        params: { icpPrice, refresh: true },
       }, (keyringAssets) => {
         dispatch(setAssets(keyringAssets));
         dispatch(setAssetsLoading(false));
