@@ -10,3 +10,4 @@ export const ADDRESS_TYPES = {
 };
 
 export const DEFAULT_FEE = 0.0001;
+export const BURN_FEE = 0.0;
