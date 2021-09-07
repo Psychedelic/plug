@@ -1,5 +1,6 @@
-import { formatAssetBySymbol } from '@shared/constants/currencies';
 import extension from 'extensionizer';
+import getICPPrice from '@shared/services/ICPPrice';
+import { formatAssetBySymbol } from '@shared/constants/currencies';
 
 export const NANOS_PER_SECOND = 1_000_000;
 export const BALANCE_ERROR = 'You have tried to spend more than the balance of your account';
@@ -110,10 +111,10 @@ export const getKeyringHandler = (type, keyring) => ({
     const response = await keyring.getTransactions();
     return recursiveParseBigint(response);
   },
-  [HANDLER_TYPES.GET_ASSETS]: async (icpPrice) => {
+  [HANDLER_TYPES.GET_ASSETS]: async ({ icpPrice, refresh }) => {
     const { wallets, currentWalletId } = await keyring.getState();
     let assets = wallets?.[currentWalletId]?.assets;
-    if (assets.every((asset) => !asset.amount)) {
+    if (assets?.every((asset) => !asset.amount) || refresh) {
       assets = await keyring.getBalance();
     } else {
       keyring.getBalance();
@@ -123,7 +124,8 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.GET_BALANCE]: async (subaccount) => {
     try {
       const balances = await keyring.getBalance(subaccount);
-      return formatAssets(balances);
+      const icpPrice = await getICPPrice();
+      return formatAssets(balances, icpPrice);
     } catch (error) {
       return { error: error.message };
     }
@@ -136,6 +138,7 @@ export const getKeyringHandler = (type, keyring) => ({
         transactionId: parseInt(transactionId?.toString?.(), 10),
       };
     } catch (error) {
+      console.log('error', error);
       return { error: error.message, height: null };
     }
   },

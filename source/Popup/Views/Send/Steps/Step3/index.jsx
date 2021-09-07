@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import {
   Container,
@@ -12,6 +13,7 @@ import {
   Dialog,
   LinkButton,
 } from '@ui';
+import { setAssets, setAssetsLoading } from '@redux/wallet';
 import { Typography } from '@material-ui/core';
 import AccountImg from '@assets/icons/account.svg';
 import ArrowImg from '@assets/icons/send-arrow.png';
@@ -28,6 +30,7 @@ import {
 } from '@components';
 
 import { ADDRESS_TYPES, DEFAULT_FEE } from '@shared/constants/addresses';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import useStyles from '../../styles';
 
 const Step3 = ({
@@ -39,6 +42,8 @@ const Step3 = ({
   const { navigator } = useRouter();
   const [accountId, setAccountId] = useState('');
   const isICP = asset?.symbol === 'ICP';
+  const dispatch = useDispatch();
+  const { icpPrice } = useSelector((state) => state.icp);
 
   const [ICPModalOpen, setOpenICPModal] = useState(false);
   const [sendingModalOpen, setSendingModalOpen] = useState(false);
@@ -83,6 +88,18 @@ const Step3 = ({
       );
     }
   }, []);
+
+  const handleReturnHome = () => {
+    dispatch(setAssetsLoading(true));
+    sendMessage({
+      type: HANDLER_TYPES.GET_ASSETS,
+      params: { refresh: true, icpPrice },
+    }, (keyringAssets) => {
+      dispatch(setAssets(keyringAssets));
+      dispatch(setAssetsLoading(false));
+    });
+    navigator.navigate('home', TABS.ACTIVITY);
+  };
 
   useEffect(() => {
     if (error) {
@@ -208,7 +225,7 @@ const Step3 = ({
                   <Button
                     variant="rainbow"
                     value={t('send.returnHome')}
-                    onClick={() => navigator.navigate('home', TABS.ACTIVITY)}
+                    onClick={handleReturnHome}
                     fullWidth
                   />
                   {transaction && <LinkButton onClick={openICRocksTx} value={t('send.viewTxOnICRocks')} />}

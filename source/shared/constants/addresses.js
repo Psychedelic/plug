@@ -9,5 +9,5 @@ export const ADDRESS_TYPES = {
   CANISTER: 'canister',
 };
 
-export const DEFAULT_FEE = 0.0001;
+export const DEFAULT_FEE = 0.00011; // Extra 0.00001 cause it seems to fluctuate somehow
 export const BURN_FEE = 0.0;
