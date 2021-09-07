@@ -9,13 +9,13 @@ import {
 
 } from '@ui';
 import { TokenIcon } from '@components';
-import { USD_PER_TC } from '@shared/constants/currencies';
+import { USD_PER_TC, CYCLES_PER_TC } from '@shared/constants/currencies';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAssets, setAssetsLoading } from '@redux/wallet';
 import { useDispatch } from 'react-redux';
 import useStyles from '../styles';
 
-const cyclesToTC = cycles => cycles ? cycles / 1_000_000_000_000 : 0; // eslint-disable-line
+const cyclesToTC = cycles => cycles ? cycles / CYCLES_PER_TC : 0; // eslint-disable-line
 
 const parseTokenBySymbol = (token) => ({
   XTC: {
