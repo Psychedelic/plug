@@ -50,7 +50,6 @@ const BurnXTC = ({
       });
   }, []);
 
-
   const requestCount = requests.length;
   const tabs = [
     {
