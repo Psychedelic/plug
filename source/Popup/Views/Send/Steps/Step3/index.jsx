@@ -29,7 +29,7 @@ import {
   useRouter, Plug, TokenIcon, TABS,
 } from '@components';
 
-import { ADDRESS_TYPES, DEFAULT_FEE } from '@shared/constants/addresses';
+import { ADDRESS_TYPES, DEFAULT_FEE, XTC_FEE } from '@shared/constants/addresses';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import useStyles from '../../styles';
 
@@ -42,6 +42,7 @@ const Step3 = ({
   const { navigator } = useRouter();
   const [accountId, setAccountId] = useState('');
   const isICP = asset?.symbol === 'ICP';
+  const isXTC = asset?.symbol === 'XTC';
   const dispatch = useDispatch();
   const { icpPrice } = useSelector((state) => state.icp);
 
@@ -50,6 +51,7 @@ const Step3 = ({
 
   const subtotal = amount * asset?.price;
   const fee = +(asset?.price * DEFAULT_FEE).toFixed(5);
+  const xtcFee = +(asset?.price * XTC_FEE).toFixed(5);
 
   const openSendModal = () => {
     setOpenICPModal(false);
@@ -259,6 +261,11 @@ const Step3 = ({
         {isICP && (
           <Grid item xs={12}>
             <InfoRow name={t('common.taxFee')} value={`${DEFAULT_FEE} ICP ($${fee})`} />
+          </Grid>
+        )}
+        {isXTC && (
+          <Grid item xs={12}>
+            <InfoRow name={t('common.taxFee')} value={`${XTC_FEE} XTC ($${xtcFee})`} />
           </Grid>
         )}
         <Grid item xs={12}>

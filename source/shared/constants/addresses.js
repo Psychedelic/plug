@@ -10,4 +10,4 @@ export const ADDRESS_TYPES = {
 };
 
 export const DEFAULT_FEE = 0.00011; // Extra 0.00001 cause it seems to fluctuate somehow
-export const BURN_FEE = 0.0;
+export const XTC_FEE = 0.002;

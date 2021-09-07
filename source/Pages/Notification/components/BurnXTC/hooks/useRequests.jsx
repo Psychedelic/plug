@@ -5,7 +5,7 @@ import { PortRPC } from '@fleekhq/browser-rpc';
 import { v4 as uuidv4 } from 'uuid';
 import { CURRENCIES } from '@shared/constants/currencies';
 import { validateCanisterId } from '@shared/utils/ids';
-import { BURN_FEE } from '@shared/constants/addresses';
+import { XTC_FEE } from '@shared/constants/addresses';
 
 const portRPC = new PortRPC({
   name: 'notification-port',
@@ -75,7 +75,7 @@ const useRequests = (incomingRequests, callId, portId) => {
     { label: 'canisterId', value: canisterId },
     {
       label: 'fee',
-      value: <AssetFormat value={BURN_FEE} asset={CURRENCIES.get('XTC')?.value} />,
+      value: <AssetFormat value={XTC_FEE} asset={CURRENCIES.get('XTC')?.value} />,
     },
   ];
 
