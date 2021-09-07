@@ -321,7 +321,7 @@
     "emptyText": "When you do, they'll show here, where you will see their traits and send them."
   },
   "burn": {
-    "title": "wants to burn XTC to transfer cycles to a canister",
+    "title": "wants to transfer cycles to a canister",
     "amount": "Amount of {token}",
     "canister": "Canister ID"
   }
