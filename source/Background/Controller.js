@@ -14,6 +14,11 @@ import { validateTransferArgs, validateBurnArgs } from './utils';
 import ERRORS from './errors';
 import plugProvider from '../Inpage/index';
 
+const DEFAULT_CURRENCY_MAP = {
+  ICP: 0,
+  XTC: 1,
+};
+
 const storage = extension.storage.local;
 let keyring;
 
@@ -300,7 +305,7 @@ backgroundController.exposeController(
       const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
       const sendToken = getKeyringHandler(HANDLER_TYPES.SEND_TOKEN, keyring);
       const assets = await getBalance();
-      if (assets?.[0]?.amount * E8S_PER_ICP > transfer.amount) {
+      if (assets?.[DEFAULT_CURRENCY_MAP.ICP]?.amount * E8S_PER_ICP > transfer.amount) {
         const response = await sendToken(transfer);
         if (response.error) {
           callback(null, false);
@@ -536,7 +541,7 @@ backgroundController.exposeController(
       const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
       const assets = await getBalance();
 
-      if ((assets?.[1]?.amount * CYCLES_PER_TC) - XTC_FEE > transfer.amount) {
+      if ((assets?.[DEFAULT_CURRENCY_MAP.XTC]?.amount * CYCLES_PER_TC) - XTC_FEE > transfer.amount) {
         const response = await burnXTC(transfer);
         if (response.error) {
           callback(null, false);
