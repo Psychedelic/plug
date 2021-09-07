@@ -540,8 +540,9 @@ backgroundController.exposeController(
       const burnXTC = getKeyringHandler(HANDLER_TYPES.BURN_XTC, keyring);
       const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
       const assets = await getBalance();
+      const xtcAmount = assets?.[DEFAULT_CURRENCY_MAP.XTC]?.amount * CYCLES_PER_TC;
 
-      if ((assets?.[DEFAULT_CURRENCY_MAP.XTC]?.amount * CYCLES_PER_TC) - XTC_FEE > transfer.amount) {
+      if (xtcAmount - XTC_FEE > transfer.amount) {
         const response = await burnXTC(transfer);
         if (response.error) {
           callback(null, false);
