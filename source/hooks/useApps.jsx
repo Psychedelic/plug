@@ -38,7 +38,8 @@ const useApps = () => {
     const parsed = Object.values(apps);
     const filtered = parsed.filter((a) => a.status === CONNECTION_STATUS.accepted);
     setParsedApps(filtered);
-  }, [apps, walletNumber]);
+  }, [apps]);
+
   return {
     parsedApps,
     removeApp: handleRemoveApp,
