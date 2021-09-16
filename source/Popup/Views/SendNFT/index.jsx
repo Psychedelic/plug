@@ -12,7 +12,8 @@ import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { setSelectedNft, setNfts } from '@redux/nfts';
+import { setCollections } from '@redux/wallet';
+import { setSelectedNft } from '@redux/nfts';
 
 const useStyles = makeStyles(() => ({
   appearAnimation: {
@@ -33,7 +34,8 @@ const SendNFT = () => {
   const { navigator } = useRouter();
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
-  const { selectedNft: nft, nfts } = useSelector((state) => state.nfts);
+  const { selectedNft: nft } = useSelector((state) => state.nfts);
+  const { collections, walletNumber } = useSelector((state) => state.wallet);
   const classes = useStyles();
   const transferNFT = () => {
     setLoading(true);
@@ -42,7 +44,10 @@ const SendNFT = () => {
       (success) => {
         setLoading(false);
         if (success) {
-          dispatch(setNfts(nfts.filter((token) => token.id !== nft.id)));
+          dispatch(setCollections({
+            collections: collections.filter((token) => token.id !== nft.id),
+            walletNumber,
+          }));
           dispatch(setSelectedNft(null));
           navigator.navigate('home', TABS.NFTS);
         } else {

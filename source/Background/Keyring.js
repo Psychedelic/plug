@@ -177,14 +177,20 @@ export const getKeyringHandler = (type, keyring) => ({
         return { error: e.message };
       }
     },
-  [HANDLER_TYPES.GET_NFTS]: async () => {
-    const nfts = await keyring.getNFTs();
-    return nfts.map((nft) => ({ ...nft, id: parseInt(nft.id.toString(), 10) }));
+  [HANDLER_TYPES.GET_NFTS]: async ({ refresh }) => {
+    const { wallets, currentWalletId } = await keyring.getState();
+    let collections = wallets?.[currentWalletId]?.collections || [];
+    if (!collections.length || refresh) {
+      collections = await keyring.getNFTs();
+    } else {
+      keyring.getNFTs();
+    }
+    return collections.map((collection) => recursiveParseBigint(collection));
   },
   [HANDLER_TYPES.TRANSFER_NFT]:
   async ({ to, nft }) => {
     try {
-      const response = await keyring.transferNFT({ to, id: BigInt(nft.id) });
+      const response = await keyring.transferNFT({ to, token: nft });
       return recursiveParseBigint(response);
     } catch (e) {
       return { error: e.message };

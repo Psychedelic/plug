@@ -11,7 +11,9 @@ import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import Plus from '@assets/icons/plus.svg';
-import { setAccountInfo, setAssets, setAssetsLoading } from '@redux/wallet';
+import {
+  setAccountInfo, setAssets, setAssetsLoading, setCollections,
+} from '@redux/wallet';
 import { useDispatch, useSelector } from 'react-redux';
 import BluePencil from '@assets/icons/blue-pencil.svg';
 import { getRandomEmoji } from '@shared/constants/emojis';
@@ -78,6 +80,7 @@ const Profile = ({ disableProfile }) => {
   };
 
   const handleChangeAccount = (wallet) => () => {
+    dispatch(setCollections({ collections: [], walletNumber }));
     sendMessage({ type: HANDLER_TYPES.SET_CURRENT_PRINCIPAL, params: wallet },
       (state) => {
         if (state?.wallets?.length) {

@@ -42,7 +42,9 @@ extension.runtime.onMessage.addListener((message, _, sendResponse) => {
   const { params, type } = message;
   const keyringHandler = getKeyringHandler(type, keyring);
   if (!keyringHandler) return;
-  keyringHandler(params).then((response) => sendResponse(response));
+  keyringHandler(params).then((response) => {
+    sendResponse(response);
+  });
   // Usually we would not return, but it seems firefox needs us to
   return true; // eslint-disable-line
 });
