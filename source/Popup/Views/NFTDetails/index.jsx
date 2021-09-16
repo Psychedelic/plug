@@ -37,6 +37,7 @@ const NFTDetails = () => {
   };
 
   const openMarketplace = (url) => () => browser.tabs.create({ url: url || entrepotUrl });
+  console.log(nft);
   return (
     <Layout>
       <Header

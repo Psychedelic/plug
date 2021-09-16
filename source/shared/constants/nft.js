@@ -3,7 +3,7 @@ import CronicLogo from '@assets/icons/nfts/CronicLogo.svg';
 
 // eslint-disable-next-line
 export const NFT_COLLECTION_LOGOS = {
-  'IC Punks': ICPunksLogo,
+  ICPunks: ICPunksLogo,
   'Cronic Critters': CronicLogo,
   Starverse: '',
   'Wrapped ICPunks': '',
@@ -19,8 +19,8 @@ export const NFT_COLLECTION_LOGOS = {
 };
 
 export const NFT_DESCRIPTIONS = {
-  'IC Punks': '10,000 randomly generated, unique collectible clowns\n with proof of ownership stored on the Internet Computer blockchain.\n Created as a reference to a meme comparing the Internet Computer token (ICP) with the\n Insane Clown Posse - an American hip hop duo founded in 1989.\n',
-  'Cronic Critters': 'Cronics is a Play-to-earn NFT game being developed by ToniqLabs for the Internet Computer. Cronics  incorporates breeding mechanics, wearable NFTs and a p2e minigame ecosystem and more.',
+  ICPunks: '10,000 randomly generated, unique collectible clowns with proof of ownership stored on the Internet Computer blockchain.\n Created as a reference to a meme comparing the Internet Computer token (ICP) with the Insane Clown Posse - an American hip hop duo founded in 1989.\n',
+  CronicCritters: 'Cronics is a Play-to-earn NFT game being developed by ToniqLabs for the Internet Computer.\n Cronics incorporates breeding mechanics, wearable NFTs and a p2e minigame ecosystem and more.',
   Starverse: '',
   'Wrapped ICPunks': '',
   'ICP News': '',
