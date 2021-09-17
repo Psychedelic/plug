@@ -7,7 +7,7 @@ import { setSelectedNft } from '@redux/nfts';
 
 import useStyles from './styles';
 
-function NFTCollection({ collection, tokens }) {
+function NFTCollection({ collection }) {
   const classes = useStyles();
   const { navigator } = useRouter();
   const dispatch = useDispatch();
@@ -18,10 +18,10 @@ function NFTCollection({ collection, tokens }) {
   };
   return (
     <div className={classes.collection}>
-      <Typography variant="h5" className={classes.title}>{collection}</Typography>
+      <Typography variant="h5" className={classes.title}>{collection?.name}</Typography>
       <div className={classes.grid}>
         {
-        tokens?.map((nft) => (
+        collection?.tokens?.map((nft) => (
           <div
             className={classes.nftContainer}
             onClick={() => handleNftClick(nft)}
@@ -37,15 +37,21 @@ function NFTCollection({ collection, tokens }) {
 }
 
 NFTCollection.propTypes = {
-  collection: PropTypes.string.isRequired,
-  tokens: PropTypes.arrayOf(PropTypes.shape({
-    index: PropTypes.number,
-    canister: PropTypes.string,
-    id: PropTypes.string,
-    name: PropTypes.string,
-    url: PropTypes.string,
-    metadata: PropTypes.any, // eslint-disable-line
-  })).isRequired,
+  collection: PropTypes.shape({
+    standard: PropTypes.string.isRequired,
+    canisterId: PropTypes.string.isRequired,
+    icon: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    tokens: PropTypes.arrayOf(PropTypes.shape({
+      index: PropTypes.number,
+      canister: PropTypes.string,
+      id: PropTypes.string,
+      name: PropTypes.string,
+      url: PropTypes.string,
+        metadata: PropTypes.any, // eslint-disable-line
+    })).isRequired,
+  }).isRequired,
 };
 
 export default NFTCollection;

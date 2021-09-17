@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -62,6 +62,12 @@ const SendNFT = () => {
       navigator.navigate('home', TABS.NFTS);
     }
   }, [nft]);
+
+  const collection = useMemo(() => collections?.find(
+    (col) => col.name === nft.collection,
+  ),
+  [collections, nft,
+  ]);
   return (
     <Layout>
       <Header
@@ -77,7 +83,7 @@ const SendNFT = () => {
               component={(
                 <Select
                   image={fallbackNftUrl(nft?.url)}
-                  name={nft?.name}
+                  name={nft?.name || `${collection.name} #${nft.index}`}
                   text={`#${nft?.index}`}
                   imageClassName={classes.nftImage}
                   readonly
