@@ -77,7 +77,7 @@ export const walletSlice = createSlice({
       const collections = state.collections.map(
         (col) => ({
           ...col,
-          tokens: col.tokens.filter((token) => token.id === action.payload?.id),
+          tokens: col.tokens.filter((token) => token.id !== action.payload?.id),
         }),
       );
       state.collections = collections.filter((col) => col.tokens.length);
