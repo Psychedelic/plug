@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Layout } from '@components';
 import {
   Header, Button, Badge, LinkButton,
@@ -18,11 +18,11 @@ import browser from 'webextension-polyfill';
 
 import Section from './components/section';
 import useStyles from './styles';
-import { NFT_COLLECTION_LOGOS, NFT_DESCRIPTIONS } from '../../../shared/constants/nft';
 
 const NFTDetails = () => {
   const { t } = useTranslation();
   const { selectedNft: nft } = useSelector((state) => state.nfts);
+  const { collections } = useSelector((state) => state.wallet);
   const { navigator } = useRouter();
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -37,12 +37,17 @@ const NFTDetails = () => {
   };
 
   const openMarketplace = (url) => () => browser.tabs.create({ url: url || entrepotUrl });
-  console.log(nft);
+  const collection = useMemo(() => collections?.find(
+    (col) => col.name === nft.collection,
+  ),
+  [collections, nft,
+  ]);
+
   return (
     <Layout>
       <Header
         left={<LinkButton value={t('common.back')} onClick={handleBack} startIcon={BackIcon} />}
-        center={nft?.name}
+        center={nft?.name || `${collection.name} #${nft.index}`}
         right={null}
       />
       <div className={classes.container}>
@@ -65,7 +70,7 @@ const NFTDetails = () => {
           />
         </div>
         <Section icon={CollectionImg} title={t('nfts.collection')}>
-          <Badge value={nft.collection} icon={NFT_COLLECTION_LOGOS[nft.collection]} />
+          <Badge value={nft.collection} icon={collection?.icon} />
           <Badge value={`#${nft?.index}`} />
         </Section>
         {!!nft?.desc && (
@@ -85,10 +90,10 @@ const NFTDetails = () => {
             }
           </Section>
         )}
-        {NFT_DESCRIPTIONS[nft.collection] && (
+        {collection?.description && (
           <Section icon={AboutImg} title="About" style={{ paddingBottom: 24 }}>
             <Typography variant="subtitle1" className={classes.description}>
-              {NFT_DESCRIPTIONS[nft.collection]}
+              {collection?.description}
             </Typography>
           </Section>
         )}

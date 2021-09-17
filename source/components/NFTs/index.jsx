@@ -27,6 +27,7 @@ const NFTs = () => {
   useEffect(() => {
     setLoading(collectionsLoading);
   }, [collectionsLoading]);
+
   return (
     <LoadingWrapper loading={loading} className="big">
       {
@@ -35,7 +36,7 @@ const NFTs = () => {
           : (
             <div className={classes.root}>
               {collections.map((collection) => (
-                <NFTCollection collection={collection.name} tokens={collection.tokens} />
+                <NFTCollection collection={collection} />
               ))}
             </div>
           )
