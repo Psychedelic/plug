@@ -7,6 +7,7 @@ import PlugController from '@psychedelic/plug-controller';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
 import { XTC_FEE } from '@shared/constants/addresses';
+import { NotificationManager } from '../lib';
 
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
@@ -26,6 +27,10 @@ const backgroundController = new BackgroundController({
   name: 'bg-script',
   trustedSources: ['plug-content-script', 'notification-port'],
 });
+
+const notificationManager = new NotificationManager(
+  extension.extension.getURL('../assets/icons/plug.svg')
+);
 
 backgroundController.start();
 
@@ -70,7 +75,12 @@ const secureController = async (callback, controller) => {
     callback(ERRORS.INITIALIZED_ERROR, null);
     return;
   }
-  controller();
+
+  try {
+    await controller();
+  } catch (e) {
+    notificationManager.notificateError();
+  }
 };
 
 backgroundController.exposeController('isConnected', async (opts, url) => secureController(opts.callback, async () => {
@@ -185,6 +195,7 @@ backgroundController.exposeController(
   'requestBalance',
   async (opts, metadata, accountId) => secureController(opts.callback, async () => {
     const { callback, message, sender } = opts;
+
     storage.get(keyring.currentWalletId.toString(), async (state) => {
       const apps = state?.[keyring.currentWalletId]?.apps || {};
       if (
@@ -563,6 +574,34 @@ backgroundController.exposeController(
       }
     }
   },
+);
+
+backgroundController.exposeController(
+  'handleError',
+  async (opts, metadata, errorMessage) => {
+    const { message, sender, callback } = opts;
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
+
+    notificationManager.notificateError(errorMessage);
+
+    callback(ERRORS.CLIENT_ERROR(errorMessage), null, [{ portId, callId }]);
+    callback(null, true);
+  }
+);
+
+backgroundController.exposeController(
+  'handleTimeout',
+  async (opts, metadata, errorMessage) => {
+    const { message, sender, callback } = opts;
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
+
+    notificationManager.notificateTimeout(errorMessage);
+
+    callback(ERRORS.CLIENT_ERROR(errorMessage), null, [{ portId, callId }]);
+    callback(null, true);
+  }
 );
 
 export default backgroundController;
