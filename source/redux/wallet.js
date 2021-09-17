@@ -73,6 +73,15 @@ export const walletSlice = createSlice({
     setCollectionsLoading: (state, action) => {
       state.collectionsLoading = action.payload;
     },
+    removeNFT: (state, action) => {
+      const collections = state.collections.map(
+        (col) => ({
+          ...col,
+          tokens: col.tokens.filter((token) => token.id === action.payload?.id),
+        }),
+      );
+      state.collections = collections.filter((col) => col.tokens.length);
+    },
   },
 });
 
@@ -84,6 +93,7 @@ export const {
   setAssetsLoading,
   setCollections,
   setCollectionsLoading,
+  removeNFT,
 } = walletSlice.actions;
 
 export default walletSlice.reducer;
