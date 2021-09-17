@@ -64,7 +64,7 @@ const SendNFT = () => {
   }, [nft]);
 
   const collection = useMemo(() => collections?.find(
-    (col) => col.name === nft.collection,
+    (col) => col.name === nft?.collection,
   ),
   [collections, nft,
   ]);

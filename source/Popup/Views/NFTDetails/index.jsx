@@ -38,7 +38,7 @@ const NFTDetails = () => {
 
   const openMarketplace = (url) => () => browser.tabs.create({ url: url || entrepotUrl });
   const collection = useMemo(() => collections?.find(
-    (col) => col.name === nft.collection,
+    (col) => col.name === nft?.collection,
   ),
   [collections, nft,
   ]);
@@ -70,7 +70,7 @@ const NFTDetails = () => {
           />
         </div>
         <Section icon={CollectionImg} title={t('nfts.collection')}>
-          <Badge value={nft.collection} icon={collection?.icon} />
+          <Badge value={nft?.collection} icon={collection?.icon} />
           <Badge value={`#${nft?.index}`} />
         </Section>
         {!!nft?.desc && (
