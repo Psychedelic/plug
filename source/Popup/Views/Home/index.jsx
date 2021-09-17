@@ -54,14 +54,6 @@ const Home = () => {
       console.warn(err);
     }
 
-    sendMessage({
-      type: HANDLER_TYPES.GET_NFTS,
-      params: { refresh: true },
-    }, (nftCollections) => {
-      dispatch(setCollections({ collections: nftCollections, walletNumber }));
-      dispatch(setCollectionsLoading(false));
-    });
-
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
       (state) => {
         if (!state?.wallets?.length) {
