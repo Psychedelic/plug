@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Actions, Tokens, Activity, Apps, Layout, useRouter, NFTs,
 } from '@components';
 import { Tabs } from '@ui';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import getICPPrice from '@shared/services/ICPPrice';
-import { setAccountInfo } from '@redux/wallet';
+import { setAccountInfo, setCollections, setCollectionsLoading } from '@redux/wallet';
 import { setICPPrice } from '@redux/icp';
 
 const getTabs = (t) => [
@@ -33,6 +33,7 @@ const Home = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { navigator, tabIndex } = useRouter();
+  const { walletNumber } = useSelector((state) => state.wallet);
 
   const onChangeTab = (index) => {
     navigator.navigate('home', index);
@@ -52,6 +53,14 @@ const Home = () => {
       // eslint-disable-next-line no-console
       console.warn(err);
     }
+
+    sendMessage({
+      type: HANDLER_TYPES.GET_NFTS,
+      params: { refresh: true },
+    }, (nftCollections) => {
+      dispatch(setCollections({ collections: nftCollections, walletNumber }));
+      dispatch(setCollectionsLoading(false));
+    });
 
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
       (state) => {
