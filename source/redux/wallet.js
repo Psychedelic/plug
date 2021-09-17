@@ -14,6 +14,8 @@ export const walletSlice = createSlice({
     assets: Object.values(TOKENS),
     walletNumber: 0,
     assetsLoading: true,
+    collections: [],
+    collectionsLoading: true,
   },
   reducers: {
     updateWalletDetails: (state, action) => {
@@ -61,6 +63,16 @@ export const walletSlice = createSlice({
     setAssetsLoading: (state, action) => {
       state.assetsLoading = action.payload;
     },
+    setCollections: (state, action) => {
+      if (state.walletNumber === action.payload?.walletNumber) {
+        state.collections = action.payload?.collections?.sort(
+          (a, b) => b?.tokens.length - a?.tokens.length,
+        );
+      }
+    },
+    setCollectionsLoading: (state, action) => {
+      state.collectionsLoading = action.payload;
+    },
   },
 });
 
@@ -70,6 +82,8 @@ export const {
   setTransactions,
   setAssets,
   setAssetsLoading,
+  setCollections,
+  setCollectionsLoading,
 } = walletSlice.actions;
 
 export default walletSlice.reducer;
