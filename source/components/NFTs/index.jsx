@@ -17,7 +17,7 @@ const NFTs = () => {
   useEffect(() => {
     sendMessage({
       type: HANDLER_TYPES.GET_NFTS,
-      params: { },
+      params: { refresh: true },
     }, (nftCollections) => {
       dispatch(setCollections({ collections: nftCollections, walletNumber }));
       dispatch(setCollectionsLoading(false));
@@ -29,7 +29,7 @@ const NFTs = () => {
   }, [collectionsLoading]);
 
   return (
-    <LoadingWrapper loading={loading} className="big">
+    <LoadingWrapper loading={!collections.length && loading} className="big">
       {
         !collections?.length
           ? <EmptyState />
