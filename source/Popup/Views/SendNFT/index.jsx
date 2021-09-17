@@ -84,7 +84,7 @@ const SendNFT = () => {
               component={(
                 <Select
                   image={fallbackNftUrl(nft?.url)}
-                  name={nft?.name || `${collection?.name} #${nft?.index}`}
+                  name={nft?.name || `${collection?.name ?? ''} #${nft.index}`}
                   text={`#${nft?.index}`}
                   imageClassName={classes.nftImage}
                   readonly
