@@ -45,7 +45,7 @@ const SendNFT = () => {
         setLoading(false);
         if (success) {
           dispatch(setCollections({
-            collections: collections.filter((token) => token.id !== nft.id),
+            collections: collections.filter((token) => token.id !== nft?.id),
             walletNumber,
           }));
           dispatch(removeNFT(nft));
@@ -84,7 +84,7 @@ const SendNFT = () => {
               component={(
                 <Select
                   image={fallbackNftUrl(nft?.url)}
-                  name={nft?.name || `${collection?.name ?? ''} #${nft.index}`}
+                  name={nft?.name || `${collection?.name ?? ''} #${nft?.index}`}
                   text={`#${nft?.index}`}
                   imageClassName={classes.nftImage}
                   readonly

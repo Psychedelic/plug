@@ -74,12 +74,13 @@ export const walletSlice = createSlice({
       state.collectionsLoading = action.payload;
     },
     removeNFT: (state, action) => {
-      state.collections = state.collections.map(
+      const collections = state.collections.map(
         (col) => ({
           ...col,
-          tokens: col.tokens.filter((token) => token.id === action.payload?.id)
+          tokens: col.tokens.filter((token) => token.id === action.payload?.id),
         }),
       );
+      state.collections = collections.filter((col) => col.tokens.length);
     },
   },
 });
