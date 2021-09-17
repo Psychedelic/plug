@@ -15,7 +15,6 @@ const NFTs = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log('getting nfts');
     sendMessage({
       type: HANDLER_TYPES.GET_NFTS,
       params: { refresh: true },
