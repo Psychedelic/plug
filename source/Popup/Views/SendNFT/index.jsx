@@ -12,7 +12,7 @@ import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { setCollections } from '@redux/wallet';
+import { removeNFT, setCollections } from '@redux/wallet';
 import { setSelectedNft } from '@redux/nfts';
 
 const useStyles = makeStyles(() => ({
@@ -48,6 +48,7 @@ const SendNFT = () => {
             collections: collections.filter((token) => token.id !== nft.id),
             walletNumber,
           }));
+          dispatch(removeNFT(nft));
           dispatch(setSelectedNft(null));
           navigator.navigate('home', TABS.NFTS);
         } else {
@@ -65,7 +66,7 @@ const SendNFT = () => {
 
   const collection = useMemo(() => collections?.find(
     (col) => col.name === nft?.collection,
-  ),
+  ) || {},
   [collections, nft,
   ]);
   return (
@@ -83,7 +84,7 @@ const SendNFT = () => {
               component={(
                 <Select
                   image={fallbackNftUrl(nft?.url)}
-                  name={nft?.name || `${collection.name} #${nft.index}`}
+                  name={nft?.name || `${collection?.name} #${nft?.index}`}
                   text={`#${nft?.index}`}
                   imageClassName={classes.nftImage}
                   readonly
