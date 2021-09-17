@@ -12,12 +12,12 @@ const NFTs = () => {
   const dispatch = useDispatch();
 
   const { collections, collectionsLoading, walletNumber } = useSelector((state) => state.wallet);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(collectionsLoading);
 
   useEffect(() => {
     sendMessage({
       type: HANDLER_TYPES.GET_NFTS,
-      params: { refresh: true },
+      params: {},
     }, (nftCollections) => {
       dispatch(setCollections({ collections: nftCollections, walletNumber }));
       dispatch(setCollectionsLoading(false));
@@ -29,7 +29,7 @@ const NFTs = () => {
   }, [collectionsLoading]);
 
   return (
-    <LoadingWrapper loading={!collections.length && loading} className="big">
+    <LoadingWrapper loading={loading} className="big">
       {
         !collections?.length
           ? <EmptyState />
