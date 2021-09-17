@@ -7,7 +7,7 @@ import PlugController from '@psychedelic/plug-controller';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
 import { XTC_FEE } from '@shared/constants/addresses';
-import { NotificationManager } from '../lib';
+import NotificationManager from '../lib/NotificationManager';
 
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
@@ -29,7 +29,7 @@ const backgroundController = new BackgroundController({
 });
 
 const notificationManager = new NotificationManager(
-  extension.extension.getURL('../assets/icons/plug.svg')
+  extension.extension.getURL('../assets/icons/plug.svg'),
 );
 
 backgroundController.start();
@@ -587,7 +587,7 @@ backgroundController.exposeController(
 
     callback(ERRORS.CLIENT_ERROR(errorMessage), null, [{ portId, callId }]);
     callback(null, true);
-  }
+  },
 );
 
 backgroundController.exposeController(
@@ -601,7 +601,7 @@ backgroundController.exposeController(
 
     callback(ERRORS.CLIENT_ERROR(errorMessage), null, [{ portId, callId }]);
     callback(null, true);
-  }
+  },
 );
 
 export default backgroundController;

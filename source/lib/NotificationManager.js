@@ -5,28 +5,26 @@ class NotificationManager {
     this.iconUrl = image;
   }
 
-  notificateError(message = "The last request made to Plug didn\'t go through") {
-    this._showNotification({
+  notificateError(message = "The last request made to Plug didn't go through") {
+    this.showNotification({
       title: 'Plug - Error',
       message,
-      iconUrl: this.iconUrl,
     });
   }
 
-  notificateTimeout(message = "The last request made to Plug timed out") {
-    this._showNotification({
+  notificateTimeout(message = 'The last request made to Plug timed out') {
+    this.showNotification({
       title: 'Plug - Request timed out',
       message,
-      iconUrl: this.iconUrl,
     });
   }
 
-  _showNotification({ title, message, iconUrl }) {
+  showNotification({ title, message }) {
     extension.notifications.create({
       type: 'basic',
       title,
       message,
-      iconUrl,
+      iconUrl: this.iconUrl,
     });
   }
 }
