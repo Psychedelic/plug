@@ -47,7 +47,7 @@ const NFTDetails = () => {
     <Layout>
       <Header
         left={<LinkButton value={t('common.back')} onClick={handleBack} startIcon={BackIcon} />}
-        center={nft?.name || `${collection.name} #${nft.index}`}
+        center={nft?.name || `${collection?.name ?? ''} #${nft.index}`}
         right={null}
       />
       <div className={classes.container}>
