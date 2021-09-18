@@ -114,6 +114,6 @@ const EMOJIS = [
   '😾',
 ];
 
-export const getRandomEmoji = () => EMOJIS[Math.floor(Math.random() * EMOJIS.length)].match(/./gu)[0];
+export const getRandomEmoji = () => EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
 
 export default EMOJIS;
