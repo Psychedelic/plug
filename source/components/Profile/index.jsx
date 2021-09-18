@@ -99,6 +99,8 @@ const Profile = ({ disableProfile }) => {
       });
   };
 
+  console.log(getRandomEmoji());
+
   return (
     <>
       <HoverAnimation
@@ -152,7 +154,7 @@ const Profile = ({ disableProfile }) => {
             }}
           >
             <div className={classes.container}>
-              <Typography variant="h5" className={classes.myAccounts}>My Accounts</Typography>
+              <Typography variant="h5" className={classes.myAccounts}>{t('profile.myAccounts')}</Typography>
               <MenuList className={clsx(classes.accountContainer, classes.menu)}>
                 {
                   accounts.map((account) => (

@@ -1392,10 +1392,10 @@
     buffer-crc32 "^0.2.13"
     crypto-js "^4.1.1"
 
-"@psychedelic/plug-controller@0.5.1":
-  version "0.5.1"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.5.1/470e5f40bc667f950ce5660ec6119b7b1a550b1d329e7189390b543422064465#ad03e89bd4f28ded4e61a9ab00e051f5ab87628b"
-  integrity sha512-1BKYRo8kV8z5ZjMUIwDGwyQKr8tQaQxAONIkoJeHvDla5T3VNLWsI5An9gTtwi6DfEJnx8nNrKETHZuCOhPJKg==
+"@psychedelic/plug-controller@0.5.2":
+  version "0.5.2"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.5.2/35a42997ae1286635a65fbee39fead11f1d1043de8d65fa2ada00f05f1ba95cf#3f8d884a95f88d17b1dfde0dba51d5303f096406"
+  integrity sha512-aQNA8GBL9ondtD02PT4GIoDMjII/YuYqgYvIQAi8sazN4AqhYm5cbgKZdwIL3w6oQLuuPOzF4IrJIxTljZkD2Q==
   dependencies:
     "@babel/preset-env" "^7.14.4"
     "@dfinity/agent" "^0.9.3"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
@@ -12,15 +12,7 @@ const UserIcon = ({
 
   const classes = useStyles();
 
-  const [displayIcon, setDisplayIcon] = useState('👽');
-
-  useEffect(() => {
-    if (icon) {
-      setDisplayIcon(icon);
-    } else if (emoji) {
-      setDisplayIcon(emoji);
-    }
-  }, [icon, emoji]);
+  const displayIcon = icon ?? emoji ?? '👽';
 
   return (
     <div
@@ -35,7 +27,7 @@ const UserIcon = ({
           </div>
         )
       }
-      <span>
+      <span role="img" aria-label="Emoji">
         {displayIcon}
       </span>
     </div>
