@@ -99,8 +99,6 @@ const Profile = ({ disableProfile }) => {
       });
   };
 
-  console.log(getRandomEmoji());
-
   return (
     <>
       <HoverAnimation
@@ -162,7 +160,7 @@ const Profile = ({ disableProfile }) => {
                       size="small"
                       key={account.walletNumber}
                       name={account.name}
-                      icon={<UserIcon size="small" icon={account.icon || '👽'} style={{ marginLeft: -6, marginRight: 12 }} />}
+                      icon={<UserIcon size="small" icon={account.icon} style={{ marginLeft: -6, marginRight: 12 }} />}
                       onClick={handleChangeAccount(account.walletNumber)}
                       selected={account.walletNumber === walletNumber}
                       endIcon={(
