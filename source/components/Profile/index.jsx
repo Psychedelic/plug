@@ -152,7 +152,7 @@ const Profile = ({ disableProfile }) => {
             }}
           >
             <div className={classes.container}>
-              <Typography variant="h5" className={classes.myAccounts}>My Accounts</Typography>
+              <Typography variant="h5" className={classes.myAccounts}>{t('profile.myAccounts')}</Typography>
               <MenuList className={clsx(classes.accountContainer, classes.menu)}>
                 {
                   accounts.map((account) => (
@@ -160,7 +160,7 @@ const Profile = ({ disableProfile }) => {
                       size="small"
                       key={account.walletNumber}
                       name={account.name}
-                      icon={<UserIcon size="small" icon={account.icon || '👽'} style={{ marginLeft: -6, marginRight: 12 }} />}
+                      icon={<UserIcon size="small" icon={account.icon} style={{ marginLeft: -6, marginRight: 12 }} />}
                       onClick={handleChangeAccount(account.walletNumber)}
                       selected={account.walletNumber === walletNumber}
                       endIcon={(

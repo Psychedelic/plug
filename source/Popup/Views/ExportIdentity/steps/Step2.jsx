@@ -51,7 +51,7 @@ const Step2 = () => {
             label={t('common.account')}
             component={(
               <Select
-                icon={<UserIcon size="medium" icon={selectedAccount?.icon || '👽'} style={{ marginRight: 12 }} />}
+                icon={<UserIcon size="medium" icon={selectedAccount?.icon} style={{ marginRight: 12 }} />}
                 name={selectedAccount?.name || ''}
                 text={shortAddress(selectedAccount?.principal) || ''}
                 onClick={() => setOpenAccounts(true)}
@@ -63,7 +63,7 @@ const Step2 = () => {
             title={t('exportIdentity.selectAccount')}
             items={accounts.map((a) => ({
               ...a,
-              icon: <UserIcon size="small" icon={a.icon || '👽'} style={{ marginLeft: -6, marginRight: 12 }} />,
+              icon: <UserIcon size="small" icon={a.icon} style={{ marginLeft: -6, marginRight: 12 }} />,
               endText: shortAddress(a.principal),
             }))}
             onClose={handleCloseAccounts}

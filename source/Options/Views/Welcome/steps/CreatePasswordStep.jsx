@@ -6,8 +6,9 @@ import { useTranslation } from 'react-i18next';
 import {
   Alert, Button, FormItem, TextInput,
 } from '@ui';
-import { sendMessage } from '@background/Keyring';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import facepalmEmoji from '@assets/icons/facepalm.svg';
+import { getRandomEmoji } from '@shared/constants/emojis';
 import useStyles from '../styles';
 
 const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => {
@@ -51,8 +52,9 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
       apps: {},
     });
 
-    const type = mnemonic ? 'import-keyring' : 'create-keyring';
-    const params = { password, mnemonic };
+    const type = mnemonic ? HANDLER_TYPES.IMPORT : HANDLER_TYPES.CREATE;
+    const params = { password, mnemonic, icon: getRandomEmoji() };
+
     sendMessage({ type, params }, (response) => {
       handleSetMnemonic(response?.mnemonic);
     });
