@@ -64,12 +64,10 @@ export const walletSlice = createSlice({
       state.assetsLoading = action.payload;
     },
     setCollections: (state, action) => {
-      if (state.walletNumber === action.payload?.walletNumber) {
-        if (action.payload.collections) {
-          state.collections = action.payload?.collections?.sort(
-            (a, b) => b?.tokens.length - a?.tokens.length,
-          );
-        }
+      if (state.walletNumber === action.payload?.walletNumber && action.payload.collections) {
+        state.collections = action.payload?.collections?.sort(
+          (a, b) => b?.tokens.length - a?.tokens.length,
+        );
       }
     },
     setCollectionsLoading: (state, action) => {
