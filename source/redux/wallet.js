@@ -65,9 +65,11 @@ export const walletSlice = createSlice({
     },
     setCollections: (state, action) => {
       if (state.walletNumber === action.payload?.walletNumber) {
-        state.collections = action.payload?.collections?.sort(
-          (a, b) => b?.tokens.length - a?.tokens.length,
-        );
+        if (action.payload.collections) {
+          state.collections = action.payload?.collections?.sort(
+            (a, b) => b?.tokens.length - a?.tokens.length,
+          );
+        }
       }
     },
     setCollectionsLoading: (state, action) => {
