@@ -60,9 +60,7 @@ export const walletSlice = createSlice({
       state.transactions = parsedTrx.slice(0, 50); // TODO: Move paging to BE
     },
     setAssets: (state, action) => {
-      const { keyringAssets, icpPrice } = action.payload;
-
-      console.log(keyringAssets);
+      const { keyringAssets, icpPrice } = action.payload || {};
 
       const formattedAssets = formatAssets(keyringAssets, icpPrice);
 

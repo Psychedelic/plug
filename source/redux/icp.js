@@ -43,7 +43,6 @@ export const useICPPrice = (refetch = false, dependencies = []) => {
 
   useEffect(() => {
     if (!icpPrice || refetch) {
-      console.log('fetching');
       fetchICPPrice();
     }
   }, dependencies);

@@ -89,6 +89,7 @@ const Profile = ({ disableProfile }) => {
           dispatch(setAssetsLoading(true));
           sendMessage({
             type: HANDLER_TYPES.GET_ASSETS,
+            params: {},
           }, (keyringAssets) => {
             dispatch(setAssets({ keyringAssets, icpPrice }));
             dispatch(setAssetsLoading(false));
