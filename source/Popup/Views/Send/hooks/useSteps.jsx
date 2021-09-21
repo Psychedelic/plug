@@ -11,6 +11,7 @@ import {
 } from '@shared/constants/currencies';
 import { validateAccountId, validateCanisterId, validatePrincipalId } from '@shared/utils/ids';
 import { ADDRESS_TYPES, DEFAULT_FEE, XTC_FEE } from '@shared/constants/addresses';
+import { useICPPrice } from '@redux/icp';
 import Step1 from '../Steps/Step1';
 // import Step2a from '../Steps/Step2a';
 // import Step2b from '../Steps/Step2b';
@@ -25,7 +26,7 @@ const useSteps = () => {
   const dispatch = useDispatch();
 
   const { assets, principalId, accountId } = useSelector((state) => state.wallet);
-  const { icpPrice } = useSelector((state) => state.icp);
+  const icpPrice = useICPPrice();
   const [selectedAsset, setSelectedAsset] = useState(assets?.[0] || CURRENCIES.get('ICP'));
 
   const [amount, setAmount] = useState(0);
@@ -190,9 +191,8 @@ const useSteps = () => {
     if (!assets?.length) {
       sendMessage({
         type: HANDLER_TYPES.GET_ASSETS,
-        params: { icpPrice },
       }, (keyringAssets) => {
-        dispatch(setAssets(keyringAssets));
+        dispatch(setAssets({ keyringAssets, icpPrice }));
         setAvailableAmount(
           {
             amount: keyringAssets?.[0]?.amount - getTransactionFee(),

@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import BluePencil from '@assets/icons/blue-pencil.svg';
 import { getRandomEmoji } from '@shared/constants/emojis';
 import clsx from 'clsx';
+import { useICPPrice } from '@redux/icp';
 import { TABS, useRouter } from '../Router';
 import ActionDialog from '../ActionDialog';
 import useMenuItems from '../../hooks/useMenuItems';
@@ -29,9 +30,9 @@ const Profile = ({ disableProfile }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { navigator } = disableProfile ? {} : useRouter();
-  const { icpPrice } = useSelector((state) => state.icp);
 
   const { walletNumber } = useSelector((state) => state.wallet);
+  const icpPrice = useICPPrice();
 
   const [open, setOpen] = useState(false);
   const [accounts, setAccounts] = useState([]);
@@ -88,9 +89,8 @@ const Profile = ({ disableProfile }) => {
           dispatch(setAssetsLoading(true));
           sendMessage({
             type: HANDLER_TYPES.GET_ASSETS,
-            params: { icpPrice },
           }, (keyringAssets) => {
-            dispatch(setAssets(keyringAssets));
+            dispatch(setAssets({ keyringAssets, icpPrice }));
             dispatch(setAssetsLoading(false));
           });
           setOpen(false);

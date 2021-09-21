@@ -5,6 +5,7 @@ import { AssetItem, Button } from '@ui';
 import { setAssets, setAssetsLoading } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { useRouter } from '@components/Router';
+import { useICPPrice } from '@redux/icp';
 import useStyles from './styles';
 
 const Tokens = () => {
@@ -12,16 +13,15 @@ const Tokens = () => {
   const { assets, assetsLoading } = useSelector((state) => state.wallet);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
-  const { icpPrice } = useSelector((state) => state.icp);
+  const icpPrice = useICPPrice();
   const { t } = useTranslation();
   const { navigator } = useRouter();
   useEffect(() => {
     if (icpPrice) {
       sendMessage({
         type: HANDLER_TYPES.GET_ASSETS,
-        params: { icpPrice },
       }, (keyringAssets) => {
-        dispatch(setAssets(keyringAssets));
+        dispatch(setAssets({ keyringAssets, icpPrice }));
         dispatch(setAssetsLoading(false));
         setLoading(false);
       });

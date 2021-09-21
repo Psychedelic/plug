@@ -6,14 +6,17 @@ import { Typography } from '@material-ui/core';
 import { CURRENCIES, E8S_PER_ICP } from '@shared/constants/currencies';
 import NumberFormat from 'react-number-format';
 import extension from 'extensionizer';
+import { useICPPrice } from '@redux/icp';
 import useStyles from '../styles';
 import SIZES from '../constants';
 
 const Details = ({
-  amount: e8s, image, url, requestCount, icpPrice,
+  amount: e8s, image, url, requestCount,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
+
+  const icpPrice = useICPPrice();
 
   const asset = CURRENCIES.get('ICP');
   const amount = e8s / E8S_PER_ICP;
@@ -57,5 +60,4 @@ Details.propTypes = {
   image: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
   requestCount: PropTypes.number.isRequired,
-  icpPrice: PropTypes.number.isRequired,
 };
