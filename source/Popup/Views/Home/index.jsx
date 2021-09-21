@@ -65,7 +65,7 @@ const Home = () => {
             params: { refresh: true },
           }, (nftCollections) => {
             dispatch(setCollections({ collections: nftCollections, walletNumber }));
-            dispatch(setCollectionsLoading(false));
+            dispatch(setCollectionsLoading(!nftCollections));
           });
         }
         dispatch(setAccountInfo(state.wallets[state.currentWalletId]));

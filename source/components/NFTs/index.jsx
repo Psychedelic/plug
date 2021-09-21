@@ -20,7 +20,7 @@ const NFTs = () => {
       params: {},
     }, (nftCollections) => {
       dispatch(setCollections({ collections: nftCollections, walletNumber }));
-      dispatch(setCollectionsLoading(false));
+      dispatch(setCollectionsLoading(!nftCollections));
     });
   }, [walletNumber]);
 
