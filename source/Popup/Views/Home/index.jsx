@@ -60,12 +60,11 @@ const Home = () => {
           {
             type: HANDLER_TYPES.GET_NFTS,
             params: { refresh: true },
-          },
-          (nftCollections) => {
-            dispatch(
-              setCollections({ collections: nftCollections, walletNumber }),
-            );
-            dispatch(setCollectionsLoading(false));
+          }, (nftCollections) => {
+            if (nftCollections) {
+              dispatch(setCollections({ collections: nftCollections, walletNumber }));
+              dispatch(setCollectionsLoading(false));
+            }
           },
         );
       }

@@ -170,7 +170,7 @@ export const getKeyringHandler = (type, keyring) => ({
     } else {
       keyring.getNFTs();
     }
-    return collections.map((collection) => recursiveParseBigint(collection));
+    return collections?.map((collection) => recursiveParseBigint(collection));
   },
   [HANDLER_TYPES.TRANSFER_NFT]:
   async ({ to, nft }) => {
