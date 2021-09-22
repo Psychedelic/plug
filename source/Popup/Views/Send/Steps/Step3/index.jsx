@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import {
   Container,
@@ -31,6 +31,7 @@ import {
 
 import { ADDRESS_TYPES, DEFAULT_FEE, XTC_FEE } from '@shared/constants/addresses';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import { useICPPrice } from '@redux/icp';
 import useStyles from '../../styles';
 
 const Step3 = ({
@@ -44,7 +45,7 @@ const Step3 = ({
   const isICP = asset?.symbol === 'ICP';
   const isXTC = asset?.symbol === 'XTC';
   const dispatch = useDispatch();
-  const { icpPrice } = useSelector((state) => state.icp);
+  const icpPrice = useICPPrice();
 
   const [ICPModalOpen, setOpenICPModal] = useState(false);
   const [sendingModalOpen, setSendingModalOpen] = useState(false);
@@ -95,9 +96,9 @@ const Step3 = ({
     dispatch(setAssetsLoading(true));
     sendMessage({
       type: HANDLER_TYPES.GET_ASSETS,
-      params: { refresh: true, icpPrice },
+      params: { refresh: true },
     }, (keyringAssets) => {
-      dispatch(setAssets(keyringAssets));
+      dispatch(setAssets({ keyringAssets, icpPrice }));
       dispatch(setAssetsLoading(false));
     });
     navigator.navigate('home', TABS.ACTIVITY);
