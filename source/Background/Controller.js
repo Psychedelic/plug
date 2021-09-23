@@ -10,7 +10,7 @@ import { XTC_FEE } from '@shared/constants/addresses';
 import NotificationManager from '../lib/NotificationManager';
 
 import SIZES from '../Pages/Notification/components/Transfer/constants';
-import { getKeyringHandler, HANDLER_TYPES, getKeyringErrorMessage, } from './Keyring';
+import { getKeyringHandler, HANDLER_TYPES, getKeyringErrorMessage } from './Keyring';
 import { validateTransferArgs, validateBurnArgs } from './utils';
 import ERRORS from './errors';
 import plugProvider from '../Inpage/index';
@@ -51,7 +51,7 @@ extension.runtime.onMessage.addListener((message, _, sendResponse) => {
     .then((response) => {
       sendResponse(response);
     })
-    .catch((error) => {
+    .catch(() => {
       const keyringErrorMessage = getKeyringErrorMessage(type);
       const errorMessage = keyringErrorMessage ? `Unexpected error while ${keyringErrorMessage}` : 'Unexpected error';
       notificationManager.notificateError(errorMessage);
