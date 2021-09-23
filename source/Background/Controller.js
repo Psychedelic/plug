@@ -10,7 +10,7 @@ import { XTC_FEE } from '@shared/constants/addresses';
 import NotificationManager from '../lib/NotificationManager';
 
 import SIZES from '../Pages/Notification/components/Transfer/constants';
-import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
+import { getKeyringHandler, HANDLER_TYPES, getKeyringErrorMessage, } from './Keyring';
 import { validateTransferArgs, validateBurnArgs } from './utils';
 import ERRORS from './errors';
 import plugProvider from '../Inpage/index';
@@ -47,9 +47,15 @@ extension.runtime.onMessage.addListener((message, _, sendResponse) => {
   const { params, type } = message;
   const keyringHandler = getKeyringHandler(type, keyring);
   if (!keyringHandler) return;
-  keyringHandler(params).then((response) => {
-    sendResponse(response);
-  });
+  keyringHandler(params)
+    .then((response) => {
+      sendResponse(response);
+    })
+    .catch((error) => {
+      const keyringErrorMessage = getKeyringErrorMessage(type);
+      const errorMessage = keyringErrorMessage ? `Unexpected error while ${keyringErrorMessage}` : 'Unexpected error';
+      notificationManager.notificateError(errorMessage);
+    });
   // Usually we would not return, but it seems firefox needs us to
   return true; // eslint-disable-line
 });
@@ -79,7 +85,7 @@ const secureController = async (callback, controller) => {
   try {
     await controller();
   } catch (e) {
-    notificationManager.notificateError();
+    notificationManager.notificateError(e.message);
   }
 };
 
