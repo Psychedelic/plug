@@ -14,7 +14,7 @@ import AboutImg from '@assets/icons/nfts/about.png';
 import { Typography } from '@material-ui/core';
 import { setSelectedNft } from '@redux/nfts';
 import { entrepotUrl } from '@shared/constants/urls';
-import browser from 'webextension-polyfill';
+import extension from 'extensionizer';
 
 import Section from './components/section';
 import useStyles from './styles';
@@ -36,7 +36,7 @@ const NFTDetails = () => {
     navigator.navigate('home', TABS.NFTS);
   };
 
-  const openMarketplace = (url) => () => browser.tabs.create({ url: url || entrepotUrl });
+  const openMarketplace = (url) => () => extension.tabs.create({ url: url || entrepotUrl });
   const collection = useMemo(() => collections?.find(
     (col) => col.name === nft?.collection,
   ),

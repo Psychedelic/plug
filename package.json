@@ -55,8 +55,7 @@
     "react-redux": "^7.2.4",
     "react-swipeable-views": "^0.13.9",
     "uuid": "8.3.2",
-    "webext-base-css": "^1.2.0",
-    "webextension-polyfill": "^0.7.0"
+    "webext-base-css": "^1.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",

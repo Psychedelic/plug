@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import browser from 'webextension-polyfill';
+import extension from 'extensionizer';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import Typography from '@material-ui/core/Typography';
@@ -84,7 +84,7 @@ const Login = ({ redirect }) => {
         <LinkButton
           style={{ paddingTop: 6 }}
           value={t('login.import')}
-          onClick={() => browser.tabs.create({ url: 'options.html' })}
+          onClick={() => extension.tabs.create({ url: 'options.html' })}
         />
       </div>
 
