@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import clsx from 'clsx';
+import extension from 'extensionizer';
 import { useRouter } from '@components/Router';
 import {
   Layout,
@@ -26,9 +27,7 @@ import BlueCheck from '@assets/icons/blue-check.svg';
 import { Info /* , Globe,  ChevronDown */ } from 'react-feather';
 // import MuiSwitch from '@material-ui/core/Switch';
 // import { withStyles } from '@material-ui/core/styles';
-// import extension from 'extensionizer';
 import { icIdsUrl } from '@shared/constants/urls';
-import browser from 'webextension-polyfill';
 import useStyles from './styles';
 import { updateWalletDetails } from '../../../redux/wallet';
 
@@ -312,7 +311,7 @@ const WalletDetails = () => {
                   />
                   <LinkButton
                     value={t('walletDetails.learnMorePrincipal')}
-                    onClick={() => browser.tabs.create({ url: icIdsUrl })}
+                    onClick={() => extension.tabs.create({ url: icIdsUrl })}
                   />
                 </div>
               )}
@@ -349,7 +348,7 @@ const WalletDetails = () => {
                   />
                   <LinkButton
                     value={t('walletDetails.learnMoreAccount')}
-                    onClick={() => browser.tabs.create({ url: icIdsUrl })}
+                    onClick={() => extension.tabs.create({ url: icIdsUrl })}
                   />
                 </div>
               )}

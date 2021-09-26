@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import extension from 'extensionizer';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
@@ -22,7 +23,6 @@ import PlugController from '@psychedelic/plug-controller';
 import { Principal } from '@dfinity/principal';
 import { Info } from 'react-feather';
 import { icIdsUrl } from '@shared/constants/urls';
-import browser from 'webextension-polyfill';
 import ArrowUpRight from '@assets/icons/arrow-up-right.png';
 import clsx from 'clsx';
 import {
@@ -67,18 +67,18 @@ const Step3 = ({
 
   const redirectToICRocks = () => {
     if (!loading) {
-      browser.tabs.create({ url: `https://ic.rocks/account/${accountId}` });
+      extension.tabs.create({ url: `https://ic.rocks/account/${accountId}` });
     }
   };
 
   const openICRocksTx = () => {
     navigator.navigate('home');
-    browser.tabs.create({ url: `https://ic.rocks/transaction/${transaction.hash}` });
+    extension.tabs.create({ url: `https://ic.rocks/transaction/${transaction.hash}` });
   };
 
   const openTwoIdsBlog = () => {
     if (!loading) {
-      browser.tabs.create({ url: icIdsUrl });
+      extension.tabs.create({ url: icIdsUrl });
     }
   };
 

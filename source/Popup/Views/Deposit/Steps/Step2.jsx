@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import browser from 'webextension-polyfill';
+import extension from 'extensionizer';
 import {
   Container, Button, LinkButton, CodeBox, InputBase, Dialog,
 } from '@ui';
@@ -41,7 +41,7 @@ const Step2 = ({ selectedSource, selectedAsset }) => {
               <Button variant="rainbow" value={t('deposit.copyAddress')} onClick={() => navigator.clipboard.writeText(principalId)} />
             </Grid>
             <Grid item xs={12}>
-              <LinkButton value={`${t('deposit.learnMore')} ${selectedAsset.name}`} onClick={() => browser.tabs.create({ url: buyCyclesUrl })} />
+              <LinkButton value={`${t('deposit.learnMore')} ${selectedAsset.name}`} onClick={() => extension.tabs.create({ url: buyCyclesUrl })} />
             </Grid>
           </Grid>
         )

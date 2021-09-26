@@ -4,7 +4,7 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
-import browser from 'webextension-polyfill';
+import extension from 'extensionizer';
 import Tooltip from '@material-ui/core/Tooltip';
 import ArrowUpRight from '@assets/icons/arrow-up-right.png';
 
@@ -68,7 +68,7 @@ const getAddress = (type, to, from) => (
 )[type] || '';
 
 const openICRocksTx = (hash) => {
-  browser.tabs.create({ url: `https://ic.rocks/transaction/${hash}` });
+  extension.tabs.create({ url: `https://ic.rocks/transaction/${hash}` });
 };
 
 const ActivityItem = ({
