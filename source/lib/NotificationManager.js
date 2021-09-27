@@ -6,10 +6,16 @@ class NotificationManager {
   }
 
   notificateError(message = "The last request made to Plug didn't go through") {
-    this.showNotification({
-      title: 'Plug - Error',
-      message,
-    });
+    const popup = extension.extension.getViews({ type: 'popup' });
+
+    if (popup.length) {
+      extension.runtime.sendMessage({ errorMessage: message });
+    } else {
+      this.showNotification({
+        title: 'Plug - Error',
+        message,
+      });
+    }
   }
 
   notificateTimeout(message = 'The last request made to Plug timed out') {
