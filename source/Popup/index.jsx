@@ -1,4 +1,7 @@
 import React, { StrictMode, useEffect, useState } from 'react';
+import extension from 'extensionizer';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import ReactDOM from 'react-dom';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
@@ -14,6 +17,15 @@ i18n.use(initReactI18next).init(initConfig);
 
 const App = () => {
   const [initialRoute, setInitialRoute] = useState(null);
+
+  useEffect(() => {
+    extension.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      if (request.errorMessage) {
+        toast(request.errorMessage, { type: 'error' });
+        sendResponse(true);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_LOCKS, params: {} }, (locks) => {
@@ -37,6 +49,17 @@ const App = () => {
           store={store}
           theme={theme}
         >
+          <ToastContainer
+            position="bottom-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
           <Popup initialRoute={initialRoute} />
         </ProviderWrapper>
       </StrictMode>
