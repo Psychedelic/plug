@@ -14,7 +14,11 @@ const Badge = ({ name, value, icon }) => {
       <div className={classes.valueContainer}>
         {
           icon
-          && <img className={classes.icon} src={icon} />
+          && (
+          <div className={classes.iconContainer}>
+            <img className={classes.icon} src={icon} />
+          </div>
+          )
         }
         <span className={classes.value}>{value}</span>
       </div>

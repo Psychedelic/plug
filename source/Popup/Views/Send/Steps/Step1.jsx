@@ -80,7 +80,7 @@ const Step1 = ({
                 <Button
                   variant="primaryOutlined"
                   value={t('common.max')}
-                  onClick={() => handleChangeAmount(availableAmount.amount)}
+                  onClick={() => handleChangeAmount(availableAmount.amount.toFixed(5))}
                 />
               </div>
             )}
@@ -126,7 +126,7 @@ const Step1 = ({
           && <span className={classes.sameAddressFromTo}>{t('deposit.sameAddressFromTo')}</span>
         }
 
-        <Grid item xs={12}>
+        <Grid item xs={12} style={{ paddingTop: '18px' }}>
           <Button
             variant="rainbow"
             value={t('common.continue')}

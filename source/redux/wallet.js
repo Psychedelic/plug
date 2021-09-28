@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ACTIVITY_STATUS, ACTIVITY_TYPES } from '@shared/constants/activity';
-import { formatAssetBySymbol, TOKEN_IMAGES } from '@shared/constants/currencies';
+import { formatAssetBySymbol, TOKENS, TOKEN_IMAGES } from '@shared/constants/currencies';
 
 /* eslint-disable no-param-reassign */
 export const walletSlice = createSlice({
@@ -11,9 +11,11 @@ export const walletSlice = createSlice({
     accountId: '',
     emoji: '👽',
     transactions: [],
-    assets: [],
+    assets: Object.values(TOKENS),
     walletNumber: 0,
     assetsLoading: true,
+    collections: [],
+    collectionsLoading: true,
   },
   reducers: {
     updateWalletDetails: (state, action) => {
@@ -23,7 +25,6 @@ export const walletSlice = createSlice({
     },
     setAccountInfo: (state, action) => {
       if (!action.payload) return;
-
       // Chrome serializes everything with toJSON
       const {
         accountId, icon, name, principal, walletNumber,
@@ -62,6 +63,25 @@ export const walletSlice = createSlice({
     setAssetsLoading: (state, action) => {
       state.assetsLoading = action.payload;
     },
+    setCollections: (state, action) => {
+      if (state.walletNumber === action.payload?.walletNumber) {
+        state.collections = action.payload?.collections?.sort(
+          (a, b) => b?.tokens.length - a?.tokens.length,
+        );
+      }
+    },
+    setCollectionsLoading: (state, action) => {
+      state.collectionsLoading = action.payload;
+    },
+    removeNFT: (state, action) => {
+      const collections = state.collections.map(
+        (col) => ({
+          ...col,
+          tokens: col.tokens.filter((token) => token.id !== action.payload?.id),
+        }),
+      );
+      state.collections = collections.filter((col) => col.tokens.length);
+    },
   },
 });
 
@@ -71,6 +91,9 @@ export const {
   setTransactions,
   setAssets,
   setAssetsLoading,
+  setCollections,
+  setCollectionsLoading,
+  removeNFT,
 } = walletSlice.actions;
 
 export default walletSlice.reducer;

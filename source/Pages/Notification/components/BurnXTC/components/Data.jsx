@@ -5,15 +5,13 @@ import extension from 'extensionizer';
 import useStyles from '../styles';
 import SIZES from '../constants';
 
-const Data = ({ data, principalId }) => {
+const Data = ({ data }) => {
   const classes = useStyles();
 
   extension.windows.update(
     extension.windows.WINDOW_ID_CURRENT,
     {
-      height: principalId
-        ? SIZES.dataHeightBig
-        : SIZES.dataHeightSmall,
+      height: SIZES.dataHeight,
     },
   );
 
@@ -43,5 +41,4 @@ Data.propTypes = {
       component: PropTypes.node.isRequired,
     }),
   ).isRequired,
-  principalId: PropTypes.objectOf(PropTypes.object).isRequired,
 };

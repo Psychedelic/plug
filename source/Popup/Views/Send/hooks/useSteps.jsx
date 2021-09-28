@@ -10,7 +10,7 @@ import {
   CURRENCIES, CYCLES_PER_TC, E8S_PER_ICP, USD_PER_TC,
 } from '@shared/constants/currencies';
 import { validateAccountId, validateCanisterId, validatePrincipalId } from '@shared/utils/ids';
-import { ADDRESS_TYPES, DEFAULT_FEE } from '@shared/constants/addresses';
+import { ADDRESS_TYPES, DEFAULT_FEE, XTC_FEE } from '@shared/constants/addresses';
 import Step1 from '../Steps/Step1';
 // import Step2a from '../Steps/Step2a';
 // import Step2b from '../Steps/Step2b';
@@ -55,6 +55,24 @@ const useSteps = () => {
     } else {
       setTrxComplete(true);
     }
+  };
+
+  const getTransactionFee = () => {
+    let currentFee;
+
+    switch (selectedAsset?.symbol) {
+      case 'ICP':
+        currentFee = DEFAULT_FEE;
+        break;
+      case 'XTC':
+        currentFee = XTC_FEE;
+        break;
+      default:
+        currentFee = 0.0;
+        break;
+    }
+
+    return currentFee;
   };
 
   const handleSendClick = () => {
@@ -122,7 +140,7 @@ const useSteps = () => {
       conversionRate: selectedAsset?.value,
     },
   );
-  const available = (selectedAsset?.amount || 0) - (selectedAsset?.symbol === 'ICP' ? DEFAULT_FEE : 0); // Only ICP supported for now
+  const available = (selectedAsset?.amount || 0) - getTransactionFee();
   const convertedAmount = Math.max(available * primaryValue.conversionRate, 0);
   const [availableAmount, setAvailableAmount] = useState({
     amount: convertedAmount,
@@ -144,7 +162,7 @@ const useSteps = () => {
     if (amount > maxAmount) {
       setAmount(maxAmount);
     }
-  }, [primaryValue]);
+  }, [primaryValue, convertedAmount]);
 
   useEffect(() => {
     setPrimaryValue(
@@ -172,12 +190,12 @@ const useSteps = () => {
     if (!assets?.length) {
       sendMessage({
         type: HANDLER_TYPES.GET_ASSETS,
-        params: {},
+        params: { icpPrice },
       }, (keyringAssets) => {
         dispatch(setAssets(keyringAssets));
         setAvailableAmount(
           {
-            amount: keyringAssets?.[0]?.amount,
+            amount: keyringAssets?.[0]?.amount - getTransactionFee(),
             prefix: primaryValue.prefix,
             suffix: primaryValue.suffix,
           },

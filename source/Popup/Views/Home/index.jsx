@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Actions, Tokens, Activity, Apps, Layout, useRouter, NFTs,
 } from '@components';
 import { Tabs } from '@ui';
-import { useTabs } from '@hooks';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import getICPPrice from '@shared/services/ICPPrice';
-import { setAccountInfo } from '@redux/wallet';
+import { setAccountInfo, setCollections, setCollectionsLoading } from '@redux/wallet';
 import { setICPPrice } from '@redux/icp';
 
 const getTabs = (t) => [
@@ -32,13 +31,13 @@ const getTabs = (t) => [
 
 const Home = () => {
   const { t } = useTranslation();
-  const { selectedTab, handleChangeTab } = useTabs();
   const dispatch = useDispatch();
   const { navigator, tabIndex } = useRouter();
+  const { walletNumber } = useSelector((state) => state.wallet);
 
-  useEffect(() => {
-    handleChangeTab(tabIndex || 0);
-  }, [tabIndex]);
+  const onChangeTab = (index) => {
+    navigator.navigate('home', index);
+  };
 
   useEffect(() => {
     try {
@@ -60,6 +59,14 @@ const Home = () => {
         if (!state?.wallets?.length) {
           sendMessage({ type: HANDLER_TYPES.LOCK, params: {} },
             () => navigator.navigate('login'));
+        } else {
+          sendMessage({
+            type: HANDLER_TYPES.GET_NFTS,
+            params: { refresh: true },
+          }, (nftCollections) => {
+            dispatch(setCollections({ collections: nftCollections, walletNumber }));
+            dispatch(setCollectionsLoading(false));
+          });
         }
         dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
       });
@@ -67,8 +74,8 @@ const Home = () => {
 
   return (
     <Layout>
-      <Actions visible={selectedTab === 0} />
-      <Tabs tabs={getTabs(t)} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
+      <Actions visible={tabIndex === 0} />
+      <Tabs tabs={getTabs(t)} selectedTab={tabIndex} handleChangeTab={onChangeTab} />
     </Layout>
   );
 };

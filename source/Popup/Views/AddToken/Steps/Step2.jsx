@@ -9,11 +9,14 @@ import {
 
 } from '@ui';
 import { TokenIcon } from '@components';
-import { USD_PER_TC } from '@shared/constants/currencies';
+import { USD_PER_TC, CYCLES_PER_TC } from '@shared/constants/currencies';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import { setAssets, setAssetsLoading } from '@redux/wallet';
+import { useDispatch, useSelector } from 'react-redux';
+
 import useStyles from '../styles';
 
-const cyclesToTC = cycles => cycles ? cycles / 1000000000000 : 0; // eslint-disable-line
+const cyclesToTC = cycles => cycles ? cycles / CYCLES_PER_TC : 0; // eslint-disable-line
 
 const parseTokenBySymbol = (token) => ({
   XTC: {
@@ -32,16 +35,25 @@ const parseTokenBySymbol = (token) => ({
 const Step2 = ({ selectedToken, handleClose }) => {
   const { t } = useTranslation();
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const displayToken = parseTokenBySymbol(selectedToken);
+  const { icpPrice } = useSelector((state) => state.icp);
   const registerToken = () => {
     setLoading(true);
     sendMessage({
       type: HANDLER_TYPES.ADD_CUSTOM_TOKEN,
       params: selectedToken?.token.canisterId,
     }, async () => {
-      setLoading(false);
-      handleClose();
+      sendMessage({
+        type: HANDLER_TYPES.GET_ASSETS,
+        params: { icpPrice, refresh: true },
+      }, (keyringAssets) => {
+        dispatch(setAssets(keyringAssets));
+        dispatch(setAssetsLoading(false));
+        setLoading(false);
+        handleClose();
+      });
     });
   };
   return (
@@ -61,7 +73,7 @@ const Step2 = ({ selectedToken, handleClose }) => {
               <Typography variant="h4">{displayToken.name}</Typography>
               <Typography variant="subtitle1"><AssetFormat value={displayToken?.amount} asset={displayToken?.symbol} /></Typography>
             </div>
-            {displayToken.price && (
+            {!!displayToken.price && (
               <div className={classes.rightContainer}>
                 <Typography variant="h4"><USDFormat value={displayToken?.price} /></Typography>
               </div>

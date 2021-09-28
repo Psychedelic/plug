@@ -11,12 +11,14 @@ import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import Plus from '@assets/icons/plus.svg';
-import { setAccountInfo, setAssets, setAssetsLoading } from '@redux/wallet';
+import {
+  setAccountInfo, setAssets, setAssetsLoading, setCollections,
+} from '@redux/wallet';
 import { useDispatch, useSelector } from 'react-redux';
 import BluePencil from '@assets/icons/blue-pencil.svg';
 import { getRandomEmoji } from '@shared/constants/emojis';
 import clsx from 'clsx';
-import { useRouter } from '../Router';
+import { TABS, useRouter } from '../Router';
 import ActionDialog from '../ActionDialog';
 import useMenuItems from '../../hooks/useMenuItems';
 import useStyles from './styles';
@@ -78,6 +80,7 @@ const Profile = ({ disableProfile }) => {
   };
 
   const handleChangeAccount = (wallet) => () => {
+    dispatch(setCollections({ collections: [], walletNumber }));
     sendMessage({ type: HANDLER_TYPES.SET_CURRENT_PRINCIPAL, params: wallet },
       (state) => {
         if (state?.wallets?.length) {
@@ -85,13 +88,13 @@ const Profile = ({ disableProfile }) => {
           dispatch(setAssetsLoading(true));
           sendMessage({
             type: HANDLER_TYPES.GET_ASSETS,
-            params: icpPrice,
+            params: { icpPrice },
           }, (keyringAssets) => {
             dispatch(setAssets(keyringAssets));
             dispatch(setAssetsLoading(false));
           });
           setOpen(false);
-          navigator.navigate('home', 0);
+          navigator.navigate('home', TABS.TOKENS);
         }
       });
   };

@@ -29,10 +29,19 @@ export default makeStyles({
     alignItems: 'center',
   },
   icon: {
+    width: 44,
+    height: 44,
+    objectFit: 'cover',
+  },
+  iconContainer: {
     background: 'white',
-    width: 31,
-    height: 31,
+    overflow: 'hidden',
+    width: 34,
+    height: 34,
     borderRadius: 31,
     marginRight: 8,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

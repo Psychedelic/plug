@@ -5,13 +5,19 @@ import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { areAllElementsIn } from '@shared/utils/array';
 import PlugController from '@psychedelic/plug-controller';
 import { validatePrincipalId } from '@shared/utils/ids';
-import { E8S_PER_ICP } from '@shared/constants/currencies';
+import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
+import { XTC_FEE } from '@shared/constants/addresses';
 
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
-import { validateTransferArgs } from './utils';
+import { validateTransferArgs, validateBurnArgs } from './utils';
 import ERRORS from './errors';
 import plugProvider from '../Inpage/index';
+
+const DEFAULT_CURRENCY_MAP = {
+  ICP: 0,
+  XTC: 1,
+};
 
 const storage = extension.storage.local;
 let keyring;
@@ -36,7 +42,9 @@ extension.runtime.onMessage.addListener((message, _, sendResponse) => {
   const { params, type } = message;
   const keyringHandler = getKeyringHandler(type, keyring);
   if (!keyringHandler) return;
-  keyringHandler(params).then((response) => sendResponse(response));
+  keyringHandler(params).then((response) => {
+    sendResponse(response);
+  });
   // Usually we would not return, but it seems firefox needs us to
   return true; // eslint-disable-line
 });
@@ -68,11 +76,12 @@ const secureController = async (callback, controller) => {
 backgroundController.exposeController('isConnected', async (opts, url) => secureController(opts.callback, async () => {
   const { callback } = opts;
 
-  storage.get('apps', (state) => {
-    if (state?.apps?.[url]) {
+  storage.get(keyring.currentWalletId.toString(), (state) => {
+    const apps = state?.[keyring.currentWalletId]?.apps || {};
+    if (apps?.[url]) {
       callback(
         null,
-        state?.apps?.[url].status === CONNECTION_STATUS.accepted,
+        apps?.[url].status === CONNECTION_STATUS.accepted,
       );
     } else {
       callback(null, false);
@@ -95,9 +104,9 @@ backgroundController.exposeController(
     const { id: portId } = sender;
     const { url: domainUrl, name, icons } = metadata;
 
-    storage.get('apps', (response) => {
+    storage.get(keyring.currentWalletId.toString(), (response) => {
       const apps = {
-        ...response.apps,
+        ...response?.[keyring.currentWalletId]?.apps,
         [domainUrl]: {
           url: domainUrl,
           name,
@@ -106,7 +115,7 @@ backgroundController.exposeController(
         },
       };
 
-      storage.set({ apps });
+      storage.set({ [keyring.currentWalletId]: { apps } });
     });
 
     // if we receive a whitelist, we create agent
@@ -176,9 +185,10 @@ backgroundController.exposeController(
   'requestBalance',
   async (opts, metadata, accountId) => secureController(opts.callback, async () => {
     const { callback, message, sender } = opts;
-    storage.get('apps', async (state) => {
+    storage.get(keyring.currentWalletId.toString(), async (state) => {
+      const apps = state?.[keyring.currentWalletId]?.apps || {};
       if (
-        state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted
+        apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted
       ) {
         if (Number.isNaN(parseInt(accountId, 10))) {
           callback(ERRORS.CLIENT_ERROR('Invalid account id'), null);
@@ -214,9 +224,10 @@ backgroundController.exposeController(
   'handleRequestBalance',
   async (opts, url, accountId, callId, portId) => {
     const { callback } = opts;
-    storage.get('apps', async (state) => {
+    storage.get(keyring.currentWalletId.toString(), async (state) => {
+      const apps = state?.[keyring.currentWalletId]?.apps || {};
       callback(null, true);
-      if (state?.apps?.[url]?.status === CONNECTION_STATUS.accepted) {
+      if (apps?.[url]?.status === CONNECTION_STATUS.accepted) {
         const getBalance = getKeyringHandler(
           HANDLER_TYPES.GET_BALANCE,
           keyring,
@@ -243,9 +254,10 @@ backgroundController.exposeController(
 
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
-    storage.get('apps', async (state) => {
+    storage.get(keyring.currentWalletId.toString(), async (state) => {
+      const apps = state?.[keyring.currentWalletId]?.apps || {};
       if (
-        state?.apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted
+        apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted
       ) {
         const argsError = validateTransferArgs(args);
         if (argsError) {
@@ -295,7 +307,7 @@ backgroundController.exposeController(
       const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
       const sendToken = getKeyringHandler(HANDLER_TYPES.SEND_TOKEN, keyring);
       const assets = await getBalance();
-      if (assets?.[0]?.amount * E8S_PER_ICP > transfer.amount) {
+      if (assets?.[DEFAULT_CURRENCY_MAP.ICP]?.amount * E8S_PER_ICP > transfer.amount) {
         const response = await sendToken(transfer);
         if (response.error) {
           callback(null, false);
@@ -319,9 +331,10 @@ backgroundController.exposeController(
   async (opts, payload, metadata) => {
     const { callback } = opts;
     try {
-      storage.get('apps', async (state) => {
+      storage.get(keyring.currentWalletId.toString(), async (state) => {
+        const apps = state?.[keyring.currentWalletId]?.apps || {};
         if (
-          state?.apps?.[metadata.url]?.status !== CONNECTION_STATUS.accepted
+          apps?.[metadata.url]?.status !== CONNECTION_STATUS.accepted
         ) {
           callback(ERRORS.CONNECTION_ERROR, null);
           return;
@@ -361,8 +374,8 @@ backgroundController.exposeController(
       return;
     }
 
-    storage.get('apps', async (state) => {
-      const app = state?.apps?.[metadata.url];
+    storage.get(keyring.currentWalletId.toString(), async (state) => {
+      const app = state?.[keyring.currentWalletId]?.apps?.[metadata.url] || {};
       if (app?.status === CONNECTION_STATUS.accepted) {
         const allWhitelisted = areAllElementsIn(whitelist, app?.whitelist);
         const height = keyring?.isUnlocked
@@ -433,27 +446,24 @@ backgroundController.exposeController(
   'handleAllowAgent',
   async (opts, url, response, callId, portId) => {
     const { callback } = opts;
-    storage.get('apps', (state) => {
-      const apps = state.apps || {};
+    storage.get(keyring.currentWalletId.toString(), (state) => {
+      const apps = state?.[keyring.currentWalletId]?.apps || {};
       const status = response.status === CONNECTION_STATUS.rejectedAgent
         ? CONNECTION_STATUS.accepted
         : response.status;
       const whitelist = response.status === CONNECTION_STATUS.accepted
         ? response.whitelist
         : [];
-
-      const newApps = Object.keys(apps).reduce((obj, key) => {
-        const newObj = { ...obj };
-        newObj[key] = apps[key];
-        if (key === url) {
-          newObj[key].status = status || CONNECTION_STATUS.rejected;
-          newObj[key].date = new Date().toISOString();
-          newObj[key].whitelist = whitelist;
-        }
-        return newObj;
-      }, {});
-
-      storage.set({ apps: newApps });
+      const newApps = {
+        ...apps,
+        [url]: {
+          ...apps[url],
+          status: status || CONNECTION_STATUS.rejected,
+          date: new Date().toISOString(),
+          whitelist,
+        },
+      };
+      storage.set({ [keyring.currentWalletId]: { apps: newApps } });
     });
     if (response?.status === CONNECTION_STATUS.accepted) {
       try {
@@ -468,6 +478,89 @@ backgroundController.exposeController(
       plugProvider.deleteAgent();
       callback(ERRORS.AGENT_REJECTED, null, [{ portId, callId }]);
       callback(null, true); // Return true to close the modal
+    }
+  },
+);
+
+backgroundController.exposeController(
+  'requestBurnXTC',
+  async (opts, metadata, args) => secureController(opts.callback, async () => {
+    const { message, sender, callback } = opts;
+
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
+    storage.get(keyring.currentWalletId.toString(), async (state) => {
+      const apps = state?.[keyring.currentWalletId]?.apps || {};
+      if (
+        apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted
+      ) {
+        const argsError = validateBurnArgs(args);
+        if (argsError) {
+          callback(argsError, null);
+          return;
+        }
+        const url = qs.stringifyUrl({
+          url: 'notification.html',
+          query: {
+            callId,
+            portId,
+            metadataJson: JSON.stringify(metadata),
+            argsJson: JSON.stringify(args),
+            type: 'burnXTC',
+          },
+        });
+
+        const height = keyring?.isUnlocked
+          ? SIZES.detailHeightSmall
+          : SIZES.loginHeight;
+        extension.windows.create({
+          url,
+          type: 'popup',
+          width: SIZES.width,
+          height,
+          top: 65,
+          left: metadata.pageWidth - SIZES.width,
+        });
+      } else {
+        callback(ERRORS.CONNECTION_ERROR, null);
+      }
+    });
+  }),
+);
+
+backgroundController.exposeController(
+  'handleRequestBurnXTC',
+  async (opts, transferRequests, callId, portId) => {
+    const { callback } = opts;
+    const transfer = transferRequests?.[0];
+
+    // Answer this callback no matter if the transfer succeeds or not.
+    if (transfer?.status === 'declined') {
+      callback(null, true);
+      callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
+    } else {
+      const burnXTC = getKeyringHandler(HANDLER_TYPES.BURN_XTC, keyring);
+      const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
+      const assets = await getBalance();
+      const xtcAmount = assets?.[DEFAULT_CURRENCY_MAP.XTC]?.amount * CYCLES_PER_TC;
+
+      if (xtcAmount - XTC_FEE > transfer.amount) {
+        const response = await burnXTC(transfer);
+        if (response.error) {
+          callback(null, false);
+          callback(ERRORS.SERVER_ERROR(response.error), null, [
+            { portId, callId },
+          ]);
+        } else {
+          const transactionId = response?.Ok;
+
+          callback(null, true);
+          callback(null, transactionId, [{ portId, callId }]);
+        }
+      } else {
+        callback(null, false);
+        callback(ERRORS.BALANCE_ERROR, null, [{ portId, callId }]);
+      }
     }
   },
 );

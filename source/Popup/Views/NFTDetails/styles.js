@@ -30,4 +30,7 @@ export default makeStyles(() => ({
     display: 'flex',
     flexWrap: 'wrap',
   },
+  description: {
+    whiteSpace: 'pre-line',
+  },
 }));

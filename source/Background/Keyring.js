@@ -1,5 +1,6 @@
-import { formatAssetBySymbol } from '@shared/constants/currencies';
 import extension from 'extensionizer';
+import getICPPrice from '@shared/services/ICPPrice';
+import { formatAssetBySymbol } from '@shared/constants/currencies';
 
 export const NANOS_PER_SECOND = 1_000_000;
 export const BALANCE_ERROR = 'You have tried to spend more than the balance of your account';
@@ -103,19 +104,29 @@ export const getKeyringHandler = (type, keyring) => ({
     isUnlocked: keyring?.isUnlocked,
     isInitialized: keyring?.isInitialized,
   }),
-  [HANDLER_TYPES.GET_STATE]: async () => keyring.getState(),
+  [HANDLER_TYPES.GET_STATE]: async () => {
+    const response = await keyring.getState();
+    return recursiveParseBigint(response);
+  },
   [HANDLER_TYPES.GET_TRANSACTIONS]: async () => {
     const response = await keyring.getTransactions();
     return recursiveParseBigint(response);
   },
-  [HANDLER_TYPES.GET_ASSETS]: async (icpPrice) => {
-    const balances = await keyring.getBalance();
-    return formatAssets(balances, icpPrice);
+  [HANDLER_TYPES.GET_ASSETS]: async ({ icpPrice, refresh }) => {
+    const { wallets, currentWalletId } = await keyring.getState();
+    let assets = wallets?.[currentWalletId]?.assets;
+    if (assets?.every((asset) => !asset.amount) || refresh) {
+      assets = await keyring.getBalance();
+    } else {
+      keyring.getBalance();
+    }
+    return formatAssets(assets, icpPrice);
   },
   [HANDLER_TYPES.GET_BALANCE]: async (subaccount) => {
     try {
       const balances = await keyring.getBalance(subaccount);
-      return formatAssets(balances);
+      const icpPrice = await getICPPrice();
+      return formatAssets(balances, icpPrice);
     } catch (error) {
       return { error: error.message };
     }
@@ -128,6 +139,7 @@ export const getKeyringHandler = (type, keyring) => ({
         transactionId: parseInt(transactionId?.toString?.(), 10),
       };
     } catch (error) {
+      console.log('error', error);
       return { error: error.message, height: null };
     }
   },
@@ -166,14 +178,20 @@ export const getKeyringHandler = (type, keyring) => ({
         return { error: e.message };
       }
     },
-  [HANDLER_TYPES.GET_NFTS]: async () => {
-    const nfts = await keyring.getNFTs();
-    return nfts.map((nft) => ({ ...nft, id: parseInt(nft.id.toString(), 10) }));
+  [HANDLER_TYPES.GET_NFTS]: async ({ refresh }) => {
+    const { wallets, currentWalletId } = await keyring.getState();
+    let collections = wallets?.[currentWalletId]?.collections || [];
+    if (!collections.length || refresh) {
+      collections = await keyring.getNFTs();
+    } else {
+      keyring.getNFTs();
+    }
+    return collections.map((collection) => recursiveParseBigint(collection));
   },
   [HANDLER_TYPES.TRANSFER_NFT]:
   async ({ to, nft }) => {
     try {
-      const response = await keyring.transferNFT({ to, id: BigInt(nft.id) });
+      const response = await keyring.transferNFT({ to, token: nft });
       return recursiveParseBigint(response);
     } catch (e) {
       return { error: e.message };

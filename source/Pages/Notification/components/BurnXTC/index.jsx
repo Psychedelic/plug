@@ -1,17 +1,15 @@
 import React, { useEffect } from 'react';
 import { useTranslation, initReactI18next } from 'react-i18next';
 import {
-  Button, Tabs, LinkButton,
+  Button, Tabs,
 } from '@ui';
 import i18n from 'i18next';
 import { useTabs } from '@hooks';
-import PropTypes from 'prop-types';
-import { Layout } from '@components';
-import { useDispatch, useSelector } from 'react-redux';
-import getICPPrice from '@shared/services/ICPPrice';
-import { setICPPrice } from '@redux/icp';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
+import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
+import { Layout } from '@components';
 import initConfig from '../../../../locales';
 import ErrorScreen from '../NotificationError';
 import useStyles from './styles';
@@ -22,36 +20,14 @@ import Data from './components/Data';
 
 i18n.use(initReactI18next).init(initConfig);
 
-const Transfer = ({
+const BurnXTC = ({
   args, callId, portId, metadata,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
   const { url, icons } = metadata;
-  const { icpPrice } = useSelector((state) => state.icp);
   const { selectedTab, handleChangeTab } = useTabs();
-
-  useEffect(() => {
-    try {
-      getICPPrice()
-        .then(({ data: price }) => {
-          dispatch(
-            setICPPrice(price?.['internet-computer']?.usd || 1),
-          );
-        });
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.warn(err);
-    }
-
-    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
-      (state) => {
-        if (state?.wallets?.length) {
-          dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
-        }
-      });
-  }, []);
 
   const {
     requests,
@@ -60,11 +36,19 @@ const Transfer = ({
     handleSetPreviousRequest,
     handleSetNextRequest,
     handleRequest,
-    handleDeclineAll,
     principalId,
     error,
     loading,
   } = useRequests([args], callId, portId);
+
+  useEffect(() => {
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
+      (state) => {
+        if (state?.wallets?.length) {
+          dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
+        }
+      });
+  }, []);
 
   const requestCount = requests.length;
   const tabs = [
@@ -74,15 +58,14 @@ const Transfer = ({
         url={url}
         image={icons[0] || null}
         amount={(requests?.[currentRequest] || args)?.amount}
+        canisterId={args.to}
         requestCount={requestCount}
-        icpPrice={icpPrice}
       />,
     },
     {
       label: t('transfer.data'),
       component: <Data
         data={data}
-        requestCount={requestCount}
         principalId={principalId}
       />,
     },
@@ -93,16 +76,16 @@ const Transfer = ({
       {error ? <ErrorScreen /> : (
         <>
           {
-            requestCount > 1
-            && (
-              <RequestHandler
-                currentRequest={currentRequest + 1}
-                requests={requestCount}
-                handlePrevious={handleSetPreviousRequest}
-                handleNext={handleSetNextRequest}
-              />
-            )
-          }
+        requestCount > 1
+        && (
+          <RequestHandler
+            currentRequest={currentRequest + 1}
+            requests={requestCount}
+            handlePrevious={handleSetPreviousRequest}
+            handleNext={handleSetNextRequest}
+          />
+        )
+        }
           <>
             <Tabs tabs={tabs} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
             <div className={classes.buttonsWrapper}>
@@ -125,16 +108,6 @@ const Transfer = ({
                   loading={loading}
                 />
               </div>
-              {
-                requestCount > 1
-                && (
-                  <LinkButton
-                    value={`${t('transfer.decline')} ${requestCount} ${t('transfer.transactions')}`}
-                    onClick={() => handleDeclineAll()}
-                    style={{ marginTop: 24 }}
-                  />
-                )
-              }
             </div>
           </>
         </>
@@ -143,9 +116,9 @@ const Transfer = ({
   );
 };
 
-export default Transfer;
+export default BurnXTC;
 
-Transfer.propTypes = {
+BurnXTC.propTypes = {
   args: PropTypes.arrayOf(PropTypes.string).isRequired,
   callId: PropTypes.string.isRequired,
   portId: PropTypes.string.isRequired,

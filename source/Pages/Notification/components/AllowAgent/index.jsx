@@ -77,7 +77,7 @@ const AllowAgent = ({
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Layout disableProfile>
+        <Layout disableProfile incStatus>
           {error ? <ErrorScreen /> : (
             <div className={classes.padTop}>
               <Container>

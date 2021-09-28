@@ -1,9 +1,7 @@
 const SIZES = {
   width: 436,
-  dataHeightBig: 621,
-  dataHeightSmall: 538,
-  detailsHeightBig: 656,
-  detailHeightSmall: 503,
+  dataHeight: 448,
+  detailHeight: 555,
   loginHeight: 581,
   appConnectHeight: 410,
 };
