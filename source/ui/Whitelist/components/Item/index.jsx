@@ -57,6 +57,7 @@ const AccordionDetails = withStyles((theme) => ({
 const WhitelistItem = forwardRef(({ canister, className, ...props }, ref) => {
   const classes = useStyles();
 
+  // TODO: Remove placeholders
   const {
     id, name = 'ICP', description = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate, temporibus blanditiis assumenda architecto in vel magnam consectetur quae atque voluptatum dolorem mollitia, commodi nemo quaerat adipisci quam impedit. Facilis, consectetur?', imageSrc = 'https://images.unsplash.com/photo-1622020457014-aed1cc44f25e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1772&q=80', imageAlt,
   } = canister || {};
