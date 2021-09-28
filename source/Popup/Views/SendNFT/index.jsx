@@ -87,6 +87,7 @@ const SendNFT = () => {
                   name={nft?.name || `${collection?.name ?? ''} #${nft?.index}`}
                   text={`#${nft?.index}`}
                   imageClassName={classes.nftImage}
+                  nft
                   readonly
                   shadow
                 />
