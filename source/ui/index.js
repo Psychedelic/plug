@@ -34,8 +34,8 @@ export { default as FullscreenContainer } from './FullscreenContainer';
 export { default as ActionCard } from './ActionCard';
 export { default as Alert } from './Alert';
 
-export { default as WhitelistContainer } from './Whitelist/components/Container';
-export { default as WhitelistItem } from './Whitelist/components/Item';
+export { default as CanisterInfoContainer } from './CanisterInfo/components/Container';
+export { default as CanisterInfoItem } from './CanisterInfo/components/Item';
 
 export { default as Badge } from './Badge';
 export { default as Title } from './Title';

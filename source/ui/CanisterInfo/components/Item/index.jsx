@@ -54,7 +54,7 @@ const AccordionDetails = withStyles((theme) => ({
   },
 }))(MuiAccordionDetails);
 
-const WhitelistItem = forwardRef(({ canister, className, ...props }, ref) => {
+const CanisterInfoItem = forwardRef(({ canister, className, ...props }, ref) => {
   const classes = useStyles();
 
   // TODO: Remove placeholders
@@ -67,7 +67,7 @@ const WhitelistItem = forwardRef(({ canister, className, ...props }, ref) => {
   // }, [id]);
 
   return (
-    <div ref={ref} {...props} className={clsx(classes.whitelistItem, className)}>
+    <div ref={ref} {...props} className={clsx(classes.canisterInfoItem, className)}>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMore />}>
           <img src={imageSrc} alt={imageAlt ?? name} className={classes.image} />
@@ -92,15 +92,15 @@ const WhitelistItem = forwardRef(({ canister, className, ...props }, ref) => {
   );
 });
 
-export default WhitelistItem;
+export default CanisterInfoItem;
 
-WhitelistItem.displayName = 'WhitelistItem';
+CanisterInfoItem.displayName = 'CanisterInfoItem';
 
-WhitelistItem.defaultProps = {
+CanisterInfoItem.defaultProps = {
   className: undefined,
 };
 
-WhitelistItem.propTypes = {
+CanisterInfoItem.propTypes = {
   canister: PropTypes.objectOf(PropTypes.string).isRequired,
   className: PropTypes.string,
 };

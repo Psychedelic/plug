@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
-  whitelistItem: {
+  canisterInfoItem: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',

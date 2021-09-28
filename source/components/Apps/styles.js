@@ -49,7 +49,7 @@ export default makeStyles((theme) => ({
   emptyTitle: {
     marginTop: 10,
   },
-  whitelistContainer: {
+  canisterInfoContainer: {
     padding: '0 24px',
     maxHeight: '340px',
   },

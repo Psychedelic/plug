@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles({
-  whitelistContainer: {
+  canisterInfoContainer: {
     display: 'flex',
     width: '100%',
     flexDirection: 'column',

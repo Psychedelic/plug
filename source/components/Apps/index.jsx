@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography';
 import {
-  AppItem, Dialog, WhitelistContainer, WhitelistItem,
+  AppItem, Dialog, CanisterInfoContainer, CanisterInfoItem,
 } from '@ui';
 import ThinkingEmoji from '@assets/icons/thinking-emoji.svg';
 import { useApps } from '@hooks';
@@ -91,9 +91,9 @@ const Apps = () => {
             onClose={() => setOpenDetail(false)}
             open={openDetail}
             component={(
-              <WhitelistContainer className={classes.whitelistContainer}>
-                {whitelist.map((id) => <WhitelistItem canister={{ id }} />)}
-              </WhitelistContainer>
+              <CanisterInfoContainer className={classes.canisterInfoContainer}>
+                {whitelist.map((id) => <CanisterInfoItem canister={{ id }} />)}
+              </CanisterInfoContainer>
             )}
           />
         )

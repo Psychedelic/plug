@@ -10,8 +10,8 @@ import {
   Container,
   IncomingAction,
   theme,
-  WhitelistContainer,
-  WhitelistItem,
+  CanisterInfoContainer,
+  CanisterInfoItem,
 } from '@ui';
 import store from '@redux/store';
 import { Layout } from '@components';
@@ -93,11 +93,11 @@ const AllowAgent = ({
                   action={t('whitelist.title')}
                 />
 
-                <WhitelistContainer>
+                <CanisterInfoContainer>
                   {args?.whitelist.map((id) => (
-                    <WhitelistItem canister={{ id }} />
+                    <CanisterInfoItem canister={{ id }} />
                   ))}
-                </WhitelistContainer>
+                </CanisterInfoContainer>
 
                 <div className={classes.buttonContainer}>
                   <Button
