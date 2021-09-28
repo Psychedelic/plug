@@ -14,6 +14,7 @@ export default {
     message: 'The transactions was rejected.',
   },
   AGENT_REJECTED: { code: 401, message: 'The agent creation was rejected.' },
+  SIGN_REJECTED: { code: 401, message: 'The sign was rejected.' },
   INITIALIZED_ERROR: { code: 403, message: 'Plug must be initialized.' },
   CLIENT_ERROR: (message) => ({ code: 400, message }),
   SERVER_ERROR: (message) => ({ code: 500, message }),

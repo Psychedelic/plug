@@ -380,9 +380,11 @@ backgroundController.exposeController(
 );
 
 backgroundController.exposeController(
-  'sign',
-  async (opts, payload, metadata) => {
-    const { callback } = opts;
+  'requestSign',
+  async (opts, payload, metadata, requestInfo) => {
+    const { message, sender, callback } = opts;
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
     try {
       storage.get(keyring.currentWalletId.toString(), async (state) => {
         const apps = state?.[keyring.currentWalletId]?.apps || {};
@@ -392,14 +394,60 @@ backgroundController.exposeController(
           callback(ERRORS.CONNECTION_ERROR, null);
           return;
         }
-        const parsedPayload = payload instanceof Buffer
-          ? payload
-          : Buffer.from(Object.values(payload));
-        const signed = await keyring.sign(parsedPayload);
-        callback(null, [...new Uint8Array(signed)]);
+
+        if (requestInfo.requestType === 'call' || requestInfo.manual) {
+          const url = qs.stringifyUrl({
+            url: 'notification.html',
+            query: {
+              callId,
+              portId,
+              type: 'sign',
+              argsJson: JSON.stringify({ requestInfo, payload }),
+            },
+          });
+
+          const height = keyring?.isUnlocked
+            ? SIZES.appConnectHeight
+            : SIZES.loginHeight;
+
+          extension.windows.create({
+            url,
+            type: 'popup',
+            width: SIZES.width,
+            height,
+          });
+        } else {
+          const parsedPayload = new Uint8Array(Object.values(payload));
+
+          const signed = await keyring.sign(parsedPayload.buffer);
+          callback(null, [...new Uint8Array(signed)]);
+        }
       });
     } catch (e) {
       callback(ERRORS.SERVER_ERROR(e), null);
+    }
+  },
+);
+
+backgroundController.exposeController(
+  'handleSign',
+  async (opts, status, payload, callId, portId) => {
+    const { callback } = opts;
+
+    if (status === CONNECTION_STATUS.accepted) {
+      try {
+        const parsedPayload = new Uint8Array(Object.values(payload));
+
+        const signed = await keyring.sign(parsedPayload.buffer);
+        callback(null, [...new Uint8Array(signed)], [{ callId, portId }]);
+        callback(null, true);
+      } catch (e) {
+        callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
+        callback(null, false);
+      }
+    } else {
+      callback(ERRORS.SIGN_REJECTED, null, [{ portId, callId }]);
+      callback(null, true); // Return true to close the modal
     }
   },
 );
