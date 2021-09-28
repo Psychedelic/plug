@@ -9,7 +9,7 @@ import InputBase from '../InputBase';
 import useStyles from './styles';
 
 const Select = ({
-  image, name, shadow, onClick, text, icon, readonly, imageClassName,
+  image, name, shadow, onClick, text, icon, readonly, imageClassName, nft,
 }) => {
   const classes = useStyles();
   return (
@@ -24,6 +24,7 @@ const Select = ({
           <TokenIcon
             alt={name}
             image={image}
+            nft={nft}
             className={
               clsx(classes.icon, shadow && classes.iconShadow, imageClassName && imageClassName)
             }
@@ -54,6 +55,7 @@ Select.defaultProps = {
   icon: null,
   readonly: false,
   imageClassName: '',
+  nft: false,
 };
 
 Select.propTypes = {
@@ -65,4 +67,5 @@ Select.propTypes = {
   icon: PropTypes.node,
   readonly: PropTypes.bool,
   imageClassName: PropTypes.string,
+  nft: PropTypes.bool,
 };
