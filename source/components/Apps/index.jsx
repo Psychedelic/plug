@@ -91,7 +91,7 @@ const Apps = () => {
             onClose={() => setOpenDetail(false)}
             open={openDetail}
             component={(
-              <WhitelistContainer style={{ padding: '0 24px' }}>
+              <WhitelistContainer className={classes.whitelistContainer}>
                 {whitelist.map((id) => <WhitelistItem canister={{ id }} />)}
               </WhitelistContainer>
             )}

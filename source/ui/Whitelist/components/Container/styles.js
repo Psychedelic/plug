@@ -7,7 +7,7 @@ export default makeStyles({
     flexDirection: 'column',
     overflowY: 'auto',
     overflowX: 'hidden',
-    maxHeight: '140px',
+
     margin: '10px 0',
   },
 });

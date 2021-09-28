@@ -73,7 +73,7 @@ const WhitelistItem = forwardRef(({ canister, className, ...props }, ref) => {
 
           <Box className={classes.infoBox}>
             <Typography component="h4" variant="p">{name}</Typography>
-            <Typography noWrap>{id}</Typography>
+            <Typography component="p" variant="subtitle1" noWrap>{id}</Typography>
           </Box>
 
           {/* <IconButton onClick={createICRocksPrincipalTab}>
