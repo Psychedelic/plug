@@ -11,6 +11,7 @@ import Transfer from './components/Transfer';
 import Balance from './components/Balance';
 import AllowAgent from './components/AllowAgent';
 import BurnXTC from './components/BurnXTC';
+import Sign from './components/Sign';
 
 const NOTIFICATION_COMPONENTS = {
   transfer: Transfer,
@@ -18,6 +19,7 @@ const NOTIFICATION_COMPONENTS = {
   connect: AppConnection,
   allowAgent: AllowAgent,
   burnXTC: BurnXTC,
+  sign: Sign,
 };
 
 const NotificationContainer = () => {
