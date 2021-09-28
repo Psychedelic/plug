@@ -12,16 +12,18 @@ export default makeStyles({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
+    fontSize: 34,
   },
   big: {
     width: 60,
     height: 60,
-    fontSize: 34,
   },
   medium: {
     width: 40,
     height: 40,
-    fontSize: 22,
+    '& > span': {
+      transform: 'scale(0.7)',
+    },
   },
   edit: {
     cursor: 'pointer',
@@ -39,6 +41,8 @@ export default makeStyles({
   small: {
     width: 30,
     height: 30,
-    fontSize: 16,
+    '& > span': {
+      transform: 'scale(0.5)',
+    },
   },
 });

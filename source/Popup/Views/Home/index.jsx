@@ -2,13 +2,23 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  Actions, Tokens, Activity, Apps, Layout, useRouter, NFTs,
+  Actions,
+  Tokens,
+  Activity,
+  Apps,
+  Layout,
+  useRouter,
+  NFTs,
 } from '@components';
 import { Tabs } from '@ui';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import getICPPrice from '@shared/services/ICPPrice';
-import { setAccountInfo, setCollections, setCollectionsLoading } from '@redux/wallet';
-import { setICPPrice } from '@redux/icp';
+import {
+  setAccountInfo,
+  setCollections,
+  setCollectionsLoading,
+} from '@redux/wallet';
+
+import { useICPPrice } from '@redux/icp';
 
 const getTabs = (t) => [
   {
@@ -39,43 +49,37 @@ const Home = () => {
     navigator.navigate('home', index);
   };
 
-  useEffect(() => {
-    try {
-      // TODO: handle error gracefully
-      // what to do when API price is unavailable?
-      getICPPrice()
-        .then(({ data }) => {
-          dispatch(
-            setICPPrice(data['internet-computer'].usd),
-          );
-        });
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.warn(err);
-    }
+  useICPPrice(true);
 
-    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
-      (state) => {
-        if (!state?.wallets?.length) {
-          sendMessage({ type: HANDLER_TYPES.LOCK, params: {} },
-            () => navigator.navigate('login'));
-        } else {
-          sendMessage({
+  useEffect(() => {
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
+      if (!state?.wallets?.length) {
+        sendMessage({ type: HANDLER_TYPES.LOCK, params: {} }, () => navigator.navigate('login'));
+      } else {
+        sendMessage(
+          {
             type: HANDLER_TYPES.GET_NFTS,
             params: { refresh: true },
           }, (nftCollections) => {
-            dispatch(setCollections({ collections: nftCollections, walletNumber }));
-            dispatch(setCollectionsLoading(false));
-          });
-        }
-        dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
-      });
+            if (nftCollections) {
+              dispatch(setCollections({ collections: nftCollections, walletNumber }));
+              dispatch(setCollectionsLoading(false));
+            }
+          },
+        );
+      }
+      dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
+    });
   }, []);
 
   return (
     <Layout>
       <Actions visible={tabIndex === 0} />
-      <Tabs tabs={getTabs(t)} selectedTab={tabIndex} handleChangeTab={onChangeTab} />
+      <Tabs
+        tabs={getTabs(t)}
+        selectedTab={tabIndex}
+        handleChangeTab={onChangeTab}
+      />
     </Layout>
   );
 };

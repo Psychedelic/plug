@@ -988,41 +988,36 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@dfinity/agent@^0.9.2", "@dfinity/agent@^0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@dfinity/agent/-/agent-0.9.3.tgz#e49f07d6749e534c4c30aa2df2bba59e3fa9570f"
-  integrity sha512-vR0t5Uf+srbUHTdGunJxek3a4jCmBKU+B2yYEX0/aSGQfJmEf5X5snuNcnrIDOCfHeK7uxmOqs65BdI8Lhn4fg==
+"@dfinity/agent@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@dfinity/agent/-/agent-0.10.0.tgz#fa5ea1bf9201e12e0f95f9c333368f8554427a30"
+  integrity sha512-wRXZ54spejA6K74Gn5g0sdtf2nSi6B2gTpx+D/WxqQKDvZbtkp8AOT+zhH5o+UQILrchZgq40pCzOWpy2W01mQ==
   dependencies:
     base64-arraybuffer "^0.2.0"
     bignumber.js "^9.0.0"
     borc "^2.1.1"
-    buffer "^6.0.3"
-    buffer-pipe "^0.0.4"
     js-sha256 "0.9.0"
     simple-cbor "^0.4.1"
 
-"@dfinity/candid@^0.9.2", "@dfinity/candid@^0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@dfinity/candid/-/candid-0.9.3.tgz#96b2a5339da634ccc5546a0560f48f5ceef70dfe"
-  integrity sha512-VMovKFrExqN0mwcn1/aut4Ou4cA9IA2+QrBjV+Ro4eVCpVvGpVRqn4jizlV9QnJjcuEBG1yImIG5RKMdZ2ejQQ==
-  dependencies:
-    buffer "^6.0.3"
-    buffer-pipe "^0.0.4"
+"@dfinity/candid@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@dfinity/candid/-/candid-0.10.0.tgz#5ef45f84701716607f1ab8e6c57ff3d3246817b1"
+  integrity sha512-APU9Qefk6fhTVsKaltxDP1tlg5Gy41XlCMZWbDGHH7UTKJdmEEpylUWgSwn/AzMZCMWoF3PXt2kyq7OijVy01g==
 
-"@dfinity/identity@^0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@dfinity/identity/-/identity-0.9.3.tgz#7d65d1ee7655d9028034bf22a92c21eea8b24028"
-  integrity sha512-8mEpkLqGW74QMsVJzuewwN0tO1fdShAT+vyfQM08VOX/u4IHckH8zZ+qGTeXKaGzuwiJRa5WZT2U7L32LDfJJg==
+"@dfinity/identity@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@dfinity/identity/-/identity-0.10.0.tgz#cbb6fc6f2c139244c9ec2a1487ccc16c856a4494"
+  integrity sha512-0KUAcP/s5j/3q8uWXAFbE5dWuxf9xSack6OYkSa5LGGdJ/s3DCwrgb0bPzYEX2CeIqNUG3x8/YwUZrMNWBxvNQ==
   dependencies:
     borc "^2.1.1"
-    buffer "^6.0.3"
-    buffer-pipe "0.0.4"
+    js-sha256 "^0.9.0"
+    secp256k1 "^4.0.2"
     tweetnacl "^1.0.1"
 
-"@dfinity/principal@^0.9.2", "@dfinity/principal@^0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@dfinity/principal/-/principal-0.9.3.tgz#52e4980bac8dd35e7a6bb2564bea89df97383e06"
-  integrity sha512-DSL3b/gGm+f57+3XkFjlK4DigtKXe9MVO8UYXDQWkVIhy0UF1KYjRNGs6awc1GTQoOTxeQ8UTFwXuvnEvJ1hpQ==
+"@dfinity/principal@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@dfinity/principal/-/principal-0.10.0.tgz#96a5b11ef80424a66488f02a24a08f2fed09eea7"
+  integrity sha512-SvlsLDLpqDQFqmTWttLWKR1D5XODmT7BmTN9QdEx+Q8x9Zxcm9K5EJevuXhe9bAAAorwgRK+vg5riF4+hW7fAw==
 
 "@discoveryjs/json-ext@^0.5.0":
   version "0.5.5"
@@ -1572,28 +1567,28 @@
     node-gyp "^7.1.0"
     read-package-json-fast "^2.0.1"
 
-"@psychedelic/dab-js@0.1.8":
-  version "0.1.8"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/dab-js/0.1.8/6271659bf1c62fb7f1c7c2ce85aea24d33fefa626fdf70bf15e3fb2395a12c1e#3a390fdb24c96cfadc3893638c961bcc21bd023e"
-  integrity sha512-+jA7pkPqn+5sru9tzgu+N8Z9sHa4gBjPKsjNjupJkwljkm8/qzbtQuHzwgKZdXUlHIrPBeU5pI2LHWozKOkm4w==
+"@psychedelic/dab-js@^0.2.0":
+  version "0.2.0"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/dab-js/0.2.0/c8117c34a9b938bb4e82b53d7100c69e3800d7b706a44f665c49e9e091d44907#747f344dc6743b3b776215585c132163ab29c148"
+  integrity sha512-9visPjbg2c1veZtInO9qJc0HoWv7slosbFGiG8xw9tI3wVoAzzGZVy3JK9+uSv/ViiZG8Kcs3C8AjvYjlg8MLw==
   dependencies:
-    "@dfinity/agent" "^0.9.3"
-    "@dfinity/identity" "^0.9.3"
-    "@dfinity/principal" "^0.9.3"
+    "@dfinity/agent" "^0.10.0"
+    "@dfinity/identity" "^0.10.0"
+    "@dfinity/principal" "^0.10.0"
     buffer-crc32 "^0.2.13"
     crypto-js "^4.1.1"
 
-"@psychedelic/plug-controller@0.5.1":
-  version "0.5.1"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.5.1/470e5f40bc667f950ce5660ec6119b7b1a550b1d329e7189390b543422064465#ad03e89bd4f28ded4e61a9ab00e051f5ab87628b"
-  integrity sha512-1BKYRo8kV8z5ZjMUIwDGwyQKr8tQaQxAONIkoJeHvDla5T3VNLWsI5An9gTtwi6DfEJnx8nNrKETHZuCOhPJKg==
+"@psychedelic/plug-controller@^0.7.1":
+  version "0.7.1"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.7.1/52a661b6cc5352df38a383d8be03f5f7d46d8b8144c6675b21c05540d218493a#8074841d7a6d7df57f149949bb4b6339a8ab0f61"
+  integrity sha512-3H8tISwNZm3mQ82KxhIqpFUtiWe4Ho1ONNpS2c3co1blJ3+fJsSjj+Lc9LBImPEqm4m2ivTVBvLJU7+tsgQ/pw==
   dependencies:
     "@babel/preset-env" "^7.14.4"
-    "@dfinity/agent" "^0.9.3"
-    "@dfinity/candid" "^0.9.3"
-    "@dfinity/identity" "^0.9.3"
-    "@dfinity/principal" "^0.9.3"
-    "@psychedelic/dab-js" "0.1.8"
+    "@dfinity/agent" "^0.10.0"
+    "@dfinity/candid" "^0.10.0"
+    "@dfinity/identity" "^0.10.0"
+    "@dfinity/principal" "^0.10.0"
+    "@psychedelic/dab-js" "^0.2.0"
     "@types/secp256k1" "^4.0.3"
     axios "^0.21.1"
     babel-jest "^25.5.1"
@@ -1602,7 +1597,6 @@
     create-hmac "^1.1.7"
     cross-fetch "^3.1.4"
     crypto-js "^4.0.0"
-    dotenv "^10.0.0"
     ed25519-hd-key "^1.2.0"
     extensionizer "^1.0.1"
     hdkey "^2.0.1"
@@ -1612,17 +1606,18 @@
     reflect-metadata "^0.1.13"
     secp256k1 "^4.0.2"
     text-encoding "^0.7.0"
+    text-encoding-shim "^1.0.5"
     tweetnacl "^1.0.3"
-    webpack-dotenv "^0.0.2"
 
-"@psychedelic/plug-inpage-provider@1.2.0":
-  version "1.2.0"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/1.2.0/53072883a65b0ee37ec8f83f94b42f709da4558fbe317f40c21d80eccb7a300d#6c94326b93c24148625bd61b410c1ffa66c6ade7"
-  integrity sha512-IyOHTyL08ntFcMe/NDaogD1w9SRcemdspCPtA6blCOEkK8cwu5lPS/G2VoLZxm/VVjCahZl63PtIFIGDooeOTQ==
+"@psychedelic/plug-inpage-provider@^1.3.0":
+  version "1.3.0"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/1.3.0/cc490d830578d1df6edea843f174c52927cae56c8d97b4dec9b62da5221b7f66#76508ad76e4f8c39094f37686c5fc2b956439b00"
+  integrity sha512-1egGyRdC8gGH93uuB1CUo0Xkx+RPpqRClDqdFonzUhKsENdl9RvzuUdOg6pGjM0HWT8CumZ1royBv3qwBjFJIg==
   dependencies:
-    "@dfinity/agent" "^0.9.2"
-    "@dfinity/candid" "^0.9.2"
-    "@dfinity/principal" "^0.9.2"
+    "@dfinity/agent" "^0.10.0"
+    "@dfinity/candid" "^0.10.0"
+    "@dfinity/identity" "^0.10.0"
+    "@dfinity/principal" "^0.10.0"
     "@fleekhq/browser-rpc" "^2.0.2"
 
 "@reduxjs/toolkit@^1.6.0":
@@ -3699,13 +3694,6 @@ buffer-from@^1.0.0, buffer-from@^1.1.1:
   resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.2.tgz#2b146a6fd72e80b4f55d255f35ed59a3a9a41bd5"
   integrity sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==
 
-buffer-pipe@0.0.4, buffer-pipe@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/buffer-pipe/-/buffer-pipe-0.0.4.tgz#e7f2ea95beb60fb692fc1dd1c878e894397a974d"
-  integrity sha512-8cHio1V6wgX+LIX6+af4tCn0+Ljl2vQd9JZdZ8vDJZdDf8x5p2DneKaq1dWxSswJG+sK4Inok9aqoqILG5kQVQ==
-  dependencies:
-    safe-buffer "^5.1.2"
-
 buffer-xor@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/buffer-xor/-/buffer-xor-1.0.3.tgz#26e61ed1422fb70dd42e6e36729ed51d855fe8d9"
@@ -3727,14 +3715,6 @@ buffer@^5.4.3, buffer@^5.5.0:
   dependencies:
     base64-js "^1.3.1"
     ieee754 "^1.1.13"
-
-buffer@^6.0.3:
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/buffer/-/buffer-6.0.3.tgz#2ace578459cc8fbe2a70aaa8f52ee63b6a74c6c6"
-  integrity sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==
-  dependencies:
-    base64-js "^1.3.1"
-    ieee754 "^1.2.1"
 
 builtin-status-codes@^3.0.0:
   version "3.0.0"
@@ -5128,23 +5108,6 @@ dot-prop@^5.2.0:
   integrity sha512-QM8q3zDe58hqUqjraQOmzZ1LIH9SWQJTlEKCH4kJ2oQvLZk7RbQXvtDM2XEq3fwkV9CCvvH4LA0AV+ogFsBM2Q==
   dependencies:
     is-obj "^2.0.0"
-
-dotenv-defaults@^2.0.1:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/dotenv-defaults/-/dotenv-defaults-2.0.2.tgz#6b3ec2e4319aafb70940abda72d3856770ee77ac"
-  integrity sha512-iOIzovWfsUHU91L5i8bJce3NYK5JXeAwH50Jh6+ARUdLiiGlYWfGw6UkzsYqaXZH/hjE/eCd/PlfM/qqyK0AMg==
-  dependencies:
-    dotenv "^8.2.0"
-
-dotenv@^10.0.0:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-10.0.0.tgz#3d4227b8fb95f81096cdd2b66653fb2c7085ba81"
-  integrity sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==
-
-dotenv@^8.2.0:
-  version "8.6.0"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.6.0.tgz#061af664d19f7f4d8fc6e4ff9b584ce237adcb8b"
-  integrity sha512-IrPdXQsk2BbzvCBGBOTmmSH5SodmqZNt4ERAZDmW4CT+tL8VtvinqywuANaFu4bOMWki16nqf0e4oC0QIaDr/g==
 
 duplexify@^3.4.2, duplexify@^3.6.0:
   version "3.7.1"
@@ -6571,7 +6534,7 @@ identity-obj-proxy@^3.0.0:
   dependencies:
     harmony-reflect "^1.4.6"
 
-ieee754@^1.1.13, ieee754@^1.1.4, ieee754@^1.2.1:
+ieee754@^1.1.13, ieee754@^1.1.4:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.2.1.tgz#8eb7a10a63fff25d15a57b001586d177d1b0d352"
   integrity sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==
@@ -11843,6 +11806,11 @@ test-exclude@^6.0.0:
     glob "^7.1.4"
     minimatch "^3.0.4"
 
+text-encoding-shim@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/text-encoding-shim/-/text-encoding-shim-1.0.5.tgz#dfd9cde8dbbffe0c52be2fc277a6a65c66d23e41"
+  integrity sha512-H7yYW+jRn4yhu60ygZ2f/eMhXPITRt4QSUTKzLm+eCaDsdX8avmgWpmtmHAzesjBVUTAypz9odu5RKUjX5HNYA==
+
 text-encoding@^0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/text-encoding/-/text-encoding-0.7.0.tgz#f895e836e45990624086601798ea98e8f36ee643"
@@ -12394,11 +12362,6 @@ webextension-polyfill@^0.5.0:
   resolved "https://registry.yarnpkg.com/webextension-polyfill/-/webextension-polyfill-0.5.0.tgz#795e0bf6a2b8eadcdb6edaecd169e9228c747519"
   integrity sha512-aFrl38x43t1bTboX/paCT8I97+idzX/TY0+fuM52hrIkCpYfROEF9kSn0BXuEIi3J9LTYt2ZZKkhx9NB1qF3nA==
 
-webextension-polyfill@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/webextension-polyfill/-/webextension-polyfill-0.7.0.tgz#0df1120ff0266056319ce1a622b09ad8d4a56505"
-  integrity sha512-su48BkMLxqzTTvPSE1eWxKToPS2Tv5DLGxKexLEVpwFd6Po6N8hhSLIvG6acPAg7qERoEaDL+Y5HQJeJeml5Aw==
-
 webidl-conversions@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-5.0.0.tgz#ae59c8a00b121543a2acc65c0434f57b0fc11aff"
@@ -12427,14 +12390,6 @@ webpack-cli@^4.2.0:
     rechoir "^0.7.0"
     v8-compile-cache "^2.2.0"
     webpack-merge "^5.7.3"
-
-webpack-dotenv@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/webpack-dotenv/-/webpack-dotenv-0.0.2.tgz#b2733adf143d8f8668a59850a959b39ad583024e"
-  integrity sha512-iRo3HY6GwAAhfYk5hchHgu59fCxi8P7QAMFrmmyYYftgn71XmJ2gVrIpEHzmZggb/B65DrA0rKUtMMdZAVZDwg==
-  dependencies:
-    dotenv "^8.2.0"
-    dotenv-defaults "^2.0.1"
 
 webpack-extension-reloader@^1.1.4:
   version "1.1.4"

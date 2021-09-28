@@ -1,7 +1,7 @@
 import React, { StrictMode, useEffect, useState } from 'react';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import browser from 'webextension-polyfill';
+import extension from 'extensionizer';
 import { theme } from '@ui';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import ProviderWrapper from '../shared/ProviderWrapper';
@@ -23,7 +23,7 @@ const App = () => {
           setInitialRoute('login');
         }
       } else {
-        browser.tabs.create({ url: 'options.html' });
+        extension.tabs.create({ url: 'options.html' });
       }
     });
   });

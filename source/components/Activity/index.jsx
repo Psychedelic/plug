@@ -5,7 +5,8 @@ import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 
 import LoadingWrapper from '@components/LoadingWrapper';
 import { useActivity } from '@hooks';
-import { setTransactions } from '../../redux/wallet';
+import { setTransactions } from '@redux/wallet';
+import { useICPPrice } from '@redux/icp';
 import useStyles from './styles';
 import EmptyState from './components/EmptyState';
 
@@ -13,9 +14,10 @@ const Activity = () => {
   const classes = useStyles();
   const { transactions } = useSelector((state) => state.wallet);
   const [transactionsLoading, setLoading] = useState(true);
-  const { icpPrice } = useSelector((state) => state.icp);
   const dispatch = useDispatch();
   const activity = useActivity(transactions);
+
+  const icpPrice = useICPPrice(true);
 
   useEffect(() => {
     if (icpPrice) {
