@@ -6,8 +6,12 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import i18n from 'i18next';
 import { Provider, useDispatch } from 'react-redux';
 import {
-  Button, Container, IncomingAction, theme,
-  WhitelistContainer, WhitelistItem,
+  Button,
+  Container,
+  IncomingAction,
+  theme,
+  WhitelistContainer,
+  WhitelistItem,
 } from '@ui';
 import store from '@redux/store';
 import { Layout } from '@components';
@@ -40,13 +44,15 @@ const AllowAgent = ({
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
 
-  const {
-    url,
-    icons,
-  } = metadata || {};
+  const { url, icons } = metadata || {};
 
   const handleAllowAgent = async (status) => {
-    const success = await portRPC.call('handleAllowAgent', [url, { status, whitelist: args?.whitelist }, callId, portId]);
+    const success = await portRPC.call('handleAllowAgent', [
+      url,
+      { status, whitelist: args?.whitelist },
+      callId,
+      portId,
+    ]);
     if (success) {
       window.close();
     }
@@ -54,39 +60,43 @@ const AllowAgent = ({
   };
 
   useEffect(() => {
-    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
-      (state) => {
-        if (state?.wallets?.length) {
-          dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
-        }
-      });
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
+      if (state?.wallets?.length) {
+        dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
+      }
+    });
 
     if (!args?.updateWhitelist || args?.showList) {
-      extension.windows.update(
-        extension.windows.WINDOW_ID_CURRENT,
-        {
-          height: Math.min(422 + 37 * args?.whitelist.length || 0, 600),
-        },
-      );
+      extension.windows.update(extension.windows.WINDOW_ID_CURRENT, {
+        height: Math.min(422 + 37 * args?.whitelist.length || 0, 600),
+      });
     } else {
       handleAllowAgent(CONNECTION_STATUS.accepted).then(() => window?.close?.());
     }
   }, []);
+
+  console.log(args);
 
   return !args?.updateWhitelist || args?.showList ? (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Layout disableProfile incStatus>
-          {error ? <ErrorScreen /> : (
+          {error ? (
+            <ErrorScreen />
+          ) : (
             <div className={classes.padTop}>
               <Container>
-                <IncomingAction url={url} image={icons[0] || null} action={t('whitelist.title')} />
+                <IncomingAction
+                  url={url}
+                  image={icons[0] || null}
+                  action={t('whitelist.title')}
+                />
 
                 <WhitelistContainer>
-                  {
-                  args?.whitelist.map((id) => <WhitelistItem canisterId={id} />)
-                }
+                  {args?.whitelist.map((id) => (
+                    <WhitelistItem canister={{ id }} />
+                  ))}
                 </WhitelistContainer>
 
                 <div className={classes.buttonContainer}>
@@ -116,7 +126,9 @@ const AllowAgent = ({
         </Layout>
       </ThemeProvider>
     </Provider>
-  ) : <div style={{ display: 'none' }} />;
+  ) : (
+    <div style={{ display: 'none' }} />
+  );
 };
 
 export default AllowAgent;

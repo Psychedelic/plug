@@ -13,6 +13,7 @@ import { currencyPropTypes } from '@shared/constants/currencies';
 import shortAddress from '@shared/utils/short-address';
 import Typography from '@material-ui/core/Typography';
 
+import { getICRocksTransactionUrl } from '@shared/constants/urls';
 import GenericIcon from '../GenericIcon';
 import SwapIcon from './SwapIcon';
 import useStyles from './styles';
@@ -68,7 +69,7 @@ const getAddress = (type, to, from) => (
 )[type] || '';
 
 const openICRocksTx = (hash) => {
-  extension.tabs.create({ url: `https://ic.rocks/transaction/${hash}` });
+  extension.tabs.create({ url: getICRocksTransactionUrl(hash) });
 };
 
 const ActivityItem = ({

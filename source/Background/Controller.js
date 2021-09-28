@@ -37,6 +37,22 @@ export const init = async () => {
   }
 };
 
+const fetchCanistersInfo = async (whitelist) => {
+  let canistersInfo = [];
+
+  if (whitelist.length > 1) {
+    const fetchedCanistersInfo = await PlugController.getMultipleCanisterInfo(whitelist);
+    console.log(fetchedCanistersInfo);
+    canistersInfo = fetchedCanistersInfo;
+  } else {
+    const fetchedCanisterInfo = await PlugController.getCanisterInfo(whitelist[0]);
+    console.log(fetchedCanisterInfo);
+    canistersInfo = [fetchedCanisterInfo];
+  }
+
+  return canistersInfo;
+};
+
 // keyring handlers
 extension.runtime.onMessage.addListener((message, _, sendResponse) => {
   const { params, type } = message;
@@ -120,6 +136,10 @@ backgroundController.exposeController(
 
     // if we receive a whitelist, we create agent
     if (isValidWhitelist) {
+      const canistersInfo = await fetchCanistersInfo(whitelist);
+
+      console.log('Canister info == ', canistersInfo);
+
       const newMetadata = { ...metadata, requestConnect: true };
 
       const url = qs.stringifyUrl({
@@ -128,7 +148,7 @@ backgroundController.exposeController(
           callId,
           portId,
           metadataJson: JSON.stringify(newMetadata),
-          argsJson: JSON.stringify({ whitelist }),
+          argsJson: JSON.stringify({ whitelist, canistersInfo }),
           type: 'allowAgent',
         },
       });
@@ -382,6 +402,8 @@ backgroundController.exposeController(
           ? SIZES.detailHeightSmall
           : SIZES.loginHeight;
 
+        const canistersInfo = await fetchCanistersInfo(whitelist);
+
         if (allWhitelisted) {
           if (!keyring.isUnlocked) {
             const url = qs.stringifyUrl({
@@ -392,6 +414,7 @@ backgroundController.exposeController(
                 metadataJson: JSON.stringify(metadata),
                 argsJson: JSON.stringify({
                   whitelist,
+                  canistersInfo,
                   updateWhitelist: true,
                   showList: false,
                 }),
@@ -419,6 +442,7 @@ backgroundController.exposeController(
               metadataJson: JSON.stringify(metadata),
               argsJson: JSON.stringify({
                 whitelist,
+                canistersInfo,
                 updateWhitelist: true,
                 showList: true,
               }),

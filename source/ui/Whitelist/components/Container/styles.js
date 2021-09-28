@@ -5,8 +5,9 @@ export default makeStyles({
     display: 'flex',
     width: '100%',
     flexDirection: 'column',
-    marginBottom: 24,
-    maxHeight: 173,
-    overflow: 'auto',
+    overflowY: 'auto',
+    overflowX: 'hidden',
+    maxHeight: '140px',
+    margin: '10px 0',
   },
 });

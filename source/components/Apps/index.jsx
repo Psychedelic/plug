@@ -92,9 +92,7 @@ const Apps = () => {
             open={openDetail}
             component={(
               <WhitelistContainer style={{ padding: '0 24px' }}>
-                {
-                  whitelist.map((id) => <WhitelistItem canisterId={id} />)
-                }
+                {whitelist.map((id) => <WhitelistItem canister={{ id }} />)}
               </WhitelistContainer>
             )}
           />

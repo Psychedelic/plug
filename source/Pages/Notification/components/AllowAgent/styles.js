@@ -7,7 +7,7 @@ export default makeStyles({
     justifyContent: 'space-between',
   },
   padTop: {
-    paddingTop: 35,
+    paddingTop: 25,
   },
   arrowUpRight: {
     cursor: 'pointer',

@@ -8,5 +8,9 @@ export default makeStyles({
   },
   padTop: {
     paddingTop: 35,
+    height: '100%',
+  },
+  container: {
+    justifyContent: 'space-between',
   },
 });
