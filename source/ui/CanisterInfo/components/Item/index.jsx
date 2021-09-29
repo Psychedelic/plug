@@ -88,12 +88,12 @@ const CanisterInfoItem = forwardRef(({ canister, className, ...props }, ref) => 
           </AccordionDetails>
         </Accordion>
       ) : (
-        <>
+        <Box className={classes.canisterInfoIdItem}>
           <Typography component="p" variant="subtitle1" noWrap>{id}</Typography>
           <IconButton onClick={createICRocksPrincipalTab} className={classes.iconButton}>
             <img src={ArrowUpRight} alt="Arrow" />
           </IconButton>
-        </>
+        </Box>
       )}
 
     </div>

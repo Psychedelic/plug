@@ -44,7 +44,12 @@ const fetchCanistersInfo = async (whitelist) => {
       return { id };
     }));
 
-    return canistersInfo;
+    const sortedCanistersInfo = canistersInfo.sort((a, b) => {
+      if (a.name && !b.name) return -1;
+      return 1;
+    });
+
+    return sortedCanistersInfo;
   }
 
   return [];
@@ -444,7 +449,6 @@ backgroundController.exposeController(
               metadataJson: JSON.stringify(metadata),
               argsJson: JSON.stringify({
                 whitelist,
-                canistersInfo,
                 updateWhitelist: true,
                 showList: true,
               }),
@@ -472,7 +476,7 @@ backgroundController.exposeController(
   'handleAllowAgent',
   async (opts, url, response, callId, portId) => {
     const { callback } = opts;
-    storage.get(keyring.currentWalletId.toString(), (state) => {
+    storage.get(keyring.currentWalletId.toString(), async (state) => {
       const apps = state?.[keyring.currentWalletId]?.apps || {};
       const status = response.status === CONNECTION_STATUS.rejectedAgent
         ? CONNECTION_STATUS.accepted
@@ -480,6 +484,9 @@ backgroundController.exposeController(
       const whitelist = response.status === CONNECTION_STATUS.accepted
         ? response.whitelist
         : [];
+
+      const cansitersInfo = await fetchCanistersInfo(whitelist);
+
       const newApps = {
         ...apps,
         [url]: {
@@ -487,6 +494,7 @@ backgroundController.exposeController(
           status: status || CONNECTION_STATUS.rejected,
           date: new Date().toISOString(),
           whitelist,
+          cansitersInfo,
         },
       };
       storage.set({ [keyring.currentWalletId]: { apps: newApps } });

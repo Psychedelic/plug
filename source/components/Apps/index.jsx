@@ -18,7 +18,7 @@ const Apps = () => {
   const [selectedApp, setSelectedApp] = useState(null);
 
   const [openDetail, setOpenDetail] = useState(false);
-  const [whitelist, setWhitelist] = useState([]);
+  const [canistersInfo, setCanistersInfo] = useState([]);
 
   const handleRemoveApp = (app) => {
     removeApp(app.url);
@@ -31,7 +31,7 @@ const Apps = () => {
   };
 
   const handleOpenDetail = (app) => () => {
-    setWhitelist(app.whitelist);
+    setCanistersInfo(app.cansitersInfo ?? []);
     setOpenDetail(true);
   };
 
@@ -92,7 +92,9 @@ const Apps = () => {
             open={openDetail}
             component={(
               <CanisterInfoContainer className={classes.canisterInfoContainer}>
-                {whitelist.map((id) => <CanisterInfoItem key={id} canister={{ id }} />)}
+                {canistersInfo.map(
+                  (canister) => (<CanisterInfoItem key={canister.id} canister={canister} />),
+                )}
               </CanisterInfoContainer>
             )}
           />
