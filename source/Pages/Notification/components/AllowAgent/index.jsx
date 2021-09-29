@@ -75,8 +75,6 @@ const AllowAgent = ({
     }
   }, []);
 
-  console.log(args);
-
   return !args?.updateWhitelist || args?.showList ? (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
@@ -94,8 +92,8 @@ const AllowAgent = ({
                 />
 
                 <CanisterInfoContainer>
-                  {args?.whitelist.map((id) => (
-                    <CanisterInfoItem key={id} canister={{ id }} />
+                  {args?.canistersInfo?.map((canister) => (
+                    <CanisterInfoItem key={canister.id} canister={canister} />
                   ))}
                 </CanisterInfoContainer>
 

@@ -18,6 +18,9 @@ export default makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   infoBox: {
-    maxWidth: '240px',
+    maxWidth: '200px',
+  },
+  iconButton: {
+    marginLeft: 'auto',
   },
 }));

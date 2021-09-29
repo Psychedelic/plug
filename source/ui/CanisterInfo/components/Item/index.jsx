@@ -57,9 +57,8 @@ const AccordionDetails = withStyles((theme) => ({
 const CanisterInfoItem = forwardRef(({ canister, className, ...props }, ref) => {
   const classes = useStyles();
 
-  // TODO: Remove placeholders
   const {
-    id, name = 'ICP', description = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate, temporibus blanditiis assumenda architecto in vel magnam consectetur quae atque voluptatum dolorem mollitia, commodi nemo quaerat adipisci quam impedit. Facilis, consectetur?', imageSrc = 'https://images.unsplash.com/photo-1622020457014-aed1cc44f25e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1772&q=80', imageAlt,
+    id, name, description, icon, iconAlt,
   } = canister || {};
 
   const createICRocksPrincipalTab = useCallback(() => {
@@ -68,25 +67,34 @@ const CanisterInfoItem = forwardRef(({ canister, className, ...props }, ref) => 
 
   return (
     <div ref={ref} {...props} className={clsx(classes.canisterInfoItem, className)}>
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMore />}>
-          <img src={imageSrc} alt={imageAlt ?? name} className={classes.image} />
+      {name ? (
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMore />}>
+            <img src={icon} alt={iconAlt ?? name} className={classes.image} />
 
-          <Box className={classes.infoBox}>
-            <Typography component="h4" variant="h5">{name}</Typography>
-            <Typography component="p" variant="subtitle1" noWrap>{id}</Typography>
-          </Box>
+            <Box className={classes.infoBox}>
+              <Typography component="h4" variant="h5">{name}</Typography>
+              <Typography component="p" variant="subtitle1" noWrap>{id}</Typography>
+            </Box>
 
-          <IconButton onClick={createICRocksPrincipalTab}>
+            <IconButton onClick={createICRocksPrincipalTab} className={classes.iconButton}>
+              <img src={ArrowUpRight} alt="Arrow" />
+            </IconButton>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>
+              {description}
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
+      ) : (
+        <>
+          <Typography component="p" variant="subtitle1" noWrap>{id}</Typography>
+          <IconButton onClick={createICRocksPrincipalTab} className={classes.iconButton}>
             <img src={ArrowUpRight} alt="Arrow" />
           </IconButton>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            {description}
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
+        </>
+      )}
 
     </div>
   );

@@ -29,28 +29,33 @@ const backgroundController = new BackgroundController({
 
 backgroundController.start();
 
+const fetchCanistersInfo = async (whitelist) => {
+  if (whitelist && whitelist.length > 0) {
+    const canistersInfo = await Promise.all(whitelist.map(async (id) => {
+      const canisterInfo = await PlugController.getCanisterInfo(id);
+
+      if (canisterInfo) {
+        return {
+          id,
+          ...canisterInfo,
+        };
+      }
+
+      return { id };
+    }));
+
+    return canistersInfo;
+  }
+
+  return [];
+};
+
 export const init = async () => {
   keyring = new PlugController.PlugKeyRing();
   await keyring.init();
   if (keyring.isUnlocked) {
     await keyring?.getState();
   }
-};
-
-const fetchCanistersInfo = async (whitelist) => {
-  let canistersInfo = [];
-
-  if (whitelist.length > 1) {
-    const fetchedCanistersInfo = await PlugController.getMultipleCanisterInfo(whitelist);
-    console.log(fetchedCanistersInfo);
-    canistersInfo = fetchedCanistersInfo;
-  } else {
-    const fetchedCanisterInfo = await PlugController.getCanisterInfo(whitelist[0]);
-    console.log(fetchedCanisterInfo);
-    canistersInfo = [fetchedCanisterInfo];
-  }
-
-  return canistersInfo;
 };
 
 // keyring handlers
@@ -108,6 +113,7 @@ backgroundController.exposeController('isConnected', async (opts, url) => secure
 backgroundController.exposeController(
   'requestConnect',
   async (opts, metadata, whitelist) => secureController(opts.callback, async () => {
+    let canistersInfo = [];
     const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
 
     if (!whitelist.every((canisterId) => validatePrincipalId(canisterId))) {
@@ -121,9 +127,7 @@ backgroundController.exposeController(
     const { url: domainUrl, name, icons } = metadata;
 
     if (isValidWhitelist) {
-      const canistersInfo = await fetchCanistersInfo(whitelist);
-
-      console.log('Canister info == ', canistersInfo);
+      canistersInfo = await fetchCanistersInfo(whitelist);
     }
 
     storage.get(keyring.currentWalletId.toString(), (response) => {
@@ -150,7 +154,7 @@ backgroundController.exposeController(
           callId,
           portId,
           metadataJson: JSON.stringify(newMetadata),
-          argsJson: JSON.stringify({ whitelist }),
+          argsJson: JSON.stringify({ whitelist, canistersInfo }),
           type: 'allowAgent',
         },
       });
@@ -403,8 +407,6 @@ backgroundController.exposeController(
           ? SIZES.detailHeightSmall
           : SIZES.loginHeight;
 
-        const canistersInfo = await fetchCanistersInfo(whitelist);
-
         if (allWhitelisted) {
           if (!keyring.isUnlocked) {
             const url = qs.stringifyUrl({
@@ -415,7 +417,6 @@ backgroundController.exposeController(
                 metadataJson: JSON.stringify(metadata),
                 argsJson: JSON.stringify({
                   whitelist,
-                  canistersInfo,
                   updateWhitelist: true,
                   showList: false,
                 }),
