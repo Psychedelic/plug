@@ -31,6 +31,7 @@ export const HANDLER_TYPES = {
   GET_TRANSACTIONS: 'get-keyring-transactions',
   GET_ASSETS: 'get-keyring-assets',
   GET_BALANCE: 'get-balance',
+  GET_LOCKS: 'get-locks',
   SEND_TOKEN: 'send-token',
   EDIT_PRINCIPAL: 'edit-principal',
   GET_PUBLIC_KEY: 'get-public-key',
@@ -173,12 +174,12 @@ export const getKeyringHandler = (type, keyring) => ({
     return collections?.map((collection) => recursiveParseBigint(collection));
   },
   [HANDLER_TYPES.TRANSFER_NFT]:
-  async ({ to, nft }) => {
-    try {
-      const response = await keyring.transferNFT({ to, token: nft });
-      return recursiveParseBigint(response);
-    } catch (e) {
-      return { error: e.message };
-    }
-  },
+    async ({ to, nft }) => {
+      try {
+        const response = await keyring.transferNFT({ to, token: nft });
+        return recursiveParseBigint(response);
+      } catch (e) {
+        return { error: e.message };
+      }
+    },
 }[type]);

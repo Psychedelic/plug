@@ -95,7 +95,7 @@ const AllowAgent = ({
 
                 <CanisterInfoContainer>
                   {args?.whitelist.map((id) => (
-                    <CanisterInfoItem canister={{ id }} />
+                    <CanisterInfoItem key={id} canister={{ id }} />
                   ))}
                 </CanisterInfoContainer>
 

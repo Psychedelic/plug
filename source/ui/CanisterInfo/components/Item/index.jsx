@@ -62,9 +62,9 @@ const CanisterInfoItem = forwardRef(({ canister, className, ...props }, ref) => 
     id, name = 'ICP', description = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate, temporibus blanditiis assumenda architecto in vel magnam consectetur quae atque voluptatum dolorem mollitia, commodi nemo quaerat adipisci quam impedit. Facilis, consectetur?', imageSrc = 'https://images.unsplash.com/photo-1622020457014-aed1cc44f25e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1772&q=80', imageAlt,
   } = canister || {};
 
-  // const createICRocksPrincipalTab = useCallback(() => {
-  //   extension.tabs.create({ url: getICRocksPrincipalUrl(id) });
-  // }, [id]);
+  const createICRocksPrincipalTab = useCallback(() => {
+    extension.tabs.create({ url: getICRocksPrincipalUrl(id) });
+  }, [id]);
 
   return (
     <div ref={ref} {...props} className={clsx(classes.canisterInfoItem, className)}>
@@ -73,13 +73,13 @@ const CanisterInfoItem = forwardRef(({ canister, className, ...props }, ref) => 
           <img src={imageSrc} alt={imageAlt ?? name} className={classes.image} />
 
           <Box className={classes.infoBox}>
-            <Typography component="h4" variant="p">{name}</Typography>
+            <Typography component="h4" variant="h5">{name}</Typography>
             <Typography component="p" variant="subtitle1" noWrap>{id}</Typography>
           </Box>
 
-          {/* <IconButton onClick={createICRocksPrincipalTab}>
+          <IconButton onClick={createICRocksPrincipalTab}>
             <img src={ArrowUpRight} alt="Arrow" />
-          </IconButton> */}
+          </IconButton>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>

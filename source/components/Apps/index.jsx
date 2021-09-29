@@ -92,7 +92,7 @@ const Apps = () => {
             open={openDetail}
             component={(
               <CanisterInfoContainer className={classes.canisterInfoContainer}>
-                {whitelist.map((id) => <CanisterInfoItem canister={{ id }} />)}
+                {whitelist.map((id) => <CanisterInfoItem key={id} canister={{ id }} />)}
               </CanisterInfoContainer>
             )}
           />
