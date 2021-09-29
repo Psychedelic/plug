@@ -1053,6 +1053,15 @@
     joi "^17.4.0"
     uuid "^8.3.2"
 
+"@fleekhq/browser-rpc@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@fleekhq/browser-rpc/-/browser-rpc-2.0.3.tgz#d85e4ebd593aad2f2d8b56bab259e3947f623bfa"
+  integrity sha512-TFj5/kOMoBqNUBp7Kf/ONrkXTVhhLcATlJYiUZmVWi8KRb+wtR2/Osvm0TrBxepUahT3Sv8bDPjMa11hg00iRQ==
+  dependencies:
+    extensionizer "^1.0.1"
+    joi "^17.4.0"
+    uuid "^8.3.2"
+
 "@gar/promisify@^1.0.1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.2.tgz#30aa825f11d438671d585bd44e7fd564535fc210"
@@ -1642,16 +1651,16 @@
     text-encoding-shim "^1.0.5"
     tweetnacl "^1.0.3"
 
-"@psychedelic/plug-inpage-provider@^1.3.0":
-  version "1.3.0"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/1.3.0/cc490d830578d1df6edea843f174c52927cae56c8d97b4dec9b62da5221b7f66#76508ad76e4f8c39094f37686c5fc2b956439b00"
-  integrity sha512-1egGyRdC8gGH93uuB1CUo0Xkx+RPpqRClDqdFonzUhKsENdl9RvzuUdOg6pGjM0HWT8CumZ1royBv3qwBjFJIg==
+"@psychedelic/plug-inpage-provider@^1.4.0":
+  version "1.4.0"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/1.4.0/20a15b418a1cfcf3e476d2ed87711ff7a8ee59bf14ca00c3fd27b2043c7f495c#3261cf266db38cb226d745e4e2f9abdab8edf083"
+  integrity sha512-oAfRGqMJWZT5gkLKz+0kFTJJ6vRM6ILQmA23+pSUv/UfaqsepFHH4uMWEhhznr6LY+v7/kAToPEweiKn6kN5qg==
   dependencies:
     "@dfinity/agent" "^0.10.0"
     "@dfinity/candid" "^0.10.0"
     "@dfinity/identity" "^0.10.0"
     "@dfinity/principal" "^0.10.0"
-    "@fleekhq/browser-rpc" "^2.0.2"
+    "@fleekhq/browser-rpc" "^2.0.3"
 
 "@reduxjs/toolkit@^1.6.0":
   version "1.6.1"
