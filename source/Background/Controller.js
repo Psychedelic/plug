@@ -339,9 +339,10 @@ backgroundController.exposeController(
           callback(ERRORS.CONNECTION_ERROR, null);
           return;
         }
-        const parsedPayload = new Uint8Array(Object.values(payload));
-
-        const signed = await keyring.sign(parsedPayload.buffer);
+        const parsedPayload = payload instanceof Buffer
+          ? payload
+          : Buffer.from(Object.values(payload));
+        const signed = await keyring.sign(parsedPayload);
         callback(null, [...new Uint8Array(signed)]);
       });
     } catch (e) {
@@ -354,7 +355,7 @@ backgroundController.exposeController('getPublicKey', async (opts) => {
   const { callback } = opts;
   try {
     const publicKey = await keyring.getPublicKey();
-    callback(null, new Uint8Array(publicKey.toDer()));
+    callback(null, publicKey);
   } catch (e) {
     callback(ERRORS.SERVER_ERROR(e), null);
   }
@@ -408,7 +409,7 @@ backgroundController.exposeController(
             });
           }
           const publicKey = await keyring.getPublicKey();
-          callback(null, new Uint8Array(publicKey.toDer()));
+          callback(null, publicKey);
         } else {
           const url = qs.stringifyUrl({
             url: 'notification.html',
@@ -467,7 +468,7 @@ backgroundController.exposeController(
     if (response?.status === CONNECTION_STATUS.accepted) {
       try {
         const publicKey = await keyring.getPublicKey();
-        callback(null, new Uint8Array(publicKey.toDer()), [{ portId, callId }]);
+        callback(null, publicKey, [{ portId, callId }]);
         callback(null, true);
       } catch (e) {
         callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
