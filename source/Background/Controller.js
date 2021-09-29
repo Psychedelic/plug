@@ -64,13 +64,17 @@ export const init = async () => {
 };
 
 // keyring handlers
-extension.runtime.onMessage.addListener((message, _, sendResponse) => {
+extension.runtime.onMessage.addListener(async (message, _, sendResponse) => {
+  if (!keyring) {
+    await init();
+  }
   const { params, type } = message;
   const keyringHandler = getKeyringHandler(type, keyring);
   if (!keyringHandler) return;
-  keyringHandler(params).then((response) => {
-    sendResponse(response);
-  });
+
+  const response = await keyringHandler(params);
+
+  sendResponse(response);
   // Usually we would not return, but it seems firefox needs us to
   return true; // eslint-disable-line
 });

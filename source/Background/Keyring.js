@@ -85,7 +85,7 @@ export const getKeyringHandler = (type, keyring) => ({
       return keyring.getState();
     },
   [HANDLER_TYPES.IMPORT]: async (params) => keyring.importMnemonic(params),
-  [HANDLER_TYPES.GET_LOCKS]: async () => ({
+  [HANDLER_TYPES.GET_LOCKS]: () => ({
     isUnlocked: keyring?.isUnlocked,
     isInitialized: keyring?.isInitialized,
   }),
@@ -152,8 +152,7 @@ export const getKeyringHandler = (type, keyring) => ({
         return { error: e.message };
       }
     },
-  [HANDLER_TYPES.GET_PEM_FILE]:
-    async (walletNumber) => keyring.getPemFile(walletNumber),
+  [HANDLER_TYPES.GET_PEM_FILE]: (walletNumber) => keyring.getPemFile(walletNumber),
   [HANDLER_TYPES.BURN_XTC]:
     async ({ to, amount }) => {
       try {
