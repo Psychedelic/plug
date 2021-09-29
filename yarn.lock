@@ -1600,8 +1600,10 @@
     node-gyp "^7.1.0"
     read-package-json-fast "^2.0.1"
 
-"@psychedelic/dab-js@../DAB-js":
-  version "0.2.1"
+"@psychedelic/dab-js@^0.2.4":
+  version "0.2.4"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/dab-js/0.2.4/854527e39fe48649b3d31856b0beb96350c675b44935bbe9b5bc82d34bbc3c58#82240e3181e0e0bc5a0079818472f39511a37e26"
+  integrity sha512-MwUPdVy7MEmNXXTMo2Ko7VpcM3xU8U6uavXq/KgN5IWRsSqAY3Qca4eaYCuTCUQ3n0EMh3vAW5NTSn/oH7Kv7w==
   dependencies:
     "@dfinity/agent" "^0.10.0"
     "@dfinity/identity" "^0.10.0"
@@ -1609,15 +1611,17 @@
     buffer-crc32 "^0.2.13"
     crypto-js "^4.1.1"
 
-"@psychedelic/plug-controller@../plug-controller":
-  version "0.7.3"
+"@psychedelic/plug-controller@^0.7.4":
+  version "0.7.4"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.7.4/fac996d4a1ad166b0750d04f8519d97354cdf5b8b4649533eab077df8a99ad49#fa3abe425e3af55d76304cf5898fda454094bd71"
+  integrity sha512-31/Vy6N+W+90R8W5mtCTNU0i28rGwAsTl0RadEzfKt3U3fAhZpLYdSGdfl41XMpvLKCjc+FeYE1sYHSW3HcTKA==
   dependencies:
     "@babel/preset-env" "^7.14.4"
     "@dfinity/agent" "^0.10.0"
     "@dfinity/candid" "^0.10.0"
     "@dfinity/identity" "^0.10.0"
     "@dfinity/principal" "^0.10.0"
-    "@psychedelic/dab-js" "../DAB-js"
+    "@psychedelic/dab-js" "^0.2.4"
     "@types/secp256k1" "^4.0.3"
     axios "^0.21.1"
     babel-jest "^25.5.1"
