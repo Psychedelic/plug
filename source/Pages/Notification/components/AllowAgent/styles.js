@@ -7,24 +7,9 @@ export default makeStyles({
     justifyContent: 'space-between',
   },
   padTop: {
-    paddingTop: 35,
+    paddingTop: 25,
   },
   arrowUpRight: {
     cursor: 'pointer',
-  },
-  whitelistContainer: {
-    display: 'flex',
-    width: '100%',
-    flexDirection: 'column',
-    marginBottom: 24,
-    maxHeight: 173,
-    overflow: 'auto',
-  },
-  whitelistItem: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    padding: '9px 0',
   },
 });

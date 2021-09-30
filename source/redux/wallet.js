@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ACTIVITY_STATUS, ACTIVITY_TYPES } from '@shared/constants/activity';
-import { formatAssetBySymbol, TOKENS, TOKEN_IMAGES } from '@shared/constants/currencies';
+import {
+  formatAssetBySymbol, formatAssets, TOKENS, TOKEN_IMAGES,
+} from '@shared/constants/currencies';
 
 /* eslint-disable no-param-reassign */
 export const walletSlice = createSlice({
@@ -58,13 +60,17 @@ export const walletSlice = createSlice({
       state.transactions = parsedTrx.slice(0, 50); // TODO: Move paging to BE
     },
     setAssets: (state, action) => {
-      state.assets = action.payload;
+      const { keyringAssets, icpPrice } = action.payload || {};
+
+      const formattedAssets = formatAssets(keyringAssets, icpPrice);
+
+      state.assets = formattedAssets;
     },
     setAssetsLoading: (state, action) => {
       state.assetsLoading = action.payload;
     },
     setCollections: (state, action) => {
-      if (state.walletNumber === action.payload?.walletNumber) {
+      if (state.walletNumber === action.payload?.walletNumber && action.payload.collections) {
         state.collections = action.payload?.collections?.sort(
           (a, b) => b?.tokens.length - a?.tokens.length,
         );

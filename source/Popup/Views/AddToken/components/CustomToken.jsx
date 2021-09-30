@@ -7,7 +7,7 @@ import {
 } from '@ui';
 import { validateCanisterId } from '@shared/utils/ids';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import browser from 'webextension-polyfill';
+import extension from 'extensionizer';
 import { customTokensUrl } from '@shared/constants/urls';
 import useStyles from '../styles';
 
@@ -73,7 +73,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
                     <br />
                     <span
                       className={classes.learnMore}
-                      onClick={() => browser.tabs.create({ url: customTokensUrl })}
+                      onClick={() => extension.tabs.create({ url: customTokensUrl })}
                     >
                       {t('common.learnMore')}
                     </span>

@@ -1,6 +1,6 @@
 import extension from 'extensionizer';
 import getICPPrice from '@shared/services/ICPPrice';
-import { formatAssetBySymbol } from '@shared/constants/currencies';
+import { formatAssets } from '@shared/constants/currencies';
 
 export const NANOS_PER_SECOND = 1_000_000;
 export const BALANCE_ERROR = 'You have tried to spend more than the balance of your account';
@@ -21,21 +21,6 @@ const recursiveParseBigint = (obj) => Object.entries(obj).reduce(
   { ...obj },
 );
 
-const formatAssets = (balances, icpPrice) => {
-  const mappedAssets = balances.map(({
-    amount, name, symbol, canisterId,
-  }) => {
-    const asset = formatAssetBySymbol(amount, symbol, icpPrice);
-    return {
-      ...asset,
-      name,
-      symbol,
-      canisterId,
-    };
-  });
-  return mappedAssets;
-};
-
 export const HANDLER_TYPES = {
   LOCK: 'lock-keyring',
   UNLOCK: 'unlock-keyring',
@@ -46,6 +31,7 @@ export const HANDLER_TYPES = {
   GET_TRANSACTIONS: 'get-keyring-transactions',
   GET_ASSETS: 'get-keyring-assets',
   GET_BALANCE: 'get-balance',
+  GET_LOCKS: 'get-locks',
   SEND_TOKEN: 'send-token',
   EDIT_PRINCIPAL: 'edit-principal',
   GET_PUBLIC_KEY: 'get-public-key',
@@ -134,7 +120,7 @@ export const getKeyringHandler = (type, keyring) => ({
     const response = await keyring.getTransactions();
     return recursiveParseBigint(response);
   },
-  [HANDLER_TYPES.GET_ASSETS]: async ({ icpPrice, refresh }) => {
+  [HANDLER_TYPES.GET_ASSETS]: async ({ refresh }) => {
     const { wallets, currentWalletId } = await keyring.getState();
     let assets = wallets?.[currentWalletId]?.assets;
     if (assets?.every((asset) => !asset.amount) || refresh) {
@@ -142,7 +128,7 @@ export const getKeyringHandler = (type, keyring) => ({
     } else {
       keyring.getBalance();
     }
-    return formatAssets(assets, icpPrice);
+    return assets;
   },
   [HANDLER_TYPES.GET_BALANCE]: async (subaccount) => {
     try {
@@ -211,12 +197,12 @@ export const getKeyringHandler = (type, keyring) => ({
     return collections?.map((collection) => recursiveParseBigint(collection));
   },
   [HANDLER_TYPES.TRANSFER_NFT]:
-  async ({ to, nft }) => {
-    try {
-      const response = await keyring.transferNFT({ to, token: nft });
-      return recursiveParseBigint(response);
-    } catch (e) {
-      return { error: e.message };
-    }
-  },
+    async ({ to, nft }) => {
+      try {
+        const response = await keyring.transferNFT({ to, token: nft });
+        return recursiveParseBigint(response);
+      } catch (e) {
+        return { error: e.message };
+      }
+    },
 }[type]);

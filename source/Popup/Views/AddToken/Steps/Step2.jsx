@@ -6,13 +6,13 @@ import Grid from '@material-ui/core/Grid';
 import XTCIcon from '@assets/icons/XTC.svg';
 import {
   Button, Container, USDFormat, AssetFormat,
-
 } from '@ui';
-import { TokenIcon } from '@components';
 import { USD_PER_TC, CYCLES_PER_TC } from '@shared/constants/currencies';
+import { TokenIcon } from '@components';
+import { useICPPrice } from '@redux/icp';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAssets, setAssetsLoading } from '@redux/wallet';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import useStyles from '../styles';
 
@@ -38,7 +38,9 @@ const Step2 = ({ selectedToken, handleClose }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const displayToken = parseTokenBySymbol(selectedToken);
-  const { icpPrice } = useSelector((state) => state.icp);
+
+  const icpPrice = useICPPrice();
+
   const registerToken = () => {
     setLoading(true);
     sendMessage({
@@ -47,9 +49,9 @@ const Step2 = ({ selectedToken, handleClose }) => {
     }, async () => {
       sendMessage({
         type: HANDLER_TYPES.GET_ASSETS,
-        params: { icpPrice, refresh: true },
+        params: { refresh: true },
       }, (keyringAssets) => {
-        dispatch(setAssets(keyringAssets));
+        dispatch(setAssets({ keyringAssets, icpPrice }));
         dispatch(setAssetsLoading(false));
         setLoading(false);
         handleClose();

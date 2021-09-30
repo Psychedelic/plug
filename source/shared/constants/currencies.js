@@ -62,6 +62,21 @@ export const formatAssetBySymbol = (_amount, symbol, icpPrice) => {
   })[symbol || 'default'] || { amount, value: amount };
 };
 
+export const formatAssets = (assets = [], icpPrice) => {
+  const mappedAssets = assets.map(({
+    amount, name, symbol, canisterId,
+  }) => {
+    const asset = formatAssetBySymbol(amount, symbol, icpPrice);
+    return {
+      ...asset,
+      name,
+      symbol,
+      canisterId,
+    };
+  });
+  return mappedAssets;
+};
+
 export const TOKENS = {
   ICP: {
     symbol: 'ICP',

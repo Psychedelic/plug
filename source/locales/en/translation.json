@@ -3,7 +3,7 @@
     "plugged": "You're plugged into",
     "notPlugged": "You're not plugged in",
     "incomingConnection": "Incoming connection!",
-    "alpha": "Plug Alpha Release"
+    "alpha": "Plug Alpha Release - {{version}}"
   },
   "copy": {
     "copyText": "Copy to clipboard",
@@ -88,7 +88,7 @@
     "emptyLink": "our docs.",
     "comingSoonTitle": "Coming soon!",
     "comingSoonSubtitle": "Plug will allow you to connect\nand log into IC Apps.",
-    "whitelistTitle": "Approved canister IDs"
+    "whitelistTitle": "Approved canisters"
   },
   "login": {
     "title": "Welcome Back!",

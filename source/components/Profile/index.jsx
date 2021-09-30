@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import BluePencil from '@assets/icons/blue-pencil.svg';
 import { getRandomEmoji } from '@shared/constants/emojis';
 import clsx from 'clsx';
+import { useICPPrice } from '@redux/icp';
 import { TABS, useRouter } from '../Router';
 import ActionDialog from '../ActionDialog';
 import useMenuItems from '../../hooks/useMenuItems';
@@ -29,9 +30,9 @@ const Profile = ({ disableProfile }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { navigator } = disableProfile ? {} : useRouter();
-  const { icpPrice } = useSelector((state) => state.icp);
 
   const { walletNumber } = useSelector((state) => state.wallet);
+  const icpPrice = useICPPrice();
 
   const [open, setOpen] = useState(false);
   const [accounts, setAccounts] = useState([]);
@@ -88,9 +89,9 @@ const Profile = ({ disableProfile }) => {
           dispatch(setAssetsLoading(true));
           sendMessage({
             type: HANDLER_TYPES.GET_ASSETS,
-            params: { icpPrice },
+            params: {},
           }, (keyringAssets) => {
-            dispatch(setAssets(keyringAssets));
+            dispatch(setAssets({ keyringAssets, icpPrice }));
             dispatch(setAssetsLoading(false));
           });
           setOpen(false);
@@ -152,7 +153,7 @@ const Profile = ({ disableProfile }) => {
             }}
           >
             <div className={classes.container}>
-              <Typography variant="h5" className={classes.myAccounts}>My Accounts</Typography>
+              <Typography variant="h5" className={classes.myAccounts}>{t('profile.myAccounts')}</Typography>
               <MenuList className={clsx(classes.accountContainer, classes.menu)}>
                 {
                   accounts.map((account) => (
@@ -160,7 +161,7 @@ const Profile = ({ disableProfile }) => {
                       size="small"
                       key={account.walletNumber}
                       name={account.name}
-                      icon={<UserIcon size="small" icon={account.icon || '👽'} style={{ marginLeft: -6, marginRight: 12 }} />}
+                      icon={<UserIcon size="small" icon={account.icon} style={{ marginLeft: -6, marginRight: 12 }} />}
                       onClick={handleChangeAccount(account.walletNumber)}
                       selected={account.walletNumber === walletNumber}
                       endIcon={(

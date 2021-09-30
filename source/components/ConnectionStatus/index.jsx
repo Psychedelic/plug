@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import extension from 'extensionizer';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import PropTypes from 'prop-types';
+import browser from 'webextension-polyfill';
 import useStyles from './styles';
 
 const CONNECTION_CONFIG = {
@@ -63,7 +64,7 @@ const ConnectionStatus = ({ incStatus = null }) => {
   return (
     <div className={clsx(classes.root, classes[className])}>
       {icon}
-      <span>{t(label)}</span>
+      <span>{t(label, { version: browser.runtime.getManifest().version })}</span>
       {
         status === CONNECTION_STATUS.accepted
         && <span className={classes.web}>&nbsp;{activeTab}</span>

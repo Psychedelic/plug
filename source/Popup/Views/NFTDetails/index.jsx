@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Layout } from '@components';
 import {
-  Header, Button, Badge, LinkButton,
+  Header, Button, Badge, LinkButton, NFTDisplayer,
 } from '@ui';
 import { useTranslation } from 'react-i18next';
 import BackIcon from '@assets/icons/back.svg';
@@ -14,7 +14,7 @@ import AboutImg from '@assets/icons/nfts/about.png';
 import { Typography } from '@material-ui/core';
 import { setSelectedNft } from '@redux/nfts';
 import { entrepotUrl } from '@shared/constants/urls';
-import browser from 'webextension-polyfill';
+import extension from 'extensionizer';
 
 import Section from './components/section';
 import useStyles from './styles';
@@ -36,7 +36,7 @@ const NFTDetails = () => {
     navigator.navigate('home', TABS.NFTS);
   };
 
-  const openMarketplace = (url) => () => browser.tabs.create({ url: url || entrepotUrl });
+  const openMarketplace = (url) => () => extension.tabs.create({ url: url || entrepotUrl });
   const collection = useMemo(() => collections?.find(
     (col) => col.name === nft?.collection,
   ),
@@ -51,7 +51,7 @@ const NFTDetails = () => {
         right={null}
       />
       <div className={classes.container}>
-        <img src={nft?.url} className={classes.image} />
+        <NFTDisplayer url={nft?.url} className={classes.image} />
         <div className={classes.buttonContainer}>
           <Button
             variant="default"

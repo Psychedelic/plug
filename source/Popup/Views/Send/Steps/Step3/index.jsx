@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import extension from 'extensionizer';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import {
   Container,
@@ -21,8 +22,7 @@ import shortAddress from '@shared/utils/short-address';
 import PlugController from '@psychedelic/plug-controller';
 import { Principal } from '@dfinity/principal';
 import { Info } from 'react-feather';
-import { icIdsUrl } from '@shared/constants/urls';
-import browser from 'webextension-polyfill';
+import { getICRocksAccountUrl, getICRocksTransactionUrl, icIdsUrl } from '@shared/constants/urls';
 import ArrowUpRight from '@assets/icons/arrow-up-right.png';
 import clsx from 'clsx';
 import {
@@ -31,6 +31,7 @@ import {
 
 import { ADDRESS_TYPES, DEFAULT_FEE, XTC_FEE } from '@shared/constants/addresses';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import { useICPPrice } from '@redux/icp';
 import useStyles from '../../styles';
 
 const Step3 = ({
@@ -44,7 +45,7 @@ const Step3 = ({
   const isICP = asset?.symbol === 'ICP';
   const isXTC = asset?.symbol === 'XTC';
   const dispatch = useDispatch();
-  const { icpPrice } = useSelector((state) => state.icp);
+  const icpPrice = useICPPrice();
 
   const [ICPModalOpen, setOpenICPModal] = useState(false);
   const [sendingModalOpen, setSendingModalOpen] = useState(false);
@@ -64,20 +65,20 @@ const Step3 = ({
     handleSendClick();
   };
 
-  const redirectToICRocks = () => {
+  const createICRocksAccountTab = useCallback(() => {
     if (!loading) {
-      browser.tabs.create({ url: `https://ic.rocks/account/${accountId}` });
+      extension.tabs.create({ url: getICRocksAccountUrl(accountId) });
     }
-  };
+  }, [loading, accountId]);
 
   const openICRocksTx = () => {
     navigator.navigate('home');
-    browser.tabs.create({ url: `https://ic.rocks/transaction/${transaction.hash}` });
+    extension.tabs.create({ url: getICRocksTransactionUrl(transaction.hash) });
   };
 
   const openTwoIdsBlog = () => {
     if (!loading) {
-      browser.tabs.create({ url: icIdsUrl });
+      extension.tabs.create({ url: icIdsUrl });
     }
   };
 
@@ -95,9 +96,9 @@ const Step3 = ({
     dispatch(setAssetsLoading(true));
     sendMessage({
       type: HANDLER_TYPES.GET_ASSETS,
-      params: { refresh: true, icpPrice },
+      params: { refresh: true },
     }, (keyringAssets) => {
-      dispatch(setAssets(keyringAssets));
+      dispatch(setAssets({ keyringAssets, icpPrice }));
       dispatch(setAssetsLoading(false));
     });
     navigator.navigate('home', TABS.ACTIVITY);
@@ -170,7 +171,7 @@ const Step3 = ({
                         <img
                           src={ArrowUpRight}
                           className={classes.arrowUpRight}
-                          onClick={redirectToICRocks}
+                          onClick={createICRocksAccountTab}
                         />
                       </div>
                     </div>
