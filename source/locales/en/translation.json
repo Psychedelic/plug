@@ -80,7 +80,6 @@
   },
   "apps": {
     "title": "Connected Apps",
-    "subtitle": "Main IC Wallet is connected to these sites.",
     "disconnectTitle": "Disconnect from Site",
     "disconnectText": "Are you sure you want to disconnect from",
     "emptyTitle": "You have no apps connected",
@@ -308,7 +307,7 @@
   },
   "nfts": {
     "allNfts": "All NFTs",
-    "goToMarketplace": "Go to Marketplace",
+    "expandNFT": "View",
     "collection": "Collection",
     "description": "Description",
     "attributes": "Attributes",

@@ -8,7 +8,7 @@ import {
 export const walletSlice = createSlice({
   name: 'wallet',
   initialState: {
-    name: 'Main IC Wallet',
+    name: 'Account 1',
     principalId: '',
     accountId: '',
     emoji: '👽',
