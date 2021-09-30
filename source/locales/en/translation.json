@@ -308,7 +308,7 @@
   },
   "nfts": {
     "allNfts": "All NFTs",
-    "goToMarketplace": "Go to Marketplace",
+    "expandNFT": "Expand",
     "collection": "Collection",
     "description": "Description",
     "attributes": "Attributes",

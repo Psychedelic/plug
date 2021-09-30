@@ -45,7 +45,7 @@ const NFTDisplayer = ({
       >
         {!interactive && <span className={classes.iframeClick} />}
         <Tag
-          className={className}
+          className={classes.innerFrame}
           {...customProps}
           src={url}
         />

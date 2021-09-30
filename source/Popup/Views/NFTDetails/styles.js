@@ -1,9 +1,17 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles(() => ({
+export default makeStyles((theme) => ({
   image: {
     borderRadius: 15,
     width: 280,
+    height: 280,
+    margin: 'auto',
+    boxShadow: 'rgb(37 41 46 / 20%) 0px 10px 30px',
+    cursor: 'pointer',
+  },
+  iframe: {
+    borderRadius: 15,
+    width: `calc(100% - ${theme.spacing(4)}px)`,
     height: 280,
     margin: 'auto',
     boxShadow: 'rgb(37 41 46 / 20%) 0px 10px 30px',
