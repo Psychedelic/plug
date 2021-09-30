@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import extension from 'extensionizer';
 import { useTranslation } from 'react-i18next';
@@ -22,7 +22,7 @@ import shortAddress from '@shared/utils/short-address';
 import PlugController from '@psychedelic/plug-controller';
 import { Principal } from '@dfinity/principal';
 import { Info } from 'react-feather';
-import { icIdsUrl } from '@shared/constants/urls';
+import { getICRocksAccountUrl, getICRocksTransactionUrl, icIdsUrl } from '@shared/constants/urls';
 import ArrowUpRight from '@assets/icons/arrow-up-right.png';
 import clsx from 'clsx';
 import {
@@ -65,15 +65,15 @@ const Step3 = ({
     handleSendClick();
   };
 
-  const redirectToICRocks = () => {
+  const createICRocksAccountTab = useCallback(() => {
     if (!loading) {
-      extension.tabs.create({ url: `https://ic.rocks/account/${accountId}` });
+      extension.tabs.create({ url: getICRocksAccountUrl(accountId) });
     }
-  };
+  }, [loading, accountId]);
 
   const openICRocksTx = () => {
     navigator.navigate('home');
-    extension.tabs.create({ url: `https://ic.rocks/transaction/${transaction.hash}` });
+    extension.tabs.create({ url: getICRocksTransactionUrl(transaction.hash) });
   };
 
   const openTwoIdsBlog = () => {
@@ -171,7 +171,7 @@ const Step3 = ({
                         <img
                           src={ArrowUpRight}
                           className={classes.arrowUpRight}
-                          onClick={redirectToICRocks}
+                          onClick={createICRocksAccountTab}
                         />
                       </div>
                     </div>

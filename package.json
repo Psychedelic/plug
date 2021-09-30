@@ -1,6 +1,6 @@
 {
   "name": "plug",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "Your plug into the Internet Computer",
   "private": true,
   "repository": "https://github.com/Psychedelic/plug",
@@ -128,7 +128,9 @@
     "*.{js,css,md}": "prettier --write"
   },
   "jest": {
-    "setupFiles": ["<rootDir>/tests/__setup__/setup.js"],
+    "setupFiles": [
+      "<rootDir>/tests/__setup__/setup.js"
+    ],
     "setupFilesAfterEnv": [
       "<rootDir>/jest.config"
     ]

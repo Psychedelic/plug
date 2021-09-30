@@ -90,7 +90,7 @@ const AppConnection = () => {
         <Layout disableProfile incStatus>
           {error ? <ErrorScreen /> : (
             <div className={classes.padTop}>
-              <Container>
+              <Container className={classes.container}>
                 <IncomingAction url={url} image={icon} action={t('appConnection.connect')} />
                 <div className={classes.buttonContainer}>
                   <Button
