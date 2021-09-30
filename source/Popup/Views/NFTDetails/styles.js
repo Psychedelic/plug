@@ -7,6 +7,7 @@ export default makeStyles(() => ({
     height: 280,
     margin: 'auto',
     boxShadow: 'rgb(37 41 46 / 20%) 0px 10px 30px',
+    cursor: 'pointer',
   },
   buttonContainer: {
     width: '100%',
