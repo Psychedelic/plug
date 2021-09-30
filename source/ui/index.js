@@ -37,3 +37,4 @@ export { default as WhitelistContainer } from './WhitelistContainer';
 export { default as WhitelistItem } from './WhitelistItem';
 export { default as Badge } from './Badge';
 export { default as Title } from './Title';
+export { default as NFTDisplayer } from './NFTDisplayer';

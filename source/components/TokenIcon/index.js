@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
+import { NFTDisplayer } from '@ui';
 import randomColor from 'random-color';
 import clsx from 'clsx';
 
@@ -26,14 +27,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function TokenIcon({
-  image, symbol, className, color, small, ...props
-}) {
+const TokenIcon = ({
+  image, symbol, className, color, nft, small, ...props
+}) => {
   const classes = useStyles();
   const backgroundColor = `rgb(${color.values.rgb.join(',')})`;
-  return image ? (
-    <img src={image} className={className} {...props} />
-  ) : (
+
+  if (image) {
+    return nft ? (
+      <NFTDisplayer url={image} className={className} {...props} />
+    ) : (
+      <img src={image} className={className} {...props} />
+    );
+  }
+
+  return (
     <div
       className={clsx(classes.genericToken, className)}
       style={{ backgroundColor }}
@@ -41,12 +49,13 @@ function TokenIcon({
       <span>{symbol}</span>
     </div>
   );
-}
+};
 
 TokenIcon.propTypes = {
   symbol: PropTypes.string.isRequired,
   image: PropTypes.string,
   className: PropTypes.string,
+  nft: PropTypes.bool,
   color: PropTypes.shape({
     values: PropTypes.shape({
       rgb: PropTypes.arrayOf(PropTypes.string),
@@ -57,6 +66,7 @@ TokenIcon.propTypes = {
 
 TokenIcon.defaultProps = {
   image: null,
+  nft: false,
   className: '',
   color: randomColor({ luminosity: 'light' }),
   small: false,

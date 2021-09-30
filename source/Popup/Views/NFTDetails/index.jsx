@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Layout } from '@components';
 import {
-  Header, Button, Badge, LinkButton,
+  Header, Button, Badge, LinkButton, NFTDisplayer,
 } from '@ui';
 import { useTranslation } from 'react-i18next';
 import BackIcon from '@assets/icons/back.svg';
@@ -51,7 +51,7 @@ const NFTDetails = () => {
         right={null}
       />
       <div className={classes.container}>
-        <img src={nft?.url} className={classes.image} />
+        <NFTDisplayer url={nft?.url} className={classes.image} />
         <div className={classes.buttonContainer}>
           <Button
             variant="default"
