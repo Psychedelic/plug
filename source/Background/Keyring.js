@@ -45,6 +45,29 @@ export const HANDLER_TYPES = {
   TRANSFER_NFT: 'transfer-nft',
 };
 
+export const getKeyringErrorMessage = (type) => ({
+  [HANDLER_TYPES.LOCK]: 'locking your Keyring.',
+  [HANDLER_TYPES.UNLOCK]: 'unlocking your Keyring.',
+  [HANDLER_TYPES.CREATE]: 'creating your Keyring',
+  [HANDLER_TYPES.IMPORT]: 'importing import your Keyring.',
+  [HANDLER_TYPES.GET]: 'getting your Keyring.',
+  [HANDLER_TYPES.GET_STATE]: 'getting your Keyring state.',
+  [HANDLER_TYPES.GET_TRANSACTIONS]: 'reading your transactions.',
+  [HANDLER_TYPES.GET_ASSETS]: 'reading your assets.',
+  [HANDLER_TYPES.GET_BALANCE]: 'reading your balance.',
+  [HANDLER_TYPES.SEND_TOKEN]: 'sending token.',
+  [HANDLER_TYPES.EDIT_PRINCIPAL]: 'editing your principal.',
+  [HANDLER_TYPES.GET_PUBLIC_KEY]: 'getting your public key.',
+  [HANDLER_TYPES.GET_TOKEN_INFO]: 'fetching token info.',
+  [HANDLER_TYPES.ADD_CUSTOM_TOKEN]: 'adding custom token.',
+  [HANDLER_TYPES.CREATE_PRINCIPAL]: 'creating your principal.',
+  [HANDLER_TYPES.SET_CURRENT_PRINCIPAL]: 'setting your principal.',
+  [HANDLER_TYPES.GET_PEM_FILE]: 'getting your PEM file.',
+  [HANDLER_TYPES.BURN_XTC]: 'burning XTC.',
+  [HANDLER_TYPES.GET_NFTS]: 'getting your NTF\'s.',
+  [HANDLER_TYPES.TRANSFER_NFT]: 'transfering your NFT.',
+}[type]);
+
 export const sendMessage = (args, callback) => {
   extension.runtime.sendMessage(args, (response) => {
     let parsedResponse = response;

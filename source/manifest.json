@@ -16,6 +16,7 @@
   "permissions": [
     "storage",
     "tabs",
+    "notifications",
     "https://gxdmhoifte.execute-api.us-west-2.amazonaws.com/prod"
   ],
 

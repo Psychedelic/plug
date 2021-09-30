@@ -7,9 +7,10 @@ import PlugController from '@psychedelic/plug-controller';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
 import { XTC_FEE } from '@shared/constants/addresses';
+import NotificationManager from '../lib/NotificationManager';
 
 import SIZES from '../Pages/Notification/components/Transfer/constants';
-import { getKeyringHandler, HANDLER_TYPES } from './Keyring';
+import { getKeyringHandler, HANDLER_TYPES, getKeyringErrorMessage } from './Keyring';
 import { validateTransferArgs, validateBurnArgs } from './utils';
 import ERRORS from './errors';
 import plugProvider from '../Inpage/index';
@@ -26,6 +27,10 @@ const backgroundController = new BackgroundController({
   name: 'bg-script',
   trustedSources: ['plug-content-script', 'notification-port'],
 });
+
+const notificationManager = new NotificationManager(
+  extension.extension.getURL('../assets/icons/plug.svg'),
+);
 
 backgroundController.start();
 
@@ -73,9 +78,15 @@ extension.runtime.onMessage.addListener((message, _, sendResponse) => {
   const { params, type } = message;
   const keyringHandler = getKeyringHandler(type, keyring);
   if (!keyringHandler) return;
-  keyringHandler(params).then((response) => {
-    sendResponse(response);
-  });
+  keyringHandler(params)
+    .then((response) => {
+      sendResponse(response);
+    })
+    .catch(() => {
+      const keyringErrorMessage = getKeyringErrorMessage(type);
+      const errorMessage = keyringErrorMessage ? `Unexpected error while ${keyringErrorMessage}` : 'Unexpected error';
+      notificationManager.notificateError(errorMessage);
+    });
   // Usually we would not return, but it seems firefox needs us to
   return true; // eslint-disable-line
 });
@@ -101,7 +112,12 @@ const secureController = async (callback, controller) => {
     callback(ERRORS.INITIALIZED_ERROR, null);
     return;
   }
-  controller();
+
+  try {
+    await controller();
+  } catch (e) {
+    notificationManager.notificateError(e.message);
+  }
 };
 
 backgroundController.exposeController('isConnected', async (opts, url) => secureController(opts.callback, async () => {
@@ -221,6 +237,7 @@ backgroundController.exposeController(
   'requestBalance',
   async (opts, metadata, accountId) => secureController(opts.callback, async () => {
     const { callback, message, sender } = opts;
+
     storage.get(keyring.currentWalletId.toString(), async (state) => {
       const apps = state?.[keyring.currentWalletId]?.apps || {};
       if (
@@ -602,6 +619,34 @@ backgroundController.exposeController(
         callback(ERRORS.BALANCE_ERROR, null, [{ portId, callId }]);
       }
     }
+  },
+);
+
+backgroundController.exposeController(
+  'handleError',
+  async (opts, metadata, errorMessage) => {
+    const { message, sender, callback } = opts;
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
+
+    notificationManager.notificateError(errorMessage);
+
+    callback(ERRORS.CLIENT_ERROR(errorMessage), null, [{ portId, callId }]);
+    callback(null, true);
+  },
+);
+
+backgroundController.exposeController(
+  'handleTimeout',
+  async (opts, metadata, errorMessage) => {
+    const { message, sender, callback } = opts;
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
+
+    notificationManager.notificateTimeout(errorMessage);
+
+    callback(ERRORS.CLIENT_ERROR(errorMessage), null, [{ portId, callId }]);
+    callback(null, true);
   },
 );
 

@@ -1453,6 +1453,44 @@
     treeverse "^1.0.4"
     walk-up-path "^1.0.0"
 
+"@npmcli/arborist@^2.8.3":
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@npmcli/arborist/-/arborist-2.9.0.tgz#b9940c0a795740c47a38245bbb90612b6b8453f5"
+  integrity sha512-21DTow2xC0GlkowlE4zOu99UY21nSymW14fHZmB0yeAqhagmttJPmCUZXU+ngJmJ/Dwe5YP9QJUTgEVRLqnwcg==
+  dependencies:
+    "@isaacs/string-locale-compare" "^1.0.1"
+    "@npmcli/installed-package-contents" "^1.0.7"
+    "@npmcli/map-workspaces" "^1.0.2"
+    "@npmcli/metavuln-calculator" "^1.1.0"
+    "@npmcli/move-file" "^1.1.0"
+    "@npmcli/name-from-folder" "^1.0.1"
+    "@npmcli/node-gyp" "^1.0.1"
+    "@npmcli/package-json" "^1.0.1"
+    "@npmcli/run-script" "^1.8.2"
+    bin-links "^2.2.1"
+    cacache "^15.0.3"
+    common-ancestor-path "^1.0.1"
+    json-parse-even-better-errors "^2.3.1"
+    json-stringify-nice "^1.1.4"
+    mkdirp "^1.0.4"
+    mkdirp-infer-owner "^2.0.0"
+    npm-install-checks "^4.0.0"
+    npm-package-arg "^8.1.5"
+    npm-pick-manifest "^6.1.0"
+    npm-registry-fetch "^11.0.0"
+    pacote "^11.3.5"
+    parse-conflict-json "^1.1.1"
+    proc-log "^1.0.0"
+    promise-all-reject-late "^1.0.0"
+    promise-call-limit "^1.0.1"
+    read-package-json-fast "^2.0.2"
+    readdir-scoped-modules "^1.1.0"
+    rimraf "^3.0.2"
+    semver "^7.3.5"
+    ssri "^8.0.1"
+    treeverse "^1.0.4"
+    walk-up-path "^1.0.0"
+
 "@npmcli/ci-detect@^1.2.0", "@npmcli/ci-detect@^1.3.0":
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@npmcli/ci-detect/-/ci-detect-1.3.0.tgz#6c1d2c625fb6ef1b9dea85ad0a5afcbef85ef22a"
@@ -10370,6 +10408,12 @@ react-swipeable-views@^0.13.9:
     react-swipeable-views-utils "^0.13.9"
     warning "^4.0.1"
 
+react-toastify@^8.0.3:
+  version "8.0.3"
+  resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-8.0.3.tgz#7fbf65f69ec357aab8dd03c1496f9177aa92409a"
+  integrity sha512-rv3koC7f9lKKSkdpYgo/TGzgWlrB/aaiUInF1DyV7BpiM4kyTs+uhu6/r8XDMtBY2FOIHK+FlK3Iv7OzpA/tCA==
+  dependencies:
+    clsx "^1.1.1"
 react-test-renderer@^17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-17.0.2.tgz#4cd4ae5ef1ad5670fc0ef776e8cc7e1231d9866c"
