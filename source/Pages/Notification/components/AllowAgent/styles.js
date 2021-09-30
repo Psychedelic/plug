@@ -29,5 +29,6 @@ export default makeStyles({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
+    cursor: 'pointer',
   },
 });
