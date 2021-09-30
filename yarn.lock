@@ -1058,15 +1058,6 @@
     joi "^17.4.0"
     uuid "^8.3.2"
 
-"@fleekhq/browser-rpc@^2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@fleekhq/browser-rpc/-/browser-rpc-2.0.3.tgz#d85e4ebd593aad2f2d8b56bab259e3947f623bfa"
-  integrity sha512-TFj5/kOMoBqNUBp7Kf/ONrkXTVhhLcATlJYiUZmVWi8KRb+wtR2/Osvm0TrBxepUahT3Sv8bDPjMa11hg00iRQ==
-  dependencies:
-    extensionizer "^1.0.1"
-    joi "^17.4.0"
-    uuid "^8.3.2"
-
 "@gar/promisify@^1.0.1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.2.tgz#30aa825f11d438671d585bd44e7fd564535fc210"
@@ -1424,45 +1415,7 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@npmcli/arborist@*", "@npmcli/arborist@^2.3.0", "@npmcli/arborist@^2.5.0":
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/@npmcli/arborist/-/arborist-2.9.0.tgz#b9940c0a795740c47a38245bbb90612b6b8453f5"
-  integrity sha512-21DTow2xC0GlkowlE4zOu99UY21nSymW14fHZmB0yeAqhagmttJPmCUZXU+ngJmJ/Dwe5YP9QJUTgEVRLqnwcg==
-  dependencies:
-    "@isaacs/string-locale-compare" "^1.0.1"
-    "@npmcli/installed-package-contents" "^1.0.7"
-    "@npmcli/map-workspaces" "^1.0.2"
-    "@npmcli/metavuln-calculator" "^1.1.0"
-    "@npmcli/move-file" "^1.1.0"
-    "@npmcli/name-from-folder" "^1.0.1"
-    "@npmcli/node-gyp" "^1.0.1"
-    "@npmcli/package-json" "^1.0.1"
-    "@npmcli/run-script" "^1.8.2"
-    bin-links "^2.2.1"
-    cacache "^15.0.3"
-    common-ancestor-path "^1.0.1"
-    json-parse-even-better-errors "^2.3.1"
-    json-stringify-nice "^1.1.4"
-    mkdirp "^1.0.4"
-    mkdirp-infer-owner "^2.0.0"
-    npm-install-checks "^4.0.0"
-    npm-package-arg "^8.1.5"
-    npm-pick-manifest "^6.1.0"
-    npm-registry-fetch "^11.0.0"
-    pacote "^11.3.5"
-    parse-conflict-json "^1.1.1"
-    proc-log "^1.0.0"
-    promise-all-reject-late "^1.0.0"
-    promise-call-limit "^1.0.1"
-    read-package-json-fast "^2.0.2"
-    readdir-scoped-modules "^1.1.0"
-    rimraf "^3.0.2"
-    semver "^7.3.5"
-    ssri "^8.0.1"
-    treeverse "^1.0.4"
-    walk-up-path "^1.0.0"
-
-"@npmcli/arborist@^2.8.3":
+"@npmcli/arborist@^2.3.0", "@npmcli/arborist@^2.5.0", "@npmcli/arborist@^2.8.3":
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/@npmcli/arborist/-/arborist-2.9.0.tgz#b9940c0a795740c47a38245bbb90612b6b8453f5"
   integrity sha512-21DTow2xC0GlkowlE4zOu99UY21nSymW14fHZmB0yeAqhagmttJPmCUZXU+ngJmJ/Dwe5YP9QJUTgEVRLqnwcg==
