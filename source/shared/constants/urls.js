@@ -7,3 +7,7 @@ export const dabForm = 'https://dab-ooo.typeform.com/token-list';
 export const customTokensUrl = 'https://docs.plugwallet.ooo/getting-started/custom-tokens/';
 export const buyCyclesUrl = 'https://docs.plugwallet.ooo/resources/buying-cycles/';
 export const entrepotUrl = 'https://entrepot.app/#marketplace';
+
+export const getICRocksAccountUrl = (accountId) => `https://ic.rocks/account/${accountId}`;
+export const getICRocksTransactionUrl = (transactionHash) => `https://ic.rocks/transaction/${transactionHash}`;
+export const getICRocksPrincipalUrl = (canisterId) => `https://ic.rocks/principal/${canisterId}`;

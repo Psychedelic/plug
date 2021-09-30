@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography';
 import {
-  AppItem, Dialog, WhitelistContainer, WhitelistItem,
+  AppItem, Dialog, CanisterInfoContainer, CanisterInfoItem,
 } from '@ui';
 import ThinkingEmoji from '@assets/icons/thinking-emoji.svg';
 import { useApps } from '@hooks';
@@ -18,7 +18,7 @@ const Apps = () => {
   const [selectedApp, setSelectedApp] = useState(null);
 
   const [openDetail, setOpenDetail] = useState(false);
-  const [whitelist, setWhitelist] = useState([]);
+  const [canistersInfo, setCanistersInfo] = useState([]);
 
   const handleRemoveApp = (app) => {
     removeApp(app.url);
@@ -31,7 +31,7 @@ const Apps = () => {
   };
 
   const handleOpenDetail = (app) => () => {
-    setWhitelist(app.whitelist);
+    setCanistersInfo(app.cansitersInfo ?? []);
     setOpenDetail(true);
   };
 
@@ -91,11 +91,11 @@ const Apps = () => {
             onClose={() => setOpenDetail(false)}
             open={openDetail}
             component={(
-              <WhitelistContainer style={{ padding: '0 24px' }}>
-                {
-                  whitelist.map((id) => <WhitelistItem canisterId={id} />)
-                }
-              </WhitelistContainer>
+              <CanisterInfoContainer className={classes.canisterInfoContainer}>
+                {canistersInfo.map(
+                  (canister) => (<CanisterInfoItem key={canister.id} canister={canister} />),
+                )}
+              </CanisterInfoContainer>
             )}
           />
         )
