@@ -36,30 +36,25 @@ backgroundController.start();
 
 const fetchCanistersInfo = async (whitelist) => {
   if (whitelist && whitelist.length > 0) {
-    try {
-      const canistersInfo = await Promise.all(whitelist.map(async (id) => {
-        const canisterInfo = await PlugController.getCanisterInfo(id);
+    const canistersInfo = await Promise.all(whitelist.map(async (id) => {
+      let canisterInfo = { id };
 
-        if (canisterInfo) {
-          return {
-            id,
-            ...canisterInfo,
-          };
-        }
+      try {
+        const fetchedCanisterInfo = await PlugController.getCanisterInfo(id);
+        canisterInfo = { id, ...fetchedCanisterInfo };
+      } catch (error) {
+        console.error(error);
+      }
 
-        return { id };
-      }));
+      return canisterInfo;
+    }));
 
-      const sortedCanistersInfo = canistersInfo.sort((a, b) => {
-        if (a.name && !b.name) return -1;
-        return 1;
-      });
+    const sortedCanistersInfo = canistersInfo.sort((a, b) => {
+      if (a.name && !b.name) return -1;
+      return 1;
+    });
 
-      return sortedCanistersInfo;
-    } catch (error) {
-      console.error(error);
-      return [];
-    }
+    return sortedCanistersInfo;
   }
 
   return [];
