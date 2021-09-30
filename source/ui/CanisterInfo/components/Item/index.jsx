@@ -105,7 +105,7 @@ export default CanisterInfoItem;
 CanisterInfoItem.displayName = 'CanisterInfoItem';
 
 CanisterInfoItem.defaultProps = {
-  className: undefined,
+  className: '',
 };
 
 CanisterInfoItem.propTypes = {
