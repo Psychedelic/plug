@@ -18,7 +18,7 @@ export default Container;
 
 Container.defaultProps = {
   big: false,
-  className: undefined,
+  className: '',
 };
 
 Container.propTypes = {
