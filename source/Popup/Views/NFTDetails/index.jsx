@@ -36,7 +36,6 @@ const NFTDetails = () => {
     navigator.navigate('home', TABS.NFTS);
   };
 
-  const openNFT = (url) => () => extension.tabs.create({ url });
   const openMarketplace = (url) => () => extension.tabs.create({ url: url || entrepotUrl });
   const collection = useMemo(() => collections?.find(
     (col) => col.name === nft?.collection,
@@ -52,7 +51,7 @@ const NFTDetails = () => {
         right={null}
       />
       <div className={classes.container}>
-        <NFTDisplayer url={nft?.url} onClick={openNFT(nft?.url)} className={classes.image} />
+        <NFTDisplayer url={nft?.url} className={classes.image} interactive />
         <div className={classes.buttonContainer}>
           <Button
             variant="default"
