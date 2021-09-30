@@ -32,7 +32,6 @@ export default makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     width: '100%',
-    marginBottom: 20,
   },
   iconButton: {
     marginLeft: 'auto',
