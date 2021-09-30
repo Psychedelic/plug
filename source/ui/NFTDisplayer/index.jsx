@@ -21,7 +21,9 @@ const TAG_PROPS = {
   },
 };
 
-const NFTDisplayer = ({ url, className, onClick }) => {
+const NFTDisplayer = ({
+  url, className, onClick, interactive,
+}) => {
   const classes = useStyles();
   const [type, setType] = useState('image/png');
 
@@ -41,7 +43,7 @@ const NFTDisplayer = ({ url, className, onClick }) => {
         className={`${classes.iframeWrapper} ${className}`}
         onClick={onClick}
       >
-        <span className={classes.iframeClick} />
+        {!interactive && <span className={classes.iframeClick} />}
         <Tag
           className={className}
           {...customProps}
@@ -65,11 +67,13 @@ NFTDisplayer.propTypes = {
   url: PropTypes.string.isRequired,
   className: PropTypes.string,
   onClick: PropTypes.func,
+  interactive: PropTypes.bool,
 };
 
 NFTDisplayer.defaultProps = {
   className: '',
   onClick: () => {},
+  interactive: false,
 };
 
 export default NFTDisplayer;
