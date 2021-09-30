@@ -36,7 +36,7 @@ const NFTDetails = () => {
     navigator.navigate('home', TABS.NFTS);
   };
 
-  const openNFT = (url) => () => extension.tabs.create({ url: url });
+  const openNFT = (url) => () => extension.tabs.create({ url });
   const openMarketplace = (url) => () => extension.tabs.create({ url: url || entrepotUrl });
   const collection = useMemo(() => collections?.find(
     (col) => col.name === nft?.collection,

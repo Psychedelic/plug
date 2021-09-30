@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import useStyles from './styles.js';
+import useStyles from './styles';
 
 const TYPE_MAP = {
   'video/mp4': 'video',
@@ -21,7 +21,7 @@ const TAG_PROPS = {
   },
 };
 
-const NFTDisplayer = ({ url, className, onClick, }) => {
+const NFTDisplayer = ({ url, className, onClick }) => {
   const classes = useStyles();
   const [type, setType] = useState('image/png');
 
@@ -41,7 +41,7 @@ const NFTDisplayer = ({ url, className, onClick, }) => {
         className={`${classes.iframeWrapper} ${className}`}
         onClick={onClick}
       >
-        <span className={classes.iframeClick}/>
+        <span className={classes.iframeClick} />
         <Tag
           className={className}
           {...customProps}
@@ -69,6 +69,7 @@ NFTDisplayer.propTypes = {
 
 NFTDisplayer.defaultProps = {
   className: '',
+  onClick: () => {},
 };
 
 export default NFTDisplayer;
