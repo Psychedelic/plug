@@ -17,13 +17,13 @@ import store from '@redux/store';
 import { Layout } from '@components';
 import extension from 'extensionizer';
 import PropTypes from 'prop-types';
-
+import { ChevronDown } from 'react-feather';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { setAccountInfo } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import clsx from 'clsx';
 import ErrorScreen from '../NotificationError';
 import initConfig from '../../../../locales';
-
 import useStyles from './styles';
 
 i18n.use(initReactI18next).init(initConfig);
@@ -45,6 +45,15 @@ const AllowAgent = ({
   const [error, setError] = useState(false);
 
   const { url, icons } = metadata || {};
+
+  const canisters = args?.canistersInfo || [];
+  const canistersLength = canisters.length;
+  const maxDispayCanisters = 2;
+
+  const displayCanister = canistersLength < maxDispayCanisters
+    ? canistersLength : maxDispayCanisters;
+
+  const [expand, setExpand] = useState(false);
 
   const handleAllowAgent = async (status) => {
     const success = await portRPC.call('handleAllowAgent', [
@@ -68,12 +77,30 @@ const AllowAgent = ({
 
     if (!args?.updateWhitelist || args?.showList) {
       extension.windows.update(extension.windows.WINDOW_ID_CURRENT, {
-        height: Math.min(422 + 37 * args?.whitelist.length || 0, 600),
+        height: 355
+          + (canistersLength > 2 ? 76 : 30)
+          + 65 * (canistersLength > 2 ? 2 : canistersLength),
       });
     } else {
       handleAllowAgent(CONNECTION_STATUS.accepted).then(() => window?.close?.());
     }
   }, []);
+
+  const toggleExpand = () => {
+    let height;
+
+    if (expand) {
+      height = 355 + 76 + 65 * Math.min(canistersLength, 2);
+    } else {
+      height = 355 + 76 + 65 * Math.min(canistersLength, 5);
+    }
+
+    extension.windows.update(extension.windows.WINDOW_ID_CURRENT, {
+      height,
+    });
+
+    setExpand((prevState) => !prevState);
+  };
 
   return !args?.updateWhitelist || args?.showList ? (
     <Provider store={store}>
@@ -92,10 +119,33 @@ const AllowAgent = ({
                 />
 
                 <CanisterInfoContainer>
-                  {args?.canistersInfo?.map((canister) => (
-                    <CanisterInfoItem key={canister.id} canister={canister} />
-                  ))}
+                  {
+                    canisters.slice(0, displayCanister).map((canister) => (
+                      <CanisterInfoItem key={canister.id} canister={canister} />
+                    ))
+                  }
+                  {
+                    expand
+                    && canisters.slice(displayCanister).map((canister) => (
+                      <CanisterInfoItem key={canister.id} canister={canister} />
+                    ))
+                  }
                 </CanisterInfoContainer>
+
+                {
+                  canistersLength > maxDispayCanisters
+                  && (
+                  <div className={classes.expandContainer} onClick={toggleExpand}>
+                    <span className={classes.expand}>
+                      {expand ? 'Collapse canisters' : `Review ${canistersLength - maxDispayCanisters} more canisters`}
+                    </span>
+                    <ChevronDown
+                      className={clsx(classes.chevron, expand && classes.rotate)}
+                      size={26}
+                    />
+                  </div>
+                  )
+                }
 
                 <div className={classes.buttonContainer}>
                   <Button

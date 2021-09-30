@@ -22,6 +22,6 @@ export default makeStyles((theme) => ({
     overflow: 'hidden',
     width: 370,
     textAlign: 'center',
-    marginBottom: `${theme.spacing(1)}px`,
+    marginBottom: `${theme.spacing(0.5)}px`,
   },
 }));

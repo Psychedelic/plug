@@ -12,4 +12,22 @@ export default makeStyles({
   arrowUpRight: {
     cursor: 'pointer',
   },
+  chevron: {
+    transition: 'transform .2s ease-in-out',
+    marginLeft: 3,
+  },
+  rotate: {
+    transform: 'rotate(180deg)',
+  },
+  expand: {
+    color: '#000000',
+    fontSize: 16,
+    fontWeight: 500,
+  },
+  expandContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
 });

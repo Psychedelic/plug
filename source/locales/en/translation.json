@@ -294,7 +294,7 @@
     "notificationError": "We’re sorry, something weird happened. Please close the pop up and try again"
   },
   "whitelist": {
-    "title": "wants to allow calls to the following canisters:"
+    "title": "wants permission to use these canisters:"
   },
   "exportIdentity": {
     "title": "Export DFX Identity",

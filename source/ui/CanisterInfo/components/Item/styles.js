@@ -7,11 +7,11 @@ export default makeStyles((theme) => ({
     alignItems: 'center',
     width: '100%',
     padding: '1px 0',
-    '&:last-child > div > div': {
-      borderBottom: 0,
-    },
-    '&:last-child > div': {
-      borderBottom: 0,
+    minHeight: 45,
+    marginBottom: 20,
+
+    '&:last-child': {
+      marginBottom: 0,
     },
   },
   image: {
@@ -22,14 +22,17 @@ export default makeStyles((theme) => ({
     objectFit: 'cover',
   },
   infoBox: {
-    maxWidth: '200px',
+    maxWidth: '250px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    height: '100%',
   },
   canisterInfoIdItem: {
-    borderBottom: '1px solid #e0e0e0',
-    minHeight: '80px',
     display: 'flex',
     alignItems: 'center',
     width: '100%',
+    marginBottom: 20,
   },
   iconButton: {
     marginLeft: 'auto',
