@@ -40,7 +40,7 @@ const NFTDisplayer = ({
   if (Tag === 'iframe') {
     return (
       <div
-        className={`${classes.iframeWrapper} ${className}`}
+        className={`${classes.iframeWrapper} ${interactive ? classes.interactive : className}`}
         onClick={onClick}
       >
         {!interactive && <span className={classes.iframeClick} />}

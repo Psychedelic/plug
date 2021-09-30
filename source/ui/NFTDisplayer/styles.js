@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles(() => ({
+export default makeStyles((theme) => ({
   iframeWrapper: {
     display: 'flex',
     flexDirection: 'column',
@@ -20,5 +20,11 @@ export default makeStyles(() => ({
     width: '100%',
     height: '100%',
     borderRadius: 10,
+  },
+  interactive: {
+    borderRadius: 15,
+    width: `calc(100% - ${theme.spacing(4)}px)`,
+    height: 280,
+    margin: 'auto',
   },
 }));
