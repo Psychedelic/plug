@@ -8,11 +8,7 @@ export default makeStyles((theme) => ({
     height: 320 + 118,
   },
   textContainer: {
-    display: 'flex',
-    flexDirection: 'column',
     padding: `0 ${theme.spacing(2)}px ${theme.spacing(0.5)}px`,
-    justifyContent: 'space-between',
-    height: 44,
   },
   centerTextContainer: {
     display: 'flex',

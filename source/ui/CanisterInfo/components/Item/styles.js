@@ -7,8 +7,8 @@ export default makeStyles((theme) => ({
     alignItems: 'center',
     width: '100%',
     padding: '1px 0',
-    marginBottom: 20,
     minHeight: 45,
+    marginBottom: 20,
 
     '&:last-child': {
       marginBottom: 0,
@@ -32,6 +32,7 @@ export default makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     width: '100%',
+    marginBottom: 20,
   },
   iconButton: {
     marginLeft: 'auto',

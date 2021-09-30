@@ -28,7 +28,11 @@ function NFTCollection({ collection }) {
             className={classes.nftContainer}
             onClick={() => handleNftClick(nft)}
           >
-            <NFTDisplayer url={nft.url} className={classes.nft} />
+            <NFTDisplayer
+              url={nft.url}
+              className={classes.nft}
+              onClick={() => handleNftClick(nft)}
+            />
             <Typography className={classes.id} variant="subtitle1">{nft.name || `#${nft.index}`}</Typography>
           </div>
         ))

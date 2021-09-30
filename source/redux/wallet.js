@@ -1,14 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ACTIVITY_STATUS, ACTIVITY_TYPES } from '@shared/constants/activity';
 import {
-  formatAssetBySymbol, formatAssets, TOKENS, TOKEN_IMAGES,
+  formatAssetBySymbol,
+  formatAssets,
+  TOKENS,
+  TOKEN_IMAGES,
 } from '@shared/constants/currencies';
 
 /* eslint-disable no-param-reassign */
 export const walletSlice = createSlice({
   name: 'wallet',
   initialState: {
-    name: 'Main IC Wallet',
+    name: 'Account 1',
     principalId: '',
     accountId: '',
     emoji: '👽',
@@ -40,7 +43,9 @@ export const walletSlice = createSlice({
     setTransactions: (state, action) => {
       const mapTransaction = (trx) => {
         const asset = formatAssetBySymbol(
-          trx?.amount, trx?.currency?.symbol, action?.payload?.icpPrice,
+          trx?.amount,
+          trx?.currency?.symbol,
+          action?.payload?.icpPrice,
         );
         const transaction = {
           ...asset,
@@ -70,7 +75,10 @@ export const walletSlice = createSlice({
       state.assetsLoading = action.payload;
     },
     setCollections: (state, action) => {
-      if (state.walletNumber === action.payload?.walletNumber && action.payload.collections) {
+      if (
+        state.walletNumber === action.payload?.walletNumber
+        && action.payload.collections
+      ) {
         state.collections = action.payload?.collections?.sort(
           (a, b) => b?.tokens.length - a?.tokens.length,
         );
@@ -80,12 +88,10 @@ export const walletSlice = createSlice({
       state.collectionsLoading = action.payload;
     },
     removeNFT: (state, action) => {
-      const collections = state.collections.map(
-        (col) => ({
-          ...col,
-          tokens: col.tokens.filter((token) => token.id !== action.payload?.id),
-        }),
-      );
+      const collections = state.collections.map((col) => ({
+        ...col,
+        tokens: col.tokens.filter((token) => token.id !== action.payload?.id),
+      }));
       state.collections = collections.filter((col) => col.tokens.length);
     },
   },

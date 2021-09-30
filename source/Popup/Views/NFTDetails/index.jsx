@@ -13,7 +13,7 @@ import AttributesImg from '@assets/icons/nfts/attributes.png';
 import AboutImg from '@assets/icons/nfts/about.png';
 import { Typography } from '@material-ui/core';
 import { setSelectedNft } from '@redux/nfts';
-import { entrepotUrl } from '@shared/constants/urls';
+import { Maximize2 } from 'react-feather';
 import extension from 'extensionizer';
 
 import Section from './components/section';
@@ -36,7 +36,8 @@ const NFTDetails = () => {
     navigator.navigate('home', TABS.NFTS);
   };
 
-  const openMarketplace = (url) => () => extension.tabs.create({ url: url || entrepotUrl });
+  const openNFT = (url) => () => extension.tabs.create({ url });
+
   const collection = useMemo(() => collections?.find(
     (col) => col.name === nft?.collection,
   ),
@@ -47,18 +48,23 @@ const NFTDetails = () => {
     <Layout>
       <Header
         left={<LinkButton value={t('common.back')} onClick={handleBack} startIcon={BackIcon} />}
-        center={nft?.name || `${collection?.name ?? ''} #${nft.index}`}
+        center={`#${nft.index}`}
         right={null}
       />
       <div className={classes.container}>
-        <NFTDisplayer url={nft?.url} className={classes.image} />
+        <NFTDisplayer url={nft?.url} className={classes.image} interactive />
         <div className={classes.buttonContainer}>
           <Button
             variant="default"
-            value={t('nfts.goToMarketplace')}
+            value={t('nfts.expandNFT')}
             style={{ width: '96%' }}
             fullWidth
-            onClick={openMarketplace(nft?.marketplaceUrl)}
+            onClick={openNFT(nft?.url)}
+            startIcon={(
+              <Maximize2
+                size="20"
+              />
+            )}
           />
           <Button
             variant="rainbow"
