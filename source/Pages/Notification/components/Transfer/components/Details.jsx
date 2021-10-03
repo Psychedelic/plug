@@ -36,14 +36,14 @@ const Details = ({
       <IncomingAction image={image} url={url} action={t('transfer.withdraw')} />
 
       <div className={classes.cyclesContainer}>
-        <Typography variant="h4">{t('transfer.amount').replace('{token}', asset.name)}</Typography>
+        <Typography variant="h5" component="h4">{t('transfer.amount').replace('{token}', asset.name)}</Typography>
 
         <div className={classes.amountContainer}>
           <span className={classes.amount}>
             <NumberFormat value={amount} displayType="text" thousandSeparator="," />
             <span className={classes.trillion}>{asset.value}</span>
           </span>
-          <Typography variant="subtitle1">
+          <Typography variant="subtitle1" className={classes.amountUsd}>
             <USDFormat value={value} />
           </Typography>
         </div>
