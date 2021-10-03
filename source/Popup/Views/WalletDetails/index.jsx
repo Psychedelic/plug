@@ -133,7 +133,6 @@ const WalletDetails = () => {
 
   const handleEditWalletName = () => {
     if (walletName.length > 20) {
-      console.log('err??');
       toast('Wallet name should not be longer than 20 characters.', { type: 'error' });
     } else {
       setEdit(false);
