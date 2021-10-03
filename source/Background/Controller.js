@@ -625,7 +625,6 @@ backgroundController.exposeController(
 backgroundController.exposeController(
   'handleError',
   async (opts, metadata, errorMessage) => {
-    console.log(opts, metadata, errorMessage);
     const { message, sender, callback } = opts;
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
