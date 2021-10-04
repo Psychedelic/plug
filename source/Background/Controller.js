@@ -141,15 +141,12 @@ backgroundController.exposeController('disconnect', async (opts, url) => secureC
   storage.get(keyring.currentWalletId.toString(), (response) => {
     const apps = response?.[keyring.currentWalletId]?.apps;
 
-    if (apps) {
-      if (!apps[url]) {
-        opts.callback(ERRORS.CONNECTION_ERROR, null);
-        return;
-      }
-
+    if (apps?.[url]) {
       const newApps = removeAppByURL({ apps, url });
 
       storage.set({ [keyring.currentWalletId]: { apps: newApps } });
+    } else {
+      opts.callback(ERRORS.CONNECTION_ERROR, null);
     }
   });
 }));
