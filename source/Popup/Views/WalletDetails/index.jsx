@@ -28,6 +28,7 @@ import { Info /* , Globe,  ChevronDown */ } from 'react-feather';
 // import MuiSwitch from '@material-ui/core/Switch';
 // import { withStyles } from '@material-ui/core/styles';
 import { icIdsUrl } from '@shared/constants/urls';
+import { toast } from 'react-toastify';
 import useStyles from './styles';
 import { updateWalletDetails } from '../../../redux/wallet';
 
@@ -130,25 +131,32 @@ const WalletDetails = () => {
     setOpenEmojis(false);
   };
 
-  const onSave = () => {
-    sendMessage(
-      {
-        type: HANDLER_TYPES.EDIT_PRINCIPAL,
-        params: {
-          walletNumber,
-          name: walletName,
-          emoji: currentEmoji,
+  const handleEditWalletName = () => {
+    if (walletName.length > 20) {
+      toast('Wallet name should not be longer than 20 characters.', { type: 'error' });
+    } else {
+      setEdit(false);
+      setOpenEmojis(false);
+
+      sendMessage(
+        {
+          type: HANDLER_TYPES.EDIT_PRINCIPAL,
+          params: {
+            walletNumber,
+            name: walletName,
+            emoji: currentEmoji,
+          },
         },
-      },
-      () => {
-        dispatch(updateWalletDetails({
-          name: walletName,
-          emoji: currentEmoji,
-        }));
-        setWalletName(walletName);
-        setCurrentEmoji(currentEmoji);
-      },
-    );
+        () => {
+          dispatch(updateWalletDetails({
+            name: walletName,
+            emoji: currentEmoji,
+          }));
+          setWalletName(walletName);
+          setCurrentEmoji(currentEmoji);
+        },
+      );
+    }
   };
 
   return (
@@ -205,7 +213,7 @@ const WalletDetails = () => {
                     <img
                       className={classes.icon}
                       src={BlueCheck}
-                      onClick={() => { setEdit(false); setOpenEmojis(false); onSave(); }}
+                      onClick={handleEditWalletName}
                     />
                   )
                   : (
