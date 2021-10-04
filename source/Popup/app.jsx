@@ -26,7 +26,7 @@ const App = () => {
         extension.tabs.create({ url: 'options.html' });
       }
     });
-  });
+  }, []);
 
   return (
     initialRoute
