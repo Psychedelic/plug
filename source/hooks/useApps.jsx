@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import extension from 'extensionizer';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import { removeAppByURL } from '@shared/utils/apps';
 
 const storage = extension.storage.local;
 
@@ -11,22 +12,16 @@ const useApps = () => {
   const { walletNumber } = useSelector((state) => state.wallet);
 
   const handleRemoveApp = (url) => {
-    const filteredApps = Object.keys(apps)
-      .filter((key) => apps[key].url !== url)
-      .reduce((obj, key) => {
-        const newObj = obj;
-        newObj[key] = apps[key];
-        return newObj;
-      }, {});
+    const newApps = removeAppByURL({ apps, url });
 
-    setApps(filteredApps);
+    setApps(newApps);
   };
 
   useEffect(() => {
     storage.get(walletNumber?.toString(), (state) => {
-      const lsApps = state?.[walletNumber]?.apps;
-      if (lsApps) {
-        setApps(lsApps);
+      const appsFromExtensionStorage = state?.[walletNumber]?.apps;
+      if (appsFromExtensionStorage) {
+        setApps(appsFromExtensionStorage);
       }
     });
   }, [walletNumber]);
