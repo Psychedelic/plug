@@ -22,9 +22,14 @@ export default makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    height: 50,
+    minHeight: 50,
+    width: 270,
+  },
+  amountUsd: {
+    wordBreak: 'break-word',
   },
   amount: {
+    wordBreak: 'break-word',
     color: theme.palette.common.blue,
     fontSize: '25px',
     lineHeight: '25px',
