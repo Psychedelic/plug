@@ -385,13 +385,19 @@ backgroundController.exposeController(
     const { message, sender, callback } = opts;
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
+    const { canisterId, requestType } = requestInfo;
     try {
       storage.get(keyring.currentWalletId.toString(), async (state) => {
-        const apps = state?.[keyring.currentWalletId]?.apps || {};
+        const app = state?.[keyring.currentWalletId]?.apps?.[metadata.url] || {};
         if (
-          apps?.[metadata.url]?.status !== CONNECTION_STATUS.accepted
+          app.status !== CONNECTION_STATUS.accepted
         ) {
           callback(ERRORS.CONNECTION_ERROR, null);
+          return;
+        }
+
+        if (requestType !== 'read_state' && canisterId && !(canisterId in Object.values(app.whitelist))) {
+          callback(ERRORS.CANISTER_NOT_WHITLESTED_ERROR(canisterId), null);
           return;
         }
 

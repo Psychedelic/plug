@@ -4,6 +4,10 @@ export default {
     message:
       'You are not connected. You must call window.ic.plug.requestConnect() and have the user accept the popup before you call this method.',
   },
+  CANISTER_NOT_WHITLESTED_ERROR: (canisterId) => ({
+    code: 401,
+    message: `Plug Identity is not allowed to make requests to canister Id: ${canisterId}`
+  }),
   BALANCE_ERROR: {
     code: 400,
     message: 'Insufficient balance or balance unavailable.',
