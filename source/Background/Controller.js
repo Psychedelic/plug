@@ -479,6 +479,15 @@ backgroundController.exposeController(
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
 
+    let canistersInfo = [];
+
+    const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
+
+
+    if (isValidWhitelist) {
+      canistersInfo = await fetchCanistersInfo(whitelist);
+    }
+
     if (!whitelist.every((canisterId) => validatePrincipalId(canisterId))) {
       callback(ERRORS.CANISTER_ID_ERROR, null);
       return;
@@ -502,6 +511,7 @@ backgroundController.exposeController(
                 metadataJson: JSON.stringify(metadata),
                 argsJson: JSON.stringify({
                   whitelist,
+                  canisterInfo,
                   updateWhitelist: true,
                   showList: false,
                 }),
@@ -529,6 +539,7 @@ backgroundController.exposeController(
               metadataJson: JSON.stringify(metadata),
               argsJson: JSON.stringify({
                 whitelist,
+                canistersInfo,
                 updateWhitelist: true,
                 showList: true,
               }),
