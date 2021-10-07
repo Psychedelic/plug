@@ -56,8 +56,11 @@ const AllowAgent = ({
   const [expand, setExpand] = useState(false);
 
   const handleAllowAgent = async (status) => {
-    const whitelist = {};
-    canistersInfo.forEach(canisterInfo => whitelist[canisterInfo.id] = { canisterInfo })
+    const whitelist = canisters.reduce(
+      (accum, canisterInfo) => ({ ...accum, [canisterInfo.id]: canisterInfo }),
+      {},
+    );
+
     const success = await portRPC.call('handleAllowAgent', [
       url,
       { status, whitelist },

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import qs from 'query-string';
+import PropTypes from 'prop-types';
 import { useTranslation, initReactI18next } from 'react-i18next';
 import { PortRPC } from '@fleekhq/browser-rpc';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -32,14 +32,14 @@ const portRPC = new PortRPC({
 portRPC.start();
 
 const Sign = ({
-  args, callId, portId
+  args, callId, portId,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
 
-  const {requestInfo} = args;
+  const { requestInfo } = args;
 
   const handleResponse = async (status) => {
     const success = await portRPC.call('handleSign', [status, args.payload, callId, portId]);
@@ -104,3 +104,9 @@ const Sign = ({
 };
 
 export default Sign;
+
+Sign.propTypes = {
+  args: PropTypes.string.isRequired,
+  callId: PropTypes.string.isRequired,
+  portId: PropTypes.string.isRequired,
+};

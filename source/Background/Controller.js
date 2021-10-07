@@ -7,6 +7,7 @@ import PlugController from '@psychedelic/plug-controller';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
 import { XTC_FEE } from '@shared/constants/addresses';
+// import { PROTECTED_CATEGORIES } from '@shared/constants/canisters';
 import NotificationManager from '../lib/NotificationManager';
 
 import SIZES from '../Pages/Notification/components/Transfer/constants';
@@ -14,7 +15,6 @@ import { getKeyringHandler, HANDLER_TYPES, getKeyringErrorMessage } from './Keyr
 import { validateTransferArgs, validateBurnArgs } from './utils';
 import ERRORS from './errors';
 import plugProvider from '../Inpage/index';
-import { PROTECTED_CATEGORIES } from '@shared/constants/canisters';
 
 const DEFAULT_CURRENCY_MAP = {
   ICP: 0,
@@ -397,21 +397,22 @@ backgroundController.exposeController(
           return;
         }
 
-        if (requestType !== 'read_state' && canisterId && !(canisterId in Object.values(app.whitelist))) {
+        if (requestType !== 'read_state' && canisterId && !(canisterId in app.whitelist)) {
           callback(ERRORS.CANISTER_NOT_WHITLESTED_ERROR(canisterId), null);
           return;
         }
 
         const canisterInfo = app.whitelist[canisterId];
+        const shouldShowModal = requestInfo.manual || (requestInfo.requestType === 'call' /*  && canisterInfo.category in PROTECTED_CATEGORIES  */);
 
-        if ((requestInfo.requestType === 'call' /*&& canisterInfo.category in PROTECTED_CATEGORIES*/) || requestInfo.manual) {
+        if (shouldShowModal) {
           const url = qs.stringifyUrl({
             url: 'notification.html',
             query: {
               callId,
               portId,
               type: 'sign',
-              argsJson: JSON.stringify({ requestInfo, payload }),
+              argsJson: JSON.stringify({ requestInfo, payload, canisterInfo }),
             },
           });
 
@@ -448,7 +449,7 @@ backgroundController.exposeController(
         const parsedPayload = new Uint8Array(Object.values(payload));
 
         const signed = await keyring.sign(parsedPayload.buffer);
-        callback(null, [...new Uint8Array(signed)], [{ callId, portId }]);
+        callback(null, new Uint8Array(signed), [{ callId, portId }]);
         callback(null, true);
       } catch (e) {
         callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
@@ -483,7 +484,6 @@ backgroundController.exposeController(
 
     const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
 
-
     if (isValidWhitelist) {
       canistersInfo = await fetchCanistersInfo(whitelist);
     }
@@ -511,7 +511,7 @@ backgroundController.exposeController(
                 metadataJson: JSON.stringify(metadata),
                 argsJson: JSON.stringify({
                   whitelist,
-                  canisterInfo,
+                  canistersInfo,
                   updateWhitelist: true,
                   showList: false,
                 }),
@@ -576,8 +576,6 @@ backgroundController.exposeController(
         ? response.whitelist
         : [];
 
-      const cansitersInfo = await fetchCanistersInfo(whitelist);
-
       const newApps = {
         ...apps,
         [url]: {
@@ -585,7 +583,6 @@ backgroundController.exposeController(
           status: status || CONNECTION_STATUS.rejected,
           date: new Date().toISOString(),
           whitelist,
-          cansitersInfo,
         },
       };
       storage.set({ [keyring.currentWalletId]: { apps: newApps } });

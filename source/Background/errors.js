@@ -6,7 +6,7 @@ export default {
   },
   CANISTER_NOT_WHITLESTED_ERROR: (canisterId) => ({
     code: 401,
-    message: `Plug Identity is not allowed to make requests to canister Id: ${canisterId}`
+    message: `Plug Identity is not allowed to make requests to canister Id: ${canisterId}`,
   }),
   BALANCE_ERROR: {
     code: 400,
