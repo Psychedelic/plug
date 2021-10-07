@@ -14,6 +14,7 @@ import { getKeyringHandler, HANDLER_TYPES, getKeyringErrorMessage } from './Keyr
 import { validateTransferArgs, validateBurnArgs } from './utils';
 import ERRORS from './errors';
 import plugProvider from '../Inpage/index';
+import { PROTECTED_CATEGORIES } from '@shared/constants/canisters';
 
 const DEFAULT_CURRENCY_MAP = {
   ICP: 0,
@@ -401,7 +402,9 @@ backgroundController.exposeController(
           return;
         }
 
-        if (requestInfo.requestType === 'call' || requestInfo.manual) {
+        const canisterInfo = app.whitelist[canisterId];
+
+        if ((requestInfo.requestType === 'call' /*&& canisterInfo.category in PROTECTED_CATEGORIES*/) || requestInfo.manual) {
           const url = qs.stringifyUrl({
             url: 'notification.html',
             query: {
