@@ -4,6 +4,10 @@ export default {
     message:
       'You are not connected. You must call window.ic.plug.requestConnect() and have the user accept the popup before you call this method.',
   },
+  CANISTER_NOT_WHITLESTED_ERROR: (canisterId) => ({
+    code: 401,
+    message: `Plug Identity is not allowed to make requests to canister Id: ${canisterId}`,
+  }),
   BALANCE_ERROR: {
     code: 400,
     message: 'Insufficient balance or balance unavailable.',
@@ -14,6 +18,7 @@ export default {
     message: 'The transactions was rejected.',
   },
   AGENT_REJECTED: { code: 401, message: 'The agent creation was rejected.' },
+  SIGN_REJECTED: { code: 401, message: 'The sign was rejected.' },
   INITIALIZED_ERROR: { code: 403, message: 'Plug must be initialized.' },
   CLIENT_ERROR: (message) => ({ code: 400, message }),
   SERVER_ERROR: (message) => ({ code: 500, message }),

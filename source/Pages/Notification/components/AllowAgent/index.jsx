@@ -56,9 +56,14 @@ const AllowAgent = ({
   const [expand, setExpand] = useState(false);
 
   const handleAllowAgent = async (status) => {
+    const whitelist = canisters.reduce(
+      (accum, canisterInfo) => ({ ...accum, [canisterInfo.id]: canisterInfo }),
+      {},
+    );
+
     const success = await portRPC.call('handleAllowAgent', [
       url,
-      { status, whitelist: args?.whitelist },
+      { status, whitelist },
       callId,
       portId,
     ]);
@@ -135,15 +140,15 @@ const AllowAgent = ({
                 {
                   canistersLength > maxDispayCanisters
                   && (
-                  <div className={classes.expandContainer} onClick={toggleExpand}>
-                    <span className={classes.expand}>
-                      {expand ? 'Collapse canisters' : `Review ${canistersLength - maxDispayCanisters} more canisters`}
-                    </span>
-                    <ChevronDown
-                      className={clsx(classes.chevron, expand && classes.rotate)}
-                      size={26}
-                    />
-                  </div>
+                    <div className={classes.expandContainer} onClick={toggleExpand}>
+                      <span className={classes.expand}>
+                        {expand ? 'Collapse canisters' : `Review ${canistersLength - maxDispayCanisters} more canisters`}
+                      </span>
+                      <ChevronDown
+                        className={clsx(classes.chevron, expand && classes.rotate)}
+                        size={26}
+                      />
+                    </div>
                   )
                 }
 

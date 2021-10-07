@@ -7,6 +7,7 @@ import PlugController from '@psychedelic/plug-controller';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
 import { XTC_FEE } from '@shared/constants/addresses';
+// import { PROTECTED_CATEGORIES } from '@shared/constants/canisters';
 import { removeAppByURL } from '@shared/utils/apps';
 import NotificationManager from '../lib/NotificationManager';
 
@@ -395,26 +396,83 @@ backgroundController.exposeController(
 );
 
 backgroundController.exposeController(
-  'sign',
-  async (opts, payload, metadata) => {
-    const { callback } = opts;
+  'requestSign',
+  async (opts, payload, metadata, requestInfo) => {
+    const { message, sender, callback } = opts;
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
+    const { canisterId, requestType } = requestInfo;
     try {
       storage.get(keyring.currentWalletId.toString(), async (state) => {
-        const apps = state?.[keyring.currentWalletId]?.apps || {};
+        const app = state?.[keyring.currentWalletId]?.apps?.[metadata.url] || {};
         if (
-          apps?.[metadata.url]?.status !== CONNECTION_STATUS.accepted
+          app.status !== CONNECTION_STATUS.accepted
         ) {
           callback(ERRORS.CONNECTION_ERROR, null);
           return;
         }
-        const parsedPayload = payload instanceof Buffer
-          ? payload
-          : Buffer.from(Object.values(payload));
-        const signed = await keyring.sign(parsedPayload);
-        callback(null, [...new Uint8Array(signed)]);
+
+        if (requestType !== 'read_state' && canisterId && !(canisterId in app.whitelist)) {
+          callback(ERRORS.CANISTER_NOT_WHITLESTED_ERROR(canisterId), null);
+          return;
+        }
+
+        const canisterInfo = app.whitelist[canisterId];
+        const shouldShowModal = requestInfo.manual || (requestInfo.requestType === 'call' /*  && canisterInfo.category in PROTECTED_CATEGORIES  */);
+
+        if (shouldShowModal) {
+          const url = qs.stringifyUrl({
+            url: 'notification.html',
+            query: {
+              callId,
+              portId,
+              type: 'sign',
+              argsJson: JSON.stringify({ requestInfo, payload, canisterInfo }),
+            },
+          });
+
+          const height = keyring?.isUnlocked
+            ? SIZES.appConnectHeight
+            : SIZES.loginHeight;
+
+          extension.windows.create({
+            url,
+            type: 'popup',
+            width: SIZES.width,
+            height,
+          });
+        } else {
+          const parsedPayload = new Uint8Array(Object.values(payload));
+
+          const signed = await keyring.sign(parsedPayload.buffer);
+          callback(null, [...new Uint8Array(signed)]);
+        }
       });
     } catch (e) {
       callback(ERRORS.SERVER_ERROR(e), null);
+    }
+  },
+);
+
+backgroundController.exposeController(
+  'handleSign',
+  async (opts, status, payload, callId, portId) => {
+    const { callback } = opts;
+
+    if (status === CONNECTION_STATUS.accepted) {
+      try {
+        const parsedPayload = new Uint8Array(Object.values(payload));
+
+        const signed = await keyring.sign(parsedPayload.buffer);
+        callback(null, new Uint8Array(signed), [{ callId, portId }]);
+        callback(null, true);
+      } catch (e) {
+        callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
+        callback(null, false);
+      }
+    } else {
+      callback(ERRORS.SIGN_REJECTED, null, [{ portId, callId }]);
+      callback(null, true); // Return true to close the modal
     }
   },
 );
@@ -436,6 +494,14 @@ backgroundController.exposeController(
 
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
+
+    let canistersInfo = [];
+
+    const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
+
+    if (isValidWhitelist) {
+      canistersInfo = await fetchCanistersInfo(whitelist);
+    }
 
     if (!whitelist.every((canisterId) => validatePrincipalId(canisterId))) {
       callback(ERRORS.CANISTER_ID_ERROR, null);
@@ -460,6 +526,7 @@ backgroundController.exposeController(
                 metadataJson: JSON.stringify(metadata),
                 argsJson: JSON.stringify({
                   whitelist,
+                  canistersInfo,
                   updateWhitelist: true,
                   showList: false,
                 }),
@@ -487,6 +554,7 @@ backgroundController.exposeController(
               metadataJson: JSON.stringify(metadata),
               argsJson: JSON.stringify({
                 whitelist,
+                canistersInfo,
                 updateWhitelist: true,
                 showList: true,
               }),
@@ -523,8 +591,6 @@ backgroundController.exposeController(
         ? response.whitelist
         : [];
 
-      const cansitersInfo = await fetchCanistersInfo(whitelist);
-
       const newApps = {
         ...apps,
         [url]: {
@@ -532,7 +598,6 @@ backgroundController.exposeController(
           status: status || CONNECTION_STATUS.rejected,
           date: new Date().toISOString(),
           whitelist,
-          cansitersInfo,
         },
       };
       storage.set({ [keyring.currentWalletId]: { apps: newApps } });
