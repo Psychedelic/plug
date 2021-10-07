@@ -8,6 +8,7 @@ import { validatePrincipalId } from '@shared/utils/ids';
 import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
 import { XTC_FEE } from '@shared/constants/addresses';
 // import { PROTECTED_CATEGORIES } from '@shared/constants/canisters';
+import { removeAppByURL } from '@shared/utils/apps';
 import NotificationManager from '../lib/NotificationManager';
 
 import SIZES from '../Pages/Notification/components/Transfer/constants';
@@ -133,6 +134,20 @@ backgroundController.exposeController('isConnected', async (opts, url) => secure
       );
     } else {
       callback(null, false);
+    }
+  });
+}));
+
+backgroundController.exposeController('disconnect', async (opts, url) => secureController(opts.callback, async () => {
+  storage.get(keyring.currentWalletId.toString(), (response) => {
+    const apps = response?.[keyring.currentWalletId]?.apps;
+
+    if (apps?.[url]) {
+      const newApps = removeAppByURL({ apps, url });
+
+      storage.set({ [keyring.currentWalletId]: { apps: newApps } });
+    } else {
+      opts.callback(ERRORS.CONNECTION_ERROR, null);
     }
   });
 }));
