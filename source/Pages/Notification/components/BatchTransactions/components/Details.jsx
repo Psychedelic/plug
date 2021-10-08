@@ -11,7 +11,7 @@ import useStyles from '../styles';
 import SIZES from '../constants';
 
 const Details = ({
-  amount: e8s, image, url, requestCount,
+  amount: e8s, image, url, transactionsCount,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -25,9 +25,9 @@ const Details = ({
   extension.windows.update(
     extension.windows.WINDOW_ID_CURRENT,
     {
-      height: requestCount > 1
+      height: transactionsCount > 1
         ? SIZES.detailsHeightBig
-        : SIZES.detailHeightSmall,
+        : SIZES.detailsHeightSmall,
     },
   );
 
@@ -59,5 +59,5 @@ Details.propTypes = {
   amount: PropTypes.number.isRequired,
   image: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
-  requestCount: PropTypes.number.isRequired,
+  transactionsCount: PropTypes.number.isRequired,
 };

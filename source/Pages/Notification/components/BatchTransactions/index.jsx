@@ -41,19 +41,21 @@ const BatchTransactions = ({
   const {
     showNext,
     showPrevious,
+
     confirm,
-    decline,
     confirmAll,
     declineAll,
 
     transactions: _transactions,
     currentIndex,
+    response,
 
     data,
     error,
     loading,
   } = useRPCTransactions(transactions, callId, portId);
 
+  const isCurrentTransaction = (response?.length ?? 0) === currentIndex;
   const transactionsCount = _transactions.length;
 
   const tabs = [
@@ -63,8 +65,9 @@ const BatchTransactions = ({
         <Details
           url={url}
           image={icons[0] || null}
-          // amount={(requests?.[currentRequest] || args)?.amount}
           transactionsCount={transactionsCount}
+          // TODO: Get amount
+          // amount={(requests?.[currentRequest] || args)?.amount}
         />
       ),
     },
@@ -74,8 +77,6 @@ const BatchTransactions = ({
         <Data
           data={data}
           transactionsCount={transactionsCount}
-          // TODO: Get principal ID
-          // principalId={principalId}
         />
       ),
     },
@@ -89,58 +90,49 @@ const BatchTransactions = ({
         <>
           {transactionsCount > 1 && (
             <Stepper
+              isActive={isCurrentTransaction}
               current={currentIndex + 1}
               total={transactionsCount}
               showNext={showNext}
               showPrevious={showPrevious}
             />
           )}
-          <>
-            <Tabs
-              tabs={tabs}
-              selectedTab={selectedTab}
-              handleChangeTab={handleChangeTab}
-            />
-            <div className={classes.buttonsWrapper}>
-              <div className={classes.buttonContainer}>
-                <Button
-                  variant="default"
-                  value={t('common.decline')}
-                  onClick={decline}
-                  fullWidth
-                  style={{ width: '96%' }}
-                  disabled={loading}
-                />
-                <Button
-                  variant="rainbow"
-                  value={t('common.confirm')}
-                  onClick={confirm}
-                  fullWidth
-                  style={{ width: '96%' }}
-                  wrapperStyle={{ textAlign: 'right' }}
-                  loading={loading}
-                />
-              </div>
-              {transactionsCount > 1 && (
-                <>
-                  <LinkButton
-                    value={`${t('transfer.decline')} ${transactionsCount} ${t(
-                      'transfer.transactions',
-                    )}`}
-                    onClick={declineAll}
-                    style={{ marginTop: 24 }}
-                  />
-                  <LinkButton
-                    value={`${t('transfer.confirm')} ${transactionsCount} ${t(
-                      'transfer.transactions',
-                    )}`}
-                    onClick={confirmAll}
-                    style={{ marginTop: 24 }}
-                  />
-                </>
-              )}
+          <Tabs
+            tabs={tabs}
+            selectedTab={selectedTab}
+            handleChangeTab={handleChangeTab}
+          />
+          <div className={classes.buttonsWrapper}>
+            <div className={classes.buttonContainer}>
+              <Button
+                variant="default"
+                value={t('common.decline')}
+                onClick={declineAll}
+                fullWidth
+                style={{ width: '96%' }}
+                disabled={loading || !isCurrentTransaction}
+              />
+              <Button
+                variant="rainbow"
+                value={t('common.confirm')}
+                onClick={confirm}
+                fullWidth
+                style={{ width: '96%' }}
+                wrapperStyle={{ textAlign: 'right' }}
+                loading={loading}
+                disabled={!isCurrentTransaction}
+              />
             </div>
-          </>
+            {transactionsCount > 1 && (
+              <LinkButton
+                value={`${t('common.confirm')} ${transactionsCount} ${t(
+                  'transfer.transactions',
+                )}`}
+                onClick={confirmAll}
+                style={{ marginTop: 24 }}
+              />
+            )}
+          </div>
         </>
       )}
     </Layout>

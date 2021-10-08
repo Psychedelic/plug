@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import { DataDisplay } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { PortRPC } from '@fleekhq/browser-rpc';
-import { v4 as uuidv4 } from 'uuid';
 
 const portRPC = new PortRPC({
   name: 'notification-port',
@@ -17,7 +16,7 @@ const TRANSACTION_STATUS = {
   DECLINED: 'declined',
 };
 
-const useTransactions = (_transactions, callId, portId) => {
+const useTransactions = (transactions, callId, portId) => {
   const { t } = useTranslation();
 
   const [error, setError] = useState(false);
@@ -25,31 +24,9 @@ const useTransactions = (_transactions, callId, portId) => {
   const [response, setResponse] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const transactions = useMemo(() => {
-    const transactionsWithIds = [
-      ..._transactions.map((transaction) => ({ ...transaction, id: uuidv4 })),
-    ];
-
-    return transactionsWithIds;
-  }, []);
-
-  const process = async (status) => {
-    setResponse([
-      ...response,
-      {
-        ...transactions[currentIndex],
-        status,
-      },
-    ]);
-
-    transactions.filter(
-      (transaction) => transaction.id !== transactions[currentIndex].id,
-    );
-  };
-
   const processAll = async (status) => {
     setLoading(true);
-    const confirmedTransactions = _transactions.map((transaction) => ({
+    const confirmedTransactions = transactions.map((transaction) => ({
       ...transaction,
       status,
     }));
@@ -68,21 +45,35 @@ const useTransactions = (_transactions, callId, portId) => {
     setLoading(false);
   };
 
+  const process = async (status) => {
+    setResponse([
+      ...response,
+      {
+        ...transactions[currentIndex],
+        status,
+      },
+    ]);
+
+    if (response.length + 1 === transactions.length) {
+      await processAll(status);
+    } else {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+
   const confirm = () => process(TRANSACTION_STATUS.CONFIRMED);
-
   const decline = () => process(TRANSACTION_STATUS.DECLINED);
-
   const confirmAll = () => processAll(TRANSACTION_STATUS.CONFIRMED);
-
   const declineAll = () => processAll(TRANSACTION_STATUS.DECLINED);
 
   const showNext = () => {
     setCurrentIndex(currentIndex + 1);
   };
-
   const showPrevious = () => {
     setCurrentIndex(currentIndex - 1);
   };
+
+  const stringifiedArgs = useMemo(() => JSON.stringify(transactions[currentIndex]?.args ?? {}), []);
 
   const data = useMemo(() => {
     const config = [
@@ -93,7 +84,7 @@ const useTransactions = (_transactions, callId, portId) => {
       },
       {
         label: 'parameters',
-        value: transactions[currentIndex]?.args || t('common.null'),
+        value: stringifiedArgs || t('common.null'),
       },
     ];
 
@@ -101,7 +92,7 @@ const useTransactions = (_transactions, callId, portId) => {
       label: t(`common.${label}`),
       component: <DataDisplay value={value} />,
     }));
-  }, []);
+  }, [currentIndex]);
 
   return {
     showNext,
@@ -111,6 +102,7 @@ const useTransactions = (_transactions, callId, portId) => {
     confirmAll,
     declineAll,
 
+    response,
     transactions,
     currentIndex,
 

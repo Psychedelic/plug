@@ -40,32 +40,11 @@ export default makeStyles((theme) => ({
     fontSize: 20,
     marginLeft: 3,
   },
-  stepper: {
-    width: '100%',
-    height: 40,
-    background: '#B5B7BB',
-    color: 'white',
-    display: 'flex',
-    alignItems: 'center',
-  },
   arrow: {
     fontWeight: 500,
     color: 'white',
     cursor: 'pointer',
     position: 'absolute',
-  },
-  requestCenter: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    margin: 'auto',
-    width: 'fit-content',
-  },
-  left: {
-    left: theme.spacing(2),
-  },
-  right: {
-    right: theme.spacing(2),
   },
   buttonsWrapper: {
     padding: '0 24px',
