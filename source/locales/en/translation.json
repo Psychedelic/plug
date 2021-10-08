@@ -68,6 +68,8 @@
     "fee": "Fee",
     "memo": "Memo",
     "null": "null",
+    "methodName": "Method name",
+    "parameters": "Parameters",
     "accountId": "Account ID",
     "principalId": "Principal ID",
     "canisterId": "Canister ID",

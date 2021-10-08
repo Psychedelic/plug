@@ -13,7 +13,7 @@ import NotificationManager from '../lib/NotificationManager';
 
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import { getKeyringHandler, HANDLER_TYPES, getKeyringErrorMessage } from './Keyring';
-import { validateTransferArgs, validateBurnArgs } from './utils';
+import { validateTransferArgs, validateBurnArgs, validateTransactions } from './utils';
 import ERRORS from './errors';
 import plugProvider from '../Inpage/index';
 
@@ -580,6 +580,96 @@ backgroundController.exposeController(
 
 backgroundController.exposeController(
   'handleAllowAgent',
+  async (opts, url, response, callId, portId) => {
+    const { callback } = opts;
+    storage.get(keyring.currentWalletId.toString(), async (state) => {
+      const apps = state?.[keyring.currentWalletId]?.apps || {};
+      const status = response.status === CONNECTION_STATUS.rejectedAgent
+        ? CONNECTION_STATUS.accepted
+        : response.status;
+      const whitelist = response.status === CONNECTION_STATUS.accepted
+        ? response.whitelist
+        : [];
+
+      const newApps = {
+        ...apps,
+        [url]: {
+          ...apps[url],
+          status: status || CONNECTION_STATUS.rejected,
+          date: new Date().toISOString(),
+          whitelist,
+        },
+      };
+      storage.set({ [keyring.currentWalletId]: { apps: newApps } });
+    });
+    if (response?.status === CONNECTION_STATUS.accepted) {
+      try {
+        const publicKey = await keyring.getPublicKey();
+        callback(null, publicKey, [{ portId, callId }]);
+        callback(null, true);
+      } catch (e) {
+        callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
+        callback(null, false);
+      }
+    } else {
+      plugProvider.deleteAgent();
+      callback(ERRORS.AGENT_REJECTED, null, [{ portId, callId }]);
+      callback(null, true); // Return true to close the modal
+    }
+  },
+);
+
+backgroundController.exposeController(
+  'batchTransactions',
+  async (opts, metadata, transactions) => secureController(opts.callback, async () => {
+    const { message, sender, callback } = opts;
+
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
+
+    storage.get(keyring.currentWalletId.toString(), async (state) => {
+      const apps = state?.[keyring.currentWalletId]?.apps || {};
+
+      if (apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
+        const transactionsError = validateTransactions(transactions);
+
+        if (transactionsError) {
+          callback(transactionsError, null);
+          return;
+        }
+
+        const url = qs.stringifyUrl({
+          url: 'notification.html',
+          query: {
+            callId,
+            portId,
+            metadataJson: JSON.stringify(metadata),
+            argsJson: JSON.stringify({ transactions }),
+            type: 'batchTransactions',
+          },
+        });
+
+        const height = keyring?.isUnlocked
+          ? SIZES.detailHeightSmall
+          : SIZES.loginHeight;
+
+        extension.windows.create({
+          url,
+          type: 'popup',
+          width: SIZES.width,
+          height,
+          top: 65,
+          left: metadata.pageWidth - SIZES.width,
+        });
+      } else {
+        callback(ERRORS.CONNECTION_ERROR, null);
+      }
+    });
+  }),
+);
+
+backgroundController.exposeController(
+  'handleBatchTransactions',
   async (opts, url, response, callId, portId) => {
     const { callback } = opts;
     storage.get(keyring.currentWalletId.toString(), async (state) => {

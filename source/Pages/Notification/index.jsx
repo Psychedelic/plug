@@ -7,6 +7,7 @@ import store from '../../redux/store';
 import ProviderWrapper from '../../shared/ProviderWrapper';
 import Login from '../../Popup/Views/Login';
 import AppConnection from './components/AppConnection';
+import BatchTransactions from './components/BatchTransactions';
 import Transfer from './components/Transfer';
 import Balance from './components/Balance';
 import AllowAgent from './components/AllowAgent';
@@ -14,6 +15,7 @@ import BurnXTC from './components/BurnXTC';
 import Sign from './components/Sign';
 
 const NOTIFICATION_COMPONENTS = {
+  batchTransactions: BatchTransactions,
   transfer: Transfer,
   balance: Balance,
   connect: AppConnection,

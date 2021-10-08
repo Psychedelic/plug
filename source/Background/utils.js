@@ -30,3 +30,14 @@ export const validateBurnArgs = ({ to, amount }) => {
   }
   return message ? ERRORS.CLIENT_ERROR(message) : null;
 };
+
+export const validateTransactions = (transactions) => {
+  console.log(transactions);
+
+  // TODO: Add validation for transactions
+  if (false) {
+    return 'Validate transactions error';
+  }
+
+  return null;
+};
