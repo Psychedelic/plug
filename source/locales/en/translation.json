@@ -76,7 +76,8 @@
     "create": "Create",
     "account": "Account",
     "learnMore": "Learn more",
-    "send": "Send"
+    "send": "Send",
+    "methodName": "Method Name"
   },
   "apps": {
     "title": "Connected Apps",
@@ -323,5 +324,24 @@
     "title": "wants to transfer cycles to a canister",
     "amount": "Amount of {token}",
     "canister": "Canister ID"
+  },
+  "assetsWarning": {
+    "details": {
+      "title": "Details"
+    },
+    "data": {
+      "title": "Data"
+    }
+  },
+  "sign": {
+    "warning": {
+      "action": "wants to interact with your assets",
+      "unknownAmount": "Unknown Amount",
+      "title": "Important Warning",
+      "description": "This app is interacting with your assets in an unsafe way (bypassing you and interacting directly with the asset). Make sure you fully trust this app before confirming, otherwise you could lose your assets.",
+      "modalTitle": "Why is the Token Amount Unknown?",
+      "modalText": "Because this app is bypassing you (unsafe) and interacting directly with the asset, which means you (and Plug) can't read the amounts.",
+      "modalLearnMore": "Learn more about Trusting Apps"
+    }
   }
 }
