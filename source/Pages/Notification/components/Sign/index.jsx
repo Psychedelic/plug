@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Layout } from '@components';
 
-import useRequests from './hooks/useRequests';
+import useRequest from './hooks/useRequest';
 import initConfig from '../../../../locales';
 import { Details, Data, WarningModal } from './components';
 import useStyles from './styles';
@@ -26,16 +26,14 @@ const AssetsWarning = ({
   const classes = useStyles();
   const [showModal, setShowModal] = useState(false);
 
-  // MOCKED
-  const shouldWarn = true;
+  const shouldWarn = !(args?.requestInfo?.decodedArguments);
 
-  // Data is mocked in hook
   const {
-    requests,
-    currentRequest,
+    request,
     data,
-    handleRequest,
-  } = useRequests([args], callId, portId);
+    handleAccept,
+    handleDecline,
+  } = useRequest(args, callId, portId);
 
   const handleBackdropClick = (event) => {
     if (showModal) {
@@ -54,7 +52,7 @@ const AssetsWarning = ({
       label: t('assetsWarning.details.title'),
       component: <Details
         url={url}
-        image={icons[0] || null}
+        icon={icons?.[0] || null}
         toggleModal={toggleModal}
         shouldWarn={shouldWarn}
       />,
@@ -104,14 +102,14 @@ const AssetsWarning = ({
               <Button
                 variant="default"
                 value={t('common.decline')}
-                onClick={() => handleRequest(requests[currentRequest], 'declined')}
+                onClick={handleDecline}
                 fullWidth
                 style={{ width: '96%' }}
               />
               <Button
                 variant="rainbow"
                 value={t('common.confirm')}
-                onClick={() => handleRequest(requests[currentRequest], 'accepted')}
+                onClick={handleAccept}
                 fullWidth
                 style={continueButtonStyles}
                 wrapperStyle={{ textAlign: 'right' }}

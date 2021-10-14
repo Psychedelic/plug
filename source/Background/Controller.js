@@ -427,7 +427,10 @@ backgroundController.exposeController(
               callId,
               portId,
               type: 'sign',
-              argsJson: JSON.stringify({ requestInfo, payload, canisterInfo }),
+              metadataJson: JSON.stringify(metadata),
+              argsJson: JSON.stringify({
+                requestInfo, payload, canisterInfo,
+              }),
             },
           });
 

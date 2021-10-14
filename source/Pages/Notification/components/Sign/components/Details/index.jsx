@@ -2,12 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import extension from 'extensionizer';
+import { IncomingAction } from '@ui';
+
 import DisplayBox from './components/DisplayBox';
 import WarningBox from './components/WarningBox';
 import SIZES from '../../constants';
 import useStyles from './styles';
 
-const Details = ({ shouldWarn, toggleModal }) => {
+const Details = ({
+  shouldWarn, toggleModal, url, icon,
+}) => {
   const { t } = useTranslation();
   const classes = useStyles();
 
@@ -22,13 +26,7 @@ const Details = ({ shouldWarn, toggleModal }) => {
 
   return (
     <div className={classes.detailsWrapper}>
-      <div className={classes.detailsImage} />
-      <h1 className={classes.canisterId}>
-        2ji5m-raaaa-aaaah-aanoa-cai
-      </h1>
-      <p className={classes.description}>
-        {t('sign.warning.action')}
-      </p>
+      <IncomingAction url={url} image={icon} action={t('sign.warning.action')} />
       <DisplayBox
         toggleModal={toggleModal}
         assetType="XTC"
@@ -41,10 +39,13 @@ const Details = ({ shouldWarn, toggleModal }) => {
 Details.propTypes = {
   shouldWarn: PropTypes.bool,
   toggleModal: PropTypes.func.isRequired,
+  url: PropTypes.string.isRequired,
+  icon: PropTypes.string,
 };
 
 Details.defaultProps = {
   shouldWarn: false,
+  icon: '',
 };
 
 export default Details;
