@@ -2,46 +2,51 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
-import { CURRENCIES } from '@shared/constants/currencies';
 import YellowInfo from '@assets/icons/yellow-info.svg';
 import useStyles from '../styles';
 
+const findAmountInArguments = (request) => (request?.methodName === 'transfer'
+  ? request?.decodedArguments?.[0]?.amount
+  : request?.decodedArguments?.[1]);
+
 const DisplayBox = ({
-  toggleModal, amount: propAmount, assetType, img,
+  toggleModal, img, request,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const [amount, setAmount] = useState('');
   const [value, setValue] = useState('');
-  const [assetSymbol, setAssetSymbol] = useState('???');
-  const [assetImg, setAssetImg] = useState(false);
+  const [assetImg, setAssetImg] = useState(request.canisterIcon);
 
   useEffect(() => {
-    const currency = CURRENCIES.get(assetType);
+    // Tengo los args?
+    //     Si: Es transfer?
+    //        Si: Mostramos data especial ---> Ver si category === nft o no
+    //        No: Mostramos normalaso los details con los args
+    //     No: Mostrar warning modal
 
-    setAmount(propAmount);
+    const methodAmount = findAmountInArguments(request);
+    if (methodAmount) {
+      setAmount(methodAmount);
+    }
+    setAssetImg(request?.canisterIcon);
 
     // Handle for NFTS
-    if (assetType === 'NFT' && propAmount) {
-      setAssetSymbol('');
-      setAmount(propAmount.collection);
-      setValue(`#${propAmount.id}`);
+    if (request?.category === 'nft' && request?.canisterName) {
+      setAmount(request?.canisterName);
+
+      setValue(`#${request?.decodedArguments?.id}`);
     }
 
-    if (currency) {
-      setAssetImg(currency.image);
-      setAssetSymbol(currency.symbol);
-
-      if (propAmount) {
-        // get value of asset (ICP & WTC)
-        setValue('$420.420');
-      }
+    if (methodAmount) {
+      // TODO: get price of asset (ICP & XTC) and multiply
+      setValue('$420.420');
     }
 
     if (img.length) {
       setAssetImg(img);
     }
-  }, [img, assetType, propAmount]);
+  }, [img, request]);
 
   return (
     <div className={classes.assetContainer}>
@@ -52,7 +57,7 @@ const DisplayBox = ({
           </h2>
         ) : (
           <h2 className={`${classes.amountTitle} ${classes.yellowTitle}`}>
-            {t('sign.warning.unknownAmount')}
+            {t('sign.warning.unknownArguments')}
             <img
               src={YellowInfo}
               className={classes.yellowInfoIcon}
@@ -62,8 +67,7 @@ const DisplayBox = ({
           </h2>
         )}
         <p className={classes.amountDescription}>
-          <span>{amount || '?.??'}&nbsp;</span>
-          <span>{assetSymbol}</span>
+          <span>{amount || '???'}&nbsp;</span>
         </p>
       </div>
       { assetImg
@@ -75,12 +79,17 @@ const DisplayBox = ({
 
 DisplayBox.propTypes = {
   toggleModal: PropTypes.func.isRequired,
-  amount: PropTypes.oneOf([
-    PropTypes.obj,
-    PropTypes.string,
-  ]).isRequired,
-  assetType: PropTypes.string.isRequired,
   img: PropTypes.string,
+  request: PropTypes.shape({
+    canisterDescription: PropTypes.string,
+    canisterIcon: PropTypes.string,
+    canisterId: PropTypes.string,
+    canisterName: PropTypes.string,
+    canisterUrl: PropTypes.string,
+    methodName: PropTypes.string,
+    category: PropTypes.string,
+    decodedArguments: PropTypes.any, // eslint-disable-line
+  }).isRequired,
 };
 
 DisplayBox.defaultProps = {

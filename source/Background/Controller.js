@@ -7,7 +7,7 @@ import PlugController from '@psychedelic/plug-controller';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
 import { XTC_FEE } from '@shared/constants/addresses';
-// import { PROTECTED_CATEGORIES } from '@shared/constants/canisters';
+import { /* PROTECTED_CATEGORIES, */ PROTECTED_IDS } from '@shared/constants/canisters';
 import { removeAppByURL } from '@shared/utils/apps';
 import NotificationManager from '../lib/NotificationManager';
 
@@ -416,9 +416,11 @@ backgroundController.exposeController(
           callback(ERRORS.CANISTER_NOT_WHITLESTED_ERROR(canisterId), null);
           return;
         }
-
         const canisterInfo = app.whitelist[canisterId];
-        const shouldShowModal = requestInfo.manual || (requestInfo.requestType === 'call' /*  && canisterInfo.category in PROTECTED_CATEGORIES  */);
+        // TODO REMOVE THIS
+        const shouldShowModal = requestInfo.manual || (requestInfo.requestType === 'call' && !!canisterInfo.id && PROTECTED_IDS.includes(canisterInfo.id));
+        // const shouldShowModal = requestInfo.manual || (requestInfo.requestType === 'call'
+        // && !!canisterInfo.category && canisterInfo.category in PROTECTED_CATEGORIES);
 
         if (shouldShowModal) {
           const url = qs.stringifyUrl({

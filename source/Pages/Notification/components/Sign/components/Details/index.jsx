@@ -10,7 +10,7 @@ import SIZES from '../../constants';
 import useStyles from './styles';
 
 const Details = ({
-  shouldWarn, toggleModal, url, icon,
+  shouldWarn, toggleModal, url, icon, request,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -26,10 +26,10 @@ const Details = ({
 
   return (
     <div className={classes.detailsWrapper}>
-      <IncomingAction url={url} image={icon} action={t('sign.warning.action')} />
+      <IncomingAction url={url} image={icon} action={t('sign.warning.action', { canisterName: request.canisterName })} />
       <DisplayBox
         toggleModal={toggleModal}
-        assetType="XTC"
+        request={request}
       />
       { shouldWarn && (<WarningBox />)}
     </div>
@@ -41,6 +41,14 @@ Details.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   url: PropTypes.string.isRequired,
   icon: PropTypes.string,
+  request: PropTypes.shape({
+    canisterDescription: PropTypes.string,
+    canisterIcon: PropTypes.string,
+    canisterId: PropTypes.string,
+    canisterName: PropTypes.string,
+    canisterUrl: PropTypes.string,
+    methodName: PropTypes.string,
+  }).isRequired,
 };
 
 Details.defaultProps = {

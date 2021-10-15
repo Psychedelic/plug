@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { DataDisplay } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { PortRPC } from '@fleekhq/browser-rpc';
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 import { validateCanisterId } from '@shared/utils/ids';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
-
 
 const portRPC = new PortRPC({
   name: 'notification-port',
@@ -19,18 +18,20 @@ const formatRequest = ({ requestInfo, canisterInfo, payload }) => ({
   canisterId: requestInfo.canisterId,
   methodName: requestInfo.methodName,
   sender: requestInfo.sender,
-  arguments: requestInfo.decodedArguments || requestInfo.arguments,
+  arguments: requestInfo.arguments,
   canisterName: canisterInfo.name,
   canisterDescription: canisterInfo.description,
   canisterIcon: canisterInfo.icon,
   canisterUrl: canisterInfo.url,
+  decodedArguments: requestInfo.decodedArguments,
+  category: canisterInfo?.category,
   payload,
 });
 
 const useRequests = (incomingRequest, callId, portId) => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
-  const [request, setRequest] = useState(formatRequest(incomingRequest));
+  const [request] = useState(formatRequest(incomingRequest));
   const [response, setResponse] = useState([]);
   const [error, setError] = useState(false);
 
@@ -38,7 +39,6 @@ const useRequests = (incomingRequest, callId, portId) => {
   /* eslint-disable no-param-reassign */
   useEffect(() => {
     const address = request.cansiterId;
-
     if (validateCanisterId(address)) {
       setCanisterId(address);
     }
@@ -62,12 +62,15 @@ const useRequests = (incomingRequest, callId, portId) => {
 
   const handleDecline = () => handleResponse(CONNECTION_STATUS.rejected);
 
-  // MOCKED
   const config = [
-    { label: 'canisterId', value: canisterId },
+    { label: 'canisterId', value: request.canisterId },
     {
       label: 'methodName',
-      value: 'MOCKED_NAME',
+      value: request.methodName,
+    },
+    {
+      label: 'arguments',
+      value: request.decodedArguments || 'UNKNOWN',
     },
   ];
 

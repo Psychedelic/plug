@@ -335,12 +335,12 @@
   },
   "sign": {
     "warning": {
-      "action": "wants to interact with your assets",
-      "unknownAmount": "Unknown Amount",
+      "action": "wants to interact with {{canisterName}}",
+      "unknownArguments": "Unknown Arguments",
       "title": "Important Warning",
-      "description": "This app is interacting with your assets in an unsafe way (bypassing you and interacting directly with the asset). Make sure you fully trust this app before confirming, otherwise you could lose your assets.",
-      "modalTitle": "Why is the Token Amount Unknown?",
-      "modalText": "Because this app is bypassing you (unsafe) and interacting directly with the asset, which means you (and Plug) can't read the amounts.",
+      "description": "This app is interacting with your assets in an unsafe way, without providing a way for Plug (or you) to see what it's doing. Make sure you fully trust this app before confirming, otherwise you could lose your assets.",
+      "modalTitle": "Why are the Arguments Unknown?",
+      "modalText": "Because this app is not showing you what it's doing (unsafe), which means you (and Plug) can't read the arguments",
       "modalLearnMore": "Learn more about Trusting Apps"
     }
   }

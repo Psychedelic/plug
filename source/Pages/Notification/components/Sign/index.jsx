@@ -34,7 +34,6 @@ const AssetsWarning = ({
     handleAccept,
     handleDecline,
   } = useRequest(args, callId, portId);
-
   const handleBackdropClick = (event) => {
     if (showModal) {
       event.preventDefault();
@@ -55,6 +54,7 @@ const AssetsWarning = ({
         icon={icons?.[0] || null}
         toggleModal={toggleModal}
         shouldWarn={shouldWarn}
+        request={request}
       />,
     },
     {
