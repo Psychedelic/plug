@@ -1,4 +1,5 @@
 export const PROTECTED_CATEGORIES = ['nft', 'asset'];
+export const ASSET_CANISTER_IDS = ['aanaa-xaaaa-aaaah-aaeiq-cai', 'ryjl3-tyaaa-aaaaa-aaaba-cai'];
 export const PROTECTED_IDS = [
   'xkbqi-2qaaa-aaaah-qbpqq-cai',
   'uzhxd-ziaaa-aaaah-qanaq-cai',

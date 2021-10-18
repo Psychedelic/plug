@@ -4,17 +4,28 @@ import { useTranslation } from 'react-i18next';
 import extension from 'extensionizer';
 import { IncomingAction } from '@ui';
 
-import DisplayBox from './components/DisplayBox';
+import { ASSET_CANISTER_IDS } from '@shared/constants/canisters';
+
 import WarningBox from './components/WarningBox';
+import NFTDisplay from './components/NFTDisplay';
+import AssetDisplay from './components/AssetDisplay';
+import CanisterInfoDisplay from './components/CanisterInfoDisplay';
+
 import SIZES from '../../constants';
 import useStyles from './styles';
+
+const getDisplayComponent = (request) => {
+  const isTransfer = ['transfer', 'transferErc20', 'transfer_to', 'send_dfx'].includes(request?.methodName);
+  if (!isTransfer) return CanisterInfoDisplay;
+  return ASSET_CANISTER_IDS.includes(request?.canisterId) ? AssetDisplay : NFTDisplay;
+};
 
 const Details = ({
   shouldWarn, toggleModal, url, icon, request,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
-
+  console.log('request', request);
   const height = shouldWarn ? SIZES.detailsWarningHeight : SIZES.detailsNormalHeight;
 
   extension.windows.update(
@@ -23,13 +34,14 @@ const Details = ({
       height,
     },
   );
-
+  const Display = getDisplayComponent(request);
   return (
     <div className={classes.detailsWrapper}>
       <IncomingAction url={url} image={icon} action={t('sign.warning.action', { canisterName: request.canisterName })} />
-      <DisplayBox
+      <Display
         toggleModal={toggleModal}
         request={request}
+        shouldWarn={shouldWarn}
       />
       { shouldWarn && (<WarningBox />)}
     </div>

@@ -80,7 +80,7 @@ export const formatAssets = (assets = [], icpPrice) => {
 export const TOKENS = {
   ICP: {
     symbol: 'ICP',
-    canisterId: null,
+    canisterId: 'ryjl3-tyaaa-aaaaa-aaaba-cai',
     name: 'ICP',
     decimals: 5,
     amount: 0,

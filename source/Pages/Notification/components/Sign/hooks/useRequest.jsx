@@ -54,7 +54,7 @@ const useRequests = (incomingRequest, callId, portId) => {
     setError(!success);
     setLoading(false);
     window.close();
-
+    console.log('TODO HANDLE RESPONSE', response);
     setResponse(status);
   };
 
