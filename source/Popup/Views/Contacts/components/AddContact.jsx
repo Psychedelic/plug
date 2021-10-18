@@ -10,7 +10,7 @@ import { Typography } from '@material-ui/core';
 import { validatePrincipalId, validateAccountId } from '@shared/utils/ids';
 import useStyles from '../styles';
 
-const AddContact = ({ handleAddContact, contacts }) => {
+const AddContact = ({ addContact, contacts }) => {
   const { t } = useTranslation();
   const classes = useStyles();
 
@@ -25,6 +25,8 @@ const AddContact = ({ handleAddContact, contacts }) => {
     const { value } = e.target;
     setId(value.trim());
   };
+
+  const handleAddContact = () => addContact({ name, id, image: getRandomEmoji() });
 
   const validateContact = () => {
     const isValid = validatePrincipalId(id) || validateAccountId(id);
@@ -107,11 +109,7 @@ const AddContact = ({ handleAddContact, contacts }) => {
               || name === ''
               || !isValidId
             }
-            onClick={() => handleAddContact({
-              name,
-              id,
-              image: getRandomEmoji(),
-            })}
+            onClick={handleAddContact}
           />
         </Grid>
       </Grid>
@@ -122,6 +120,6 @@ const AddContact = ({ handleAddContact, contacts }) => {
 export default AddContact;
 
 AddContact.propTypes = {
-  handleAddContact: PropTypes.func.isRequired,
+  addContact: PropTypes.func.isRequired,
   contacts: PropTypes.arrayOf(PropTypes.object).isRequired,
 };

@@ -93,12 +93,13 @@ const IDInput = ({
                 input: clsx(
                   classes.input,
                   isValid === false && classes.inputInvalid,
+                  shouldDisplayContacts && classes.paddingRight,
                 ),
               }}
               fullWidth
               value={value}
               type="text"
-              onChange={(e) => onChange(e.target.value.trim())}
+              onChange={(e) => onChange(e.target.value)}
               placeholder={placeholder || t('send.inputId')}
             />
             <div className={classes.iconContainer}>
@@ -143,28 +144,28 @@ const IDInput = ({
             }}
           />
           {isContactsOpened && (
-          <ActionDialog
-            open={isContactsOpened}
-            title={t('contacts.addToContacts')}
-            content={(
-              <FormItem
-                label={t('contacts.name')}
-                smallLabel
-                component={(
-                  <TextInput
-                    fullWidth
-                    value={contactName}
-                    onChange={handleChangeContactName}
-                    type="text"
-                  />
-                )}
-              />
-            )}
-            button={t('common.add')}
-            buttonVariant="rainbow"
-            onClick={() => addContact()}
-            onClose={() => setIsContactsOpened(false)}
-          />
+            <ActionDialog
+              open={isContactsOpened}
+              title={t('contacts.addToContacts')}
+              content={(
+                <FormItem
+                  label={t('contacts.name')}
+                  smallLabel
+                  component={(
+                    <TextInput
+                      fullWidth
+                      value={contactName}
+                      onChange={handleChangeContactName}
+                      type="text"
+                    />
+                  )}
+                />
+              )}
+              button={t('common.add')}
+              buttonVariant="rainbow"
+              onClick={() => addContact()}
+              onClose={() => setIsContactsOpened(false)}
+            />
           )}
         </div>
       </Grid>

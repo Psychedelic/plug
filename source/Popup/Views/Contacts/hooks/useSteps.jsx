@@ -12,6 +12,7 @@ const useSteps = () => {
   const {
     contacts, handleAddContact, handleRemoveContact, ungroupedContacts,
   } = useContacts();
+
   const [currentView, setCurrentView] = useState(0);
 
   const { navigator } = useRouter();
@@ -54,7 +55,7 @@ const useSteps = () => {
       ...firstView,
     },
     {
-      component: <AddContact handleAddContact={addContact} contacts={ungroupedContacts} />,
+      component: <AddContact addContact={addContact} contacts={ungroupedContacts} />,
       left: leftButton(() => handleChangeView(0)),
       right: null,
       center: t('contacts.addContact'),

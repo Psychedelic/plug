@@ -69,6 +69,7 @@ const Login = ({ redirect }) => {
           type="password"
           id="password"
           error={error}
+          autoFocus
         />
         <Button
           value={t('login.unlock')}
