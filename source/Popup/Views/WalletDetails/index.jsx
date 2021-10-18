@@ -231,10 +231,10 @@ const WalletDetails = () => {
             && (
               <Picker
                 pickerStyle={{
-                  height: 157,
+                  height: 190,
                   width: 'auto',
                   position: 'absolute',
-                  top: 145,
+                  top: 150,
                   left: 40,
                   right: 40,
                   zIndex: 1,

@@ -135,6 +135,7 @@ const Profile = ({ disableProfile }) => {
                 value={accountName}
                 onChange={handleChangeAccountName}
                 type="text"
+                className={classes.createAccountInput}
               />
             )}
           />

@@ -5,13 +5,11 @@ import clsx from 'clsx';
 import useStyles from './styles';
 
 const TextInput = forwardRef(({
-  value, type, onChange, startIcon, error, disabled, ...other
+  value, type, onChange, startIcon, error, disabled, className, ...other
 }, ref) => {
   const classes = useStyles();
 
   const [isFocus, setIsFocus] = useState(false);
-
-  console.log(ref);
 
   return (
     <InputBase
@@ -20,7 +18,7 @@ const TextInput = forwardRef(({
         root: clsx(classes.root,
           !disabled && classes.hover,
           (isFocus && !error) && classes.focus,
-          error && classes.error),
+          error && classes.error, className),
       }}
       value={value}
       type={type}
@@ -44,12 +42,14 @@ TextInput.defaultProps = {
   error: false,
   startIcon: null,
   disabled: false,
+  className: '',
 };
 
 TextInput.propTypes = {
   value: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
+  className: PropTypes.string,
   startIcon: PropTypes.node,
   error: PropTypes.bool,
   disabled: PropTypes.bool,
