@@ -42,7 +42,7 @@ export const currencyPropTypes = {
 export const CYCLES_PER_TC = 1_000_000_000_000;
 
 export const formatAssetBySymbol = (_amount, symbol, icpPrice) => {
-  const amount = parseInt(_amount.toString(), 10);
+  const amount = parseInt(_amount?.toString() || 0, 10);
   return ({
     ICP: {
       amount: amount / E8S_PER_ICP,

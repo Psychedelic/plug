@@ -32,7 +32,7 @@ const NFTDisplay = ({ request, shouldWarn, toggleModal }) => {
       shouldWarn={shouldWarn}
       title={title || 'Unknown ID'}
       subtitle={request?.canisterName || 'Unknown Collection'}
-      img={request?.canisterIcon || ''}
+      img={request?.canisterIcon}
       toggleModal={toggleModal}
     />
   );

@@ -31,7 +31,7 @@ const AssetDisplay = ({ request, shouldWarn, toggleModal }) => {
   return (
     <DisplayBox
       shouldWarn={shouldWarn}
-      title={asset.value || 'Unknown Amount'}
+      title={asset?.value || 'Unknown Amount'}
       subtitle={`${asset?.amount || '???'} ${asset?.symbol || ''}`}
       img={asset?.image}
       toggleModal={toggleModal}
