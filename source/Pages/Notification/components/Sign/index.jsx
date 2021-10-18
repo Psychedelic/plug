@@ -46,6 +46,8 @@ const AssetsWarning = ({
     setShowModal(!showModal);
   };
 
+  window.onclose = () => handleDecline();
+
   const tabs = [
     {
       label: t('assetsWarning.details.title'),
@@ -61,6 +63,7 @@ const AssetsWarning = ({
       label: t('assetsWarning.data.title'),
       component: <Data
         data={data}
+        withArguments={!shouldWarn}
       />,
     },
   ];

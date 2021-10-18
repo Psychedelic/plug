@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { CanisterInfoContainer, CanisterInfoItem } from '@ui';
 
 const CanisterInfoDisplay = ({ request }) => {
-  console.log('Canister info', request);
   const canisterInfo = {
     id: request?.canisterId,
     name: request?.canisterName,

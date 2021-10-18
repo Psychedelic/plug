@@ -5,13 +5,13 @@ import extension from 'extensionizer';
 import useStyles from '../../styles';
 import SIZES from '../../constants';
 
-const Data = ({ data }) => {
+const Data = ({ data, withArguments }) => {
   const classes = useStyles();
-
+  console.log('withargs', withArguments);
   extension.windows.update(
     extension.windows.WINDOW_ID_CURRENT,
     {
-      height: SIZES.dataHeight,
+      height: withArguments ? SIZES.dataWithArgumentsHeight : SIZES.dataHeight,
     },
   );
 
@@ -41,4 +41,5 @@ Data.propTypes = {
       component: PropTypes.node.isRequired,
     }),
   ).isRequired,
+  withArguments: PropTypes.bool.isRequired,
 };

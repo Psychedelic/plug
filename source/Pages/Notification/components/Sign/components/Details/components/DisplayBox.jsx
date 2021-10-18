@@ -41,12 +41,14 @@ const DisplayBox = ({
       <div className={classes.assetText}>
         <h2 className={`${classes.amountTitle} ${shouldWarn ? classes.yellowTitle : ''}`}>
           {title || t('sign.warning.unknownArguments')}
+          {shouldWarn && (
           <img
             src={YellowInfo}
             className={classes.yellowInfoIcon}
             onClick={toggleModal}
             alt="more-info"
           />
+          )}
         </h2>
         <p className={classes.amountDescription}>
           <span>{subtitle || '???'}&nbsp;</span>

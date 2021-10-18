@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import extension from 'extensionizer';
 
 import { formatAssetBySymbol, TOKENS } from '@shared/constants/currencies';
 import { useICPPrice } from '@redux/icp';
 
 import DisplayBox from './DisplayBox';
+
+import SIZES from '../../../constants';
 
 // eslint-disable-next-line max-len
 const getAssetData = (canisterId) => Object.values(TOKENS).find((token) => token.canisterId === canisterId);
@@ -22,6 +25,14 @@ const getAssetAmount = (request) => {
 const AssetDisplay = ({ request, shouldWarn, toggleModal }) => {
   const [asset, setAsset] = useState(null);
   const icpPrice = useICPPrice(true);
+
+  extension.windows.update(
+    extension.windows.WINDOW_ID_CURRENT,
+    {
+      height: shouldWarn ? SIZES.detailsWarningHeight : SIZES.assetsHeight,
+    },
+  );
+
   useEffect(() => {
     const amount = getAssetAmount(request);
     const assetData = getAssetData(request?.canisterId);
@@ -31,7 +42,7 @@ const AssetDisplay = ({ request, shouldWarn, toggleModal }) => {
   return (
     <DisplayBox
       shouldWarn={shouldWarn}
-      title={asset?.value || 'Unknown Amount'}
+      title={`$${asset?.value}` || 'Unknown Amount'}
       subtitle={`${asset?.amount || '???'} ${asset?.symbol || ''}`}
       img={asset?.image}
       toggleModal={toggleModal}

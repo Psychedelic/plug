@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { getCanisterMetadata } from '@psychedelic/dab-js';
+import { getCanisterInfo } from '@psychedelic/dab-js';
 
 import DisplayBox from './DisplayBox';
 
@@ -19,7 +19,7 @@ const NFTDisplay = ({ request, shouldWarn, toggleModal }) => {
   const [title, setTitle] = useState('');
 
   useEffect(() => {
-    getCanisterMetadata().then((response) => {
+    getCanisterInfo().then((response) => {
       setLoading(false);
       if (request?.decodedArguments) {
         setTitle(getNFTIndex(request, response));
@@ -30,7 +30,7 @@ const NFTDisplay = ({ request, shouldWarn, toggleModal }) => {
     <DisplayBox
       loading={loading}
       shouldWarn={shouldWarn}
-      title={title || 'Unknown ID'}
+      title={title || 'Unknown ID or recipient'}
       subtitle={request?.canisterName || 'Unknown Collection'}
       img={request?.canisterIcon}
       toggleModal={toggleModal}

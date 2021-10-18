@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DataDisplay } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { PortRPC } from '@fleekhq/browser-rpc';
+import ReactJson from 'react-json-view';
 // import { v4 as uuidv4 } from 'uuid';
 import { validateCanisterId } from '@shared/utils/ids';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
@@ -62,24 +63,33 @@ const useRequests = (incomingRequest, callId, portId) => {
 
   const handleDecline = () => handleResponse(CONNECTION_STATUS.rejected);
 
-  const config = [
-    { label: 'canisterId', value: request.canisterId },
+  const data = [
+    { label: t('common.canisterId'), component: <DataDisplay value={request.canisterId} /> },
     {
-      label: 'methodName',
-      value: request.methodName,
+      label: t('common.methodName'),
+      component: <DataDisplay value={request.methodName} />,
     },
     {
-      label: 'arguments',
-      value: request.decodedArguments || 'UNKNOWN',
+      label: t('common.arguments'),
+      withArguments: !!request?.decodedArguments,
+      component: request.decodedArguments
+        ? (
+          <ReactJson
+            src={request.decodedArguments}
+            collapsed={2}
+            style={{
+              backgroundColor: '#F3F4F6',
+              padding: '10px',
+              borderRadius: '10px',
+              minHeight: '185px',
+              maxHeight: '185px',
+              overflow: 'auto',
+            }}
+          />
+        )
+        : <DataDisplay value="Unknown" />,
     },
   ];
-
-  const data = config.map(({ label, value }) => (
-    {
-      label: t(`common.${label}`),
-      component: <DataDisplay value={value} />,
-    }
-  ));
 
   return {
     request,

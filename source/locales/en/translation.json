@@ -45,6 +45,7 @@
     "noActivityText": "When you deposit, send, or swap,\nyour activity will be displayed here."
   },
   "common": {
+    "arguments": "Arguments",
     "to": "to",
     "delete": "delete",
     "close": "Close",
