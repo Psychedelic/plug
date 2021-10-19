@@ -9,38 +9,47 @@ import InputBase from '../InputBase';
 import useStyles from './styles';
 
 const Select = ({
-  image, name, shadow, onClick, text, icon, readonly, imageClassName, nft,
+  image,
+  name,
+  shadow,
+  onClick,
+  text,
+  icon,
+  readonly,
+  imageClassName,
+  nft,
 }) => {
   const classes = useStyles();
   return (
     <InputBase>
-      <div className={clsx(classes.root, readonly && classes.readonly)} onClick={onClick}>
-        {
-          icon
-        }
-        {
-          image
-          && (
+      <div
+        className={clsx(classes.root, readonly && classes.readonly, onClick && classes.selectable)}
+        onClick={onClick}
+      >
+        {icon}
+        {image && (
           <TokenIcon
             alt={name}
             image={image}
             nft={nft}
-            className={
-              clsx(classes.icon, shadow && classes.iconShadow, imageClassName && imageClassName)
-            }
+            className={clsx(
+              classes.icon,
+              shadow && classes.iconShadow,
+              imageClassName && imageClassName,
+            )}
             symbol={name}
           />
-          )
-        }
+        )}
         <div className={classes.textContainer}>
           <Typography variant="h4">{name}</Typography>
-          {
-            text
-            && <Typography variant="subtitle2" style={{ marginTop: 4 }}>{text}</Typography>
-          }
+          {text && (
+            <Typography variant="subtitle2" style={{ marginTop: 4 }}>
+              {text}
+            </Typography>
+          )}
         </div>
 
-        {!readonly && (<img src={ChevronDown} className={classes.alignRight} />)}
+        {!readonly && <img src={ChevronDown} className={classes.alignRight} />}
       </div>
     </InputBase>
   );

@@ -5,7 +5,6 @@ import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';
 import Step1 from '../Steps/Step1';
 import Step2 from '../Steps/Step2';
-import Step3 from '../Steps/Step3';
 
 const useSteps = () => {
   const [step, setStep] = useState(0);
@@ -24,12 +23,7 @@ const useSteps = () => {
       right: rightButton(t('common.close')),
     },
     {
-      component: <Step2 handleChangeStep={() => handleChangeStep(2)} />,
-      left: leftButton(() => handleChangeStep(0)),
-      right: rightButton(t('common.close')),
-    },
-    {
-      component: <Step3 />,
+      component: <Step2 />,
       left: null,
       right: rightButton(t('common.done')),
       next: null,

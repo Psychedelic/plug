@@ -55,7 +55,7 @@ const CopyButton = ({
         onMouseLeave={() => setShowTooltip(false)}
         {...other}
       >
-        <Copy size="16" className={classes.icon} />
+        <Copy size="18" className={classes.icon} />
         {
           label
           && <Typography variant="subtitle2" className={classes.label}>{label}</Typography>

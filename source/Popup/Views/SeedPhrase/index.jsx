@@ -15,9 +15,7 @@ const SeedPhrase = () => {
   return (
     <Layout>
       <Header left={left} right={right} center={t('seedPhrase.title')} />
-      {
-        component
-      }
+      {component}
     </Layout>
   );
 };

@@ -6,11 +6,12 @@ export default makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    cursor: 'pointer',
     transition: 'background 0.2s',
     width: '100%',
     borderRadius: 10,
-
+  },
+  selectable: {
+    cursor: 'pointer',
     '&:hover': {
       background: '#F3F4F6',
     },
