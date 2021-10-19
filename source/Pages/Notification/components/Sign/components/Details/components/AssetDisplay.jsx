@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import extension from 'extensionizer';
+import { useTranslation } from 'react-i18next';
 
 import { formatAssetBySymbol, TOKENS } from '@shared/constants/currencies';
 import { useICPPrice } from '@redux/icp';
@@ -23,6 +24,7 @@ const getAssetAmount = (request) => {
 };
 
 const AssetDisplay = ({ request, shouldWarn, toggleModal }) => {
+  const { t } = useTranslation();
   const [asset, setAsset] = useState(null);
   const icpPrice = useICPPrice(true);
 
@@ -44,7 +46,7 @@ const AssetDisplay = ({ request, shouldWarn, toggleModal }) => {
   return (
     <DisplayBox
       shouldWarn={shouldWarn}
-      title={asset?.value || asset?.value === 0 ? `$${asset?.value}` : 'Unknown Amount'}
+      title={asset?.value || asset?.value === 0 ? `$${asset?.value}` : t('sign.warning.unknownAmount')}
       subtitle={`${asset?.amount ?? '???'} ${asset?.symbol ?? ''}`}
       img={asset?.image}
       toggleModal={toggleModal}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import extension from 'extensionizer';
+import { useTranslation } from 'react-i18next';
 
 import { decodeTokenId } from '@shared/utils/ext';
 
@@ -16,6 +17,7 @@ const getNFTId = (request) => {
 };
 
 const NFTDisplay = ({ request, shouldWarn, toggleModal }) => {
+  const { t } = useTranslation();
   const [title, setTitle] = useState('');
 
   extension.windows.update(
@@ -34,8 +36,8 @@ const NFTDisplay = ({ request, shouldWarn, toggleModal }) => {
   return (
     <DisplayBox
       shouldWarn={shouldWarn}
-      title={title ?? 'Unknown ID or recipient'}
-      subtitle={request?.canisterName || 'Unknown Collection'}
+      title={title || t('sign.warning.unknownId')}
+      subtitle={request?.canisterName || t('sign.unknownCollection')}
       img={request?.canisterIcon}
       toggleModal={toggleModal}
     />

@@ -342,7 +342,10 @@
       "description": "This app is interacting with your assets in an unsafe way, without providing a way for Plug (or you) to see what it's doing. Make sure you fully trust this app before confirming, otherwise you could lose your assets.",
       "modalTitle": "Why are the Arguments Unknown?",
       "modalText": "Because this app is not showing you what it's doing (unsafe), which means you (and Plug) can't read the arguments",
-      "modalLearnMore": "Learn more about Trusting Apps"
+      "modalLearnMore": "Learn more about Trusting Apps",
+      "unknownId": "Unknown ID",
+      "unknownCollection": "Unknown Collection",
+      "unknownAmount": "Unknown Amount"
     }
   }
 }

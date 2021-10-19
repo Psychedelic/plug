@@ -17,19 +17,19 @@ const DisplayBox = ({
         <h2 className={`${classes.amountTitle} ${shouldWarn ? classes.yellowTitle : ''}`}>
           {title || t('sign.warning.unknownArguments')}
           {shouldWarn && (
-          <img
-            src={YellowInfo}
-            className={classes.yellowInfoIcon}
-            onClick={toggleModal}
-            alt="more-info"
-          />
+            <img
+              src={YellowInfo}
+              className={classes.yellowInfoIcon}
+              onClick={toggleModal}
+              alt="more-info"
+            />
           )}
         </h2>
         <p className={classes.amountDescription}>
           <span>{subtitle || '???'}&nbsp;</span>
         </p>
       </div>
-      <img src={img || request?.canisterIcon} className={classes.assetImg} alt="asset img" />
+      <img src={img || request?.canisterIcon} className={classes.assetImg} alt="asset" />
     </div>
   );
 };
