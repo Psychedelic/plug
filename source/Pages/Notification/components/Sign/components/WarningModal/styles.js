@@ -52,5 +52,7 @@ export default makeStyles(() => ({
       textDecoration: 'none',
       color: '#3574F4',
     },
+    display: 'flex',
+    justifyContent: 'center',
   },
 }));
