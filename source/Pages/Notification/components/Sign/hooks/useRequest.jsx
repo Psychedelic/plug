@@ -33,7 +33,6 @@ const useRequests = (incomingRequest, callId, portId) => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [request] = useState(formatRequest(incomingRequest));
-  const [response, setResponse] = useState([]);
   const [error, setError] = useState(false);
 
   const [canisterId, setCanisterId] = useState(null);
@@ -55,8 +54,6 @@ const useRequests = (incomingRequest, callId, portId) => {
     setError(!success);
     setLoading(false);
     window.close();
-    console.log('TODO HANDLE RESPONSE', response);
-    setResponse(status);
   };
 
   const handleAccept = () => handleResponse(CONNECTION_STATUS.accepted);

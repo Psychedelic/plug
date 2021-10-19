@@ -23,7 +23,6 @@ const Details = ({
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
-  console.log('request', request);
 
   const Display = getDisplayComponent(request);
   return (
