@@ -1,3 +1,9 @@
+export const SILENT_ERRORS = {
+  AGENT_REJECTED: { code: 401, message: 'The agent creation was rejected.' },
+  SIGN_REJECTED: { code: 401, message: 'The sign was rejected.' },
+  TRANSACTION_REJECTED: { code: 401, message: 'The transactions was rejected.' },
+};
+
 export default {
   CONNECTION_ERROR: {
     code: 401,
@@ -13,11 +19,8 @@ export default {
     message: 'The transaction that was just attempted failed because you don’t have enough funds. Review your balance before trying again, or contact the project’s developers.',
   },
   CANISTER_ID_ERROR: { code: 400, message: 'The transaction the app/page attempted failed because the destination Canister ID is invalid. Please contact this project’s developers so they can fix it.' },
-  TRANSACTION_REJECTED: {
-    code: 401,
-    message: 'The transactions was rejected.',
-  },
   INITIALIZED_ERROR: { code: 403, message: 'This app tried to connect to Plug, but your wallet is not setup yet. Please click the extension and get started before trying to use an app.' },
   CLIENT_ERROR: (message) => ({ code: 400, message }),
   SERVER_ERROR: (message) => ({ code: 500, message }),
+  ...SILENT_ERRORS,
 };

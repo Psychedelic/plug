@@ -16,7 +16,7 @@ import NotificationManager from '../lib/NotificationManager';
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import { getKeyringHandler, HANDLER_TYPES, getKeyringErrorMessage } from './Keyring';
 import { validateTransferArgs, validateBurnArgs } from './utils';
-import ERRORS from './errors';
+import ERRORS, { SILENT_ERRORS } from './errors';
 import plugProvider from '../Inpage/index';
 
 const DEFAULT_CURRENCY_MAP = {
@@ -486,7 +486,7 @@ backgroundController.exposeController(
         callback(null, false);
       }
     } else {
-      callback(null, null, [{ portId, callId }]);
+      callback(ERRORS.SIGN_REJECTED, null, [{ portId, callId }]);
       callback(null, true); // Return true to close the modal
     }
   },
@@ -628,7 +628,7 @@ backgroundController.exposeController(
       }
     } else {
       plugProvider.deleteAgent();
-      callback(null, null, [{ portId, callId }]);
+      callback(ERRORS.AGENT_REJECTED, null, [{ portId, callId }]);
       callback(null, true); // Return true to close the modal
     }
   },
@@ -724,7 +724,9 @@ backgroundController.exposeController(
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
 
-    notificationManager.notificateError(errorMessage);
+    if (![SILENT_ERRORS.map((e) => e.message)].includes(errorMessage)) {
+      notificationManager.notificateError(errorMessage);
+    }
 
     callback(ERRORS.CLIENT_ERROR(errorMessage), null, [{ portId, callId }]);
     callback(null, true);
