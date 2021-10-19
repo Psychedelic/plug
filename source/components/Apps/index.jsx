@@ -31,7 +31,7 @@ const Apps = () => {
   };
 
   const handleOpenDetail = (app) => () => {
-    setCanistersInfo(app.cansitersInfo ?? []);
+    setCanistersInfo(app?.whitelist ? Object.values(app.whitelist) : []);
     setOpenDetail(true);
   };
 
