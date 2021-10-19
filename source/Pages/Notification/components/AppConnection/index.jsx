@@ -87,7 +87,7 @@ const AppConnection = () => {
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Layout disableProfile incStatus>
+        <Layout disableProfile disableNavigation incStatus>
           {error ? <ErrorScreen /> : (
             <div className={classes.padTop}>
               <Container className={classes.container}>

@@ -74,7 +74,7 @@ const Transfer = ({
   ];
 
   return (
-    <Layout disableProfile>
+    <Layout disableProfile disableNavigation>
       {error ? (
         <ErrorScreen />
       ) : (

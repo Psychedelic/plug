@@ -72,20 +72,20 @@ const BurnXTC = ({
   ];
 
   return (
-    <Layout disableProfile>
+    <Layout disableProfile disableNavigation>
       {error ? <ErrorScreen /> : (
         <>
           {
-        requestCount > 1
-        && (
-          <RequestHandler
-            currentRequest={currentRequest + 1}
-            requests={requestCount}
-            handlePrevious={handleSetPreviousRequest}
-            handleNext={handleSetNextRequest}
-          />
-        )
-        }
+            requestCount > 1
+            && (
+              <RequestHandler
+                currentRequest={currentRequest + 1}
+                requests={requestCount}
+                handlePrevious={handleSetPreviousRequest}
+                handleNext={handleSetNextRequest}
+              />
+            )
+          }
           <>
             <Tabs tabs={tabs} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
             <div className={classes.buttonsWrapper}>

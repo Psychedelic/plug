@@ -419,15 +419,12 @@ backgroundController.exposeController(
           return;
         }
         const canisterInfo = app.whitelist[canisterId];
-        // TODO REMOVE THIS
-        console.log('requestting dab data');
+        // TODO REMOVE THIS FOR CATEGORY ATTRIBUTE
         const nftCanisters = await getAllNFTS(new HttpAgent({ canisterId: DAB_CANISTER_ID, host: 'https://mainnet.dfinity.network' }));
-        console.log('collections', nftCanisters);
         const PROTECTED_IDS = [
           ...(nftCanisters || []).map((collection) => collection.principal_id.toString()),
           ...ASSET_CANISTER_IDS,
         ];
-        console.log(PROTECTED_IDS);
         const shouldShowModal = requestInfo.manual || (requestInfo.requestType === 'call' && !!canisterInfo.id && PROTECTED_IDS.includes(canisterInfo.id));
         // const shouldShowModal = requestInfo.manual || (requestInfo.requestType === 'call'
         // && !!canisterInfo.category && canisterInfo.category in PROTECTED_CATEGORIES);

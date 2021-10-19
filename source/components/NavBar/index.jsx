@@ -8,13 +8,13 @@ import Profile from '../Profile';
 import WalletInfo from '../WalletInfo';
 import useStyles from './styles';
 
-const NavBar = ({ disableProfile }) => {
-  const { navigator } = useRouter();
+const NavBar = ({ disableProfile, disableNavigation }) => {
+  const navigator = disableNavigation ? null : useRouter();
   const classes = useStyles();
-
+  const navigateHome = () => navigator ?? navigator.navigate('home');
   return (
     <div className={classes.root}>
-      <Button aria-label="Plug" className={classes.flex} onClick={() => navigator.navigate('home')}>
+      <Button aria-label="Plug" className={classes.flex} onClick={navigateHome}>
         <Plug size="small" />
       </Button>
       <div className={classes.walletContainer}>
@@ -27,8 +27,13 @@ const NavBar = ({ disableProfile }) => {
   );
 };
 
-export default NavBar;
-
 NavBar.propTypes = {
   disableProfile: PropTypes.bool.isRequired,
+  disableNavigation: PropTypes.string,
 };
+
+NavBar.defaultProps = {
+  disableNavigation: false,
+};
+
+export default NavBar;

@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation, initReactI18next } from 'react-i18next';
-import { Button, Tabs } from '@ui';
+import { Provider, useDispatch } from 'react-redux';
+import { Button, Tabs, theme } from '@ui';
 import i18n from 'i18next';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@material-ui/styles';
 import { useTabs } from '@hooks';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
-import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Layout } from '@components';
+import store from '@redux/store';
 
 import useRequest from './hooks/useRequest';
 import initConfig from '../../../../locales';
@@ -86,42 +89,47 @@ const AssetsWarning = ({
   }, []);
 
   return (
-    <Layout disableProfile>
-      {
-        showModal && (
-          <WarningModal toggleModal={() => setShowModal(false)} />
-        )
-      }
-      <div className={classes.backdropContainer} onClick={handleBackdropClick}>
-        { showModal && (
-          <div
-            className={classes.backdropOpacity}
-          />
-        )}
-        <div className={`${classes.mainContainer} ${showModal && classes.backgroundOpacity}`}>
-          <Tabs tabs={tabs} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
-          <div className={classes.buttonsWrapper}>
-            <div className={classes.buttonContainer}>
-              <Button
-                variant="default"
-                value={t('common.decline')}
-                onClick={handleDecline}
-                fullWidth
-                style={{ width: '96%' }}
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Layout disableProfile disableNavigation>
+          {
+            showModal && (
+              <WarningModal toggleModal={() => setShowModal(false)} />
+            )
+          }
+          <div className={classes.backdropContainer} onClick={handleBackdropClick}>
+            {showModal && (
+              <div
+                className={classes.backdropOpacity}
               />
-              <Button
-                variant="rainbow"
-                value={t('common.confirm')}
-                onClick={handleAccept}
-                fullWidth
-                style={continueButtonStyles}
-                wrapperStyle={{ textAlign: 'right' }}
-              />
+            )}
+            <div className={`${classes.mainContainer} ${showModal && classes.backgroundOpacity}`}>
+              <Tabs tabs={tabs} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
+              <div className={classes.buttonsWrapper}>
+                <div className={classes.buttonContainer}>
+                  <Button
+                    variant="default"
+                    value={t('common.decline')}
+                    onClick={handleDecline}
+                    fullWidth
+                    style={{ width: '96%' }}
+                  />
+                  <Button
+                    variant="rainbow"
+                    value={t('common.confirm')}
+                    onClick={handleAccept}
+                    fullWidth
+                    style={continueButtonStyles}
+                    wrapperStyle={{ textAlign: 'right' }}
+                  />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </Layout>
+        </Layout>
+      </ThemeProvider>
+    </Provider>
   );
 };
 
