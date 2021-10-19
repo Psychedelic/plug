@@ -45,6 +45,7 @@
     "noActivityText": "When you deposit, send, or swap,\nyour activity will be displayed here."
   },
   "common": {
+    "arguments": "Arguments",
     "to": "to",
     "delete": "delete",
     "close": "Close",
@@ -76,7 +77,8 @@
     "create": "Create",
     "account": "Account",
     "learnMore": "Learn more",
-    "send": "Send"
+    "send": "Send",
+    "methodName": "Method Name"
   },
   "apps": {
     "title": "Connected Apps",
@@ -323,5 +325,27 @@
     "title": "wants to transfer cycles to a canister",
     "amount": "Amount of {token}",
     "canister": "Canister ID"
+  },
+  "assetsWarning": {
+    "details": {
+      "title": "Details"
+    },
+    "data": {
+      "title": "Data"
+    }
+  },
+  "sign": {
+    "warning": {
+      "action": "wants to interact with {{canisterName}}",
+      "unknownArguments": "Unknown Arguments",
+      "title": "Important Warning",
+      "description": "This app is interacting with your assets in an unsafe way, without providing a way for Plug (or you) to see what it's doing. Make sure you fully trust this app before confirming, otherwise you could lose your assets.",
+      "modalTitle": "Why are the Arguments Unknown?",
+      "modalText": "Because this app is not showing you what it's doing (unsafe), which means you (and Plug) can't read the arguments",
+      "modalLearnMore": "Learn more about Trusting Apps",
+      "unknownId": "Unknown ID",
+      "unknownCollection": "Unknown Collection",
+      "unknownAmount": "Unknown Amount"
+    }
   }
 }

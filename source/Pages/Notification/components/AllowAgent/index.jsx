@@ -111,7 +111,7 @@ const AllowAgent = ({
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Layout disableProfile incStatus>
+        <Layout disableProfile disableNavigation incStatus>
           {error ? (
             <ErrorScreen />
           ) : (

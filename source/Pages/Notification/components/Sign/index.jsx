@@ -1,61 +1,83 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 import { useTranslation, initReactI18next } from 'react-i18next';
-import { PortRPC } from '@fleekhq/browser-rpc';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { ThemeProvider } from '@material-ui/core/styles';
-import i18n from 'i18next';
 import { Provider, useDispatch } from 'react-redux';
-
-import {
-  Button, Container, theme,
-} from '@ui';
-import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
-import store from '@redux/store';
-import { Layout } from '@components';
-import extension from 'extensionizer';
+import { Button, Tabs, theme } from '@ui';
+import i18n from 'i18next';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@material-ui/styles';
+import { useTabs } from '@hooks';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
+import PropTypes from 'prop-types';
+import { Layout } from '@components';
+import store from '@redux/store';
+
+import useRequest from './hooks/useRequest';
 import initConfig from '../../../../locales';
-import SIZES from '../Transfer/constants';
-import ErrorScreen from '../NotificationError';
+import { Details, Data, WarningModal } from './components';
 import useStyles from './styles';
 
 i18n.use(initReactI18next).init(initConfig);
 
-const portRPC = new PortRPC({
-  name: 'notification-port',
-  target: 'bg-script',
-  timeout: 20000,
-});
-
-portRPC.start();
-
-const Sign = ({
-  args, callId, portId,
+const AssetsWarning = ({
+  args, callId, portId, metadata,
 }) => {
-  const classes = useStyles();
   const { t } = useTranslation();
-  const [error, setError] = useState(false);
+  const { url, icons } = metadata;
+  const { selectedTab, handleChangeTab } = useTabs();
   const dispatch = useDispatch();
+  const classes = useStyles();
+  const [showModal, setShowModal] = useState(false);
 
-  const { requestInfo } = args;
+  const shouldWarn = !(args?.requestInfo?.decodedArguments);
 
-  const handleResponse = async (status) => {
-    const success = await portRPC.call('handleSign', [status, args.payload, callId, portId]);
-
-    if (success) {
-      window.close();
+  const {
+    request,
+    data,
+    handleAccept,
+    handleDecline,
+  } = useRequest(args, callId, portId);
+  const handleBackdropClick = (event) => {
+    if (showModal) {
+      event.preventDefault();
+      event.stopPropagation();
+      setShowModal(false);
     }
-    setError(!success);
   };
 
-  extension.windows.update(
-    extension.windows.WINDOW_ID_CURRENT,
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
+
+  window.onclose = () => handleDecline();
+
+  const tabs = [
     {
-      height: SIZES.appConnectHeight,
+      label: t('assetsWarning.details.title'),
+      component: <Details
+        url={url}
+        icon={icons?.[0] || null}
+        toggleModal={toggleModal}
+        shouldWarn={shouldWarn}
+        request={request}
+      />,
     },
-  );
+    {
+      label: t('assetsWarning.data.title'),
+      component: <Data
+        data={data}
+        withArguments={!shouldWarn}
+      />,
+    },
+  ];
+
+  let continueButtonStyles = {
+    width: '96%',
+  };
+
+  if (shouldWarn) {
+    continueButtonStyles = { ...continueButtonStyles, background: '#EEAC00' };
+  }
 
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
@@ -70,43 +92,52 @@ const Sign = ({
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Layout disableProfile incStatus>
-          {error ? <ErrorScreen /> : (
-            <div className={classes.padTop}>
-              <Container>
-                <text>
-                  {JSON.stringify(requestInfo, undefined, 2)}
-                </text>
+        <Layout disableProfile disableNavigation>
+          {
+            showModal && (
+              <WarningModal toggleModal={() => setShowModal(false)} />
+            )
+          }
+          <div className={classes.backdropContainer} onClick={handleBackdropClick}>
+            {showModal && (
+              <div
+                className={classes.backdropOpacity}
+              />
+            )}
+            <div className={`${classes.mainContainer} ${showModal && classes.backgroundOpacity}`}>
+              <Tabs tabs={tabs} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
+              <div className={classes.buttonsWrapper}>
                 <div className={classes.buttonContainer}>
                   <Button
                     variant="default"
                     value={t('common.decline')}
-                    onClick={() => handleResponse(CONNECTION_STATUS.rejected)}
-                    style={{ width: '96%' }}
+                    onClick={handleDecline}
                     fullWidth
+                    style={{ width: '96%' }}
                   />
                   <Button
                     variant="rainbow"
-                    value={t('common.allow')}
-                    onClick={() => handleResponse(CONNECTION_STATUS.accepted)}
+                    value={t('common.confirm')}
+                    onClick={handleAccept}
                     fullWidth
-                    style={{ width: '96%' }}
+                    style={continueButtonStyles}
                     wrapperStyle={{ textAlign: 'right' }}
                   />
                 </div>
-              </Container>
+              </div>
             </div>
-          )}
+          </div>
         </Layout>
       </ThemeProvider>
     </Provider>
   );
 };
 
-export default Sign;
-
-Sign.propTypes = {
-  args: PropTypes.string.isRequired,
+AssetsWarning.propTypes = {
+  args: PropTypes.arrayOf(PropTypes.string).isRequired,
   callId: PropTypes.string.isRequired,
   portId: PropTypes.string.isRequired,
+  metadata: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
+
+export default AssetsWarning;

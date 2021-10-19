@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { DataDisplay, AssetFormat } from '@ui';
+import { DataDisplay } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { PortRPC } from '@fleekhq/browser-rpc';
 import { v4 as uuidv4 } from 'uuid';
-import { CURRENCIES } from '@shared/constants/currencies';
 import { validateCanisterId } from '@shared/utils/ids';
-import { XTC_FEE } from '@shared/constants/addresses';
 
 const portRPC = new PortRPC({
   name: 'notification-port',
@@ -41,7 +39,7 @@ const useRequests = (incomingRequests, callId, portId) => {
   useEffect(async () => {
     if (requests.length === 0) {
       setLoading(true);
-      const success = await portRPC.call('handleRequestBurnXTC', [response, callId, portId]);
+      const success = await portRPC.call('handleSign', [response, callId, portId]);
       if (success) {
         window.close();
       }
@@ -55,7 +53,7 @@ const useRequests = (incomingRequests, callId, portId) => {
 
   const handleDeclineAll = async () => {
     const declinedRequests = requests.map((r) => ({ ...r, status: 'declined' }));
-    await portRPC.call('handleRequestBurnXTC', [declinedRequests, callId, portId]);
+    await portRPC.call('handleSign', [declinedRequests, callId, portId]);
     window.close();
   };
 
@@ -71,11 +69,12 @@ const useRequests = (incomingRequests, callId, portId) => {
     setRequests(requests.filter((r) => r.id !== request.id));
   };
 
+  // MOCKED
   const config = [
     { label: 'canisterId', value: canisterId },
     {
-      label: 'fee',
-      value: <AssetFormat value={XTC_FEE} asset={CURRENCIES.get('XTC')?.value} />,
+      label: 'methodName',
+      value: 'MOCKED_NAME',
     },
   ];
 

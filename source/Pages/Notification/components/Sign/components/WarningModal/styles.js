@@ -1,18 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles(() => ({
-  buttonsWrapper: {
-    padding: '0 24px 30px',
-  },
-  innerContainer: {
-    padding: '20px 25px 5px',
-  },
-  buttonContainer: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
   modal: {
     margin: 0,
     background: 'white',
@@ -46,21 +34,6 @@ export default makeStyles(() => ({
     flexDirection: 'column',
     alignItems: 'center',
     background: 'transparent',
-  },
-  backdropContainer: {
-    position: 'relative',
-  },
-  mainContainer: {
-    backgroundColor: 'white',
-  },
-  backdropOpacity: {
-    background: 'rgb(206, 208, 213)',
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-  },
-  backgroundOpacity: {
-    opacity: 0.4,
   },
   modalLink: {
     margin: '19px 0 0',
