@@ -22,9 +22,11 @@ const WarningBox = () => {
         {t('sign.warning.description')}
       </p>
       <p className={classes.warningLine}>
-        Safety Tip: <span className={classes.warningLink}>Learn</span>,
-        <span className={classes.warningLink}>talk</span>, or
-        <span className={classes.warningLink}>tweet about it</span>
+        <span className={classes.warningInfo}>Safety Tip:</span>
+        <a className={classes.warningLink} target="_blank" href="https://docs.plugwallet.ooo/resources/app-trust-and-security/" rel="noreferrer">Learn,</a>
+        <a className={classes.warningLink} target="_blank" href="https://discord.gg/fleekhq" rel="noreferrer">talk,</a>
+        <span className={classes.warningInfo}>or</span>
+        <a className={classes.warningLink} target="_blank" href="https://twitter.com/intent/tweet?text=Hey! I want to talk about security!" rel="noreferrer">tweet about it</a>
       </p>
     </div>
   );

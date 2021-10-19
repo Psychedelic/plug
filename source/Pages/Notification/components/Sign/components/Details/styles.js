@@ -88,6 +88,11 @@ export default makeStyles(() => ({
   warningLink: {
     textDecoration: 'underline',
     cursor: 'pointer',
+    color: '#B45309',
+    marginRight: '5px',
+  },
+  warningInfo: {
+    marginRight: '5px',
   },
   warningLine: {
     color: '#B45309',
