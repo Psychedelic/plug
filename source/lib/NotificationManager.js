@@ -12,7 +12,7 @@ class NotificationManager {
       extension.runtime.sendMessage({ errorMessage: message });
     } else {
       this.showNotification({
-        title: 'Plug - Error',
+        title: 'Plug - Notification',
         message,
       });
     }
