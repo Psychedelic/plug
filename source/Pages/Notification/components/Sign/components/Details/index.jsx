@@ -33,7 +33,13 @@ const Details = ({
         request={request}
         shouldWarn={shouldWarn}
       />
-      { shouldWarn && (<WarningBox />)}
+      { shouldWarn && (
+        <WarningBox
+          pageUrl={url}
+          canisterId={request?.canisterId}
+          canisterName={request?.canisterName}
+        />
+      )}
     </div>
   );
 };

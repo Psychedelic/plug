@@ -84,7 +84,7 @@ const useRequests = (incomingRequest, callId, portId) => {
             }}
           />
         )
-        : <DataDisplay value="Unknown" />,
+        : <DataDisplay value="Unknown" warn />,
     },
   ];
 

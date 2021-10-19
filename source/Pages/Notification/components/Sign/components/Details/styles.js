@@ -36,7 +36,7 @@ export default makeStyles(() => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '100%',
-    margin: '25px 0 0',
+    margin: '10px 0 0',
     padding: '18px',
     boxSizing: 'border-box',
     border: '1px solid #D1D5DB',

@@ -9,7 +9,9 @@ import clsx from 'clsx';
 import { getICRocksPrincipalUrl } from '@shared/constants/urls';
 import useStyles from './styles';
 
-const CanisterInfoItem = ({ canister, className, ...props }) => {
+const CanisterInfoItem = ({
+  canister, className, defaultBoxClassName, ...props
+}) => {
   const classes = useStyles();
 
   const {
@@ -36,7 +38,7 @@ const CanisterInfoItem = ({ canister, className, ...props }) => {
           </IconButton>
         </>
       ) : (
-        <Box className={classes.canisterInfoIdItem}>
+        <Box className={clsx(classes.canisterInfoIdItem, defaultBoxClassName)}>
           <Typography component="p" variant="subtitle1">{id}</Typography>
           <IconButton onClick={createICRocksPrincipalTab} className={classes.iconButton}>
             <img src={ArrowUpRight} alt="Arrow" />
@@ -53,10 +55,12 @@ export default CanisterInfoItem;
 CanisterInfoItem.displayName = 'CanisterInfoItem';
 
 CanisterInfoItem.defaultProps = {
+  defaultBoxClassName: '',
   className: '',
 };
 
 CanisterInfoItem.propTypes = {
   canister: PropTypes.objectOf(PropTypes.string).isRequired,
   className: PropTypes.string,
+  defaultBoxClassName: PropTypes.string,
 };

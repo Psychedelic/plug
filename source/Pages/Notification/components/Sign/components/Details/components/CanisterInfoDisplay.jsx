@@ -10,6 +10,9 @@ const useStyles = makeStyles({
   canisterInfoContainer: {
     marginBottom: 0,
   },
+  emptyBox: {
+    justifyContent: 'space-around',
+  },
 });
 
 const CanisterInfoDisplay = ({ request, shouldWarn }) => {
@@ -28,7 +31,11 @@ const CanisterInfoDisplay = ({ request, shouldWarn }) => {
   );
   return (
     <CanisterInfoContainer className={classes.canisterInfoContainer}>
-      <CanisterInfoItem key={canisterInfo?.id} canister={canisterInfo} />
+      <CanisterInfoItem
+        key={canisterInfo?.id}
+        canister={canisterInfo}
+        defaultBoxClassName={classes.emptyBox}
+      />
     </CanisterInfoContainer>
   );
 };

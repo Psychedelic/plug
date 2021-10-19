@@ -1,13 +1,15 @@
 import qs from 'query-string';
 import extension from 'extensionizer';
 import { BackgroundController } from '@fleekhq/browser-rpc';
+import { getAllNFTS } from '@psychedelic/dab-js';
+import { HttpAgent } from '@dfinity/agent';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { areAllElementsIn } from '@shared/utils/array';
 import PlugController from '@psychedelic/plug-controller';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
 import { XTC_FEE } from '@shared/constants/addresses';
-import { /* PROTECTED_CATEGORIES, */ PROTECTED_IDS } from '@shared/constants/canisters';
+import { /* PROTECTED_CATEGORIES, */ ASSET_CANISTER_IDS, DAB_CANISTER_ID } from '@shared/constants/canisters';
 import { removeAppByURL } from '@shared/utils/apps';
 import NotificationManager from '../lib/NotificationManager';
 
@@ -418,6 +420,14 @@ backgroundController.exposeController(
         }
         const canisterInfo = app.whitelist[canisterId];
         // TODO REMOVE THIS
+        console.log('requestting dab data');
+        const nftCanisters = await getAllNFTS(new HttpAgent({ canisterId: DAB_CANISTER_ID, host: 'https://mainnet.dfinity.network' }));
+        console.log('collections', nftCanisters);
+        const PROTECTED_IDS = [
+          ...(nftCanisters || []).map((collection) => collection.principal_id.toString()),
+          ...ASSET_CANISTER_IDS,
+        ];
+        console.log(PROTECTED_IDS);
         const shouldShowModal = requestInfo.manual || (requestInfo.requestType === 'call' && !!canisterInfo.id && PROTECTED_IDS.includes(canisterInfo.id));
         // const shouldShowModal = requestInfo.manual || (requestInfo.requestType === 'call'
         // && !!canisterInfo.category && canisterInfo.category in PROTECTED_CATEGORIES);
