@@ -50,7 +50,7 @@ const getStatus = (status, classes, t) => {
 
 const getDate = (status, date) => (
   status === ACTIVITY_STATUS.COMPLETED
-    ? moment(date).format('MMMM Do')
+    ? moment(date).format('MMM Do')
     : ''
 );
 
@@ -137,7 +137,7 @@ const ActivityItem = ({
             {`${t('activity.title.pluggedInto')} ${name}`}
           </Typography>
           <Typography variant="subtitle2">
-            {moment(Date.parse(date)).format('MMMM Do')}
+            {moment(Date.parse(date)).format('MMM Do')}
           </Typography>
         </div>
       </div>

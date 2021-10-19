@@ -100,6 +100,11 @@ const Profile = ({ disableProfile }) => {
       });
   };
 
+  const handleOpenCreateAccount = () => {
+    handleToggle();
+    setOpenCreateAccount(true);
+  };
+
   return (
     <>
       <HoverAnimation
@@ -130,6 +135,7 @@ const Profile = ({ disableProfile }) => {
                 value={accountName}
                 onChange={handleChangeAccountName}
                 type="text"
+                className={classes.createAccountInput}
               />
             )}
           />
@@ -179,10 +185,10 @@ const Profile = ({ disableProfile }) => {
                 <MenuItem
                   size="small"
                   key="createAccount"
-                  name="Create Account"
+                  name={t('profile.createAccount')}
                   alignLeft
                   image={Plus}
-                  onClick={() => setOpenCreateAccount(true)}
+                  onClick={handleOpenCreateAccount}
                 />
                 <Divider style={{ margin: '6px 0' }} />
                 {

@@ -49,4 +49,7 @@ export default makeStyles({
   settingContainer: {
     paddingTop: 0,
   },
+  createAccountInput: {
+    marginBottom: '6px',
+  },
 });

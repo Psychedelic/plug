@@ -62,6 +62,9 @@ export default makeStyles((theme) => ({
       border: `2px solid ${theme.palette.danger.main}`,
     },
   },
+  paddingRight: {
+    paddingRight: '40px',
+  },
   newAddress: {
     height: 51,
     width: '100%',
