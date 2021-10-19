@@ -163,7 +163,7 @@ const IDInput = ({
               )}
               button={t('common.add')}
               buttonVariant="rainbow"
-              onClick={() => addContact()}
+              onClick={addContact}
               onClose={() => setIsContactsOpened(false)}
             />
           )}
