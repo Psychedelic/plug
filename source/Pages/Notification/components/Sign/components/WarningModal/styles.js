@@ -16,6 +16,7 @@ export default makeStyles(() => ({
     fontSize: '16px',
     lineHeight: '20px',
     color: '#111827',
+    textAlign: 'center',
   },
   modalText: {
     margin: '0',
@@ -23,6 +24,9 @@ export default makeStyles(() => ({
     fontSize: '16px',
     lineHeight: '20px',
     color: '#374151',
+    textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'center',
   },
   modalContainer: {
     width: '100%',
