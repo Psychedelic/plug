@@ -724,7 +724,7 @@ backgroundController.exposeController(
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
 
-    if (![SILENT_ERRORS.map((e) => e.message)].includes(errorMessage)) {
+    if (![Object.values(SILENT_ERRORS).map((e) => e.message)].includes(errorMessage)) {
       notificationManager.notificateError(errorMessage);
     }
 
