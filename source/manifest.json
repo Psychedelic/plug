@@ -1,8 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Plug",
-  "version": "0.3.4",
-
+  "version": "0.4.0",
   "icons": {
     "16": "assets/icons/favicon-16.png",
     "32": "assets/icons/favicon-32.png",
@@ -12,30 +11,24 @@
   "description": "Your plug into the Internet Computer",
   "homepage_url": "https://github.com/psychedelic/plug",
   "short_name": "Plug",
-
   "permissions": [
     "storage",
     "tabs",
     "notifications",
     "https://gxdmhoifte.execute-api.us-west-2.amazonaws.com/prod"
   ],
-
   "content_security_policy": "script-src 'self' 'wasm-eval'; object-src 'self'",
-
   "__chrome|firefox__author": "FleekHQ",
   "__opera__developer": {
     "name": "FleekHQ"
   },
-
   "__firefox__applications": {
     "gecko": {
       "id": "plug@plugwallet.ooo"
     }
   },
-
   "__chrome__minimum_chrome_version": "49",
   "__opera__minimum_opera_version": "36",
-
   "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {
@@ -48,33 +41,31 @@
     "__chrome|opera__chrome_style": false,
     "__firefox__browser_style": false
   },
-
   "__chrome|opera__options_page": "options.html",
   "options_ui": {
     "page": "options.html",
     "open_in_tab": true,
     "__chrome__chrome_style": false
   },
-
   "background": {
     "scripts": [
       "js/background.bundle.js"
     ],
     "__chrome|opera__persistent": true
   },
-
-  "content_scripts": [{
-    "run_at": "document_start",
-    "all_frames": true,
-    "matches": [
-      "http://*/*",
-      "https://*/*"
-    ],
-    "js": [
-      "js/contentScript.bundle.js"
-    ]
-  }],
-
+  "content_scripts": [
+    {
+      "run_at": "document_start",
+      "all_frames": true,
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "js/contentScript.bundle.js"
+      ]
+    }
+  ],
   "web_accessible_resources": [
     "js/inpage.bundle.js"
   ]
