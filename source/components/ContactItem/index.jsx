@@ -21,7 +21,7 @@ const ContactItem = ({
     >
       <UserIcon icon={contact.image} />
       <div className={classes.nameContainer}>
-        <Typography variant="h5">{contact.name}</Typography>
+        <Typography variant="h4">{contact.name}</Typography>
         <Typography variant="subtitle1">{shortAddress(contact.id)}</Typography>
       </div>
       {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
@@ -6,9 +6,7 @@ import PropTypes from 'prop-types';
 import TextInput from '../TextInput';
 import useStyles from './styles';
 
-const FormInput = ({
-  id, label, type, value, onChange, error,
-}) => {
+const FormInput = forwardRef(({ id, label, ...props }, ref) => {
   const classes = useStyles();
 
   return (
@@ -16,10 +14,10 @@ const FormInput = ({
       <InputLabel shrink htmlFor={id} className={classes.formLabel}>
         <Typography variant="h6">{label}</Typography>
       </InputLabel>
-      <TextInput id={id} type={type} value={value} onChange={onChange} error={error} />
+      <TextInput ref={ref} id={id} {...props} />
     </FormControl>
   );
-};
+});
 
 export default FormInput;
 
