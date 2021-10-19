@@ -1,16 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CanisterInfoContainer, CanisterInfoItem } from '@ui';
+import extension from 'extensionizer';
+import { makeStyles } from '@material-ui/core';
 
-const CanisterInfoDisplay = ({ request }) => {
+import { CanisterInfoContainer, CanisterInfoItem } from '@ui';
+import SIZES from '../../../constants';
+
+const useStyles = makeStyles({
+  canisterInfoContainer: {
+    marginBottom: 0,
+  },
+});
+
+const CanisterInfoDisplay = ({ request, shouldWarn }) => {
+  const classes = useStyles();
   const canisterInfo = {
     id: request?.canisterId,
     name: request?.canisterName,
     icon: request?.canisterIcon,
     iconAlt: request?.canisterDescription,
   };
+  extension.windows.update(
+    extension.windows.WINDOW_ID_CURRENT,
+    {
+      height: shouldWarn ? SIZES.canisterInfoWarning : SIZES.canisterInfoHeight,
+    },
+  );
   return (
-    <CanisterInfoContainer>
+    <CanisterInfoContainer className={classes.canisterInfoContainer}>
       <CanisterInfoItem key={canisterInfo?.id} canister={canisterInfo} />
     </CanisterInfoContainer>
   );
@@ -27,6 +44,7 @@ CanisterInfoDisplay.propTypes = {
     category: PropTypes.string,
     decodedArguments: PropTypes.any, // eslint-disable-line
   }).isRequired,
+  shouldWarn: PropTypes.bool.isRequired,
 };
 
 export default CanisterInfoDisplay;

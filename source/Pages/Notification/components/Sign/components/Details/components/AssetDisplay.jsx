@@ -39,8 +39,8 @@ const AssetDisplay = ({ request, shouldWarn, toggleModal }) => {
     const formattedAsset = formatAssetBySymbol(amount, assetData.symbol, icpPrice);
     formattedAsset.amount = Number.isNaN(formattedAsset.amount) ? null : formattedAsset.amount;
     setAsset(formattedAsset);
-    console.log('formatted', formattedAsset);
   }, [request]);
+
   return (
     <DisplayBox
       shouldWarn={shouldWarn}
