@@ -34,12 +34,12 @@ const IDInput = ({
     () => [principalId, accountId].includes(value), [principalId, accountId, value],
   );
 
-  const isIncludesContacts = useMemo(() => !contacts
+  const notInContacts = useMemo(() => !contacts
     .flatMap((c) => c.contacts)
     .map((c) => c.id)
-    .includes(value), [contacts]);
+    .includes(value), [contacts, value]);
 
-  const shouldDisplayContacts = value !== null && isValid && isIncludesContacts && !isUserAddress;
+  const shouldDisplayContacts = value !== null && isValid && notInContacts && !isUserAddress;
 
   const handleSelectedContact = (contact) => setSelectedContact(contact);
 
@@ -128,47 +128,47 @@ const IDInput = ({
         )}
       </div>
       {shouldDisplayContacts && (
-      <Grid item xs={12}>
-        <div className={clsx(classes.newAddress, classes.appearAnimation)}>
-          <span className={classes.newAddressTitle}>
-            {t('contacts.newAddress')}
-          </span>
-          <Button
-            variant="primary"
-            value={t('contacts.addContact')}
-            onClick={() => setIsContactsOpened(true)}
-            style={{
-              minWidth: 118,
-              height: 27,
-              borderRadius: 6,
-            }}
-          />
-          {isContactsOpened && (
-            <ActionDialog
-              open={isContactsOpened}
-              title={t('contacts.addToContacts')}
-              content={(
-                <FormItem
-                  label={t('contacts.name')}
-                  smallLabel
-                  component={(
-                    <TextInput
-                      fullWidth
-                      value={contactName}
-                      onChange={handleChangeContactName}
-                      type="text"
-                    />
-                  )}
-                />
-              )}
-              button={t('common.add')}
-              buttonVariant="rainbow"
-              onClick={addContact}
-              onClose={() => setIsContactsOpened(false)}
+        <Grid item xs={12}>
+          <div className={clsx(classes.newAddress, classes.appearAnimation)}>
+            <span className={classes.newAddressTitle}>
+              {t('contacts.newAddress')}
+            </span>
+            <Button
+              variant="primary"
+              value={t('contacts.addContact')}
+              onClick={() => setIsContactsOpened(true)}
+              style={{
+                minWidth: 118,
+                height: 27,
+                borderRadius: 6,
+              }}
             />
-          )}
-        </div>
-      </Grid>
+            {isContactsOpened && (
+              <ActionDialog
+                open={isContactsOpened}
+                title={t('contacts.addToContacts')}
+                content={(
+                  <FormItem
+                    label={t('contacts.name')}
+                    smallLabel
+                    component={(
+                      <TextInput
+                        fullWidth
+                        value={contactName}
+                        onChange={handleChangeContactName}
+                        type="text"
+                      />
+                    )}
+                  />
+                )}
+                button={t('common.add')}
+                buttonVariant="rainbow"
+                onClick={addContact}
+                onClose={() => setIsContactsOpened(false)}
+              />
+            )}
+          </div>
+        </Grid>
       )}
     </>
   );
