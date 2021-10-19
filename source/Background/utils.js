@@ -9,11 +9,11 @@ export const validateTransferArgs = ({ to, amount }) => {
   let message = null;
 
   if (validateAmount(amount)) {
-    message = 'Invalid amount. The amount must be a positive integer. \n';
+    message = 'The transaction failed because the amount entered was invalid. \n';
   }
 
   if (!validatePrincipalId(to) && !validateAccountId(to)) {
-    message = 'Invalid to address. The address must be a principal Id or an account Id';
+    message = 'The transaction failed because the destination address was invalid, it has to be a Principal ID or an Account ID.';
   }
   return message ? ERRORS.CLIENT_ERROR(message) : null;
 };
@@ -22,11 +22,11 @@ export const validateBurnArgs = ({ to, amount }) => {
   let message = null;
 
   if (validateAmount(amount)) {
-    message = 'Invalid amount. The amount must be a positive integer. \n';
+    message = 'The transaction failed because the amount entered was invalid. \n';
   }
 
   if (!validateCanisterId(to)) {
-    message = 'Invalid to address. The address must be a canister Id';
+    message = 'The transaction failed because the destination address was invalid, it has to be a Canister ID';
   }
   return message ? ERRORS.CLIENT_ERROR(message) : null;
 };
