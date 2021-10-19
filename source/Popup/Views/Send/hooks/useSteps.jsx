@@ -30,7 +30,6 @@ const useSteps = () => {
   const [selectedAsset, setSelectedAsset] = useState(assets?.[0] || CURRENCIES.get('ICP'));
 
   const [amount, setAmount] = useState(0);
-  const [transaction, setTransaction] = useState(null);
   const [address, setAddress] = useState(null);
   const [addressInfo, setAddressInfo] = useState({ isValid: null, type: null });
   const [trxComplete, setTrxComplete] = useState(false);
@@ -97,7 +96,6 @@ const useSteps = () => {
           sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: {} },
             (transactions) => {
               dispatch(setTransactions({ ...transactions, icpPrice }));
-              setTransaction(transactions?.transactions[0]);
             });
         }
       });
@@ -320,8 +318,7 @@ const useSteps = () => {
         addressInfo={addressInfo}
         handleSendClick={handleSendClick}
         error={sendError}
-        transaction={transaction}
-        trxComplete={trxComplete}
+        isTrxCompleted={trxComplete}
       />,
       left: <LinkButton value={t('common.back')} onClick={() => handlePreviousStep()} startIcon={BackIcon} />,
       right: rightButton,
