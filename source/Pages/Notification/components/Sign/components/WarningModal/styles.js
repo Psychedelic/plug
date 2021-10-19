@@ -23,6 +23,7 @@ export default makeStyles(() => ({
     fontSize: '16px',
     lineHeight: '20px',
     color: '#374151',
+    textAlign: 'center',
   },
   modalContainer: {
     width: '100%',

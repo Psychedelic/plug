@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@ui';
 
 import useStyles from './styles';
+import { WARNING_LINKS } from '../../constants';
 
 const WarningModal = ({ toggleModal }) => {
   const classes = useStyles();
@@ -26,9 +27,9 @@ const WarningModal = ({ toggleModal }) => {
           style={{ width: '87%' }}
           wrapperStyle={{ textAlign: 'center' }}
         />
-        <p className={classes.modalLink}>
+        <a className={classes.modalLink} href={WARNING_LINKS.docs} target="_blank" rel="noreferrer">
           {t('sign.warning.modalLearnMore')}
-        </p>
+        </a>
       </div>
     </div>
   );
