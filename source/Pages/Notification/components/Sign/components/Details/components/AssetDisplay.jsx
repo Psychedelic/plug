@@ -37,13 +37,15 @@ const AssetDisplay = ({ request, shouldWarn, toggleModal }) => {
     const amount = getAssetAmount(request);
     const assetData = getAssetData(request?.canisterId);
     const formattedAsset = formatAssetBySymbol(amount, assetData.symbol, icpPrice);
+    formattedAsset.amount = Number.isNaN(formattedAsset.amount) ? null : formattedAsset.amount;
     setAsset(formattedAsset);
+    console.log('formatted', formattedAsset);
   }, [request]);
   return (
     <DisplayBox
       shouldWarn={shouldWarn}
-      title={`$${asset?.value}` || 'Unknown Amount'}
-      subtitle={`${asset?.amount || '???'} ${asset?.symbol || ''}`}
+      title={asset?.value || asset?.value === 0 ? `$${asset?.value}` : 'Unknown Amount'}
+      subtitle={`${asset?.amount ?? '???'} ${asset?.symbol ?? ''}`}
       img={asset?.image}
       toggleModal={toggleModal}
     />

@@ -5,6 +5,7 @@ const SIZES = {
   dataHeight: 530,
   dataWithArgumentsHeight: 680,
   assetsHeight: 565,
+  nftHeight: 565,
 };
 
 export default SIZES;

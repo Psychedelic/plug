@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import extension from 'extensionizer';
 import { IncomingAction } from '@ui';
 
 import { ASSET_CANISTER_IDS } from '@shared/constants/canisters';
@@ -11,7 +10,6 @@ import NFTDisplay from './components/NFTDisplay';
 import AssetDisplay from './components/AssetDisplay';
 import CanisterInfoDisplay from './components/CanisterInfoDisplay';
 
-import SIZES from '../../constants';
 import useStyles from './styles';
 
 const getDisplayComponent = (request) => {
@@ -26,14 +24,7 @@ const Details = ({
   const { t } = useTranslation();
   const classes = useStyles();
   console.log('request', request);
-  const height = shouldWarn ? SIZES.detailsWarningHeight : SIZES.detailsNormalHeight;
 
-  extension.windows.update(
-    extension.windows.WINDOW_ID_CURRENT,
-    {
-      height,
-    },
-  );
   const Display = getDisplayComponent(request);
   return (
     <div className={classes.detailsWrapper}>

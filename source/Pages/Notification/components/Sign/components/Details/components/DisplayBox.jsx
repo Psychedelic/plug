@@ -10,32 +10,7 @@ const DisplayBox = ({
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  // const [amount, setAmount] = useState('');
-  // const [value, setValue] = useState('');
-  // const [assetImg, setAssetImg] = useState(request.canisterIcon);
-  // useEffect(() => {
-  //   const methodAmount = findAmountInArguments(request);
-  //   if (methodAmount) {
-  //     setAmount(methodAmount);
-  //   }
-  //   setAssetImg(request?.canisterIcon);
 
-  //   // Handle for NFTS
-  //   if (request?.category === 'nft' && request?.canisterName) {
-  //     setAmount(request?.canisterName);
-
-  //     setValue(`#${request?.decodedArguments?.id}`);
-  //   }
-
-  //   if (methodAmount) {
-  //     // TODO: get price of asset (ICP & XTC) and multiply
-  //     setValue('$420.420');
-  //   }
-
-  //   if (img.length) {
-  //     setAssetImg(img);
-  //   }
-  // }, [img, request]);
   return (
     <div className={classes.assetContainer}>
       <div className={classes.assetText}>

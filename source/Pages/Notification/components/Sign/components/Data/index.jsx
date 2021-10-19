@@ -7,7 +7,6 @@ import SIZES from '../../constants';
 
 const Data = ({ data, withArguments }) => {
   const classes = useStyles();
-  console.log('withargs', withArguments);
   extension.windows.update(
     extension.windows.WINDOW_ID_CURRENT,
     {

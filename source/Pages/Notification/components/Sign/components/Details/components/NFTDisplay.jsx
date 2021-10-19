@@ -1,36 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { getCanisterInfo } from '@psychedelic/dab-js';
+import extension from 'extensionizer';
+
+import { decodeTokenId } from '@shared/utils/ext';
 
 import DisplayBox from './DisplayBox';
+import SIZES from '../../../constants';
 
-const getNFTIndex = (request, canisterMetadata) => {
-  const { standard } = canisterMetadata;
+const getNFTId = (request) => {
   const indexInArgs = {
-    EXT: (args) => args?.[0]?.token,
-    ICPunks: (args) => args?.[1],
-    DepartureLabs: (args) => args?.[1],
-  }[standard];
+    transfer: (args) => args?.[0]?.token || args?.[1],
+    transfer_to: (args) => args?.[1],
+  }[request?.methodName];
   return indexInArgs(request?.decodedArguments);
 };
 
 const NFTDisplay = ({ request, shouldWarn, toggleModal }) => {
-  const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState('');
 
+  extension.windows.update(
+    extension.windows.WINDOW_ID_CURRENT,
+    {
+      height: shouldWarn ? SIZES.detailsWarningHeight : SIZES.nftHeight,
+    },
+  );
+
   useEffect(() => {
-    getCanisterInfo().then((response) => {
-      setLoading(false);
-      if (request?.decodedArguments) {
-        setTitle(getNFTIndex(request, response));
-      }
-    });
+    if (request?.decodedArguments) {
+      const nftId = getNFTId(request);
+      setTitle(`#${Number.isNaN(Number(nftId)) ? decodeTokenId(nftId) : nftId}`);
+    }
   }, [request]);
   return (
     <DisplayBox
-      loading={loading}
       shouldWarn={shouldWarn}
-      title={title || 'Unknown ID or recipient'}
+      title={title ?? 'Unknown ID or recipient'}
       subtitle={request?.canisterName || 'Unknown Collection'}
       img={request?.canisterIcon}
       toggleModal={toggleModal}
