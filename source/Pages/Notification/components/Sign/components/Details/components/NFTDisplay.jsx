@@ -37,7 +37,7 @@ const NFTDisplay = ({ request, shouldWarn, toggleModal }) => {
     <DisplayBox
       shouldWarn={shouldWarn}
       title={title || t('sign.warning.unknownId')}
-      subtitle={request?.canisterName || t('sign.unknownCollection')}
+      subtitle={request?.canisterName || t('sign.warning.unknownCollection')}
       img={request?.canisterIcon}
       toggleModal={toggleModal}
     />
