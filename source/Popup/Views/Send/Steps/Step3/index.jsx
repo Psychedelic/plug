@@ -22,12 +22,10 @@ import shortAddress from '@shared/utils/short-address';
 import PlugController from '@psychedelic/plug-controller';
 import { Principal } from '@dfinity/principal';
 import { Info } from 'react-feather';
-import { getICRocksAccountUrl, getICRocksTransactionUrl, icIdsUrl } from '@shared/constants/urls';
+import { getICRocksAccountUrl, icIdsUrl } from '@shared/constants/urls';
 import ArrowUpRight from '@assets/icons/arrow-up-right.png';
 import clsx from 'clsx';
-import {
-  useRouter, Plug, TokenIcon, TABS,
-} from '@components';
+import { useRouter, TokenIcon, TABS } from '@components';
 
 import { ADDRESS_TYPES, DEFAULT_FEE, XTC_FEE } from '@shared/constants/addresses';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
@@ -35,7 +33,7 @@ import { useICPPrice } from '@redux/icp';
 import useStyles from '../../styles';
 
 const Step3 = ({
-  asset, amount, address, addressInfo, handleSendClick, error, transaction, trxComplete,
+  asset, amount, address, addressInfo, handleSendClick, error, isTrxCompleted,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -48,7 +46,6 @@ const Step3 = ({
   const icpPrice = useICPPrice();
 
   const [ICPModalOpen, setOpenICPModal] = useState(false);
-  const [sendingModalOpen, setSendingModalOpen] = useState(false);
 
   const subtotal = amount * asset?.price;
   const fee = +(asset?.price * DEFAULT_FEE).toFixed(5);
@@ -56,7 +53,6 @@ const Step3 = ({
 
   const openSendModal = () => {
     setOpenICPModal(false);
-    setSendingModalOpen(true);
   };
 
   const onClick = () => {
@@ -70,11 +66,6 @@ const Step3 = ({
       extension.tabs.create({ url: getICRocksAccountUrl(accountId) });
     }
   }, [loading, accountId]);
-
-  const openICRocksTx = () => {
-    navigator.navigate('home');
-    extension.tabs.create({ url: getICRocksTransactionUrl(transaction.hash) });
-  };
 
   const openTwoIdsBlog = () => {
     if (!loading) {
@@ -92,23 +83,27 @@ const Step3 = ({
     }
   }, []);
 
-  const handleReturnHome = () => {
-    dispatch(setAssetsLoading(true));
-    sendMessage({
-      type: HANDLER_TYPES.GET_ASSETS,
-      params: { refresh: true },
-    }, (keyringAssets) => {
-      dispatch(setAssets({ keyringAssets, icpPrice }));
-      dispatch(setAssetsLoading(false));
-    });
-    navigator.navigate('home', TABS.ACTIVITY);
-  };
-
   useEffect(() => {
     if (error) {
       navigator.navigate('error');
     }
   }, [error]);
+
+  useEffect(() => {
+    if (isTrxCompleted) {
+      dispatch(setAssetsLoading(true));
+      sendMessage({
+        type: HANDLER_TYPES.GET_ASSETS,
+        params: { refresh: true },
+      }, (keyringAssets) => {
+        dispatch(setAssets({ keyringAssets, icpPrice }));
+        dispatch(setAssetsLoading(false));
+      });
+
+      setLoading(false);
+      navigator.navigate('home', TABS.ACTIVITY);
+    }
+  }, [isTrxCompleted]);
 
   return (
     <Container>
@@ -216,32 +211,6 @@ const Step3 = ({
             </div>
           )}
         />
-        <Dialog
-          closeable={false}
-          open={sendingModalOpen}
-          component={(
-            <div className={classes.sendingModal}>
-              <Plug size="big" message={t(`send.plug${transaction ? 'LetsGo' : 'Chill'}`)} />
-              {trxComplete ? (
-                <>
-                  <Typography className={classes.sendModalTitle}>{t('send.transactionSuccess')}</Typography>
-                  <Button
-                    variant="rainbow"
-                    value={t('send.returnHome')}
-                    onClick={handleReturnHome}
-                    fullWidth
-                  />
-                  {transaction && <LinkButton onClick={openICRocksTx} value={t('send.viewTxOnICRocks')} />}
-                </>
-              ) : (
-                <>
-                  <Typography className={classes.sendModalTitle}>{t('send.transactionInProgress')}</Typography>
-                  <Typography className={classes.modalWarning}>{t('send.doNotClose')}</Typography>
-                </>
-              )}
-            </div>
-          )}
-        />
 
         {
           addressInfo.type === ADDRESS_TYPES.PRINCIPAL && asset.symbol === 'ICP'
@@ -294,8 +263,7 @@ Step3.propTypes = {
   addressInfo: PropTypes.objectOf(PropTypes.object).isRequired,
   handleSendClick: PropTypes.func.isRequired,
   error: PropTypes.bool,
-  transaction: PropTypes.objectOf(PropTypes.string).isRequired,
-  trxComplete: PropTypes.bool.isRequired,
+  isTrxCompleted: PropTypes.bool.isRequired,
 };
 
 Step3.defaultProps = {
