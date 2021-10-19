@@ -486,7 +486,7 @@ backgroundController.exposeController(
         callback(null, false);
       }
     } else {
-      callback(ERRORS.SIGN_REJECTED, null, [{ portId, callId }]);
+      callback(null, null, [{ portId, callId }]);
       callback(null, true); // Return true to close the modal
     }
   },
@@ -628,7 +628,7 @@ backgroundController.exposeController(
       }
     } else {
       plugProvider.deleteAgent();
-      callback(ERRORS.AGENT_REJECTED, null, [{ portId, callId }]);
+      callback(null, null, [{ portId, callId }]);
       callback(null, true); // Return true to close the modal
     }
   },

@@ -2,24 +2,22 @@ export default {
   CONNECTION_ERROR: {
     code: 401,
     message:
-      'You are not connected. You must call window.ic.plug.requestConnect() and have the user accept the popup before you call this method.',
+      'There was an error when this app/page tried to interact with your wallet in Plug. Please contact this project’s developers and share the error with them so they can fix it.',
   },
   CANISTER_NOT_WHITLESTED_ERROR: (canisterId) => ({
     code: 401,
-    message: `Plug Identity is not allowed to make requests to canister Id: ${canisterId}`,
+    message: `This app tried to connect to a canister (${canisterId}) on your behalf without the proper permissions. Please contact this project’s developers and share the error with them so they can fix it.`,
   }),
   BALANCE_ERROR: {
     code: 400,
-    message: 'Insufficient balance or balance unavailable.',
+    message: 'The transaction that was just attempted failed because you don’t have enough funds. Review your balance before trying again, or contact the project’s developers.',
   },
-  CANISTER_ID_ERROR: { code: 400, message: 'Invalid canister id/s.' },
+  CANISTER_ID_ERROR: { code: 400, message: 'The transaction the app/page attempted failed because the destination Canister ID is invalid. Please contact this project’s developers so they can fix it.' },
   TRANSACTION_REJECTED: {
     code: 401,
     message: 'The transactions was rejected.',
   },
-  AGENT_REJECTED: { code: 401, message: 'The agent creation was rejected.' },
-  SIGN_REJECTED: { code: 401, message: 'The sign was rejected.' },
-  INITIALIZED_ERROR: { code: 403, message: 'Plug must be initialized.' },
+  INITIALIZED_ERROR: { code: 403, message: 'This app tried to connect to Plug, but your wallet is not setup yet. Please click the extension and get started before trying to use an app.' },
   CLIENT_ERROR: (message) => ({ code: 400, message }),
   SERVER_ERROR: (message) => ({ code: 500, message }),
 };
