@@ -9,9 +9,9 @@ import WalletInfo from '../WalletInfo';
 import useStyles from './styles';
 
 const NavBar = ({ disableProfile, disableNavigation }) => {
-  const navigator = disableNavigation ? null : useRouter();
+  const { navigator } = disableNavigation ? {} : useRouter();
   const classes = useStyles();
-  const navigateHome = () => navigator ?? navigator.navigate('home');
+  const navigateHome = () => navigator?.navigate('home');
   return (
     <div className={classes.root}>
       <Button aria-label="Plug" className={classes.flex} onClick={navigateHome}>
