@@ -15,7 +15,7 @@ import NotificationManager from '../lib/NotificationManager';
 
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import { getKeyringHandler, HANDLER_TYPES, getKeyringErrorMessage } from './Keyring';
-import { validateTransferArgs, validateBurnArgs } from './utils';
+import { validateTransferArgs, validateBurnArgs, validateTransactions } from './utils';
 import ERRORS, { SILENT_ERRORS } from './errors';
 import plugProvider from '../Inpage/index';
 
@@ -635,6 +635,66 @@ backgroundController.exposeController(
 );
 
 backgroundController.exposeController(
+  'batchTransactions',
+  async (opts, metadata, transactions) => secureController(opts.callback, async () => {
+    const { message, sender, callback } = opts;
+
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
+
+    storage.get(keyring.currentWalletId.toString(), async (state) => {
+      const apps = state?.[keyring.currentWalletId]?.apps || {};
+
+      if (apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
+        const transactionsError = validateTransactions(transactions);
+
+        if (transactionsError) {
+          callback(transactionsError, null);
+          return;
+        }
+
+        const url = qs.stringifyUrl({
+          url: 'notification.html',
+          query: {
+            callId,
+            portId,
+            metadataJson: JSON.stringify(metadata),
+            argsJson: JSON.stringify({ transactions }),
+            type: 'batchTransactions',
+          },
+        });
+
+        const height = keyring?.isUnlocked
+          ? SIZES.detailHeightSmall
+          : SIZES.loginHeight;
+
+        extension.windows.create({
+          url,
+          type: 'popup',
+          width: SIZES.width,
+          height,
+          top: 65,
+          left: metadata.pageWidth - SIZES.width,
+        });
+      } else {
+        callback(ERRORS.CONNECTION_ERROR, null);
+      }
+    });
+  }),
+);
+
+backgroundController.exposeController(
+  'handleBatchTransactions',
+  async (opts, transactions, callId, portId) => {
+    const { callback } = opts;
+    storage.get(keyring.currentWalletId.toString(), async (state) => {
+      const apps = state?.[keyring.currentWalletId]?.apps || {};
+      storage.set({ [keyring.currentWalletId]: { apps } });
+    });
+  },
+);
+
+backgroundController.exposeController(
   'requestBurnXTC',
   async (opts, metadata, args) => secureController(opts.callback, async () => {
     const { message, sender, callback } = opts;
@@ -665,6 +725,7 @@ backgroundController.exposeController(
         const height = keyring?.isUnlocked
           ? SIZES.detailHeightSmall
           : SIZES.loginHeight;
+
         extension.windows.create({
           url,
           type: 'popup',
