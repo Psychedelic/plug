@@ -526,7 +526,10 @@ backgroundController.exposeController(
     storage.get(keyring.currentWalletId.toString(), async (state) => {
       const app = state?.[keyring.currentWalletId]?.apps?.[metadata.url] || {};
       if (app?.status === CONNECTION_STATUS.accepted) {
-        const allWhitelisted = areAllElementsIn(whitelist, app?.whitelist);
+        const allWhitelisted = areAllElementsIn(
+          whitelist,
+          app?.whitelist ? Object.keys(app?.whitelist) : [],
+        );
         const height = keyring?.isUnlocked
           ? SIZES.detailHeightSmall
           : SIZES.loginHeight;
@@ -548,7 +551,7 @@ backgroundController.exposeController(
                 type: 'allowAgent',
               },
             });
-
+            console.log('do i ever get here?');
             extension.windows.create({
               url,
               type: 'popup',
