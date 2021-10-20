@@ -25,6 +25,8 @@ const NOTIFICATION_COMPONENTS = {
 const NotificationContainer = () => {
   const [loggedIn, setLoggedIn] = useState(null);
   const { query } = qs.parseUrl(window.location.href);
+  const [onTimeout, setOnTimeout] = useState(null);
+  const [timeoutId, setTimeoutId] = useState(null);
 
   const {
     callId, metadataJson = '{}', argsJson = '{}', type, portId,
@@ -43,6 +45,21 @@ const NotificationContainer = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    if (onTimeout) {
+      const id = setTimeout(onTimeout, args?.timeout || 120000);
+      setTimeoutId(id);
+    }
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [onTimeout]);
+
   const handleLogin = () => setLoggedIn(true);
   const Component = NOTIFICATION_COMPONENTS[type];
   return (
@@ -58,6 +75,7 @@ const NotificationContainer = () => {
               callId={callId}
               portId={portId}
               metadata={metadata}
+              setOnTimeout={setOnTimeout}
             />
           )
           : <Login redirect={handleLogin} />

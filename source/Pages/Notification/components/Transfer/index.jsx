@@ -19,21 +19,13 @@ import Data from './components/Data';
 i18n.use(initReactI18next).init(initConfig);
 
 const Transfer = ({
-  args, callId, portId, metadata,
+  args, callId, portId, metadata, setOnTimeout,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
   const { url, icons } = metadata;
   const { selectedTab, handleChangeTab } = useTabs();
-
-  useEffect(() => {
-    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
-      if (state?.wallets?.length) {
-        dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
-      }
-    });
-  }, []);
 
   const {
     requests,
@@ -47,6 +39,17 @@ const Transfer = ({
     error,
     loading,
   } = useRequests([args], callId, portId);
+
+  useEffect(() => {
+    setOnTimeout(() => () => {
+      handleRequest(requests[currentRequest], 'declined').then(() => window?.close?.());
+    });
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
+      if (state?.wallets?.length) {
+        dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
+      }
+    });
+  }, []);
 
   const requestCount = requests.length;
   const tabs = [
@@ -137,4 +140,5 @@ Transfer.propTypes = {
   callId: PropTypes.string.isRequired,
   portId: PropTypes.string.isRequired,
   metadata: PropTypes.arrayOf(PropTypes.string).isRequired,
+  setOnTimeout: PropTypes.func.isRequired,
 };
