@@ -21,7 +21,7 @@ import Data from './components/Data';
 i18n.use(initReactI18next).init(initConfig);
 
 const BurnXTC = ({
-  args, callId, portId, metadata,
+  args, callId, portId, metadata, setOnTimeout,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -42,6 +42,9 @@ const BurnXTC = ({
   } = useRequests([args], callId, portId);
 
   useEffect(() => {
+    setOnTimeout(() => () => {
+      handleRequest(requests[currentRequest], 'declined').then(() => window?.close?.());
+    });
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
       (state) => {
         if (state?.wallets?.length) {
@@ -123,4 +126,5 @@ BurnXTC.propTypes = {
   callId: PropTypes.string.isRequired,
   portId: PropTypes.string.isRequired,
   metadata: PropTypes.arrayOf(PropTypes.string).isRequired,
+  setOnTimeout: PropTypes.func.isRequired,
 };

@@ -37,7 +37,7 @@ const portRPC = new PortRPC({
 portRPC.start();
 
 const AllowAgent = ({
-  args, metadata, callId, portId,
+  args, metadata, callId, portId, setOnTimeout,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
@@ -74,6 +74,9 @@ const AllowAgent = ({
   };
 
   useEffect(() => {
+    setOnTimeout(() => () => {
+      handleAllowAgent(CONNECTION_STATUS.rejected).then(() => window?.close?.());
+    });
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
       if (state?.wallets?.length) {
         dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
@@ -191,4 +194,5 @@ AllowAgent.propTypes = {
   callId: PropTypes.string.isRequired,
   portId: PropTypes.string.isRequired,
   metadata: PropTypes.objectOf(PropTypes.string).isRequired,
+  setOnTimeout: PropTypes.func.isRequired,
 };
