@@ -44,7 +44,7 @@ DisplayBox.propTypes = {
     canisterDescription: PropTypes.string,
     canisterIcon: PropTypes.string,
     canisterId: PropTypes.string,
-    canisterName: PropTypes.string,
+    name: PropTypes.string,
     canisterUrl: PropTypes.string,
     methodName: PropTypes.string,
     category: PropTypes.string,

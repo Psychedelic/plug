@@ -19,7 +19,7 @@ const CanisterInfoDisplay = ({ request, shouldWarn }) => {
   const classes = useStyles();
   const canisterInfo = {
     id: request?.canisterId,
-    name: request?.canisterName,
+    name: request?.name,
     icon: request?.canisterIcon,
     iconAlt: request?.canisterDescription,
   };
@@ -45,7 +45,7 @@ CanisterInfoDisplay.propTypes = {
     canisterDescription: PropTypes.string,
     canisterIcon: PropTypes.string,
     canisterId: PropTypes.string,
-    canisterName: PropTypes.string,
+    name: PropTypes.string,
     canisterUrl: PropTypes.string,
     methodName: PropTypes.string,
     category: PropTypes.string,

@@ -1,20 +1,24 @@
 import React, { useEffect } from 'react';
 import { useTranslation, initReactI18next } from 'react-i18next';
-import { Button, Tabs, LinkButton } from '@ui';
+import {
+  Button, Tabs, LinkButton, theme,
+} from '@ui';
 import i18n from 'i18next';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@material-ui/styles';
 import { useTabs } from '@hooks';
+import store from '@redux/store';
 import PropTypes from 'prop-types';
 import { Layout } from '@components';
-import { useDispatch } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
 import initConfig from '../../../../locales';
-import ErrorScreen from '../NotificationError';
 import useStyles from './styles';
 import Stepper from './components/Stepper';
 import useRPCTransactions from './hooks/useRPCTransactions';
-import Details from './components/Details';
-import Data from './components/Data';
+import Details from '../Sign/components/Details';
+import Data from '../Sign/components/Data';
 
 i18n.use(initReactI18next).init(initConfig);
 
@@ -47,11 +51,11 @@ const BatchTransactions = ({
     declineAll,
 
     transactions: _transactions,
+    transaction,
     currentIndex,
     response,
 
     data,
-    error,
     loading,
   } = useRPCTransactions(transactions, callId, portId);
 
@@ -60,34 +64,27 @@ const BatchTransactions = ({
 
   const tabs = [
     {
-      label: t('transfer.details'),
-      component: (
-        <Details
-          url={url}
-          image={icons[0] || null}
-          transactionsCount={transactionsCount}
-          // TODO: Get amount
-          // amount={(requests?.[currentRequest] || args)?.amount}
-        />
-      ),
+      label: t('assetsWarning.details.title'),
+      component: <Details
+        url={url}
+        icon={icons?.[0] || null}
+        request={transaction}
+      />,
     },
     {
-      label: t('transfer.data'),
-      component: (
-        <Data
-          data={data}
-          transactionsCount={transactionsCount}
-        />
-      ),
+      label: t('assetsWarning.data.title'),
+      component: <Data
+        data={data}
+        withArguments
+      />,
     },
   ];
 
   return (
-    <Layout disableProfile>
-      {error ? (
-        <ErrorScreen />
-      ) : (
-        <>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Layout disableProfile disableNavigation>
           {transactionsCount > 1 && (
             <Stepper
               isActive={isCurrentTransaction}
@@ -133,9 +130,9 @@ const BatchTransactions = ({
               />
             )}
           </div>
-        </>
-      )}
-    </Layout>
+        </Layout>
+      </ThemeProvider>
+    </Provider>
   );
 };
 

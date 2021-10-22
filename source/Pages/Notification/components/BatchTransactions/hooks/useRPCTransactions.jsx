@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { DataDisplay } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { PortRPC } from '@fleekhq/browser-rpc';
+import ReactJson from 'react-json-view';
 
 const portRPC = new PortRPC({
   name: 'notification-port',
@@ -11,60 +12,38 @@ const portRPC = new PortRPC({
 
 portRPC.start();
 
-const TRANSACTION_STATUS = {
-  CONFIRMED: 'confirmed',
-  DECLINED: 'declined',
-};
+const formatTransaction = ({ transaction }) => ({
+  canisterId: transaction.canisterId,
+  methodName: transaction.methodName,
+  sender: transaction.sender,
+  arguments: transaction.arguments,
+  name: transaction?.canisterInfo?.name,
+  canisterDescription: transaction?.canisterInfo?.description,
+  canisterIcon: transaction?.canisterInfo?.icon,
+  canisterUrl: transaction?.canisterInfo?.url,
+  decodedArguments: transaction.decodedArguments,
+  category: transaction?.canisterInfo?.category,
+});
 
 const useTransactions = (transactions, callId, portId) => {
   const { t } = useTranslation();
 
-  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [response, setResponse] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const processAll = async (status) => {
+  const processAll = async (accepted) => {
     setLoading(true);
-    const confirmedTransactions = transactions.map((transaction) => ({
-      ...transaction,
-      status,
-    }));
-
-    const isSucceed = await portRPC.call('handleBatchTransactions', [
-      confirmedTransactions,
+    await portRPC.call('handleBatchTransactions', [
+      accepted,
       callId,
       portId,
     ]);
-
-    if (isSucceed) {
-      window.close();
-    }
-
-    setError(!isSucceed);
     setLoading(false);
+    window.close();
   };
 
-  const process = async (status) => {
-    setResponse([
-      ...response,
-      {
-        ...transactions[currentIndex],
-        status,
-      },
-    ]);
-
-    if (response.length + 1 === transactions.length) {
-      await processAll(status);
-    } else {
-      setCurrentIndex(currentIndex + 1);
-    }
-  };
-
-  const confirm = () => process(TRANSACTION_STATUS.CONFIRMED);
-  const decline = () => process(TRANSACTION_STATUS.DECLINED);
-  const confirmAll = () => processAll(TRANSACTION_STATUS.CONFIRMED);
-  const declineAll = () => processAll(TRANSACTION_STATUS.DECLINED);
+  const confirm = () => processAll(true);
+  const decline = () => processAll(false);
 
   const showNext = () => {
     setCurrentIndex(currentIndex + 1);
@@ -73,41 +52,40 @@ const useTransactions = (transactions, callId, portId) => {
     setCurrentIndex(currentIndex - 1);
   };
 
-  const stringifiedArgs = useMemo(() => JSON.stringify(transactions[currentIndex]?.args ?? {}), []);
-
-  const data = useMemo(() => {
-    const config = [
-      { label: 'canisterId', value: 'HERE_COMES_CANISTER_ID' },
-      {
-        label: 'methodName',
-        value: transactions[currentIndex]?.methodName,
-      },
-      {
-        label: 'parameters',
-        value: stringifiedArgs || t('common.null'),
-      },
-    ];
-
-    return config.map(({ label, value }) => ({
-      label: t(`common.${label}`),
-      component: <DataDisplay value={value} />,
-    }));
-  }, [currentIndex]);
+  const transaction = formatTransaction({ transaction: transactions?.[currentIndex] });
+  const data = useMemo(() => [
+    { label: t('common.canisterId'), component: <DataDisplay value={transaction?.canisterId} /> },
+    {
+      label: t('common.methodName'),
+      component: <DataDisplay value={transaction?.methodName} />,
+    },
+    {
+      label: t('common.arguments'),
+      component: <ReactJson
+        src={transaction?.decodedArguments}
+        collapsed={2}
+        style={{
+          backgroundColor: '#F3F4F6',
+          padding: '10px',
+          borderRadius: '10px',
+          maxHeight: '185px',
+          overflow: 'auto',
+        }}
+      />,
+    },
+  ], [transaction]);
 
   return {
     showNext,
     showPrevious,
     confirm,
     decline,
-    confirmAll,
-    declineAll,
 
-    response,
     transactions,
+    transaction,
     currentIndex,
 
     data,
-    error,
     loading,
   };
 };

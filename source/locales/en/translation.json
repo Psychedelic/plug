@@ -338,7 +338,7 @@
   },
   "sign": {
     "warning": {
-      "action": "wants to interact with {{canisterName}}",
+      "action": "wants to interact with {{name}}",
       "unknownArguments": "Unknown Arguments",
       "title": "Important Warning",
       "description": "This app is interacting with your assets in an unsafe way, without providing a way for Plug (or you) to see what it's doing. Make sure you fully trust this app before confirming, otherwise you could lose your assets.",

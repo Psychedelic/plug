@@ -37,7 +37,7 @@ const NFTDisplay = ({ request, shouldWarn, toggleModal }) => {
     <DisplayBox
       shouldWarn={shouldWarn}
       title={title || t('sign.warning.unknownId')}
-      subtitle={request?.canisterName || t('sign.warning.unknownCollection')}
+      subtitle={request?.name || t('sign.warning.unknownCollection')}
       img={request?.canisterIcon}
       toggleModal={toggleModal}
     />
@@ -51,7 +51,7 @@ NFTDisplay.propTypes = {
     canisterDescription: PropTypes.string,
     canisterIcon: PropTypes.string,
     canisterId: PropTypes.string,
-    canisterName: PropTypes.string,
+    name: PropTypes.string,
     canisterUrl: PropTypes.string,
     methodName: PropTypes.string,
     category: PropTypes.string,

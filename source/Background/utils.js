@@ -32,8 +32,6 @@ export const validateBurnArgs = ({ to, amount }) => {
 };
 
 export const validateTransactions = (transactions) => {
-  console.log(transactions);
-
   // TODO: Add validation for transactions
   if (false) {
     return 'Validate transactions error';

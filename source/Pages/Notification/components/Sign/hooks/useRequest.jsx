@@ -20,7 +20,7 @@ const formatRequest = ({ requestInfo, canisterInfo, payload }) => ({
   methodName: requestInfo.methodName,
   sender: requestInfo.sender,
   arguments: requestInfo.arguments,
-  canisterName: canisterInfo.name,
+  name: canisterInfo.name,
   canisterDescription: canisterInfo.description,
   canisterIcon: canisterInfo.icon,
   canisterUrl: canisterInfo.url,

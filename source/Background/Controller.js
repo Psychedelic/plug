@@ -551,7 +551,6 @@ backgroundController.exposeController(
                 type: 'allowAgent',
               },
             });
-            console.log('do i ever get here?');
             extension.windows.create({
               url,
               type: 'popup',
@@ -646,23 +645,26 @@ backgroundController.exposeController(
     const { id: portId } = sender;
 
     storage.get(keyring.currentWalletId.toString(), async (state) => {
-      const apps = state?.[keyring.currentWalletId]?.apps || {};
+      const app = state?.[keyring.currentWalletId]?.apps?.[metadata?.url] || {};
 
-      if (apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted) {
+      if (app?.status === CONNECTION_STATUS.accepted) {
         const transactionsError = validateTransactions(transactions);
 
         if (transactionsError) {
           callback(transactionsError, null);
           return;
         }
-
+        const canistersInfo = app?.whitelist || {};
+        const transactionsWithInfo = transactions.map(
+          (tx) => ({ ...tx, canisterInfo: canistersInfo[tx.canisterId] }),
+        );
         const url = qs.stringifyUrl({
           url: 'notification.html',
           query: {
             callId,
             portId,
             metadataJson: JSON.stringify(metadata),
-            argsJson: JSON.stringify({ transactions }),
+            argsJson: JSON.stringify({ transactions: transactionsWithInfo, canistersInfo }),
             type: 'batchTransactions',
           },
         });
@@ -688,12 +690,10 @@ backgroundController.exposeController(
 
 backgroundController.exposeController(
   'handleBatchTransactions',
-  async (opts, transactions, callId, portId) => {
+  async (opts, accepted, callId, portId) => {
     const { callback } = opts;
-    storage.get(keyring.currentWalletId.toString(), async (state) => {
-      const apps = state?.[keyring.currentWalletId]?.apps || {};
-      storage.set({ [keyring.currentWalletId]: { apps } });
-    });
+    callback(null, accepted, [{ callId, portId }]);
+    callback(null, true);
   },
 );
 
