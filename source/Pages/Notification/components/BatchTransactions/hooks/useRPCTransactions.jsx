@@ -17,7 +17,7 @@ const formatTransaction = ({ transaction }) => ({
   methodName: transaction.methodName,
   sender: transaction.sender,
   arguments: transaction.arguments,
-  name: transaction?.canisterInfo?.name,
+  canisterName: transaction?.canisterInfo?.name,
   canisterDescription: transaction?.canisterInfo?.description,
   canisterIcon: transaction?.canisterInfo?.icon,
   canisterUrl: transaction?.canisterInfo?.url,

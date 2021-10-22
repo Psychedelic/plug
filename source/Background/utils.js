@@ -31,11 +31,7 @@ export const validateBurnArgs = ({ to, amount }) => {
   return message ? ERRORS.CLIENT_ERROR(message) : null;
 };
 
-export const validateTransactions = (transactions) => {
-  // TODO: Add validation for transactions
-  if (false) {
-    return 'Validate transactions error';
-  }
-
-  return null;
-};
+export const validateTransactions = (transactions) => Array.isArray(transactions)
+  && transactions?.every(
+    (tx) => tx.idl && tx.canisterId && tx.methodName && tx.args,
+  );

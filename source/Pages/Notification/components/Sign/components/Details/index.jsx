@@ -27,7 +27,7 @@ const Details = ({
   const Display = getDisplayComponent(request);
   return (
     <div className={classes.detailsWrapper}>
-      <IncomingAction url={url} image={icon} action={t('sign.warning.action', { name: request.name })} />
+      <IncomingAction url={url} image={icon} action={t('sign.warning.action', { name: request.canisterName })} />
       <Display
         toggleModal={toggleModal}
         request={request}
@@ -37,7 +37,7 @@ const Details = ({
         <WarningBox
           pageUrl={url}
           canisterId={request?.canisterId}
-          name={request?.name}
+          name={request?.canisterName}
         />
       )}
     </div>
@@ -53,7 +53,7 @@ Details.propTypes = {
     canisterDescription: PropTypes.string,
     canisterIcon: PropTypes.string,
     canisterId: PropTypes.string,
-    name: PropTypes.string,
+    canisterName: PropTypes.string,
     canisterUrl: PropTypes.string,
     methodName: PropTypes.string,
   }).isRequired,

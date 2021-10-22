@@ -3,25 +3,13 @@ import PropTypes from 'prop-types';
 import extension from 'extensionizer';
 import { useTranslation } from 'react-i18next';
 
-import { formatAssetBySymbol, TOKENS } from '@shared/constants/currencies';
+import { formatAssetBySymbol } from '@shared/constants/currencies';
 import { useICPPrice } from '@redux/icp';
 
-import DisplayBox from './DisplayBox';
+import DisplayBox from '../DisplayBox';
 
-import SIZES from '../../../constants';
-
-// eslint-disable-next-line max-len
-const getAssetData = (canisterId) => Object.values(TOKENS).find((token) => token.canisterId === canisterId);
-
-const getAssetAmount = (request) => {
-  const { methodName } = request || {};
-  const amountInArgs = {
-    transfer: (args) => args?.[0]?.amount,
-    transferErc20: (args) => args?.[1],
-    send_dfx: (args) => args?.[0]?.amount,
-  }[methodName];
-  return amountInArgs(request?.decodedArguments);
-};
+import SIZES from '../../../../constants';
+import { formatMethodName, getAssetAmount, getAssetData } from './utils';
 
 const AssetDisplay = ({ request, shouldWarn, toggleModal }) => {
   const { t } = useTranslation();
@@ -42,12 +30,13 @@ const AssetDisplay = ({ request, shouldWarn, toggleModal }) => {
     formattedAsset.amount = Number.isNaN(formattedAsset.amount) ? null : formattedAsset.amount;
     setAsset(formattedAsset);
   }, [request]);
-
+  const title = shouldWarn ? t('sign.warning.unknownAmount') : formatMethodName(request?.methodName);
+  const subtitle = `${asset?.amount ?? '???'} ${asset?.symbol ?? ''} ${asset?.amount !== null ? `(~$${asset?.value})` : ''}`;
   return (
     <DisplayBox
       shouldWarn={shouldWarn}
-      title={asset?.value || asset?.value === 0 ? `$${asset?.value}` : t('sign.warning.unknownAmount')}
-      subtitle={`${asset?.amount ?? '???'} ${asset?.symbol ?? ''}`}
+      title={title}
+      subtitle={subtitle}
       img={asset?.image}
       toggleModal={toggleModal}
     />
@@ -61,7 +50,7 @@ AssetDisplay.propTypes = {
     canisterDescription: PropTypes.string,
     canisterIcon: PropTypes.string,
     canisterId: PropTypes.string,
-    name: PropTypes.string,
+    canisterName: PropTypes.string,
     canisterUrl: PropTypes.string,
     methodName: PropTypes.string,
     category: PropTypes.string,

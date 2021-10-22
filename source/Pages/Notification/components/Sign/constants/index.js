@@ -4,7 +4,7 @@ const SIZES = {
   detailsWarningHeight: 795,
   dataHeight: 530,
   dataWithArgumentsHeight: 680,
-  assetsHeight: 565,
+  assetsHeight: 550,
   nftHeight: 565,
   canisterInfoHeight: 495,
   canisterInfoWarning: 740,

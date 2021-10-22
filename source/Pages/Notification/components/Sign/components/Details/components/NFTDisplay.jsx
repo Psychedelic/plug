@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import extension from 'extensionizer';
 import { useTranslation } from 'react-i18next';
+import { capitalize } from '@material-ui/core';
 
 import { decodeTokenId } from '@shared/utils/ext';
 
@@ -18,7 +19,7 @@ const getNFTId = (request) => {
 
 const NFTDisplay = ({ request, shouldWarn, toggleModal }) => {
   const { t } = useTranslation();
-  const [title, setTitle] = useState('');
+  const [subtitle, setSubtitle] = useState('');
 
   extension.windows.update(
     extension.windows.WINDOW_ID_CURRENT,
@@ -30,14 +31,17 @@ const NFTDisplay = ({ request, shouldWarn, toggleModal }) => {
   useEffect(() => {
     if (request?.decodedArguments) {
       const nftId = getNFTId(request);
-      setTitle(`#${Number.isNaN(Number(nftId)) ? decodeTokenId(nftId) : nftId}`);
+      const index = Number.isNaN(Number(nftId)) ? decodeTokenId(nftId) : nftId;
+      setSubtitle(`${request?.canisterName} #${index}`);
+    } else {
+      setSubtitle(request?.canisterName || t('sign.warning.unknownCollection'));
     }
   }, [request]);
   return (
     <DisplayBox
       shouldWarn={shouldWarn}
-      title={title || t('sign.warning.unknownId')}
-      subtitle={request?.name || t('sign.warning.unknownCollection')}
+      title={shouldWarn ? t('sign.warning.unknownArguments') : capitalize(request?.methodName)}
+      subtitle={subtitle}
       img={request?.canisterIcon}
       toggleModal={toggleModal}
     />
@@ -51,7 +55,7 @@ NFTDisplay.propTypes = {
     canisterDescription: PropTypes.string,
     canisterIcon: PropTypes.string,
     canisterId: PropTypes.string,
-    name: PropTypes.string,
+    canisterName: PropTypes.string,
     canisterUrl: PropTypes.string,
     methodName: PropTypes.string,
     category: PropTypes.string,
