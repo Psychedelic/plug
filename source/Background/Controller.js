@@ -159,7 +159,7 @@ backgroundController.exposeController('disconnect', async (opts, url) => secureC
 
 backgroundController.exposeController(
   'requestConnect',
-  async (opts, metadata, whitelist) => secureController(opts.callback, async () => {
+  async (opts, metadata, whitelist, timeout) => secureController(opts.callback, async () => {
     let canistersInfo = [];
     const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
 
@@ -185,6 +185,7 @@ backgroundController.exposeController(
           name,
           status: CONNECTION_STATUS.pending,
           icon: icons[0] || null,
+          timeout,
         },
       };
 
@@ -201,7 +202,7 @@ backgroundController.exposeController(
           callId,
           portId,
           metadataJson: JSON.stringify(newMetadata),
-          argsJson: JSON.stringify({ whitelist, canistersInfo }),
+          argsJson: JSON.stringify({ whitelist, canistersInfo, timeout }),
           type: 'allowAgent',
         },
       });
@@ -226,6 +227,7 @@ backgroundController.exposeController(
           portId,
           url: domainUrl,
           icon: icons[0] || null,
+          argsJson: JSON.stringify({ timeout }),
           type: 'connect',
         },
       });
@@ -344,7 +346,7 @@ backgroundController.exposeController(
             callId,
             portId,
             metadataJson: JSON.stringify(metadata),
-            argsJson: JSON.stringify(args),
+            argsJson: JSON.stringify({ ...args, timeout: apps?.[metadata.url]?.timeout }),
             type: 'transfer',
           },
         });
@@ -442,7 +444,7 @@ backgroundController.exposeController(
               type: 'sign',
               metadataJson: JSON.stringify(metadata),
               argsJson: JSON.stringify({
-                requestInfo, payload, canisterInfo,
+                requestInfo, payload, canisterInfo, timeout: app?.timeout,
               }),
             },
           });
@@ -548,6 +550,7 @@ backgroundController.exposeController(
                   canistersInfo,
                   updateWhitelist: true,
                   showList: false,
+                  timeout: app?.timeout,
                 }),
                 type: 'allowAgent',
               },
@@ -721,7 +724,7 @@ backgroundController.exposeController(
             callId,
             portId,
             metadataJson: JSON.stringify(metadata),
-            argsJson: JSON.stringify(args),
+            argsJson: JSON.stringify({ ...args, timeout: apps?.[metadata.url]?.timeout }),
             type: 'burnXTC',
           },
         });
