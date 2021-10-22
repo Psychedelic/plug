@@ -338,6 +338,7 @@
   },
   "sign": {
     "warning": {
+      "assetCanister": "an asset canister",
       "action": "wants to interact with {{name}}",
       "unknownArguments": "Unknown Arguments",
       "title": "Important Warning",

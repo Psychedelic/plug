@@ -17,7 +17,9 @@ const CanisterInfoDisplay = ({ request, shouldWarn, toggleModal }) => {
   );
 
   const title = shouldWarn ? t('sign.warning.unknownArguments') : formatMethodName(request?.methodName);
-  const subtitle = shouldWarn ? request?.methodName : request?.canisterId;
+  const subtitle = shouldWarn
+    ? formatMethodName(request?.methodName)
+    : request?.canisterName || request?.canisterId;
   return (
     <DisplayBox
       shouldWarn={shouldWarn}

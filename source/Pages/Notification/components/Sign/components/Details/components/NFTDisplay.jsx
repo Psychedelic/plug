@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import extension from 'extensionizer';
 import { useTranslation } from 'react-i18next';
-import { capitalize } from '@material-ui/core';
 
 import { decodeTokenId } from '@shared/utils/ext';
 
 import DisplayBox from './DisplayBox';
 import SIZES from '../../../constants';
+import { formatMethodName } from '../utils';
 
 const getNFTId = (request) => {
   const indexInArgs = {
@@ -32,15 +32,15 @@ const NFTDisplay = ({ request, shouldWarn, toggleModal }) => {
     if (request?.decodedArguments) {
       const nftId = getNFTId(request);
       const index = Number.isNaN(Number(nftId)) ? decodeTokenId(nftId) : nftId;
-      setSubtitle(`${request?.canisterName} #${index}`);
+      setSubtitle(`${request?.canisterName ? request?.canisterName : ''} #${index}`);
     } else {
-      setSubtitle(request?.methodName || t('sign.warning.unknownCollection'));
+      setSubtitle(request?.methodName ? formatMethodName(request?.methodName) : t('sign.warning.unknownCollection'));
     }
   }, [request]);
   return (
     <DisplayBox
       shouldWarn={shouldWarn}
-      title={shouldWarn ? t('sign.warning.unknownArguments') : capitalize(request?.methodName)}
+      title={shouldWarn ? t('sign.warning.unknownArguments') : formatMethodName(request?.methodName)}
       subtitle={subtitle}
       img={request?.canisterIcon}
       toggleModal={toggleModal}

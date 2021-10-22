@@ -28,7 +28,7 @@ const Details = ({
   const Display = getDisplayComponent(request);
   return (
     <div className={classes.detailsWrapper}>
-      <IncomingAction url={url} image={icon} action={t('sign.warning.action', { name: request.canisterName })} />
+      <IncomingAction url={url} image={icon} action={t('sign.warning.action', { name: request.canisterName || t('sign.warning.assetCanister') })} />
       <Display
         toggleModal={toggleModal}
         request={request}
