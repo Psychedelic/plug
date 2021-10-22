@@ -62,6 +62,8 @@ const NotificationContainer = () => {
     };
   }, [onTimeout]);
 
+  window.onbeforeunload = () => onTimeout?.();
+
   const handleLogin = () => setLoggedIn(true);
   const Component = NOTIFICATION_COMPONENTS[type];
   return (
