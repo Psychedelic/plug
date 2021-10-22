@@ -6,10 +6,10 @@ import { useTranslation } from 'react-i18next';
 import { formatAssetBySymbol } from '@shared/constants/currencies';
 import { useICPPrice } from '@redux/icp';
 
-import DisplayBox from '../DisplayBox';
+import DisplayBox from './DisplayBox';
 
-import SIZES from '../../../../constants';
-import { formatMethodName, getAssetAmount, getAssetData } from './utils';
+import SIZES from '../../../constants';
+import { formatMethodName, getAssetAmount, getAssetData } from '../utils';
 
 const AssetDisplay = ({ request, shouldWarn, toggleModal }) => {
   const { t } = useTranslation();
@@ -29,9 +29,10 @@ const AssetDisplay = ({ request, shouldWarn, toggleModal }) => {
     const formattedAsset = formatAssetBySymbol(amount, assetData.symbol, icpPrice);
     formattedAsset.amount = Number.isNaN(formattedAsset.amount) ? null : formattedAsset.amount;
     setAsset(formattedAsset);
-  }, [request]);
+  }, [request, icpPrice]);
+
   const title = shouldWarn ? t('sign.warning.unknownAmount') : formatMethodName(request?.methodName);
-  const subtitle = `${asset?.amount ?? '???'} ${asset?.symbol ?? ''} ${asset?.amount !== null ? `(~$${asset?.value})` : ''}`;
+  const subtitle = `${asset?.amount ?? '???'} ${asset?.symbol ?? ''} ${asset?.amount !== null && icpPrice ? `(~$${asset?.value?.toFixed?.(2)})` : ''}`;
   return (
     <DisplayBox
       shouldWarn={shouldWarn}

@@ -427,6 +427,7 @@ backgroundController.exposeController(
         const PROTECTED_IDS = [
           ...(nftCanisters || []).map((collection) => collection.principal_id.toString()),
           ...ASSET_CANISTER_IDS,
+          'rkp4c-7iaaa-aaaaa-aaaca-cai',
         ];
         const shouldShowModal = requestInfo.manual || (requestInfo.requestType === 'call' && !!canisterInfo.id && PROTECTED_IDS.includes(canisterInfo.id));
         // const shouldShowModal = requestInfo.manual || (requestInfo.requestType === 'call'

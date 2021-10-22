@@ -1,42 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import extension from 'extensionizer';
-import { makeStyles } from '@material-ui/core';
+import { useTranslation } from 'react-i18next';
 
-import { CanisterInfoContainer, CanisterInfoItem } from '@ui';
 import SIZES from '../../../constants';
+import { formatMethodName } from '../utils';
+import DisplayBox from './DisplayBox';
 
-const useStyles = makeStyles({
-  canisterInfoContainer: {
-    marginBottom: 0,
-  },
-  emptyBox: {
-    justifyContent: 'space-around',
-  },
-});
-
-const CanisterInfoDisplay = ({ request, shouldWarn }) => {
-  const classes = useStyles();
-  const canisterInfo = {
-    id: request?.canisterId,
-    name: request?.canisterName,
-    icon: request?.canisterIcon,
-    iconAlt: request?.canisterDescription,
-  };
+const CanisterInfoDisplay = ({ request, shouldWarn, toggleModal }) => {
+  const { t } = useTranslation();
   extension.windows.update(
     extension.windows.WINDOW_ID_CURRENT,
     {
       height: shouldWarn ? SIZES.canisterInfoWarning : SIZES.canisterInfoHeight,
     },
   );
+
+  const title = shouldWarn ? t('sign.warning.unknownArguments') : formatMethodName(request?.methodName);
+  const subtitle = shouldWarn ? request?.methodName : request?.canisterId;
   return (
-    <CanisterInfoContainer className={classes.canisterInfoContainer}>
-      <CanisterInfoItem
-        key={canisterInfo?.id}
-        canister={canisterInfo}
-        defaultBoxClassName={classes.emptyBox}
-      />
-    </CanisterInfoContainer>
+    <DisplayBox
+      shouldWarn={shouldWarn}
+      title={title}
+      subtitle={subtitle}
+      img={request?.canisterIcon}
+      toggleModal={toggleModal}
+    />
+    // <CanisterInfoContainer className={classes.canisterInfoContainer}>
+    //   <CanisterInfoItem
+    //     key={canisterInfo?.id}
+    //     canister={canisterInfo}
+    //     defaultBoxClassName={classes.emptyBox}
+    //   />
+    // </CanisterInfoContainer>
   );
 };
 
@@ -51,6 +47,7 @@ CanisterInfoDisplay.propTypes = {
     category: PropTypes.string,
     decodedArguments: PropTypes.any, // eslint-disable-line
   }).isRequired,
+  toggleModal: PropTypes.func.isRequired,
   shouldWarn: PropTypes.bool.isRequired,
 };
 

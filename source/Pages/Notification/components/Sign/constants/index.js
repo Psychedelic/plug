@@ -6,8 +6,8 @@ const SIZES = {
   dataWithArgumentsHeight: 680,
   assetsHeight: 550,
   nftHeight: 565,
-  canisterInfoHeight: 495,
-  canisterInfoWarning: 740,
+  canisterInfoHeight: 550,
+  canisterInfoWarning: 790,
 };
 
 export const WARNING_LINKS = {

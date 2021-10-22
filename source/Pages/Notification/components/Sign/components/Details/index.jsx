@@ -11,9 +11,10 @@ import AssetDisplay from './components/AssetDisplay';
 import CanisterInfoDisplay from './components/CanisterInfoDisplay';
 
 import useStyles from './styles';
+import { TRANSFER_METHOD_NAMES } from './constants';
 
 const getDisplayComponent = (request) => {
-  const isTransfer = ['transfer', 'transferErc20', 'transfer_to', 'send_dfx'].includes(request?.methodName);
+  const isTransfer = TRANSFER_METHOD_NAMES.includes(request?.methodName);
   if (!isTransfer) return CanisterInfoDisplay;
   return ASSET_CANISTER_IDS.includes(request?.canisterId) ? AssetDisplay : NFTDisplay;
 };
