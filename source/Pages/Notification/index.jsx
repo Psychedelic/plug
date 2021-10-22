@@ -7,7 +7,7 @@ import store from '../../redux/store';
 import ProviderWrapper from '../../shared/ProviderWrapper';
 import Login from '../../Popup/Views/Login';
 import AppConnection from './components/AppConnection';
-import BatchTransactions from './components/BatchTransactions';
+import BatchTransactions from './components/Sign/components/BatchTransactions';
 import Transfer from './components/Transfer';
 import Balance from './components/Balance';
 import AllowAgent from './components/AllowAgent';
@@ -62,7 +62,7 @@ const NotificationContainer = () => {
     };
   }, [onTimeout]);
 
-  window.onbeforeunload = () => onTimeout?.();
+  window.onclose = () => onTimeout?.();
 
   const handleLogin = () => setLoggedIn(true);
   const Component = NOTIFICATION_COMPONENTS[type];

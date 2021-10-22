@@ -119,4 +119,9 @@ export default makeStyles(() => ({
   yellowTitle: {
     color: '#EEAC00',
   },
+  displaysContainer: {
+    maxHeight: 320,
+    overflow: 'auto',
+    width: '100%',
+  },
 }));

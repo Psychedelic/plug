@@ -7,14 +7,19 @@ import SIZES from '../../../constants';
 import { formatMethodName } from '../utils';
 import DisplayBox from './DisplayBox';
 
-const CanisterInfoDisplay = ({ request, shouldWarn, toggleModal }) => {
+const CanisterInfoDisplay = ({
+  request, shouldWarn, toggleModal, resize,
+}) => {
   const { t } = useTranslation();
-  extension.windows.update(
-    extension.windows.WINDOW_ID_CURRENT,
-    {
-      height: shouldWarn ? SIZES.canisterInfoWarning : SIZES.canisterInfoHeight,
-    },
-  );
+
+  if (resize) {
+    extension.windows.update(
+      extension.windows.WINDOW_ID_CURRENT,
+      {
+        height: shouldWarn ? SIZES.canisterInfoWarning : SIZES.canisterInfoHeight,
+      },
+    );
+  }
 
   const title = shouldWarn ? t('sign.warning.unknownArguments') : formatMethodName(request?.methodName);
   const subtitle = shouldWarn
@@ -28,13 +33,6 @@ const CanisterInfoDisplay = ({ request, shouldWarn, toggleModal }) => {
       img={request?.canisterIcon}
       toggleModal={toggleModal}
     />
-    // <CanisterInfoContainer className={classes.canisterInfoContainer}>
-    //   <CanisterInfoItem
-    //     key={canisterInfo?.id}
-    //     canister={canisterInfo}
-    //     defaultBoxClassName={classes.emptyBox}
-    //   />
-    // </CanisterInfoContainer>
   );
 };
 
@@ -49,6 +47,7 @@ CanisterInfoDisplay.propTypes = {
     category: PropTypes.string,
     decodedArguments: PropTypes.any, // eslint-disable-line
   }).isRequired,
+  resize: PropTypes.bool.isRequired,
   toggleModal: PropTypes.func.isRequired,
   shouldWarn: PropTypes.bool.isRequired,
 };

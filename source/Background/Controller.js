@@ -623,12 +623,14 @@ backgroundController.exposeController(
       };
       storage.set({ [keyring.currentWalletId]: { apps: newApps } });
     });
+    console.log('handle allow agent', response);
     if (response?.status === CONNECTION_STATUS.accepted) {
       try {
         const publicKey = await keyring.getPublicKey();
         callback(null, publicKey, [{ portId, callId }]);
         callback(null, true);
       } catch (e) {
+        console.log('error', e);
         callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
         callback(null, false);
       }

@@ -20,27 +20,40 @@ const getDisplayComponent = (request) => {
 };
 
 const Details = ({
-  shouldWarn, toggleModal, url, icon, request,
+  shouldWarn, toggleModal, url, icon, requests,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
-
-  const Display = getDisplayComponent(request);
+  const title = t(`sign.warning.action${requests?.length ? 's' : ''}`, { name: requests?.[0]?.canisterName || t('sign.warning.assetCanister') });
   return (
     <div className={classes.detailsWrapper}>
-      <IncomingAction url={url} image={icon} action={t('sign.warning.action', { name: request.canisterName || t('sign.warning.assetCanister') })} />
-      <Display
-        toggleModal={toggleModal}
-        request={request}
-        shouldWarn={shouldWarn}
+      <IncomingAction
+        url={url}
+        image={icon}
+        action={title}
       />
-      {shouldWarn && (
-        <WarningBox
-          pageUrl={url}
-          canisterId={request?.canisterId}
-          name={request?.canisterName}
-        />
-      )}
+      <div className={classes.displaysContainer}>
+        {requests.map((request) => {
+          const Display = getDisplayComponent(request);
+          return (
+            <>
+              <Display
+                toggleModal={toggleModal}
+                request={request}
+                shouldWarn={shouldWarn}
+                resize={requests?.length === 1}
+              />
+              {shouldWarn && (
+                <WarningBox
+                  pageUrl={url}
+                  canisterId={request?.canisterId}
+                  name={request?.canisterName}
+                />
+              )}
+            </>
+          );
+        })}
+      </div>
     </div>
   );
 };
@@ -50,14 +63,14 @@ Details.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   url: PropTypes.string.isRequired,
   icon: PropTypes.string,
-  request: PropTypes.shape({
+  requests: PropTypes.arrayOf(PropTypes.shape({
     canisterDescription: PropTypes.string,
     canisterIcon: PropTypes.string,
     canisterId: PropTypes.string,
     canisterName: PropTypes.string,
     canisterUrl: PropTypes.string,
     methodName: PropTypes.string,
-  }).isRequired,
+  })).isRequired,
 };
 
 Details.defaultProps = {

@@ -17,16 +17,20 @@ const getNFTId = (request) => {
   return indexInArgs(request?.decodedArguments);
 };
 
-const NFTDisplay = ({ request, shouldWarn, toggleModal }) => {
+const NFTDisplay = ({
+  request, shouldWarn, toggleModal, resize,
+}) => {
   const { t } = useTranslation();
   const [subtitle, setSubtitle] = useState('');
 
-  extension.windows.update(
-    extension.windows.WINDOW_ID_CURRENT,
-    {
-      height: shouldWarn ? SIZES.detailsWarningHeight : SIZES.nftHeight,
-    },
-  );
+  if (resize) {
+    extension.windows.update(
+      extension.windows.WINDOW_ID_CURRENT,
+      {
+        height: shouldWarn ? SIZES.detailsWarningHeight : SIZES.nftHeight,
+      },
+    );
+  }
 
   useEffect(() => {
     if (request?.decodedArguments) {
@@ -61,6 +65,7 @@ NFTDisplay.propTypes = {
     category: PropTypes.string,
     decodedArguments: PropTypes.any, // eslint-disable-line
   }).isRequired,
+  resize: PropTypes.bool.isRequired,
 };
 
 export default NFTDisplay;

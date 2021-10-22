@@ -1,24 +1,27 @@
 import React, { useEffect } from 'react';
+import { Provider, useDispatch } from 'react-redux';
 import { useTranslation, initReactI18next } from 'react-i18next';
-import {
-  Button, Tabs, LinkButton, theme,
-} from '@ui';
 import i18n from 'i18next';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/styles';
+import PropTypes from 'prop-types';
+import extension from 'extensionizer';
+
+import {
+  Button, Tabs, theme,
+} from '@ui';
 import { useTabs } from '@hooks';
 import store from '@redux/store';
-import PropTypes from 'prop-types';
 import { Layout } from '@components';
-import { Provider, useDispatch } from 'react-redux';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
-import initConfig from '../../../../locales';
+
+import initConfig from '../../../../../../locales';
 import useStyles from './styles';
-import Stepper from './components/Stepper';
 import useRPCTransactions from './hooks/useRPCTransactions';
-import Details from '../Sign/components/Details';
-import Data from '../Sign/components/Data';
+import Details from '../Details';
+import Data from '../Data';
+import SIZES from '../../constants';
 
 i18n.use(initReactI18next).init(initConfig);
 
@@ -42,25 +45,20 @@ const BatchTransactions = ({
     });
   }, []);
 
+  extension.windows.update(
+    extension.windows.WINDOW_ID_CURRENT,
+    {
+      height: transactions?.length > 3 ? SIZES.batchTransactions : SIZES.batchTransactionsScroll,
+    },
+  );
+
   const {
-    showNext,
-    showPrevious,
-
     confirm,
-    confirmAll,
-    declineAll,
-
+    decline,
     transactions: _transactions,
-    transaction,
-    currentIndex,
-    response,
-
     data,
     loading,
   } = useRPCTransactions(transactions, callId, portId);
-
-  const isCurrentTransaction = (response?.length ?? 0) === currentIndex;
-  const transactionsCount = _transactions.length;
 
   const tabs = [
     {
@@ -68,13 +66,13 @@ const BatchTransactions = ({
       component: <Details
         url={url}
         icon={icons?.[0] || null}
-        request={transaction}
+        requests={_transactions}
       />,
     },
     {
       label: t('assetsWarning.data.title'),
       component: <Data
-        data={data}
+        transactionsData={data}
         withArguments
       />,
     },
@@ -85,15 +83,6 @@ const BatchTransactions = ({
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Layout disableProfile disableNavigation>
-          {transactionsCount > 1 && (
-            <Stepper
-              isActive={isCurrentTransaction}
-              current={currentIndex + 1}
-              total={transactionsCount}
-              showNext={showNext}
-              showPrevious={showPrevious}
-            />
-          )}
           <Tabs
             tabs={tabs}
             selectedTab={selectedTab}
@@ -104,10 +93,9 @@ const BatchTransactions = ({
               <Button
                 variant="default"
                 value={t('common.decline')}
-                onClick={declineAll}
+                onClick={decline}
                 fullWidth
                 style={{ width: '96%' }}
-                disabled={loading || !isCurrentTransaction}
               />
               <Button
                 variant="rainbow"
@@ -117,18 +105,9 @@ const BatchTransactions = ({
                 style={{ width: '96%' }}
                 wrapperStyle={{ textAlign: 'right' }}
                 loading={loading}
-                disabled={!isCurrentTransaction}
               />
             </div>
-            {transactionsCount > 1 && (
-              <LinkButton
-                value={`${t('common.confirm')} ${transactionsCount} ${t(
-                  'transfer.transactions',
-                )}`}
-                onClick={confirmAll}
-                style={{ marginTop: 24 }}
-              />
-            )}
+
           </div>
         </Layout>
       </ThemeProvider>

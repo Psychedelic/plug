@@ -11,17 +11,21 @@ import DisplayBox from './DisplayBox';
 import SIZES from '../../../constants';
 import { formatMethodName, getAssetAmount, getAssetData } from '../utils';
 
-const AssetDisplay = ({ request, shouldWarn, toggleModal }) => {
+const AssetDisplay = ({
+  request, shouldWarn, toggleModal, resize,
+}) => {
   const { t } = useTranslation();
   const [asset, setAsset] = useState(null);
   const icpPrice = useICPPrice(true);
 
-  extension.windows.update(
-    extension.windows.WINDOW_ID_CURRENT,
-    {
-      height: shouldWarn ? SIZES.detailsWarningHeight : SIZES.assetsHeight,
-    },
-  );
+  if (resize) {
+    extension.windows.update(
+      extension.windows.WINDOW_ID_CURRENT,
+      {
+        height: shouldWarn ? SIZES.detailsWarningHeight : SIZES.assetsHeight,
+      },
+    );
+  }
 
   useEffect(() => {
     const amount = getAssetAmount(request);
@@ -47,6 +51,7 @@ const AssetDisplay = ({ request, shouldWarn, toggleModal }) => {
 AssetDisplay.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   shouldWarn: PropTypes.bool.isRequired,
+  resize: PropTypes.bool.isRequired,
   request: PropTypes.shape({
     canisterDescription: PropTypes.string,
     canisterIcon: PropTypes.string,

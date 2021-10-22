@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormItem } from '@ui';
 import extension from 'extensionizer';
 import useStyles from '../../styles';
 import SIZES from '../../constants';
 
-const Data = ({ data, withArguments }) => {
+const Data = ({ transactionsData, withArguments }) => {
   const classes = useStyles();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const handleClickMethod = (index) => () => setCurrentIndex(index);
   extension.windows.update(
     extension.windows.WINDOW_ID_CURRENT,
     {
@@ -17,7 +19,7 @@ const Data = ({ data, withArguments }) => {
   return (
     <div className={classes.innerContainer}>
       {
-        data.map((item, index) => (
+        transactionsData?.[currentIndex]?.map((item, index) => (
           <FormItem
             key={index.toString()}
             label={item.label}
@@ -34,11 +36,13 @@ const Data = ({ data, withArguments }) => {
 export default Data;
 
 Data.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      component: PropTypes.node.isRequired,
-    }),
+  transactionsData: PropTypes.arrayOf(
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string.isRequired,
+        component: PropTypes.node.isRequired,
+      }),
+    ),
   ).isRequired,
   withArguments: PropTypes.bool.isRequired,
 };

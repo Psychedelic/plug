@@ -29,7 +29,6 @@ const useTransactions = (transactions, callId, portId) => {
   const { t } = useTranslation();
 
   const [loading, setLoading] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   const processAll = async (accepted) => {
     setLoading(true);
@@ -45,45 +44,36 @@ const useTransactions = (transactions, callId, portId) => {
   const confirm = () => processAll(true);
   const decline = () => processAll(false);
 
-  const showNext = () => {
-    setCurrentIndex(currentIndex + 1);
-  };
-  const showPrevious = () => {
-    setCurrentIndex(currentIndex - 1);
-  };
-
-  const transaction = formatTransaction({ transaction: transactions?.[currentIndex] });
-  const data = useMemo(() => [
-    { label: t('common.canisterId'), component: <DataDisplay value={transaction?.canisterId} /> },
-    {
-      label: t('common.methodName'),
-      component: <DataDisplay value={transaction?.methodName} />,
-    },
-    {
-      label: t('common.arguments'),
-      component: <ReactJson
-        src={transaction?.decodedArguments}
-        collapsed={2}
-        style={{
-          backgroundColor: '#F3F4F6',
-          padding: '10px',
-          borderRadius: '10px',
-          maxHeight: '185px',
-          overflow: 'auto',
-        }}
-      />,
-    },
-  ], [transaction]);
+  const data = useMemo(() => transactions.map((tx) => {
+    const transaction = formatTransaction({ transaction: tx });
+    return [
+      { label: t('common.canisterId'), component: <DataDisplay value={transaction?.canisterId} /> },
+      {
+        label: t('common.methodName'),
+        component: <DataDisplay value={transaction?.methodName} />,
+      },
+      {
+        label: t('common.arguments'),
+        component: <ReactJson
+          src={transaction?.decodedArguments}
+          collapsed={2}
+          style={{
+            backgroundColor: '#F3F4F6',
+            padding: '10px',
+            borderRadius: '10px',
+            maxHeight: '185px',
+            overflow: 'auto',
+          }}
+        />,
+      },
+    ];
+  }), [transactions]);
 
   return {
-    showNext,
-    showPrevious,
     confirm,
     decline,
 
-    transactions,
-    transaction,
-    currentIndex,
+    transactions: transactions.map((tx) => formatTransaction({ transaction: tx })),
 
     data,
     loading,
