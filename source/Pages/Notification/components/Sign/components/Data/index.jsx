@@ -1,25 +1,43 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FormItem } from '@ui';
 import extension from 'extensionizer';
+import clsx from 'clsx';
+
+import { FormItem } from '@ui';
+
 import useStyles from '../../styles';
 import SIZES from '../../constants';
+import { formatMethodName } from '../Details/utils';
 
 const Data = ({ transactionsData, withArguments }) => {
   const classes = useStyles();
   const [currentIndex, setCurrentIndex] = useState(0);
+
   const handleClickMethod = (index) => () => setCurrentIndex(index);
+  const multipleTransactions = transactionsData?.length > 1;
+  const height = withArguments ? SIZES.dataWithArgumentsHeight : SIZES.dataHeight;
   extension.windows.update(
     extension.windows.WINDOW_ID_CURRENT,
     {
-      height: withArguments ? SIZES.dataWithArgumentsHeight : SIZES.dataHeight,
+      height: height + Number(multipleTransactions) * SIZES.dataTabs,
     },
   );
 
   return (
     <div className={classes.innerContainer}>
+      <div className={classes.dataTabs}>
+        {transactionsData.map((tx, index) => (
+          <button
+            type="button"
+            className={clsx(classes.dataTab, index === currentIndex && classes.selectedTab)}
+            onClick={handleClickMethod(index)}
+          >
+            {formatMethodName(tx?.transaction?.methodName)}
+          </button>
+        ))}
+      </div>
       {
-        transactionsData?.[currentIndex]?.map((item, index) => (
+        transactionsData?.[currentIndex]?.formItems?.map((item, index) => (
           <FormItem
             key={index.toString()}
             label={item.label}
@@ -37,12 +55,15 @@ export default Data;
 
 Data.propTypes = {
   transactionsData: PropTypes.arrayOf(
-    PropTypes.arrayOf(
-      PropTypes.shape({
-        label: PropTypes.string.isRequired,
-        component: PropTypes.node.isRequired,
-      }),
-    ),
+    PropTypes.shape({
+      transaction: PropTypes.any, // eslint-disable-line
+      formItems: PropTypes.arrayOf(
+        PropTypes.shape({
+          label: PropTypes.string.isRequired,
+          component: PropTypes.node.isRequired,
+        }),
+      ),
+    }),
   ).isRequired,
   withArguments: PropTypes.bool.isRequired,
 };

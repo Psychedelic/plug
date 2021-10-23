@@ -65,7 +65,7 @@ const AssetsWarning = ({
     {
       label: t('assetsWarning.data.title'),
       component: <Data
-        transactionsData={[data]}
+        transactionsData={{ formItems: [data], transaction: request }}
         withArguments={!shouldWarn}
       />,
     },

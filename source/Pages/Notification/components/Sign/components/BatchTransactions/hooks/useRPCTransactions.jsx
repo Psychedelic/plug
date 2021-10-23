@@ -46,7 +46,7 @@ const useTransactions = (transactions, callId, portId) => {
 
   const data = useMemo(() => transactions.map((tx) => {
     const transaction = formatTransaction({ transaction: tx });
-    return [
+    const formItems = [
       { label: t('common.canisterId'), component: <DataDisplay value={transaction?.canisterId} /> },
       {
         label: t('common.methodName'),
@@ -68,6 +68,7 @@ const useTransactions = (transactions, callId, portId) => {
         />,
       },
     ];
+    return { transaction, formItems };
   }), [transactions]);
 
   return {

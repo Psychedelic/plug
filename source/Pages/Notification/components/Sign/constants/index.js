@@ -10,6 +10,7 @@ const SIZES = {
   canisterInfoWarning: 790,
   batchTransactions: 750,
   batchTransactionsScroll: 800,
+  dataTabs: 70,
 };
 
 export const WARNING_LINKS = {
