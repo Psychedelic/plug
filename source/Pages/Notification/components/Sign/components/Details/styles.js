@@ -37,7 +37,7 @@ export default makeStyles(() => ({
     justifyContent: 'space-between',
     width: '100%',
     margin: '10px 0 0',
-    padding: '16px',
+    padding: '18px',
     boxSizing: 'border-box',
     border: '1px solid #D1D5DB',
     borderRadius: '10px',

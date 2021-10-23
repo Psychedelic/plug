@@ -25,17 +25,19 @@ const Data = ({ transactionsData, withArguments }) => {
 
   return (
     <div className={classes.innerContainer}>
-      <div className={classes.dataTabs}>
-        {transactionsData.map((tx, index) => (
-          <button
-            type="button"
-            className={clsx(classes.dataTab, index === currentIndex && classes.selectedTab)}
-            onClick={handleClickMethod(index)}
-          >
-            {formatMethodName(tx?.transaction?.methodName)}
-          </button>
-        ))}
-      </div>
+      {multipleTransactions && (
+        <div className={classes.dataTabs}>
+          {transactionsData.map((tx, index) => (
+            <button
+              type="button"
+              className={clsx(classes.dataTab, index === currentIndex && classes.selectedTab)}
+              onClick={handleClickMethod(index)}
+            >
+              {formatMethodName(tx?.transaction?.methodName)}
+            </button>
+          ))}
+        </div>
+      )}
       {
         transactionsData?.[currentIndex]?.formItems?.map((item, index) => (
           <FormItem
