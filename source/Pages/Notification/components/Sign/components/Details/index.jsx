@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { IncomingAction } from '@ui';
+import { ArrowDown } from 'react-feather';
 
 import { ASSET_CANISTER_IDS } from '@shared/constants/canisters';
 
@@ -33,16 +34,21 @@ const Details = ({
         action={title}
       />
       <div className={classes.displaysContainer}>
-        {requests.map((request) => {
+        {requests.map((request, index) => {
           const Display = getDisplayComponent(request);
           return (
-            <>
+            <div className={classes.displayContainer}>
               <Display
                 toggleModal={toggleModal}
                 request={request}
                 shouldWarn={shouldWarn}
                 resize={requests?.length === 1}
               />
+              {index < requests.length - 1 && (
+                <div className={classes.nextArrowContainer}>
+                  <ArrowDown size="20" color="#3574F4" />
+                </div>
+              )}
               {shouldWarn && (
                 <WarningBox
                   pageUrl={url}
@@ -50,9 +56,10 @@ const Details = ({
                   name={request?.canisterName}
                 />
               )}
-            </>
+            </div>
           );
         })}
+        <div className={classes.gradient} />
       </div>
     </div>
   );

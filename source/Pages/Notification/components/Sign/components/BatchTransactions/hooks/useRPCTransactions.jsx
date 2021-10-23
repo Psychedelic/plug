@@ -61,6 +61,7 @@ const useTransactions = (transactions, callId, portId) => {
             backgroundColor: '#F3F4F6',
             padding: '10px',
             borderRadius: '10px',
+            minHeight: '185px',
             maxHeight: '185px',
             overflow: 'auto',
           }}
