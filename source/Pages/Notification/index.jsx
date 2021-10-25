@@ -10,6 +10,7 @@ import AppConnection from './components/AppConnection';
 import BatchTransactions from './components/Sign/components/BatchTransactions';
 import Transfer from './components/Transfer';
 import Balance from './components/Balance';
+import Principal from './components/Principal';
 import AllowAgent from './components/AllowAgent';
 import BurnXTC from './components/BurnXTC';
 import Sign from './components/Sign';
@@ -18,6 +19,7 @@ const NOTIFICATION_COMPONENTS = {
   batchTransactions: BatchTransactions,
   transfer: Transfer,
   balance: Balance,
+  principal: Principal,
   connect: AppConnection,
   allowAgent: AllowAgent,
   burnXTC: BurnXTC,
@@ -33,9 +35,8 @@ const NotificationContainer = () => {
   const {
     callId, metadataJson = '{}', argsJson = '{}', type, portId,
   } = query;
-
-  const metadata = JSON.parse(metadataJson);
-  const args = JSON.parse(argsJson); // single request for now
+  const metadata = JSON.parse(metadataJson || '{}');
+  const args = JSON.parse(argsJson || '{}'); // single request for now
 
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_LOCKS, params: {} }, (locks) => {

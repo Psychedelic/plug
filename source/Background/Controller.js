@@ -261,9 +261,9 @@ backgroundController.exposeController(
     const { callback, message, sender } = opts;
 
     storage.get(keyring.currentWalletId.toString(), async (state) => {
-      const apps = state?.[keyring.currentWalletId]?.apps || {};
+      const app = state?.[keyring.currentWalletId]?.apps?.[metadata.url] || {};
       if (
-        apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted
+        app?.status === CONNECTION_STATUS.accepted
       ) {
         if (Number.isNaN(parseInt(accountId, 10))) {
           callback(ERRORS.CLIENT_ERROR('Invalid account id'), null);
@@ -300,9 +300,9 @@ backgroundController.exposeController(
   async (opts, url, accountId, callId, portId) => {
     const { callback } = opts;
     storage.get(keyring.currentWalletId.toString(), async (state) => {
-      const apps = state?.[keyring.currentWalletId]?.apps || {};
+      const app = state?.[keyring.currentWalletId]?.apps?.[url] || {};
       callback(null, true);
-      if (apps?.[url]?.status === CONNECTION_STATUS.accepted) {
+      if (app?.status === CONNECTION_STATUS.accepted) {
         const getBalance = getKeyringHandler(
           HANDLER_TYPES.GET_BALANCE,
           keyring,
@@ -699,8 +699,12 @@ backgroundController.exposeController(
   'handleBatchTransactions',
   async (opts, accepted, callId, portId) => {
     const { callback } = opts;
-    callback(null, accepted, [{ callId, portId }]);
-    callback(null, true);
+    callback(null, true); // close the modal
+    if (accepted) {
+      callback(null, accepted, [{ callId, portId }]);
+    } else {
+      callback(ERRORS.TRANSACTION_REJECTED, false, [{ callId, portId }]);
+    }
   },
 );
 
@@ -712,9 +716,9 @@ backgroundController.exposeController(
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
     storage.get(keyring.currentWalletId.toString(), async (state) => {
-      const apps = state?.[keyring.currentWalletId]?.apps || {};
+      const app = state?.[keyring.currentWalletId]?.apps?.[metadata.url] || {};
       if (
-        apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted
+        app?.status === CONNECTION_STATUS.accepted
       ) {
         const argsError = validateBurnArgs(args);
         if (argsError) {
@@ -727,7 +731,7 @@ backgroundController.exposeController(
             callId,
             portId,
             metadataJson: JSON.stringify(metadata),
-            argsJson: JSON.stringify({ ...args, timeout: apps?.[metadata.url]?.timeout }),
+            argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
             type: 'burnXTC',
           },
         });
@@ -785,6 +789,59 @@ backgroundController.exposeController(
         callback(ERRORS.BALANCE_ERROR, null, [{ portId, callId }]);
       }
     }
+  },
+);
+
+backgroundController.exposeController(
+  'getPrincipal',
+  async (opts, pageUrl) => secureController(opts.callback, async () => {
+    const { callback, message, sender } = opts;
+    storage.get(keyring.currentWalletId.toString(), async (state) => {
+      const app = state?.[keyring.currentWalletId]?.apps?.[pageUrl] || {};
+      if (
+        app?.status === CONNECTION_STATUS.accepted
+      ) {
+        if (!keyring.isUnlocked) {
+          const url = qs.stringifyUrl({
+            url: 'notification.html',
+            query: {
+              callId: message.data.data.id,
+              portId: sender.id,
+              type: 'principal',
+              metadataJson: JSON.stringify({ url: pageUrl }),
+            },
+          });
+
+          extension.windows.create({
+            url,
+            type: 'popup',
+            width: SIZES.width,
+            height: SIZES.loginHeight,
+          });
+        } else {
+          callback(null, keyring.state.wallets[keyring.currentWalletId].principal);
+        }
+      } else {
+        callback(ERRORS.CONNECTION_ERROR, null);
+      }
+    });
+  }),
+);
+
+backgroundController.exposeController(
+  'handleGetPrincipal',
+  async (opts, url, callId, portId) => {
+    const { callback } = opts;
+    storage.get(keyring.currentWalletId.toString(), async (state) => {
+      const app = state?.[keyring.currentWalletId]?.apps?.[url] || {};
+      callback(null, true);
+      if (app?.status === CONNECTION_STATUS.accepted) {
+        const { principal } = keyring?.state?.wallets?.[keyring?.currentWalletId] || {};
+        callback(null, principal?.toText(), [{ portId, callId }]);
+      } else {
+        callback(ERRORS.CONNECTION_ERROR, null, [{ portId, callId }]);
+      }
+    });
   },
 );
 
