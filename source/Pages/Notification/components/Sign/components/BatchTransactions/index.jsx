@@ -37,21 +37,6 @@ const BatchTransactions = ({
 
   const { selectedTab, handleChangeTab } = useTabs();
 
-  useEffect(() => {
-    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
-      if (state?.wallets?.length) {
-        dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
-      }
-    });
-  }, []);
-
-  extension.windows.update(
-    extension.windows.WINDOW_ID_CURRENT,
-    {
-      height: transactions?.length > 3 ? SIZES.batchTransactions : SIZES.batchTransactionsScroll,
-    },
-  );
-
   const {
     confirm,
     decline,
@@ -66,7 +51,22 @@ const BatchTransactions = ({
         decline().then(() => window?.close?.());
       });
     }
-  }, [decline]);
+  }, []);
+
+  useEffect(() => {
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
+      if (state?.wallets?.length) {
+        dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
+      }
+    });
+  }, []);
+
+  extension.windows.update(
+    extension.windows.WINDOW_ID_CURRENT,
+    {
+      height: transactions?.length > 3 ? SIZES.batchTransactions : SIZES.batchTransactionsScroll,
+    },
+  );
 
   const tabs = [
     {

@@ -30,6 +30,7 @@ const Data = ({ transactionsData, withArguments }) => {
           {transactionsData.map((tx, index) => (
             <button
               type="button"
+              key={`${tx.transaction?.methodName}_${index}`} // eslint-disable-line
               className={clsx(classes.dataTab, index === currentIndex && classes.selectedTab)}
               onClick={handleClickMethod(index)}
             >
