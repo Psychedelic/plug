@@ -37,7 +37,7 @@ export default makeStyles(() => ({
     justifyContent: 'space-between',
     width: '100%',
     margin: '10px 0 0',
-    padding: '18px',
+    padding: '16px',
     boxSizing: 'border-box',
     border: '1px solid #D1D5DB',
     borderRadius: '10px',
@@ -120,7 +120,7 @@ export default makeStyles(() => ({
     color: '#EEAC00',
   },
   displaysContainer: {
-    maxHeight: 320,
+    maxHeight: 340,
     overflow: 'auto',
     width: '100%',
     position: 'relative',
@@ -142,13 +142,5 @@ export default makeStyles(() => ({
     alignItems: 'center',
     zIndex: 2,
     backgroundColor: 'white',
-  },
-  gradient: {
-    position: 'absolute',
-    left: 0,
-    width: '100%',
-    height: 15,
-    bottom: 30,
-    background: 'linear-gradient(180deg, rgba(253, 253, 253, 0) 0%, white 100%)',
   },
 }));
