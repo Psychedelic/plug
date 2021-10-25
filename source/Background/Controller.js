@@ -176,7 +176,6 @@ backgroundController.exposeController(
     if (isValidWhitelist) {
       canistersInfo = await fetchCanistersInfo(whitelist);
     }
-
     storage.get(keyring.currentWalletId.toString(), (response) => {
       const apps = {
         ...response?.[keyring.currentWalletId]?.apps,
@@ -331,9 +330,9 @@ backgroundController.exposeController(
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
     storage.get(keyring.currentWalletId.toString(), async (state) => {
-      const apps = state?.[keyring.currentWalletId]?.apps || {};
+      const app = state?.[keyring.currentWalletId]?.apps?.[metadata?.url] || {};
       if (
-        apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted
+        app?.status === CONNECTION_STATUS.accepted
       ) {
         const argsError = validateTransferArgs(args);
         if (argsError) {
@@ -346,7 +345,7 @@ backgroundController.exposeController(
             callId,
             portId,
             metadataJson: JSON.stringify(metadata),
-            argsJson: JSON.stringify({ ...args, timeout: apps?.[metadata.url]?.timeout }),
+            argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
             type: 'transfer',
           },
         });
@@ -623,14 +622,13 @@ backgroundController.exposeController(
       };
       storage.set({ [keyring.currentWalletId]: { apps: newApps } });
     });
-    console.log('handle allow agent', response);
+
     if (response?.status === CONNECTION_STATUS.accepted) {
       try {
         const publicKey = await keyring.getPublicKey();
         callback(null, publicKey, [{ portId, callId }]);
         callback(null, true);
       } catch (e) {
-        console.log('error', e);
         callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
         callback(null, false);
       }
@@ -670,7 +668,11 @@ backgroundController.exposeController(
             callId,
             portId,
             metadataJson: JSON.stringify(metadata),
-            argsJson: JSON.stringify({ transactions: transactionsWithInfo, canistersInfo }),
+            argsJson: JSON.stringify({
+              transactions: transactionsWithInfo,
+              canistersInfo,
+              timeout: app?.timeout,
+            }),
             type: 'batchTransactions',
           },
         });
