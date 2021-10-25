@@ -26,7 +26,7 @@ import SIZES from '../../constants';
 i18n.use(initReactI18next).init(initConfig);
 
 const BatchTransactions = ({
-  args, callId, portId, metadata,
+  args, callId, portId, metadata, setOnTimeout,
 }) => {
   const { transactions } = args || {};
   const { url, icons } = metadata;
@@ -59,6 +59,14 @@ const BatchTransactions = ({
     data,
     loading,
   } = useRPCTransactions(transactions, callId, portId);
+
+  useEffect(() => {
+    if (decline) {
+      setOnTimeout(() => () => {
+        decline().then(() => window?.close?.());
+      });
+    }
+  }, [decline]);
 
   const tabs = [
     {
@@ -122,4 +130,5 @@ BatchTransactions.propTypes = {
   callId: PropTypes.string.isRequired,
   portId: PropTypes.string.isRequired,
   metadata: PropTypes.arrayOf(PropTypes.string).isRequired,
+  setOnTimeout: PropTypes.func.isRequired,
 };
