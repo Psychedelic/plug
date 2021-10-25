@@ -15,8 +15,9 @@ export const getAssetAmount = (request) => {
 };
 
 /* eslint-disable no-nested-ternary */
-export const formatMethodName = (methodName) => (TRANSFER_METHOD_NAMES.includes(methodName)
-  ? 'Transfer'
+// eslint-disable-next-line max-len
+export const formatMethodName = (methodName, assetName) => (TRANSFER_METHOD_NAMES.includes(methodName)
+  ? `Transfer ${assetName ? `(${assetName})` : ''}`
   : (methodName?.includes('_')
     ? methodName.split('_').map((word) => capitalize(word)).join(' ')
     : capitalize(methodName)));

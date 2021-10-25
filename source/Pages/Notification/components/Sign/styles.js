@@ -98,6 +98,7 @@ export default makeStyles(() => ({
     marginRight: 10,
     backgroundColor: '#F3F4F6',
     borderRadius: 10,
+    minWidth: 'fit-content',
   },
   selectedTab: {
     color: '#3574F4',

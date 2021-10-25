@@ -8,8 +8,8 @@ const SIZES = {
   nftHeight: 565,
   canisterInfoHeight: 550,
   canisterInfoWarning: 790,
-  batchTransactions: 750,
-  batchTransactionsScroll: 800,
+  batchTransactions: 760,
+  batchTransactionsScroll: 780,
   dataTabs: 70,
 };
 
