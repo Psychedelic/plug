@@ -139,15 +139,16 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: error.message };
     }
   },
-  [HANDLER_TYPES.SEND_TOKEN]: async ({ to, amount, canisterId }) => {
+  [HANDLER_TYPES.SEND_TOKEN]: async ({
+    to, amount, canisterId, opts,
+  }) => {
     try {
-      const { height, transactionId } = await keyring.send(to, BigInt(amount), canisterId);
+      const { height, transactionId } = await keyring.send(to, BigInt(amount), canisterId, opts);
       return {
         height: parseInt(height?.toString?.(), 10),
         transactionId: parseInt(transactionId?.toString?.(), 10),
       };
     } catch (error) {
-      console.log('error', error);
       return { error: error.message, height: null };
     }
   },

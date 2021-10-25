@@ -7,6 +7,7 @@ import { decodeTokenId } from '@shared/utils/ext';
 
 import DisplayBox from './DisplayBox';
 import SIZES from '../../../constants';
+import { formatMethodName } from '../utils';
 
 const getNFTId = (request) => {
   const indexInArgs = {
@@ -16,28 +17,35 @@ const getNFTId = (request) => {
   return indexInArgs(request?.decodedArguments);
 };
 
-const NFTDisplay = ({ request, shouldWarn, toggleModal }) => {
+const NFTDisplay = ({
+  request, shouldWarn, toggleModal, resize,
+}) => {
   const { t } = useTranslation();
-  const [title, setTitle] = useState('');
+  const [subtitle, setSubtitle] = useState('');
 
-  extension.windows.update(
-    extension.windows.WINDOW_ID_CURRENT,
-    {
-      height: shouldWarn ? SIZES.detailsWarningHeight : SIZES.nftHeight,
-    },
-  );
+  if (resize) {
+    extension.windows.update(
+      extension.windows.WINDOW_ID_CURRENT,
+      {
+        height: shouldWarn ? SIZES.detailsWarningHeight : SIZES.nftHeight,
+      },
+    );
+  }
 
   useEffect(() => {
     if (request?.decodedArguments) {
       const nftId = getNFTId(request);
-      setTitle(`#${Number.isNaN(Number(nftId)) ? decodeTokenId(nftId) : nftId}`);
+      const index = Number.isNaN(Number(nftId)) ? decodeTokenId(nftId) : nftId;
+      setSubtitle(`${request?.canisterName ? request?.canisterName : ''} #${index}`);
+    } else {
+      setSubtitle(request?.methodName ? formatMethodName(request?.methodName) : t('sign.warning.unknownCollection'));
     }
   }, [request]);
   return (
     <DisplayBox
       shouldWarn={shouldWarn}
-      title={title || t('sign.warning.unknownId')}
-      subtitle={request?.canisterName || t('sign.warning.unknownCollection')}
+      title={shouldWarn ? t('sign.warning.unknownArguments') : formatMethodName(request?.methodName)}
+      subtitle={subtitle}
       img={request?.canisterIcon}
       toggleModal={toggleModal}
     />
@@ -57,6 +65,7 @@ NFTDisplay.propTypes = {
     category: PropTypes.string,
     decodedArguments: PropTypes.any, // eslint-disable-line
   }).isRequired,
+  resize: PropTypes.bool.isRequired,
 };
 
 export default NFTDisplay;

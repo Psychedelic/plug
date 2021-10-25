@@ -6,6 +6,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import i18n from 'i18next';
 import { Provider, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import {
   Button, Container, IncomingAction, theme,
@@ -31,7 +32,7 @@ const portRPC = new PortRPC({
 
 portRPC.start();
 
-const AppConnection = () => {
+const AppConnection = ({ setOnTimeout }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const [status, setStatus] = useState(null);
@@ -48,7 +49,7 @@ const AppConnection = () => {
   } = query;
 
   const handleResponse = async () => {
-    const success = await portRPC.call('handleAllowAgent', [url, { status, whitelist: [] }, callId, portId]);
+    const success = await portRPC.call('handleAllowAgent', [url, { status: status || CONNECTION_STATUS.rejected, whitelist: [] }, callId, portId]);
     if (success) {
       window.close();
     }
@@ -75,6 +76,9 @@ const AppConnection = () => {
   };
 
   useEffect(() => {
+    setOnTimeout(() => () => {
+      setStatus(CONNECTION_STATUS.rejected);
+    });
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
       (state) => {
         if (state?.wallets?.length) {
@@ -116,6 +120,10 @@ const AppConnection = () => {
       </ThemeProvider>
     </Provider>
   );
+};
+
+AppConnection.propTypes = {
+  setOnTimeout: PropTypes.func.isRequired,
 };
 
 export default AppConnection;

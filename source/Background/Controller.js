@@ -15,7 +15,7 @@ import NotificationManager from '../lib/NotificationManager';
 
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import { getKeyringHandler, HANDLER_TYPES, getKeyringErrorMessage } from './Keyring';
-import { validateTransferArgs, validateBurnArgs } from './utils';
+import { validateTransferArgs, validateBurnArgs, validateTransactions } from './utils';
 import ERRORS, { SILENT_ERRORS } from './errors';
 import plugProvider from '../Inpage/index';
 
@@ -159,7 +159,7 @@ backgroundController.exposeController('disconnect', async (opts, url) => secureC
 
 backgroundController.exposeController(
   'requestConnect',
-  async (opts, metadata, whitelist) => secureController(opts.callback, async () => {
+  async (opts, metadata, whitelist, timeout) => secureController(opts.callback, async () => {
     let canistersInfo = [];
     const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
 
@@ -176,7 +176,6 @@ backgroundController.exposeController(
     if (isValidWhitelist) {
       canistersInfo = await fetchCanistersInfo(whitelist);
     }
-
     storage.get(keyring.currentWalletId.toString(), (response) => {
       const apps = {
         ...response?.[keyring.currentWalletId]?.apps,
@@ -185,6 +184,7 @@ backgroundController.exposeController(
           name,
           status: CONNECTION_STATUS.pending,
           icon: icons[0] || null,
+          timeout,
         },
       };
 
@@ -201,7 +201,7 @@ backgroundController.exposeController(
           callId,
           portId,
           metadataJson: JSON.stringify(newMetadata),
-          argsJson: JSON.stringify({ whitelist, canistersInfo }),
+          argsJson: JSON.stringify({ whitelist, canistersInfo, timeout }),
           type: 'allowAgent',
         },
       });
@@ -226,6 +226,7 @@ backgroundController.exposeController(
           portId,
           url: domainUrl,
           icon: icons[0] || null,
+          argsJson: JSON.stringify({ timeout }),
           type: 'connect',
         },
       });
@@ -329,9 +330,9 @@ backgroundController.exposeController(
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
     storage.get(keyring.currentWalletId.toString(), async (state) => {
-      const apps = state?.[keyring.currentWalletId]?.apps || {};
+      const app = state?.[keyring.currentWalletId]?.apps?.[metadata?.url] || {};
       if (
-        apps?.[metadata.url]?.status === CONNECTION_STATUS.accepted
+        app?.status === CONNECTION_STATUS.accepted
       ) {
         const argsError = validateTransferArgs(args);
         if (argsError) {
@@ -344,7 +345,7 @@ backgroundController.exposeController(
             callId,
             portId,
             metadataJson: JSON.stringify(metadata),
-            argsJson: JSON.stringify(args),
+            argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
             type: 'transfer',
           },
         });
@@ -441,7 +442,7 @@ backgroundController.exposeController(
               type: 'sign',
               metadataJson: JSON.stringify(metadata),
               argsJson: JSON.stringify({
-                requestInfo, payload, canisterInfo,
+                requestInfo, payload, canisterInfo, timeout: app?.timeout,
               }),
             },
           });
@@ -526,7 +527,10 @@ backgroundController.exposeController(
     storage.get(keyring.currentWalletId.toString(), async (state) => {
       const app = state?.[keyring.currentWalletId]?.apps?.[metadata.url] || {};
       if (app?.status === CONNECTION_STATUS.accepted) {
-        const allWhitelisted = areAllElementsIn(whitelist, app?.whitelist);
+        const allWhitelisted = areAllElementsIn(
+          whitelist,
+          app?.whitelist ? Object.keys(app?.whitelist) : [],
+        );
         const height = keyring?.isUnlocked
           ? SIZES.detailHeightSmall
           : SIZES.loginHeight;
@@ -544,11 +548,11 @@ backgroundController.exposeController(
                   canistersInfo,
                   updateWhitelist: true,
                   showList: false,
+                  timeout: app?.timeout,
                 }),
                 type: 'allowAgent',
               },
             });
-
             extension.windows.create({
               url,
               type: 'popup',
@@ -617,6 +621,7 @@ backgroundController.exposeController(
       };
       storage.set({ [keyring.currentWalletId]: { apps: newApps } });
     });
+
     if (response?.status === CONNECTION_STATUS.accepted) {
       try {
         const publicKey = await keyring.getPublicKey();
@@ -631,6 +636,71 @@ backgroundController.exposeController(
       callback(ERRORS.AGENT_REJECTED, null, [{ portId, callId }]);
       callback(null, true); // Return true to close the modal
     }
+  },
+);
+
+backgroundController.exposeController(
+  'batchTransactions',
+  async (opts, metadata, transactions) => secureController(opts.callback, async () => {
+    const { message, sender, callback } = opts;
+
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
+
+    storage.get(keyring.currentWalletId.toString(), async (state) => {
+      const app = state?.[keyring.currentWalletId]?.apps?.[metadata?.url] || {};
+
+      if (app?.status === CONNECTION_STATUS.accepted) {
+        const transactionsError = validateTransactions(transactions);
+
+        if (transactionsError) {
+          callback(transactionsError, null);
+          return;
+        }
+        const canistersInfo = app?.whitelist || {};
+        const transactionsWithInfo = transactions.map(
+          (tx) => ({ ...tx, canisterInfo: canistersInfo[tx.canisterId] }),
+        );
+        const url = qs.stringifyUrl({
+          url: 'notification.html',
+          query: {
+            callId,
+            portId,
+            metadataJson: JSON.stringify(metadata),
+            argsJson: JSON.stringify({
+              transactions: transactionsWithInfo,
+              canistersInfo,
+              timeout: app?.timeout,
+            }),
+            type: 'batchTransactions',
+          },
+        });
+
+        const height = keyring?.isUnlocked
+          ? SIZES.detailHeightSmall
+          : SIZES.loginHeight;
+
+        extension.windows.create({
+          url,
+          type: 'popup',
+          width: SIZES.width,
+          height,
+          top: 65,
+          left: metadata.pageWidth - SIZES.width,
+        });
+      } else {
+        callback(ERRORS.CONNECTION_ERROR, null);
+      }
+    });
+  }),
+);
+
+backgroundController.exposeController(
+  'handleBatchTransactions',
+  async (opts, accepted, callId, portId) => {
+    const { callback } = opts;
+    callback(null, accepted, [{ callId, portId }]);
+    callback(null, true);
   },
 );
 
@@ -657,7 +727,7 @@ backgroundController.exposeController(
             callId,
             portId,
             metadataJson: JSON.stringify(metadata),
-            argsJson: JSON.stringify(args),
+            argsJson: JSON.stringify({ ...args, timeout: apps?.[metadata.url]?.timeout }),
             type: 'burnXTC',
           },
         });
@@ -665,6 +735,7 @@ backgroundController.exposeController(
         const height = keyring?.isUnlocked
           ? SIZES.detailHeightSmall
           : SIZES.loginHeight;
+
         extension.windows.create({
           url,
           type: 'popup',

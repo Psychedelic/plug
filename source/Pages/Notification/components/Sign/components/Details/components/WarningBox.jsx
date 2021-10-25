@@ -7,7 +7,7 @@ import useStyles from '../styles';
 
 import { WARNING_LINKS } from '../../../constants';
 
-const WarningBox = ({ pageUrl, canisterName, canisterId }) => {
+const WarningBox = ({ pageUrl, name, canisterId }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -29,7 +29,7 @@ const WarningBox = ({ pageUrl, canisterName, canisterId }) => {
         <a className={classes.warningLink} target="_blank" href={WARNING_LINKS.docs} rel="noreferrer">Learn,</a>
         <a className={classes.warningLink} target="_blank" href={WARNING_LINKS.discord} rel="noreferrer">talk,</a>
         <span className={classes.warningInfo}>or</span>
-        <a className={classes.warningLink} target="_blank" href={WARNING_LINKS.twitter(pageUrl, canisterName || canisterId)} rel="noreferrer">tweet about it</a>
+        <a className={classes.warningLink} target="_blank" href={WARNING_LINKS.twitter(pageUrl, name || canisterId)} rel="noreferrer">tweet about it</a>
       </p>
     </div>
   );
@@ -38,11 +38,11 @@ const WarningBox = ({ pageUrl, canisterName, canisterId }) => {
 WarningBox.propTypes = {
   pageUrl: PropTypes.string.isRequired,
   canisterId: PropTypes.string.isRequired,
-  canisterName: PropTypes.string,
+  name: PropTypes.string,
 };
 
 WarningBox.defaultProps = {
-  canisterName: null,
+  name: null,
 };
 
 export default WarningBox;

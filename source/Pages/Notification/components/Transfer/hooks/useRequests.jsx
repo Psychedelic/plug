@@ -86,9 +86,9 @@ const useRequests = (incomingRequests, callId, portId) => {
     { label: 'accountId', value: shortAddress(accountId) },
     {
       label: 'fee',
-      value: <AssetFormat value={requests[currentRequest]?.args?.fee || DEFAULT_FEE} asset={CURRENCIES.get('ICP')?.value} />,
+      value: <AssetFormat value={requests[currentRequest]?.opts?.fee || DEFAULT_FEE} asset={CURRENCIES.get('ICP')?.value} />,
     },
-    { label: 'memo', value: requests[currentRequest]?.args?.memo || t('common.null') },
+    { label: 'memo', value: requests[currentRequest]?.opts?.memo || t('common.null') },
   ];
   if (principalId) {
     config = [{ label: 'principalId', value: shortAddress(principalId) }, ...config];

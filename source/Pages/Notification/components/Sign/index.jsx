@@ -20,7 +20,7 @@ import useStyles from './styles';
 i18n.use(initReactI18next).init(initConfig);
 
 const AssetsWarning = ({
-  args, callId, portId, metadata,
+  args, callId, portId, metadata, setOnTimeout,
 }) => {
   const { t } = useTranslation();
   const { url, icons } = metadata;
@@ -59,13 +59,13 @@ const AssetsWarning = ({
         icon={icons?.[0] || null}
         toggleModal={toggleModal}
         shouldWarn={shouldWarn}
-        request={request}
+        requests={[request]}
       />,
     },
     {
       label: t('assetsWarning.data.title'),
       component: <Data
-        data={data}
+        transactionsData={[{ formItems: data, transaction: request }]}
         withArguments={!shouldWarn}
       />,
     },
@@ -80,6 +80,9 @@ const AssetsWarning = ({
   }
 
   useEffect(() => {
+    setOnTimeout(() => () => {
+      handleDecline().then(() => window?.close?.());
+    });
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
       (state) => {
         if (state?.wallets?.length) {
@@ -138,6 +141,7 @@ AssetsWarning.propTypes = {
   callId: PropTypes.string.isRequired,
   portId: PropTypes.string.isRequired,
   metadata: PropTypes.arrayOf(PropTypes.string).isRequired,
+  setOnTimeout: PropTypes.func.isRequired,
 };
 
 export default AssetsWarning;
