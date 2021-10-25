@@ -407,7 +407,8 @@ backgroundController.exposeController(
     const { message, sender, callback } = opts;
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
-    const { canisterId, requestType } = requestInfo;
+    const { canisterId, requestType, preApprove } = requestInfo;
+
     try {
       storage.get(keyring.currentWalletId.toString(), async (state) => {
         const app = state?.[keyring.currentWalletId]?.apps?.[metadata.url] || {};
@@ -429,7 +430,8 @@ backgroundController.exposeController(
           ...(nftCanisters || []).map((collection) => collection.principal_id.toString()),
           ...ASSET_CANISTER_IDS,
         ];
-        const shouldShowModal = requestInfo.manual || (requestInfo.requestType === 'call' && !!canisterInfo.id && PROTECTED_IDS.includes(canisterInfo.id));
+        const shouldShowModal = !preApprove
+          && (requestInfo.manual || (requestInfo.requestType === 'call' && !!canisterInfo.id && PROTECTED_IDS.includes(canisterInfo.id)));
         // const shouldShowModal = requestInfo.manual || (requestInfo.requestType === 'call'
         // && !!canisterInfo.category && canisterInfo.category in PROTECTED_CATEGORIES);
 

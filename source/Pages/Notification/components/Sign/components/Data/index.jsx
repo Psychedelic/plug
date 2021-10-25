@@ -34,7 +34,7 @@ const Data = ({ transactionsData, withArguments }) => {
               className={clsx(classes.dataTab, index === currentIndex && classes.selectedTab)}
               onClick={handleClickMethod(index)}
             >
-              {formatMethodName(tx?.transaction?.methodName)}
+              {formatMethodName(tx?.transaction?.methodName, tx?.transaction?.canisterName)}
             </button>
           ))}
         </div>

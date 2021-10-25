@@ -64,7 +64,7 @@ const BatchTransactions = ({
   extension.windows.update(
     extension.windows.WINDOW_ID_CURRENT,
     {
-      height: transactions?.length > 3 ? SIZES.batchTransactions : SIZES.batchTransactionsScroll,
+      height: transactions?.length <= 3 ? SIZES.batchTransactions : SIZES.batchTransactionsScroll,
     },
   );
 
