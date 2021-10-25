@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Plug",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "icons": {
     "16": "assets/icons/favicon-16.png",
     "32": "assets/icons/favicon-32.png",

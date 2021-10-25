@@ -59,13 +59,13 @@ const AssetsWarning = ({
         icon={icons?.[0] || null}
         toggleModal={toggleModal}
         shouldWarn={shouldWarn}
-        request={request}
+        requests={[request]}
       />,
     },
     {
       label: t('assetsWarning.data.title'),
       component: <Data
-        data={data}
+        transactionsData={[{ formItems: data, transaction: request }]}
         withArguments={!shouldWarn}
       />,
     },

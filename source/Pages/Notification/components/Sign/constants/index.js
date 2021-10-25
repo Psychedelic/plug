@@ -4,14 +4,17 @@ const SIZES = {
   detailsWarningHeight: 795,
   dataHeight: 530,
   dataWithArgumentsHeight: 680,
-  assetsHeight: 565,
+  assetsHeight: 550,
   nftHeight: 565,
-  canisterInfoHeight: 495,
-  canisterInfoWarning: 740,
+  canisterInfoHeight: 550,
+  canisterInfoWarning: 790,
+  batchTransactions: 750,
+  batchTransactionsScroll: 800,
+  dataTabs: 70,
 };
 
 export const WARNING_LINKS = {
-  twitter: (url, canisterName) => `https://twitter.com/intent/tweet?text=Hey ${url}. Interacting with ${canisterName} on your app feels unsafe (I can't see all the info). Can you please fix this 🙏`,
+  twitter: (url, name) => `https://twitter.com/intent/tweet?text=Hey ${url}. Interacting with ${name} on your app feels unsafe (I can't see all the info). Can you please fix this 🙏`,
   discord: 'https://discord.gg/fleekhq',
   docs: 'https://docs.plugwallet.ooo/resources/app-trust-and-security/',
 };

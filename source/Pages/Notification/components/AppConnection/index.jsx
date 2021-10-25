@@ -49,7 +49,7 @@ const AppConnection = ({ setOnTimeout }) => {
   } = query;
 
   const handleResponse = async () => {
-    const success = await portRPC.call('handleAllowAgent', [url, { status, whitelist: [] }, callId, portId]);
+    const success = await portRPC.call('handleAllowAgent', [url, { status: status || CONNECTION_STATUS.rejected, whitelist: [] }, callId, portId]);
     if (success) {
       window.close();
     }

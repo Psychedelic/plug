@@ -119,4 +119,36 @@ export default makeStyles(() => ({
   yellowTitle: {
     color: '#EEAC00',
   },
+  displaysContainer: {
+    maxHeight: 320,
+    overflow: 'auto',
+    width: '100%',
+    position: 'relative',
+    paddingBottom: 15,
+  },
+  displayContainer: {
+    width: '100%',
+    position: 'relative',
+  },
+  nextArrowContainer: {
+    bottom: -20,
+    border: '1px solid #D1D5DB',
+    borderRadius: '50%',
+    left: '46%',
+    padding: '3px',
+    position: 'absolute',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 2,
+    backgroundColor: 'white',
+  },
+  gradient: {
+    position: 'absolute',
+    left: 0,
+    width: '100%',
+    height: 15,
+    bottom: 30,
+    background: 'linear-gradient(180deg, rgba(253, 253, 253, 0) 0%, white 100%)',
+  },
 }));
