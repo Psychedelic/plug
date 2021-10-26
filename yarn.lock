@@ -1568,10 +1568,10 @@
     node-gyp "^7.1.0"
     read-package-json-fast "^2.0.1"
 
-"@psychedelic/dab-js@0.2.3":
-  version "0.2.3"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/dab-js/0.2.3/4915e2a3d6fd38824bcf9576db5a324c8f043618d4e17dc1500657255f41f94d#eaac8ab1f3f0ede84d0c002f3679fe4872e97873"
-  integrity sha512-9f1z278Pv9xTiE122RhH6Sy6fy2DoVyE+9lC4Bt53KLdj6kx2PE5SbKX6KSUWaA5vAbe2iDHobmdZ6JHTIy1Qg==
+"@psychedelic/dab-js@0.2.4":
+  version "0.2.4"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/dab-js/0.2.4/15a78ca900f3071ebecfbe627cfe2050b22705a5adfefb202f3eda6fe8c577ca#b0a1726fa6429f6a5073ddca8596e2e978ae5c18"
+  integrity sha512-/NCgYeNbjq+810mAv7Aa+RwzYQhF9BKTSAvn2Kx5WZ4RtJBl8bzSXo6LQk/pJqKh0oX16etoqhCWFOs6bYMnZg==
   dependencies:
     "@dfinity/agent" "^0.9.3"
     "@dfinity/candid" "^0.9.3"
@@ -1580,16 +1580,16 @@
     buffer-crc32 "^0.2.13"
     crypto-js "^4.1.1"
 
-"@psychedelic/plug-controller@0.8.1":
-  version "0.8.1"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.8.1/640d2f5271c67ba6fa8862636e7184810ba1529df096fec298847b7c4f6328c9#ee8b84989aace25cc1c929af6d150114eb3c4d3a"
-  integrity sha512-82Ca+kCCnn3H8rpVPC0MqCvwJ8oaD7wWphDcc4rY1phkhYBlEsU6c67TBgDRHfmy9SzxjnGcuCgASpl/lbcbfA==
+"@psychedelic/plug-controller@0.8.2":
+  version "0.8.2"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.8.2/2a60715c2597fb86dbcf131ba3db63fa60f0c7ccc35e8f9dc90f4f203f11c2bd#cf8ba0be602cd790314fb0e31450f69d0940af50"
+  integrity sha512-E11xIW6VzUP8UepI/+gBdJWN6aUya5fX+OaP5LJhOkU4S/jSLI9c3RWuDZ5Ck9dkNhBUOf1M3EM7B0t4mq3mSw==
   dependencies:
     "@dfinity/agent" "^0.9.3"
     "@dfinity/candid" "^0.9.3"
     "@dfinity/identity" "^0.9.3"
     "@dfinity/principal" "^0.9.3"
-    "@psychedelic/dab-js" "0.2.3"
+    "@psychedelic/dab-js" "0.2.4"
     "@types/secp256k1" "^4.0.3"
     axios "^0.21.1"
     babel-jest "^25.5.1"
