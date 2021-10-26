@@ -30,15 +30,15 @@ const NFTs = () => {
         dispatch(setCollectionsLoading(false));
       }
     });
-    getBatchedNFTs({
-      principal: Principal.fromText(principalId),
-      callback: (collection) => {
-        if (collection?.tokens?.length) {
+    if (principalId) {
+      getBatchedNFTs({
+        principal: Principal.fromText(principalId),
+        callback: (collection) => {
           dispatch(addCollection({ collection, walletNumber }));
           dispatch(setCollectionsLoading(false));
-        }
-      },
-    });
+        },
+      });
+    }
   }, [walletNumber]);
 
   useEffect(() => {
@@ -52,9 +52,8 @@ const NFTs = () => {
           ? <EmptyState />
           : (
             <div className={classes.root}>
-              {collections.map((collection) => (
-                <NFTCollection collection={collection} />
-              ))}
+              {collections.map((collection) => !!collection?.tokens?.length
+                && (<NFTCollection collection={collection} />))}
             </div>
           )
       }
