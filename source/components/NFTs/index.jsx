@@ -46,7 +46,7 @@ const NFTs = () => {
   return (
     <LoadingWrapper loading={!nfts.length && collectionsLoading} className="big">
       {
-        !collections?.length
+        !nfts?.length
           ? <EmptyState />
           : (
             <div className={classes.root}>
