@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -23,36 +23,41 @@ import { getBatchedNFTs } from '@psychedelic/dab-js';
 
 import { useICPPrice } from '@redux/icp';
 
-const getTabs = (t) => [
-  {
-    label: t('tabs.tokens'),
-    component: <Tokens />,
-  },
-  {
-    label: t('tabs.nfts'),
-    component: <NFTs />,
-  },
-  {
-    label: t('tabs.activity'),
-    component: <Activity />,
-  },
-  {
-    label: t('tabs.apps'),
-    component: <Apps />,
-  },
-];
-
 const Home = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { navigator, tabIndex } = useRouter();
-  const { walletNumber } = useSelector((state) => state.wallet);
+  const {
+    walletNumber, assetsLoading, collectionsLoading, transactionsLoading,
+  } = useSelector((state) => state.wallet);
 
   const onChangeTab = (index) => {
     navigator.navigate('home', index);
   };
 
   useICPPrice(true);
+
+  const tabs = useMemo(() => [
+    {
+      label: t('tabs.tokens'),
+      component: <Tokens />,
+      loading: assetsLoading,
+    },
+    {
+      label: t('tabs.nfts'),
+      component: <NFTs />,
+      loading: collectionsLoading,
+    },
+    {
+      label: t('tabs.activity'),
+      component: <Activity />,
+      loading: transactionsLoading,
+    },
+    {
+      label: t('tabs.apps'),
+      component: <Apps />,
+    },
+  ], [assetsLoading, collectionsLoading, transactionsLoading]);
 
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
@@ -72,7 +77,6 @@ const Home = () => {
           callback: (collection) => {
             if (collection) {
               dispatch(addCollection({ collection, walletNumber }));
-              dispatch(setCollectionsLoading(false));
             }
           },
         });
@@ -85,7 +89,7 @@ const Home = () => {
     <Layout>
       <Actions visible={tabIndex === 0} />
       <Tabs
-        tabs={getTabs(t)}
+        tabs={tabs}
         selectedTab={tabIndex}
         handleChangeTab={onChangeTab}
       />

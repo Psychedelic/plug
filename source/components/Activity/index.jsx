@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ActivityItem } from '@ui';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 
 import LoadingWrapper from '@components/LoadingWrapper';
 import { useActivity } from '@hooks';
-import { setTransactions } from '@redux/wallet';
+import { setTransactions, setTransactionsLoading } from '@redux/wallet';
 import { useICPPrice } from '@redux/icp';
 import useStyles from './styles';
 import EmptyState from './components/EmptyState';
 
 const Activity = () => {
   const classes = useStyles();
-  const { transactions } = useSelector((state) => state.wallet);
-  const [transactionsLoading, setLoading] = useState(true);
+  const { transactions, transactionsLoading } = useSelector((state) => state.wallet);
   const dispatch = useDispatch();
   const activity = useActivity(transactions);
 
@@ -24,7 +23,7 @@ const Activity = () => {
       sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: {} },
         (trxs) => {
           dispatch(setTransactions({ ...trxs, icpPrice }));
-          setLoading(false);
+          dispatch(setTransactionsLoading(false));
         });
     }
   }, [icpPrice]);

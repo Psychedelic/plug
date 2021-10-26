@@ -24,7 +24,7 @@ const Tabs = ({ tabs, selectedTab, handleChangeTab }) => {
       >
         {
           tabs.map((tab) => (
-            <Tab key={tab.label} label={tab.label} />
+            <Tab key={tab.label} label={tab.label} loading={tab.loading} />
           ))
         }
       </MuiTabs>
