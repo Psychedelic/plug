@@ -11,7 +11,7 @@ import {
   NFTs,
 } from '@components';
 import { Tabs } from '@ui';
-import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import { HANDLER_TYPES, sendMessage, recursiveParseBigint } from '@background/Keyring';
 import {
   setAccountInfo,
   addCollection,
@@ -75,9 +75,10 @@ const Home = () => {
         getBatchedNFTs({
           principal: state?.wallets?.[state?.currentWalletId].principal,
           callback: (collection) => {
-            if (collection) {
-              dispatch(addCollection({ collection, walletNumber }));
-            }
+            dispatch(addCollection({
+              collection: recursiveParseBigint(collection),
+              walletNumber,
+            }));
           },
         });
       }
