@@ -64,10 +64,8 @@ const Home = () => {
           type: HANDLER_TYPES.GET_NFTS,
           params: {},
         }, (nftCollections) => {
-          if (nftCollections?.length) {
-            dispatch(setCollections({ collections: nftCollections, walletNumber }));
-            dispatch(setCollectionsLoading(false));
-          }
+          dispatch(setCollections({ collections: nftCollections, walletNumber }));
+          dispatch(setCollectionsLoading(false));
         });
         getBatchedNFTs({
           principal: state?.wallets?.[state?.currentWalletId].principal,
