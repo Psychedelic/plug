@@ -28,10 +28,8 @@ const NFTs = () => {
       type: HANDLER_TYPES.GET_NFTS,
       params: {},
     }, (nftCollections) => {
-      if (nftCollections?.length) {
-        dispatch(setCollections({ collections: nftCollections, walletNumber }));
-        dispatch(setCollectionsLoading(false));
-      }
+      dispatch(setCollections({ collections: nftCollections, walletNumber }));
+      dispatch(setCollectionsLoading(false));
     });
     if (principalId) {
       getBatchedNFTs({
