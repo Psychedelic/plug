@@ -23,6 +23,7 @@ export const walletSlice = createSlice({
     assetsLoading: true,
     collections: [],
     collectionsLoading: true,
+    transactionsLoading: true,
   },
   reducers: {
     updateWalletDetails: (state, action) => {
@@ -65,6 +66,9 @@ export const walletSlice = createSlice({
       };
       const parsedTrx = action.payload?.transactions?.map(mapTransaction) || [];
       state.transactions = parsedTrx.slice(0, 50); // TODO: Move paging to BE
+    },
+    setTransactionsLoading: (state, action) => {
+      state.transactionsLoading = action.payload;
     },
     setAssets: (state, action) => {
       const { keyringAssets, icpPrice } = action.payload || {};
@@ -111,6 +115,7 @@ export const {
   updateWalletDetails,
   setAccountInfo,
   setTransactions,
+  setTransactionsLoading,
   setAssets,
   setAssetsLoading,
   addCollection,
