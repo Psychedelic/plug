@@ -1582,8 +1582,8 @@
 
 "@psychedelic/plug-controller@0.8.2":
   version "0.8.2"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.8.2/2a60715c2597fb86dbcf131ba3db63fa60f0c7ccc35e8f9dc90f4f203f11c2bd#cf8ba0be602cd790314fb0e31450f69d0940af50"
-  integrity sha512-E11xIW6VzUP8UepI/+gBdJWN6aUya5fX+OaP5LJhOkU4S/jSLI9c3RWuDZ5Ck9dkNhBUOf1M3EM7B0t4mq3mSw==
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.8.2/f4f523d705861903df7db82e6e2f82e86ae5bc87ff6a148b2cff81b8ed9787a2#daf14d66f4f6dfb2dd7e9af4a62f9b1d5e0a5878"
+  integrity sha512-3598LPfZ4r++OVbcOMEKCEhbhybmBn4YXM5gslK9fyfKwiewVWBcBXJa8VGkDkKJAlRM2vDIhZBkEDWG8a+ZxA==
   dependencies:
     "@dfinity/agent" "^0.9.3"
     "@dfinity/candid" "^0.9.3"
