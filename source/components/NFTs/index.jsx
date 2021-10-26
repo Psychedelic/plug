@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBatchedNFTs } from '@psychedelic/dab-js';
 import { Principal } from '@dfinity/principal';
@@ -17,10 +17,10 @@ const NFTs = () => {
   const {
     collections, collectionsLoading, walletNumber, principalId,
   } = useSelector((state) => state.wallet);
-  const [loading, setLoading] = useState(collectionsLoading);
 
   useEffect(() => {
     // Update cache
+    dispatch(setCollectionsLoading(true));
     sendMessage({
       type: HANDLER_TYPES.GET_NFTS,
       params: {},
@@ -35,18 +35,13 @@ const NFTs = () => {
         principal: Principal.fromText(principalId),
         callback: (collection) => {
           dispatch(addCollection({ collection, walletNumber }));
-          dispatch(setCollectionsLoading(false));
         },
       });
     }
   }, [walletNumber]);
-
-  useEffect(() => {
-    setLoading(collectionsLoading);
-  }, [collectionsLoading]);
-
+  const nfts = collections?.flatMap((c) => c.tokens);
   return (
-    <LoadingWrapper loading={loading} className="big">
+    <LoadingWrapper loading={!nfts.length && collectionsLoading} className="big">
       {
         !collections?.length
           ? <EmptyState />
