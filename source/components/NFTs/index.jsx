@@ -21,6 +21,9 @@ const NFTs = () => {
   useEffect(() => {
     // Update cache
     dispatch(setCollectionsLoading(true));
+    setTimeout(() => {
+      dispatch(setCollectionsLoading(false));
+    }, 30000);
     sendMessage({
       type: HANDLER_TYPES.GET_NFTS,
       params: {},
