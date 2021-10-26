@@ -15,7 +15,6 @@ import { HANDLER_TYPES, sendMessage, recursiveParseBigint } from '@background/Ke
 import {
   setAccountInfo,
   addCollection,
-  setCollectionsLoading,
   setCollections,
 } from '@redux/wallet';
 
@@ -71,7 +70,6 @@ const Home = () => {
         }, (nftCollections) => {
           if (nftCollections?.length) {
             dispatch(setCollections({ collections: nftCollections, walletNumber }));
-            dispatch(setCollectionsLoading(false));
           }
         });
         getBatchedNFTs({
