@@ -5,7 +5,7 @@ import { formatAssets } from '@shared/constants/currencies';
 export const NANOS_PER_SECOND = 1_000_000;
 export const BALANCE_ERROR = 'You have tried to spend more than the balance of your account';
 
-const recursiveParseBigint = (obj) => Object.entries(obj).reduce(
+export const recursiveParseBigint = (obj) => Object.entries(obj).reduce(
   (acum, [key, val]) => {
     if (val instanceof Object) {
       const res = Array.isArray(val)

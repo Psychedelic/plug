@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getBatchedNFTs } from '@psychedelic/dab-js';
 import { Principal } from '@dfinity/principal';
 
-import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import { HANDLER_TYPES, sendMessage, recursiveParseBigint } from '@background/Keyring';
 import LoadingWrapper from '../LoadingWrapper';
 import { addCollection, setCollections, setCollectionsLoading } from '../../redux/wallet';
 import useStyles from './styles';
@@ -34,7 +34,10 @@ const NFTs = () => {
       getBatchedNFTs({
         principal: Principal.fromText(principalId),
         callback: (collection) => {
-          dispatch(addCollection({ collection, walletNumber }));
+          dispatch(addCollection({
+            collection: recursiveParseBigint(collection),
+            walletNumber,
+          }));
         },
       });
     }
@@ -43,7 +46,7 @@ const NFTs = () => {
   return (
     <LoadingWrapper loading={!nfts.length && collectionsLoading} className="big">
       {
-        !collections?.length
+        !nfts?.length
           ? <EmptyState />
           : (
             <div className={classes.root}>
