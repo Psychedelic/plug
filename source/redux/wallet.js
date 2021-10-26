@@ -7,6 +7,8 @@ import {
   TOKEN_IMAGES,
 } from '@shared/constants/currencies';
 
+const sortCollections = (a, b) => b?.tokens.length - a?.tokens.length;
+
 /* eslint-disable no-param-reassign */
 export const walletSlice = createSlice({
   name: 'wallet',
@@ -74,14 +76,22 @@ export const walletSlice = createSlice({
     setAssetsLoading: (state, action) => {
       state.assetsLoading = action.payload;
     },
-    setCollections: (state, action) => {
-      if (
-        state.walletNumber === action.payload?.walletNumber
-        && action.payload.collections
-      ) {
-        state.collections = action.payload?.collections?.sort(
-          (a, b) => b?.tokens.length - a?.tokens.length,
+    addCollection: (state, action) => {
+      const { collection, walletNumber } = action.payload;
+      if (state.walletNumber === walletNumber && collection) {
+        const collectionIndex = state.collections.findIndex(
+          (col) => col.canisterId === collection.canisterId,
         );
+        state?.collections.splice(
+          collectionIndex, collectionIndex < 0 ? 0 : 1, collection,
+        );
+        state.collections = state?.collections?.sort(sortCollections);
+      }
+    },
+    setCollections: (state, action) => {
+      const { collections, walletNumber } = action.payload;
+      if (state.walletNumber === walletNumber && collections) {
+        state.collections = collections?.sort(sortCollections);
       }
     },
     setCollectionsLoading: (state, action) => {
@@ -103,6 +113,7 @@ export const {
   setTransactions,
   setAssets,
   setAssetsLoading,
+  addCollection,
   setCollections,
   setCollectionsLoading,
   removeNFT,

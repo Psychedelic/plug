@@ -14,9 +14,12 @@ import { Tabs } from '@ui';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import {
   setAccountInfo,
-  setCollections,
+  addCollection,
   setCollectionsLoading,
+  setCollections,
 } from '@redux/wallet';
+
+import { getBatchedNFTs } from '@psychedelic/dab-js';
 
 import { useICPPrice } from '@redux/icp';
 
@@ -56,17 +59,25 @@ const Home = () => {
       if (!state?.wallets?.length) {
         sendMessage({ type: HANDLER_TYPES.LOCK, params: {} }, () => navigator.navigate('login'));
       } else {
-        sendMessage(
-          {
-            type: HANDLER_TYPES.GET_NFTS,
-            params: { refresh: true },
-          }, (nftCollections) => {
-            if (nftCollections) {
-              dispatch(setCollections({ collections: nftCollections, walletNumber }));
+        // Update cache
+        sendMessage({
+          type: HANDLER_TYPES.GET_NFTS,
+          params: {},
+        }, (nftCollections) => {
+          if (nftCollections?.length) {
+            dispatch(setCollections({ collections: nftCollections, walletNumber }));
+            dispatch(setCollectionsLoading(false));
+          }
+        });
+        getBatchedNFTs({
+          principal: state?.wallets?.[state?.currentWalletId].principal,
+          callback: (collection) => {
+            if (collection) {
+              dispatch(addCollection({ collection, walletNumber }));
               dispatch(setCollectionsLoading(false));
             }
           },
-        );
+        });
       }
       dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
     });
