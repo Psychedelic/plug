@@ -1580,6 +1580,18 @@
     buffer-crc32 "^0.2.13"
     crypto-js "^4.1.1"
 
+"@psychedelic/dab-js@0.2.5":
+  version "0.2.5"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/dab-js/0.2.5/38f0af2160316156f474df0856b1c361616d7b45b40ab1a6061aa18f669ca927#201ceda2f01c167d464ef5b0b82a2e4b1712a9c0"
+  integrity sha512-LSuHViDofplS6OPcrTTEKXFA/G1DN1yMDjSkaeny+0GlzjH0OSgkNMNHGKS96PalNN2Tk5hgX8caKH4l2DQtMw==
+  dependencies:
+    "@dfinity/agent" "^0.9.3"
+    "@dfinity/candid" "^0.9.3"
+    "@dfinity/identity" "^0.9.3"
+    "@dfinity/principal" "^0.9.3"
+    buffer-crc32 "^0.2.13"
+    crypto-js "^4.1.1"
+
 "@psychedelic/plug-controller@0.8.2":
   version "0.8.2"
   resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.8.2/f4f523d705861903df7db82e6e2f82e86ae5bc87ff6a148b2cff81b8ed9787a2#daf14d66f4f6dfb2dd7e9af4a62f9b1d5e0a5878"

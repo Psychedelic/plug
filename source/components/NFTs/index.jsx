@@ -21,9 +21,6 @@ const NFTs = () => {
   useEffect(() => {
     // Update cache
     dispatch(setCollectionsLoading(true));
-    setTimeout(() => {
-      dispatch(setCollectionsLoading(false));
-    }, 30000);
     sendMessage({
       type: HANDLER_TYPES.GET_NFTS,
       params: {},
@@ -36,6 +33,13 @@ const NFTs = () => {
     if (principalId) {
       getBatchedNFTs({
         principal: Principal.fromText(principalId),
+        onFinish: (cols) => {
+          dispatch(setCollections({
+            collections: cols.map((col) => recursiveParseBigint(col)),
+            walletNumber,
+          }));
+          dispatch(setCollectionsLoading(false));
+        },
         callback: (collection) => {
           dispatch(addCollection({
             collection: recursiveParseBigint(collection),
