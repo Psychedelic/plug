@@ -38,17 +38,14 @@ const NFTDetails = () => {
 
   const openNFT = (url) => () => extension.tabs.create({ url });
 
-  const collection = useMemo(() => collections?.find(
-    (col) => col.name === nft?.collection,
-  ),
-  [collections, nft,
-  ]);
+  const collection = useMemo(() => collections?.find((col) => col.name === nft?.collection),
+    [collections, nft]);
 
   return (
     <Layout>
       <Header
         left={<LinkButton value={t('common.back')} onClick={handleBack} startIcon={BackIcon} />}
-        center={`#${nft.index}`}
+        center={`#${nft?.index}`}
         right={null}
       />
       <div className={classes.container}>
@@ -84,15 +81,15 @@ const NFTDetails = () => {
             <Typography variant="subtitle1">{nft?.desc}</Typography>
           </Section>
         )}
-        {nft?.metadata?.properties?.length > 1 && (
+        {nft?.metadata?.properties?.filter((prop) => typeof prop?.value !== 'object')?.length >= 1 && (
           <Section icon={AttributesImg} title={t('nfts.attributes')}>
             {
-              nft?.metadata?.properties?.map((prop) => (
+              nft?.metadata?.properties?.map((prop) => ((
                 <Badge
                   name={prop.name}
-                  value={prop.value}
+                  value={prop?.value}
                 />
-              ))
+              )))
             }
           </Section>
         )}
