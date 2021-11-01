@@ -21,6 +21,7 @@ import {
 import { getBatchedNFTs } from '@psychedelic/dab-js';
 
 import { useICPPrice } from '@redux/icp';
+import { Principal } from '@dfinity/principal';
 
 const Home = () => {
   const { t } = useTranslation();
@@ -73,7 +74,7 @@ const Home = () => {
           }
         });
         getBatchedNFTs({
-          principal: state?.wallets?.[state?.currentWalletId].principal,
+          principal: Principal.fromText(state?.wallets?.[state?.currentWalletId].principal),
           callback: (collection) => {
             dispatch(addCollection({
               collection: recursiveParseBigint(collection),

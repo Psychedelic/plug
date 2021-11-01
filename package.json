@@ -20,7 +20,7 @@
     "build:chrome": "cross-env NODE_ENV=production cross-env TARGET_BROWSER=chrome webpack",
     "build:firefox": "cross-env NODE_ENV=production cross-env TARGET_BROWSER=firefox webpack",
     "build:opera": "cross-env NODE_ENV=production cross-env TARGET_BROWSER=opera webpack",
-    "build": "yarn build:inpage && yarn run build:chrome && yarn run build:firefox && yarn run build:opera",
+    "build": "yarn build:inpage && yarn run build:chrome && yarn run build:firefox",
     "build:inpage": "webpack --config ./webpack.inpage.js",
     "lint": "eslint ./source --ext .js,.jsx",
     "lint:fix": "eslint ./source --ext .js,.jsx --fix",
