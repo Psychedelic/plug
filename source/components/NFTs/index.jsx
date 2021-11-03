@@ -2,8 +2,9 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBatchedNFTs } from '@psychedelic/dab-js';
 import { Principal } from '@dfinity/principal';
+import JsonBigint from 'json-bigint';
 
-import { HANDLER_TYPES, sendMessage, recursiveParseBigint } from '@background/Keyring';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import LoadingWrapper from '../LoadingWrapper';
 import { addCollection, setCollections, setCollectionsLoading } from '../../redux/wallet';
 import useStyles from './styles';
@@ -34,14 +35,14 @@ const NFTs = () => {
         principal: Principal.fromText(principalId),
         onFinish: (cols) => {
           dispatch(setCollections({
-            collections: cols.map((col) => recursiveParseBigint(col)),
+            collections: cols.map((col) => JsonBigint.parse(col)),
             walletNumber,
           }));
           dispatch(setCollectionsLoading(false));
         },
         callback: (collection) => {
           dispatch(addCollection({
-            collection: recursiveParseBigint(collection),
+            collection: JsonBigint.parse(collection),
             walletNumber,
           }));
         },

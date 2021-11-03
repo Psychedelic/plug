@@ -11,12 +11,13 @@ import {
   NFTs,
 } from '@components';
 import { Tabs } from '@ui';
-import { HANDLER_TYPES, sendMessage, recursiveParseBigint } from '@background/Keyring';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import {
   setAccountInfo,
   addCollection,
   setCollections,
 } from '@redux/wallet';
+import JsonBigint from 'json-bigint';
 
 import { getBatchedNFTs } from '@psychedelic/dab-js';
 
@@ -61,6 +62,7 @@ const Home = () => {
 
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
+      console.log('state in home', state);
       if (!state?.wallets?.length) {
         sendMessage({ type: HANDLER_TYPES.LOCK, params: {} }, () => navigator.navigate('login'));
       } else {
@@ -77,7 +79,7 @@ const Home = () => {
           principal: Principal.fromText(state?.wallets?.[state?.currentWalletId].principal),
           callback: (collection) => {
             dispatch(addCollection({
-              collection: recursiveParseBigint(collection),
+              collection: JsonBigint.parse(collection),
               walletNumber,
             }));
           },
