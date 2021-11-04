@@ -27,6 +27,8 @@ const Activity = () => {
         });
     }
   }, [icpPrice]);
+  console.log('Activity:');
+  console.log(activity);
   return (
     <LoadingWrapper loading={!transactions.length && transactionsLoading} className="big">
       <div className={classes.root}>

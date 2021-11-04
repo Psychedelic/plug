@@ -7,15 +7,15 @@ import clsx from 'clsx';
 import extension from 'extensionizer';
 import Tooltip from '@material-ui/core/Tooltip';
 import ArrowUpRight from '@assets/icons/arrow-up-right.png';
-import { capitalize } from '@material-ui/core';
 
 import { ACTIVITY_STATUS } from '@shared/constants/activity';
 import { currencyPropTypes } from '@shared/constants/currencies';
 import shortAddress from '@shared/utils/short-address';
 import Typography from '@material-ui/core/Typography';
 
-import UnknownIcon from '@assets/icons/unknown-icon.svg';
 import { getICRocksTransactionUrl } from '@shared/constants/urls';
+import { capitalize } from '@material-ui/core';
+
 import GenericIcon from '../GenericIcon';
 import SwapIcon from './SwapIcon';
 import useStyles from './styles';
@@ -42,19 +42,25 @@ const getStatus = (status, classes, t) => {
   }
 };
 
-const getSubtitle = (type, to, from, t, canisterId) => (({
-  SEND: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
-  BURN: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
-  RECEIVE: ` · ${t('activity.subtitle.from')}: ${shortAddress(from)}`,
-})[type] || canisterId ? `. At: ${shortAddress(canisterId)}` : '');
+const getDate = (status, date) => (
+  status === ACTIVITY_STATUS.COMPLETED
+    ? moment(date).format('MMM Do')
+    : ''
+);
 
-const getAddress = (type, to, from, canisterId) => (
+const getSubtitle = (type, to, from, t) => ({
+  SEND: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
+  RECEIVE: ` · ${t('activity.subtitle.from')}: ${shortAddress(from)}`,
+  BURN: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
+})[type] || '';
+
+const getAddress = (type, to, from) => (
   {
     SEND: to,
-    BURN: to,
     RECEIVE: from,
+    BURN: to,
   }
-)[type] || canisterId || '';
+)[type] || '';
 
 const openICRocksTx = (hash) => {
   extension.tabs.create({ url: getICRocksTransactionUrl(hash) });
@@ -75,7 +81,6 @@ const ActivityItem = ({
   hash,
   image,
   name,
-  canisterId,
 }) => {
   const { t } = useTranslation();
   const [showSwap, setShowSwap] = useState(false);
@@ -102,7 +107,7 @@ const ActivityItem = ({
 
     /* eslint-disable no-nested-ternary */
     navigator.clipboard.writeText(
-      getAddress(type, to, from, canisterId),
+      getAddress(type, to, from),
     );
 
     setCopied(true);
@@ -152,7 +157,7 @@ const ActivityItem = ({
           )
           : (
             <GenericIcon
-              image={plug?.image || image || UnknownIcon}
+              image={plug?.image || image}
               type={type}
             />
           )
@@ -167,7 +172,7 @@ const ActivityItem = ({
           onMouseOver={() => setShowTooltip(true)}
           onMouseLeave={() => setShowTooltip(false)}
         >
-          {getStatus(status, classes, t)}{moment(date).format('MMM Do')}
+          {getStatus(status, classes, t)}{getDate(status, date)}
           <Tooltip
             classes={{ tooltipPlacementBottom: classes.tooltip }}
             title={tooltipText}
@@ -175,7 +180,7 @@ const ActivityItem = ({
             open={showTooltip || copied}
             placement="bottom"
           >
-            <span>{getSubtitle(type, to, from, t, canisterId)}</span>
+            <span>{getSubtitle(type, to, from, t)}</span>
           </Tooltip>
         </Typography>
       </div>
@@ -216,15 +221,13 @@ ActivityItem.defaultProps = {
   plug: null,
   swapData: null,
   icon: null,
-  type: 'PLUG',
+  type: '',
   hash: null,
   name: null,
-  canisterId: null,
 };
 
 ActivityItem.propTypes = {
   type: PropTypes.number,
-  canisterId: PropTypes.string,
   to: PropTypes.string,
   from: PropTypes.string,
   amount: PropTypes.number,

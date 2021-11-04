@@ -34,7 +34,7 @@ const extensionReloaderPlugin = nodeEnv === 'development'
     },
   })
   : () => {
-    this.apply = () => {};
+    this.apply = () => { };
   };
 
 const getExtensionFileType = (browser) => {
@@ -117,7 +117,7 @@ module.exports = {
         loader: 'babel-loader',
         // exclude: /node_modules/,
         options: {
-          plugins: ['@babel/plugin-proposal-export-namespace-from'],
+          plugins: ['@babel/plugin-proposal-export-namespace-from', '@babel/plugin-proposal-class-properties', '@babel/plugin-proposal-optional-chaining'],
         },
       },
       {
