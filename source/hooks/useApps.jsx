@@ -9,26 +9,25 @@ const storage = extension.storage.local;
 const useApps = () => {
   const [apps, setApps] = useState({});
   const [parsedApps, setParsedApps] = useState([]);
-  const { walletNumber } = useSelector((state) => state.wallet);
+  const { principalId } = useSelector((state) => state.wallet);
 
   const handleRemoveApp = (url) => {
     const newApps = removeAppByURL({ apps, url });
-
     setApps(newApps);
   };
 
   useEffect(() => {
-    storage.get(walletNumber?.toString(), (state) => {
-      const appsFromExtensionStorage = state?.[walletNumber]?.apps;
+    storage.get(principalId?.toString(), (state) => {
+      const appsFromExtensionStorage = state?.[principalId]?.apps;
       if (appsFromExtensionStorage) {
         setApps(appsFromExtensionStorage);
       }
     });
-  }, [walletNumber]);
+  }, [principalId]);
 
   useEffect(() => {
     storage.set({
-      [walletNumber]: { apps },
+      [principalId]: { apps },
     });
     const parsed = Object.values(apps);
     const filtered = parsed.filter((a) => a.status === CONNECTION_STATUS.accepted);
