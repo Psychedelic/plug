@@ -3,6 +3,7 @@ import ReceiveImg from '@assets/icons/receive-activity.svg';
 import SendImg from '@assets/icons/send-activity.svg';
 import BurnImg from '@assets/icons/burn-activity.svg';
 import MintImg from '@assets/icons/mint-activity.svg';
+import LightningImg from '@assets/icons/lightning-activity.svg';
 import PropTypes from 'prop-types';
 import useStyles from './styles';
 
@@ -18,10 +19,10 @@ const GenericIcon = ({ image, type }) => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      {
-        Object.keys(TYPE_IMAGES).includes(type?.toUpperCase())
-        && <img className={classes.activity} src={TYPE_IMAGES[type.toUpperCase()]} />
-      }
+      <img
+        className={classes.activity}
+        src={TYPE_IMAGES[type.toUpperCase()] || LightningImg}
+      />
       <img className={classes.root} src={image} />
     </div>
   );

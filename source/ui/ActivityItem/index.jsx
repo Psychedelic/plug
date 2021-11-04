@@ -7,27 +7,33 @@ import clsx from 'clsx';
 import extension from 'extensionizer';
 import Tooltip from '@material-ui/core/Tooltip';
 import ArrowUpRight from '@assets/icons/arrow-up-right.png';
-import { capitalize } from '@material-ui/core';
+import { capitalize, IconButton } from '@material-ui/core';
+import ListIcon from '@material-ui/icons/List';
 
 import { ACTIVITY_STATUS } from '@shared/constants/activity';
 import { currencyPropTypes } from '@shared/constants/currencies';
 import shortAddress from '@shared/utils/short-address';
 import Typography from '@material-ui/core/Typography';
+import { Dialog } from '@ui';
 
 import UnknownIcon from '@assets/icons/unknown-icon.svg';
 import { getICRocksTransactionUrl } from '@shared/constants/urls';
+import ReactJson from 'react-json-view';
 import GenericIcon from '../GenericIcon';
 import SwapIcon from './SwapIcon';
 import useStyles from './styles';
 
 const getTitle = (type, symbol, swapData, plug, t) => {
   switch (type) {
+    case 'SEND':
+    case 'RECEIVE':
+      return `${capitalize(type?.toLowerCase())} ${symbol ?? ''}`;
     case 'SWAP':
       return `${t('activity.title.swap')} ${symbol} ${t('activity.title.for')} ${swapData.currency.name}`;
     case 'PLUG':
       return `${t('activity.title.pluggedInto')} ${plug.name}`;
     default:
-      return `${capitalize(type?.toLowerCase())} ${symbol ?? ''}`;
+      return `Executed: ${capitalize(type?.toLowerCase())} ${symbol ?? ''}`;
   }
 };
 
@@ -46,7 +52,7 @@ const getSubtitle = (type, to, from, t, canisterId) => (({
   SEND: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
   BURN: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
   RECEIVE: ` · ${t('activity.subtitle.from')}: ${shortAddress(from)}`,
-})[type] || canisterId ? `. At: ${shortAddress(canisterId)}` : '');
+})[type] ?? `. In: ${shortAddress(canisterId)}`);
 
 const getAddress = (type, to, from, canisterId) => (
   {
@@ -76,11 +82,13 @@ const ActivityItem = ({
   image,
   name,
   canisterId,
+  details,
 }) => {
   const { t } = useTranslation();
   const [showSwap, setShowSwap] = useState(false);
   const [hover, setHover] = useState(false);
   const handleShowSwap = (show) => { setShowSwap(show); };
+  const [openDetail, setOpenDetail] = useState(false);
 
   const classes = useStyles();
 
@@ -133,7 +141,6 @@ const ActivityItem = ({
   }
 
   const isTransaction = ['SEND', 'RECEIVE'].includes(type) && symbol === 'ICP';
-
   return (
     <div
       className={clsx(classes.root, isTransaction && classes.pointer)}
@@ -191,16 +198,47 @@ const ActivityItem = ({
         <div className={
           clsx(
             classes.iconContainer,
-            (isTransaction && hover) && classes.iconContainerAnimation,
+            hover && classes.iconContainerAnimation,
           )
         }
         >
-          <img
-            src={ArrowUpRight}
-          />
+          {isTransaction ? (
+            <img
+              src={ArrowUpRight}
+            />
+          ) : details && (
+            <IconButton size="small" onClick={() => setOpenDetail(true)} className={classes.detailsIcon}>
+              <ListIcon />
+            </IconButton>
+          )}
         </div>
       </div>
-
+      {
+        openDetail
+        && (
+          <Dialog
+            title="Transaction Details"
+            onClose={() => setOpenDetail(false)}
+            open={openDetail}
+            component={(
+              <div className={classes.transactionDetailsContainer}>
+                <ReactJson
+                  src={details}
+                  collapsed={2}
+                  style={{
+                    backgroundColor: '#F3F4F6',
+                    padding: '10px',
+                    borderRadius: '10px',
+                    minHeight: '185px',
+                    maxHeight: '350px',
+                    overflow: 'auto',
+                  }}
+                />
+              </div>
+            )}
+          />
+        )
+      }
     </div>
   );
 };
@@ -220,11 +258,13 @@ ActivityItem.defaultProps = {
   hash: null,
   name: null,
   canisterId: null,
+  details: null,
 };
 
 ActivityItem.propTypes = {
   type: PropTypes.number,
   canisterId: PropTypes.string,
+  details: PropTypes.objectOf(PropTypes.any),
   to: PropTypes.string,
   from: PropTypes.string,
   amount: PropTypes.number,

@@ -63,6 +63,7 @@ export const walletSlice = createSlice({
           canisterId: trx?.details?.canisterId,
           plug: null,
           canisterInfo: trx?.canisterInfo,
+          details: trx?.details,
         };
         return transaction;
       };
