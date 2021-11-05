@@ -47,6 +47,7 @@ const fetchCanistersInfo = async (whitelist) => {
         const fetchedCanisterInfo = await PlugController.getCanisterInfo(id);
         canisterInfo = { id, ...fetchedCanisterInfo };
       } catch (error) {
+        /* eslint-disable-next-line */
         console.error(error);
       }
 

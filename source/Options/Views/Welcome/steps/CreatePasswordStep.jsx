@@ -47,10 +47,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
     }
 
     // clean the storage before initiating keyring
-    extension.storage.local.set({
-      contacts: [],
-      apps: {},
-    });
+    extension.storage.local.clear();
 
     const type = mnemonic ? HANDLER_TYPES.IMPORT : HANDLER_TYPES.CREATE;
     const params = { password, mnemonic, icon: getRandomEmoji() };
