@@ -1649,7 +1649,7 @@
     crypto-js "^4.1.1"
 
 "@psychedelic/plug-controller@../plug-wallet-controller":
-  version "0.8.2"
+  version "0.9.0"
   dependencies:
     "@dfinity/agent" "^0.9.3"
     "@dfinity/candid" "^0.9.3"

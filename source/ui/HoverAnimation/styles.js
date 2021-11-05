@@ -10,8 +10,6 @@ export default makeStyles({
     },
   },
   hoverAnimation: {
-    transitionDuration: '.5s',
-    transitionProperty: 'transform',
     '&:hover': {
       animation: '$hoverEffect',
       animationDuration: '1.5s',
