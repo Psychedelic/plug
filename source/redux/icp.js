@@ -37,6 +37,7 @@ export const useICPPrice = (refetch = false, dependencies = []) => {
       dispatch(setICPPrice(data?.['internet-computer']?.usd ?? 1));
     } catch (error) {
       // TODO: Handle error
+      /* eslint-disable-next-line */
       console.warn(error);
     }
   };
