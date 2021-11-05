@@ -7,33 +7,33 @@ import clsx from 'clsx';
 import extension from 'extensionizer';
 import Tooltip from '@material-ui/core/Tooltip';
 import ArrowUpRight from '@assets/icons/arrow-up-right.png';
+import { capitalize, IconButton } from '@material-ui/core';
+import ListIcon from '@material-ui/icons/List';
 
-import { ACTIVITY_TYPES, ACTIVITY_STATUS } from '@shared/constants/activity';
+import { ACTIVITY_STATUS } from '@shared/constants/activity';
 import { currencyPropTypes } from '@shared/constants/currencies';
 import shortAddress from '@shared/utils/short-address';
 import Typography from '@material-ui/core/Typography';
 
+import UnknownIcon from '@assets/icons/unknown-icon.svg';
 import { getICRocksTransactionUrl } from '@shared/constants/urls';
+import ReactJson from 'react-json-view';
+import Dialog from '../Dialog';
 import GenericIcon from '../GenericIcon';
 import SwapIcon from './SwapIcon';
 import useStyles from './styles';
 
 const getTitle = (type, symbol, swapData, plug, t) => {
   switch (type) {
-    case ACTIVITY_TYPES.SEND:
-      return `${t('activity.title.send')} ${symbol}`;
-    case ACTIVITY_TYPES.RECEIVE:
-      return `${t('activity.title.receive')} ${symbol}`;
-    case ACTIVITY_TYPES.SWAP:
+    case 'SEND':
+    case 'RECEIVE':
+      return `${capitalize(type?.toLowerCase())} ${symbol ?? ''}`;
+    case 'SWAP':
       return `${t('activity.title.swap')} ${symbol} ${t('activity.title.for')} ${swapData.currency.name}`;
-    case ACTIVITY_TYPES.PLUG:
+    case 'PLUG':
       return `${t('activity.title.pluggedInto')} ${plug.name}`;
-    case ACTIVITY_TYPES.BURN:
-      return `${t('activity.title.burn')} ${symbol}`;
-    case ACTIVITY_TYPES.MINT:
-      return `${t('activity.title.receive')} ${symbol}`;
     default:
-      return '';
+      return `Executed: ${capitalize(type?.toLowerCase())} ${symbol ?? ''}`;
   }
 };
 
@@ -48,25 +48,19 @@ const getStatus = (status, classes, t) => {
   }
 };
 
-const getDate = (status, date) => (
-  status === ACTIVITY_STATUS.COMPLETED
-    ? moment(date).format('MMM Do')
-    : ''
-);
+const getSubtitle = (type, to, from, t, canisterId) => (({
+  SEND: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
+  BURN: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
+  RECEIVE: ` · ${t('activity.subtitle.from')}: ${shortAddress(from)}`,
+})[type] ?? `. In: ${shortAddress(canisterId)}`);
 
-const getSubtitle = (type, to, from, t) => ({
-  [ACTIVITY_TYPES.SEND]: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
-  [ACTIVITY_TYPES.RECEIVE]: ` · ${t('activity.subtitle.from')}: ${shortAddress(from)}`,
-  [ACTIVITY_TYPES.BURN]: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
-})[type] || '';
-
-const getAddress = (type, to, from) => (
+const getAddress = (type, to, from, canisterId) => (
   {
-    [ACTIVITY_TYPES.SEND]: to,
-    [ACTIVITY_TYPES.RECEIVE]: from,
-    [ACTIVITY_TYPES.BURN]: to,
+    SEND: to,
+    BURN: to,
+    RECEIVE: from,
   }
-)[type] || '';
+)[type] || canisterId || '';
 
 const openICRocksTx = (hash) => {
   extension.tabs.create({ url: getICRocksTransactionUrl(hash) });
@@ -87,11 +81,14 @@ const ActivityItem = ({
   hash,
   image,
   name,
+  canisterId,
+  details,
 }) => {
   const { t } = useTranslation();
   const [showSwap, setShowSwap] = useState(false);
   const [hover, setHover] = useState(false);
   const handleShowSwap = (show) => { setShowSwap(show); };
+  const [openDetail, setOpenDetail] = useState(false);
 
   const classes = useStyles();
 
@@ -113,7 +110,7 @@ const ActivityItem = ({
 
     /* eslint-disable no-nested-ternary */
     navigator.clipboard.writeText(
-      getAddress(type, to, from),
+      getAddress(type, to, from, canisterId),
     );
 
     setCopied(true);
@@ -127,8 +124,7 @@ const ActivityItem = ({
       setTooltipText(copyText);
     }, 1500);
   };
-
-  if (type === ACTIVITY_TYPES.PLUG) {
+  if (type === 'PLUG') {
     return (
       <div className={classes.root}>
         <img className={classes.image} src={icon} />
@@ -144,8 +140,7 @@ const ActivityItem = ({
     );
   }
 
-  const isTransaction = [ACTIVITY_TYPES.SEND, ACTIVITY_TYPES.RECEIVE].includes(type) && symbol === 'ICP';
-
+  const isTransaction = ['SEND', 'RECEIVE'].includes(type) && symbol === 'ICP';
   return (
     <div
       className={clsx(classes.root, isTransaction && classes.pointer)}
@@ -154,7 +149,7 @@ const ActivityItem = ({
       onMouseLeave={() => setHover(false)}
     >
       {
-        type === ACTIVITY_TYPES.SWAP
+        type === 'SWAP'
           ? (
             <SwapIcon
               fromCurrency={{ symbol, value, amount }}
@@ -164,7 +159,7 @@ const ActivityItem = ({
           )
           : (
             <GenericIcon
-              image={plug?.image || image}
+              image={plug?.image || image || UnknownIcon}
               type={type}
             />
           )
@@ -179,7 +174,7 @@ const ActivityItem = ({
           onMouseOver={() => setShowTooltip(true)}
           onMouseLeave={() => setShowTooltip(false)}
         >
-          {getStatus(status, classes, t)}{getDate(status, date)}
+          {getStatus(status, classes, t)}{moment(date).format('MMM Do')}
           <Tooltip
             classes={{ tooltipPlacementBottom: classes.tooltip }}
             title={tooltipText}
@@ -187,7 +182,7 @@ const ActivityItem = ({
             open={showTooltip || copied}
             placement="bottom"
           >
-            <span>{getSubtitle(type, to, from, t)}</span>
+            <span>{getSubtitle(type, to, from, t, canisterId)}</span>
           </Tooltip>
         </Typography>
       </div>
@@ -203,16 +198,47 @@ const ActivityItem = ({
         <div className={
           clsx(
             classes.iconContainer,
-            (isTransaction && hover) && classes.iconContainerAnimation,
+            hover && classes.iconContainerAnimation,
           )
         }
         >
-          <img
-            src={ArrowUpRight}
-          />
+          {isTransaction ? (
+            <img
+              src={ArrowUpRight}
+            />
+          ) : details && (
+            <IconButton size="small" onClick={() => setOpenDetail(true)} className={classes.detailsIcon}>
+              <ListIcon />
+            </IconButton>
+          )}
         </div>
       </div>
-
+      {
+        openDetail
+        && (
+          <Dialog
+            title="Transaction Details"
+            onClose={() => setOpenDetail(false)}
+            open={openDetail}
+            component={(
+              <div className={classes.transactionDetailsContainer}>
+                <ReactJson
+                  src={details}
+                  collapsed={2}
+                  style={{
+                    backgroundColor: '#F3F4F6',
+                    padding: '10px',
+                    borderRadius: '10px',
+                    minHeight: '185px',
+                    maxHeight: '350px',
+                    overflow: 'auto',
+                  }}
+                />
+              </div>
+            )}
+          />
+        )
+      }
     </div>
   );
 };
@@ -228,13 +254,17 @@ ActivityItem.defaultProps = {
   plug: null,
   swapData: null,
   icon: null,
-  type: ACTIVITY_TYPES.PLUG,
+  type: 'PLUG',
   hash: null,
   name: null,
+  canisterId: null,
+  details: null,
 };
 
 ActivityItem.propTypes = {
   type: PropTypes.number,
+  canisterId: PropTypes.string,
+  details: PropTypes.objectOf(PropTypes.any),
   to: PropTypes.string,
   from: PropTypes.string,
   amount: PropTypes.number,
