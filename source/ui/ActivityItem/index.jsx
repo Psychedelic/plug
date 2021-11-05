@@ -14,11 +14,11 @@ import { ACTIVITY_STATUS } from '@shared/constants/activity';
 import { currencyPropTypes } from '@shared/constants/currencies';
 import shortAddress from '@shared/utils/short-address';
 import Typography from '@material-ui/core/Typography';
-import { Dialog } from '@ui';
 
 import UnknownIcon from '@assets/icons/unknown-icon.svg';
 import { getICRocksTransactionUrl } from '@shared/constants/urls';
 import ReactJson from 'react-json-view';
+import Dialog from '../Dialog';
 import GenericIcon from '../GenericIcon';
 import SwapIcon from './SwapIcon';
 import useStyles from './styles';
