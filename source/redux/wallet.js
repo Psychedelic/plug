@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ACTIVITY_STATUS, ACTIVITY_TYPES } from '@shared/constants/activity';
+import { ACTIVITY_STATUS } from '@shared/constants/activity';
 import {
   formatAssetBySymbol,
   formatAssets,
@@ -46,21 +46,24 @@ export const walletSlice = createSlice({
     setTransactions: (state, action) => {
       const mapTransaction = (trx) => {
         const asset = formatAssetBySymbol(
-          trx?.amount,
-          trx?.currency?.symbol,
+          trx?.details?.amount,
+          trx?.details?.currency?.symbol,
           action?.payload?.icpPrice,
         );
         const transaction = {
           ...asset,
-          type: ACTIVITY_TYPES[trx?.type],
-          date: new Date(trx?.timestamp),
-          status: ACTIVITY_STATUS[trx?.status],
-          to: trx?.to,
-          plug: null,
-          from: trx?.from,
+          type: trx?.type,
           hash: trx?.hash,
-          image: TOKEN_IMAGES[trx?.currency?.symbol] || '',
-          symbol: trx?.currency?.symbol,
+          to: trx?.details?.to,
+          from: trx?.details?.from,
+          date: new Date(trx?.timestamp),
+          status: ACTIVITY_STATUS[trx?.details?.status],
+          image: TOKEN_IMAGES[trx?.details?.currency?.symbol] || '',
+          symbol: trx?.details?.currency?.symbol,
+          canisterId: trx?.details?.canisterId,
+          plug: null,
+          canisterInfo: trx?.canisterInfo,
+          details: trx?.details,
         };
         return transaction;
       };

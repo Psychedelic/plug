@@ -11,3 +11,4 @@ export const entrepotUrl = 'https://entrepot.app/#marketplace';
 export const getICRocksAccountUrl = (accountId) => `https://ic.rocks/account/${accountId}`;
 export const getICRocksTransactionUrl = (transactionHash) => `https://ic.rocks/transaction/${transactionHash}`;
 export const getICRocksPrincipalUrl = (canisterId) => `https://ic.rocks/principal/${canisterId}`;
+export const getCapExplorerUrl = (canisterId) => ` https://blue-bar-1426.on.fleek.co/app-transactions/${canisterId}`;

@@ -12,7 +12,12 @@ import { Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import Plus from '@assets/icons/plus.svg';
 import {
-  setAccountInfo, setAssets, setAssetsLoading, setCollections,
+  setAccountInfo,
+  setAssets,
+  setAssetsLoading,
+  setCollections,
+  setTransactions,
+  setTransactionsLoading,
 } from '@redux/wallet';
 import { useDispatch, useSelector } from 'react-redux';
 import BluePencil from '@assets/icons/blue-pencil.svg';
@@ -87,6 +92,8 @@ const Profile = ({ disableProfile }) => {
         if (state?.wallets?.length) {
           dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
           dispatch(setAssetsLoading(true));
+          dispatch(setTransactions([]));
+          dispatch(setTransactionsLoading(true));
           sendMessage({
             type: HANDLER_TYPES.GET_ASSETS,
             params: {},

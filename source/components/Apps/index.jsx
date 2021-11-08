@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import {
   AppItem, Dialog, CanisterInfoContainer, CanisterInfoItem,
 } from '@ui';
+
 import ThinkingEmoji from '@assets/icons/thinking-emoji.svg';
 import { useApps } from '@hooks';
 import ActionDialog from '../ActionDialog';

@@ -55,8 +55,9 @@ export default makeStyles((theme) => ({
     marginLeft: 6,
   },
   iconContainerAnimation: {
-    width: 12,
+    width: 15,
     opacity: 1,
+    marginLeft: 10,
   },
   values: {
     display: 'flex',
@@ -71,5 +72,11 @@ export default makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-evenly',
+  },
+  transactionDetailsContainer: {
+    padding: '0 15px 15px',
+  },
+  detailsIcon: {
+    marginRight: '5px',
   },
 }));
