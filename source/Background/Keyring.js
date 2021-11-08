@@ -1,7 +1,7 @@
 import extension from 'extensionizer';
 import getICPPrice from '@shared/services/ICPPrice';
 import { formatAssets } from '@shared/constants/currencies';
-import JsonBigint from 'json-bigint';
+import { recursiveParseBigint } from '@shared/utils/object';
 
 export const NANOS_PER_SECOND = 1_000_000;
 export const BALANCE_ERROR = 'You have tried to spend more than the balance of your account';
@@ -98,17 +98,14 @@ export const getKeyringHandler = (type, keyring) => ({
     isInitialized: keyring?.isInitialized,
   }),
   [HANDLER_TYPES.GET_STATE]: async () => {
-    console.log('getting state in FE');
     const response = await keyring.getState();
-    console.log('got state in FE', response);
-    return JsonBigint.parse(response);
+    return recursiveParseBigint(response);
   },
   [HANDLER_TYPES.GET_TRANSACTIONS]: async () => {
     const response = await keyring.getTransactions();
-    return JsonBigint.parse(response);
+    return recursiveParseBigint(response);
   },
   [HANDLER_TYPES.GET_ASSETS]: async ({ refresh }) => {
-    console.log('fetching assets');
     const { wallets, currentWalletId } = await keyring.getState();
     let assets = wallets?.[currentWalletId]?.assets;
     if (assets?.every((asset) => !asset.amount) || refresh) {
@@ -116,7 +113,6 @@ export const getKeyringHandler = (type, keyring) => ({
     } else {
       keyring.getBalance();
     }
-    console.log('fetched assets', assets);
     return assets;
   },
   [HANDLER_TYPES.GET_BALANCE]: async (subaccount) => {
@@ -171,25 +167,23 @@ export const getKeyringHandler = (type, keyring) => ({
     async ({ to, amount }) => {
       try {
         const response = await keyring.burnXTC({ to, amount });
-        return JsonBigint.parse(response);
+        return recursiveParseBigint(response);
       } catch (e) {
         return { error: e.message };
       }
     },
   [HANDLER_TYPES.GET_NFTS]: async () => {
-    console.log('getting nfts in fe');
     const { wallets, currentWalletId } = await keyring.getState();
     const cachedCollections = wallets?.[currentWalletId]?.collections || [];
     // update cache
     keyring.getNFTs();
-    console.log('got NFTs');
-    return cachedCollections?.map((collection) => JsonBigint.parse(collection));
+    return cachedCollections;
   },
   [HANDLER_TYPES.TRANSFER_NFT]:
     async ({ to, nft }) => {
       try {
         const response = await keyring.transferNFT({ to, token: nft });
-        return JsonBigint.parse(response);
+        return recursiveParseBigint(response);
       } catch (e) {
         return { error: e.message };
       }

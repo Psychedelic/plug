@@ -17,12 +17,12 @@ import {
   addCollection,
   setCollections,
 } from '@redux/wallet';
-import JsonBigint from 'json-bigint';
 
 import { getBatchedNFTs } from '@psychedelic/dab-js';
 
 import { useICPPrice } from '@redux/icp';
 import { Principal } from '@dfinity/principal';
+import { recursiveParseBigint } from '@shared/utils/object';
 
 const Home = () => {
   const { t } = useTranslation();
@@ -62,7 +62,6 @@ const Home = () => {
 
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
-      console.log('state in home', state);
       if (!state?.wallets?.length) {
         sendMessage({ type: HANDLER_TYPES.LOCK, params: {} }, () => navigator.navigate('login'));
       } else {
@@ -79,7 +78,7 @@ const Home = () => {
           principal: Principal.fromText(state?.wallets?.[state?.currentWalletId].principal),
           callback: (collection) => {
             dispatch(addCollection({
-              collection: JsonBigint.parse(collection),
+              collection: recursiveParseBigint(collection),
               walletNumber,
             }));
           },

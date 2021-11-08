@@ -79,11 +79,8 @@ extension.runtime.onMessage.addListener((message, _, sendResponse) => {
     const { params, type } = message;
     const keyringHandler = getKeyringHandler(type, keyring);
     if (!keyringHandler) return;
-    console.log('Executing ', type);
-    console.log('With params: ');
-    console.log(params);
     keyringHandler(params).then((res) => sendResponse(res)).catch((e) => {
-      console.log('keyring error', e);
+      console.log('Error: ', e);
       const keyringErrorMessage = getKeyringErrorMessage(type);
       const errorMessage = keyringErrorMessage ? `Unexpected error while ${keyringErrorMessage}` : 'Unexpected error';
       notificationManager.notificateError(errorMessage);
