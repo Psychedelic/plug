@@ -7,21 +7,22 @@ import LightningImg from '@assets/icons/lightning-activity.svg';
 import PropTypes from 'prop-types';
 import useStyles from './styles';
 
-const TYPE_IMAGES = {
+const getActivityIcon = (type) => ({
   RECEIVE: ReceiveImg,
   SEND: SendImg,
   BURN: BurnImg,
   MINT: MintImg,
   TRANSFER: SendImg,
-};
+})[type] || LightningImg;
 
 const GenericIcon = ({ image, type }) => {
   const classes = useStyles();
+  const activityIcon = type ? getActivityIcon(type) : null;
   return (
     <div className={classes.root}>
       <img
         className={classes.activity}
-        src={TYPE_IMAGES[type.toUpperCase()] || LightningImg}
+        src={activityIcon}
       />
       <img className={classes.root} src={image} />
     </div>
