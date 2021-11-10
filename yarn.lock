@@ -1640,6 +1640,8 @@
   version "0.3.0-comp"
   resolved "https://npm.pkg.github.com/download/@psychedelic/dab-js/0.3.0-comp/686dd0fb70e743963cb7ed94e1b831613e19196029d219405c92e21336b3802f#d10d4c64b401ef594a235cbd14a57388ba0b793c"
   integrity sha512-kPEeVzHhe39n+GAS2NhZeGelhbushg7IU6LzGzfSkUd7qxcKpOA0m4XplC/8ze3HejQ8J3q0Q7cv46R6kttEOw==
+"@psychedelic/plug-controller@../plug-wallet-controller":
+  version "0.10.0"
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"

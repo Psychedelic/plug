@@ -45,7 +45,7 @@ const Step2 = ({ selectedToken, handleClose }) => {
     setLoading(true);
     sendMessage({
       type: HANDLER_TYPES.ADD_CUSTOM_TOKEN,
-      params: selectedToken?.token.canisterId,
+      params: selectedToken?.token,
     }, async () => {
       sendMessage({
         type: HANDLER_TYPES.GET_ASSETS,
