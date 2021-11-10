@@ -159,18 +159,19 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.GET_PUBLIC_KEY]:
     async () => keyring.getPublicKey(),
   [HANDLER_TYPES.GET_TOKEN_INFO]:
-    async (canisterId) => {
+    async ({ canisterId, standard }) => {
       try {
-        const tokenInfo = await keyring.getTokenInfo(canisterId);
+        const { currentWalletId } = await keyring.getState();
+        const tokenInfo = await keyring.getTokenInfo(canisterId, currentWalletId, standard);
         return { ...tokenInfo, amount: parseInt(tokenInfo.amount.toString(), 10) };
       } catch (e) {
         return { error: e.message };
       }
     },
   [HANDLER_TYPES.ADD_CUSTOM_TOKEN]:
-    async (canisterId) => {
+    async ({ canisterId, standard }) => {
       try {
-        const response = await keyring.registerToken(canisterId);
+        const response = await keyring.registerToken(canisterId, standard);
         return response;
       } catch (e) {
         return { error: e.message };
