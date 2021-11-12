@@ -14,6 +14,7 @@ import { ACTIVITY_STATUS } from '@shared/constants/activity';
 import { currencyPropTypes } from '@shared/constants/currencies';
 import shortAddress from '@shared/utils/short-address';
 import Typography from '@material-ui/core/Typography';
+import { Principal } from '@dfinity/principal';
 
 import UnknownIcon from '@assets/icons/unknown-icon.svg';
 import { getICRocksTransactionUrl } from '@shared/constants/urls';
@@ -23,6 +24,20 @@ import GenericIcon from '../GenericIcon';
 import SwapIcon from './SwapIcon';
 import useStyles from './styles';
 
+const formatJson = (data) => Object.entries(data).reduce((acum, [key, val]) => {
+  const current = { ...acum };
+  if (Array.isArray(val)) {
+    current[key] = val.map((v) => formatJson(v));
+  } else if (val._isPrincipal) { // eslint-disable-line no-underscore-dangle
+    console.log(val, Object.values(val._arr), new Uint8Array(val._arr));
+    current[key] = Principal.fromUint8Array(new Uint8Array(Object.values(val._arr))).toString();
+  } else if (typeof val === 'object') {
+    current[key] = formatJson(val);
+  } else {
+    current[key] = val;
+  }
+  return current;
+}, {});
 const getTitle = (type, symbol, swapData, plug, t) => {
   switch (type) {
     case 'SEND':
@@ -223,7 +238,7 @@ const ActivityItem = ({
             component={(
               <div className={classes.transactionDetailsContainer}>
                 <ReactJson
-                  src={details}
+                  src={formatJson(details)}
                   collapsed={2}
                   style={{
                     backgroundColor: '#F3F4F6',
