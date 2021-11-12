@@ -1023,51 +1023,25 @@
     js-sha256 "0.9.0"
     simple-cbor "^0.4.1"
 
-"@dfinity/agent@^0.9.2", "@dfinity/agent@^0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@dfinity/agent/-/agent-0.9.3.tgz#e49f07d6749e534c4c30aa2df2bba59e3fa9570f"
-  integrity sha512-vR0t5Uf+srbUHTdGunJxek3a4jCmBKU+B2yYEX0/aSGQfJmEf5X5snuNcnrIDOCfHeK7uxmOqs65BdI8Lhn4fg==
-  dependencies:
-    base64-arraybuffer "^0.2.0"
-    bignumber.js "^9.0.0"
-    borc "^2.1.1"
-    buffer "^6.0.3"
-    buffer-pipe "^0.0.4"
-    js-sha256 "0.9.0"
-    simple-cbor "^0.4.1"
-
 "@dfinity/candid@^0.10.1":
   version "0.10.1"
   resolved "https://registry.yarnpkg.com/@dfinity/candid/-/candid-0.10.1.tgz#f93d7cdc3856a6d527f31c7112a0537ef70ba315"
   integrity sha512-Z7C125quoAYafj+yK20KQKI/MkXgB9tgPkvtIk1Ec8eGXIU7OXOHSIknvJR6zXdE9eUc/veiD4+VDWK7I82sDw==
 
-"@dfinity/candid@^0.9.2", "@dfinity/candid@^0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@dfinity/candid/-/candid-0.9.3.tgz#96b2a5339da634ccc5546a0560f48f5ceef70dfe"
-  integrity sha512-VMovKFrExqN0mwcn1/aut4Ou4cA9IA2+QrBjV+Ro4eVCpVvGpVRqn4jizlV9QnJjcuEBG1yImIG5RKMdZ2ejQQ==
-  dependencies:
-    buffer "^6.0.3"
-    buffer-pipe "^0.0.4"
-
-"@dfinity/identity@^0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@dfinity/identity/-/identity-0.9.3.tgz#7d65d1ee7655d9028034bf22a92c21eea8b24028"
-  integrity sha512-8mEpkLqGW74QMsVJzuewwN0tO1fdShAT+vyfQM08VOX/u4IHckH8zZ+qGTeXKaGzuwiJRa5WZT2U7L32LDfJJg==
+"@dfinity/identity@^0.10.1":
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/@dfinity/identity/-/identity-0.10.1.tgz#f701b8f0205d83431dda7352fa8d9f30af137c5b"
+  integrity sha512-d5rkr5Sg1Eiwnmd2mkz1xvrzAdITbMBcIaU0LlKCG+eKMxcgDLm4eB8FBvS5Pqr0S5sHb/YXpLZrhpL5xC38bg==
   dependencies:
     borc "^2.1.1"
-    buffer "^6.0.3"
-    buffer-pipe "0.0.4"
+    js-sha256 "^0.9.0"
+    secp256k1 "^4.0.2"
     tweetnacl "^1.0.1"
 
 "@dfinity/principal@^0.10.1":
   version "0.10.1"
   resolved "https://registry.yarnpkg.com/@dfinity/principal/-/principal-0.10.1.tgz#2472aa0eef8b46000394720ef40bbd4bd330c000"
   integrity sha512-1/r726xwVlSsCc+Fl2szM+P9xNfsu5TItC56n/KRuhGEE9sN8NLnorxcNvpzoII0f99XBNCNMRJPUkWSZPLpbw==
-
-"@dfinity/principal@^0.9.2", "@dfinity/principal@^0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@dfinity/principal/-/principal-0.9.3.tgz#52e4980bac8dd35e7a6bb2564bea89df97383e06"
-  integrity sha512-DSL3b/gGm+f57+3XkFjlK4DigtKXe9MVO8UYXDQWkVIhy0UF1KYjRNGs6awc1GTQoOTxeQ8UTFwXuvnEvJ1hpQ==
 
 "@discoveryjs/json-ext@^0.5.0":
   version "0.5.5"
@@ -1624,39 +1598,30 @@
     axios "^0.24.0"
     cross-fetch "^3.1.4"
 
-"@psychedelic/dab-js@0.2.4":
-  version "0.2.4"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/dab-js/0.2.4/15a78ca900f3071ebecfbe627cfe2050b22705a5adfefb202f3eda6fe8c577ca#b0a1726fa6429f6a5073ddca8596e2e978ae5c18"
-  integrity sha512-/NCgYeNbjq+810mAv7Aa+RwzYQhF9BKTSAvn2Kx5WZ4RtJBl8bzSXo6LQk/pJqKh0oX16etoqhCWFOs6bYMnZg==
+"@psychedelic/dab-js@0.3.0":
+  version "0.3.0"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/dab-js/0.3.0/584f12a4c94565728fb22937ed8e4561d3174f224862be5a716080f892896f6e#e1e3fc15a47377878355a08ed834a37971d852e6"
+  integrity sha512-OUW//ZVsRnc/GKE/Ql3gDT5TANz1htEGH6tKWJPxZUhkfabwE7MEivJxahUY31Nqm613Eh5H/x5g0qd+KReq8Q==
   dependencies:
-    "@dfinity/agent" "^0.9.3"
-    "@dfinity/candid" "^0.9.3"
-    "@dfinity/identity" "^0.9.3"
-    "@dfinity/principal" "^0.9.3"
+    "@dfinity/agent" "^0.10.1"
+    "@dfinity/candid" "^0.10.1"
+    "@dfinity/identity" "^0.10.1"
+    "@dfinity/principal" "^0.10.1"
     buffer-crc32 "^0.2.13"
+    cross-fetch "^3.1.4"
     crypto-js "^4.1.1"
 
-"@psychedelic/dab-js@0.2.5":
-  version "0.2.5"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/dab-js/0.2.5/38f0af2160316156f474df0856b1c361616d7b45b40ab1a6061aa18f669ca927#201ceda2f01c167d464ef5b0b82a2e4b1712a9c0"
-  integrity sha512-LSuHViDofplS6OPcrTTEKXFA/G1DN1yMDjSkaeny+0GlzjH0OSgkNMNHGKS96PalNN2Tk5hgX8caKH4l2DQtMw==
+"@psychedelic/plug-controller@0.11.0":
+  version "0.11.0"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.11.0/a1bedeec596b3ef96960d0e33f5a17aeb4a69fed5e679ded9396ce0c1f83529c#46d81398433da123a63e60751dd3b5ce81895f09"
+  integrity sha512-CVYgSLM3RncVc95RP6KK1GAFLjFlflaV6N3W9jkqosV/IsiQdVtNbLnTwM2mcOPJZBtMwleG8yz8zwtjpcF2WQ==
   dependencies:
-    "@dfinity/agent" "^0.9.3"
-    "@dfinity/candid" "^0.9.3"
-    "@dfinity/identity" "^0.9.3"
-    "@dfinity/principal" "^0.9.3"
-    buffer-crc32 "^0.2.13"
-    crypto-js "^4.1.1"
-
-"@psychedelic/plug-controller@../plug-wallet-controller":
-  version "0.10.0"
-  dependencies:
-    "@dfinity/agent" "^0.9.3"
-    "@dfinity/candid" "^0.9.3"
-    "@dfinity/identity" "^0.9.3"
-    "@dfinity/principal" "^0.9.3"
+    "@dfinity/agent" "^0.10.1"
+    "@dfinity/candid" "^0.10.1"
+    "@dfinity/identity" "^0.10.1"
+    "@dfinity/principal" "^0.10.1"
     "@psychedelic/cap-js" "^0.0.5"
-    "@psychedelic/dab-js" "0.2.4"
+    "@psychedelic/dab-js" "0.3.0"
     "@types/secp256k1" "^4.0.3"
     axios "^0.21.1"
     babel-jest "^25.5.1"
@@ -1678,14 +1643,15 @@
     text-encoding-shim "^1.0.5"
     tweetnacl "^1.0.3"
 
-"@psychedelic/plug-inpage-provider@1.4.9":
-  version "1.4.9"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/1.4.9/0d6b7afa533e92c811ebd8559cee7619561bcf7347e5358c49432c814b26e84d#3673ffc798c2467169f4772a4b4f7b8ad797ff4b"
-  integrity sha512-shBG/v2Ry6bHN5h7EGiDJlULli1zMY1MQ4CwEsDvheAWnl6mAY8ms+VPQUeaomk4pTucs7ypIWfAOVySLtpbYw==
+"@psychedelic/plug-inpage-provider@1.5.0":
+  version "1.5.0"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/1.5.0/c3496640284dec2f4e758cb3fe4adf0a3e86f123d53d166cb4519becdfa8ede0#bc742dce7ade4c9842b1b4c0fb9bc7ae676b20e0"
+  integrity sha512-ZiU2mmFGYCSoi7aTCYy+azfZjc30tOdnRY/Enq2yS1AuubrnAGdaPtWjFnAG28uUkOHPfSLezRvS0jQuXY84bQ==
   dependencies:
-    "@dfinity/agent" "^0.9.2"
-    "@dfinity/candid" "^0.9.2"
-    "@dfinity/principal" "^0.9.2"
+    "@dfinity/agent" "^0.10.1"
+    "@dfinity/candid" "^0.10.1"
+    "@dfinity/identity" "^0.10.1"
+    "@dfinity/principal" "^0.10.1"
     "@fleekhq/browser-rpc" "^2.0.3"
 
 "@reduxjs/toolkit@^1.6.0":
@@ -3769,13 +3735,6 @@ buffer-from@^1.0.0, buffer-from@^1.1.1:
   resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.2.tgz#2b146a6fd72e80b4f55d255f35ed59a3a9a41bd5"
   integrity sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==
 
-buffer-pipe@0.0.4, buffer-pipe@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/buffer-pipe/-/buffer-pipe-0.0.4.tgz#e7f2ea95beb60fb692fc1dd1c878e894397a974d"
-  integrity sha512-8cHio1V6wgX+LIX6+af4tCn0+Ljl2vQd9JZdZ8vDJZdDf8x5p2DneKaq1dWxSswJG+sK4Inok9aqoqILG5kQVQ==
-  dependencies:
-    safe-buffer "^5.1.2"
-
 buffer-xor@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/buffer-xor/-/buffer-xor-1.0.3.tgz#26e61ed1422fb70dd42e6e36729ed51d855fe8d9"
@@ -3797,14 +3756,6 @@ buffer@^5.4.3, buffer@^5.5.0:
   dependencies:
     base64-js "^1.3.1"
     ieee754 "^1.1.13"
-
-buffer@^6.0.3:
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/buffer/-/buffer-6.0.3.tgz#2ace578459cc8fbe2a70aaa8f52ee63b6a74c6c6"
-  integrity sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==
-  dependencies:
-    base64-js "^1.3.1"
-    ieee754 "^1.2.1"
 
 builtin-status-codes@^3.0.0:
   version "3.0.0"
@@ -6676,7 +6627,7 @@ identity-obj-proxy@^3.0.0:
   dependencies:
     harmony-reflect "^1.4.6"
 
-ieee754@^1.1.13, ieee754@^1.1.4, ieee754@^1.2.1:
+ieee754@^1.1.13, ieee754@^1.1.4:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.2.1.tgz#8eb7a10a63fff25d15a57b001586d177d1b0d352"
   integrity sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==
