@@ -25,15 +25,12 @@ import useStyles from './styles';
 
 const getTitle = (type, symbol, swapData, plug, t) => {
   switch (type) {
-    case 'SEND':
-    case 'RECEIVE':
-      return `${capitalize(type?.toLowerCase())} ${symbol ?? ''}`;
     case 'SWAP':
       return `${t('activity.title.swap')} ${symbol} ${t('activity.title.for')} ${swapData.currency.name}`;
     case 'PLUG':
       return `${t('activity.title.pluggedInto')} ${plug.name}`;
     default:
-      return `Executed: ${capitalize(type?.toLowerCase())} ${symbol ?? ''}`;
+      return `${capitalize(type?.toLowerCase())} ${symbol ?? ''}`;
   }
 };
 
@@ -48,11 +45,11 @@ const getStatus = (status, classes, t) => {
   }
 };
 
-const getSubtitle = (type, to, from, t, canisterId) => (({
+const getSubtitle = (type, to, from, t) => (({
   SEND: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
   BURN: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
   RECEIVE: ` · ${t('activity.subtitle.from')}: ${shortAddress(from)}`,
-})[type] ?? `. In: ${shortAddress(canisterId)}`);
+})[type]);
 
 const getAddress = (type, to, from, canisterId) => (
   {
@@ -83,6 +80,7 @@ const ActivityItem = ({
   name,
   canisterId,
   details,
+  canisterInfo,
 }) => {
   const { t } = useTranslation();
   const [showSwap, setShowSwap] = useState(false);
@@ -96,7 +94,6 @@ const ActivityItem = ({
 
   const copyText = t('copy.copyTextAddress');
   const copiedText = t('copy.copiedText');
-
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipText, setTooltipText] = useState(copyText);
   const handleItemClick = () => {
@@ -188,12 +185,25 @@ const ActivityItem = ({
       </div>
       <div className={classes.rightContainer}>
         <div className={classes.amountContainer}>
-          <Typography variant="h5">
-            <NumberFormat value={showSwap ? swapData.amount : amount} displayType="text" thousandSeparator="," suffix={` ${showSwap ? swapData.currency.name : symbol}`} decimalScale={5} />
-          </Typography>
-          <Typography variant="subtitle2">
-            <NumberFormat value={showSwap ? swapData.value : value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" decimalScale={2} />
-          </Typography>
+          {details?.tokenId ? (
+            <>
+              <Typography variant="h5">
+                {details?.tokenId?.length > 5 ? shortAddress(details?.tokenId) : `#${details?.tokenId}`}
+              </Typography>
+              <Typography variant="subtitle2">
+                {canisterInfo?.name || canisterId}
+              </Typography>
+            </>
+          ) : (
+            <>
+              <Typography variant="h5">
+                <NumberFormat value={showSwap ? swapData.amount : amount} displayType="text" thousandSeparator="," suffix={` ${showSwap ? swapData.currency.name : symbol}`} decimalScale={5} />
+              </Typography>
+              <Typography variant="subtitle2">
+                <NumberFormat value={showSwap ? swapData.value : value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" decimalScale={2} />
+              </Typography>
+            </>
+          )}
         </div>
         <div className={
           clsx(
@@ -224,13 +234,13 @@ const ActivityItem = ({
               <div className={classes.transactionDetailsContainer}>
                 <ReactJson
                   src={details}
-                  collapsed={2}
+                  collapsed={1}
                   style={{
                     backgroundColor: '#F3F4F6',
                     padding: '10px',
                     borderRadius: '10px',
                     minHeight: '185px',
-                    maxHeight: '350px',
+                    maxHeight: '340px',
                     overflow: 'auto',
                   }}
                 />
@@ -259,9 +269,11 @@ ActivityItem.defaultProps = {
   name: null,
   canisterId: null,
   details: null,
+  canisterInfo: {},
 };
 
 ActivityItem.propTypes = {
+  canisterInfo: PropTypes.objectOf(PropTypes.any),
   type: PropTypes.number,
   canisterId: PropTypes.string,
   details: PropTypes.objectOf(PropTypes.any),
