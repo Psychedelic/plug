@@ -50,20 +50,28 @@ export const walletSlice = createSlice({
           trx?.details?.currency?.symbol,
           action?.payload?.icpPrice,
         );
+        const isOwnTx = [state.principalId, state.accountId].includes(trx?.caller);
+        const getType = () => {
+          const { type } = trx;
+          if (type.toUpperCase() === 'TRANSFER') {
+            return isOwnTx ? 'SEND' : 'RECEIVE';
+          }
+          return type.toUpperCase();
+        };
         const transaction = {
           ...asset,
-          type: trx?.type,
+          type: getType(),
           hash: trx?.hash,
           to: trx?.details?.to,
-          from: trx?.details?.from,
+          from: trx?.details?.from || trx?.caller,
           date: new Date(trx?.timestamp),
           status: ACTIVITY_STATUS[trx?.details?.status],
-          image: TOKEN_IMAGES[trx?.details?.currency?.symbol] || '',
-          symbol: trx?.details?.currency?.symbol,
+          image: TOKEN_IMAGES[trx?.details?.currency?.symbol] || trx?.canisterInfo?.icon || '',
+          symbol: trx?.details?.currency?.symbol ?? (trx?.canisterInfo ? 'NFT' : ''),
           canisterId: trx?.details?.canisterId,
           plug: null,
           canisterInfo: trx?.canisterInfo,
-          details: trx?.details,
+          details: { ...trx?.details, caller: trx?.caller },
         };
         return transaction;
       };
