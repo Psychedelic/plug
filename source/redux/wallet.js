@@ -6,6 +6,7 @@ import {
   TOKENS,
   TOKEN_IMAGES,
 } from '@shared/constants/currencies';
+import shortAddress from '@shared/utils/short-address';
 
 const sortCollections = (a, b) => b?.tokens.length - a?.tokens.length;
 
@@ -58,8 +59,8 @@ export const walletSlice = createSlice({
           from: trx?.details?.from,
           date: new Date(trx?.timestamp),
           status: ACTIVITY_STATUS[trx?.details?.status],
-          image: TOKEN_IMAGES[trx?.details?.currency?.symbol] || '',
-          symbol: trx?.details?.currency?.symbol,
+          image: TOKEN_IMAGES[trx?.details?.currency?.symbol] || trx?.canisterInfo?.icon || '',
+          symbol: trx?.details?.currency?.symbol ?? (trx?.canisterInfo ? 'NFT' : ''),
           canisterId: trx?.details?.canisterId,
           plug: null,
           canisterInfo: trx?.canisterInfo,
