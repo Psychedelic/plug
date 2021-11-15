@@ -118,7 +118,6 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.GET_TRANSACTIONS]: async () => {
     const response = await keyring.getTransactions();
-    console.log('fetched transactions', response);
     return recursiveParseBigint(response);
   },
   [HANDLER_TYPES.GET_ASSETS]: async ({ refresh }) => {
