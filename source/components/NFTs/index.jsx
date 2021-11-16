@@ -25,28 +25,30 @@ const NFTs = () => {
       type: HANDLER_TYPES.GET_NFTS,
       params: {},
     }, (nftCollections) => {
+      console.log('get NFTS response component', nftCollections);
       if (nftCollections?.length) {
         dispatch(setCollections({ collections: nftCollections, walletNumber }));
       }
+      dispatch(setCollectionsLoading(false));
     });
-    if (principalId) {
-      getBatchedNFTs({
-        principal: Principal.fromText(principalId),
-        onFinish: (cols) => {
-          dispatch(setCollections({
-            collections: cols.map((col) => recursiveParseBigint(col)),
-            walletNumber,
-          }));
-          dispatch(setCollectionsLoading(false));
-        },
-        callback: (collection) => {
-          dispatch(addCollection({
-            collection: recursiveParseBigint(collection),
-            walletNumber,
-          }));
-        },
-      });
-    }
+    // if (principalId) {
+    //   getBatchedNFTs({
+    //     principal: Principal.fromText(principalId),
+    //     onFinish: (cols) => {
+    //       dispatch(setCollections({
+    //         collections: cols.map((col) => recursiveParseBigint(col)),
+    //         walletNumber,
+    //       }));
+    //       dispatch(setCollectionsLoading(false));
+    //     },
+    //     callback: (collection) => {
+    //       dispatch(addCollection({
+    //         collection: recursiveParseBigint(collection),
+    //         walletNumber,
+    //       }));
+    //     },
+    //   });
+    // }
   }, [walletNumber]);
   const nfts = collections?.flatMap((c) => c.tokens);
   return (

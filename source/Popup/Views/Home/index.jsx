@@ -65,23 +65,23 @@ const Home = () => {
         sendMessage({ type: HANDLER_TYPES.LOCK, params: {} }, () => navigator.navigate('login'));
       } else {
         // Update cache
-        sendMessage({
-          type: HANDLER_TYPES.GET_NFTS,
-          params: {},
-        }, (nftCollections) => {
-          if (nftCollections?.length) {
-            dispatch(setCollections({ collections: nftCollections, walletNumber }));
-          }
-        });
-        getBatchedNFTs({
-          principal: Principal.fromText(state?.wallets?.[state?.currentWalletId].principal),
-          callback: (collection) => {
-            dispatch(addCollection({
-              collection: recursiveParseBigint(collection),
-              walletNumber,
-            }));
-          },
-        });
+        // sendMessage({
+        //   type: HANDLER_TYPES.GET_NFTS,
+        //   params: {},
+        // }, (nftCollections) => {
+        //   if (nftCollections?.length) {
+        //     dispatch(setCollections({ collections: nftCollections, walletNumber }));
+        //   }
+        // });
+        // getBatchedNFTs({
+        //   principal: Principal.fromText(state?.wallets?.[state?.currentWalletId].principal),
+        //   callback: (collection) => {
+        //     dispatch(addCollection({
+        //       collection: recursiveParseBigint(collection),
+        //       walletNumber,
+        //     }));
+        //   },
+        // });
       }
       dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
     });
