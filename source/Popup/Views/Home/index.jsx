@@ -28,7 +28,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const { navigator, tabIndex } = useRouter();
   const {
-    walletNumber, assetsLoading, collectionsLoading, transactionsLoading,
+    walletNumber, assetsLoading, collectionsLoading, transactionsLoading, optimisticNFTUpdate,
   } = useSelector((state) => state.wallet);
 
   const onChangeTab = (index) => {
