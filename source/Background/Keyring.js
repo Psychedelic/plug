@@ -187,11 +187,11 @@ export const getKeyringHandler = (type, keyring) => ({
         return { error: e.message };
       }
     },
-  [HANDLER_TYPES.GET_NFTS]: async () => {
+  [HANDLER_TYPES.GET_NFTS]: async ({ refresh = false }) => {
     const { wallets, currentWalletId } = await keyring.getState();
     let collections = wallets?.[currentWalletId]?.collections || [];
     if (!collections.length) {
-      collections = await keyring.getNFTs();
+      collections = await keyring.getNFTs(currentWalletId, refresh);
     }
     return (collections || [])?.map((collection) => recursiveParseBigint(collection));
   },

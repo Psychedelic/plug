@@ -21,7 +21,7 @@ const NFTs = () => {
     dispatch(setCollectionsLoading(true));
     sendMessage({
       type: HANDLER_TYPES.GET_NFTS,
-      params: {},
+      params: { refresh: false },
     }, (nftCollections) => {
       if (nftCollections?.length) {
         dispatch(setCollections({ collections: nftCollections, walletNumber }));
