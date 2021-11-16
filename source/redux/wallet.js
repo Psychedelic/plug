@@ -50,20 +50,28 @@ export const walletSlice = createSlice({
           trx?.details?.currency?.symbol,
           action?.payload?.icpPrice,
         );
+        const isOwnTx = [state.principalId, state.accountId].includes(trx?.caller);
+        const getType = () => {
+          const { type } = trx;
+          if (type.toUpperCase() === 'TRANSFER') {
+            return isOwnTx ? 'SEND' : 'RECEIVE';
+          }
+          return type.toUpperCase();
+        };
         const transaction = {
           ...asset,
-          type: trx?.type,
+          type: getType(),
           hash: trx?.hash,
           to: trx?.details?.to,
-          from: trx?.details?.from,
+          from: trx?.details?.from || trx?.caller,
           date: new Date(trx?.timestamp),
           status: ACTIVITY_STATUS[trx?.details?.status],
-          image: TOKEN_IMAGES[trx?.details?.currency?.symbol] || '',
-          symbol: trx?.details?.currency?.symbol,
+          image: TOKEN_IMAGES[trx?.details?.currency?.symbol] || trx?.canisterInfo?.icon || '',
+          symbol: trx?.details?.currency?.symbol ?? (trx?.canisterInfo ? 'NFT' : ''),
           canisterId: trx?.details?.canisterId,
           plug: null,
           canisterInfo: trx?.canisterInfo,
-          details: trx?.details,
+          details: { ...trx?.details, caller: trx?.caller },
         };
         return transaction;
       };
@@ -96,10 +104,11 @@ export const walletSlice = createSlice({
       }
     },
     setCollections: (state, action) => {
-      const { collections, walletNumber } = action.payload;
-      if (state.walletNumber === walletNumber && collections) {
+      const { collections, principalId } = action.payload;
+      if (state.principalId === principalId && collections) {
         state.collections = collections?.sort(sortCollections);
       }
+      state.optimisticNFTUpdate = false;
     },
     setCollectionsLoading: (state, action) => {
       state.collectionsLoading = action.payload;
@@ -110,6 +119,7 @@ export const walletSlice = createSlice({
         tokens: col.tokens.filter((token) => token.id !== action.payload?.id),
       }));
       state.collections = collections.filter((col) => col.tokens.length);
+      state.optimisticNFTUpdate = true;
     },
   },
 });

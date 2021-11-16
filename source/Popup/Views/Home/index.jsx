@@ -11,25 +11,21 @@ import {
   NFTs,
 } from '@components';
 import { Tabs } from '@ui';
-import { HANDLER_TYPES, sendMessage, recursiveParseBigint } from '@background/Keyring';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import {
   setAccountInfo,
-  addCollection,
   setCollections,
   setCollectionsLoading,
 } from '@redux/wallet';
 
-import { getBatchedNFTs } from '@psychedelic/dab-js';
-
 import { useICPPrice } from '@redux/icp';
-import { Principal } from '@dfinity/principal';
 
 const Home = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { navigator, tabIndex } = useRouter();
   const {
-    walletNumber, assetsLoading, collectionsLoading, transactionsLoading,
+    principalId, assetsLoading, collectionsLoading, transactionsLoading,
   } = useSelector((state) => state.wallet);
 
   const onChangeTab = (index) => {
@@ -68,21 +64,12 @@ const Home = () => {
         // Update cache
         sendMessage({
           type: HANDLER_TYPES.GET_NFTS,
-          params: {},
+          params: { refresh: true },
         }, (nftCollections) => {
           if (nftCollections?.length) {
-            dispatch(setCollections({ collections: nftCollections, walletNumber }));
+            dispatch(setCollections({ collections: nftCollections, principalId }));
           }
           dispatch(setCollectionsLoading(false));
-        });
-        getBatchedNFTs({
-          principal: Principal.fromText(state?.wallets?.[state?.currentWalletId].principal),
-          callback: (collection) => {
-            dispatch(addCollection({
-              collection: recursiveParseBigint(collection),
-              walletNumber,
-            }));
-          },
         });
       }
       dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
