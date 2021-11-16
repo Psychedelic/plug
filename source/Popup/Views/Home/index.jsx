@@ -24,7 +24,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const { navigator, tabIndex } = useRouter();
   const {
-    walletNumber, assetsLoading, collectionsLoading, transactionsLoading,
+    principalId, assetsLoading, collectionsLoading, transactionsLoading,
   } = useSelector((state) => state.wallet);
 
   const onChangeTab = (index) => {
@@ -66,7 +66,7 @@ const Home = () => {
           params: { refresh: true },
         }, (nftCollections) => {
           if (nftCollections?.length) {
-            dispatch(setCollections({ collections: nftCollections, walletNumber }));
+            dispatch(setCollections({ collections: nftCollections, principalId }));
           }
         });
       }

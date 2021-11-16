@@ -105,8 +105,8 @@ export const walletSlice = createSlice({
       }
     },
     setCollections: (state, action) => {
-      const { collections, walletNumber } = action.payload;
-      if (state.walletNumber === walletNumber && collections) {
+      const { collections, principalId } = action.payload;
+      if (state.principalId === principalId && collections) {
         state.collections = collections?.sort(sortCollections);
       }
       state.optimisticNFTUpdate = false;
