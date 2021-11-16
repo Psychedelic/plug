@@ -1012,18 +1012,7 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@dfinity/agent@^0.10.1":
-  version "0.10.1"
-  resolved "https://registry.yarnpkg.com/@dfinity/agent/-/agent-0.10.1.tgz#6379b42977ca30a3718ee5b6f67f0d69c995aa21"
-  integrity sha512-VUHO5mveK0XX8b9xbfg5SThEGLhMAwkfejuwS5fzF9gqQVWqnIx5ISrbre8UvNNyuzM5v4/vZI+kpE2zL54rwg==
-  dependencies:
-    base64-arraybuffer "^0.2.0"
-    bignumber.js "^9.0.0"
-    borc "^2.1.1"
-    js-sha256 "0.9.0"
-    simple-cbor "^0.4.1"
-
-"@dfinity/agent@^0.9.2", "@dfinity/agent@^0.9.3":
+"@dfinity/agent@0.9.3", "@dfinity/agent@^0.9.2", "@dfinity/agent@^0.9.3":
   version "0.9.3"
   resolved "https://registry.yarnpkg.com/@dfinity/agent/-/agent-0.9.3.tgz#e49f07d6749e534c4c30aa2df2bba59e3fa9570f"
   integrity sha512-vR0t5Uf+srbUHTdGunJxek3a4jCmBKU+B2yYEX0/aSGQfJmEf5X5snuNcnrIDOCfHeK7uxmOqs65BdI8Lhn4fg==
@@ -1036,12 +1025,18 @@
     js-sha256 "0.9.0"
     simple-cbor "^0.4.1"
 
-"@dfinity/candid@^0.10.1":
+"@dfinity/agent@^0.10.1":
   version "0.10.1"
-  resolved "https://registry.yarnpkg.com/@dfinity/candid/-/candid-0.10.1.tgz#f93d7cdc3856a6d527f31c7112a0537ef70ba315"
-  integrity sha512-Z7C125quoAYafj+yK20KQKI/MkXgB9tgPkvtIk1Ec8eGXIU7OXOHSIknvJR6zXdE9eUc/veiD4+VDWK7I82sDw==
+  resolved "https://registry.yarnpkg.com/@dfinity/agent/-/agent-0.10.1.tgz#6379b42977ca30a3718ee5b6f67f0d69c995aa21"
+  integrity sha512-VUHO5mveK0XX8b9xbfg5SThEGLhMAwkfejuwS5fzF9gqQVWqnIx5ISrbre8UvNNyuzM5v4/vZI+kpE2zL54rwg==
+  dependencies:
+    base64-arraybuffer "^0.2.0"
+    bignumber.js "^9.0.0"
+    borc "^2.1.1"
+    js-sha256 "0.9.0"
+    simple-cbor "^0.4.1"
 
-"@dfinity/candid@^0.9.2", "@dfinity/candid@^0.9.3":
+"@dfinity/candid@0.9.3", "@dfinity/candid@^0.9.2", "@dfinity/candid@^0.9.3":
   version "0.9.3"
   resolved "https://registry.yarnpkg.com/@dfinity/candid/-/candid-0.9.3.tgz#96b2a5339da634ccc5546a0560f48f5ceef70dfe"
   integrity sha512-VMovKFrExqN0mwcn1/aut4Ou4cA9IA2+QrBjV+Ro4eVCpVvGpVRqn4jizlV9QnJjcuEBG1yImIG5RKMdZ2ejQQ==
@@ -1049,7 +1044,12 @@
     buffer "^6.0.3"
     buffer-pipe "^0.0.4"
 
-"@dfinity/identity@^0.9.3":
+"@dfinity/candid@^0.10.1":
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/@dfinity/candid/-/candid-0.10.1.tgz#f93d7cdc3856a6d527f31c7112a0537ef70ba315"
+  integrity sha512-Z7C125quoAYafj+yK20KQKI/MkXgB9tgPkvtIk1Ec8eGXIU7OXOHSIknvJR6zXdE9eUc/veiD4+VDWK7I82sDw==
+
+"@dfinity/identity@0.9.3", "@dfinity/identity@^0.9.3":
   version "0.9.3"
   resolved "https://registry.yarnpkg.com/@dfinity/identity/-/identity-0.9.3.tgz#7d65d1ee7655d9028034bf22a92c21eea8b24028"
   integrity sha512-8mEpkLqGW74QMsVJzuewwN0tO1fdShAT+vyfQM08VOX/u4IHckH8zZ+qGTeXKaGzuwiJRa5WZT2U7L32LDfJJg==
@@ -1059,15 +1059,15 @@
     buffer-pipe "0.0.4"
     tweetnacl "^1.0.1"
 
+"@dfinity/principal@0.9.3", "@dfinity/principal@^0.9.2", "@dfinity/principal@^0.9.3":
+  version "0.9.3"
+  resolved "https://registry.yarnpkg.com/@dfinity/principal/-/principal-0.9.3.tgz#52e4980bac8dd35e7a6bb2564bea89df97383e06"
+  integrity sha512-DSL3b/gGm+f57+3XkFjlK4DigtKXe9MVO8UYXDQWkVIhy0UF1KYjRNGs6awc1GTQoOTxeQ8UTFwXuvnEvJ1hpQ==
+
 "@dfinity/principal@^0.10.1":
   version "0.10.1"
   resolved "https://registry.yarnpkg.com/@dfinity/principal/-/principal-0.10.1.tgz#2472aa0eef8b46000394720ef40bbd4bd330c000"
   integrity sha512-1/r726xwVlSsCc+Fl2szM+P9xNfsu5TItC56n/KRuhGEE9sN8NLnorxcNvpzoII0f99XBNCNMRJPUkWSZPLpbw==
-
-"@dfinity/principal@^0.9.2", "@dfinity/principal@^0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@dfinity/principal/-/principal-0.9.3.tgz#52e4980bac8dd35e7a6bb2564bea89df97383e06"
-  integrity sha512-DSL3b/gGm+f57+3XkFjlK4DigtKXe9MVO8UYXDQWkVIhy0UF1KYjRNGs6awc1GTQoOTxeQ8UTFwXuvnEvJ1hpQ==
 
 "@discoveryjs/json-ext@^0.5.0":
   version "0.5.5"
@@ -1613,7 +1613,7 @@
     node-gyp "^7.1.0"
     read-package-json-fast "^2.0.1"
 
-"@psychedelic/cap-js@^0.0.5":
+"@psychedelic/cap-js@0.0.5":
   version "0.0.5"
   resolved "https://npm.pkg.github.com/download/@psychedelic/cap-js/0.0.5/5623abd851cdf8c36d6a2c2dc961f0ba9b1b9ca4e5db4c0f25e56d5afbc85de4#2eb444e86b24098a8162f67d3f1c4734cc2a3fa0"
   integrity sha512-2zaD6DKUMGk3veZvEEheVv5rPie7rh5q0BXY5qzthi56rd6Qo4xWQlyLNlGuyVzVRPWNbWGoF2zEBS2aBZci0Q==
@@ -1649,14 +1649,14 @@
     crypto-js "^4.1.1"
 
 "@psychedelic/plug-controller@../plug-wallet-controller":
-  version "0.11.0-cap-custom"
+  version "0.10.1"
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
     "@dfinity/identity" "0.9.3"
     "@dfinity/principal" "0.9.3"
     "@psychedelic/cap-js" "0.0.5"
-    "@psychedelic/dab-js" "../DAB-js"
+    "@psychedelic/dab-js" "0.2.4"
     "@types/secp256k1" "^4.0.3"
     axios "^0.21.1"
     babel-jest "^25.5.1"
