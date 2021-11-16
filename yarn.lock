@@ -1624,16 +1624,16 @@
     axios "^0.24.0"
     cross-fetch "^3.1.4"
 
-"@psychedelic/dab-js@0.2.4":
-  version "0.2.4"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/dab-js/0.2.4/15a78ca900f3071ebecfbe627cfe2050b22705a5adfefb202f3eda6fe8c577ca#b0a1726fa6429f6a5073ddca8596e2e978ae5c18"
-  integrity sha512-/NCgYeNbjq+810mAv7Aa+RwzYQhF9BKTSAvn2Kx5WZ4RtJBl8bzSXo6LQk/pJqKh0oX16etoqhCWFOs6bYMnZg==
+"@psychedelic/dab-js@../DAB-js":
+  version "0.3.3"
   dependencies:
-    "@dfinity/agent" "^0.9.3"
-    "@dfinity/candid" "^0.9.3"
-    "@dfinity/identity" "^0.9.3"
-    "@dfinity/principal" "^0.9.3"
+    "@dfinity/agent" "0.9.3"
+    "@dfinity/candid" "0.9.3"
+    "@dfinity/identity" "0.9.3"
+    "@dfinity/principal" "0.9.3"
+    axios "^0.24.0"
     buffer-crc32 "^0.2.13"
+    cross-fetch "^3.1.4"
     crypto-js "^4.1.1"
 
 "@psychedelic/dab-js@0.2.5":
@@ -1649,14 +1649,14 @@
     crypto-js "^4.1.1"
 
 "@psychedelic/plug-controller@../plug-wallet-controller":
-  version "0.10.1"
+  version "0.11.0-cap-custom"
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
     "@dfinity/identity" "0.9.3"
     "@dfinity/principal" "0.9.3"
     "@psychedelic/cap-js" "0.0.5"
-    "@psychedelic/dab-js" "0.2.4"
+    "@psychedelic/dab-js" "../DAB-js"
     "@types/secp256k1" "^4.0.3"
     axios "^0.21.1"
     babel-jest "^25.5.1"
