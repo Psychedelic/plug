@@ -13,7 +13,7 @@ const NFTs = () => {
   const dispatch = useDispatch();
 
   const {
-    collections, collectionsLoading, walletNumber,
+    collections, collectionsLoading, walletNumber, optimisticNFTUpdate,
   } = useSelector((state) => state.wallet);
 
   useEffect(() => {
@@ -21,9 +21,9 @@ const NFTs = () => {
     dispatch(setCollectionsLoading(true));
     sendMessage({
       type: HANDLER_TYPES.GET_NFTS,
-      params: {},
+      params: { refresh: false },
     }, (nftCollections) => {
-      if (nftCollections?.length) {
+      if (nftCollections?.length && !optimisticNFTUpdate) {
         dispatch(setCollections({ collections: nftCollections, walletNumber }));
       }
       dispatch(setCollectionsLoading(false));

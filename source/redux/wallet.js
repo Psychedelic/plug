@@ -24,6 +24,7 @@ export const walletSlice = createSlice({
     collections: [],
     collectionsLoading: true,
     transactionsLoading: true,
+    optimisticNFTUpdate: false,
   },
   reducers: {
     updateWalletDetails: (state, action) => {
@@ -108,6 +109,7 @@ export const walletSlice = createSlice({
       if (state.walletNumber === walletNumber && collections) {
         state.collections = collections?.sort(sortCollections);
       }
+      state.optimisticNFTUpdate = false;
     },
     setCollectionsLoading: (state, action) => {
       state.collectionsLoading = action.payload;
@@ -118,6 +120,7 @@ export const walletSlice = createSlice({
         tokens: col.tokens.filter((token) => token.id !== action.payload?.id),
       }));
       state.collections = collections.filter((col) => col.tokens.length);
+      state.optimisticNFTUpdate = true;
     },
   },
 });

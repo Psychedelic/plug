@@ -12,7 +12,10 @@ import {
 } from '@components';
 import { Tabs } from '@ui';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { setAccountInfo } from '@redux/wallet';
+import {
+  setAccountInfo,
+  setCollections,
+} from '@redux/wallet';
 
 import { useICPPrice } from '@redux/icp';
 
@@ -21,7 +24,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const { navigator, tabIndex } = useRouter();
   const {
-    assetsLoading, collectionsLoading, transactionsLoading,
+    walletNumber, assetsLoading, collectionsLoading, transactionsLoading,
   } = useSelector((state) => state.wallet);
 
   const onChangeTab = (index) => {
@@ -56,6 +59,16 @@ const Home = () => {
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
       if (!state?.wallets?.length) {
         sendMessage({ type: HANDLER_TYPES.LOCK, params: {} }, () => navigator.navigate('login'));
+      } else {
+        // Update cache
+        sendMessage({
+          type: HANDLER_TYPES.GET_NFTS,
+          params: { refresh: true },
+        }, (nftCollections) => {
+          if (nftCollections?.length) {
+            dispatch(setCollections({ collections: nftCollections, walletNumber }));
+          }
+        });
       }
       dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
     });
