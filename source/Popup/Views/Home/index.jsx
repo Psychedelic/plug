@@ -11,24 +11,20 @@ import {
   NFTs,
 } from '@components';
 import { Tabs } from '@ui';
-import { HANDLER_TYPES, sendMessage, recursiveParseBigint } from '@background/Keyring';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import {
   setAccountInfo,
-  addCollection,
   setCollections,
 } from '@redux/wallet';
 
-import { getBatchedNFTs } from '@psychedelic/dab-js';
-
 import { useICPPrice } from '@redux/icp';
-import { Principal } from '@dfinity/principal';
 
 const Home = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { navigator, tabIndex } = useRouter();
   const {
-    walletNumber, assetsLoading, collectionsLoading, transactionsLoading, optimisticNFTUpdate,
+    walletNumber, assetsLoading, collectionsLoading, transactionsLoading,
   } = useSelector((state) => state.wallet);
 
   const onChangeTab = (index) => {
