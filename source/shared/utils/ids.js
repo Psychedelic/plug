@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { Principal } from '@dfinity/principal';
 import { ALPHANUM_REGEX, CANISTER_MAX_LENGTH } from '../constants/addresses';
 
@@ -19,17 +18,3 @@ export const validateCanisterId = (text) => {
     return false;
   }
 };
-
-export const recursiveParsePrincipal = (data) => Object.entries(data).reduce((acum, [key, val]) => {
-  const current = { ...acum };
-  if (Array.isArray(val)) {
-    current[key] = val.map((v) => recursiveParsePrincipal(v));
-  } else if (val._isPrincipal) {
-    current[key] = Principal.fromUint8Array(new Uint8Array(Object.values(val._arr))).toString();
-  } else if (typeof val === 'object') {
-    current[key] = recursiveParsePrincipal(val);
-  } else {
-    current[key] = val;
-  }
-  return current;
-}, {});

@@ -19,12 +19,10 @@ const GenericIcon = ({ image, type }) => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      {type && (
-        <img
-          className={classes.activity}
-          src={TYPE_IMAGES[type] || LightningImg}
-        />
-      )}
+      <img
+        className={classes.activity}
+        src={TYPE_IMAGES[type.toUpperCase()] || LightningImg}
+      />
       <img className={classes.root} src={image} />
     </div>
   );

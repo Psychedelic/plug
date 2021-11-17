@@ -36,7 +36,7 @@ const Profile = ({ disableProfile }) => {
   const dispatch = useDispatch();
   const { navigator } = disableProfile ? {} : useRouter();
 
-  const { walletNumber, principalId } = useSelector((state) => state.wallet);
+  const { walletNumber } = useSelector((state) => state.wallet);
   const icpPrice = useICPPrice();
 
   const [open, setOpen] = useState(false);
@@ -86,7 +86,7 @@ const Profile = ({ disableProfile }) => {
   };
 
   const handleChangeAccount = (wallet) => () => {
-    dispatch(setCollections({ collections: [], principalId }));
+    dispatch(setCollections({ collections: [], walletNumber }));
     sendMessage({ type: HANDLER_TYPES.SET_CURRENT_PRINCIPAL, params: wallet },
       (state) => {
         if (state?.wallets?.length) {
