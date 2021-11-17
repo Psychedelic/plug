@@ -35,7 +35,7 @@ const SendNFT = () => {
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
   const { selectedNft: nft } = useSelector((state) => state.nfts);
-  const { collections, walletNumber } = useSelector((state) => state.wallet);
+  const { collections, principalId } = useSelector((state) => state.wallet);
   const classes = useStyles();
   const transferNFT = () => {
     setLoading(true);
@@ -46,7 +46,7 @@ const SendNFT = () => {
         if (success) {
           dispatch(setCollections({
             collections: collections.filter((token) => token.id !== nft?.id),
-            walletNumber,
+            principalId,
           }));
           dispatch(removeNFT(nft));
           dispatch(setSelectedNft(null));

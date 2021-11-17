@@ -16,6 +16,7 @@ import {
   setAccountInfo,
   addCollection,
   setCollections,
+  setCollectionsLoading,
 } from '@redux/wallet';
 
 import { getBatchedNFTs } from '@psychedelic/dab-js';
@@ -72,6 +73,7 @@ const Home = () => {
           if (nftCollections?.length) {
             dispatch(setCollections({ collections: nftCollections, walletNumber }));
           }
+          dispatch(setCollectionsLoading(false));
         });
         getBatchedNFTs({
           principal: Principal.fromText(state?.wallets?.[state?.currentWalletId].principal),

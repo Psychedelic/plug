@@ -28,6 +28,7 @@ const NFTs = () => {
       if (nftCollections?.length) {
         dispatch(setCollections({ collections: nftCollections, walletNumber }));
       }
+      dispatch(setCollectionsLoading(false));
     });
     if (principalId) {
       getBatchedNFTs({
