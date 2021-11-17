@@ -15,6 +15,7 @@ import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import {
   setAccountInfo,
   setCollections,
+  setCollectionsLoading,
 } from '@redux/wallet';
 
 import { useICPPrice } from '@redux/icp';
@@ -68,6 +69,7 @@ const Home = () => {
           if (nftCollections?.length) {
             dispatch(setCollections({ collections: nftCollections, principalId }));
           }
+          dispatch(setCollectionsLoading(false));
         });
       }
       dispatch(setAccountInfo(state.wallets[state.currentWalletId]));

@@ -26,6 +26,7 @@ const NFTs = () => {
       if (nftCollections?.length && !optimisticNFTUpdate) {
         dispatch(setCollections({ collections: nftCollections, principalId }));
       }
+      dispatch(setCollectionsLoading(false));
     });
   }, [principalId]);
   const nfts = collections?.flatMap((c) => c.tokens);
