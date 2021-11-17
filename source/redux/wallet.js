@@ -24,7 +24,6 @@ export const walletSlice = createSlice({
     collections: [],
     collectionsLoading: true,
     transactionsLoading: true,
-    optimisticNFTUpdate: false,
   },
   reducers: {
     updateWalletDetails: (state, action) => {

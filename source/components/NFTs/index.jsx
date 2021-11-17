@@ -21,7 +21,7 @@ const NFTs = () => {
     dispatch(setCollectionsLoading(true));
     sendMessage({
       type: HANDLER_TYPES.GET_NFTS,
-      params: { refresh: false },
+      params: {},
     }, (nftCollections) => {
       if (nftCollections?.length && !optimisticNFTUpdate) {
         dispatch(setCollections({ collections: nftCollections, principalId }));
