@@ -56,7 +56,7 @@ const NFTDetails = () => {
             value={t('nfts.expandNFT')}
             style={{ width: '96%' }}
             fullWidth
-            onClick={openNFT(nft?.url)}
+            onClick={openNFT(nft?.url?.replace('type=thumbnail', ''))}
             startIcon={(
               <Maximize2
                 size="20"
