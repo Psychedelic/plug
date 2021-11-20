@@ -7,7 +7,7 @@ import BackIcon from '@assets/icons/back.svg';
 import { setAssets, setTransactions } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import {
-  CURRENCIES, CYCLES_PER_TC, E8S_PER_ICP, USD_PER_TC,
+  CURRENCIES, USD_PER_TC,
 } from '@shared/constants/currencies';
 import { validateAccountId, validateCanisterId, validatePrincipalId } from '@shared/utils/ids';
 import { ADDRESS_TYPES, DEFAULT_FEE, XTC_FEE } from '@shared/constants/addresses';
@@ -76,20 +76,15 @@ const useSteps = () => {
   };
 
   const handleSendClick = () => {
-    const sendAmount = {
-      ICP: parseInt(amount * E8S_PER_ICP, 10),
-      XTC: parseInt(amount * CYCLES_PER_TC, 10),
-      WTC: parseInt(amount * CYCLES_PER_TC, 10),
-    }[selectedAsset?.symbol] || amount;
     if (sendingXTCtoCanister && destination === XTC_OPTIONS.BURN) {
       sendMessage({
         type: HANDLER_TYPES.BURN_XTC,
-        params: { to: address, amount: sendAmount },
+        params: { to: address, amount },
       }, parseSendResponse);
     } else {
       sendMessage({
         type: HANDLER_TYPES.SEND_TOKEN,
-        params: { to: address, amount: sendAmount, canisterId: selectedAsset?.canisterId },
+        params: { to: address, amount, canisterId: selectedAsset?.canisterId },
       }, (response) => {
         parseSendResponse(response);
         if (!selectedAsset) {

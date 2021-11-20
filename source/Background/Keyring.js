@@ -121,21 +121,34 @@ export const getKeyringHandler = (type, keyring) => ({
     return recursiveParseBigint(response);
   },
   [HANDLER_TYPES.GET_ASSETS]: async ({ refresh }) => {
-    const { wallets, currentWalletId } = await keyring.getState();
-    let assets = wallets?.[currentWalletId]?.assets;
-    if (assets?.every((asset) => !asset.amount) || refresh) {
-      assets = await keyring.getBalance();
-    } else {
-      keyring.getBalance();
+    try {
+      console.log('GETTING ASSETS');
+      const { wallets, currentWalletId } = await keyring.getState();
+      let assets = wallets?.[currentWalletId]?.assets;
+      if (assets?.every((asset) => !asset.amount) || refresh) {
+        console.log('GETTING BALLANCE');
+        assets = await keyring.getBalance();
+        console.log('BALLANCE,', assets);
+      } else {
+        keyring.getBalance();
+      }
+      return assets;
+    } catch (e) {
+      console.error(e);
+      return { error: e.message };
     }
-    return assets;
   },
   [HANDLER_TYPES.GET_BALANCE]: async (subaccount) => {
+    console.log('GETTING BALANCE');
     try {
       const balances = await keyring.getBalance(subaccount);
       const icpPrice = await getICPPrice();
+      console.log('BALANCE', balances);
+      console.log('FORMATING ASSETS');
+      console.log(formatAssets(balances, icpPrice));
       return formatAssets(balances, icpPrice);
     } catch (error) {
+      console.error(error);
       return { error: error.message };
     }
   },
@@ -143,10 +156,10 @@ export const getKeyringHandler = (type, keyring) => ({
     to, amount, canisterId, opts,
   }) => {
     try {
-      const { height, transactionId } = await keyring.send(to, BigInt(amount), canisterId, opts);
+      const { height, transactionId } = await keyring.send(to, amount, canisterId, opts);
       return {
-        height: parseInt(height?.toString?.(), 10),
-        transactionId: parseInt(transactionId?.toString?.(), 10),
+        height: height ? parseInt(height, 10) : undefined,
+        transactionId: transactionId ? parseInt(transactionId, 10) : undefined,
       };
     } catch (error) {
       return { error: error.message, height: null };
@@ -160,9 +173,11 @@ export const getKeyringHandler = (type, keyring) => ({
     async () => keyring.getPublicKey(),
   [HANDLER_TYPES.GET_TOKEN_INFO]:
     async (canisterId) => {
+      console.log('GETTING TOKEN INFO');
       try {
         const tokenInfo = await keyring.getTokenInfo(canisterId);
-        return { ...tokenInfo, amount: parseInt(tokenInfo.amount.toString(), 10) };
+        console.log('TOKEN INFO:', tokenInfo);
+        return { ...tokenInfo, amount: parseInt(tokenInfo, 10) };
       } catch (e) {
         return { error: e.message };
       }

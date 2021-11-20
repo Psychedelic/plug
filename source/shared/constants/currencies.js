@@ -42,23 +42,25 @@ export const currencyPropTypes = {
 export const CYCLES_PER_TC = 1_000_000_000_000;
 
 export const formatAssetBySymbol = (_amount, symbol, icpPrice) => {
-  const amount = parseInt(_amount?.toString(), 10);
+  console.log('FORMATING ASSET', _amount, symbol);
+  const amount = parseFloat(_amount, 10);
+  console.log('AMOUNT', amount);
   return ({
     ICP: {
-      amount: amount / E8S_PER_ICP,
-      value: (amount * icpPrice) / E8S_PER_ICP,
+      amount,
+      value: (amount * icpPrice),
       image: TOKEN_IMAGES.ICP,
       symbol: 'ICP',
     },
     XTC: {
-      amount: amount / CYCLES_PER_TC,
-      value: (amount * USD_PER_TC) / CYCLES_PER_TC,
+      amount,
+      value: (amount * USD_PER_TC),
       image: TOKEN_IMAGES.XTC,
       symbol: 'XTC',
     },
     WTC: {
-      amount: amount / CYCLES_PER_TC,
-      value: (amount * USD_PER_TC) / CYCLES_PER_TC,
+      amount,
+      value: (amount * USD_PER_TC),
       symbol: 'WTC',
     },
     default: { amount, value: amount },
