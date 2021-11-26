@@ -30,7 +30,7 @@ const parseTokenBySymbol = (token) => ({
     amount: cyclesToTC(token.amount),
     price: cyclesToTC(token.amount) * USD_PER_TC,
   },
-})[token?.token?.symbol] || token;
+})[token?.token?.symbol] || { ...token?.token, amount: token.amount };
 
 const Step2 = ({ selectedToken, handleClose }) => {
   const { t } = useTranslation();
@@ -38,7 +38,6 @@ const Step2 = ({ selectedToken, handleClose }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const displayToken = parseTokenBySymbol(selectedToken);
-
   const icpPrice = useICPPrice();
 
   const registerToken = () => {
