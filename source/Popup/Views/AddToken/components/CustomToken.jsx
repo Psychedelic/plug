@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { useTranslation } from 'react-i18next';
 import {
-  Button, FormItem, TextInput, Container, Alert,
+  Button, FormItem, TextInput, Container, Alert, Dialog, Select,
 } from '@ui';
 import { validateCanisterId } from '@shared/utils/ids';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
@@ -11,27 +11,34 @@ import extension from 'extensionizer';
 import { customTokensUrl } from '@shared/constants/urls';
 import useStyles from '../styles';
 
+const FUNGIBLE_STANDARDS = { DIP20: 'DIP20', EXT: 'EXT' };
+
 const CustomToken = ({ handleChangeSelectedToken }) => {
   const { t } = useTranslation();
-  const [token, setToken] = useState('');
+  const [canisterId, setCanisterId] = useState('');
+  const [standard, setStandard] = useState(FUNGIBLE_STANDARDS.DIP20);
   const [invalidToken, setInvalidToken] = useState(null);
   const [tokenError, setTokenError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const classes = useStyles();
 
-  const handleChangeToken = (e) => {
-    setToken(e.target.value.trim());
+  const handleChangeId = (e) => {
+    setCanisterId(e.target.value.trim());
   };
 
   useEffect(() => {
-    if (token) {
-      setInvalidToken(!validateCanisterId(token));
+    if (canisterId) {
+      setInvalidToken(!validateCanisterId(canisterId));
     }
-  }, [token]);
+  }, [canisterId]);
 
   const handleSubmit = () => {
     setLoading(true);
-    sendMessage({ type: HANDLER_TYPES.GET_TOKEN_INFO, params: token }, async (tokenInfo) => {
+    sendMessage({
+      type: HANDLER_TYPES.GET_TOKEN_INFO,
+      params: { canisterId, standard: standard.toLowerCase() },
+    }, async (tokenInfo) => {
       if (tokenInfo?.error) {
         setTokenError(true);
         setInvalidToken(true);
@@ -40,6 +47,10 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
       }
       setLoading(false);
     });
+  };
+  const handleCloseDialog = (value) => {
+    setStandard(value.name);
+    setDialogOpen(false);
   };
 
   return (
@@ -52,14 +63,38 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
             component={(
               <TextInput
                 fullWidth
-                value={token}
-                onChange={handleChangeToken}
+                value={canisterId}
+                onChange={handleChangeId}
                 type="text"
                 error={invalidToken}
+              />
+              )}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <FormItem
+            smallLabel
+            label={t('addToken.standard')}
+            component={(
+              <Select
+                image=""
+                name={standard}
+                onClick={() => setDialogOpen(true)}
+                shadow
+                className={classes.select}
               />
             )}
           />
         </Grid>
+        {dialogOpen && (
+        <Dialog
+          title={t('send.selectAsset')}
+          items={Object.values(FUNGIBLE_STANDARDS).map((name) => ({ name }))}
+          onClose={handleCloseDialog}
+          selectedValue={standard}
+          open={dialogOpen}
+        />
+        )}
         {
           tokenError
           && (
@@ -90,7 +125,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
             value={t('common.continue')}
             onClick={handleSubmit}
             fullWidth
-            disabled={!token || invalidToken || loading || tokenError}
+            disabled={!canisterId || invalidToken || loading || tokenError}
             loading={loading}
           />
         </Grid>

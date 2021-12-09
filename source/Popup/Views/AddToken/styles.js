@@ -102,4 +102,8 @@ export default makeStyles((theme) => ({
     textDecoration: 'underline',
     cursor: 'pointer',
   },
+  select: {
+    height: 47,
+    borderRadius: 6,
+  },
 }));
