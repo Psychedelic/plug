@@ -32,7 +32,7 @@ const SendNFT = () => {
   const [address, setAddress] = useState(null);
   const [loading, setLoading] = useState(false);
   const { navigator } = useRouter();
-  const [error, setError] = useState(false);
+  const [errorMessage, setError] = useState('');
   const dispatch = useDispatch();
   const { selectedNft: nft } = useSelector((state) => state.nfts);
   const { collections, principalId } = useSelector((state) => state.wallet);
@@ -41,7 +41,7 @@ const SendNFT = () => {
     setLoading(true);
     setError(false);
     sendMessage({ type: HANDLER_TYPES.TRANSFER_NFT, params: { nft, to: address } },
-      (success) => {
+      ({ success, error }) => {
         setLoading(false);
         if (success) {
           dispatch(setCollections({
@@ -52,7 +52,7 @@ const SendNFT = () => {
           dispatch(setSelectedNft(null));
           navigator.navigate('home', TABS.NFTS);
         } else {
-          setError(true);
+          setError(error || t('nfts.transferError'));
         }
       });
   };
@@ -121,13 +121,13 @@ const SendNFT = () => {
               loading={loading}
             />
           </Grid>
-          {error && (
+          {errorMessage?.length > 0 && (
             <Grid item xs={12}>
               <div className={classes.appearAnimation}>
                 <Alert
                   type="danger"
                   title={(
-                    <span>{t('nfts.transferError')}</span>
+                    <span>{errorMessage}</span>
                   )}
                 />
               </div>
