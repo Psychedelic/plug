@@ -18,10 +18,11 @@ const Select = ({
   readonly,
   imageClassName,
   nft,
+  className,
 }) => {
   const classes = useStyles();
   return (
-    <InputBase>
+    <InputBase className={className}>
       <div
         className={clsx(classes.root, readonly && classes.readonly, onClick && classes.selectable)}
         onClick={onClick}
@@ -65,6 +66,7 @@ Select.defaultProps = {
   readonly: false,
   imageClassName: '',
   nft: false,
+  className: '',
 };
 
 Select.propTypes = {
@@ -77,4 +79,5 @@ Select.propTypes = {
   readonly: PropTypes.bool,
   imageClassName: PropTypes.string,
   nft: PropTypes.bool,
+  className: PropTypes.string,
 };

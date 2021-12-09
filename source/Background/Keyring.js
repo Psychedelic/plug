@@ -121,14 +121,19 @@ export const getKeyringHandler = (type, keyring) => ({
     return recursiveParseBigint(response);
   },
   [HANDLER_TYPES.GET_ASSETS]: async ({ refresh }) => {
-    const { wallets, currentWalletId } = await keyring.getState();
-    let assets = wallets?.[currentWalletId]?.assets;
-    if (assets?.every((asset) => !asset.amount) || refresh) {
-      assets = await keyring.getBalance();
-    } else {
-      keyring.getBalance();
+    try {
+      const { wallets, currentWalletId } = await keyring.getState();
+      let assets = wallets?.[currentWalletId]?.assets;
+      if (assets?.every((asset) => !asset.amount) || refresh) {
+        assets = await keyring.getBalance();
+      } else {
+        keyring.getBalance();
+      }
+      return assets;
+    } catch (e) {
+      console.error(e);
+      return { error: e.message };
     }
-    return assets;
   },
   [HANDLER_TYPES.GET_BALANCE]: async (subaccount) => {
     try {
@@ -143,10 +148,10 @@ export const getKeyringHandler = (type, keyring) => ({
     to, amount, canisterId, opts,
   }) => {
     try {
-      const { height, transactionId } = await keyring.send(to, BigInt(amount), canisterId, opts);
+      const { height, transactionId } = await keyring.send(to, amount, canisterId, opts);
       return {
-        height: parseInt(height?.toString?.(), 10),
-        transactionId: parseInt(transactionId?.toString?.(), 10),
+        height: height ? parseInt(height, 10) : undefined,
+        transactionId: transactionId ? parseInt(transactionId, 10) : undefined,
       };
     } catch (error) {
       return { error: error.message, height: null };
@@ -159,18 +164,18 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.GET_PUBLIC_KEY]:
     async () => keyring.getPublicKey(),
   [HANDLER_TYPES.GET_TOKEN_INFO]:
-    async (canisterId) => {
+    async ({ canisterId, standard }) => {
       try {
-        const tokenInfo = await keyring.getTokenInfo(canisterId);
-        return { ...tokenInfo, amount: parseInt(tokenInfo.amount.toString(), 10) };
+        const tokenInfo = await keyring.getTokenInfo(canisterId, standard);
+        return { ...tokenInfo, amount: tokenInfo.amount.toString() };
       } catch (e) {
         return { error: e.message };
       }
     },
   [HANDLER_TYPES.ADD_CUSTOM_TOKEN]:
-    async (canisterId) => {
+    async ({ canisterId, standard }) => {
       try {
-        const response = await keyring.registerToken(canisterId);
+        const response = await keyring.registerToken(canisterId, standard);
         return response;
       } catch (e) {
         return { error: e.message };

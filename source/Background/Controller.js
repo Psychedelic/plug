@@ -775,7 +775,7 @@ backgroundController.exposeController(
       const xtcAmount = assets?.[DEFAULT_CURRENCY_MAP.XTC]?.amount * CYCLES_PER_TC;
 
       if (xtcAmount - XTC_FEE > transfer.amount) {
-        const response = await burnXTC(transfer);
+        const response = await burnXTC(String(transfer));
         if (response.error) {
           callback(null, false);
           callback(ERRORS.SERVER_ERROR(response.error), null, [

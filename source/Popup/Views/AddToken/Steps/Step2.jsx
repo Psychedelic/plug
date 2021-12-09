@@ -30,7 +30,7 @@ const parseTokenBySymbol = (token) => ({
     amount: cyclesToTC(token.amount),
     price: cyclesToTC(token.amount) * USD_PER_TC,
   },
-})[token?.token?.symbol] || token;
+})[token?.token?.symbol] || { ...token?.token, amount: token.amount };
 
 const Step2 = ({ selectedToken, handleClose }) => {
   const { t } = useTranslation();
@@ -38,14 +38,13 @@ const Step2 = ({ selectedToken, handleClose }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const displayToken = parseTokenBySymbol(selectedToken);
-
   const icpPrice = useICPPrice();
 
   const registerToken = () => {
     setLoading(true);
     sendMessage({
       type: HANDLER_TYPES.ADD_CUSTOM_TOKEN,
-      params: selectedToken?.token.canisterId,
+      params: selectedToken?.token,
     }, async () => {
       sendMessage({
         type: HANDLER_TYPES.GET_ASSETS,
