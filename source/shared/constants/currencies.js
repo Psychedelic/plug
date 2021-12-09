@@ -1,5 +1,6 @@
 import DfinityImg from '@assets/icons/Dfinity.svg';
 import XTCImg from '@assets/icons/XTC.svg';
+import WICPImg from '@assets/icons/WICP.png'
 import PropTypes from 'prop-types';
 
 export const USD_PER_TC = 1.426560;
@@ -31,6 +32,7 @@ export const CURRENCIES = new Map([
 export const TOKEN_IMAGES = {
   XTC: XTCImg,
   ICP: DfinityImg,
+  WICP: WICPImg,
 };
 
 export const currencyPropTypes = {
@@ -60,6 +62,12 @@ export const formatAssetBySymbol = (_amount, symbol, icpPrice) => {
       amount,
       value: (amount * USD_PER_TC),
       symbol: 'WTC',
+    },
+    WICP: {
+      amount,
+      value: (amount * icpPrice),
+      image: TOKEN_IMAGES.WICP,
+      symbol: 'WICP'
     },
     default: { amount, value: amount },
   })[symbol || 'default'] || { amount, value: amount };
@@ -99,4 +107,13 @@ export const TOKENS = {
     value: 0,
     image: TOKEN_IMAGES.XTC,
   },
+  WICP: {
+    symbol: 'WICP',
+    canisterId: 'aanaa-xaaaa-aaaah-aaeiq-cai',
+    name: 'Wrapped ICP',
+    decimals: 5,
+    amount: 0,
+    value: 0,
+    image: TOKEN_IMAGES.WICP,
+  }
 };
