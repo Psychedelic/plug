@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import MenuList from '@material-ui/core/MenuList';
 import Button from '@material-ui/core/Button';
 import {
-  HoverAnimation, MenuItem, FormItem, TextInput,
+  HoverAnimation, MenuItem, FormItem, TextInput, LinkButton,
 } from '@ui';
 import PropTypes from 'prop-types';
 import Drawer from '@material-ui/core/Drawer';
@@ -35,6 +35,7 @@ const Profile = ({ disableProfile }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { navigator } = disableProfile ? {} : useRouter();
+  const [isEditing, setIsEditing] = useState(false);
 
   const { walletNumber, principalId } = useSelector((state) => state.wallet);
   const icpPrice = useICPPrice();
@@ -83,6 +84,10 @@ const Profile = ({ disableProfile }) => {
       setAccountName('');
       setOpenCreateAccount(false);
     });
+  };
+
+  const toggleEditAccounts = () => {
+    setIsEditing(!isEditing);
   };
 
   const handleChangeAccount = (wallet) => () => {
@@ -166,7 +171,10 @@ const Profile = ({ disableProfile }) => {
             }}
           >
             <div className={classes.container}>
-              <Typography variant="h5" className={classes.myAccounts}>{t('profile.myAccounts')}</Typography>
+              <div className={classes.header}>
+                <Typography variant="h5" className={classes.myAccounts}>{t('profile.myAccounts')}</Typography>
+                <LinkButton value={t(`common.${isEditing ? 'done' : 'edit'}`)} onClick={toggleEditAccounts} />
+              </div>
               <MenuList className={clsx(classes.accountContainer, classes.menu)}>
                 {
                   accounts.map((account) => (
