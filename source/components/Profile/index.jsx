@@ -197,7 +197,7 @@ const Profile = ({ disableProfile }) => {
                         key={account.walletNumber}
                         name={account.name}
                         icon={<UserIcon size="small" icon={account.icon} style={{ marginLeft: -6, marginRight: 12 }} />}
-                        onClick={handleChangeAccount(account.walletNumber)}
+                        onClick={!isHidden && handleChangeAccount(account.walletNumber)}
                         selected={account.walletNumber === walletNumber}
                         className={clsx(isHidden && classes.hiddenAccount)}
                         endIcon={account.walletNumber === walletNumber ? (

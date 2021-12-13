@@ -12,7 +12,7 @@ export const profileSlice = createSlice({
     hiddenAccounts: [],
   },
   reducers: {
-    getHiddenAccounts: (state, action) => {
+    setHiddenAccounts: (state, action) => {
       state.hiddenAccounts = action.payload;
     },
     toggleAccountHidden: (state, action) => {
@@ -22,6 +22,7 @@ export const profileSlice = createSlice({
       } else {
         state.hiddenAccounts.splice(index, 1);
       }
+      storage.set({ hiddenAccounts: Object.values(state.hiddenAccounts) });
     },
   },
 });
@@ -41,7 +42,7 @@ export const useHiddenAccounts = (dependencies = []) => {
     try {
       storage.get('hiddenAccounts', (state) => {
         const hidden = state.hiddenAccounts;
-        if (hidden) {
+        if (hidden?.length) {
           dispatch(profileSlice.setHiddenAccounts(hidden));
         }
       });
