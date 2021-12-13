@@ -21,9 +21,12 @@ import {
 } from '@redux/wallet';
 import { useDispatch, useSelector } from 'react-redux';
 import BluePencil from '@assets/icons/blue-pencil.svg';
+import VisibleIcon from '@assets/icons/visible.svg';
+import InvisibleIcon from '@assets/icons/invisible.svg';
 import { getRandomEmoji } from '@shared/constants/emojis';
 import clsx from 'clsx';
 import { useICPPrice } from '@redux/icp';
+import { toggleAccountHidden, useHiddenAccounts } from '@redux/profile';
 import { TABS, useRouter } from '../Router';
 import ActionDialog from '../ActionDialog';
 import useMenuItems from '../../hooks/useMenuItems';
@@ -47,6 +50,9 @@ const Profile = ({ disableProfile }) => {
   const [accountName, setAccountName] = useState('');
 
   const menuItems = disableProfile ? [] : useMenuItems();
+
+  const hiddenAccounts = useHiddenAccounts();
+  console.log('hiddenAccounts', hiddenAccounts);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -88,6 +94,12 @@ const Profile = ({ disableProfile }) => {
 
   const toggleEditAccounts = () => {
     setIsEditing(!isEditing);
+  };
+
+  const toggleAccountVisibility = (account) => (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch(toggleAccountHidden(account));
   };
 
   const handleChangeAccount = (wallet) => () => {
@@ -177,22 +189,31 @@ const Profile = ({ disableProfile }) => {
               </div>
               <MenuList className={clsx(classes.accountContainer, classes.menu)}>
                 {
-                  accounts.map((account) => (
-                    <MenuItem
-                      size="small"
-                      key={account.walletNumber}
-                      name={account.name}
-                      icon={<UserIcon size="small" icon={account.icon} style={{ marginLeft: -6, marginRight: 12 }} />}
-                      onClick={handleChangeAccount(account.walletNumber)}
-                      selected={account.walletNumber === walletNumber}
-                      endIcon={(
+                  accounts.map((account) => {
+                    const isHidden = hiddenAccounts.includes(account.walletNumber);
+                    return (!isHidden || isEditing) && (
+                      <MenuItem
+                        size="small"
+                        key={account.walletNumber}
+                        name={account.name}
+                        icon={<UserIcon size="small" icon={account.icon} style={{ marginLeft: -6, marginRight: 12 }} />}
+                        onClick={handleChangeAccount(account.walletNumber)}
+                        selected={account.walletNumber === walletNumber}
+                        className={clsx(isHidden && classes.hiddenAccount)}
+                        endIcon={account.walletNumber === walletNumber ? (
+                          <img
+                            src={BluePencil}
+                            onClick={handleEditAccount}
+                          />
+                        ) : isEditing && (
                         <img
-                          src={BluePencil}
-                          onClick={handleEditAccount}
+                          src={isHidden ? InvisibleIcon : VisibleIcon}
+                          onClick={toggleAccountVisibility(account.walletNumber)}
                         />
-                      )}
-                    />
-                  ))
+                        )}
+                      />
+                    );
+                  })
                 }
               </MenuList>
               <MenuList className={clsx(classes.settingContainer, classes.menu)}>

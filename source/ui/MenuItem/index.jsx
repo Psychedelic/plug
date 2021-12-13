@@ -20,6 +20,7 @@ const MenuItem = ({
   endIcon,
   endText,
   symbol,
+  className,
 }) => {
   const classes = useStyles();
 
@@ -28,7 +29,7 @@ const MenuItem = ({
       key={name}
       onClick={onClick}
       disabled={disabled}
-      className={clsx(size !== 'small' ? classes.big : classes.small, border && classes.border)}
+      className={clsx(size !== 'small' ? classes.big : classes.small, border && classes.border, className)}
       classes={{
         root: selected ? classes.selected : null,
       }}
@@ -50,7 +51,7 @@ const MenuItem = ({
       }
       <Typography variant={size === 'small' ? 'h6' : 'h5'} className={classes.text}>{name}</Typography>
       {
-        (endIcon && selected)
+        endIcon
         && (
           <div className={classes.comingSoon}>
             {endIcon}
@@ -82,12 +83,14 @@ MenuItem.defaultProps = {
   selected: false,
   endText: null,
   symbol: '',
+  className: '',
 };
 
 MenuItem.propTypes = {
   name: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
+  className: PropTypes.string,
   size: PropTypes.oneOf(['small', 'medium', 'large']),
   border: PropTypes.bool,
   disabled: PropTypes.bool,

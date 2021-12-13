@@ -31,6 +31,10 @@ export default makeStyles({
   label: {
     width: 'auto',
   },
+  hiddenAccount: {
+    color: 'rgba(0, 0, 0, 0.26)',
+    opacity: 0.7,
+  },
   menu: {
     zIndex: 1,
   },
