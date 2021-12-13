@@ -149,9 +149,28 @@ backgroundController.exposeController('disconnect', async (opts, url) => secureC
     const apps = response?.[keyring.currentWalletId]?.apps;
 
     if (apps?.[url]) {
-      const newApps = removeAppByURL({ apps, url });
+      //const newApps = removeAppByURL({ apps, url });
 
+      const date = new Date().toISOString();
+
+      const newApps = {
+        ...apps,
+        [url]: {
+          ...apps[url],
+          status: CONNECTION_STATUS.disconnected,
+          date,
+          whitelist,
+          events: [
+            ...apps[url].events,
+            {
+              status: CONNECTION_STATUS.disconnected,
+              date,
+            }
+          ]
+        },
+      };
       storage.set({ [keyring.currentWalletId]: { apps: newApps } });
+
     } else {
       opts.callback(ERRORS.CONNECTION_ERROR, null);
     }
@@ -177,6 +196,9 @@ backgroundController.exposeController(
     if (isValidWhitelist) {
       canistersInfo = await fetchCanistersInfo(whitelist);
     }
+
+    const date = new Date().toISOString();
+
     storage.get(keyring.currentWalletId.toString(), (response) => {
       const apps = {
         ...response?.[keyring.currentWalletId]?.apps,
@@ -186,6 +208,14 @@ backgroundController.exposeController(
           status: CONNECTION_STATUS.pending,
           icon: icons[0] || null,
           timeout,
+          date,
+          events: [
+            ...response?.[keyring.currentWalletId]?.apps[domainUrl].events,
+            {
+              status: CONNECTION_STATUS.pending,
+              date,
+            }
+          ],
         },
       };
 
@@ -613,13 +643,22 @@ backgroundController.exposeController(
         ? response.whitelist
         : [];
 
+      const date = new Date().toISOString();
+
       const newApps = {
         ...apps,
         [url]: {
           ...apps[url],
           status: status || CONNECTION_STATUS.rejected,
-          date: new Date().toISOString(),
+          date,
           whitelist,
+          events: [
+            ...apps[url].events,
+            {
+              status: status || CONNECTION_STATUS.rejected,
+              date,
+            }
+          ]
         },
       };
       storage.set({ [keyring.currentWalletId]: { apps: newApps } });

@@ -11,6 +11,7 @@ import { capitalize, IconButton } from '@material-ui/core';
 import ListIcon from '@material-ui/icons/List';
 
 import { ACTIVITY_STATUS } from '@shared/constants/activity';
+import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { currencyPropTypes } from '@shared/constants/currencies';
 import shortAddress from '@shared/utils/short-address';
 import Typography from '@material-ui/core/Typography';
@@ -22,6 +23,7 @@ import Dialog from '../Dialog';
 import GenericIcon from '../GenericIcon';
 import SwapIcon from './SwapIcon';
 import useStyles from './styles';
+import { FiberPin } from '@material-ui/icons';
 
 const getTitle = (type, symbol, swapData, plug, t) => {
   switch (type) {
@@ -122,12 +124,20 @@ const ActivityItem = ({
     }, 1500);
   };
   if (type === 'PLUG') {
+
+    console.log('plug status', status);
     return (
       <div className={classes.root}>
         <img className={classes.image} src={icon} />
         <div className={classes.leftContainer}>
           <Typography variant="h5" className={classes.pluggedTitle}>
-            {`${t('activity.title.pluggedInto')} ${name}`}
+            {
+              status === CONNECTION_STATUS.accepted
+                ?
+                `${t('activity.title.pluggedInto')} ${name}`
+                :
+                `${t('activity.title.unpluggedFrom')} ${name}`
+            }
           </Typography>
           <Typography variant="subtitle2">
             {moment(Date.parse(date)).format('MMM Do')}
