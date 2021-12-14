@@ -15,6 +15,12 @@ export default makeStyles({
     alignItems: 'center',
     cursor: 'pointer',
   },
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '20px 20px 10px',
+  },
   button: {
     width: 37,
     height: 37,
@@ -24,6 +30,10 @@ export default makeStyles({
   },
   label: {
     width: 'auto',
+  },
+  hiddenAccount: {
+    color: 'rgba(0, 0, 0, 0.26)',
+    opacity: 0.7,
   },
   menu: {
     zIndex: 1,
@@ -36,7 +46,6 @@ export default makeStyles({
   },
   myAccounts: {
     fontWeight: 600,
-    padding: '16px 0px 8px 16px',
   },
   paper: {
     width: 293,
