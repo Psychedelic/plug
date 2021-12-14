@@ -75,7 +75,7 @@ const AllowAgent = ({
 
   useEffect(() => {
     setOnTimeout(() => () => {
-      handleAllowAgent(CONNECTION_STATUS.rejected).then(() => window?.close?.());
+      handleAllowAgent(CONNECTION_STATUS.rejectedAgent).then(() => window?.close?.());
     });
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
       if (state?.wallets?.length) {
@@ -93,6 +93,10 @@ const AllowAgent = ({
       handleAllowAgent(CONNECTION_STATUS.accepted).then(() => window?.close?.());
     }
   }, []);
+
+  window.onbeforeunload = () => {
+    handleAllowAgent(CONNECTION_STATUS.rejectedAgent);
+  };
 
   const toggleExpand = () => {
     let height;

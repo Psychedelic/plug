@@ -3,6 +3,7 @@ import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import ReactDOM from 'react-dom';
 import qs from 'query-string';
 import { theme } from '@ui';
+import extension from 'extensionizer';
 import store from '../../redux/store';
 import ProviderWrapper from '../../shared/ProviderWrapper';
 import Login from '../../Popup/Views/Login';
@@ -14,6 +15,7 @@ import Principal from './components/Principal';
 import AllowAgent from './components/AllowAgent';
 import BurnXTC from './components/BurnXTC';
 import Sign from './components/Sign';
+import SIZES from './components/Transfer/constants';
 
 const NOTIFICATION_COMPONENTS = {
   batchTransactions: BatchTransactions,
@@ -39,12 +41,25 @@ const NotificationContainer = () => {
   const args = JSON.parse(argsJson || '{}'); // single request for now
 
   useEffect(() => {
-    sendMessage({ type: HANDLER_TYPES.GET_LOCKS, params: {} }, (locks) => {
-      if (locks?.isUnlocked) {
-        setLoggedIn(true);
-      } else {
-        setLoggedIn(false);
-      }
+    let logged = false;
+    try {
+      sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
+        if (state?.wallets?.length) {
+          sendMessage({ type: HANDLER_TYPES.GET_LOCKS, params: {} }, (locks) => {
+            if (locks?.isUnlocked) {
+              logged = true;
+            }
+          });
+        }
+      });
+    } catch (e) {
+      logged = false;
+    }
+    setLoggedIn(logged);
+    extension.windows.update(extension.windows.WINDOW_ID_CURRENT, {
+      height: logged
+        ? SIZES.appConnectHeight
+        : SIZES.loginHeight,
     });
   }, []);
 
