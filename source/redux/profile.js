@@ -27,7 +27,7 @@ export const profileSlice = createSlice({
   },
 });
 
-export const { getHiddenAccounts, toggleAccountHidden } = profileSlice.actions;
+export const { setHiddenAccounts, toggleAccountHidden } = profileSlice.actions;
 
 /**
  * @description Hook that fetches hidden accounts from storage and sets them in the state.
@@ -43,7 +43,7 @@ export const useHiddenAccounts = (dependencies = []) => {
       storage.get('hiddenAccounts', (state) => {
         const hidden = state.hiddenAccounts;
         if (hidden?.length) {
-          dispatch(profileSlice.setHiddenAccounts(hidden));
+          dispatch(profileSlice.actions.setHiddenAccounts(hidden));
         }
       });
     } catch (error) {
