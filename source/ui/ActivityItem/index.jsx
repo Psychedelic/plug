@@ -23,7 +23,6 @@ import Dialog from '../Dialog';
 import GenericIcon from '../GenericIcon';
 import SwapIcon from './SwapIcon';
 import useStyles from './styles';
-import { FiberPin } from '@material-ui/icons';
 
 const getTitle = (type, symbol, swapData, plug, t) => {
   switch (type) {
@@ -124,8 +123,6 @@ const ActivityItem = ({
     }, 1500);
   };
   if (type === 'PLUG') {
-
-    console.log('plug status', status);
     return (
       <div className={classes.root}>
         <img className={classes.image} src={icon} />
@@ -133,10 +130,8 @@ const ActivityItem = ({
           <Typography variant="h5" className={classes.pluggedTitle}>
             {
               status === CONNECTION_STATUS.accepted
-                ?
-                `${t('activity.title.pluggedInto')} ${name}`
-                :
-                `${t('activity.title.unpluggedFrom')} ${name}`
+                ? `${t('activity.title.pluggedInto')} ${name}`
+                : `${t('activity.title.unpluggedFrom')} ${name}`
             }
           </Typography>
           <Typography variant="subtitle2">

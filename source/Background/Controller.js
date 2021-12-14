@@ -9,13 +9,23 @@ import PlugController from '@psychedelic/plug-controller';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
 import { XTC_FEE } from '@shared/constants/addresses';
-import { /* PROTECTED_CATEGORIES, */ ASSET_CANISTER_IDS, DAB_CANISTER_ID } from '@shared/constants/canisters';
-import { removeAppByURL } from '@shared/utils/apps';
+import {
+  /* PROTECTED_CATEGORIES, */ ASSET_CANISTER_IDS,
+  DAB_CANISTER_ID,
+} from '@shared/constants/canisters';
+import { addDisconnectedEntry } from '@shared/utils/apps';
 import NotificationManager from '../lib/NotificationManager';
-
 import SIZES from '../Pages/Notification/components/Transfer/constants';
-import { getKeyringHandler, HANDLER_TYPES, getKeyringErrorMessage } from './Keyring';
-import { validateTransferArgs, validateBurnArgs, validateTransactions } from './utils';
+import {
+  getKeyringHandler,
+  HANDLER_TYPES,
+  getKeyringErrorMessage,
+} from './Keyring';
+import {
+  validateTransferArgs,
+  validateBurnArgs,
+  validateTransactions,
+} from './utils';
 import ERRORS, { SILENT_ERRORS } from './errors';
 import plugProvider from '../Inpage/index';
 
@@ -40,19 +50,21 @@ backgroundController.start();
 
 const fetchCanistersInfo = async (whitelist) => {
   if (whitelist && whitelist.length > 0) {
-    const canistersInfo = await Promise.all(whitelist.map(async (id) => {
-      let canisterInfo = { id };
+    const canistersInfo = await Promise.all(
+      whitelist.map(async (id) => {
+        let canisterInfo = { id };
 
-      try {
-        const fetchedCanisterInfo = await PlugController.getCanisterInfo(id);
-        canisterInfo = { id, ...fetchedCanisterInfo };
-      } catch (error) {
-        /* eslint-disable-next-line */
-        console.error(error);
-      }
+        try {
+          const fetchedCanisterInfo = await PlugController.getCanisterInfo(id);
+          canisterInfo = { id, ...fetchedCanisterInfo };
+        } catch (error) {
+          /* eslint-disable-next-line */
+          console.error(error);
+        }
 
-      return canisterInfo;
-    }));
+        return canisterInfo;
+      }),
+    );
 
     const sortedCanistersInfo = canistersInfo.sort((a, b) => {
       if (a.name && !b.name) return -1;
@@ -80,11 +92,15 @@ extension.runtime.onMessage.addListener((message, _, sendResponse) => {
     const keyringHandler = getKeyringHandler(type, keyring);
     if (!keyringHandler) return;
 
-    keyringHandler(params).then((res) => sendResponse(res)).catch(() => {
-      const keyringErrorMessage = getKeyringErrorMessage(type);
-      const errorMessage = keyringErrorMessage ? `Unexpected error while ${keyringErrorMessage}` : 'Unexpected error';
-      notificationManager.notificateError(errorMessage);
-    });
+    keyringHandler(params)
+      .then((res) => sendResponse(res))
+      .catch(() => {
+        const keyringErrorMessage = getKeyringErrorMessage(type);
+        const errorMessage = keyringErrorMessage
+          ? `Unexpected error while ${keyringErrorMessage}`
+          : 'Unexpected error';
+        notificationManager.notificateError(errorMessage);
+      });
   };
 
   if (!keyring) {
@@ -134,10 +150,7 @@ backgroundController.exposeController('isConnected', async (opts, url) => secure
   storage.get(keyring.currentWalletId.toString(), (state) => {
     const apps = state?.[keyring.currentWalletId]?.apps || {};
     if (apps?.[url]) {
-      callback(
-        null,
-        apps?.[url].status === CONNECTION_STATUS.accepted,
-      );
+      callback(null, apps?.[url].status === CONNECTION_STATUS.accepted);
     } else {
       callback(null, false);
     }
@@ -149,28 +162,8 @@ backgroundController.exposeController('disconnect', async (opts, url) => secureC
     const apps = response?.[keyring.currentWalletId]?.apps;
 
     if (apps?.[url]) {
-      //const newApps = removeAppByURL({ apps, url });
-
-      const date = new Date().toISOString();
-
-      const newApps = {
-        ...apps,
-        [url]: {
-          ...apps[url],
-          status: CONNECTION_STATUS.disconnected,
-          date,
-          whitelist,
-          events: [
-            ...apps[url].events,
-            {
-              status: CONNECTION_STATUS.disconnected,
-              date,
-            }
-          ]
-        },
-      };
+      const newApps = addDisconnectedEntry({ apps, url });
       storage.set({ [keyring.currentWalletId]: { apps: newApps } });
-
     } else {
       opts.callback(ERRORS.CONNECTION_ERROR, null);
     }
@@ -211,10 +204,6 @@ backgroundController.exposeController(
           date,
           events: [
             ...response?.[keyring.currentWalletId]?.apps[domainUrl].events,
-            {
-              status: CONNECTION_STATUS.pending,
-              date,
-            }
           ],
         },
       };
@@ -293,9 +282,7 @@ backgroundController.exposeController(
 
     storage.get(keyring.currentWalletId.toString(), async (state) => {
       const app = state?.[keyring.currentWalletId]?.apps?.[metadata.url] || {};
-      if (
-        app?.status === CONNECTION_STATUS.accepted
-      ) {
+      if (app?.status === CONNECTION_STATUS.accepted) {
         if (Number.isNaN(parseInt(accountId, 10))) {
           callback(ERRORS.CLIENT_ERROR('Invalid account id'), null);
         } else if (!keyring.isUnlocked) {
@@ -362,9 +349,7 @@ backgroundController.exposeController(
     const { id: portId } = sender;
     storage.get(keyring.currentWalletId.toString(), async (state) => {
       const app = state?.[keyring.currentWalletId]?.apps?.[metadata?.url] || {};
-      if (
-        app?.status === CONNECTION_STATUS.accepted
-      ) {
+      if (app?.status === CONNECTION_STATUS.accepted) {
         const argsError = validateTransferArgs(args);
         if (argsError) {
           callback(argsError, null);
@@ -413,7 +398,10 @@ backgroundController.exposeController(
       const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
       const sendToken = getKeyringHandler(HANDLER_TYPES.SEND_TOKEN, keyring);
       const assets = await getBalance();
-      if (assets?.[DEFAULT_CURRENCY_MAP.ICP]?.amount * E8S_PER_ICP > transfer.amount) {
+      if (
+        assets?.[DEFAULT_CURRENCY_MAP.ICP]?.amount * E8S_PER_ICP
+        > transfer.amount
+      ) {
         const response = await sendToken(transfer);
         if (response.error) {
           callback(null, false);
@@ -443,26 +431,36 @@ backgroundController.exposeController(
     try {
       storage.get(keyring.currentWalletId.toString(), async (state) => {
         const app = state?.[keyring.currentWalletId]?.apps?.[metadata.url] || {};
-        if (
-          app.status !== CONNECTION_STATUS.accepted
-        ) {
+        if (app.status !== CONNECTION_STATUS.accepted) {
           callback(ERRORS.CONNECTION_ERROR, null);
           return;
         }
 
-        if (requestType !== 'read_state' && canisterId && !(canisterId in app.whitelist)) {
+        if (
+          requestType !== 'read_state'
+          && canisterId
+          && !(canisterId in app.whitelist)
+        ) {
           callback(ERRORS.CANISTER_NOT_WHITLESTED_ERROR(canisterId), null);
           return;
         }
         const canisterInfo = app.whitelist[canisterId];
         // TODO REMOVE THIS FOR CATEGORY ATTRIBUTE
-        const nftCanisters = await getAllNFTS(new HttpAgent({ canisterId: DAB_CANISTER_ID, host: 'https://mainnet.dfinity.network' }));
+        const nftCanisters = await getAllNFTS(
+          new HttpAgent({
+            canisterId: DAB_CANISTER_ID,
+            host: 'https://mainnet.dfinity.network',
+          }),
+        );
         const PROTECTED_IDS = [
           ...(nftCanisters || []).map((collection) => collection.principal_id.toString()),
           ...ASSET_CANISTER_IDS,
         ];
         const shouldShowModal = !preApprove
-          && (requestInfo.manual || (requestInfo.requestType === 'call' && !!canisterInfo.id && PROTECTED_IDS.includes(canisterInfo.id)));
+          && (requestInfo.manual
+            || (requestInfo.requestType === 'call'
+              && !!canisterInfo.id
+              && PROTECTED_IDS.includes(canisterInfo.id)));
         // const shouldShowModal = requestInfo.manual || (requestInfo.requestType === 'call'
         // && !!canisterInfo.category && canisterInfo.category in PROTECTED_CATEGORIES);
 
@@ -475,7 +473,10 @@ backgroundController.exposeController(
               type: 'sign',
               metadataJson: JSON.stringify(metadata),
               argsJson: JSON.stringify({
-                requestInfo, payload, canisterInfo, timeout: app?.timeout,
+                requestInfo,
+                payload,
+                canisterInfo,
+                timeout: app?.timeout,
               }),
             },
           });
@@ -657,8 +658,8 @@ backgroundController.exposeController(
             {
               status: status || CONNECTION_STATUS.rejected,
               date,
-            }
-          ]
+            },
+          ],
         },
       };
       storage.set({ [keyring.currentWalletId]: { apps: newApps } });
@@ -700,9 +701,10 @@ backgroundController.exposeController(
           return;
         }
         const canistersInfo = app?.whitelist || {};
-        const transactionsWithInfo = transactions.map(
-          (tx) => ({ ...tx, canisterInfo: canistersInfo[tx.canisterId] }),
-        );
+        const transactionsWithInfo = transactions.map((tx) => ({
+          ...tx,
+          canisterInfo: canistersInfo[tx.canisterId],
+        }));
         const url = qs.stringifyUrl({
           url: 'notification.html',
           query: {
@@ -759,9 +761,7 @@ backgroundController.exposeController(
     const { id: portId } = sender;
     storage.get(keyring.currentWalletId.toString(), async (state) => {
       const app = state?.[keyring.currentWalletId]?.apps?.[metadata.url] || {};
-      if (
-        app?.status === CONNECTION_STATUS.accepted
-      ) {
+      if (app?.status === CONNECTION_STATUS.accepted) {
         const argsError = validateBurnArgs(args);
         if (argsError) {
           callback(argsError, null);
@@ -834,41 +834,39 @@ backgroundController.exposeController(
   },
 );
 
-backgroundController.exposeController(
-  'getPrincipal',
-  async (opts, pageUrl) => secureController(opts.callback, async () => {
-    const { callback, message, sender } = opts;
-    storage.get(keyring.currentWalletId.toString(), async (state) => {
-      const app = state?.[keyring.currentWalletId]?.apps?.[pageUrl] || {};
-      if (
-        app?.status === CONNECTION_STATUS.accepted
-      ) {
-        if (!keyring.isUnlocked) {
-          const url = qs.stringifyUrl({
-            url: 'notification.html',
-            query: {
-              callId: message.data.data.id,
-              portId: sender.id,
-              type: 'principal',
-              metadataJson: JSON.stringify({ url: pageUrl }),
-            },
-          });
+backgroundController.exposeController('getPrincipal', async (opts, pageUrl) => secureController(opts.callback, async () => {
+  const { callback, message, sender } = opts;
+  storage.get(keyring.currentWalletId.toString(), async (state) => {
+    const app = state?.[keyring.currentWalletId]?.apps?.[pageUrl] || {};
+    if (app?.status === CONNECTION_STATUS.accepted) {
+      if (!keyring.isUnlocked) {
+        const url = qs.stringifyUrl({
+          url: 'notification.html',
+          query: {
+            callId: message.data.data.id,
+            portId: sender.id,
+            type: 'principal',
+            metadataJson: JSON.stringify({ url: pageUrl }),
+          },
+        });
 
-          extension.windows.create({
-            url,
-            type: 'popup',
-            width: SIZES.width,
-            height: SIZES.loginHeight,
-          });
-        } else {
-          callback(null, keyring.state.wallets[keyring.currentWalletId].principal);
-        }
+        extension.windows.create({
+          url,
+          type: 'popup',
+          width: SIZES.width,
+          height: SIZES.loginHeight,
+        });
       } else {
-        callback(ERRORS.CONNECTION_ERROR, null);
+        callback(
+          null,
+          keyring.state.wallets[keyring.currentWalletId].principal,
+        );
       }
-    });
-  }),
-);
+    } else {
+      callback(ERRORS.CONNECTION_ERROR, null);
+    }
+  });
+}));
 
 backgroundController.exposeController(
   'handleGetPrincipal',
@@ -894,7 +892,11 @@ backgroundController.exposeController(
     const { id: callId } = message.data.data;
     const { id: portId } = sender;
 
-    if (!Object.values(SILENT_ERRORS).map((e) => e.message).includes(errorMessage)) {
+    if (
+      !Object.values(SILENT_ERRORS)
+        .map((e) => e.message)
+        .includes(errorMessage)
+    ) {
       notificationManager.notificateError(errorMessage);
     }
 
