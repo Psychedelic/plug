@@ -48,12 +48,8 @@ const NotificationContainer = () => {
           sendMessage({ type: HANDLER_TYPES.GET_LOCKS, params: {} }, (locks) => {
             if (locks?.isUnlocked) {
               logged = true;
-            } else {
-              logged = false;
             }
           });
-        } else {
-          logged = false;
         }
       });
     } catch (e) {
