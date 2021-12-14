@@ -30,6 +30,7 @@
       "swap": "Swap",
       "for": "for",
       "pluggedInto": "Plugged into",
+      "unpluggedFrom": "Unplugged from",
       "mint": "Mint",
       "burn": "Burn"
     },
