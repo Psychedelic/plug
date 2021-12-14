@@ -17,7 +17,7 @@ export default makeStyles((theme) => ({
   image: {
     width: theme.spacing(3),
     height: theme.spacing(3),
-    borderRadius: '100%',
+    borderRadius: '10px',
     marginRight: theme.spacing(1),
     objectFit: 'cover',
   },

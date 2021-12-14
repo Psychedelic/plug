@@ -4,7 +4,7 @@ export default makeStyles((theme) => ({
   image: {
     height: 51,
     width: 51,
-    borderRadius: 26,
+    borderRadius: 12,
     background: theme.palette.common.primaryBlack,
     marginBottom: theme.spacing(1),
   },
