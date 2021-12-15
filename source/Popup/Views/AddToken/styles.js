@@ -56,13 +56,14 @@ export default makeStyles((theme) => ({
   tokensContainer: {
     height: 202,
     margin: '0 0 12px 0',
+    overflow: 'auto',
   },
   poweredByDab: {
     position: 'absolute',
     margin: 'auto',
     left: 0,
     right: 0,
-    bottom: 12,
+    bottom: 8,
   },
   dabTokenContainer: {
     height: 190,
