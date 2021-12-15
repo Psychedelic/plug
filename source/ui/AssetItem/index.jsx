@@ -16,7 +16,7 @@ const AssetItem = ({
       <TokenIcon className={classes.image} image={image} alt={name} symbol={symbol} />
       <div className={classes.leftContainer}>
         <Typography variant="h5">{name}</Typography>
-        <Typography variant="subtitle2" className={clsx((loading) && classes.pulse)}>
+        <Typography variant="subtitle2" className={clsx(loading && classes.pulse)}>
           <NumberFormat value={amount} displayType="text" decimalScale={5} fixedDecimalScale thousandSeparator="," suffix={` ${symbol}`} />
         </Typography>
       </div>
