@@ -57,6 +57,7 @@ const Step2 = ({ selectedToken, handleClose }) => {
       });
     });
   };
+
   return (
     <Container>
       <Grid container spacing={2}>

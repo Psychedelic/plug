@@ -52,7 +52,6 @@ const Profile = ({ disableProfile }) => {
   const menuItems = disableProfile ? [] : useMenuItems();
 
   const hiddenAccounts = useHiddenAccounts();
-  console.log('hiddenAccounts', hiddenAccounts);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
