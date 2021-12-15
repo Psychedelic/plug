@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   Container, LinkButton, TextInput,
 } from '@ui';
-import { TokenIcon } from '@components';
+import { TokenIcon, PoweredByDab } from '@components';
 import Grid from '@material-ui/core/Grid';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
@@ -10,28 +10,29 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
 import VerifiedImg from '@assets/icons/verified.svg';
 import PropTypes from 'prop-types';
+import { getDabTokens, getTokenBalance } from '@shared/services/DAB';
+import { useSelector } from 'react-redux';
 import useStyles from '../styles';
 import DabInfo from './DabInfo';
-import { getDabTokensWithBalance } from '@shared/services/DAB';
-import { PoweredByDab } from '@components';
-import { useSelector } from 'react-redux';
 
 const SearchToken = ({ handleChangeSelectedToken, handleChangeTab }) => {
   const { t } = useTranslation();
   const classes = useStyles();
 
+  const { principalId } = useSelector((state) => state.wallet);
+
   const [search, setSearch] = useState('');
   const [tokens, setTokens] = useState([]);
   const [filteredTokens, setFilteredTokens] = useState([]);
-  const { principalId } = useSelector((state) => state.wallet);
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
   };
 
-  const handleSelectToken = (token = {}) => {
+  const handleSelectToken = async (token = {}) => {
     const { timestamp, ...cleanToken } = token;
-    handleChangeSelectedToken({ token: cleanToken });
+    const amount = await getTokenBalance(token, principalId);
+    handleChangeSelectedToken({ token: cleanToken, amount })();
   };
 
   useEffect(() => {
@@ -46,7 +47,7 @@ const SearchToken = ({ handleChangeSelectedToken, handleChangeTab }) => {
 
   useEffect(() => {
     const getTokens = async () => {
-      const tempTokens = await getDabTokensWithBalance(principalId);
+      const tempTokens = await getDabTokens();
       setTokens(tempTokens);
     };
     getTokens();
@@ -84,7 +85,7 @@ const SearchToken = ({ handleChangeSelectedToken, handleChangeTab }) => {
                     {filteredTokens.map((ft) => (
                       <div
                         className={classes.tokenItem}
-                        onClick={handleSelectToken(ft)}
+                        onClick={() => handleSelectToken(ft)}
                       >
                         <div className={classes.tokenImage}>
                           <TokenIcon image={ft.image} symbol={ft.symbol} />
