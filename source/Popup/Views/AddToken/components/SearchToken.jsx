@@ -12,8 +12,9 @@ import VerifiedImg from '@assets/icons/verified.svg';
 import PropTypes from 'prop-types';
 import useStyles from '../styles';
 import DabInfo from './DabInfo';
-import { getDabTokens } from '@shared/services/DAB';
+import { getDabTokensWithBalance } from '@shared/services/DAB';
 import { PoweredByDab } from '@components';
+import { useSelector } from 'react-redux';
 
 const SearchToken = ({ handleChangeSelectedToken, handleChangeTab }) => {
   const { t } = useTranslation();
@@ -22,9 +23,15 @@ const SearchToken = ({ handleChangeSelectedToken, handleChangeTab }) => {
   const [search, setSearch] = useState('');
   const [tokens, setTokens] = useState([]);
   const [filteredTokens, setFilteredTokens] = useState([]);
+  const { principalId } = useSelector((state) => state.wallet);
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
+  };
+
+  const handleSelectToken = (token = {}) => {
+    const { timestamp, ...cleanToken } = token;
+    handleChangeSelectedToken({ token: cleanToken });
   };
 
   useEffect(() => {
@@ -39,7 +46,7 @@ const SearchToken = ({ handleChangeSelectedToken, handleChangeTab }) => {
 
   useEffect(() => {
     const getTokens = async () => {
-      const tempTokens = await getDabTokens();
+      const tempTokens = await getDabTokensWithBalance(principalId);
       setTokens(tempTokens);
     };
     getTokens();
@@ -77,7 +84,7 @@ const SearchToken = ({ handleChangeSelectedToken, handleChangeTab }) => {
                     {filteredTokens.map((ft) => (
                       <div
                         className={classes.tokenItem}
-                        onClick={handleChangeSelectedToken({ token: ft })}
+                        onClick={handleSelectToken(ft)}
                       >
                         <div className={classes.tokenImage}>
                           <TokenIcon image={ft.image} symbol={ft.symbol} />
