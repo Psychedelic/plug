@@ -38,8 +38,8 @@ const SearchToken = ({ handleChangeSelectedToken, handleChangeTab }) => {
     const lowerSearch = search.toLowerCase();
     setFilteredTokens(
       tokens.filter(
-        (token) => lowerSearch.includes(token.name.toLowerCase())
-          || lowerSearch.includes(token.symbol.toLowerCase()),
+        (token) => token.name.toLowerCase().includes(lowerSearch)
+          || token.symbol.toLowerCase().includes(lowerSearch),
       ),
     );
   }, [search]);
@@ -76,7 +76,7 @@ const SearchToken = ({ handleChangeSelectedToken, handleChangeTab }) => {
                 <DabInfo />
               </Grid>
             )
-            : filteredTokens.length > 0
+            : (filteredTokens.length > 0
               ? (
                 <Grid item xs={12}>
                   <div className={classes.tokensContainer}>
@@ -117,7 +117,7 @@ const SearchToken = ({ handleChangeSelectedToken, handleChangeTab }) => {
                     </div>
                   </div>
                 </Grid>
-              )
+              ))
         }
       </Grid>
     </Container>
