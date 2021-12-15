@@ -17,7 +17,7 @@ const Tokens = () => {
   const { t } = useTranslation();
   const { navigator } = useRouter();
 
-  useEffect(() => {
+  const fetchAssets = () => {
     if (icpPrice) {
       sendMessage({
         type: HANDLER_TYPES.GET_ASSETS,
@@ -28,6 +28,11 @@ const Tokens = () => {
         setLoading(false);
       });
     }
+  };
+  useEffect(() => {
+    const id = setInterval(fetchAssets, 15000);
+    fetchAssets();
+    return () => clearInterval(id);
   }, [icpPrice]);
 
   useEffect(() => {
