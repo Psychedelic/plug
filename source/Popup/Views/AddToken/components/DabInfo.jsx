@@ -7,13 +7,12 @@ import extension from 'extensionizer';
 import { dabUrl, dabForm } from '@shared/constants/urls';
 import useStyles from '../styles';
 
-const DabComingSoon = () => {
+const DabInfo = () => {
   const { t } = useTranslation();
   const classes = useStyles();
 
   return (
     <div className={classes.dabTokenContainer}>
-      <div className={classes.comingSoon}>{t('addToken.comingSoon')}</div>
       <img
         src={DabIcon}
         className={classes.dabImage}
@@ -26,4 +25,4 @@ const DabComingSoon = () => {
   );
 };
 
-export default DabComingSoon;
+export default DabInfo;

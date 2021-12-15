@@ -23,5 +23,6 @@ export { default as LoadingWrapper } from './LoadingWrapper';
 export { IconQrCode } from './Icons';
 export { default as TokenIcon } from './TokenIcon';
 export { default as NFTs } from './NFTs';
+export { default as PoweredByDab } from './PoweredByDab';
 
 export * from './Router';
