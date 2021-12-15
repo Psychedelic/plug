@@ -57,6 +57,7 @@ const Step2 = ({ selectedToken, handleClose }) => {
       });
     });
   };
+
   return (
     <Container>
       <Grid container spacing={2}>
@@ -72,7 +73,7 @@ const Step2 = ({ selectedToken, handleClose }) => {
             />
             <div className={classes.leftContainer}>
               <Typography variant="h4">{displayToken.name}</Typography>
-              <Typography variant="subtitle1"><AssetFormat value={displayToken?.amount} asset={displayToken?.symbol} /></Typography>
+              <Typography variant="subtitle1"><AssetFormat value={displayToken?.amount?.value} asset={displayToken?.symbol} /></Typography>
             </div>
             {!!displayToken.price && (
               <div className={classes.rightContainer}>

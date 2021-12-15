@@ -86,7 +86,7 @@ export const walletSlice = createSlice({
 
       const formattedAssets = formatAssets(keyringAssets, icpPrice);
 
-      state.assets = formattedAssets;
+      state.assets = [...formattedAssets];
     },
     setAssetsLoading: (state, action) => {
       state.assetsLoading = action.payload;

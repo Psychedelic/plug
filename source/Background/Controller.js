@@ -1,8 +1,6 @@
 import qs from 'query-string';
 import extension from 'extensionizer';
 import { BackgroundController } from '@fleekhq/browser-rpc';
-import { getAllNFTS } from '@psychedelic/dab-js';
-import { HttpAgent } from '@dfinity/agent';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { areAllElementsIn } from '@shared/utils/array';
 import PlugController from '@psychedelic/plug-controller';
@@ -11,7 +9,6 @@ import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
 import { XTC_FEE } from '@shared/constants/addresses';
 import {
   /* PROTECTED_CATEGORIES, */ ASSET_CANISTER_IDS,
-  DAB_CANISTER_ID,
 } from '@shared/constants/canisters';
 import { addDisconnectedEntry } from '@shared/utils/apps';
 import NotificationManager from '../lib/NotificationManager';
@@ -28,6 +25,7 @@ import {
 } from './utils';
 import ERRORS, { SILENT_ERRORS } from './errors';
 import plugProvider from '../Inpage/index';
+import { getDabNfts } from '@shared/services/DAB';
 
 const DEFAULT_CURRENCY_MAP = {
   ICP: 0,
@@ -446,12 +444,7 @@ backgroundController.exposeController(
         }
         const canisterInfo = app.whitelist[canisterId];
         // TODO REMOVE THIS FOR CATEGORY ATTRIBUTE
-        const nftCanisters = await getAllNFTS(
-          new HttpAgent({
-            canisterId: DAB_CANISTER_ID,
-            host: 'https://mainnet.dfinity.network',
-          }),
-        );
+        const nftCanisters = await getDabNfts();
         const PROTECTED_IDS = [
           ...(nftCanisters || []).map((collection) => collection.principal_id.toString()),
           ...ASSET_CANISTER_IDS,
