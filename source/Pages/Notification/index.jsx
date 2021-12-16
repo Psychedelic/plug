@@ -28,8 +28,14 @@ const NOTIFICATION_COMPONENTS = {
   sign: Sign,
 };
 
+const resizeToLogin = () => {
+  extension.windows.update(extension.windows.WINDOW_ID_CURRENT, {
+    height: SIZES.loginHeight,
+  });
+};
+
 const NotificationContainer = () => {
-  const [loggedIn, setLoggedIn] = useState(null);
+  const [loggedIn, setLoggedIn] = useState(false);
   const { query } = qs.parseUrl(window.location.href);
   const [onTimeout, setOnTimeout] = useState(null);
   const [timeoutId, setTimeoutId] = useState(null);
@@ -41,30 +47,23 @@ const NotificationContainer = () => {
   const args = JSON.parse(argsJson || '{}'); // single request for now
 
   useEffect(() => {
-    let logged = false;
     try {
       sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
         if (state?.wallets?.length) {
           sendMessage({ type: HANDLER_TYPES.GET_LOCKS, params: {} }, (locks) => {
             if (locks?.isUnlocked) {
-              logged = true;
+              setLoggedIn(true);
             } else {
-              logged = false;
+              resizeToLogin();
             }
           });
         } else {
-          logged = false;
+          resizeToLogin();
         }
       });
     } catch (e) {
-      logged = false;
+      resizeToLogin();
     }
-    setLoggedIn(logged);
-    extension.windows.update(extension.windows.WINDOW_ID_CURRENT, {
-      height: logged
-        ? SIZES.appConnectHeight
-        : SIZES.loginHeight,
-    });
   }, []);
 
   useEffect(() => {
