@@ -204,7 +204,6 @@ backgroundController.exposeController(
           whitelist,
         },
       };
-      console.log('inrequest connect', apps);
       storage.set({ [keyring.currentWalletId]: { apps } });
     });
 
@@ -544,7 +543,6 @@ backgroundController.exposeController(
     if (isValidWhitelist) {
       canistersInfo = await fetchCanistersInfo(whitelist);
     }
-    console.log('verify whitelist', whitelist);
     if (!whitelist.every((canisterId) => validatePrincipalId(canisterId))) {
       callback(ERRORS.CANISTER_ID_ERROR, null);
       return;
@@ -552,7 +550,6 @@ backgroundController.exposeController(
 
     storage.get(keyring.currentWalletId.toString(), async (state) => {
       const app = state?.[keyring.currentWalletId]?.apps?.[metadata.url] || {};
-      console.log('app', app);
       if (app?.status === CONNECTION_STATUS.accepted) {
         const allWhitelisted = areAllElementsIn(
           whitelist,
