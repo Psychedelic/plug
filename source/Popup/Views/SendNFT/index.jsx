@@ -32,18 +32,20 @@ const SendNFT = () => {
   const [address, setAddress] = useState(null);
   const [loading, setLoading] = useState(false);
   const { navigator } = useRouter();
-  const [errorMessage, setError] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const dispatch = useDispatch();
   const { selectedNft: nft } = useSelector((state) => state.nfts);
   const { collections, principalId } = useSelector((state) => state.wallet);
   const classes = useStyles();
   const transferNFT = () => {
     setLoading(true);
-    setError(false);
+    setErrorMessage('');
     sendMessage({ type: HANDLER_TYPES.TRANSFER_NFT, params: { nft, to: address } },
-      ({ success, error }) => {
+      ({ error }) => {
         setLoading(false);
-        if (success) {
+        if (error) {
+          setErrorMessage(error);
+        } else {
           dispatch(setCollections({
             collections: collections.filter((token) => token.id !== nft?.id),
             principalId,
@@ -51,8 +53,6 @@ const SendNFT = () => {
           dispatch(removeNFT(nft));
           dispatch(setSelectedNft(null));
           navigator.navigate('home', TABS.NFTS);
-        } else {
-          setError(error || t('nfts.transferError'));
         }
       });
   };
