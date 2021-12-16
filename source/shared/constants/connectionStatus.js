@@ -4,4 +4,5 @@ export const CONNECTION_STATUS = {
   accepted: 'accepted',
   rejected: 'rejected',
   rejectedAgent: 'rejectedAgent',
+  disconnected: 'disconnected',
 };

@@ -15,17 +15,17 @@ const TYPE_IMAGES = {
   TRANSFER: SendImg,
 };
 
-const GenericIcon = ({ image, type }) => {
+const GenericIcon = ({ image, type, style }) => {
   const classes = useStyles();
   return (
-    <div className={classes.root}>
+    <div className={classes.root} style={style}>
       {type && (
         <img
           className={classes.activity}
           src={TYPE_IMAGES[type] || LightningImg}
         />
       )}
-      <img className={classes.root} src={image} />
+      <img className={classes.root} src={image} style={style} />
     </div>
   );
 };
@@ -34,9 +34,11 @@ export default GenericIcon;
 
 GenericIcon.defaultProps = {
   type: null,
+  style: null,
 };
 
 GenericIcon.propTypes = {
   image: PropTypes.string.isRequired,
   type: PropTypes.string,
+  style: PropTypes.objectOf(PropTypes.object),
 };

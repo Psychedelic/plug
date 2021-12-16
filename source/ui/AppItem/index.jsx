@@ -22,7 +22,7 @@ const AppItem = ({
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      <GenericIcon image={icon} />
+      <GenericIcon image={icon} style={{ borderRadius: 10 }} />
       <Typography variant="h5" className={classes.title}>{name}</Typography>
       <IconButton className={clsx(classes.icon, classes.firstIcon, hover && classes.visible)} size="medium" onClick={onDetail}>
         <ListIcon />

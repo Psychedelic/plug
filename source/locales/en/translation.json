@@ -30,6 +30,7 @@
       "swap": "Swap",
       "for": "for",
       "pluggedInto": "Plugged into",
+      "unpluggedFrom": "Unplugged from",
       "mint": "Mint",
       "burn": "Burn"
     },
@@ -51,6 +52,7 @@
     "close": "Close",
     "back": "Back",
     "save": "Save",
+    "edit": "Edit",
     "done": "Done",
     "password": "Enter Password",
     "decline": "Decline",
@@ -289,7 +291,8 @@
     "dabTitle": "DAB Token List",
     "dabText": "Helping improve discoverability, reputation, and trust in IC tokens.",
     "tokenError": "Invalid Canister ID. No Token Interface Detected.",
-    "standard": "Token Standard"
+    "standard": "Token Standard",
+    "searchResults": "Search results"
   },
   "error": {
     "errorTitle": "Something went wrong",
@@ -352,5 +355,8 @@
       "unknownCollection": "Unknown Collection",
       "unknownAmount": "Unknown Amount"
     }
+  },
+  "dab": {
+    "poweredByDab": "POWERED BY DAB"
   }
 }

@@ -1,9 +1,9 @@
 import DfinityImg from '@assets/icons/Dfinity.svg';
 import XTCImg from '@assets/icons/XTC.svg';
-import WICPImg from '@assets/icons/WICP.png'
+import WICPImg from '@assets/icons/WICP.png';
 import PropTypes from 'prop-types';
 
-export const USD_PER_TC = 1.426560;
+export const USD_PER_TC = 1.42656;
 export const E8S_PER_ICP = 100_000_000;
 export const CURRENCIES = new Map([
   [
@@ -45,32 +45,34 @@ export const CYCLES_PER_TC = 1_000_000_000_000;
 
 export const formatAssetBySymbol = (_amount, symbol, icpPrice) => {
   const amount = parseFloat(_amount, 10);
-  return ({
-    ICP: {
-      amount,
-      value: (amount * icpPrice),
-      image: TOKEN_IMAGES.ICP,
-      symbol: 'ICP',
-    },
-    XTC: {
-      amount,
-      value: (amount * USD_PER_TC),
-      image: TOKEN_IMAGES.XTC,
-      symbol: 'XTC',
-    },
-    WTC: {
-      amount,
-      value: (amount * USD_PER_TC),
-      symbol: 'WTC',
-    },
-    WICP: {
-      amount,
-      value: (amount * icpPrice),
-      image: TOKEN_IMAGES.WICP,
-      symbol: 'WICP'
-    },
-    default: { amount, value: amount },
-  })[symbol || 'default'] || { amount, value: amount };
+  return (
+    {
+      ICP: {
+        amount,
+        value: amount * icpPrice,
+        image: TOKEN_IMAGES.ICP,
+        symbol: 'ICP',
+      },
+      XTC: {
+        amount,
+        value: amount * USD_PER_TC,
+        image: TOKEN_IMAGES.XTC,
+        symbol: 'XTC',
+      },
+      WTC: {
+        amount,
+        value: amount * USD_PER_TC,
+        symbol: 'WTC',
+      },
+      WICP: {
+        amount,
+        value: amount * icpPrice,
+        image: TOKEN_IMAGES.WICP,
+        symbol: 'WICP',
+      },
+      default: { amount, value: amount },
+    }[symbol || 'default'] || { amount, value: amount }
+  );
 };
 
 export const formatAssets = (assets = [], icpPrice) => {
@@ -115,5 +117,5 @@ export const TOKENS = {
     amount: 0,
     value: 0,
     image: TOKEN_IMAGES.WICP,
-  }
+  },
 };

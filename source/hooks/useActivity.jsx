@@ -1,10 +1,10 @@
 import useApps from './useApps';
 
 const useActivity = (transactions) => {
-  const { parsedApps } = useApps();
+  const { historicApps } = useApps();
 
   const sortActivity = () => {
-    const unsortedActivity = [...transactions, ...parsedApps];
+    const unsortedActivity = [...transactions, ...historicApps];
     return unsortedActivity.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
   };
 
