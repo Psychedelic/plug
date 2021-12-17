@@ -22,7 +22,7 @@ export const addDisconnectedEntry = ({ apps, url }) => {
       status: CONNECTION_STATUS.disconnected,
       date,
       events: [
-        ...apps[url].events,
+        ...apps[url]?.events || [],
         {
           status: CONNECTION_STATUS.disconnected,
           date,

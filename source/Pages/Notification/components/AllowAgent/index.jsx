@@ -43,6 +43,7 @@ const AllowAgent = ({
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
+  const [handled, setHandled] = useState(false);
 
   const { url, icons } = metadata || {};
 
@@ -60,13 +61,13 @@ const AllowAgent = ({
       (accum, canisterInfo) => ({ ...accum, [canisterInfo.id]: canisterInfo }),
       {},
     );
-
     const success = await portRPC.call('handleAllowAgent', [
       url,
       { status, whitelist },
       callId,
       portId,
     ]);
+    setHandled(true);
     if (success) {
       window.close();
     }
@@ -75,7 +76,10 @@ const AllowAgent = ({
 
   useEffect(() => {
     setOnTimeout(() => () => {
-      handleAllowAgent(CONNECTION_STATUS.rejectedAgent).then(() => window?.close?.());
+      handleAllowAgent(CONNECTION_STATUS.rejectedAgent).then(() => {
+        setHandled(true);
+        window?.close?.();
+      });
     });
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
       if (state?.wallets?.length) {
@@ -90,12 +94,17 @@ const AllowAgent = ({
           + 65 * (canistersLength > 2 ? 2 : canistersLength),
       });
     } else {
-      handleAllowAgent(CONNECTION_STATUS.accepted).then(() => window?.close?.());
+      handleAllowAgent(CONNECTION_STATUS.accepted).then(() => {
+        setHandled(true);
+        window?.close?.();
+      });
     }
   }, []);
 
   window.onbeforeunload = () => {
-    handleAllowAgent(CONNECTION_STATUS.rejectedAgent);
+    if (!handled) {
+      handleAllowAgent(CONNECTION_STATUS.rejectedAgent);
+    }
   };
 
   const toggleExpand = () => {
