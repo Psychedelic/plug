@@ -187,7 +187,6 @@ backgroundController.exposeController(
     }
 
     const date = new Date().toISOString();
-
     storage.get(keyring.currentWalletId.toString(), (response) => {
       const apps = {
         ...response?.[keyring.currentWalletId]?.apps,
@@ -547,7 +546,6 @@ backgroundController.exposeController(
       callback(ERRORS.CANISTER_ID_ERROR, null);
       return;
     }
-
     storage.get(keyring.currentWalletId.toString(), async (state) => {
       const app = state?.[keyring.currentWalletId]?.apps?.[metadata.url] || {};
       if (app?.status === CONNECTION_STATUS.accepted) {
