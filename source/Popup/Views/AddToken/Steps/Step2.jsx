@@ -30,7 +30,10 @@ const parseTokenBySymbol = (token) => ({
     amount: cyclesToTC(token.amount),
     price: cyclesToTC(token.amount) * USD_PER_TC,
   },
-})[token?.token?.symbol] || { ...token?.token, amount: token.amount };
+})[token?.token?.symbol] || {
+  ...token?.token,
+  amount: token?.amount?.value / (10 ** token?.amount?.decimals),
+};
 
 const Step2 = ({ selectedToken, handleClose }) => {
   const { t } = useTranslation();
@@ -73,7 +76,7 @@ const Step2 = ({ selectedToken, handleClose }) => {
             />
             <div className={classes.leftContainer}>
               <Typography variant="h4">{displayToken.name}</Typography>
-              <Typography variant="subtitle1"><AssetFormat value={displayToken?.amount?.value} asset={displayToken?.symbol} /></Typography>
+              <Typography variant="subtitle1"><AssetFormat value={displayToken?.amount} asset={displayToken?.symbol} /></Typography>
             </div>
             {!!displayToken.price && (
               <div className={classes.rightContainer}>
