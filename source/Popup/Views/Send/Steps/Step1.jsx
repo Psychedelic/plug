@@ -132,7 +132,7 @@ const Step1 = ({
             value={t('common.continue')}
             fullWidth
             disabled={
-              !(amount > 0)
+              !(parseFloat(amount) > 0)
               || !addressInfo.isValid
               || address === null
               || address === ''
@@ -148,7 +148,7 @@ const Step1 = ({
 export default Step1;
 
 Step1.propTypes = {
-  amount: PropTypes.number.isRequired,
+  amount: PropTypes.string.isRequired,
   handleChangeAmount: PropTypes.func.isRequired,
   handleChangeStep: PropTypes.func.isRequired,
   selectedAsset: PropTypes.objectOf(PropTypes.object).isRequired,
