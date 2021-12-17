@@ -1700,9 +1700,9 @@
     "@fleekhq/browser-rpc" "^2.0.3"
 
 "@reduxjs/toolkit@^1.6.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-1.7.0.tgz#fe00b8869bc076cf92efc00417832822d1e5c367"
-  integrity sha512-iApo4zS+8kWnIn4xucTDWpqRjDNkXruFIyJQWwThIEIbMj5kwqvbMaQcEgd2a305B68Z+4bvZqAqJSATeddaJA==
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-1.7.1.tgz#994962aeb7df3c77be343dd2ad1aa48221dbaa0c"
+  integrity sha512-wXwXYjBVz/ItxB7SMzEAMmEE/FBiY1ze18N+VVVX7NtVbRUrdOGKhpQMHivIJfkbJvSdLUU923a/yAagJQzY0Q==
   dependencies:
     immer "^9.0.7"
     redux "^4.1.2"
@@ -3929,9 +3929,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000844, caniuse-lite@^1.0.30001272, caniuse-lite@^1.0.30001286:
-  version "1.0.30001286"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001286.tgz#3e9debad420419618cfdf52dc9b6572b28a8fff6"
-  integrity sha512-zaEMRH6xg8ESMi2eQ3R4eZ5qw/hJiVsO/HlLwniIwErij0JDr9P+8V4dtx1l+kLq6j3yy8l8W4fst1lBnat5wQ==
+  version "1.0.30001287"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001287.tgz#5fab6a46ab9e47146d5dd35abfe47beaf8073c71"
+  integrity sha512-4udbs9bc0hfNrcje++AxBuc6PfLNHwh3PO9kbwnfCQWyqtlzg3py0YgFu8jyRTTo85VAz4U+VLxSlID09vNtWA==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -5225,9 +5225,9 @@ ed25519-hd-key@^1.2.0:
     tweetnacl "1.0.3"
 
 electron-to-chromium@^1.3.47, electron-to-chromium@^1.4.17:
-  version "1.4.19"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.19.tgz#b02bfdc6a5f1c683849a462cd54258288c087433"
-  integrity sha512-TeAjwsC/vhvxEtX/xN1JQUMkl+UrwKXlB4rwLyuLYVuBuRtqJJrU4Jy5pCVihMQg4m1ceZ3MEJ0yYuxHj8vC+w==
+  version "1.4.20"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.20.tgz#8fbf9677ccac19b4249c0a6204e0943d9d66ce30"
+  integrity sha512-N7ZVNrdzX8NE90OXEFBMsBf3fp8P/vVDUER3WCUZjzC7OkNTXHVoF6W9qVhq8+dA8tGnbDajzUpj2ISNVVyj+Q==
 
 elliptic@^6.5.2, elliptic@^6.5.3:
   version "6.5.4"
@@ -5253,9 +5253,9 @@ emoji-log@^1.0.2:
   integrity sha512-3r9WI8xWU3gaeuPSrHEO9cbTybzlud82v98qeJlwyeGhUhKMleKdvDLegn/CPd1UZiFfTgl5VmJ9OW7I0y7CVA==
 
 emoji-picker-react@^3.4.7:
-  version "3.4.11"
-  resolved "https://registry.yarnpkg.com/emoji-picker-react/-/emoji-picker-react-3.4.11.tgz#0691525ae0a987d7d2bf9419db9c2024ee2224ef"
-  integrity sha512-fYND7GfAMHnmydIF7nZUS/vNmiTkoZRnyj8+I1Gkrs54sF6bAgSxbVdD+wyvwt/M+CaVynJ0gOH30AL9DxL60A==
+  version "3.4.12"
+  resolved "https://registry.yarnpkg.com/emoji-picker-react/-/emoji-picker-react-3.4.12.tgz#4fc7a1f0e00241d3f9bd04172e25a3a08c0d8ada"
+  integrity sha512-i2VRfKRltFJjsY5ste7UPOn24uXcb4yuOVU6u9Cm3gsSc1MvCqr3XsBGhhhK8jPLeDB9llWtFQ6vABZSqNKQxA==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
