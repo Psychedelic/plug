@@ -207,12 +207,12 @@ const useSteps = () => {
   // when seeing asset as USD,
   // we need to convert back the amount to the correct rate when going to review
   const convertToPrimaryAsset = () => {
-    setAmount(amount / primaryValue.conversionRate);
+    setAmount((amount / primaryValue.conversionRate).toString());
   };
 
   // when coming back from review we need to view amount with the correct rate
   const convertToSecondaryAsset = () => {
-    setAmount(amount * primaryValue.conversionRate);
+    setAmount((amount * primaryValue.conversionRate).toString());
   };
 
   const conversionPrice = amount / secondaryValue.price;

@@ -11,6 +11,7 @@ import {
   /* PROTECTED_CATEGORIES, */ ASSET_CANISTER_IDS,
 } from '@shared/constants/canisters';
 import { addDisconnectedEntry } from '@shared/utils/apps';
+import { getDabNfts } from '@shared/services/DAB';
 import NotificationManager from '../lib/NotificationManager';
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import {
@@ -25,7 +26,6 @@ import {
 } from './utils';
 import ERRORS, { SILENT_ERRORS } from './errors';
 import plugProvider from '../Inpage/index';
-import { getDabNfts } from '@shared/services/DAB';
 
 const DEFAULT_CURRENCY_MAP = {
   ICP: 0,

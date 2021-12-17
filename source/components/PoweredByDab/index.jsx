@@ -17,7 +17,7 @@ const PoweredByDab = () => {
       />
       <span className={classes.poweredByDab}>{t('dab.poweredByDab')}</span>
     </div>
-  )
-}
+  );
+};
 
 export default PoweredByDab;
