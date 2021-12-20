@@ -70,7 +70,7 @@ const Step2 = ({ selectedToken, handleClose }) => {
         <Grid item xs={12}>
           <div className={classes.confirmToken}>
             <TokenIcon
-              image={displayToken.image}
+              image={displayToken.logo}
               className={classes.tokenImage}
               symbol={displayToken?.symbol}
             />

@@ -32,7 +32,6 @@ export default makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-evenly',
-    marginLeft: theme.spacing(1),
   },
   rightContainer: {
     display: 'flex',

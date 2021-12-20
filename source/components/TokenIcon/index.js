@@ -25,10 +25,20 @@ const useStyles = makeStyles((theme) => ({
     boxShadow:
       '0px 0px 0px rgba(6, 44, 82, 0.1), 0px 1px 3px rgba(64, 66, 69, 0.12), 0px 2px 16px rgba(33, 43, 54, 0.08)',
   },
+  icon: {
+    width: '100%',
+    height: 'auto',
+  },
 }));
 
 const TokenIcon = ({
-  image, symbol, className, color, nft, small, ...props
+  image,
+  symbol,
+  className,
+  color,
+  nft,
+  small,
+  ...props
 }) => {
   const classes = useStyles();
   const backgroundColor = `rgb(${color.values.rgb.join(',')})`;
@@ -37,7 +47,7 @@ const TokenIcon = ({
     return nft ? (
       <NFTDisplayer url={image} className={className} {...props} />
     ) : (
-      <img src={image} className={className} {...props} />
+      <img src={image} className={clsx(classes.icon, className)} {...props} />
     );
   }
 
