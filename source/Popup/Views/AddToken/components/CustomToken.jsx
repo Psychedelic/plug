@@ -49,7 +49,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
     });
   };
   const handleCloseDialog = (value) => {
-    setStandard(value.name);
+    setStandard(value?.name ?? standard);
     setDialogOpen(false);
   };
 
@@ -68,7 +68,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
                 type="text"
                 error={invalidToken}
               />
-              )}
+            )}
           />
         </Grid>
         <Grid item xs={12}>
@@ -87,36 +87,36 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
           />
         </Grid>
         {dialogOpen && (
-        <Dialog
-          title={t('send.selectAsset')}
-          items={Object.values(FUNGIBLE_STANDARDS).map((name) => ({ name }))}
-          onClose={handleCloseDialog}
-          selectedValue={standard}
-          open={dialogOpen}
-        />
+          <Dialog
+            title={t('send.selectAsset')}
+            items={Object.values(FUNGIBLE_STANDARDS).map((name) => ({ name }))}
+            onClose={handleCloseDialog}
+            selectedValue={standard}
+            open={dialogOpen}
+          />
         )}
         {
           tokenError
           && (
-          <Grid item xs={12}>
-            <div className={classes.appearAnimation}>
-              <Alert
-                type="danger"
-                title={(
-                  <div>
-                    <span>{t('addToken.tokenError')}</span>
-                    <br />
-                    <span
-                      className={classes.learnMore}
-                      onClick={() => extension.tabs.create({ url: customTokensUrl })}
-                    >
-                      {t('common.learnMore')}
-                    </span>
-                  </div>
-                )}
-              />
-            </div>
-          </Grid>
+            <Grid item xs={12}>
+              <div className={classes.appearAnimation}>
+                <Alert
+                  type="danger"
+                  title={(
+                    <div>
+                      <span>{t('addToken.tokenError')}</span>
+                      <br />
+                      <span
+                        className={classes.learnMore}
+                        onClick={() => extension.tabs.create({ url: customTokensUrl })}
+                      >
+                        {t('common.learnMore')}
+                      </span>
+                    </div>
+                  )}
+                />
+              </div>
+            </Grid>
           )
         }
         <Grid item xs={12}>
