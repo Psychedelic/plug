@@ -1,5 +1,6 @@
 import qs from 'query-string';
 import extension from 'extensionizer';
+import fromExponential from 'from-exponential';
 import { BackgroundController } from '@fleekhq/browser-rpc';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { areAllElementsIn } from '@shared/utils/array';
@@ -801,7 +802,13 @@ backgroundController.exposeController(
       const xtcAmount = assets?.[DEFAULT_CURRENCY_MAP.XTC]?.amount * CYCLES_PER_TC;
 
       if (xtcAmount - XTC_FEE > transfer.amount) {
-        const response = await burnXTC(String(transfer));
+        const stringBurnAmount = fromExponential(transfer.amount / CYCLES_PER_TC);
+        const burnParams = {
+          to: transfer.to,
+          amount: stringBurnAmount,
+        };
+
+        const response = await burnXTC(burnParams);
         if (response.error) {
           callback(null, false);
           callback(ERRORS.SERVER_ERROR(response.error), null, [
