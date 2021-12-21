@@ -396,7 +396,7 @@ backgroundController.exposeController(
       const assets = await getBalance();
       const parsedAmount = (transfer.amount / E8S_PER_ICP);
       if (assets?.[DEFAULT_CURRENCY_MAP.ICP]?.amount > parsedAmount) {
-        transfer.amount = parsedAmount.toString();
+        transfer.amount = fromExponential(parsedAmount);
         const response = await sendToken(transfer);
         if (response.error) {
           callback(null, false);
