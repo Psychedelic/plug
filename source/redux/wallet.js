@@ -58,6 +58,15 @@ export const walletSlice = createSlice({
           }
           return type.toUpperCase();
         };
+        const getSymbol = () => {
+          if ('tokenRegistryInfo' in trx.details)
+            return trx.details['tokenRegistryInfo'].symbol;
+          if ('nftRegistryInfo' in trx.details)
+            return 'NFT'
+          return trx?.details?.currency?.symbol ?? ''
+        }
+        if('utozz-siaaa-aaaam-qaaxq-cai' === trx?.details?.canisterId)
+          console.log('TRX', trx)
         const transaction = {
           ...asset,
           type: getType(),
@@ -66,8 +75,8 @@ export const walletSlice = createSlice({
           from: trx?.details?.from || trx?.caller,
           date: new Date(trx?.timestamp),
           status: ACTIVITY_STATUS[trx?.details?.status],
-          image: TOKEN_IMAGES[trx?.details?.currency?.symbol] || trx?.canisterInfo?.icon || '',
-          symbol: trx?.details?.currency?.symbol ?? (trx?.canisterInfo ? 'NFT' : ''),
+          image: TOKEN_IMAGES[getSymbol()] || trx?.canisterInfo?.icon || '',
+          symbol: getSymbol(),
           canisterId: trx?.details?.canisterId,
           plug: null,
           canisterInfo: trx?.canisterInfo,
