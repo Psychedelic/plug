@@ -16,7 +16,7 @@ export const profileSlice = createSlice({
       state.hiddenAccounts = action.payload;
     },
     toggleAccountHidden: (state, action) => {
-      const index = state.hiddenAccounts.indexOf(action.payload);
+      const index = state?.hiddenAccounts?.indexOf(action.payload) ?? -1;
       if (index === -1) {
         state.hiddenAccounts.push(action.payload);
       } else {

@@ -393,10 +393,9 @@ backgroundController.exposeController(
       const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
       const sendToken = getKeyringHandler(HANDLER_TYPES.SEND_TOKEN, keyring);
       const assets = await getBalance();
-      if (
-        assets?.[DEFAULT_CURRENCY_MAP.ICP]?.amount * E8S_PER_ICP
-        > transfer.amount
-      ) {
+      const parsedAmount = (transfer.amount / E8S_PER_ICP);
+      if (assets?.[DEFAULT_CURRENCY_MAP.ICP]?.amount > parsedAmount) {
+        transfer.amount = parsedAmount.toString();
         const response = await sendToken(transfer);
         if (response.error) {
           callback(null, false);
