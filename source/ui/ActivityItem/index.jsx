@@ -86,7 +86,11 @@ const ActivityItem = ({
   const { t } = useTranslation();
   const [showSwap, setShowSwap] = useState(false);
   const [hover, setHover] = useState(false);
-  const handleShowSwap = (show) => { setShowSwap(show); };
+  const handleShowSwap = (show) => {
+    if (symbol && value && amount && swapData) {
+      setShowSwap(show);
+    }
+  };
   const [openDetail, setOpenDetail] = useState(false);
 
   const classes = useStyles();
@@ -202,10 +206,10 @@ const ActivityItem = ({
           ) : (
             <>
               <Typography variant="h5">
-                <NumberFormat value={showSwap ? swapData.amount : amount} displayType="text" thousandSeparator="," suffix={` ${showSwap ? swapData.currency?.name : symbol}`} decimalScale={5} />
+                <NumberFormat value={showSwap ? swapData?.amount : amount} displayType="text" thousandSeparator="," suffix={` ${showSwap ? swapData.currency?.name : symbol}`} decimalScale={5} />
               </Typography>
               <Typography variant="subtitle2">
-                <NumberFormat value={showSwap ? swapData.value : value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" decimalScale={2} />
+                <NumberFormat value={showSwap ? swapData?.value : value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" decimalScale={2} />
               </Typography>
             </>
           )}
