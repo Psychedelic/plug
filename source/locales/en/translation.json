@@ -82,7 +82,8 @@
     "account": "Account",
     "learnMore": "Learn more",
     "send": "Send",
-    "methodName": "Method Name"
+    "methodName": "Method Name",
+    "unknownToken": "unknown token"
   },
   "apps": {
     "title": "Connected Apps",
