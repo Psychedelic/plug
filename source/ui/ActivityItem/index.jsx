@@ -27,7 +27,7 @@ import useStyles from './styles';
 const getTitle = (type, symbol, swapData, plug, t) => {
   switch (type) {
     case 'SWAP':
-      return `${t('activity.title.swap')} ${symbol} ${t('activity.title.for')} ${swapData?.currency?.name || 'unkown token'}`;
+      return `${t('activity.title.swap')} ${symbol} ${t('activity.title.for')} ${swapData?.currency?.name || t('common.unknownToken')}`;
     case 'PLUG':
       return `${t('activity.title.pluggedInto')} ${plug.name}`;
     default:
