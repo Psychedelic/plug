@@ -30,9 +30,7 @@ const Dialog = ({
     <MuiDialog
       onClose={handleClose}
       open={open}
-      scroll={'paper'}
       PaperProps={{ className: classes.paper }}
-      classes={{}}
     >
       {title && (
         <DialogTitle disableTypography>
