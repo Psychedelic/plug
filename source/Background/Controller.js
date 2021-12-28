@@ -1,3 +1,4 @@
+import browser from 'webextension-polyfill';
 import qs from 'query-string';
 import extension from 'extensionizer';
 import fromExponential from 'from-exponential';
@@ -35,6 +36,22 @@ const DEFAULT_CURRENCY_MAP = {
 
 const storage = extension.storage.local;
 let keyring;
+
+const versionClean = () => {
+  // storage.set({ version: '0.4.2' });
+  storage.get(null, (result) => {
+    console.log('all ->', result);
+    const restoreObject = {}
+    const accountKeys = Object.keys(result).filter((key) => !isNaN(key));
+  });
+
+  storage.get('version', ({ version }) => {
+    const currentVersion = browser.runtime.getManifest().version;
+    if (currentVersion !== version) {
+      console.log('Should wipe storage');
+    }
+  });
+};
 
 const backgroundController = new BackgroundController({
   name: 'bg-script',
@@ -82,6 +99,7 @@ export const init = async () => {
   if (keyring.isUnlocked) {
     await keyring?.getState();
   }
+  versionClean();
 };
 
 // keyring handlers
