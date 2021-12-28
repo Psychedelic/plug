@@ -41,11 +41,13 @@ const Tokens = () => {
 
   return (
     <div className={classes.root}>
-      {
+      <div className={classes.tokenContainer}>
+        {
           assets?.map((asset) => (
             <AssetItem {...asset} key={asset.name} loading={loading} />
           ))
         }
+      </div>
       <div className={classes.buttonWrapper}>
         <Button
           variant="rainbowOutlined"

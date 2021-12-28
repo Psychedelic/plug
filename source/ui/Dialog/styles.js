@@ -10,7 +10,10 @@ export default makeStyles((theme) => ({
     left: theme.spacing(2),
     margin: 0,
     maxHeight: '70%',
-    overflow: 'hidden',
+    overflow: 'auto',
+  },
+  root: {
+    overflow: 'auto',
   },
   title: {
     color: theme.palette.common.primaryBlack,

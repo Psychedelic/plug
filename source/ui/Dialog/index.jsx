@@ -30,7 +30,9 @@ const Dialog = ({
     <MuiDialog
       onClose={handleClose}
       open={open}
+      scroll={'paper'}
       PaperProps={{ className: classes.paper }}
+      classes={{}}
     >
       {title && (
         <DialogTitle disableTypography>
@@ -40,7 +42,7 @@ const Dialog = ({
           </IconButton>
         </DialogTitle>
       )}
-      <MenuList>
+      <MenuList className={classes.root}>
         {
           (items && items.length > 0)
             ? items.map((item, index) => (
