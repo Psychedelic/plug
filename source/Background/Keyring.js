@@ -122,6 +122,8 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.GET_ASSETS]: async ({ refresh }) => {
     try {
+      if (!keyring?.isUnlocked) return {};
+
       const { wallets, currentWalletId } = await keyring.getState();
       let assets = wallets?.[currentWalletId]?.assets;
       if (assets?.every((asset) => !Number(asset.amount)) || refresh) {
@@ -131,7 +133,6 @@ export const getKeyringHandler = (type, keyring) => ({
       }
       return assets;
     } catch (e) {
-      console.error(e);
       return { error: e.message };
     }
   },
