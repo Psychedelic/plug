@@ -40,7 +40,7 @@ const Dialog = ({
           </IconButton>
         </DialogTitle>
       )}
-      <MenuList>
+      <MenuList className={classes.root}>
         {
           (items && items.length > 0)
             ? items.map((item, index) => (

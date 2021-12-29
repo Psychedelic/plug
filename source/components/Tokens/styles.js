@@ -4,13 +4,18 @@ export default makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    padding: `${theme.spacing(2)}px 0`,
+    padding: `10px 0`,
     height: 320,
+  },
+  tokenContainer: {
+    height: 250,
+    overflow: 'auto',
   },
   buttonWrapper: {
     display: 'flex',
     justifyContent: 'center',
     width: '100%',
-    marginTop: 'auto',
+    bottom: 10,
+    position: 'absolute',
   },
 }));
