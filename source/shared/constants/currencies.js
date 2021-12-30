@@ -70,8 +70,8 @@ export const formatAssetBySymbol = (_amount, symbol, icpPrice) => {
         image: TOKEN_IMAGES.WICP,
         symbol: 'WICP',
       },
-      default: { amount, value: amount },
-    }[symbol || 'default'] || { amount, value: amount }
+      default: { amount },
+    }[symbol || 'default'] || { amount }
   );
 };
 
