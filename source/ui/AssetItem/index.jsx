@@ -11,12 +11,15 @@ import useStyles from './styles';
 const AssetItem = ({
   asset, loading, onDelete,
 }) => {
-  const { image, name, amount, value, symbol } = asset;
+  const {
+    image, name, amount, value, symbol,
+  } = asset;
   const classes = useStyles();
   const [hover, setHover] = useState(false);
 
   return (
-    <div className={classes.root}
+    <div
+      className={classes.root}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
@@ -29,16 +32,18 @@ const AssetItem = ({
       </div>
       {
         (hover && onDelete && !['ICP', 'XTC'].includes(asset.symbol)) // this could be more generic but 30/12 kekw
-          ?
-          <Trash2
-            className={classes.deleteIcon}
-            onClick={() => onDelete(asset)}
-            size="18"
-          />
-          :
-          <Typography variant="h5" className={clsx(classes.value, (loading) && classes.pulse)}>
-            <NumberFormat value={value} displayType="text" decimalScale={2} fixedDecimalScale thousandSeparator="," prefix="$" />
-          </Typography>
+          ? (
+            <Trash2
+              className={classes.deleteIcon}
+              onClick={() => onDelete(asset)}
+              size="18"
+            />
+          )
+          : !!value && (
+            <Typography variant="h5" className={clsx(classes.value, (loading) && classes.pulse)}>
+              <NumberFormat value={value} displayType="text" decimalScale={2} fixedDecimalScale thousandSeparator="," prefix="$" />
+            </Typography>
+          )
       }
     </div>
 
@@ -48,10 +53,18 @@ const AssetItem = ({
 export default AssetItem;
 
 AssetItem.propTypes = {
+  onDelete: PropTypes.func.isRequired,
   image: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   amount: PropTypes.number.isRequired,
   value: PropTypes.number.isRequired,
   symbol: PropTypes.string.isRequired,
   loading: PropTypes.bool.isRequired,
+  asset: PropTypes.shape({
+    symbol: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    amount: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+  }).isRequired,
 };
