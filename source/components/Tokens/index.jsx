@@ -44,16 +44,14 @@ const Tokens = () => {
   }, [assetsLoading]);
 
   const handleDelete = (asset) => {
-    console.log('asset', asset);
-    console.log('assets', assets);
     const filtered = assets.filter((item) => item.symbol !== asset.symbol);
-    dispatch(setAssets({ filtered, icpPrice }));
+    dispatch(setAssets({ keyringAssets: filtered, icpPrice }));
 
     sendMessage({
       type: HANDLER_TYPES.REMOVE_CUSTOM_TOKEN,
       params: asset.canisterId,
     }, (newAssets) => {
-      dispatch(setAssets({ newAssets, icpPrice }));
+      dispatch(setAssets({ keyringAssets: newAssets, icpPrice }));
     });
 
     setOpen(false);
@@ -62,7 +60,7 @@ const Tokens = () => {
   const onDelete = (asset) => {
     setSelectedAsset(asset);
     setOpen(true);
-  }
+  };
 
   return (
     <div className={classes.root}>
@@ -102,7 +100,8 @@ const Tokens = () => {
             buttonVariant="danger"
             onClick={() => handleDelete(selectedAsset)}
             onClose={() => setOpen(false)}
-          />)
+          />
+        )
       }
     </div>
   );
