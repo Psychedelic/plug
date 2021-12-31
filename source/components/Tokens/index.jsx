@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { Typography } from '@material-ui/core';
 import { AssetItem, Button } from '@ui';
 import { setAssets, setAssetsLoading } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { useRouter } from '@components/Router';
 import { useICPPrice } from '@redux/icp';
+import { ActionDialog } from '@components';
 import useStyles from './styles';
 
 const Tokens = () => {
@@ -16,6 +18,8 @@ const Tokens = () => {
   const icpPrice = useICPPrice();
   const { t } = useTranslation();
   const { navigator } = useRouter();
+  const [open, setOpen] = useState(false);
+  const [selectedAsset, setSelectedAsset] = useState(null);
 
   const fetchAssets = () => {
     if (icpPrice) {
@@ -39,12 +43,38 @@ const Tokens = () => {
     setLoading(assetsLoading);
   }, [assetsLoading]);
 
+  const handleDelete = (asset) => {
+    console.log('asset', asset);
+    console.log('assets', assets);
+    const filtered = assets.filter((item) => item.symbol !== asset.symbol);
+    dispatch(setAssets({ filtered, icpPrice }));
+
+    sendMessage({
+      type: HANDLER_TYPES.REMOVE_CUSTOM_TOKEN,
+      params: asset.canisterId,
+    }, (newAssets) => {
+      dispatch(setAssets({ newAssets, icpPrice }));
+    });
+
+    setOpen(false);
+  };
+
+  const onDelete = (asset) => {
+    setSelectedAsset(asset);
+    setOpen(true);
+  }
+
   return (
     <div className={classes.root}>
       <div className={classes.tokenContainer}>
         {
           assets?.map((asset) => (
-            <AssetItem {...asset} key={asset.name} loading={loading} />
+            <AssetItem
+              asset={asset}
+              key={asset.name}
+              loading={loading}
+              onDelete={onDelete}
+            />
           ))
         }
       </div>
@@ -61,6 +91,19 @@ const Tokens = () => {
           }}
         />
       </div>
+      {
+        open
+        && (
+          <ActionDialog
+            open={open}
+            title={t('assets.removeTokenTitle')}
+            content={<Typography>{t('assets.removeTokenText')} <b>{selectedAsset.symbol}</b>?</Typography>}
+            button={t('common.remove')}
+            buttonVariant="danger"
+            onClick={() => handleDelete(selectedAsset)}
+            onClose={() => setOpen(false)}
+          />)
+      }
     </div>
   );
 };

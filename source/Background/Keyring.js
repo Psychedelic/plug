@@ -37,6 +37,7 @@ export const HANDLER_TYPES = {
   GET_PUBLIC_KEY: 'get-public-key',
   GET_TOKEN_INFO: 'get-token-info',
   ADD_CUSTOM_TOKEN: 'add-custom-token',
+  REMOVE_CUSTOM_TOKEN: 'remove-custom-token',
   CREATE_PRINCIPAL: 'create-principal',
   SET_CURRENT_PRINCIPAL: 'set-current-principal',
   GET_PEM_FILE: 'get-pem-file',
@@ -60,6 +61,7 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.GET_PUBLIC_KEY]: 'getting your public key.',
   [HANDLER_TYPES.GET_TOKEN_INFO]: 'fetching token info.',
   [HANDLER_TYPES.ADD_CUSTOM_TOKEN]: 'adding custom token.',
+  [HANDLER_TYPES.REMOVE_CUSTOM_TOKEN]: 'removing custom token.',
   [HANDLER_TYPES.CREATE_PRINCIPAL]: 'creating your principal.',
   [HANDLER_TYPES.SET_CURRENT_PRINCIPAL]: 'setting your principal.',
   [HANDLER_TYPES.GET_PEM_FILE]: 'getting your PEM file.',
@@ -177,6 +179,15 @@ export const getKeyringHandler = (type, keyring) => ({
     async ({ canisterId, standard }) => {
       try {
         const response = await keyring.registerToken(canisterId, standard);
+        return response;
+      } catch (e) {
+        return { error: e.message };
+      }
+    },
+  [HANDLER_TYPES.REMOVE_CUSTOM_TOKEN]:
+    async ({ canisterId }) => {
+      try {
+        const response = await keyring.removeToken(canisterId);
         return response;
       } catch (e) {
         return { error: e.message };

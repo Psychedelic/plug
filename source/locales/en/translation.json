@@ -82,8 +82,8 @@
     "account": "Account",
     "learnMore": "Learn more",
     "send": "Send",
-    "methodName": "Method Name",
-    "unknownToken": "unknown token"
+    "unknownToken": "unknown token",
+    "remove": "Remove"
   },
   "apps": {
     "title": "Connected Apps",
@@ -359,5 +359,9 @@
   },
   "dab": {
     "poweredByDab": "POWERED BY DAB"
+  },
+  "assets": {
+    "removeTokenTitle": "Remove custom token",
+    "removeTokenText": "Are you sure you want to remove"
   }
 }

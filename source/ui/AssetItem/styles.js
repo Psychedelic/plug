@@ -23,6 +23,8 @@ export default makeStyles((theme) => ({
   value: {
     marginLeft: 'auto',
     alignSelf: 'flex-start',
+    transition: 'transform .2s ease-in-out',
+    transitionDelay: '1s',
   },
   '@keyframes pulse': {
     '0%': {
@@ -38,5 +40,19 @@ export default makeStyles((theme) => ({
   pulse: {
     opacity: 1,
     animation: '$pulse 2s infinite',
+  },
+  deleteIcon: {
+    cursor: 'pointer',
+    fontSize: 18,
+    transition: 'transform 0.3s',
+    color: '#111827',
+    marginLeft: 'auto',
+    alignSelf: 'center',
+    transition: 'transform .2s ease-in-out',
+    transitionDelay: '1s',
+
+    '&:hover': {
+      transform: 'scale(1.03)',
+    },
   },
 }));
