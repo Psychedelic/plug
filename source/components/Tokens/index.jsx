@@ -12,7 +12,7 @@ import useStyles from './styles';
 
 const Tokens = () => {
   const classes = useStyles();
-  const { assets, assetsLoading } = useSelector((state) => state.wallet);
+  const { assets, assetsLoading, walletNumber } = useSelector((state) => state.wallet);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const icpPrice = useICPPrice();
@@ -44,14 +44,12 @@ const Tokens = () => {
   }, [assetsLoading]);
 
   const handleDelete = (asset) => {
-    console.log('asset', asset);
-    console.log('assets', assets);
     const filtered = assets.filter((item) => item.symbol !== asset.symbol);
     dispatch(setAssets({ filtered, icpPrice }));
 
     sendMessage({
       type: HANDLER_TYPES.REMOVE_CUSTOM_TOKEN,
-      params: asset.canisterId,
+      params: asset.canisterId, walletNumber
     }, (newAssets) => {
       dispatch(setAssets({ newAssets, icpPrice }));
     });
