@@ -185,9 +185,9 @@ export const getKeyringHandler = (type, keyring) => ({
       }
     },
   [HANDLER_TYPES.REMOVE_CUSTOM_TOKEN]:
-    async ({ canisterId }) => {
+    async ({ canisterId, walletNumber }) => {
       try {
-        const response = await keyring.removeToken(canisterId);
+        const response = await keyring.removeToken(canisterId, walletNumber);
         return response;
       } catch (e) {
         return { error: e.message };

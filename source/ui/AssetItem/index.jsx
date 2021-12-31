@@ -31,7 +31,7 @@ const AssetItem = ({
         </Typography>
       </div>
       {
-        (hover && onDelete && !['ICP', 'XTC'].includes(asset.symbol)) // this could be more generic but 30/12 kekw
+        (hover && onDelete && !['ICP', 'XTC', 'WICP'].includes(asset.symbol)) // this could be more generic but 30/12 kekw
           ? (
             <Trash2
               className={classes.deleteIcon}
