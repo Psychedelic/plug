@@ -49,7 +49,7 @@ const Tokens = () => {
 
     sendMessage({
       type: HANDLER_TYPES.REMOVE_CUSTOM_TOKEN,
-      params: asset.canisterId,
+      params: { canisterId: asset.canisterId },
     }, (newAssets) => {
       dispatch(setAssets({ keyringAssets: newAssets, icpPrice }));
     });
