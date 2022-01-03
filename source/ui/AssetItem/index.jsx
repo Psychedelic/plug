@@ -20,7 +20,7 @@ const AssetItem = ({
           <NumberFormat value={amount} displayType="text" decimalScale={5} fixedDecimalScale thousandSeparator="," suffix={` ${symbol}`} />
         </Typography>
       </div>
-      { value && (
+      {!!value && (
         <Typography variant="h5" className={clsx(classes.value, (loading) && classes.pulse)}>
           <NumberFormat value={value} displayType="text" decimalScale={2} fixedDecimalScale thousandSeparator="," prefix="$" />
         </Typography>
