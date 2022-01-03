@@ -63,7 +63,7 @@ export const walletSlice = createSlice({
           if ('nftRegistryInfo' in trx.details) return 'NFT';
           return trx?.details?.currency?.symbol ?? '';
         };
-        if (trx?.details?.canisterId === 'utozz-siaaa-aaaam-qaaxq-cai') console.log('TRX', trx);
+        const canisterInfo = trx?.details?.tokenRegistryInfo || trx?.details?.nftRegistryInfo;
         const transaction = {
           ...asset,
           type: getType(),
@@ -72,11 +72,11 @@ export const walletSlice = createSlice({
           from: trx?.details?.from || trx?.caller,
           date: new Date(trx?.timestamp),
           status: ACTIVITY_STATUS[trx?.details?.status],
-          image: TOKEN_IMAGES[getSymbol()] || trx?.canisterInfo?.icon || '',
+          image: TOKEN_IMAGES[getSymbol()] || canisterInfo?.icon || '',
           symbol: getSymbol(),
           canisterId: trx?.details?.canisterId,
           plug: null,
-          canisterInfo: trx?.canisterInfo,
+          canisterInfo,
           details: { ...trx?.details, caller: trx?.caller },
         };
         return transaction;
