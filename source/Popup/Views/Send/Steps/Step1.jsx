@@ -52,7 +52,7 @@ const Step1 = ({
                 name={selectedAsset?.symbol}
                 image={selectedAsset?.image}
                 onClick={() => setOpenAssets(true)}
-                value={amount}
+                value={amount.toFixed(6).slice(0, -1)}
                 onChange={handleChangeAmount}
                 primaryValue={primaryValue}
                 secondaryValue={secondaryValue}
@@ -66,7 +66,7 @@ const Step1 = ({
               <div className={classes.subtitle}>
                 <Typography variant="subtitle2" className={classes.pre}>
                   <NumberFormat
-                    value={availableAmount.amount}
+                    value={availableAmount.amount.toFixed(6)}
                     decimalScale={5}
                     fixedDecimalScale
                     thousandSeparator=","
@@ -80,7 +80,7 @@ const Step1 = ({
                 <Button
                   variant="primaryOutlined"
                   value={t('common.max')}
-                  onClick={() => handleChangeAmount(availableAmount.amount.toFixed(5))}
+                  onClick={() => handleChangeAmount(Number(availableAmount.amount.toFixed(6)))}
                 />
               </div>
             )}

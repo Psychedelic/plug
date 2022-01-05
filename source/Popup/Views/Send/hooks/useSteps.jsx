@@ -10,7 +10,7 @@ import {
   CURRENCIES, USD_PER_TC,
 } from '@shared/constants/currencies';
 import { validateAccountId, validateCanisterId, validatePrincipalId } from '@shared/utils/ids';
-import { ADDRESS_TYPES, DEFAULT_FEE, XTC_FEE } from '@shared/constants/addresses';
+import { ADDRESS_TYPES, DEFAULT_ICP_FEE, XTC_FEE } from '@shared/constants/addresses';
 import { useICPPrice } from '@redux/icp';
 import Step1 from '../Steps/Step1';
 // import Step2a from '../Steps/Step2a';
@@ -18,6 +18,9 @@ import Step1 from '../Steps/Step1';
 import Step2c from '../Steps/Step2c';
 import Step3 from '../Steps/Step3';
 import XTC_OPTIONS from '../constants/xtc';
+
+const MAX_DECIMALS = 12;
+const DISPLAY_DECIMALS = 5;
 
 const useSteps = () => {
   const [step, setStep] = useState(0);
@@ -39,6 +42,9 @@ const useSteps = () => {
 
   const [sendingXTCtoCanister, setSendingXTCtoCanister] = useState(false);
 
+  const truncateFloatForDisplay = (value) => Number(
+    value.toFixed(MAX_DECIMALS).slice(0, -(MAX_DECIMALS - DISPLAY_DECIMALS)),
+  );
   const handleChangeAddress = (value) => setAddress(value.trim());
   const handleChangeAddressInfo = (value) => setAddressInfo(value);
   const handleChangeAsset = (value) => setSelectedAsset({
@@ -46,7 +52,7 @@ const useSteps = () => {
     price: { ICP: icpPrice, XTC: USD_PER_TC, WTC: USD_PER_TC }[value?.symbol] || 1,
   });
   const handleChangeStep = (index) => setStep(index);
-  const handleChangeAmount = (value) => setAmount(value);
+  const handleChangeAmount = (value) => setAmount(Number(value));
   const handleChangeDestination = (value) => setDestination(value);
   const parseSendResponse = (response) => {
     const { error } = response || {};
@@ -62,7 +68,7 @@ const useSteps = () => {
 
     switch (selectedAsset?.symbol) {
       case 'ICP':
-        currentFee = DEFAULT_FEE;
+        currentFee = DEFAULT_ICP_FEE;
         break;
       case 'XTC':
         currentFee = XTC_FEE;
@@ -75,16 +81,18 @@ const useSteps = () => {
     return currentFee;
   };
 
+  const getAvailableAmount = (value) => truncateFloatForDisplay(value - getTransactionFee());
+
   const handleSendClick = () => {
     if (sendingXTCtoCanister && destination === XTC_OPTIONS.BURN) {
       sendMessage({
         type: HANDLER_TYPES.BURN_XTC,
-        params: { to: address, amount },
+        params: { to: address, amount: amount.toString() },
       }, parseSendResponse);
     } else {
       sendMessage({
         type: HANDLER_TYPES.SEND_TOKEN,
-        params: { to: address, amount, canisterId: selectedAsset?.canisterId },
+        params: { to: address, amount: amount.toString(), canisterId: selectedAsset?.canisterId },
       }, (response) => {
         parseSendResponse(response);
         if (!selectedAsset) {
@@ -134,7 +142,7 @@ const useSteps = () => {
       conversionRate: selectedAsset?.value,
     },
   );
-  const available = (selectedAsset?.amount || 0) - getTransactionFee();
+  const available = getAvailableAmount((selectedAsset?.amount || 0));
   const convertedAmount = Math.max(available * primaryValue.conversionRate, 0);
   const [availableAmount, setAvailableAmount] = useState({
     amount: convertedAmount,
@@ -144,7 +152,6 @@ const useSteps = () => {
 
   useEffect(() => {
     const maxAmount = convertedAmount;
-
     setAvailableAmount(
       {
         amount: maxAmount,
@@ -154,7 +161,7 @@ const useSteps = () => {
     );
 
     if (amount > maxAmount) {
-      setAmount(maxAmount);
+      setAmount(truncateFloatForDisplay(maxAmount));
     }
   }, [primaryValue, convertedAmount]);
 
@@ -189,7 +196,7 @@ const useSteps = () => {
         dispatch(setAssets({ keyringAssets, icpPrice }));
         setAvailableAmount(
           {
-            amount: keyringAssets?.[0]?.amount - getTransactionFee(),
+            amount: getAvailableAmount(keyringAssets?.[0]?.amount),
             prefix: primaryValue.prefix,
             suffix: primaryValue.suffix,
           },
@@ -207,12 +214,12 @@ const useSteps = () => {
   // when seeing asset as USD,
   // we need to convert back the amount to the correct rate when going to review
   const convertToPrimaryAsset = () => {
-    setAmount((amount / primaryValue.conversionRate).toString());
+    setAmount(truncateFloatForDisplay(amount / primaryValue.conversionRate));
   };
 
   // when coming back from review we need to view amount with the correct rate
   const convertToSecondaryAsset = () => {
-    setAmount((amount * primaryValue.conversionRate).toString());
+    setAmount(truncateFloatForDisplay(amount * primaryValue.conversionRate));
   };
 
   const conversionPrice = amount / secondaryValue.price;

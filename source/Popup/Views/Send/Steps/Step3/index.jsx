@@ -27,7 +27,7 @@ import ArrowUpRight from '@assets/icons/arrow-up-right.png';
 import clsx from 'clsx';
 import { useRouter, TokenIcon, TABS } from '@components';
 
-import { ADDRESS_TYPES, DEFAULT_FEE, XTC_FEE } from '@shared/constants/addresses';
+import { ADDRESS_TYPES, DEFAULT_ICP_FEE, XTC_FEE } from '@shared/constants/addresses';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { useICPPrice } from '@redux/icp';
 import useStyles from '../../styles';
@@ -48,7 +48,7 @@ const Step3 = ({
   const [ICPModalOpen, setOpenICPModal] = useState(false);
 
   const subtotal = amount * asset?.price;
-  const fee = +(asset?.price * DEFAULT_FEE).toFixed(5);
+  const fee = +(asset?.price * DEFAULT_ICP_FEE).toFixed(5);
   const xtcFee = +(asset?.price * XTC_FEE).toFixed(5);
 
   const openSendModal = () => {
@@ -230,7 +230,7 @@ const Step3 = ({
         }
         {isICP && (
           <Grid item xs={12}>
-            <InfoRow name={t('common.taxFee')} value={`${DEFAULT_FEE} ICP ($${fee})`} />
+            <InfoRow name={t('common.taxFee')} value={`${DEFAULT_ICP_FEE} ICP ($${fee})`} />
           </Grid>
         )}
         {isXTC && (
