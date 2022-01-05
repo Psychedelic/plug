@@ -75,6 +75,8 @@ const useSteps = () => {
     return currentFee;
   };
 
+  const getAvailableAmount = (value) => Number((value - getTransactionFee()).toFixed(12));
+
   const handleSendClick = () => {
     if (sendingXTCtoCanister && destination === XTC_OPTIONS.BURN) {
       sendMessage({
@@ -134,7 +136,7 @@ const useSteps = () => {
       conversionRate: selectedAsset?.value,
     },
   );
-  const available = (selectedAsset?.amount || 0) - getTransactionFee();
+  const available = getAvailableAmount((selectedAsset?.amount || 0));
   const convertedAmount = Math.max(available * primaryValue.conversionRate, 0);
   const [availableAmount, setAvailableAmount] = useState({
     amount: convertedAmount,
@@ -144,7 +146,6 @@ const useSteps = () => {
 
   useEffect(() => {
     const maxAmount = convertedAmount;
-
     setAvailableAmount(
       {
         amount: maxAmount,
@@ -189,7 +190,7 @@ const useSteps = () => {
         dispatch(setAssets({ keyringAssets, icpPrice }));
         setAvailableAmount(
           {
-            amount: keyringAssets?.[0]?.amount - getTransactionFee(),
+            amount: getAvailableAmount(keyringAssets?.[0]?.amount),
             prefix: primaryValue.prefix,
             suffix: primaryValue.suffix,
           },
