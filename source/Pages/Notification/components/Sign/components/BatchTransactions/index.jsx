@@ -101,7 +101,7 @@ const BatchTransactions = ({
               <Button
                 variant="default"
                 value={t('common.decline')}
-                onClick={decline}
+                onClick={() => window.close()}
                 fullWidth
                 style={{ width: '96%' }}
               />

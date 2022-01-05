@@ -39,10 +39,9 @@ const Transfer = ({
     error,
     loading,
   } = useRequests([args], callId, portId);
-
   useEffect(() => {
     setOnTimeout(() => () => {
-      handleRequest(requests[currentRequest], 'declined').then(() => window?.close?.());
+      handleDeclineAll();
     });
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
       if (state?.wallets?.length) {
@@ -101,7 +100,7 @@ const Transfer = ({
                 <Button
                   variant="default"
                   value={t('common.decline')}
-                  onClick={() => handleRequest(requests[currentRequest], 'declined')}
+                  onClick={() => window.close()}
                   fullWidth
                   style={{ width: '96%' }}
                   disabled={loading}

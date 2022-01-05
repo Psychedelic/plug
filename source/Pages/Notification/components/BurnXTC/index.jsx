@@ -39,11 +39,12 @@ const BurnXTC = ({
     principalId,
     error,
     loading,
+    handleDeclineAll,
   } = useRequests([args], callId, portId);
 
   useEffect(() => {
     setOnTimeout(() => () => {
-      handleRequest(requests[currentRequest], 'declined').then(() => window?.close?.());
+      handleDeclineAll();
     });
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
       (state) => {
@@ -96,7 +97,7 @@ const BurnXTC = ({
                 <Button
                   variant="default"
                   value={t('common.decline')}
-                  onClick={() => handleRequest(requests[currentRequest], 'declined')}
+                  onClick={() => window.close()}
                   fullWidth
                   style={{ width: '96%' }}
                   disabled={loading}
