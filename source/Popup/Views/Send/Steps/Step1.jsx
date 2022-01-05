@@ -58,7 +58,7 @@ const Step1 = ({
                 secondaryValue={secondaryValue}
                 conversionPrice={conversionPrice}
                 handleSwapValues={handleSwapValues}
-                x={availableAmount.amount}
+                availableAmount={availableAmount.amount}
                 decimalScale={5}
               />
             )}
