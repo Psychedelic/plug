@@ -88,7 +88,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
         </Grid>
         {dialogOpen && (
           <Dialog
-            title={t('send.selectAsset')}
+            title={t('addToken.selectStandard')}
             items={Object.values(FUNGIBLE_STANDARDS).map((name) => ({ name }))}
             onClose={handleCloseDialog}
             selectedValue={standard}

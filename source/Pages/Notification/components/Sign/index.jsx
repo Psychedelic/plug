@@ -114,7 +114,7 @@ const AssetsWarning = ({
                   <Button
                     variant="default"
                     value={t('common.decline')}
-                    onClick={handleDecline}
+                    onClick={() => window.close()}
                     fullWidth
                     style={{ width: '96%' }}
                   />
