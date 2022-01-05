@@ -293,7 +293,8 @@
     "dabText": "Helping improve discoverability, reputation, and trust in IC tokens.",
     "tokenError": "Invalid Canister ID. No Token Interface Detected.",
     "standard": "Token Standard",
-    "searchResults": "Search results"
+    "searchResults": "Search results",
+    "selectStandard": "Select the token's interface standard"
   },
   "error": {
     "errorTitle": "Something went wrong",
