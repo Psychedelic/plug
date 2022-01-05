@@ -8,7 +8,7 @@ import shortAddress from '@shared/utils/short-address';
 import PlugController from '@psychedelic/plug-controller';
 import { Principal } from '@dfinity/principal';
 import { validatePrincipalId } from '@shared/utils/ids';
-import { DEFAULT_FEE } from '@shared/constants/addresses';
+import { DEFAULT_ICP_FEE } from '@shared/constants/addresses';
 
 const portRPC = new PortRPC({
   name: 'notification-port',
@@ -86,7 +86,7 @@ const useRequests = (incomingRequests, callId, portId) => {
     { label: 'accountId', value: shortAddress(accountId) },
     {
       label: 'fee',
-      value: <AssetFormat value={requests[currentRequest]?.opts?.fee || DEFAULT_FEE} asset={CURRENCIES.get('ICP')?.value} />,
+      value: <AssetFormat value={requests[currentRequest]?.opts?.fee || DEFAULT_ICP_FEE} asset={CURRENCIES.get('ICP')?.value} />,
     },
     { label: 'memo', value: requests[currentRequest]?.opts?.memo || t('common.null') },
   ];
