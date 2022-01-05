@@ -46,8 +46,12 @@ const SendNFT = () => {
         if (error) {
           setErrorMessage(error);
         } else {
+          const sameNFT = (token) => token.id === nft?.id;
+          const filteredCollections = collections.filter((collection) =>
+            !collection.tokens.some(sameNFT)
+          );
           dispatch(setCollections({
-            collections: collections.filter((token) => token.id !== nft?.id),
+            collections: filteredCollections,
             principalId,
           }));
           dispatch(removeNFT(nft));
