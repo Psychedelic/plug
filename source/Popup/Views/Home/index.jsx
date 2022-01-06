@@ -21,7 +21,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const { navigator, tabIndex } = useRouter();
   const {
-    principalId, assetsLoading, collectionsLoading, transactionsLoading,
+    assetsLoading, collectionsLoading, transactionsLoading,
   } = useSelector((state) => state.wallet);
 
   const onChangeTab = (index) => {
