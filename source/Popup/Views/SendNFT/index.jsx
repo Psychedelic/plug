@@ -47,8 +47,8 @@ const SendNFT = () => {
           setErrorMessage(error);
         } else {
           const sameNFT = (token) => token.id === nft?.id;
-          const filteredCollections = collections.filter((collection) =>
-            !collection.tokens.some(sameNFT)
+          const filteredCollections = collections.filter(
+            (collection) => !collection.tokens.some(sameNFT),
           );
           dispatch(setCollections({
             collections: filteredCollections,
