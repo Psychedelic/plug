@@ -6,6 +6,9 @@ export default makeStyles((theme) => ({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
+    '&:hover': {
+      backgroundColor: '#f5f5f5',
+    },
   },
   image: {
     height: 41,

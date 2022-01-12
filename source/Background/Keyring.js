@@ -43,6 +43,7 @@ export const HANDLER_TYPES = {
   BURN_XTC: 'burn-xtc',
   GET_NFTS: 'get-nfts',
   TRANSFER_NFT: 'transfer-nft',
+  UPDATE_BALANCE: 'update-balance',
 };
 
 export const getKeyringErrorMessage = (type) => ({
@@ -66,6 +67,7 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.BURN_XTC]: 'burning XTC.',
   [HANDLER_TYPES.GET_NFTS]: 'getting your NTF\'s.',
   [HANDLER_TYPES.TRANSFER_NFT]: 'transfering your NFT.',
+  [HANDLER_TYPES.UPDATE_BALANCE]: 'updating the token\'s balance.',
 }[type]);
 
 export const sendMessage = (args, callback) => {
@@ -127,9 +129,9 @@ export const getKeyringHandler = (type, keyring) => ({
       const { wallets, currentWalletId } = await keyring.getState();
       let assets = wallets?.[currentWalletId]?.assets;
       if (assets?.every((asset) => !Number(asset.amount)) || refresh) {
-        assets = await keyring.getBalance();
+        assets = await keyring.getBalances();
       } else {
-        keyring.getBalance();
+        keyring.getBalances();
       }
       return assets;
     } catch (e) {
@@ -138,7 +140,7 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.GET_BALANCE]: async (subaccount) => {
     try {
-      const balances = await keyring.getBalance(subaccount);
+      const balances = await keyring.getBalances(subaccount);
       const icpPrice = await getICPPrice();
       return formatAssets(balances, icpPrice);
     } catch (error) {
@@ -207,6 +209,16 @@ export const getKeyringHandler = (type, keyring) => ({
         const response = await keyring.transferNFT({ to, token: nft });
         return recursiveParseBigint(response);
       } catch (e) {
+        return { error: e.message };
+      }
+    },
+  [HANDLER_TYPES.UPDATE_BALANCE]:
+    async (token) => {
+      try {
+        const response = await keyring.getBalance(token);
+        return recursiveParseBigint(response);
+      } catch (e) {
+        console.log('update balance error', e);
         return { error: e.message };
       }
     },

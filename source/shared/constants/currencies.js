@@ -70,21 +70,19 @@ export const formatAssetBySymbol = (_amount, symbol, icpPrice) => {
         image: TOKEN_IMAGES.WICP,
         symbol: 'WICP',
       },
-      default: { amount },
-    }[symbol || 'default'] || { amount }
+      default: { amount, symbol },
+    }[symbol || 'default'] || { amount, symbol }
   );
 };
 
 export const formatAssets = (assets = [], icpPrice) => {
   const mappedAssets = assets.map(({
-    amount, name, symbol, canisterId,
+    amount, symbol, ...tokenData
   }) => {
     const asset = formatAssetBySymbol(amount, symbol, icpPrice);
     return {
       ...asset,
-      name,
-      symbol,
-      canisterId,
+      ...tokenData,
     };
   });
   return mappedAssets;

@@ -97,6 +97,14 @@ export const walletSlice = createSlice({
     setAssetsLoading: (state, action) => {
       state.assetsLoading = action.payload;
     },
+    updateBalance: (state, action) => {
+      const { symbol, amount } = action.payload;
+      const tokenBalance = state.assets.find((token) => token.symbol === symbol);
+      const tokenIndex = state.assets.findIndex((asset) => asset.symbol === symbol);
+      tokenBalance.amount = parseFloat(amount, 10);
+      console.log('tokenBalance', tokenBalance);
+      state.assets[tokenIndex] = tokenBalance;
+    },
     addCollection: (state, action) => {
       const { collection, walletNumber } = action.payload;
       if (state.walletNumber === walletNumber && collection) {
@@ -141,6 +149,7 @@ export const {
   setCollections,
   setCollectionsLoading,
   removeNFT,
+  updateBalance,
 } = walletSlice.actions;
 
 export default walletSlice.reducer;
