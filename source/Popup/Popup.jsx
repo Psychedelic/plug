@@ -4,7 +4,6 @@ import extension from 'extensionizer';
 import {
   Route,
   Router,
-  storagePropType,
 } from '@components';
 import Home from './Views/Home';
 import Help from './Views/Help';
@@ -22,8 +21,8 @@ import ErrorScreen from './Views/Error';
 import NFTDetails from './Views/NFTDetails';
 import SendNFT from './Views/SendNFT';
 
-const Popup = ({ storage, initialRoute }) => (
-  <Router initialRouteName={initialRoute} storage={storage}>
+const Popup = ({ initialRoute }) => (
+  <Router initialRouteName={initialRoute}>
     <Route name="login" component={Login} />
     <Route name="home" component={Home} />
     <Route name="help" component={Help} />
@@ -42,12 +41,7 @@ const Popup = ({ storage, initialRoute }) => (
   </Router>
 );
 
-Popup.defaultProps = {
-  storage: extension.storage,
-};
-
 Popup.propTypes = {
-  storage: PropTypes.shape(storagePropType),
   initialRoute: PropTypes.string.isRequired,
 };
 

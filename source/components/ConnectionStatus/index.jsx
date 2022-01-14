@@ -7,6 +7,7 @@ import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import PropTypes from 'prop-types';
 import browser from 'webextension-polyfill';
 import useStyles from './styles';
+import { getAppsKey } from '@modules/storageManager';
 
 const CONNECTION_CONFIG = {
   [CONNECTION_STATUS.accepted]: {
@@ -47,7 +48,7 @@ const ConnectionStatus = ({ incStatus = null }) => {
 
   useEffect(() => {
     if (activeTab && !incStatus) {
-      extension.storage.local.get('apps', (state) => {
+      getAppsKey((state) => {
         setStatus(state?.apps?.[activeTab]?.status || CONNECTION_STATUS.rejected);
       });
     }
