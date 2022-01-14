@@ -15,7 +15,8 @@
       "@redux": ["source/redux"],
       "@redux/*": ["source/redux/*"],
       "@background": ["source/Background"],
-      "@background/*": ["source/Background/*"]
+      "@background/*": ["source/Background/*"],
+      "@modules/*": ["source/Modules/*"]
     }
   },
   "exclude": ["node_modules", "dist"]
