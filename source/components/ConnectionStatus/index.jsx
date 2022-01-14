@@ -3,11 +3,11 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import extension from 'extensionizer';
-import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import PropTypes from 'prop-types';
 import browser from 'webextension-polyfill';
-import useStyles from './styles';
+import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { getAppsKey } from '@modules/storageManager';
+import useStyles from './styles';
 
 const CONNECTION_CONFIG = {
   [CONNECTION_STATUS.accepted]: {

@@ -2,8 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import {
-  getHiddenAccounts as getHiddenAccountsFromStorage,
-  setHiddenAccounts as setHiddenAccountsFromStorage,
+  getHiddenAccounts as getStorageHiddenAccounts,
+  setHiddenAccounts as setStorageHiddenAccounts,
 } from '@modules/storageManager';
 
 /* eslint-disable no-param-reassign */
@@ -23,7 +23,7 @@ export const profileSlice = createSlice({
       } else {
         state.hiddenAccounts.splice(index, 1);
       }
-      setHiddenAccountsFromStorage(Object.values(state.hiddenAccounts));
+      setStorageHiddenAccounts(Object.values(state.hiddenAccounts));
     },
   },
 });
@@ -41,7 +41,7 @@ export const useHiddenAccounts = (dependencies = []) => {
 
   const getHiddenAccountsFromStorage = async () => {
     try {
-      getHiddenAccountsFromStorage((hidden) => {
+      getStorageHiddenAccounts((hidden) => {
         if (hidden?.length) {
           dispatch(profileSlice.actions.setHiddenAccounts(hidden));
         }

@@ -5,8 +5,6 @@ import { setRouter } from '@modules/storageManager';
 export const RouteContext = React.createContext();
 export const RouteUpdateContext = React.createContext();
 
-const ROUTER_KEY = 'router';
-
 export const TABS = {
   TOKENS: 0,
   NFTS: 1,

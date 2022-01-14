@@ -6,7 +6,7 @@ const storage = extension.storage.local;
 
 export const getApps = (currentWalletId, cb) => {
   storage.get(currentWalletId, (state) => {
-    cb(state?.[parseInt(currentWalletId)]?.apps);
+    cb(state?.[parseInt(currentWalletId, 10)]?.apps);
   });
 };
 
@@ -17,14 +17,14 @@ export const setApps = (currentWalletId, apps) => {
 export const removeApp = (currentWalletId, appUrl, cb) => {
   let newApps;
 
-  const apps = getApps(currentWalletId, (apps) => {
-    if (apps?.[url]) {
-      newApps = addDisconnectedEntry({ apps, url });
+  getApps(currentWalletId, (apps) => {
+    if (apps?.[appUrl]) {
+      newApps = addDisconnectedEntry({ apps, appUrl });
       setApps(currentWalletId, newApps);
-      return cb(true);
-    } 
-
-    cb(false);
+      cb(true);
+    } else {
+      cb(false);
+    }
   });
 };
 
@@ -32,7 +32,7 @@ export const setRouter = (route) => {
   storage.set({ router: route });
 };
 
-export const getContacts = (cb) =>  {
+export const getContacts = (cb) => {
   storage.get(['contacts'], (state) => {
     cb(state.contacts);
   });

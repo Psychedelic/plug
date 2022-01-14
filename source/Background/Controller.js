@@ -8,10 +8,10 @@ import PlugController from '@psychedelic/plug-controller';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
 import { XTC_FEE } from '@shared/constants/addresses';
+import { getApps, setApps, removeApp } from '@modules';
 import {
   /* PROTECTED_CATEGORIES, */ ASSET_CANISTER_IDS,
 } from '@shared/constants/canisters';
-import { addDisconnectedEntry } from '@shared/utils/apps';
 import { getDabNfts } from '@shared/services/DAB';
 import NotificationManager from '../lib/NotificationManager';
 import SIZES from '../Pages/Notification/components/Transfer/constants';
@@ -27,7 +27,6 @@ import {
 } from './utils';
 import ERRORS, { SILENT_ERRORS } from './errors';
 import plugProvider from '../Inpage/index';
-import { getApps, setApps, removeApp } from '@modules/storageManager';
 
 const DEFAULT_CURRENCY_MAP = {
   ICP: 0,
@@ -546,7 +545,7 @@ backgroundController.exposeController(
       callback(ERRORS.CANISTER_ID_ERROR, null);
       return;
     }
-    
+
     getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
       const app = apps?.[metadata.url] || {};
       if (app?.status === CONNECTION_STATUS.accepted) {

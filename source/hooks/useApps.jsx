@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { addDisconnectedEntry } from '@shared/utils/apps';
-import { getApps, setApps } from '@modules/storageManager';
+import { getApps, setApps as setStorageApps } from '@modules';
 
 const useApps = () => {
   const [apps, setApps] = useState({});
@@ -24,7 +24,7 @@ const useApps = () => {
   }, [walletNumber]);
 
   useEffect(() => {
-    setApps(walletNumber, apps);
+    setStorageApps(walletNumber, apps);
     const parsed = Object.values(apps);
 
     const allEvents = parsed.flatMap((app) => app?.events?.map((event) => ({
