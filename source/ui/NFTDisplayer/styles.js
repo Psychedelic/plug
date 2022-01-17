@@ -27,4 +27,24 @@ export default makeStyles((theme) => ({
     height: 280,
     margin: 'auto',
   },
+  wrapper: {
+    overflow: 'hidden',
+    position: 'relative',
+    transition: 'box-shadow 1s',
+  },
+  loadingContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#E9EBEF',
+    zIndex: 1000
+  },
+  loadingWrapper: {
+    boxShadow: 'none',
+  }
 }));
