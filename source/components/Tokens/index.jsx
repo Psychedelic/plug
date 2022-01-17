@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
-import { AssetItem, Button } from '@ui';
+import { AssetItem } from '@ui';
 import { setAssets, setAssetsLoading } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { useRouter } from '@components/Router';
 import { useICPPrice } from '@redux/icp';
+import plusIcon from '@assets/icons/white-plus.svg';
 import useStyles from './styles';
 
 const Tokens = () => {
@@ -14,7 +14,6 @@ const Tokens = () => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const icpPrice = useICPPrice();
-  const { t } = useTranslation();
   const { navigator } = useRouter();
 
   const fetchAssets = () => {
@@ -48,18 +47,11 @@ const Tokens = () => {
           ))
         }
       </div>
-      <div className={classes.buttonWrapper}>
-        <Button
-          variant="rainbowOutlined"
-          value={t('addToken.title')}
-          onClick={() => navigator.navigate('add-token')}
-          style={{
-            width: 166,
-            height: 42,
-            borderRadius: 10,
-            alignSelf: 'center',
-          }}
-        />
+      <div
+        className={classes.buttonWrapper}
+        onClick={() => navigator.navigate('add-token')}
+      >
+        <img src={plusIcon} />
       </div>
     </div>
   );
