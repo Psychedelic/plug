@@ -4,76 +4,97 @@ import { addDisconnectedEntry } from '@shared/utils/apps';
 
 const storage = extension.storage.local;
 
+const secureGetWrapper = (key, defaultValue, cb) => {
+  try {
+    storage.get(key, cb);
+  } catch (e) {
+    cb(defaultValue);
+  }
+};
+
+const secureSetWrapper = (setArguments, defaultValue, cb) => {
+  try {
+    // Callsback true after setting item
+    storage.set(setArguments, () => { cb(true) });
+  } catch (e) {
+    cb(defaultValue);
+  }
+};
+
 export const getApps = (currentWalletId, cb) => {
-  try {
-    storage.get(currentWalletId, (state) => {
-      cb(state?.[parseInt(currentWalletId, 10)]?.apps || {});
-    });
-  } catch (e) {
-    cb({});
-  }
+  const defaultValue = {};
+
+  secureGetWrapper(currentWalletId, defaultValue, (state) => (
+    cb(state?.[parseInt(currentWalletId, 10)]?.apps || defaultvalue)
+  ));
 };
 
-export const setApps = (currentWalletId, apps) => {
-  storage.set({ [currentWalletId]: { apps } });
+export const setApps = (currentWalletId, apps, cb = () => {}) => {
+  const defaultValue = false;
+
+  secureSetWrapper({ [currentWalletId]: { apps } }, defaultValue, cb);
 };
 
-export const removeApp = (currentWalletId, appUrl, cb) => {
-  try {
-    getApps(currentWalletId, (apps) => {
-      if (apps?.[appUrl]) {
-        const newApps = addDisconnectedEntry({ apps, appUrl });
-        setApps(currentWalletId, newApps);
-        cb(true);
-      } else {
-        cb(false);
-      }
-    });
-  } catch (e) {
-    cb(false);
-  }
+export const removeApp = (currentWalletId, appUrl, cb = () => {}) => {
+  const defaultValue = false;
+
+  secureGetWrapper(currentWalletId, {}, (apps) => {
+    if (apps?.[appUrl]) {
+      const newApps = addDisconnectedEntry({ apps, appUrl });
+      setApps(currentWalletId, newApps, cb);
+    } else {
+      cb(defaultValue);
+    }
+  });
 };
 
-export const setRouter = (route) => {
-  storage.set({ router: route });
+export const setRouter = (route, cb = () => {}) => {
+  const defaultValue = false;
+
+  secureSetWrapper({ router: route }, defaultValue, cb);
 };
 
 export const getContacts = (cb) => {
-  try {
-  storage.get(['contacts'], (state) => {
-    cb(state.contacts || []);
+  const defaultValue = [];
+
+  secureGetWrapper(['contacts'], defaultValue, (state) => {
+    console.log('from s->', state?.contacts);
+    cb(state?.contacts || defaultValue);
   });
-  } catch (e) {
-    cb([]);
-  }
 };
 
-export const setContacts = (contacts) => {
-  storage.set({ contacts });
+export const setContacts = (contacts, cb = () => {}) => {
+  const defaultValue = false;
+
+  secureSetWrapper({ contacts }, defaultValue, cb);
 };
 
-export const setHiddenAccounts = (hiddenAccounts) => {
-  storage.set({ hiddenAccounts });
+export const setHiddenAccounts = (hiddenAccounts, cb = () => {}) => {
+  const defaultValue = false;
+
+  secureSetWrapper({ hiddenAccounts }, defaultValue, cb);
 };
 
 export const getHiddenAccounts = (cb) => {
-  try {
-    storage.get('hiddenAccounts', (state) => {
-      cb(state.hiddenAccounts || {});
-    });
-  } catch (e) {
-    cb({});
-  }
+  const defaultValue = {};
+
+  secureGetWrapper('hiddenAccounts', defaultValue, (state) => {
+    cb(state?.hiddenAccounts || defaultValue);
+  });
 };
 
 export const getAppsKey = (cb) => {
-  try {
-    storage.get('apps', cb);
-  } catch (e) {
-    cb({});
-  }
+  const defaultValue = {};
+
+  secureGetWrapper('apps', defaultValue, (result) => {
+    cb(result || defaultValue);
+  });
 };
 
-export const clearStorage = () => {
-  storage.clear();
+export const clearStorage = (cb = () => {}) => {
+  try {
+    storage.clear(cb(true));
+  } catch (e) {
+    cb(false);
+  }
 };
