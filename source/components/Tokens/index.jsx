@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
-import { AssetItem, Button } from '@ui';
+import { Plus } from 'react-feather';
+import { AssetItem } from '@ui';
 import { setAssets, setAssetsLoading } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { useRouter } from '@components/Router';
@@ -14,7 +14,6 @@ const Tokens = () => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const icpPrice = useICPPrice();
-  const { t } = useTranslation();
   const { navigator } = useRouter();
 
   const fetchAssets = () => {
@@ -48,18 +47,11 @@ const Tokens = () => {
           ))
         }
       </div>
-      <div className={classes.buttonWrapper}>
-        <Button
-          variant="rainbowOutlined"
-          value={t('addToken.title')}
-          onClick={() => navigator.navigate('add-token')}
-          style={{
-            width: 166,
-            height: 42,
-            borderRadius: 10,
-            alignSelf: 'center',
-          }}
-        />
+      <div
+        onClick={() => navigator.navigate('add-token')}
+        className={classes.buttonWrapper}
+      >
+        <Plus size="30" className={classes.icon} strokeWidth={2.5} />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles(() => ({
+export default makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
@@ -14,8 +14,21 @@ export default makeStyles(() => ({
   buttonWrapper: {
     display: 'flex',
     justifyContent: 'center',
-    width: '100%',
-    bottom: 10,
+    alignItems: 'center',
+    bottom: 24,
+    right: 24,
     position: 'absolute',
+    borderRadius: 41,
+    height: 41,
+    width: 41,
+    backgroundColor: theme.palette.common.blue,
+    cursor: 'pointer',
+
+    '&:hover': {
+      opacity: 0.9,
+    },
+  },
+  icon: {
+    color: 'white',
   },
 }));
