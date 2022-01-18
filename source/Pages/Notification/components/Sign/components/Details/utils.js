@@ -12,17 +12,27 @@ export const getAssetData = (canisterId) => Object.values(TOKENS).find((token) =
 export const getAssetAmount = (request) => {
   const { methodName } = request || {};
   const amountInArgs = {
-    transfer: (args) => args?.[0]?.amount / (10 ** CYCLE_DECIMALS),
-    transferErc20: (args) => args?.[1] / (10 ** CYCLE_DECIMALS),
-    send_dfx: (args) => args?.[0]?.amount?.e8s / (10 ** ICP_DECIMALS),
+    transfer: (args) => args?.[0]?.amount / 10 ** CYCLE_DECIMALS,
+    transferErc20: (args) => args?.[1] / 10 ** CYCLE_DECIMALS,
+    send_dfx: (args) => args?.[0]?.amount?.e8s / 10 ** ICP_DECIMALS,
   }[methodName];
   return amountInArgs(request?.decodedArguments);
 };
 
 /* eslint-disable no-nested-ternary */
 // eslint-disable-next-line max-len
-export const formatMethodName = (methodName, assetName) => (TRANSFER_METHOD_NAMES.includes(methodName)
-  ? `Transfer ${assetName ? `(${assetName})` : ''}`
-  : (methodName?.includes('_')
-    ? methodName.split('_').map((word) => capitalize(word)).join(' ')
-    : capitalize(methodName)));
+export const formatMethodName = (methodName, assetName) => {
+  switch (methodName) {
+    case 'swapExactTokensForTokens':
+      return 'Swap Tokens';
+    default:
+      return TRANSFER_METHOD_NAMES.includes(methodName)
+        ? `Transfer ${assetName ? `(${assetName})` : ''}`
+        : methodName?.includes('_')
+          ? methodName
+            .split('_')
+            .map((word) => capitalize(word))
+            .join(' ')
+          : capitalize(methodName);
+  }
+};
