@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import extension from 'extensionizer';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { addDisconnectedEntry } from '@shared/utils/apps';
-
-const storage = extension.storage.local;
+import { getApps, setApps as setStorageApps } from '@modules';
 
 const useApps = () => {
   const [apps, setApps] = useState({});
@@ -18,8 +16,7 @@ const useApps = () => {
   };
 
   useEffect(() => {
-    storage.get(walletNumber?.toString(), (state) => {
-      const appsFromExtensionStorage = state?.[walletNumber]?.apps;
+    getApps(walletNumber?.toString(), (appsFromExtensionStorage = {}) => {
       if (appsFromExtensionStorage) {
         setApps(appsFromExtensionStorage);
       }
@@ -27,9 +24,7 @@ const useApps = () => {
   }, [walletNumber]);
 
   useEffect(() => {
-    storage.set({
-      [walletNumber]: { apps },
-    });
+    setStorageApps(walletNumber, apps);
     const parsed = Object.values(apps);
 
     const allEvents = parsed.flatMap((app) => app?.events?.map((event) => ({

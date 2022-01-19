@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
-import extension from 'extensionizer';
+import { getContacts, setContacts as setStorageContacts } from '@modules/storageManager';
 
 const getFirstLetterFrom = (value) => value.slice(0, 1).toUpperCase();
-
-const storage = extension.storage.local;
 
 const useContacts = () => {
   const [contacts, setContacts] = useState([]);
@@ -13,8 +11,8 @@ const useContacts = () => {
   const handleRemoveContact = (contact) => setContacts(contacts.filter((c) => c.id !== contact.id));
 
   useEffect(() => {
-    storage.get(['contacts'], (state) => {
-      const lsContacts = state.contacts;
+    // storageManager getContacts
+    getContacts((lsContacts) => {
       if (lsContacts) {
         setContacts(lsContacts);
       }
@@ -22,9 +20,7 @@ const useContacts = () => {
   }, []);
 
   useEffect(() => {
-    storage.set({
-      contacts,
-    });
+    setStorageContacts(contacts);
 
     setGroupedContacts(contacts
       .reduce((list, contact) => {

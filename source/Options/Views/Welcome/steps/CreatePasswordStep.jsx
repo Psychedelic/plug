@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import extension from 'extensionizer';
 import Grid from '@material-ui/core/Grid';
 import { useTranslation } from 'react-i18next';
 import {
@@ -9,6 +8,7 @@ import {
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import facepalmEmoji from '@assets/icons/facepalm.svg';
 import { getRandomEmoji } from '@shared/constants/emojis';
+import { clearStorage } from '@modules/storageManager';
 import useStyles from '../styles';
 
 const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => {
@@ -47,7 +47,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
     }
 
     // clean the storage before initiating keyring
-    extension.storage.local.clear();
+    clearStorage();
 
     const type = mnemonic ? HANDLER_TYPES.IMPORT : HANDLER_TYPES.CREATE;
     const params = { password, mnemonic, icon: getRandomEmoji() };

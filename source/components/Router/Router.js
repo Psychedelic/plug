@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { setRouter } from '@modules/storageManager';
 
 export const RouteContext = React.createContext();
 export const RouteUpdateContext = React.createContext();
-
-const ROUTER_KEY = 'router';
 
 export const TABS = {
   TOKENS: 0,
@@ -14,7 +13,7 @@ export const TABS = {
 };
 
 const Router = (props) => {
-  const { storage, children, initialRouteName } = props;
+  const { children, initialRouteName } = props;
 
   const [route, setRoute] = useState(initialRouteName);
   const [tabIndex, setTabIndex] = useState(TABS.TOKENS);
@@ -29,9 +28,7 @@ const Router = (props) => {
   };
 
   useEffect(() => {
-    storage.local.set({
-      [ROUTER_KEY]: route,
-    });
+    setRouter(route);
   }, [route]);
 
   const content = React.Children.toArray(children).filter((component) => {
@@ -51,16 +48,6 @@ const Router = (props) => {
   );
 };
 
-export const storagePropType = {
-  onChanged: PropTypes.shape({
-    addListener: PropTypes.func.isRequired,
-  }).isRequired,
-  local: PropTypes.shape({
-    set: PropTypes.func.isRequired,
-    get: PropTypes.func.isRequired,
-  }).isRequired,
-};
-
 Router.defaultProps = {
   children: null,
   initialRouteName: null,
@@ -69,7 +56,6 @@ Router.defaultProps = {
 Router.propTypes = {
   children: PropTypes.node,
   initialRouteName: PropTypes.string,
-  storage: PropTypes.shape(storagePropType).isRequired,
 };
 
 export default Router;
