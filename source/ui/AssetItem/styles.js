@@ -39,4 +39,24 @@ export default makeStyles((theme) => ({
     opacity: 1,
     animation: '$pulse 2s infinite',
   },
+  failedContainer: {
+    backgroundColor: '#F3F5F9',
+  },
+  failedTitle: {
+    color: '#6B707B',
+    fontSize: 16,
+  },
+  failedDescription: {
+    color: '#6B707B',
+    fontStyle: 'italic',
+    fontSize: 16,
+  },
+  refresh: {
+    alignSelf: 'center',
+    cursor: 'pointer',
+
+    '&:hover': {
+      opacity: 0.9,
+    },
+  },
 }));

@@ -361,5 +361,8 @@
   },
   "dab": {
     "poweredByDab": "POWERED BY DAB"
+  },
+  "tokens": {
+    "failedToFetchBalance": "Failed to fetch balance"
   }
 }
