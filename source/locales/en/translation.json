@@ -15,7 +15,8 @@
     "createAccount": "Create Account",
     "settings": "Settings",
     "help": "Help",
-    "lock": "Lock"
+    "lock": "Lock",
+    "refreshWallet": "Refresh Wallet"
   },
   "tabs": {
     "tokens": "Tokens",
