@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
 import useStyles from './styles';
 
@@ -14,10 +15,16 @@ const TAG_PROPS = {
     autoPlay: true,
     muted: true,
     loop: true,
+    width: '100%',
+    height: '100%',
+  },
+  img: {
+    width: '100%',
+    height: '100%',
   },
   iframe: {
-    width: 112,
-    height: 112,
+    width: '100%',
+    height: '100%',
     loading: 'lazy',
   },
 };
@@ -26,6 +33,7 @@ const NFTDisplayer = ({
   url, className, onClick, interactive,
 }) => {
   const classes = useStyles();
+  const [loading, setLoading] = useState(true);
   const [type, setType] = useState('image/png');
 
   useEffect(() => {
@@ -55,12 +63,22 @@ const NFTDisplayer = ({
   }
 
   return (
-    <Tag
-      {...customProps}
-      onClick={onClick}
-      className={className}
-      src={url}
-    />
+    <div className={`${className} ${classes.wrapper} ${loading ? classes.loadingWrapper : ''}`}>
+      <Tag
+        {...customProps}
+        onClick={onClick}
+        onLoad={() => setLoading(false)}
+        onPlay={() => setLoading(false)}
+        src={url}
+      />
+      { loading && (
+        <div className={classes.loadingContainer}>
+          <CircularProgress
+            color="#6B707B"
+          />
+        </div>
+      )}
+    </div>
   );
 };
 
