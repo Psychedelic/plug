@@ -126,9 +126,9 @@ export const getKeyringHandler = (type, keyring) => ({
       const { wallets, currentWalletId } = await keyring.getState();
       let assets = wallets?.[currentWalletId]?.assets;
       if (assets?.every((asset) => !Number(asset.amount)) || refresh) {
-        assets = await keyring.getBalance();
+        assets = await keyring.getBalances();
       } else {
-        keyring.getBalance();
+        keyring.getBalances();
       }
       return assets;
     } catch (e) {
@@ -137,7 +137,7 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.GET_BALANCE]: async (subaccount) => {
     try {
-      const balances = await keyring.getBalance(subaccount);
+      const balances = await keyring.getBalances(subaccount);
       const icpPrice = await getICPPrice();
       return formatAssets(balances, icpPrice);
     } catch (error) {
