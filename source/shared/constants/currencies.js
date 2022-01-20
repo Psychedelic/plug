@@ -44,29 +44,30 @@ export const currencyPropTypes = {
 export const CYCLES_PER_TC = 1_000_000_000_000;
 
 export const formatAssetBySymbol = (_amount, symbol, icpPrice) => {
-  const amount = parseFloat(_amount, 10);
+  const error = _amount === 'Error';
+  const amount = error ? 'Error' : parseFloat(_amount, 10);
   return (
     {
       ICP: {
         amount,
-        value: amount * icpPrice,
+        value: error ? 'Error' : amount * icpPrice,
         image: TOKEN_IMAGES.ICP,
         symbol: 'ICP',
       },
       XTC: {
         amount,
-        value: amount * USD_PER_TC,
+        value: error ? 'Error' : amount * USD_PER_TC,
         image: TOKEN_IMAGES.XTC,
         symbol: 'XTC',
       },
       WTC: {
         amount,
-        value: amount * USD_PER_TC,
+        value: error ? 'Error' : amount * USD_PER_TC,
         symbol: 'WTC',
       },
       WICP: {
         amount,
-        value: amount * icpPrice,
+        value: error ? 'Error' : amount * icpPrice,
         image: TOKEN_IMAGES.WICP,
         symbol: 'WICP',
       },
