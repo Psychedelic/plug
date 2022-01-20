@@ -28,6 +28,7 @@ const Tokens = () => {
       });
     }
   };
+
   useEffect(() => {
     const id = setInterval(fetchAssets, 15000);
     fetchAssets();
@@ -43,7 +44,13 @@ const Tokens = () => {
       <div className={classes.tokenContainer}>
         {
           assets?.map((asset) => (
-            <AssetItem {...asset} key={asset.name} loading={loading} />
+            <AssetItem
+              {...asset}
+              updateToken={fetchAssets}
+              key={asset.name}
+              loading={loading}
+              failed={asset.amount === 'Error'}
+            />
           ))
         }
       </div>
