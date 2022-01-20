@@ -49,13 +49,13 @@ const Profile = ({ disableProfile }) => {
   const [openCreateAccount, setOpenCreateAccount] = useState(false);
   const [accountName, setAccountName] = useState('');
 
-  const menuItems = disableProfile ? [] : useMenuItems();
-
-  const hiddenAccounts = useHiddenAccounts();
-
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
+
+  const menuItems = disableProfile ? [] : useMenuItems(handleToggle);
+
+  const hiddenAccounts = useHiddenAccounts();
 
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
