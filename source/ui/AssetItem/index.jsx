@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
@@ -10,10 +10,18 @@ import { useTranslation } from 'react-i18next';
 import useStyles from './styles';
 
 const AssetItem = ({
-  image, name, amount, value, symbol, loading, failed,
+  updateToken, image, name, amount, value, symbol, loading, failed,
 }) => {
   const classes = useStyles();
+  const [fetchLoading, setFetchLoading] = useState(false);
   const { t } = useTranslation();
+
+  const handleFetchAssets = async () => {
+    setFetchLoading(true);
+    await updateToken();
+    setFetchLoading(false);
+  }
+
   return (
     <div className={clsx(classes.root, failed && classes.failedContainer)}>
       <TokenIcon className={classes.image} image={image} alt={name} symbol={symbol} />
@@ -44,7 +52,7 @@ const AssetItem = ({
             <img
               className={clsx(classes.value, classes.refresh)}
               src={RefreshIcon}
-              onClick={() => null}
+              onClick={handleFetchAssets}
             />
           )
           : !!value && (
@@ -64,10 +72,11 @@ AssetItem.defaultProps = {
 };
 
 AssetItem.propTypes = {
+  updateToken: PropTypes.func.isRequired,
   image: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  amount: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
+  amount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   symbol: PropTypes.string.isRequired,
   loading: PropTypes.bool.isRequired,
   failed: PropTypes.bool,
