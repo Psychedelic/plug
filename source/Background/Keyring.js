@@ -1,6 +1,7 @@
 import extension from 'extensionizer';
 import getICPPrice from '@shared/services/ICPPrice';
 import { formatAssets } from '@shared/constants/currencies';
+import { setRouter } from '@modules/storageManager';
 
 export const NANOS_PER_SECOND = 1_000_000;
 export const BALANCE_ERROR = 'You have tried to spend more than the balance of your account';
@@ -90,9 +91,7 @@ export const getKeyringHandler = (type, keyring) => ({
       unlocked = await keyring.unlock(params?.password);
 
       if (unlocked && params?.redirect) {
-        extension.storage.local.set({
-          router: 'home',
-        });
+        setRouter('home');
       }
     } catch (e) {
       unlocked = false;
@@ -126,7 +125,6 @@ export const getKeyringHandler = (type, keyring) => ({
 
       const { wallets, currentWalletId } = await keyring.getState();
       let assets = wallets?.[currentWalletId]?.assets;
-
       const shouldUpdate = assets?.every((asset) => !Number(asset.amount))
         || assets?.some((asset) => asset.amount === 'Error')
         || refresh;

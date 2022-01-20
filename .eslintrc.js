@@ -40,6 +40,7 @@ module.exports = {
         map: [
           ['@ui', './source/ui'],
           ['@components', './source/components'],
+          ['@modules', './source/Modules'],
           ['@assets', './source/assets'],
           ['@shared', './source/shared'],
           ['@hooks', './source/hooks'],
