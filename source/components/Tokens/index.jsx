@@ -5,6 +5,7 @@ import { AssetItem } from '@ui';
 import { setAssets, setAssetsLoading } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { useRouter } from '@components/Router';
+import { AMOUNT_ERROR } from '@shared/constants/currencies';
 import { useICPPrice } from '@redux/icp';
 import useStyles from './styles';
 
@@ -49,7 +50,7 @@ const Tokens = () => {
               updateToken={fetchAssets}
               key={asset.name}
               loading={loading}
-              failed={asset.amount === 'Error'}
+              failed={asset.amount === AMOUNT_ERROR}
             />
           ))
         }

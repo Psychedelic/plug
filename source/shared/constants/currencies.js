@@ -3,6 +3,7 @@ import XTCImg from '@assets/icons/XTC.svg';
 import WICPImg from '@assets/icons/WICP.png';
 import PropTypes from 'prop-types';
 
+export const AMOUNT_ERROR = 'Error';
 export const USD_PER_TC = 1.42656;
 export const E8S_PER_ICP = 100_000_000;
 export const CURRENCIES = new Map([
@@ -44,30 +45,30 @@ export const currencyPropTypes = {
 export const CYCLES_PER_TC = 1_000_000_000_000;
 
 export const formatAssetBySymbol = (_amount, symbol, icpPrice) => {
-  const error = _amount === 'Error';
-  const amount = error ? 'Error' : parseFloat(_amount, 10);
+  const amount = parseFloat(_amount, 10) || AMOUNT_ERROR;
+
   return (
     {
       ICP: {
         amount,
-        value: error ? 'Error' : amount * icpPrice,
+        value: amount * icpPrice || AMOUNT_ERROR,
         image: TOKEN_IMAGES.ICP,
         symbol: 'ICP',
       },
       XTC: {
         amount,
-        value: error ? 'Error' : amount * USD_PER_TC,
+        value: amount * USD_PER_TC || AMOUNT_ERROR,
         image: TOKEN_IMAGES.XTC,
         symbol: 'XTC',
       },
       WTC: {
         amount,
-        value: error ? 'Error' : amount * USD_PER_TC,
+        value: amount * USD_PER_TC || AMOUNT_ERROR,
         symbol: 'WTC',
       },
       WICP: {
         amount,
-        value: error ? 'Error' : amount * icpPrice,
+        value: amount * icpPrice || AMOUNT_ERROR,
         image: TOKEN_IMAGES.WICP,
         symbol: 'WICP',
       },
