@@ -17,10 +17,13 @@ const AssetItem = ({
   const { t } = useTranslation();
 
   const handleFetchAssets = async () => {
+    // Avoid calling multiple times
+    if (fetchLoading) return;
+
     setFetchLoading(true);
     await updateToken();
     setFetchLoading(false);
-  }
+  };
 
   return (
     <div className={clsx(classes.root, failed && classes.failedContainer)}>
