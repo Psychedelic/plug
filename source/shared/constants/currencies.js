@@ -45,7 +45,7 @@ export const currencyPropTypes = {
 export const CYCLES_PER_TC = 1_000_000_000_000;
 
 export const formatAssetBySymbol = (_amount, symbol, icpPrice) => {
-  const amount = parseFloat(_amount, 10) || AMOUNT_ERROR;
+  const amount = isNaN(_amount) ? AMOUNT_ERROR : parseFloat(_amount, 10);
 
   return (
     {
