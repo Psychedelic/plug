@@ -11,7 +11,7 @@ import {
   setTransactions,
   setTransactionsLoading,
   setCollections,
-  setCollectionsLoading
+  setCollectionsLoading,
 } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 
@@ -21,7 +21,6 @@ const useMenuItems = (toggleMenu) => {
   const dispatch = useDispatch();
   const icpPrice = useICPPrice();
   const { principalId } = useSelector((state) => state.wallet);
-
 
   const refreshWallet = () => {
     navigator.navigate('home', TABS.TOKENS);
@@ -44,8 +43,8 @@ const useMenuItems = (toggleMenu) => {
       dispatch(setTransactionsLoading(true));
       sendMessage({
         type: HANDLER_TYPES.GET_TRANSACTIONS,
-        params: {}
-      },  (trxs) => {
+        params: {},
+      }, (trxs) => {
         dispatch(setTransactions({ ...trxs, icpPrice }));
         dispatch(setTransactionsLoading(false));
       });
