@@ -46,29 +46,31 @@ export const CYCLES_PER_TC = 1_000_000_000_000;
 
 export const formatAssetBySymbol = (_amount, symbol, icpPrice) => {
   const amount = isNaN(_amount) ? AMOUNT_ERROR : parseFloat(_amount, 10);
+  const icpValue = isNaN(amount) ? AMOUNT_ERROR : amount * icpPrice;
+  const tcValue = isNaN(amount) ? AMOUNT_ERROR : amount * USD_PER_TC;
 
   return (
     {
       ICP: {
         amount,
-        value: amount * icpPrice || AMOUNT_ERROR,
+        value: icpValue,
         image: TOKEN_IMAGES.ICP,
         symbol: 'ICP',
       },
       XTC: {
         amount,
-        value: amount * USD_PER_TC || AMOUNT_ERROR,
+        value: tcValue,
         image: TOKEN_IMAGES.XTC,
         symbol: 'XTC',
       },
       WTC: {
         amount,
-        value: amount * USD_PER_TC || AMOUNT_ERROR,
+        value: tcValue,
         symbol: 'WTC',
       },
       WICP: {
         amount,
-        value: amount * icpPrice || AMOUNT_ERROR,
+        value: icpValue,
         image: TOKEN_IMAGES.WICP,
         symbol: 'WICP',
       },
