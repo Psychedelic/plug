@@ -5,6 +5,7 @@ import { AssetItem } from '@ui';
 import { setAssets, setAssetsLoading } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { useRouter } from '@components/Router';
+import { AMOUNT_ERROR } from '@shared/constants/currencies';
 import { useICPPrice } from '@redux/icp';
 import useStyles from './styles';
 
@@ -28,6 +29,7 @@ const Tokens = () => {
       });
     }
   };
+
   useEffect(() => {
     const id = setInterval(fetchAssets, 15000);
     fetchAssets();
@@ -43,7 +45,13 @@ const Tokens = () => {
       <div className={classes.tokenContainer}>
         {
           assets?.map((asset) => (
-            <AssetItem {...asset} key={asset.name} loading={loading} />
+            <AssetItem
+              {...asset}
+              updateToken={fetchAssets}
+              key={asset.name}
+              loading={loading}
+              failed={asset.amount === AMOUNT_ERROR}
+            />
           ))
         }
       </div>

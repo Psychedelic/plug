@@ -15,7 +15,8 @@
     "createAccount": "Create Account",
     "settings": "Settings",
     "help": "Help",
-    "lock": "Lock"
+    "lock": "Lock",
+    "refreshWallet": "Refresh Wallet"
   },
   "tabs": {
     "tokens": "Tokens",
@@ -360,5 +361,8 @@
   },
   "dab": {
     "poweredByDab": "POWERED BY DAB"
+  },
+  "tokens": {
+    "failedToFetchBalance": "Failed to fetch balance"
   }
 }

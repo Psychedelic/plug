@@ -42,9 +42,9 @@ export default makeStyles((theme) => ({
     width: '100%',
     height: '100%',
     backgroundColor: '#E9EBEF',
-    zIndex: 1000
+    zIndex: 1000,
   },
   loadingWrapper: {
     boxShadow: 'none',
-  }
+  },
 }));

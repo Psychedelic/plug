@@ -125,7 +125,11 @@ export const getKeyringHandler = (type, keyring) => ({
 
       const { wallets, currentWalletId } = await keyring.getState();
       let assets = wallets?.[currentWalletId]?.assets;
-      if (assets?.every((asset) => !Number(asset.amount)) || refresh) {
+      const shouldUpdate = assets?.every((asset) => !Number(asset.amount))
+        || assets?.some((asset) => asset.amount === 'Error')
+        || refresh;
+
+      if (shouldUpdate) {
         assets = await keyring.getBalances();
       } else {
         keyring.getBalances();

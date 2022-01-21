@@ -15,7 +15,7 @@ const secureGetWrapper = (key, defaultValue, cb) => {
 const secureSetWrapper = (setArguments, defaultValue, cb) => {
   try {
     // Callsback true after setting item
-    storage.set(setArguments, () => { cb(true) });
+    storage.set(setArguments, () => { cb(true); });
   } catch (e) {
     cb(defaultValue);
   }
@@ -25,7 +25,7 @@ export const getApps = (currentWalletId, cb) => {
   const defaultValue = {};
 
   secureGetWrapper(currentWalletId, defaultValue, (state) => (
-    cb(state?.[parseInt(currentWalletId, 10)]?.apps || defaultvalue)
+    cb(state?.[parseInt(currentWalletId, 10)]?.apps || defaultValue)
   ));
 };
 
@@ -58,7 +58,6 @@ export const getContacts = (cb) => {
   const defaultValue = [];
 
   secureGetWrapper(['contacts'], defaultValue, (state) => {
-    console.log('from s->', state?.contacts);
     cb(state?.contacts || defaultValue);
   });
 };
