@@ -21,8 +21,18 @@ export const getAssetAmount = (request) => {
 
 /* eslint-disable no-nested-ternary */
 // eslint-disable-next-line max-len
-export const formatMethodName = (methodName, assetName) => (TRANSFER_METHOD_NAMES.includes(methodName)
-  ? `Transfer ${assetName ? `(${assetName})` : ''}`
-  : (methodName?.includes('_')
-    ? methodName.split('_').map((word) => capitalize(word)).join(' ')
-    : capitalize(methodName)));
+export const formatMethodName = (methodName, assetName) => {
+  switch (methodName) {
+    case 'swapExactTokensForTokens':
+      return 'Swap Tokens';
+    default:
+      return TRANSFER_METHOD_NAMES.includes(methodName)
+        ? `Transfer ${assetName ? `(${assetName})` : ''}`
+        : methodName?.includes('_')
+          ? methodName
+            .split('_')
+            .map((word) => capitalize(word))
+            .join(' ')
+          : capitalize(methodName);
+  }
+};
