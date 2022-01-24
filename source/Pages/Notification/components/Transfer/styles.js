@@ -68,7 +68,7 @@ export default makeStyles((theme) => ({
     right: theme.spacing(2),
   },
   buttonsWrapper: {
-    padding: '0 24px',
+    padding: '0 24px 24px',
     marginTop: '20px',
   },
 }));

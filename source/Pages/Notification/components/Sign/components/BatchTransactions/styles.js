@@ -47,7 +47,7 @@ export default makeStyles((theme) => ({
     position: 'absolute',
   },
   buttonsWrapper: {
-    padding: '0 24px',
+    padding: '0 24px 12px',
     marginTop: '20px',
   },
 }));
