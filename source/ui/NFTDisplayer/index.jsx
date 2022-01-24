@@ -7,7 +7,6 @@ const TYPE_MAP = {
   'video/mp4': 'video',
   'image/png': 'img',
   'text/html': 'iframe',
-  'image/svg+xml': 'iframe',
 };
 
 const TAG_PROPS = {
