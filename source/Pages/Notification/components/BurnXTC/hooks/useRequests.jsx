@@ -10,7 +10,7 @@ import { XTC_FEE } from '@shared/constants/addresses';
 const portRPC = new PortRPC({
   name: 'notification-port',
   target: 'bg-script',
-  timeout: 20000,
+  timeout: 40000,
 });
 
 portRPC.start();
