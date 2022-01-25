@@ -31,7 +31,7 @@ const useMenuItems = (toggleMenu) => {
       dispatch(setCollectionsLoading(true));
       sendMessage({
         type: HANDLER_TYPES.GET_NFTS,
-        params: {},
+        params: { refresh: true },
       }, (nftCollections) => {
         if (nftCollections?.length) {
           dispatch(setCollections({ collections: nftCollections, principalId }));
@@ -53,7 +53,7 @@ const useMenuItems = (toggleMenu) => {
       dispatch(setAssetsLoading(true));
       sendMessage({
         type: HANDLER_TYPES.GET_ASSETS,
-        params: {},
+        params: { refresh: true },
       }, (keyringAssets) => {
         dispatch(setAssets({ keyringAssets, icpPrice }));
         dispatch(setAssetsLoading(false));
