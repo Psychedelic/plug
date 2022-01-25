@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles(() => ({
   buttonsWrapper: {
-    padding: '0 24px 30px',
+    padding: '0 24px 24px',
   },
   innerContainer: {
     padding: '20px 25px 5px',
