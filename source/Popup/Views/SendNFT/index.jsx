@@ -27,6 +27,30 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const getFilteredCollections = (collection, collections, nft) => {
+  const filterNFT = (token) => token.id !== nft?.id;
+  const collectionIndex = collections.indexOf(collection);
+  let filteredCollections = [...collections];
+
+  if (collection.tokens.length > 1) {
+    // If collection has tokens we filter them
+    const filteredCollection = JSON.parse(JSON.stringify(collection));
+    const tokens = collection.tokens.filter(filterNFT);
+
+    filteredCollections = [...collections];
+
+    filteredCollections[collectionIndex] = {
+      ...filteredCollection,
+      tokens,
+    };
+  } else {
+    // If tokens is empty remove collection
+    filteredCollections.splice(collectionIndex, 1);
+  }
+
+  return filteredCollections;
+};
+
 const SendNFT = () => {
   const { t } = useTranslation();
   const [address, setAddress] = useState(null);
@@ -37,6 +61,12 @@ const SendNFT = () => {
   const { selectedNft: nft } = useSelector((state) => state.nfts);
   const { collections, principalId } = useSelector((state) => state.wallet);
   const classes = useStyles();
+
+  const collection = useMemo(() => collections?.find(
+    (col) => col.name === nft?.collection,
+  ) || {},
+  [collections, nft]);
+
   const transferNFT = () => {
     setLoading(true);
     setErrorMessage('');
@@ -46,10 +76,8 @@ const SendNFT = () => {
         if (error) {
           setErrorMessage(error);
         } else {
-          const sameNFT = (token) => token.id === nft?.id;
-          const filteredCollections = collections.filter(
-            (collection) => !collection.tokens.some(sameNFT),
-          );
+          const filteredCollections = getFilteredCollections(collection, collections, nft);
+
           dispatch(setCollections({
             collections: filteredCollections,
             principalId,
@@ -67,11 +95,6 @@ const SendNFT = () => {
       navigator.navigate('home', TABS.NFTS);
     }
   }, [nft]);
-
-  const collection = useMemo(() => collections?.find(
-    (col) => col.name === nft?.collection,
-  ) || {},
-  [collections, nft]);
 
   return (
     <Layout>
