@@ -38,7 +38,7 @@ export const setApps = (currentWalletId, apps, cb = () => {}) => {
 export const removeApp = (currentWalletId, appUrl, cb = () => {}) => {
   const defaultValue = false;
 
-  secureGetWrapper(currentWalletId, {}, (apps) => {
+  getApps(currentWalletId, (apps) => {
     if (apps?.[appUrl]) {
       const newApps = addDisconnectedEntry({ apps, appUrl });
       setApps(currentWalletId, newApps, cb);
