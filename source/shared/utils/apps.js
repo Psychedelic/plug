@@ -13,16 +13,16 @@ export const removeAppByURL = ({ apps, url }) => {
   return filteredApps;
 };
 
-export const addDisconnectedEntry = ({ apps, url }) => {
+export const addDisconnectedEntry = ({ apps, appUrl }) => {
   const date = new Date().toISOString();
   return {
     ...apps,
-    [url]: {
-      ...apps[url],
+    [appUrl]: {
+      ...apps[appUrl],
       status: CONNECTION_STATUS.disconnected,
       date,
       events: [
-        ...apps[url]?.events || [],
+        ...apps[appUrl]?.events || [],
         {
           status: CONNECTION_STATUS.disconnected,
           date,
