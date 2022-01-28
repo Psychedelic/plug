@@ -1685,10 +1685,10 @@
     text-encoding-shim "^1.0.5"
     tweetnacl "^1.0.3"
 
-"@psychedelic/plug-inpage-provider@1.6.3":
-  version "1.6.3"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/1.6.3/2b3b155980aade7121f8c5a4cd9f9af639d76c8a718076962e093ef643c7145d#072d4e284ca9cb00bfe0536e48be7f25543a1412"
-  integrity sha512-Kcd1toL78TX3rMFxzwn/0Ug+06xdBwkTnDST4j7c/E9inu8uo7I8RWzZixVH0g8JiNYVwHorEwgRqSY6qw4/pg==
+"@psychedelic/plug-inpage-provider@1.6.2":
+  version "1.6.2"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/1.6.2/6512e86fb8c97264f46a96b7a59dc5d5afdecdab474e31bd1d459ed5799771b6#d1c04d1996e2de02e7eec75f8493c952be8aa534"
+  integrity sha512-/En2g04VN0j7KH5fekKtLMSQVH+KCXQod2uwcCMIsOPqOmqkYjWzWNn8ErtV2oZ/v1mNNLzCUA7qPbENmI9lQQ==
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
