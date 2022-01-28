@@ -10,8 +10,8 @@ const useApps = () => {
   const [historicApps, setHistoricApps] = useState([]);
   const { walletNumber } = useSelector((state) => state.wallet);
 
-  const handleRemoveApp = (url) => {
-    const newApps = addDisconnectedEntry({ apps, url });
+  const handleRemoveApp = (appUrl) => {
+    const newApps = addDisconnectedEntry({ apps, appUrl });
     setApps(newApps);
   };
 
