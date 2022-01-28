@@ -31,7 +31,7 @@ const AssetDisplay = ({
     const amount = getAssetAmount(request);
     const assetData = getAssetData(request?.canisterId);
     const formattedAsset = formatAssetBySymbol(amount, assetData.symbol, icpPrice);
-    formattedAsset.amount = Number.isNaN(formattedAsset.amount) ? null : formattedAsset.amount;
+    formattedAsset.amount = formattedAsset.amount === 'Error' || Number.isNaN(formattedAsset.amount) ? null : formattedAsset.amount;
     setAsset(formattedAsset);
   }, [request, icpPrice]);
 
