@@ -76,7 +76,7 @@ const AllowAgent = ({
 
   useEffect(() => {
     setOnTimeout(() => () => {
-      handleAllowAgent(CONNECTION_STATUS.rejectedAgent).then(() => {
+      handleAllowAgent(CONNECTION_STATUS.rejected).then(() => {
         setHandled(true);
         window?.close?.();
       });
@@ -103,7 +103,7 @@ const AllowAgent = ({
 
   window.onbeforeunload = () => {
     if (!handled) {
-      handleAllowAgent(CONNECTION_STATUS.rejectedAgent);
+      handleAllowAgent(CONNECTION_STATUS.rejected);
     }
   };
 
