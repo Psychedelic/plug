@@ -273,7 +273,7 @@ backgroundController.exposeController(
     getApps(keyring.currentWalletId.toString(), (apps = {}) => {
       const app = apps?.[metadata.url] || {};
       if (app?.status === CONNECTION_STATUS.accepted) {
-        if (Number.isNaN(parseInt(accountId, 10))) {
+        if (accountId && Number.isNaN(parseInt(accountId, 10))) {
           callback(ERRORS.CLIENT_ERROR('Invalid account id'), null);
         } else if (!keyring.isUnlocked) {
           const url = qs.stringifyUrl({
