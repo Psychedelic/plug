@@ -13,6 +13,7 @@
   "profile": {
     "myAccounts": "My Accounts",
     "createAccount": "Create Account",
+    "connectLedger": "Connect Ledger",
     "settings": "Settings",
     "help": "Help",
     "lock": "Lock",
@@ -147,6 +148,9 @@
     "checkbox": "I will be safe with my Secret Recovery Phrase."
   },
   "appConnection": {
+    "connect": "wants to connect to your wallet"
+  },
+  "ledgerConnection": {
     "connect": "wants to connect to your wallet"
   },
   "deposit": {

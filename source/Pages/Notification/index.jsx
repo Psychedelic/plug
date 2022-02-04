@@ -15,6 +15,7 @@ import Principal from './components/Principal';
 import AllowAgent from './components/AllowAgent';
 import BurnXTC from './components/BurnXTC';
 import Sign from './components/Sign';
+import LedgerConnection from './components/LedgerConnection';
 import SIZES from './components/Transfer/constants';
 
 const NOTIFICATION_COMPONENTS = {
@@ -26,6 +27,7 @@ const NOTIFICATION_COMPONENTS = {
   allowAgent: AllowAgent,
   burnXTC: BurnXTC,
   sign: Sign,
+  ledgerConnection: LedgerConnection,
 };
 
 const resizeToLogin = () => {
@@ -43,6 +45,7 @@ const NotificationContainer = () => {
   const {
     callId, metadataJson = '{}', argsJson = '{}', type, portId,
   } = query;
+  console.log(metadataJson, argsJson);
   const metadata = JSON.parse(metadataJson || '{}');
   const args = JSON.parse(argsJson || '{}'); // single request for now
 

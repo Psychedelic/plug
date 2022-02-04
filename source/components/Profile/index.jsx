@@ -128,6 +128,12 @@ const Profile = ({ disableProfile }) => {
     setOpenCreateAccount(true);
   };
 
+  const handleConnectLedger = () => {
+    sendMessage({ type: HANDLER_TYPES.CONNECT_LEDGER, params: {} }, () => {
+      console.log('CONNECT LEDGER CALLBAK');
+    });
+  };
+
   return (
     <>
       <HoverAnimation
@@ -205,10 +211,10 @@ const Profile = ({ disableProfile }) => {
                             onClick={handleEditAccount}
                           />
                         ) : isEditing && (
-                        <img
-                          src={isHidden ? InvisibleIcon : VisibleIcon}
-                          onClick={toggleAccountVisibility(account.walletNumber)}
-                        />
+                          <img
+                            src={isHidden ? InvisibleIcon : VisibleIcon}
+                            onClick={toggleAccountVisibility(account.walletNumber)}
+                          />
                         )}
                       />
                     );
@@ -224,6 +230,14 @@ const Profile = ({ disableProfile }) => {
                   alignLeft
                   image={Plus}
                   onClick={handleOpenCreateAccount}
+                />
+                <MenuItem
+                  size="small"
+                  key="connectLedger"
+                  name={t('profile.connectLedger')}
+                  alignLeft
+                  image={Plus}
+                  onClick={handleConnectLedger}
                 />
                 <Divider style={{ margin: '6px 0' }} />
                 {

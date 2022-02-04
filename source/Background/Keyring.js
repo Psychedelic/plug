@@ -1,7 +1,12 @@
+/* eslint-disable no-unused-vars */
+import qs from 'query-string';
 import extension from 'extensionizer';
 import getICPPrice from '@shared/services/ICPPrice';
 import { formatAssets } from '@shared/constants/currencies';
 import { setRouter } from '@modules/storageManager';
+import TransportWebHID, { Transport } from '@ledgerhq/hw-transport-webhid';
+import LedgerApp, { LedgerError, ResponseSign } from '@zondax/ledger-icp';
+import SIZES from '../Pages/Notification/components/Transfer/constants';
 
 export const NANOS_PER_SECOND = 1_000_000;
 export const BALANCE_ERROR = 'You have tried to spend more than the balance of your account';
@@ -44,6 +49,8 @@ export const HANDLER_TYPES = {
   BURN_XTC: 'burn-xtc',
   GET_NFTS: 'get-nfts',
   TRANSFER_NFT: 'transfer-nft',
+  CONNECT_LEDGER: 'connect-ledger',
+  CONNECTED_LEDGER: 'connected-ledger',
 };
 
 export const getKeyringErrorMessage = (type) => ({
@@ -211,6 +218,68 @@ export const getKeyringHandler = (type, keyring) => ({
         return recursiveParseBigint(response);
       } catch (e) {
         return { error: e.message };
+      }
+    },
+  [HANDLER_TYPES.CONNECT_LEDGER]:
+    async () => {
+      console.log('BACK CONNECT_LEDGER');
+
+      try {
+        const url = qs.stringifyUrl({
+          url: 'notification.html',
+          query: {
+            type: 'ledgerConnection',
+          },
+        });
+
+        const height = SIZES.appConnectHeight;
+
+        extension.windows.create({
+          url,
+          type: 'popup',
+          width: SIZES.width,
+          height,
+        });
+      } catch (e) {
+        console.error('OPENING POP UP: ', e);
+      }
+
+      console.log('BACK CONNECT_LEDGER END');
+    },
+  [HANDLER_TYPES.CONNECTED_LEDGER]:
+    async () => {
+      console.log('LEDGER IS CONNECTED');
+
+      try {
+        const derivePath = 'm/44\'/223\'/0\'/0/0';
+        const transport = await TransportWebHID.openConnected();
+        if (!transport) {
+          console.error('TODO MAL BRO');
+          return;
+        }
+        const ledgerApp = new LedgerApp(transport);
+        const resp = await ledgerApp.getAddressAndPubKey(derivePath);
+        if (resp.returnCode === 28161) {
+          throw new Error('Please open the Internet Computer app on your wallet and try again.');
+        } else if (resp.returnCode === LedgerError.TransactionRejected) {
+          throw new Error('Ledger Wallet is locked. Unlock it and try again.');
+          // @ts-ignore
+        } else if (resp.returnCode === 65535) {
+          throw new Error('Unable to fetch the public key. Please try again.');
+        }
+        const principal = resp.principalText;
+        console.log(`Este es tu principal ${principal} DESDE EL BACK BRO`);
+      } catch (err) {
+        if (err.id && err.id === 'NoDeviceFound') {
+          throw new Error('No Ledger device found. Is the wallet connected and unlocked?');
+        } else if (
+          err.message && err.message.includes('cannot open device with path')
+        ) {
+          throw new Error('Cannot connect to Ledger device. Please close all other wallet applications (e.g. Ledger Live) and try again.');
+        } else {
+          // Unsupported browser. Data on browser compatibility is taken from https://caniuse.com/webhid
+          throw new Error(`Cannot connect to Ledger Wallet. Either you have other wallet applications open (e.g. Ledger Live), or your browser doesn't support WebHID, which is necessary to communicate with your Ledger hardware wallet.\n\nSupported browsers:\n* Chrome (Desktop) v89+\n* Edge v89+\n* Opera v76+\n\nError: ${err}`);
+        }
       }
     },
 }[type]);
