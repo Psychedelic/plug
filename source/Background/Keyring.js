@@ -88,12 +88,14 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.UNLOCK]: async (params) => {
     let unlocked = false;
     try {
+      console.log('trying to unlock');
       unlocked = await keyring.unlock(params?.password);
 
       if (unlocked && params?.redirect) {
         setRouter('home');
       }
     } catch (e) {
+      console.log('unlock error ->', e);
       unlocked = false;
     }
     return unlocked;
@@ -124,16 +126,26 @@ export const getKeyringHandler = (type, keyring) => ({
       if (!keyring?.isUnlocked) return {};
 
       const { wallets, currentWalletId } = await keyring.getState();
-      let assets = wallets?.[currentWalletId]?.assets;
-      const shouldUpdate = assets?.every((asset) => !Number(asset.amount))
-        || assets?.some((asset) => asset.amount === 'Error')
+      let assets = Object.values(wallets?.[currentWalletId]?.assets);
+      console.log('preformed assets ->', assets);
+      const shouldUpdate = Object.values(assets)?.every((asset) => !Number(asset.amount))
+        || Object.values(assets)?.some((asset) => asset.amount === 'Error')
         || refresh;
 
+      console.log('should update ->', shouldUpdate);
+
       if (shouldUpdate) {
+        try {
         assets = await keyring.getBalances();
+        console.log('new assets ->', assets);
+        } catch (e) {
+          console.log('getBalances e ->', e);
+        }
       } else {
         keyring.getBalances();
       }
+
+      console.log('returned assets ->', assets);
       return assets;
     } catch (e) {
       return { error: e.message };
@@ -141,7 +153,9 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.GET_BALANCE]: async (subaccount) => {
     try {
+      console.log('trying to get balances');
       const balances = await keyring.getBalances(subaccount);
+      console.log('balances ->', balances);
       const icpPrice = await getICPPrice();
       return formatAssets(balances, icpPrice);
     } catch (error) {
