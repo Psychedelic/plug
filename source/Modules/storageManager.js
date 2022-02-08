@@ -29,6 +29,13 @@ export const getApps = (currentWalletId, cb) => {
   ));
 };
 
+export const getApp = (currentWalletId, appUrl, cb) => {
+  getApps(keyring.currentWalletId.toString(), (apps) => {
+    const app = apps?.[metadata?.url] || {};
+    cb(app);
+  });
+};
+
 export const setApps = (currentWalletId, apps, cb = () => {}) => {
   const defaultValue = false;
 
