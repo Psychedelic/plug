@@ -25,6 +25,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
 
   const handleChangeId = (e) => {
     setCanisterId(e.target.value.trim());
+    setTokenError(false);
   };
 
   useEffect(() => {
@@ -41,7 +42,6 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
     }, async (tokenInfo) => {
       if (tokenInfo?.error) {
         setTokenError(true);
-        setInvalidToken(true);
       } else {
         handleChangeSelectedToken(tokenInfo)();
       }
@@ -51,6 +51,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
   const handleCloseDialog = (value) => {
     setStandard(value?.name ?? standard);
     setDialogOpen(false);
+    setTokenError(false);
   };
 
   return (
@@ -125,7 +126,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
             value={t('common.continue')}
             onClick={handleSubmit}
             fullWidth
-            disabled={!canisterId || invalidToken || loading || tokenError}
+            disabled={!canisterId || invalidToken || loading}
             loading={loading}
           />
         </Grid>
