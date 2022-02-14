@@ -1,7 +1,7 @@
 import useApps from './useApps';
 
-const useActivity = (transactions) => {
-  const { historicApps } = useApps();
+const useActivity = (transactions = []) => {
+  const { historicApps = [] } = useApps();
 
   const sortActivity = () => {
     const unsortedActivity = [...transactions, ...historicApps];

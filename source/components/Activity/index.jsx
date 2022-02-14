@@ -28,10 +28,10 @@ const Activity = () => {
     }
   }, [icpPrice]);
   return (
-    <LoadingWrapper loading={!transactions.length && transactionsLoading} className="big">
+    <LoadingWrapper loading={!transactions?.length && transactionsLoading} className="big">
       <div className={classes.root}>
         {
-          activity && activity.length > 0
+          activity && activity?.length > 0
             ? activity.map((item, index) => (
               <ActivityItem key={index.toString()} {...item} />
             ))
