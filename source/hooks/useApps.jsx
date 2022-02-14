@@ -36,8 +36,8 @@ const useApps = () => {
       whitelist: app?.whitelist,
     })));
 
-    const filtered = parsed?.filter((a) => a.status === CONNECTION_STATUS.accepted) || [];
-    const historic = allEvents?.filter((a) => a.status === CONNECTION_STATUS.accepted
+    const filtered = parsed?.filter((a) => a?.status === CONNECTION_STATUS.accepted) || [];
+    const historic = allEvents?.filter((a) => a?.status === CONNECTION_STATUS.accepted
       || CONNECTION_STATUS.disconnected) || [];
 
     setParsedApps(filtered);
