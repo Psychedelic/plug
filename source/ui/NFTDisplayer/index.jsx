@@ -73,6 +73,7 @@ const NFTDisplayer = ({
       { loading && (
         <div className={classes.loadingContainer}>
           <CircularProgress
+            size="25%"
             color="#6B707B"
           />
         </div>

@@ -18,9 +18,9 @@ export default makeStyles((theme) => ({
     bottom: 24,
     right: 24,
     position: 'absolute',
-    borderRadius: 41,
-    height: 41,
-    width: 41,
+    borderRadius: 42,
+    height: 42,
+    width: 42,
     backgroundColor: theme.palette.common.blue,
     cursor: 'pointer',
 
