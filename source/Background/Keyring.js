@@ -1,10 +1,56 @@
 import extension from 'extensionizer';
 import getICPPrice from '@shared/services/ICPPrice';
-import { formatAssets } from '@shared/constants/currencies';
+import {
+  formatAssets,
+  parseAssetsAmount,
+  parseFromAmount,
+  parseToAmount,
+} from '@shared/constants/currencies';
 import { setRouter } from '@modules/storageManager';
 
 export const NANOS_PER_SECOND = 1_000_000;
 export const BALANCE_ERROR = 'You have tried to spend more than the balance of your account';
+
+const parseTransactionObject = (transactionObject) => {
+  const { amount, currency, token } = transactionObject;
+
+  const { decimals } = { ...currency, ...token };
+  const parsedAmount = parseToAmount(amount, decimals);
+
+  return {
+    ...transactionObject,
+    amount: parsedAmount,
+  };
+};
+
+const parseTransaction = (transaction) => {
+  const { details } = transaction;
+  const { fee } = details;
+
+  const parsedDetails = parseTransactionObject(details);
+  let parsedFee = fee;
+
+  if (fee instanceof Object && ('token' in fee || 'currency' in fee)) {
+    parsedFee = parseTransactionObject(fee);
+  }
+
+  return {
+    ...transaction,
+    details: {
+      ...parsedDetails,
+      fee: parsedFee,
+    },
+  };
+};
+
+const parseTransactions = (transactionsObject) => {
+  const { transactions } = transactionsObject;
+
+  return {
+    ...transactionsObject,
+    transactions: transactions.map(parseTransaction),
+  };
+};
 
 export const recursiveParseBigint = (obj) => Object.entries(obj).reduce(
   (acum, [key, val]) => {
@@ -119,7 +165,7 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.GET_TRANSACTIONS]: async () => {
     const response = await keyring.getTransactions();
-    return recursiveParseBigint(response);
+    return parseTransactions(response);
   },
   [HANDLER_TYPES.GET_ASSETS]: async ({ refresh }) => {
     try {
@@ -127,17 +173,14 @@ export const getKeyringHandler = (type, keyring) => ({
 
       const { wallets, currentWalletId } = await keyring.getState();
       let assets = Object.values(wallets?.[currentWalletId]?.assets);
-      console.log('preformed assets ->', assets);
       const shouldUpdate = Object.values(assets)?.every((asset) => !Number(asset.amount))
         || Object.values(assets)?.some((asset) => asset.amount === 'Error')
         || refresh;
 
-      console.log('should update ->', shouldUpdate);
-
       if (shouldUpdate) {
         try {
-        assets = await keyring.getBalances();
-        console.log('new assets ->', assets);
+          assets = await keyring.getBalances();
+          assets = parseAssetsAmount(assets);
         } catch (e) {
           console.log('getBalances e ->', e);
         }
@@ -145,7 +188,6 @@ export const getKeyringHandler = (type, keyring) => ({
         keyring.getBalances();
       }
 
-      console.log('returned assets ->', assets);
       return assets;
     } catch (e) {
       return { error: e.message };
@@ -153,11 +195,10 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.GET_BALANCE]: async (subaccount) => {
     try {
-      console.log('trying to get balances');
-      const balances = await keyring.getBalances(subaccount);
-      console.log('balances ->', balances);
+      const assets = await keyring.getBalances(subaccount);
+      const parsedAssets = parseAssetsAmount(assets);
       const icpPrice = await getICPPrice();
-      return formatAssets(balances, icpPrice);
+      return formatAssets(parsedAssets, icpPrice);
     } catch (error) {
       return { error: error.message };
     }
@@ -166,7 +207,11 @@ export const getKeyringHandler = (type, keyring) => ({
     to, amount, canisterId, opts,
   }) => {
     try {
-      const { height, transactionId } = await keyring.send(to, amount, canisterId, opts);
+      const { token } = await keyring.getTokenInfo(canisterId);
+      const { decimals } = token;
+      const parsedAmount = parseFromAmount(amount, decimals);
+
+      const { height, transactionId } = await keyring.send(to, parsedAmount, canisterId, opts);
       return {
         height: height ? parseInt(height, 10) : undefined,
         transactionId: transactionId ? parseInt(transactionId, 10) : undefined,
