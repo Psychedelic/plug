@@ -53,7 +53,8 @@ const MultiInput = ({
   decimalScale,
 }) => {
   const classes = useStyles();
-
+  const hasConversionRate = !!secondaryValue?.conversionRate
+    && !Number.isNaN(secondaryValue?.conversionRate);
   return (
     <InputBase>
       <div className={classes.leftContainer} onClick={onClick}>
@@ -80,19 +81,28 @@ const MultiInput = ({
           }}
         />
         <span className={classes.estimatedTotal}>
-          <NumberFormat
-            displayType="text"
-            decimalScale={decimalScale}
-            fixedDecimalScale
-            thousandSeparator=","
-            value={conversionPrice}
-            prefix={secondaryValue.prefix}
-            suffix={secondaryValue.suffix}
-          />
+          {hasConversionRate ? (
+            <NumberFormat
+              displayType="text"
+              decimalScale={decimalScale}
+              fixedDecimalScale
+              thousandSeparator=","
+              value={conversionPrice}
+              prefix={secondaryValue.prefix}
+              suffix={secondaryValue.suffix}
+            />
+          ) : (
+            <span>No price available</span>
+          )}
         </span>
-        <IconButton className={classes.swapIcon} onClick={() => handleSwapValues()}>
-          <img src={ExchangeIcon} />
-        </IconButton>
+        {hasConversionRate && (
+          <IconButton
+            className={classes.swapIcon}
+            onClick={() => handleSwapValues()}
+          >
+            <img src={ExchangeIcon} />
+          </IconButton>
+        )}
       </div>
     </InputBase>
   );

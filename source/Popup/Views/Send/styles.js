@@ -52,8 +52,8 @@ export default makeStyles((theme) => ({
     animationDuration: '0.5s',
   },
   image: {
-    height: 22,
-    width: 22,
+    height: 30,
+    width: 30,
     borderRadius: 44,
     marginRight: 6,
   },
