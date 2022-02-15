@@ -34,12 +34,12 @@ const IDInput = ({
     () => [principalId, accountId].includes(value), [principalId, accountId, value],
   );
 
-  const notInContacts = useMemo(() => !contacts
+  const inContacts = useMemo(() => contacts
     .flatMap((c) => c.contacts)
     .map((c) => c.id)
     .includes(value), [contacts, value]);
 
-  const shouldDisplayContacts = value !== null && isValid && notInContacts && !isUserAddress;
+  const shouldDisplayAddToContacts = value !== null && isValid && !inContacts && !isUserAddress;
 
   const handleSelectedContact = (contact) => setSelectedContact(contact);
 
@@ -93,7 +93,7 @@ const IDInput = ({
                 input: clsx(
                   classes.input,
                   isValid === false && classes.inputInvalid,
-                  shouldDisplayContacts && classes.paddingRight,
+                  !!contacts.length && classes.paddingRight,
                 ),
               }}
               fullWidth
@@ -127,7 +127,7 @@ const IDInput = ({
           </>
         )}
       </div>
-      {shouldDisplayContacts && (
+      {shouldDisplayAddToContacts && (
         <Grid item xs={12}>
           <div className={clsx(classes.newAddress, classes.appearAnimation)}>
             <span className={classes.newAddressTitle}>
