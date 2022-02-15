@@ -288,7 +288,10 @@ ActivityItem.propTypes = {
   details: PropTypes.objectOf(PropTypes.any),
   to: PropTypes.string,
   from: PropTypes.string,
-  amount: PropTypes.number,
+  amount: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
   value: PropTypes.number,
   status: PropTypes.number,
   symbol: PropTypes.string.isRequired,
@@ -303,7 +306,10 @@ ActivityItem.propTypes = {
   }),
   swapData: PropTypes.shape({
     currency: PropTypes.shape(currencyPropTypes).isRequired,
-    amount: PropTypes.number.isRequired,
+    amount: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
     value: PropTypes.number.isRequired,
     status: PropTypes.oneOf(Object.keys(ACTIVITY_STATUS)).isRequired,
     date: PropTypes.instanceOf(Date).isRequired,
