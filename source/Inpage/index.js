@@ -8,14 +8,13 @@ const clientRPC = new BrowserRPC(window, {
 });
 
 clientRPC.start();
-
-const plugProvider = new Provider(clientRPC);
 const ic = window.ic || {};
+const plugProvider = new Provider(clientRPC);
+plugProvider.init();
 
-/* eslint-disable no-console */
 window.ic = {
   ...ic,
   plug: plugProvider,
 };
-
+/* eslint-disable no-console */
 export default plugProvider;
