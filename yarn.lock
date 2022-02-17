@@ -1685,15 +1685,18 @@
     text-encoding-shim "^1.0.5"
     tweetnacl "^1.0.3"
 
-"@psychedelic/plug-inpage-provider@1.6.1":
-  version "1.6.1"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/1.6.1/0811f0e6beea1162a4f36ed82c98a4ff6ba2e4aff88c494b2f0d3273621d3ee2#7e779b3857108571cd0fd586e2b786d73cb04332"
-  integrity sha512-iliY9Q7i76KhRUS+vIhMRJnJrG5JbYFaF3EbqhOHdHdhy55kGAMBYImZdBQkDBYd+TKofbD3eZBnfezo/miJoA==
+"@psychedelic/plug-inpage-provider@1.7.0":
+  version "1.7.0"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/1.7.0/6f705acc36491e366f06393a4982d72a0434e770f1cccee61c2e86b9631bfc1d#996b87990016931ad84437d74393cedfc385216d"
+  integrity sha512-pa/siAsh39cVHfBFlJ4csBqglk3ZvU6UinqIJjYkvcb0ZfJviyoDFS9zJki/2rgrx3IyV66xAdpQzS0AY7deJQ==
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
     "@dfinity/principal" "0.9.3"
     "@fleekhq/browser-rpc" "^2.0.3"
+    buffer-crc32 "^0.2.13"
+    crypto-js "^4.1.1"
+    json-bigint "^1.0.0"
 
 "@reduxjs/toolkit@^1.6.0":
   version "1.7.1"
