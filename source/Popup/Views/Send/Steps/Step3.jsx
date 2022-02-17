@@ -30,7 +30,7 @@ import { useRouter, TokenIcon, TABS } from '@components';
 import { ADDRESS_TYPES, DEFAULT_ICP_FEE, XTC_FEE } from '@shared/constants/addresses';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { useICPPrice } from '@redux/icp';
-import useStyles from '../../styles';
+import useStyles from '../styles';
 
 const Step3 = ({
   asset, amount, address, addressInfo, handleSendClick, error, isTrxCompleted,
@@ -116,9 +116,11 @@ const Step3 = ({
               <AssetFormat value={amount} asset={asset?.symbol} />
             </Typography>
           </div>
-          <Typography variant="subtitle1">
-            <USDFormat value={subtotal} />
-          </Typography>
+          {asset?.price && (
+            <Typography variant="subtitle1">
+              <USDFormat value={subtotal} />
+            </Typography>
+          )}
         </Grid>
         <Grid item xs={12}>
           <Card>
@@ -238,10 +240,11 @@ const Step3 = ({
             <InfoRow name={t('common.taxFee')} value={`${XTC_FEE} XTC ($${xtcFee})`} />
           </Grid>
         )}
-        <Grid item xs={12}>
-          <InfoRow name={t('common.total')} value={<USDFormat value={subtotal + fee} />} total />
-        </Grid>
-
+        {asset?.price && (
+          <Grid item xs={12}>
+            <InfoRow name={t('common.total')} value={<USDFormat value={subtotal + fee} />} total />
+          </Grid>
+        )}
         <Grid item xs={12}>
           <Button
             variant="rainbow"

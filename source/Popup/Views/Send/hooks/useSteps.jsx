@@ -49,7 +49,9 @@ const useSteps = () => {
   const handleChangeAddressInfo = (value) => setAddressInfo(value);
   const handleChangeAsset = (value) => setSelectedAsset({
     ...value,
-    price: { ICP: icpPrice, XTC: USD_PER_TC, WTC: USD_PER_TC }[value?.symbol] || 1,
+    price: {
+      ICP: icpPrice, XTC: USD_PER_TC, WTC: USD_PER_TC, WICP: icpPrice,
+    }[value?.symbol],
   });
   const handleChangeStep = (index) => setStep(index);
   const handleChangeAmount = (value) => setAmount(Number(value));

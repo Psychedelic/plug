@@ -41,7 +41,6 @@ export default makeStyles((theme) => ({
       backgroundClip: 'padding-box, border-box',
     },
     '&:focus': {
-      padding: '0px 11px',
       border: 'double 2px transparent',
       backgroundImage:
         'linear-gradient(white, white), radial-gradient(circle at top left,#FFE701,#FA51D3,#10D9ED,#53FF54)',
@@ -50,15 +49,12 @@ export default makeStyles((theme) => ({
     },
   },
   inputInvalid: {
-    padding: '0px 11px',
     border: `2px solid ${theme.palette.danger.main}`,
 
     '&:hover': {
-      padding: '0px 11px',
       border: `2px solid ${theme.palette.danger.main}`,
     },
     '&:focus': {
-      padding: '0px 11px',
       border: `2px solid ${theme.palette.danger.main}`,
     },
   },
