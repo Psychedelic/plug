@@ -137,6 +137,7 @@ const secureController = async (callback, controller) => {
   try {
     await controller();
   } catch (e) {
+    console.log('error here ->', e);
     notificationManager.notificateError(e.message);
   }
 };
@@ -394,7 +395,11 @@ backgroundController.exposeController(
       const assets = await getBalance();
       const parsedAmount = (transfer.amount / E8S_PER_ICP);
       if (assets?.[DEFAULT_CURRENCY_MAP.ICP]?.amount > parsedAmount) {
-        const response = await sendToken(transfer);
+        const response = await sendToken({
+          ...transfer,
+          amount: parsedAmount,
+        });
+
         if (response.error) {
           callback(null, false);
           callback(ERRORS.SERVER_ERROR(response.error), null, [
@@ -799,14 +804,13 @@ backgroundController.exposeController(
       const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
       const assets = await getBalance();
       const xtcAmount = assets?.[DEFAULT_CURRENCY_MAP.XTC]?.amount * CYCLES_PER_TC;
+      const parsedAmount = transfer.amount / CYCLES_PER_TC;
 
       if (xtcAmount - XTC_FEE > transfer.amount) {
-        const burnParams = {
-          to: transfer.to,
-          amount: transfer.amount,
-        };
-
-        const response = await burnXTC(burnParams);
+        const response = await burnXTC({
+          ...transfer,
+          amount: parsedAmount
+        });
         if (response.error) {
           callback(null, false);
           callback(ERRORS.SERVER_ERROR(response.error), null, [

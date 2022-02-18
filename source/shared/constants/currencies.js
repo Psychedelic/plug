@@ -100,9 +100,10 @@ export const parseToAmount = (amount, decimals) => {
 };
 
 export const parseFromAmount = (amount, decimals) => {
-  const commaIndex = amount.search(/[.]/);
-  const decimalsToFill = decimals - (amount.length - commaIndex - 1);
-  const strippedText = amount.slice(0, commaIndex) + amount.slice(commaIndex + 1) + '0'.repeat(decimalsToFill);
+  const stringifiedAmount = `${amount}`;
+  const commaIndex = stringifiedAmount.search(/[.]/);
+  const decimalsToFill = decimals - (stringifiedAmount.length - commaIndex - 1);
+  const strippedText = stringifiedAmount.slice(0, commaIndex) + stringifiedAmount.slice(commaIndex + 1) + '0'.repeat(decimalsToFill);
   const notZeroIndex = strippedText.search(/[^0]/);
 
   if (notZeroIndex > 1) {

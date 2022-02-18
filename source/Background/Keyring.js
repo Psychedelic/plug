@@ -1,6 +1,9 @@
 import extension from 'extensionizer';
 import getICPPrice from '@shared/services/ICPPrice';
 import {
+  /* PROTECTED_CATEGORIES, */ XTC_CANISTER_ID, ICP_CANISTER_ID,
+} from '@shared/constants/canisters';
+import {
   formatAssets,
   parseAssetsAmount,
   parseFromAmount,
@@ -134,7 +137,6 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.UNLOCK]: async (params) => {
     let unlocked = false;
     try {
-      console.log('trying to unlock');
       unlocked = await keyring.unlock(params?.password);
 
       if (unlocked && params?.redirect) {
@@ -178,12 +180,8 @@ export const getKeyringHandler = (type, keyring) => ({
         || refresh;
 
       if (shouldUpdate) {
-        try {
-          assets = await keyring.getBalances();
-          assets = parseAssetsAmount(assets);
-        } catch (e) {
-          console.log('getBalances e ->', e);
-        }
+        assets = await keyring.getBalances();
+        assets = parseAssetsAmount(assets);
       } else {
         keyring.getBalances();
       }
@@ -207,11 +205,11 @@ export const getKeyringHandler = (type, keyring) => ({
     to, amount, canisterId, opts,
   }) => {
     try {
-      const { token } = await keyring.getTokenInfo(canisterId);
+      const { token } = await keyring.getTokenInfo(ICP_CANISTER_ID);
       const { decimals } = token;
       const parsedAmount = parseFromAmount(amount, decimals);
 
-      const { height, transactionId } = await keyring.send(to, parsedAmount, canisterId, opts);
+      const { height, transactionId } = await keyring.send(to, parsedAmount, ICP_CANISTER_ID, opts);
       return {
         height: height ? parseInt(height, 10) : undefined,
         transactionId: transactionId ? parseInt(transactionId, 10) : undefined,
@@ -249,9 +247,18 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.BURN_XTC]:
     async ({ to, amount }) => {
       try {
-        const response = await keyring.burnXTC({ to, amount });
+        const { token } = await keyring.getTokenInfo(XTC_CANISTER_ID);
+        const { decimals } = token;
+        const parsedAmount = parseFromAmount(amount, decimals);
+        console.log('Sent obj ->', { to, amount: parsedAmount });
+
+        const response = await keyring.burnXTC({ to, amount: parsedAmount });
+        console.log('response ->', response);
+        return;
         return recursiveParseBigint(response);
       } catch (e) {
+        console.log('error ->>', e);
+        console.trace(e);
         return { error: e.message };
       }
     },
