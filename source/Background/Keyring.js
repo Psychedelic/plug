@@ -247,14 +247,7 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.BURN_XTC]:
     async ({ to, amount }) => {
       try {
-        const { token } = await keyring.getTokenInfo(XTC_CANISTER_ID);
-        const { decimals } = token;
-        const parsedAmount = parseFromAmount(amount, decimals);
-        console.log('Sent obj ->', { to, amount: parsedAmount });
-
-        const response = await keyring.burnXTC({ to, amount: parsedAmount });
-        console.log('response ->', response);
-        return;
+        const response = await keyring.burnXTC({ to, amount });
         return recursiveParseBigint(response);
       } catch (e) {
         console.log('error ->>', e);
