@@ -106,7 +106,7 @@ export const parseFromAmount = (amount, decimals) => {
   if (shouldParseDecimalExponential > -1) {
     const decimalsToAdd = stringifiedAmount.slice(shouldParseDecimalExponential + 2) - 1;
     const prefix = stringifiedAmount.slice(0, shouldParseDecimalExponential);
-    stringifiedAmount = '0.' + '0'.repeat(decimalsToAdd) + prefix;
+    stringifiedAmount = `0.${'0'.repeat(decimalsToAdd)}${prefix}`;
   }
 
   const commaIndex = stringifiedAmount.search(/[.]/);

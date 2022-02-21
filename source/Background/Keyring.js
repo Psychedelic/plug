@@ -1,7 +1,7 @@
 import extension from 'extensionizer';
 import getICPPrice from '@shared/services/ICPPrice';
 import {
-  /* PROTECTED_CATEGORIES, */ XTC_CANISTER_ID, ICP_CANISTER_ID,
+  /* PROTECTED_CATEGORIES, */ ICP_CANISTER_ID,
 } from '@shared/constants/canisters';
 import {
   formatAssets,
@@ -143,7 +143,6 @@ export const getKeyringHandler = (type, keyring) => ({
         setRouter('home');
       }
     } catch (e) {
-      console.log('unlock error ->', e);
       unlocked = false;
     }
     return unlocked;
@@ -179,6 +178,9 @@ export const getKeyringHandler = (type, keyring) => ({
         || Object.values(assets)?.some((asset) => asset.amount === 'Error')
         || refresh;
 
+      console.log(Object.values(assets));
+      console.log('should update ->', Object.values(assets)?.every((asset) => !Number(asset.amount)));
+
       if (shouldUpdate) {
         assets = await keyring.getBalances();
         assets = parseAssetsAmount(assets);
@@ -202,7 +204,7 @@ export const getKeyringHandler = (type, keyring) => ({
     }
   },
   [HANDLER_TYPES.SEND_TOKEN]: async ({
-    to, amount, canisterId, opts,
+    to, amount, opts,
   }) => {
     try {
       const { token } = await keyring.getTokenInfo(ICP_CANISTER_ID);
@@ -250,8 +252,6 @@ export const getKeyringHandler = (type, keyring) => ({
         const response = await keyring.burnXTC({ to, amount });
         return recursiveParseBigint(response);
       } catch (e) {
-        console.log('error ->>', e);
-        console.trace(e);
         return { error: e.message };
       }
     },

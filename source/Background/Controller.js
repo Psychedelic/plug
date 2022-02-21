@@ -137,7 +137,6 @@ const secureController = async (callback, controller) => {
   try {
     await controller();
   } catch (e) {
-    console.log('error here ->', e);
     notificationManager.notificateError(e.message);
   }
 };
@@ -809,7 +808,7 @@ backgroundController.exposeController(
       if (xtcAmount - XTC_FEE > transfer.amount) {
         const response = await burnXTC({
           ...transfer,
-          amount: parsedAmount
+          amount: parsedAmount,
         });
         if (response.error) {
           callback(null, false);
