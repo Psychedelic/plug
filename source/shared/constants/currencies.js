@@ -100,7 +100,15 @@ export const parseToAmount = (amount, decimals) => {
 };
 
 export const parseFromAmount = (amount, decimals) => {
-  const stringifiedAmount = `${amount}`;
+  let stringifiedAmount = `${amount}`;
+  const shouldParseDecimalExponential = stringifiedAmount.search(/e-/);
+
+  if (shouldParseDecimalExponential > -1) {
+    const decimalsToAdd = stringifiedAmount.slice(shouldParseDecimalExponential + 2) - 1;
+    const prefix = stringifiedAmount.slice(0, shouldParseDecimalExponential);
+    stringifiedAmount = '0.' + '0'.repeat(decimalsToAdd) + prefix;
+  }
+
   const commaIndex = stringifiedAmount.search(/[.]/);
   const decimalsToFill = decimals - (stringifiedAmount.length - commaIndex - 1);
   const strippedText = stringifiedAmount.slice(0, commaIndex) + stringifiedAmount.slice(commaIndex + 1) + '0'.repeat(decimalsToFill);
