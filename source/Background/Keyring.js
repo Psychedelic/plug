@@ -178,15 +178,13 @@ export const getKeyringHandler = (type, keyring) => ({
         || Object.values(assets)?.some((asset) => asset.amount === 'Error')
         || refresh;
 
-      console.log(Object.values(assets));
-      console.log('should update ->', Object.values(assets)?.every((asset) => !Number(asset.amount)));
-
       if (shouldUpdate) {
         assets = await keyring.getBalances();
-        assets = parseAssetsAmount(assets);
       } else {
         keyring.getBalances();
       }
+
+      assets = parseAssetsAmount(assets);
 
       return assets;
     } catch (e) {
