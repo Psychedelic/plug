@@ -45,9 +45,14 @@ export const walletSlice = createSlice({
     },
     setTransactions: (state, action) => {
       const mapTransaction = (trx) => {
+        const getSymbol = () => {
+          if ('tokenRegistryInfo' in trx.details) return trx.details.tokenRegistryInfo.symbol;
+          if ('nftRegistryInfo' in trx.details) return 'NFT';
+          return trx?.details?.currency?.symbol ?? '';
+        };
         const asset = formatAssetBySymbol(
           trx?.details?.amount,
-          trx?.details?.currency?.symbol,
+          getSymbol(),
           action?.payload?.icpPrice,
         );
         const isOwnTx = [state.principalId, state.accountId].includes(trx?.caller);
@@ -57,11 +62,6 @@ export const walletSlice = createSlice({
             return isOwnTx ? 'SEND' : 'RECEIVE';
           }
           return type.toUpperCase();
-        };
-        const getSymbol = () => {
-          if ('tokenRegistryInfo' in trx.details) return trx.details.tokenRegistryInfo.symbol;
-          if ('nftRegistryInfo' in trx.details) return 'NFT';
-          return trx?.details?.currency?.symbol ?? '';
         };
         const canisterInfo = trx?.details?.tokenRegistryInfo || trx?.details?.nftRegistryInfo;
         const transaction = {

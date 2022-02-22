@@ -1,6 +1,5 @@
 import qs from 'query-string';
 import extension from 'extensionizer';
-import fromExponential from 'from-exponential';
 import { BackgroundController } from '@fleekhq/browser-rpc';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { areAllElementsIn } from '@shared/utils/array';
@@ -395,8 +394,11 @@ backgroundController.exposeController(
       const assets = await getBalance();
       const parsedAmount = (transfer.amount / E8S_PER_ICP);
       if (assets?.[DEFAULT_CURRENCY_MAP.ICP]?.amount > parsedAmount) {
-        transfer.amount = fromExponential(parsedAmount);
-        const response = await sendToken(transfer);
+        const response = await sendToken({
+          ...transfer,
+          amount: parsedAmount,
+        });
+
         if (response.error) {
           callback(null, false);
           callback(ERRORS.SERVER_ERROR(response.error), null, [
@@ -801,15 +803,13 @@ backgroundController.exposeController(
       const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
       const assets = await getBalance();
       const xtcAmount = assets?.[DEFAULT_CURRENCY_MAP.XTC]?.amount * CYCLES_PER_TC;
+      const parsedAmount = transfer.amount / CYCLES_PER_TC;
 
       if (xtcAmount - XTC_FEE > transfer.amount) {
-        const stringBurnAmount = fromExponential(transfer.amount / CYCLES_PER_TC);
-        const burnParams = {
-          to: transfer.to,
-          amount: stringBurnAmount,
-        };
-
-        const response = await burnXTC(burnParams);
+        const response = await burnXTC({
+          ...transfer,
+          amount: parsedAmount,
+        });
         if (response.error) {
           callback(null, false);
           callback(ERRORS.SERVER_ERROR(response.error), null, [

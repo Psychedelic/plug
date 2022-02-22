@@ -1,10 +1,59 @@
 import extension from 'extensionizer';
 import getICPPrice from '@shared/services/ICPPrice';
-import { formatAssets } from '@shared/constants/currencies';
+import {
+  /* PROTECTED_CATEGORIES, */ ICP_CANISTER_ID,
+} from '@shared/constants/canisters';
+import {
+  formatAssets,
+  parseAssetsAmount,
+  parseFromAmount,
+  parseToAmount,
+} from '@shared/constants/currencies';
 import { setRouter } from '@modules/storageManager';
 
 export const NANOS_PER_SECOND = 1_000_000;
 export const BALANCE_ERROR = 'You have tried to spend more than the balance of your account';
+
+const parseTransactionObject = (transactionObject) => {
+  const { amount, currency, token } = transactionObject;
+
+  const { decimals } = { ...currency, ...token };
+  const parsedAmount = parseToAmount(amount, decimals);
+
+  return {
+    ...transactionObject,
+    amount: parsedAmount,
+  };
+};
+
+const parseTransaction = (transaction) => {
+  const { details } = transaction;
+  const { fee } = details;
+
+  const parsedDetails = parseTransactionObject(details);
+  let parsedFee = fee;
+
+  if (fee instanceof Object && ('token' in fee || 'currency' in fee)) {
+    parsedFee = parseTransactionObject(fee);
+  }
+
+  return {
+    ...transaction,
+    details: {
+      ...parsedDetails,
+      fee: parsedFee,
+    },
+  };
+};
+
+const parseTransactions = (transactionsObject) => {
+  const { transactions } = transactionsObject;
+
+  return {
+    ...transactionsObject,
+    transactions: transactions.map(parseTransaction),
+  };
+};
 
 export const recursiveParseBigint = (obj) => Object.entries(obj).reduce(
   (acum, [key, val]) => {
@@ -117,16 +166,16 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.GET_TRANSACTIONS]: async () => {
     const response = await keyring.getTransactions();
-    return recursiveParseBigint(response);
+    return parseTransactions(response);
   },
   [HANDLER_TYPES.GET_ASSETS]: async ({ refresh }) => {
     try {
       if (!keyring?.isUnlocked) return {};
 
       const { wallets, currentWalletId } = await keyring.getState();
-      let assets = wallets?.[currentWalletId]?.assets;
-      const shouldUpdate = assets?.every((asset) => !Number(asset.amount))
-        || assets?.some((asset) => asset.amount === 'Error')
+      let assets = Object.values(wallets?.[currentWalletId]?.assets);
+      const shouldUpdate = Object.values(assets)?.every((asset) => !Number(asset.amount))
+        || Object.values(assets)?.some((asset) => asset.amount === 'Error')
         || refresh;
 
       if (shouldUpdate) {
@@ -134,6 +183,9 @@ export const getKeyringHandler = (type, keyring) => ({
       } else {
         keyring.getBalances();
       }
+
+      assets = parseAssetsAmount(assets);
+
       return assets;
     } catch (e) {
       return { error: e.message };
@@ -141,18 +193,23 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.GET_BALANCE]: async (subaccount) => {
     try {
-      const balances = await keyring.getBalances(subaccount);
+      const assets = await keyring.getBalances(subaccount);
+      const parsedAssets = parseAssetsAmount(assets);
       const icpPrice = await getICPPrice();
-      return formatAssets(balances, icpPrice);
+      return formatAssets(parsedAssets, icpPrice);
     } catch (error) {
       return { error: error.message };
     }
   },
   [HANDLER_TYPES.SEND_TOKEN]: async ({
-    to, amount, canisterId, opts,
+    to, amount, opts,
   }) => {
     try {
-      const { height, transactionId } = await keyring.send(to, amount, canisterId, opts);
+      const { token } = await keyring.getTokenInfo(ICP_CANISTER_ID);
+      const { decimals } = token;
+      const parsedAmount = parseFromAmount(amount, decimals);
+
+      const { height, transactionId } = await keyring.send(to, parsedAmount, ICP_CANISTER_ID, opts);
       return {
         height: height ? parseInt(height, 10) : undefined,
         transactionId: transactionId ? parseInt(transactionId, 10) : undefined,
