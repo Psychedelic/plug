@@ -1,9 +1,6 @@
 import extension from 'extensionizer';
 import getICPPrice from '@shared/services/ICPPrice';
 import {
-  /* PROTECTED_CATEGORIES, */ ICP_CANISTER_ID,
-} from '@shared/constants/canisters';
-import {
   formatAssets,
   parseAssetsAmount,
   parseFromAmount,
@@ -202,14 +199,14 @@ export const getKeyringHandler = (type, keyring) => ({
     }
   },
   [HANDLER_TYPES.SEND_TOKEN]: async ({
-    to, amount, opts,
+    to, amount, canisterId, opts,
   }) => {
     try {
-      const { token } = await keyring.getTokenInfo(ICP_CANISTER_ID);
+      const { token } = await keyring.getTokenInfo(canisterId);
       const { decimals } = token;
       const parsedAmount = parseFromAmount(amount, decimals);
 
-      const { height, transactionId } = await keyring.send(to, parsedAmount, ICP_CANISTER_ID, opts);
+      const { height, transactionId } = await keyring.send(to, parsedAmount, canisterId, opts);
       return {
         height: height ? parseInt(height, 10) : undefined,
         transactionId: transactionId ? parseInt(transactionId, 10) : undefined,
