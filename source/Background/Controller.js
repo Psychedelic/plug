@@ -9,7 +9,7 @@ import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
 import { XTC_FEE } from '@shared/constants/addresses';
 import { getApps, setApps, removeApp } from '@modules';
 import {
-  /* PROTECTED_CATEGORIES, */ ASSET_CANISTER_IDS,
+  /* PROTECTED_CATEGORIES, */ ASSET_CANISTER_IDS, ICP_CANISTER_ID,
 } from '@shared/constants/canisters';
 import { getDabNfts } from '@shared/services/DAB';
 import NotificationManager from '../lib/NotificationManager';
@@ -397,6 +397,7 @@ backgroundController.exposeController(
         const response = await sendToken({
           ...transfer,
           amount: parsedAmount,
+          canisterId: ICP_CANISTER_ID,
         });
 
         if (response.error) {
