@@ -24,10 +24,10 @@ import GenericIcon from '../GenericIcon';
 import SwapIcon from './SwapIcon';
 import useStyles from './styles';
 
-const getTitle = (type, symbol, swapData, plug, t) => {
+const getTitle = (type, symbol, sonicData, plug, t) => {
   switch (type) {
     case 'SWAP':
-      return `${t('activity.title.swap')} ${symbol} ${t('activity.title.for')} ${swapData?.currency?.name || t('common.unknownToken')}`;
+      return `${t('activity.title.swap')} ${symbol} ${t('activity.title.for')} ${sonicData?.currency?.name || t('common.unknownToken')}`;
     case 'PLUG':
       return `${t('activity.title.pluggedInto')} ${plug.name}`;
     default:
@@ -73,7 +73,7 @@ const ActivityItem = ({
   status,
   date,
   plug,
-  swapData,
+  sonicData,
   icon,
   symbol,
   hash,
@@ -87,7 +87,7 @@ const ActivityItem = ({
   const [showSwap, setShowSwap] = useState(false);
   const [hover, setHover] = useState(false);
   const handleShowSwap = (show) => {
-    if (symbol && value && amount && swapData) {
+    if (symbol && value && amount && sonicData) {
       setShowSwap(show);
     }
   };
@@ -159,7 +159,7 @@ const ActivityItem = ({
           ? (
             <SwapIcon
               fromCurrency={{ symbol, value, amount }}
-              toCurrency={swapData?.currency}
+              toCurrency={sonicData?.currency}
               handleShowSwap={handleShowSwap}
             />
           )
@@ -172,7 +172,7 @@ const ActivityItem = ({
       }
       <div className={classes.leftContainer}>
         <Typography variant="h5">
-          {getTitle(type, symbol, swapData, plug, t)}
+          {getTitle(type, symbol, sonicData, plug, t)}
         </Typography>
         <Typography
           variant="subtitle2"
@@ -194,7 +194,7 @@ const ActivityItem = ({
       </div>
       <div className={classes.rightContainer}>
         <div className={classes.amountContainer}>
-          {details?.tokenId ? (
+          {symbol === 'NFT' ? (
             <>
               <Typography variant="h5">
                 {details?.tokenId?.length > 5 ? shortAddress(details?.tokenId) : `#${details?.tokenId}`}
@@ -206,10 +206,10 @@ const ActivityItem = ({
           ) : (
             <>
               <Typography variant="h5">
-                <NumberFormat value={showSwap ? swapData?.amount : amount} displayType="text" thousandSeparator="," suffix={` ${showSwap ? swapData.currency?.name : symbol}`} decimalScale={5} />
+                <NumberFormat value={showSwap ? sonicData?.amount : amount} displayType="text" thousandSeparator="," suffix={` ${showSwap ? sonicData.currency?.name : symbol}`} decimalScale={5} />
               </Typography>
               <Typography variant="subtitle2">
-                <NumberFormat value={showSwap ? swapData?.value : value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" decimalScale={2} />
+                <NumberFormat value={showSwap ? sonicData?.value : value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" decimalScale={2} />
               </Typography>
             </>
           )}
@@ -271,7 +271,7 @@ ActivityItem.defaultProps = {
   value: null,
   status: null,
   plug: null,
-  swapData: null,
+  sonicData: null,
   icon: null,
   type: 'PLUG',
   hash: null,
@@ -304,7 +304,7 @@ ActivityItem.propTypes = {
     name: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
   }),
-  swapData: PropTypes.shape({
+  sonicData: PropTypes.shape({
     currency: PropTypes.shape(currencyPropTypes).isRequired,
     amount: PropTypes.oneOfType([
       PropTypes.string,

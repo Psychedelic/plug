@@ -15,9 +15,11 @@ export const NANOS_PER_SECOND = 1_000_000;
 export const BALANCE_ERROR = 'You have tried to spend more than the balance of your account';
 
 const parseTransactionObject = (transactionObject) => {
-  const { amount, currency, token } = transactionObject;
+  const {
+    amount, currency, token, sonicData,
+  } = transactionObject;
 
-  const { decimals } = { ...currency, ...token };
+  const { decimals } = { ...currency, ...token, ...(sonicData?.token ?? {}) };
   const parsedAmount = parseToAmount(amount, decimals);
 
   return {
