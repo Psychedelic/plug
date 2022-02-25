@@ -7,16 +7,10 @@ const TYPE_MAP = {
   'video/mp4': 'video',
   'image/png': 'img',
   'text/html': 'iframe',
+  'image/svg+xml': 'svg',
 };
 
 const TAG_PROPS = {
-  video: {
-    autoPlay: true,
-    muted: true,
-    loop: true,
-    width: '100%',
-    height: '100%',
-  },
   img: {
     width: '100%',
     height: '100%',
@@ -25,6 +19,17 @@ const TAG_PROPS = {
     width: '100%',
     height: '100%',
     loading: 'lazy',
+  },
+  svg: {
+    width: '100%',
+    height: '100%',
+  },
+  video: {
+    autoPlay: true,
+    muted: true,
+    loop: true,
+    width: '100%',
+    height: '100%',
   },
 };
 
