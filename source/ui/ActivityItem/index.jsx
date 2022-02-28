@@ -17,7 +17,7 @@ import shortAddress from '@shared/utils/short-address';
 import Typography from '@material-ui/core/Typography';
 
 import UnknownIcon from '@assets/icons/unknown-icon.svg';
-import { getICRocksTransactionUrl } from '@shared/constants/urls';
+import { getICNetworkStatusUrl } from '@shared/constants/urls';
 import ReactJson from 'react-json-view';
 import Dialog from '../Dialog';
 import GenericIcon from '../GenericIcon';
@@ -61,7 +61,7 @@ const getAddress = (type, to, from, canisterId) => (
 )[type] || canisterId || '';
 
 const openICRocksTx = (hash) => {
-  extension.tabs.create({ url: getICRocksTransactionUrl(hash) });
+  extension.tabs.create({ url: getICNetworkStatusUrl(hash) });
 };
 
 const ActivityItem = ({
