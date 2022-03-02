@@ -60,7 +60,7 @@ const getAddress = (type, to, from, canisterId) => (
   }
 )[type] || canisterId || '';
 
-const openICRocksTx = (hash) => {
+const openICNetworkTx = (hash) => {
   extension.tabs.create({ url: getICNetworkStatusUrl(hash) });
 };
 
@@ -103,7 +103,7 @@ const ActivityItem = ({
   const [tooltipText, setTooltipText] = useState(copyText);
   const handleItemClick = () => {
     if (symbol === 'ICP') {
-      openICRocksTx(hash);
+      openICNetworkTx(hash);
     }
   };
 
