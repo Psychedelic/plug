@@ -38,7 +38,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
     setLoading(true);
     sendMessage({
       type: HANDLER_TYPES.GET_TOKEN_INFO,
-      params: { canisterId, standard: standard.toLowerCase() },
+      params: { canisterId, standard: standard },
     }, async (tokenInfo) => {
       if (tokenInfo?.error) {
         setTokenError(true);
