@@ -39,7 +39,6 @@ const NFTItem = ({
   image,
   canisterId,
   details,
-  canisterInfo,
   setOpenDetail,
   hovering,
 }) => {
@@ -125,12 +124,10 @@ NFTItem.defaultProps = {
   name: null,
   canisterId: null,
   details: null,
-  canisterInfo: {},
   hovering: false,
 };
 
 NFTItem.propTypes = {
-  canisterInfo: PropTypes.objectOf(PropTypes.any),
   type: PropTypes.number,
   canisterId: PropTypes.string,
   details: PropTypes.objectOf(PropTypes.any),

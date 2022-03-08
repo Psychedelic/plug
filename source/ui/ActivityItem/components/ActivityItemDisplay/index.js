@@ -5,7 +5,7 @@ import { Tooltip, Typography } from '@material-ui/core';
 import useStyles from '../../styles';
 
 const ActivityItemDisplay = ({
-  image, title, subtitle, tooltip, onCopy, tooltipText, copied,
+  image, title, subtitle, tooltip, onCopy, tooltipText, copied, titleClassName,
 }) => {
   const classes = useStyles();
 
@@ -15,7 +15,7 @@ const ActivityItemDisplay = ({
     <>
       {image}
       <div className={classes.leftContainer}>
-        <Typography variant="h5">{title}</Typography>
+        <Typography variant="h5" className={titleClassName}>{title}</Typography>
         <Typography
           variant="subtitle2"
           onClick={onCopy}
@@ -40,14 +40,23 @@ const ActivityItemDisplay = ({
   );
 };
 
+ActivityItemDisplay.defaultProps = {
+  tooltip: null,
+  tooltipText: null,
+  copied: false,
+  onCopy: () => {},
+  titleClassName: '',
+};
+
 ActivityItemDisplay.propTypes = {
   image: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string.isRequired,
-  tooltip: PropTypes.string.isRequired,
-  tooltipText: PropTypes.string.isRequired,
-  copied: PropTypes.bool.isRequired,
-  onCopy: PropTypes.func.isRequired,
+  tooltip: PropTypes.string,
+  tooltipText: PropTypes.string,
+  copied: PropTypes.bool,
+  onCopy: PropTypes.func,
+  titleClassName: PropTypes.string,
 };
 
 export default ActivityItemDisplay;

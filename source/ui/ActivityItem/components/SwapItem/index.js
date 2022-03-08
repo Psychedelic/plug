@@ -10,6 +10,7 @@ import ListIcon from '@material-ui/icons/List';
 
 import SwapIcon from '../SwapIcon';
 import useStyles from '../../styles';
+import ActivityItemDisplay from '../ActivityItemDisplay';
 
 const TokenItem = ({
   date,
@@ -26,15 +27,13 @@ const TokenItem = ({
 
   return (
     <>
-      <SwapIcon fromCurrency={swap?.from} toCurrency={swap?.to} setHovering={setIconHovered} />
-      <div className={classes.leftContainer}>
-        <Typography variant="h5">
-          {`${t('activity.title.swap')} ${swap?.from?.name} ${t('activity.title.for')} ${swap?.to?.name || t('common.unknownToken')}`}
-        </Typography>
-        <Typography variant="subtitle2">
-          {moment(date).format('MMM Do')}
-        </Typography>
-      </div>
+      <ActivityItemDisplay
+        image={(
+          <SwapIcon fromCurrency={swap?.from} toCurrency={swap?.to} setHovering={setIconHovered} />
+          )}
+        title={`${t('activity.title.swap')} ${swap?.from?.name} ${t('activity.title.for')} ${swap?.to?.name || t('common.unknownToken')}`}
+        subtitle={moment(date).format('MMM Do')}
+      />
       <div className={classes.rightContainer}>
         <div className={classes.amountContainer}>
           {/* TODO: Add correct formatting */}

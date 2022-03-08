@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import {
-  capitalize, IconButton, Typography, Tooltip,
+  capitalize, IconButton, Typography,
 } from '@material-ui/core';
 import ListIcon from '@material-ui/icons/List';
 
@@ -15,6 +15,7 @@ import shortAddress from '@shared/utils/short-address';
 import { GenericIcon } from '@ui';
 
 import useStyles from '../../styles';
+import ActivityItemDisplay from '../ActivityItemDisplay';
 
 const getSubtitle = (type, to, from, t) => (({
   SEND: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
@@ -53,7 +54,6 @@ const TokenItem = (props) => {
 
   const copyText = t('copy.copyTextAddress');
   const copiedText = t('copy.copiedText');
-  const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipText, setTooltipText] = useState(copyText);
 
   const handleClickCopy = (e) => {
@@ -77,32 +77,20 @@ const TokenItem = (props) => {
   };
   return (
     <>
-      <GenericIcon
-        image={image || UnknownIcon}
-        type={type}
+      <ActivityItemDisplay
+        image={(
+          <GenericIcon
+            image={image || UnknownIcon}
+            type={type}
+          />
+          )}
+        title={`${capitalize(type?.toLowerCase())} ${symbol ?? ''}`}
+        subtitle={moment(date).format('MMM Do')}
+        tooltip={getSubtitle(type, to, from, t, canisterId)}
+        copied={copied}
+        tooltipText={tooltipText}
+        onCopy={handleClickCopy}
       />
-      <div className={classes.leftContainer}>
-        <Typography variant="h5">
-          {`${capitalize(type?.toLowerCase())} ${symbol ?? ''}`}
-        </Typography>
-        <Typography
-          variant="subtitle2"
-          onClick={handleClickCopy}
-          onMouseOver={() => setShowTooltip(true)}
-          onMouseLeave={() => setShowTooltip(false)}
-        >
-          {moment(date).format('MMM Do')}
-          <Tooltip
-            classes={{ tooltipPlacementBottom: classes.tooltip }}
-            title={tooltipText}
-            arrow
-            open={showTooltip || copied}
-            placement="bottom"
-          >
-            <span>{getSubtitle(type, to, from, t, canisterId)}</span>
-          </Tooltip>
-        </Typography>
-      </div>
       <div className={classes.rightContainer}>
         <div className={classes.amountContainer}>
           <Typography variant="h5">
