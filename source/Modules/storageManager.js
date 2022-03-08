@@ -97,3 +97,17 @@ export const clearStorage = (cb = () => {}) => {
     cb(false);
   }
 };
+
+export const getLastClockCheck = (cb) => {
+  const defaultValue = '';
+
+  secureGetWrapper('lastClockCheck', defaultValue, (result) => {
+    cb(result?.lastClockCheck || defaultValue);
+  });
+};
+
+export const setLastClockCheck = () => {
+  const defaultValue = new Date().toUTCString();
+
+  secureSetWrapper({ 'lastClockCheck': defaultValue }, defaultValue, () => {});
+};
