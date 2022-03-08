@@ -34,7 +34,7 @@ const Clock = () => {
           {t('clock.description')}
           <a
             className={classes.descriptionLink}
-            href="https://docs.plugwallet.ooo/"
+            href="https://docs.plugwallet.ooo/resources/troubleshooting-tokens/#clock-error-code-400-specified-ingress_expiry-not-within-expected-range"
           >
             {t('clock.descriptionLink')}
           </a>
