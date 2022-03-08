@@ -3,10 +3,30 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import NumberFormat from 'react-number-format';
+
+import { formatAssetBySymbol, parseToAmount } from '@shared/constants/currencies';
+import { useICPPrice } from '@redux/icp';
 
 import SwapIcon from '../SwapIcon';
 import ActivityItemDisplay from '../ActivityItemDisplay';
 import ActivityItemDetails from '../ActivityItemDetails';
+
+const getSwapData = (swap, iconHovered, icpPrice) => {
+  const {
+    from, to, amountIn, amountOut,
+  } = swap || {};
+  const inData = {
+    amount: -parseToAmount(amountIn, from?.details?.decimals),
+    symbol: from?.details?.symbol,
+  };
+  const outData = {
+    amount: parseToAmount(amountOut, to?.details?.decimals),
+    symbol: to?.details?.symbol,
+  };
+  const data = iconHovered ? outData : inData;
+  return formatAssetBySymbol(data?.amount, data.symbol, icpPrice);
+};
 
 const TokenItem = ({
   date,
@@ -15,10 +35,10 @@ const TokenItem = ({
   hovering,
 }) => {
   const { t } = useTranslation();
+  const icpPrice = useICPPrice();
   const [iconHovered, setIconHovered] = useState(false);
-
   const { swap } = details?.sonicData || {};
-
+  const data = getSwapData(swap, iconHovered, icpPrice);
   return (
     <>
       <ActivityItemDisplay
@@ -29,8 +49,8 @@ const TokenItem = ({
         subtitle={moment(date).format('MMM Do')}
       />
       <ActivityItemDetails
-        main={iconHovered ? 'TODO Hover' : 'TODO'}
-        secondary=""
+        main={<NumberFormat value={data.amount} displayType="text" thousandSeparator="," suffix={` ${data.symbol}`} decimalScale={5} />}
+        secondary={<NumberFormat value={data.value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" decimalScale={2} />}
         hovering={hovering}
         details={details}
         setOpenDetail={setOpenDetail}
