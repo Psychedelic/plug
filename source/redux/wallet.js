@@ -75,7 +75,6 @@ export const walletSlice = createSlice({
           image: trx?.details?.canisterInfo?.icon || TOKEN_IMAGES[getSymbol()] || '',
           symbol: getSymbol(),
           canisterId: trx?.details?.canisterInfo?.canisterId,
-          plug: null,
           canisterInfo: trx?.canisterInfo,
           details: { ...trx?.details, caller: trx?.caller },
         };

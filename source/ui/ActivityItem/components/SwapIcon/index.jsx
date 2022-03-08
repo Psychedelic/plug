@@ -9,7 +9,7 @@ import { TokenIcon } from '@components';
 
 import useStyles from './styles';
 
-const SwapIcon = ({ fromCurrency, toCurrency }) => {
+const SwapIcon = ({ fromCurrency, toCurrency, setHovering }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -29,6 +29,8 @@ const SwapIcon = ({ fromCurrency, toCurrency }) => {
         className={clsx(classes.image, classes.toImage)}
         image={toCurrency?.thumbnail || UnknownIcon}
         alt={toCurrency?.name}
+        onMouseEnter={() => setHovering(true)}
+        onMouseLeave={() => setHovering(false)}
       />
     </div>
   );
@@ -39,4 +41,5 @@ export default SwapIcon;
 SwapIcon.propTypes = {
   fromCurrency: PropTypes.shape(currencyPropTypes).isRequired,
   toCurrency: PropTypes.shape(currencyPropTypes).isRequired,
+  setHovering: PropTypes.func.isRequired,
 };
