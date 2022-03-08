@@ -8,7 +8,7 @@ export const customTokensUrl = 'https://docs.plugwallet.ooo/getting-started/cust
 export const buyCyclesUrl = 'https://docs.plugwallet.ooo/resources/buying-cycles/';
 export const entrepotUrl = 'https://entrepot.app/#marketplace';
 
-export const getICRocksAccountUrl = (accountId) => `https://dashboard.internetcomputer.org/account/${accountId}`;
-export const getICRocksTransactionUrl = (transactionHash) => `https://dashboard.internetcomputer.org/transaction/${transactionHash}`;
-export const getICRocksPrincipalUrl = (canisterId) => `https://dashboard.internetcomputer.org/principal/${canisterId}`;
+export const getICNetworkStatusUrl = (transactionHash) => `https://dashboard.internetcomputer.org/transaction/${transactionHash}`;
+export const getICRocksAccountUrl = (accountId) => `https://ic.rocks/account/${accountId}`;
+export const getICRocksPrincipalUrl = (canisterId) => `https://ic.rocks/principal/${canisterId}`;
 export const getCapExplorerUrl = (canisterId) => ` https://blue-bar-1426.on.fleek.co/app-transactions/${canisterId}`;

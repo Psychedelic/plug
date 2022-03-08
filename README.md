@@ -47,7 +47,7 @@ If you don't have one, create the personal access token [in the developer settin
 Run the following command to authenticate, using the **personal access token** as your **password**:
 
 ```
-npm login --registry=https://npm.pkg.github.com --scope=@Psychedelic
+npm login --registry=https://npm.pkg.github.com --scope=@psychedelic
 ```
 
 Then run the following:
