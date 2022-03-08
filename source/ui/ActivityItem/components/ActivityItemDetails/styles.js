@@ -21,7 +21,7 @@ export default makeStyles(() => ({
     opacity: 1,
     marginLeft: 10,
   },
-  tokenContainer: {
+  amountContainer: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-evenly',

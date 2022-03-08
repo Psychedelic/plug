@@ -1,53 +1,49 @@
 import React, { useState } from 'react';
-
+import NumberFormat from 'react-number-format';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import clsx from 'clsx';
-
-import {
-  capitalize, IconButton, Typography,
-} from '@material-ui/core';
-import ListIcon from '@material-ui/icons/List';
+import { capitalize } from '@material-ui/core';
 
 import UnknownIcon from '@assets/icons/unknown-icon.svg';
-
 import shortAddress from '@shared/utils/short-address';
-
 import { GenericIcon } from '@ui';
 
-import useStyles from '../../styles';
 import ActivityItemDisplay from '../ActivityItemDisplay';
+import ActivityItemDetails from '../ActivityItemDetails';
 
 const getSubtitle = (type, to, from, t) => (({
   SEND: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
+  BURN: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
   RECEIVE: ` · ${t('activity.subtitle.from')}: ${shortAddress(from)}`,
 })[type]);
 
 const getAddress = (type, to, from, canisterId) => (
   {
     SEND: to,
+    BURN: to,
     RECEIVE: from,
   }
 )[type] || canisterId || '';
 
-const NFTItem = ({
-  type,
-  to,
-  from,
-  date,
-  image,
-  canisterId,
-  details,
-  setOpenDetail,
-  hovering,
-}) => {
+const TokenItem = (props) => {
+  const {
+    type,
+    to,
+    from,
+    amount,
+    value,
+    date,
+    symbol,
+    image,
+    canisterId,
+    details,
+    setOpenDetail,
+    isTransaction,
+    hovering,
+  } = props;
   const { t } = useTranslation();
-
-  const classes = useStyles();
-
   const [copied, setCopied] = useState(false);
-
   const copyText = t('copy.copyTextAddress');
   const copiedText = t('copy.copiedText');
   const [tooltipText, setTooltipText] = useState(copyText);
@@ -71,7 +67,6 @@ const NFTItem = ({
       setTooltipText(copyText);
     }, 1500);
   };
-
   return (
     <>
       <ActivityItemDisplay
@@ -80,65 +75,57 @@ const NFTItem = ({
             image={image || UnknownIcon}
             type={type}
           />
-        )}
-        title={`${capitalize(type?.toLowerCase())} NFT`}
+          )}
+        title={`${capitalize(type?.toLowerCase())} ${symbol ?? ''}`}
         subtitle={moment(date).format('MMM Do')}
         tooltip={getSubtitle(type, to, from, t, canisterId)}
         copied={copied}
         tooltipText={tooltipText}
         onCopy={handleClickCopy}
       />
-      <div className={classes.rightContainer}>
-        <div className={classes.tokenContainer}>
-          <Typography variant="h5">
-            {details?.tokenId?.length > 5 ? shortAddress(details?.tokenId) : `#${details?.tokenId}`}
-          </Typography>
-          <Typography variant="subtitle2">
-            {details?.canisterInfo?.name || shortAddress(canisterId)}
-          </Typography>
-        </div>
-        <div className={
-          clsx(
-            classes.iconContainer,
-            hovering && classes.iconContainerAnimation,
-          )
-        }
-        >
-          {details && (
-          <IconButton size="small" onClick={() => setOpenDetail(true)} className={classes.detailsIcon}>
-            <ListIcon />
-          </IconButton>
-          )}
-        </div>
-      </div>
+      <ActivityItemDetails
+        main={<NumberFormat value={amount} displayType="text" thousandSeparator="," suffix={` ${symbol}`} decimalScale={5} />}
+        secondary={<NumberFormat value={value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" decimalScale={2} />}
+        hovering={hovering}
+        details={details}
+        setOpenDetail={setOpenDetail}
+        isTransaction={isTransaction}
+      />
     </>
   );
 };
 
-export default NFTItem;
+export default TokenItem;
 
-NFTItem.defaultProps = {
+TokenItem.defaultProps = {
   to: null,
   from: null,
+  amount: null,
+  value: null,
   type: 'PLUG',
-  name: null,
+  hovering: false,
   canisterId: null,
   details: null,
-  hovering: false,
 };
 
-NFTItem.propTypes = {
+TokenItem.propTypes = {
   type: PropTypes.number,
   canisterId: PropTypes.string,
   details: PropTypes.objectOf(PropTypes.any),
   to: PropTypes.string,
   from: PropTypes.string,
+  amount: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
+  value: PropTypes.number,
+  symbol: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   date: PropTypes.oneOfType([
     PropTypes.instanceOf(Date),
     PropTypes.string,
   ]).isRequired,
-  name: PropTypes.string,
   setOpenDetail: PropTypes.func.isRequired,
+  isTransaction: PropTypes.bool.isRequired,
   hovering: PropTypes.bool,
 };

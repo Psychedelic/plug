@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip, Typography } from '@material-ui/core';
 
-import useStyles from '../../styles';
+import useStyles from './styles';
 
 const ActivityItemDisplay = ({
   image, title, subtitle, tooltip, onCopy, tooltipText, copied, titleClassName,

@@ -8,11 +8,11 @@ import ReactJson from 'react-json-view';
 import { getICNetworkStatusUrl } from '@shared/constants/urls';
 import { Dialog } from '@ui';
 
-import PlugItem from './components/PlugItem';
-import SwapItem from './components/SwapItem';
-import NFTItem from './components/NFTItem';
+import PlugItem from './components/items/PlugItem';
+import SwapItem from './components/items/SwapItem';
+import NFTItem from './components/items/NFTItem';
+import TokenItem from './components/items/TokenItem';
 import useStyles from './styles';
-import TokenItem from './components/TokenItem';
 
 const openICNetworkTx = (hash) => {
   extension.tabs.create({ url: getICNetworkStatusUrl(hash) });
