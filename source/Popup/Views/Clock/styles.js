@@ -5,7 +5,7 @@ export default makeStyles(() => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: '76px 59px'
+    padding: '76px 59px',
   },
   clockImg: {
     width: 43,

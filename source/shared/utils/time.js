@@ -16,7 +16,7 @@ export const isClockOutOfSync = () => {
       return diff >= MAX_MS_DIFFERENCE;
     })
     .catch(() => false);
-}
+};
 
 export const isClockCheckExpired = (cb) => {
   getLastClockCheck((lastCheckedDateString) => {
@@ -32,4 +32,4 @@ export const isClockCheckExpired = (cb) => {
 
     cb(true);
   });
-}
+};

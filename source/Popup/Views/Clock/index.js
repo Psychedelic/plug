@@ -18,7 +18,7 @@ const Clock = () => {
     if (!clockOutOfSync) {
       navigator.navigate('home');
     }
-  }
+  };
 
   return (
     <Layout>
@@ -47,6 +47,6 @@ const Clock = () => {
       </div>
     </Layout>
   );
-}
+};
 
 export default Clock;
