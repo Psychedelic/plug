@@ -8,6 +8,7 @@ import {
   parseAssetsAmount,
   parseFromAmount,
   parseToAmount,
+  TOKENS,
 } from '@shared/constants/currencies';
 import { setRouter } from '@modules/storageManager';
 
@@ -20,7 +21,9 @@ const parseTransactionObject = (transactionObject) => {
   } = transactionObject;
 
   const { decimals } = { ...currency, ...token, ...(sonicData?.token ?? {}) };
-  const parsedAmount = parseToAmount(amount, decimals);
+  // TODO: Decimals are currently not in DAB. Remove once they are added.
+  // eslint-disable-next-line max-len
+  const parsedAmount = parseToAmount(amount, decimals || TOKENS[sonicData?.token?.details?.symbol]?.decimals);
 
   return {
     ...transactionObject,

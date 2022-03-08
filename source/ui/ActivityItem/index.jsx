@@ -12,7 +12,6 @@ import ListIcon from '@material-ui/icons/List';
 
 import { ACTIVITY_STATUS } from '@shared/constants/activity';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
-import { currencyPropTypes } from '@shared/constants/currencies';
 import shortAddress from '@shared/utils/short-address';
 import Typography from '@material-ui/core/Typography';
 
@@ -27,7 +26,7 @@ import useStyles from './styles';
 const getTitle = (type, symbol, sonicData, plug, t) => {
   switch (type) {
     case 'SWAP':
-      return `${t('activity.title.swap')} ${symbol} ${t('activity.title.for')} ${sonicData?.currency?.name || t('common.unknownToken')}`;
+      return `${t('activity.title.swap')} ${sonicData?.swap?.from?.name} ${t('activity.title.for')} ${sonicData?.swap?.to?.name || t('common.unknownToken')}`;
     case 'PLUG':
       return `${t('activity.title.pluggedInto')} ${plug.name}`;
     default:
@@ -73,7 +72,6 @@ const ActivityItem = ({
   status,
   date,
   plug,
-  sonicData,
   icon,
   symbol,
   hash,
@@ -84,13 +82,10 @@ const ActivityItem = ({
   canisterInfo,
 }) => {
   const { t } = useTranslation();
-  const [showSwap, setShowSwap] = useState(false);
   const [hover, setHover] = useState(false);
-  const handleShowSwap = (show) => {
-    if (symbol && value && amount && sonicData) {
-      setShowSwap(show);
-    }
-  };
+
+  const { swap } = details?.sonicData || {};
+
   const [openDetail, setOpenDetail] = useState(false);
 
   const classes = useStyles();
@@ -126,6 +121,7 @@ const ActivityItem = ({
       setTooltipText(copyText);
     }, 1500);
   };
+
   if (type === 'PLUG') {
     return (
       <div className={classes.root}>
@@ -158,9 +154,8 @@ const ActivityItem = ({
         type === 'SWAP'
           ? (
             <SwapIcon
-              fromCurrency={{ symbol, value, amount }}
-              toCurrency={sonicData?.currency}
-              handleShowSwap={handleShowSwap}
+              fromCurrency={swap?.from}
+              toCurrency={swap?.to}
             />
           )
           : (
@@ -172,7 +167,7 @@ const ActivityItem = ({
       }
       <div className={classes.leftContainer}>
         <Typography variant="h5">
-          {getTitle(type, symbol, sonicData, plug, t)}
+          {getTitle(type, symbol, details?.sonicData, plug, t)}
         </Typography>
         <Typography
           variant="subtitle2"
@@ -206,10 +201,10 @@ const ActivityItem = ({
           ) : (
             <>
               <Typography variant="h5">
-                <NumberFormat value={showSwap ? sonicData?.amount : amount} displayType="text" thousandSeparator="," suffix={` ${showSwap ? sonicData.currency?.name : symbol}`} decimalScale={5} />
+                <NumberFormat value={amount} displayType="text" thousandSeparator="," suffix={` ${symbol}`} decimalScale={5} />
               </Typography>
               <Typography variant="subtitle2">
-                <NumberFormat value={showSwap ? sonicData?.value : value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" decimalScale={2} />
+                <NumberFormat value={value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" decimalScale={2} />
               </Typography>
             </>
           )}
@@ -271,7 +266,6 @@ ActivityItem.defaultProps = {
   value: null,
   status: null,
   plug: null,
-  sonicData: null,
   icon: null,
   type: 'PLUG',
   hash: null,
@@ -303,16 +297,6 @@ ActivityItem.propTypes = {
   plug: PropTypes.shape({
     name: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
-  }),
-  sonicData: PropTypes.shape({
-    currency: PropTypes.shape(currencyPropTypes).isRequired,
-    amount: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
-    value: PropTypes.number.isRequired,
-    status: PropTypes.oneOf(Object.keys(ACTIVITY_STATUS)).isRequired,
-    date: PropTypes.instanceOf(Date).isRequired,
   }),
   icon: PropTypes.string,
   hash: PropTypes.string,

@@ -45,12 +45,12 @@ export const walletSlice = createSlice({
     },
     setTransactions: (state, action) => {
       const mapTransaction = (trx) => {
+        const { sonicData } = trx?.details || {};
         const getSymbol = () => {
           if ('tokenRegistryInfo' in (trx?.details?.canisterInfo || [])) return trx?.details?.canisterInfo.tokenRegistryInfo.symbol;
           if ('nftRegistryInfo' in (trx?.details?.canisterInfo || [])) return 'NFT';
-          return trx?.details?.currency?.symbol ?? trx?.details?.sonicData?.token?.details?.symbol ?? '';
+          return trx?.details?.currency?.symbol ?? sonicData?.token?.details?.symbol ?? '';
         };
-        console.log('isSonic?', trx?.details);
         const asset = formatAssetBySymbol(
           trx?.details?.amount,
           getSymbol(),
