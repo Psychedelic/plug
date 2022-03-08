@@ -364,5 +364,10 @@
   },
   "tokens": {
     "failedToFetchBalance": "Failed to fetch balance"
+  },
+  "clock": {
+    "title": "Your device clock is set incorrectly",
+    "description": "Please update your device's clock settings and set the time to automatic mode. This is part of the network's security measures, ",
+    "descriptionLink": "read more about it here."
   }
 }
