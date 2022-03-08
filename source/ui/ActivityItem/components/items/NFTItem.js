@@ -1,31 +1,16 @@
-import React, { useState } from 'react';
-
+import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
 import { capitalize } from '@material-ui/core';
-
 import UnknownIcon from '@assets/icons/unknown-icon.svg';
-
 import shortAddress from '@shared/utils/short-address';
-
 import { GenericIcon } from '@ui';
 
 import ActivityItemDisplay from '../ActivityItemDisplay';
 import ActivityItemDetails from '../ActivityItemDetails';
-
-const getSubtitle = (type, to, from, t) => (({
-  SEND: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,
-  RECEIVE: ` · ${t('activity.subtitle.from')}: ${shortAddress(from)}`,
-})[type]);
-
-const getAddress = (type, to, from, canisterId) => (
-  {
-    SEND: to,
-    RECEIVE: from,
-  }
-)[type] || canisterId || '';
+import { getSubtitle } from '../../utils';
 
 const NFTItem = ({
   type,
@@ -37,34 +22,11 @@ const NFTItem = ({
   details,
   setOpenDetail,
   hovering,
+  copied,
+  onCopy,
+  tooltipText,
 }) => {
   const { t } = useTranslation();
-
-  const [copied, setCopied] = useState(false);
-
-  const copyText = t('copy.copyTextAddress');
-  const copiedText = t('copy.copiedText');
-  const [tooltipText, setTooltipText] = useState(copyText);
-
-  const handleClickCopy = (e) => {
-    e.stopPropagation();
-
-    /* eslint-disable no-nested-ternary */
-    navigator.clipboard.writeText(
-      getAddress(type, to, from, canisterId),
-    );
-
-    setCopied(true);
-    setTooltipText(copiedText);
-
-    setTimeout(() => {
-      setCopied(false);
-    }, 1000);
-
-    setTimeout(() => {
-      setTooltipText(copyText);
-    }, 1500);
-  };
 
   return (
     <>
@@ -80,7 +42,7 @@ const NFTItem = ({
         tooltip={getSubtitle(type, to, from, t, canisterId)}
         copied={copied}
         tooltipText={tooltipText}
-        onCopy={handleClickCopy}
+        onCopy={onCopy}
       />
       <ActivityItemDetails
         main={details?.tokenId?.length > 5 ? shortAddress(details?.tokenId) : `#${details?.tokenId}`}
@@ -119,4 +81,7 @@ NFTItem.propTypes = {
   name: PropTypes.string,
   setOpenDetail: PropTypes.func.isRequired,
   hovering: PropTypes.bool,
+  copied: PropTypes.bool.isRequired,
+  onCopy: PropTypes.func.isRequired,
+  tooltipText: PropTypes.string.isRequired,
 };

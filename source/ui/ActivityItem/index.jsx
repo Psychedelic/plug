@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-
+import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import extension from 'extensionizer';
 import ReactJson from 'react-json-view';
@@ -13,6 +13,7 @@ import SwapItem from './components/items/SwapItem';
 import NFTItem from './components/items/NFTItem';
 import TokenItem from './components/items/TokenItem';
 import useStyles from './styles';
+import { getAddress } from './utils';
 
 const openICNetworkTx = (hash) => {
   extension.tabs.create({ url: getICNetworkStatusUrl(hash) });
@@ -24,16 +25,43 @@ const ActivityItem = (props) => {
     symbol,
     hash,
     details,
+    to,
+    from,
+    canisterId,
   } = props;
   const [hovering, setHovering] = useState(false);
-
   const [openDetail, setOpenDetail] = useState(false);
-
+  const { t } = useTranslation();
   const classes = useStyles();
   const handleItemClick = () => {
     if (symbol === 'ICP') {
       openICNetworkTx(hash);
     }
+  };
+
+  const [copied, setCopied] = useState(false);
+  const copyText = t('copy.copyTextAddress');
+  const copiedText = t('copy.copiedText');
+  const [tooltipText, setTooltipText] = useState(copyText);
+
+  const handleClickCopy = (e) => {
+    e.stopPropagation();
+
+    /* eslint-disable no-nested-ternary */
+    navigator.clipboard.writeText(
+      getAddress(type, to, from, canisterId),
+    );
+
+    setCopied(true);
+    setTooltipText(copiedText);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 1000);
+
+    setTimeout(() => {
+      setTooltipText(copyText);
+    }, 1500);
   };
 
   const getComponent = () => {
@@ -65,6 +93,9 @@ const ActivityItem = (props) => {
         setOpenDetail={setOpenDetail}
         isTransaction={isTransaction}
         hovering={hovering}
+        copied={copied}
+        onCopy={handleClickCopy}
+        tooltipText={tooltipText}
       />
       {
       openDetail
