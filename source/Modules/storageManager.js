@@ -107,7 +107,7 @@ export const getLastClockCheck = (cb) => {
 };
 
 export const setLastClockCheck = () => {
-  const defaultValue = new Date().toUTCString();
+  const currentDate = new Date().toUTCString();
 
-  secureSetWrapper({ lastClockCheck: defaultValue }, defaultValue, () => {});
+  secureSetWrapper({ lastClockCheck: currentDate }, currentDate, () => {});
 };
