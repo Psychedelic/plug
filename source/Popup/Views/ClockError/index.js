@@ -7,7 +7,7 @@ import { isClockOutOfSync } from '@shared/utils/time';
 import { useRouter } from '@components/Router';
 import useStyles from './styles';
 
-const Clock = () => {
+const ClockError = () => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { navigator } = useRouter();
@@ -49,4 +49,4 @@ const Clock = () => {
   );
 };
 
-export default Clock;
+export default ClockError;

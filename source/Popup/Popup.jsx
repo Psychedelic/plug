@@ -19,7 +19,7 @@ import Login from './Views/Login';
 import ErrorScreen from './Views/Error';
 import NFTDetails from './Views/NFTDetails';
 import SendNFT from './Views/SendNFT';
-import Clock from './Views/Clock';
+import ClockError from './Views/ClockError';
 
 const Popup = ({ initialRoute }) => (
   <Router initialRouteName={initialRoute}>
@@ -31,7 +31,7 @@ const Popup = ({ initialRoute }) => (
     <Route name="seed-phrase" component={SeedPhrase} />
     <Route name="deposit" component={Deposit} />
     {/* <Route name="swap" component={Swap} /> */}
-    <Route name="clock" component={Clock} />
+    <Route name="clockError" component={ClockError} />
     <Route name="send" component={Send} />
     <Route name="contacts" component={Contacts} />
     <Route name="error" component={ErrorScreen} />

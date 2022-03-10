@@ -36,7 +36,7 @@ const Login = ({ redirect }) => {
         isClockOutOfSync()
           .then((shouldShowClockScreen) => {
             if (shouldShowClockScreen) {
-              navigator.navigate('clock');
+              navigator.navigate('clockError');
             }
           });
         sendMessage({

@@ -37,7 +37,7 @@ const App = () => {
               isClockOutOfSync()
                 .then((shouldShowClockScreen) => {
                   if (shouldShowClockScreen) {
-                    setInitialRoute('clock');
+                    setInitialRoute('clockError');
                   }
                 });
             }
