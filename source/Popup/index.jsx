@@ -8,6 +8,7 @@ import { initReactI18next } from 'react-i18next';
 import browser from 'webextension-polyfill';
 import { theme } from '@ui';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import { isClockCheckExpired, isClockOutOfSync } from '@shared/utils/time';
 import ProviderWrapper from '../shared/ProviderWrapper';
 import Popup from './Popup';
 import initConfig from '../locales';
@@ -31,6 +32,16 @@ const App = () => {
     sendMessage({ type: HANDLER_TYPES.GET_LOCKS, params: {} }, (locks) => {
       if (locks?.isInitialized) {
         if (locks?.isUnlocked) {
+          isClockCheckExpired((shouldCheck) => {
+            if (shouldCheck) {
+              isClockOutOfSync()
+                .then((shouldShowClockScreen) => {
+                  if (shouldShowClockScreen) {
+                    setInitialRoute('clockError');
+                  }
+                });
+            }
+          });
           setInitialRoute('home');
         } else {
           setInitialRoute('login');
