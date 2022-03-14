@@ -28,11 +28,6 @@ const useHelpItems = () => {
       name: t('help.discord'),
       onClick: (() => window.open('https://discord.plugwallet.ooo/', '_blank')),
     },
-    // {
-    //   image: StarIcon,
-    //   name: t('help.review'),
-    //   onClick: (() => null),
-    // },
   ];
 };
 

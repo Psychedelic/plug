@@ -5,6 +5,7 @@ import {
   parseAssetsAmount,
   parseFromAmount,
   parseToAmount,
+  TOKENS,
 } from '@shared/constants/currencies';
 import { setRouter } from '@modules/storageManager';
 
@@ -12,10 +13,14 @@ export const NANOS_PER_SECOND = 1_000_000;
 export const BALANCE_ERROR = 'You have tried to spend more than the balance of your account';
 
 const parseTransactionObject = (transactionObject) => {
-  const { amount, currency, token } = transactionObject;
+  const {
+    amount, currency, token, sonicData,
+  } = transactionObject;
 
-  const { decimals } = { ...currency, ...token };
-  const parsedAmount = parseToAmount(amount, decimals);
+  const { decimals } = { ...currency, ...token, ...(sonicData?.token ?? {}) };
+  // TODO: Decimals are currently not in DAB. Remove once they are added.
+  // eslint-disable-next-line max-len
+  const parsedAmount = parseToAmount(amount, decimals || TOKENS[sonicData?.token?.details?.symbol]?.decimals);
 
   return {
     ...transactionObject,

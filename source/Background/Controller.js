@@ -11,7 +11,7 @@ import { getApps, setApps, removeApp } from '@modules';
 import {
   /* PROTECTED_CATEGORIES, */ ASSET_CANISTER_IDS,
 } from '@shared/constants/canisters';
-import { getDabNfts } from '@shared/services/DAB';
+import { getDabNfts, getDabTokens } from '@shared/services/DAB';
 import NotificationManager from '../lib/NotificationManager';
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import {
@@ -91,7 +91,8 @@ extension.runtime.onMessage.addListener((message, _, sendResponse) => {
 
     keyringHandler(params)
       .then((res) => sendResponse(res))
-      .catch(() => {
+      .catch((e) => {
+        console.warn(e);
         const keyringErrorMessage = getKeyringErrorMessage(type);
         const errorMessage = keyringErrorMessage
           ? `Unexpected error while ${keyringErrorMessage}`
@@ -443,8 +444,10 @@ backgroundController.exposeController(
         const canisterInfo = app.whitelist[canisterId];
         // TODO REMOVE THIS FOR CATEGORY ATTRIBUTE
         const nftCanisters = await getDabNfts();
+        const tokenCanisters = await getDabTokens();
         const PROTECTED_IDS = [
           ...(nftCanisters || []).map((collection) => collection.principal_id.toString()),
+          ...(tokenCanisters || []).map((token) => token.principal_id.toString()),
           ...ASSET_CANISTER_IDS,
         ];
         const shouldShowModal = !preApprove

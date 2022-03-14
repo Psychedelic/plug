@@ -9,7 +9,7 @@ import { TokenIcon } from '@components';
 
 import useStyles from './styles';
 
-const SwapIcon = ({ fromCurrency, toCurrency, handleShowSwap }) => {
+const SwapIcon = ({ fromCurrency, toCurrency, setHovering }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -17,7 +17,7 @@ const SwapIcon = ({ fromCurrency, toCurrency, handleShowSwap }) => {
     <div className={classes.root}>
       <TokenIcon
         className={clsx(classes.image, classes.fromImage)}
-        image={fromCurrency?.image || UnknownIcon}
+        image={fromCurrency?.thumbnail || UnknownIcon}
         alt={fromCurrency?.name}
       />
       <img
@@ -27,10 +27,10 @@ const SwapIcon = ({ fromCurrency, toCurrency, handleShowSwap }) => {
       />
       <TokenIcon
         className={clsx(classes.image, classes.toImage)}
-        image={toCurrency?.image || UnknownIcon}
+        image={toCurrency?.thumbnail || UnknownIcon}
         alt={toCurrency?.name}
-        onMouseEnter={() => handleShowSwap(true)}
-        onMouseLeave={() => handleShowSwap(false)}
+        onMouseEnter={() => setHovering(true)}
+        onMouseLeave={() => setHovering(false)}
       />
     </div>
   );
@@ -41,5 +41,5 @@ export default SwapIcon;
 SwapIcon.propTypes = {
   fromCurrency: PropTypes.shape(currencyPropTypes).isRequired,
   toCurrency: PropTypes.shape(currencyPropTypes).isRequired,
-  handleShowSwap: PropTypes.func.isRequired,
+  setHovering: PropTypes.func.isRequired,
 };

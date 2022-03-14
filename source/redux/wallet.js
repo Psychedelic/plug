@@ -45,10 +45,11 @@ export const walletSlice = createSlice({
     },
     setTransactions: (state, action) => {
       const mapTransaction = (trx) => {
+        const { sonicData } = trx?.details || {};
         const getSymbol = () => {
-          if ('tokenRegistryInfo' in trx.details) return trx.details.tokenRegistryInfo.symbol;
-          if ('nftRegistryInfo' in trx.details) return 'NFT';
-          return trx?.details?.currency?.symbol ?? '';
+          if ('tokenRegistryInfo' in (trx?.details?.canisterInfo || [])) return trx?.details?.canisterInfo.tokenRegistryInfo.symbol;
+          if ('nftRegistryInfo' in (trx?.details?.canisterInfo || [])) return 'NFT';
+          return trx?.details?.currency?.symbol ?? sonicData?.token?.details?.symbol ?? '';
         };
         const asset = formatAssetBySymbol(
           trx?.details?.amount,
@@ -63,7 +64,6 @@ export const walletSlice = createSlice({
           }
           return type.toUpperCase();
         };
-        const canisterInfo = trx?.details?.tokenRegistryInfo || trx?.details?.nftRegistryInfo;
         const transaction = {
           ...asset,
           type: getType(),
@@ -72,11 +72,10 @@ export const walletSlice = createSlice({
           from: trx?.details?.from || trx?.caller,
           date: new Date(trx?.timestamp),
           status: ACTIVITY_STATUS[trx?.details?.status],
-          image: TOKEN_IMAGES[getSymbol()] || canisterInfo?.icon || '',
+          image: trx?.details?.canisterInfo?.icon || TOKEN_IMAGES[getSymbol()] || '',
           symbol: getSymbol(),
-          canisterId: trx?.details?.canisterId,
-          plug: null,
-          canisterInfo,
+          canisterId: trx?.details?.canisterInfo?.canisterId,
+          canisterInfo: trx?.canisterInfo,
           details: { ...trx?.details, caller: trx?.caller },
         };
         return transaction;
