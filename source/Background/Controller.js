@@ -146,11 +146,7 @@ backgroundController.exposeController('isConnected', async (opts, url) => secure
   const { callback } = opts;
 
   getApps(keyring.currentWalletId.toString(), (apps = {}) => {
-    if (apps?.[url]) {
-      callback(null, apps?.[url].status === CONNECTION_STATUS.accepted);
-    } else {
-      callback(null, false);
-    }
+    callback(null, apps?.[url]);
   });
 }));
 

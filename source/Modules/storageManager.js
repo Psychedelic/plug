@@ -31,14 +31,13 @@ export const getApps = (walletId, cb) => {
 
 export const setApps = (walletId, apps, cb = () => {}) => {
   const defaultValue = false;
-
   secureSetWrapper({ [walletId]: { apps } }, defaultValue, cb);
 };
 
 export const updateApp = (walletId, app = {}) => {
   getApps(walletId, (apps = {}) => {
-    const prevApp = apps[app?.url] || {};
-    const newApp = { ...prevApp, ...app, events: [...prevApp.events, ...app.events] };
+    const prevApp = apps[app?.url] || { events: [] };
+    const newApp = { ...prevApp, ...app, events: [...prevApp?.events, ...(app?.events || [])] };
     const newApps = {
       ...apps,
       [app?.url]: newApp,
