@@ -3,6 +3,6 @@ export const CONNECTION_STATUS = {
   pending: 'pending',
   accepted: 'accepted',
   rejected: 'rejected',
-  rejectedAgent: 'rejectedAgent',
+  rejectedWhitelistUpdate: 'rejectedWhitelistUpdate',
   disconnected: 'disconnected',
 };

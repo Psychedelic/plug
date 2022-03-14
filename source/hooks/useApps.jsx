@@ -26,7 +26,7 @@ const useApps = () => {
   useEffect(() => {
     setStorageApps(walletNumber, apps);
     const parsed = Object.values(apps) || [];
-
+    console.log('parsed', parsed);
     const allEvents = parsed?.flatMap((app) => app?.events?.map((event) => ({
       date: event?.date,
       status: event?.status,

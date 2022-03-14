@@ -21,27 +21,39 @@ const secureSetWrapper = (setArguments, defaultValue, cb) => {
   }
 };
 
-export const getApps = (currentWalletId, cb) => {
+export const getApps = (walletId, cb) => {
   const defaultValue = {};
 
-  secureGetWrapper(currentWalletId, defaultValue, (state) => (
-    cb(state?.[parseInt(currentWalletId, 10)]?.apps || defaultValue)
+  secureGetWrapper(walletId, defaultValue, (state) => (
+    cb(state?.[parseInt(walletId, 10)]?.apps || defaultValue)
   ));
 };
 
-export const setApps = (currentWalletId, apps, cb = () => {}) => {
+export const setApps = (walletId, apps, cb = () => {}) => {
   const defaultValue = false;
 
-  secureSetWrapper({ [currentWalletId]: { apps } }, defaultValue, cb);
+  secureSetWrapper({ [walletId]: { apps } }, defaultValue, cb);
 };
 
-export const removeApp = (currentWalletId, appUrl, cb = () => {}) => {
+export const updateApp = (walletId, app = {}) => {
+  getApps(walletId, (apps = {}) => {
+    const prevApp = apps[app?.url] || {};
+    const newApp = { ...prevApp, ...app, events: [...prevApp.events, ...app.events] };
+    const newApps = {
+      ...apps,
+      [app?.url]: newApp,
+    };
+    setApps(walletId, newApps);
+  });
+};
+
+export const removeApp = (walletId, appUrl, cb = () => {}) => {
   const defaultValue = false;
 
-  getApps(currentWalletId, (apps) => {
+  getApps(walletId, (apps) => {
     if (apps?.[appUrl]) {
       const newApps = addDisconnectedEntry({ apps, appUrl });
-      setApps(currentWalletId, newApps, cb);
+      setApps(walletId, newApps, cb);
     } else {
       cb(defaultValue);
     }

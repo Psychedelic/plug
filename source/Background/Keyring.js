@@ -7,6 +7,8 @@ import {
   parseToAmount,
 } from '@shared/constants/currencies';
 import { setRouter } from '@modules/storageManager';
+// import plugProvider from 'source/Inpage';
+// import { getApps, setApps, removeApp } from '@modules';
 
 export const NANOS_PER_SECOND = 1_000_000;
 export const BALANCE_ERROR = 'You have tried to spend more than the balance of your account';
@@ -149,6 +151,14 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.SET_CURRENT_PRINCIPAL]:
     async (walletNumber) => {
       await keyring.setCurrentPrincipal(walletNumber);
+      // // get host and whitelist from storage
+      // const url = window.location.origin.replace(/^(?:https?:\/\/)?(?:www\.)?/i, '').split('/')[0];
+      // getApps(walletNumber, (apps = {}) => {
+      //   const whitelist = apps[url]?.whitelist;
+      // });
+      // // get public key from keyring
+      // const publicKey = await keyring.getPublicKey();
+      // plugProvider.changeCurrentWallet({ publicKey });
 
       return keyring.getState();
     },

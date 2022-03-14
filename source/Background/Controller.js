@@ -7,7 +7,7 @@ import PlugController from '@psychedelic/plug-controller';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
 import { XTC_FEE } from '@shared/constants/addresses';
-import { getApps, setApps, removeApp } from '@modules';
+import { getApps, removeApp, updateApp } from '@modules';
 import {
   /* PROTECTED_CATEGORIES, */ ASSET_CANISTER_IDS,
 } from '@shared/constants/canisters';
@@ -163,53 +163,40 @@ backgroundController.exposeController('disconnect', async (opts, url) => secureC
 
 backgroundController.exposeController(
   'requestConnect',
-  async (opts, metadata, whitelist, timeout) => secureController(opts.callback, async () => {
+  async (opts, metadata, connectionParams) => secureController(opts.callback, async () => {
     let canistersInfo = [];
+    const { message, sender } = opts;
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
+    const { url: domainUrl, name, icons } = metadata;
+    const { whitelist, timeout, host } = connectionParams || {};
+
     const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
     if (!whitelist.every((canisterId) => validatePrincipalId(canisterId))) {
       opts.callback(ERRORS.CANISTER_ID_ERROR, null);
       return;
     }
-    const { message, sender } = opts;
-    const { id: callId } = message.data.data;
-    const { id: portId } = sender;
-    const { url: domainUrl, name, icons } = metadata;
-
-    if (isValidWhitelist) {
-      canistersInfo = await fetchCanistersInfo(whitelist);
-    }
 
     const date = new Date().toISOString();
-
-    getApps(keyring.currentWalletId.toString(), (apps = {}) => {
-      const newApps = {
-        ...apps,
-        [domainUrl]: {
-          url: domainUrl,
-          name,
-          status: CONNECTION_STATUS.pending,
-          icon: icons[0] || null,
-          timeout,
-          date,
-          events: [
-            ...apps[domainUrl]?.events || [],
-          ],
-          whitelist,
-        },
-      };
-      setApps(keyring.currentWalletId.toString(), newApps);
-    });
-
-    // if we receive a whitelist, we create agent
+    const appConnection = {
+      url: domainUrl,
+      name,
+      status: CONNECTION_STATUS.pending,
+      icon: icons[0] || null,
+      timeout,
+      date,
+      host,
+      whitelist,
+    };
+    updateApp(keyring.currentWalletId.toString(), appConnection);
     if (isValidWhitelist) {
-      const newMetadata = { ...metadata, requestConnect: true };
-
+      canistersInfo = await fetchCanistersInfo(whitelist);
       const url = qs.stringifyUrl({
         url: 'notification.html',
         query: {
           callId,
           portId,
-          metadataJson: JSON.stringify(newMetadata),
+          metadataJson: JSON.stringify(metadata),
           argsJson: JSON.stringify({ whitelist, canistersInfo, timeout }),
           type: 'allowAgent',
         },
@@ -622,39 +609,20 @@ backgroundController.exposeController(
 );
 
 backgroundController.exposeController(
-  'handleAllowAgent',
+  'handleRequestConnect',
   async (opts, url, response, callId, portId) => {
     const { callback } = opts;
-
-    getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
-      const status = response.status === CONNECTION_STATUS.rejectedAgent
-        ? CONNECTION_STATUS.accepted
-        : response.status;
-      const whitelist = response.status === CONNECTION_STATUS.accepted
-        ? response.whitelist
-        : [];
-
-      const date = new Date().toISOString();
-
-      const newApps = {
-        ...apps,
-        [url]: {
-          ...apps[url],
-          status: status || CONNECTION_STATUS.rejected,
-          date,
-          whitelist,
-          events: [
-            ...apps[url]?.events || [],
-            {
-              status: status || CONNECTION_STATUS.rejected,
-              date,
-            },
-          ],
-        },
-      };
-      setApps(keyring.currentWalletId.toString(), newApps);
-    });
-
+    const event = {
+      status: response?.status || CONNECTION_STATUS.rejected,
+      date: new Date().toISOString(),
+    };
+    const appConnection = {
+      ...event,
+      url,
+      whitelist: response?.whitelist || [],
+      events: response?.status === CONNECTION_STATUS.accepted ? [event] : [],
+    };
+    updateApp(keyring.currentWalletId.toString(), appConnection);
     if (response?.status === CONNECTION_STATUS.accepted) {
       try {
         const publicKey = await keyring.getPublicKey();
