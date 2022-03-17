@@ -27,6 +27,7 @@ const Step1 = ({
   address,
   handleChangeAddress,
   addressInfo,
+  loadingAddress,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -100,6 +101,7 @@ const Step1 = ({
             label={t('send.to')}
             component={(
               <IDInput
+                loading={loadingAddress}
                 value={address}
                 onChange={handleChangeAddress}
                 isValid={addressInfo.isValid}
@@ -162,4 +164,5 @@ Step1.propTypes = {
   address: PropTypes.objectOf(PropTypes.object).isRequired,
   handleChangeAddress: PropTypes.func.isRequired,
   addressInfo: PropTypes.objectOf(PropTypes.object).isRequired,
+  loadingAddress: PropTypes.bool.isRequired,
 };

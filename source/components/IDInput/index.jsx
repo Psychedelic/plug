@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import {
   Button, Dialog, FormItem, InputBase, TextInput,
 } from '@ui';
-import { Grid } from '@material-ui/core';
+import { CircularProgress, Grid } from '@material-ui/core';
 import { useContacts } from '@hooks';
 import { getRandomEmoji } from '@shared/constants/emojis';
 import ActionDialog from '../ActionDialog';
@@ -17,7 +17,7 @@ import ContactList from '../ContactList';
 import useStyles from './styles';
 
 const IDInput = ({
-  value, onChange, placeholder, isValid,
+  value, onChange, placeholder, isValid, loading,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
@@ -92,7 +92,7 @@ const IDInput = ({
               classes={{
                 input: clsx(
                   classes.input,
-                  isValid === false && classes.inputInvalid,
+                  !isValid && classes.inputInvalid,
                   !!contacts.length && classes.paddingRight,
                 ),
               }}
@@ -103,13 +103,16 @@ const IDInput = ({
               placeholder={placeholder || t('send.inputId')}
             />
             <div className={classes.iconContainer}>
-              {contacts.length > 0 && (
+              {loading ? (
+                <CircularProgress size={24} />
+              )
+                : contacts.length > 0 && (
                 <img
                   className={classes.icon}
                   src={BookIcon}
                   onClick={() => setOpenContacts(true)}
                 />
-              )}
+                )}
               <Dialog
                 title={t('contacts.title')}
                 onClose={handleCloseContacts}
@@ -179,10 +182,12 @@ IDInput.propTypes = {
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string.isRequired,
   isValid: PropTypes.bool,
+  loading: PropTypes.bool,
 };
 
 IDInput.defaultProps = {
   isValid: true,
+  loading: false,
 };
 
 export default IDInput;
