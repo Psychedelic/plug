@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { Dialog, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import extension from 'extensionizer';
 import { Info } from 'react-feather';
 import clsx from 'clsx';
 
-import { Button, LinkButton } from '@ui';
+import { Button, LinkButton, Dialog } from '@ui';
 import { ADDRESS_TYPES } from '@shared/constants/addresses';
 import { getICRocksAccountUrl, icIdsUrl } from '@shared/constants/urls';
 import ArrowUpRight from '@assets/icons/arrow-up-right.png';

@@ -139,6 +139,8 @@ const Step1 = ({
               !(parseFloat(amount) > 0)
               || !addressInfo.isValid
               || loadingAddress
+              || address === null
+              || address === ''
             }
             onClick={handleChangeStep}
           />

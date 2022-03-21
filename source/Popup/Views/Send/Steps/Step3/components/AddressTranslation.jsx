@@ -1,17 +1,10 @@
-import React, { useState } from 'react';
-import {
-  Button,
-  Card,
-  Dialog,
-  LinkButton,
-} from '@ui';
+import React from 'react';
+import { Card } from '@ui';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import extension from 'extensionizer';
 import { Typography } from '@material-ui/core';
 
 import ArrowImg from '@assets/icons/send-arrow.svg';
-import { icIdsUrl } from '@shared/constants/urls';
 
 import useStyles from '../../../styles';
 import AddressRow from './AddressRow';
@@ -19,13 +12,7 @@ import AddressRow from './AddressRow';
 const AddressTranslation = ({ addresses = [], loading }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const [ICPModalOpen, setOpenICPModal] = useState(false);
 
-  const openTwoIdsBlog = () => {
-    if (!loading) {
-      extension.tabs.create({ url: icIdsUrl });
-    }
-  };
   const [originalAddress, translatedAddress] = addresses;
   return (
     <Card className={classes.card}>
@@ -40,27 +27,6 @@ const AddressTranslation = ({ addresses = [], loading }) => {
           <AddressRow primary loading={loading} {...translatedAddress} />
         </div>
         )}
-        <Dialog
-          title={t('send.icpModalTitle')}
-          onClose={() => setOpenICPModal(false)}
-          open={ICPModalOpen}
-          component={(
-            <div className={classes.modal}>
-              <Typography>{t('send.icpModalText')}</Typography>
-              <Button
-                variant="rainbow"
-                value={t('send.icpModalButton1')}
-                onClick={() => setOpenICPModal(false)}
-                fullWidth
-                disabled={loading}
-              />
-              <LinkButton
-                value={t('send.icpModalButton2')}
-                onClick={openTwoIdsBlog}
-              />
-            </div>
-          )}
-        />
       </div>
     </Card>
   );

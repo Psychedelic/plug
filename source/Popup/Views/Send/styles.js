@@ -172,13 +172,13 @@ export default makeStyles((theme) => ({
   },
   card: {
     width: '100%',
-    margin: '0 10px',
+    margin: '0 10px 20px',
   },
   addressTranslationContainer: {
     display: 'flex',
     width: '100%',
     flexDirection: 'column',
-    padding: '10px 10px 10px 0px',
+    padding: '12px 10px 12px 0px',
     maxHeight: 130,
   },
   leftContainer: {

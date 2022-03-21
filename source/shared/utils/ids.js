@@ -36,6 +36,5 @@ export const recursiveParsePrincipal = (data) => Object.entries(data).reduce((ac
   return current;
 }, {});
 
-export const validateAddress = (address) => isICNSName(address)
-  || validatePrincipalId(address)
+export const validateAddress = (address) => validatePrincipalId(address)
   || validateAccountId(address);

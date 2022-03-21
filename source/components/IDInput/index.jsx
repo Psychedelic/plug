@@ -92,7 +92,7 @@ const IDInput = ({
               classes={{
                 input: clsx(
                   classes.input,
-                  !isValid && classes.inputInvalid,
+                  !!value && !isValid && classes.inputInvalid,
                   !!contacts.length && classes.paddingRight,
                 ),
               }}
