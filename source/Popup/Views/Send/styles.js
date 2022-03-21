@@ -86,10 +86,8 @@ export default makeStyles((theme) => ({
     marginRight: 12,
   },
   arrow: {
-    padding: '8px 10px',
-    marginRight: 8,
-    maxHeight: 80,
-    height: '100%',
+    height: 25,
+    width: 38,
   },
   arrowUpRight: {
     cursor: 'pointer',
@@ -179,6 +177,7 @@ export default makeStyles((theme) => ({
   addressTranslationContainer: {
     display: 'flex',
     width: '100%',
+    flexDirection: 'column',
     padding: '10px 10px 10px 0px',
     maxHeight: 130,
   },
@@ -200,7 +199,16 @@ export default makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
   },
+  addressRow: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    justifyContent: 'space-between',
+  },
   relative: {
     position: 'relative',
+  },
+  primaryAddressRow: {
+    paddingTop: 13,
   },
 }));

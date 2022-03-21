@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import extension from 'extensionizer';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
@@ -21,10 +20,9 @@ import { ADDRESS_TYPES, DEFAULT_ICP_FEE, XTC_FEE } from '@shared/constants/addre
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { useICPPrice } from '@redux/icp';
 import { validatePrincipalId } from '@shared/utils/ids';
-import { icIdsUrl } from '@shared/constants/urls';
 
-import useStyles from '../styles';
-import AddressTranslation from './AddressTranslation';
+import useStyles from '../../styles';
+import AddressTranslation from './components/AddressTranslation';
 
 const getAddressTranslations = (address, addressInfo, symbol) => {
   const translations = [{ address, type: addressInfo.type }];
@@ -73,12 +71,6 @@ const Step3 = ({
     handleSendClick();
   };
 
-  const openTwoIdsBlog = () => {
-    if (!loading) {
-      extension.tabs.create({ url: icIdsUrl });
-    }
-  };
-
   useEffect(() => {
     if (error) {
       navigator.navigate('error');
@@ -120,22 +112,6 @@ const Step3 = ({
         <AddressTranslation
           addresses={getAddressTranslations(address, addressInfo, asset?.symbol)}
         />
-        {
-          asset.symbol === 'ICP' && addressInfo.type !== ADDRESS_TYPES.ACCOUNT
-          && (
-          <Grid item xs={12}>
-            <div className={classes.alertContainer}>
-              <span>{t('send.icpAlertText')}</span>
-              <span
-                className={classes.alertButton}
-                onClick={openTwoIdsBlog}
-              >
-                {t('send.icpAlertButton')}
-              </span>
-            </div>
-          </Grid>
-          )
-        }
         {isICP && (
           <Grid item xs={12}>
             <InfoRow name={t('common.taxFee')} value={`${DEFAULT_ICP_FEE} ICP ($${fee})`} />
@@ -166,10 +142,18 @@ const Step3 = ({
 };
 
 Step3.propTypes = {
-  asset: PropTypes.objectOf(PropTypes.object).isRequired,
+  asset: PropTypes.objectOf(PropTypes.shape({
+    image: PropTypes.string,
+    symbol: PropTypes.string,
+    type: PropTypes.string,
+  })).isRequired,
   amount: PropTypes.number.isRequired,
   address: PropTypes.string.isRequired,
-  addressInfo: PropTypes.objectOf(PropTypes.object).isRequired,
+  addressInfo: PropTypes.objectOf(PropTypes.shape({
+    type: PropTypes.string.isRequired,
+    address: PropTypes.string.isRequired,
+    resolvedAddress: PropTypes.string,
+  })).isRequired,
   handleSendClick: PropTypes.func.isRequired,
   error: PropTypes.bool,
   isTrxCompleted: PropTypes.bool.isRequired,
