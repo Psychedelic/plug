@@ -51,11 +51,15 @@ const useSteps = () => {
   const debouncedAddress = useDebounce(address, 750);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    if (debouncedAddress) {
+    if (debouncedAddress && isICNSName(debouncedAddress)) {
       setLoading(true);
       resolveICNSName(debouncedAddress, selectedAsset?.symbol === 'ICP')
         .then((response) => {
-          setAddressInfo({ isValid: !!response, type: getAddressType(response) });
+          setAddressInfo({
+            isValid: !!response,
+            type: ADDRESS_TYPES.ICNS,
+            resolvedAddress: response,
+          });
           setLoading(false);
         });
     }
@@ -105,15 +109,16 @@ const useSteps = () => {
   const getAvailableAmount = (value) => truncateFloatForDisplay(value - getTransactionFee());
 
   const handleSendClick = () => {
+    const to = addressInfo.resolvedAddress || address;
     if (sendingXTCtoCanister && destination === XTC_OPTIONS.BURN) {
       sendMessage({
         type: HANDLER_TYPES.BURN_XTC,
-        params: { to: address, amount: amount.toString() },
+        params: { to, amount: amount.toString() },
       }, parseSendResponse);
     } else {
       sendMessage({
         type: HANDLER_TYPES.SEND_TOKEN,
-        params: { to: address, amount: amount.toString(), canisterId: selectedAsset?.canisterId },
+        params: { to, amount: amount.toString(), canisterId: selectedAsset?.canisterId },
       }, (response) => {
         parseSendResponse(response);
         if (!selectedAsset) {

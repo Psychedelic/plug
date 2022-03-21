@@ -77,13 +77,13 @@
     "accountId": "Account ID",
     "principalId": "Principal ID",
     "canisterId": "Canister ID",
+    "icns": "ICNS",
     "sign": "Sign",
     "name": "Name",
     "create": "Create",
     "account": "Account",
     "learnMore": "Learn more",
     "send": "Send",
-    "methodName": "Method Name",
     "unknownToken": "unknown token"
   },
   "apps": {

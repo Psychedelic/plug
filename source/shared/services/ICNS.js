@@ -17,14 +17,29 @@ const Registry = Actor.createActor(registryIDL, {
   agent: DEFAULT_AGENT,
 });
 
+/* Resolution rules:
+ * 1. If it's ICP
+ *    - If the returned Record has an account, return the account
+ *    - If not, if the returned Record has a pid, return the pid
+ *    - If not, fetch the record from the Registry and return the owner's pid.
+ *
+ * 2. If it's not ICP:
+ *    - If the returned Record has a pid, return the pid
+ *    - If not, fetch the record from the Registry and return the owner's pid.
+ */
 export default async (name, isICP) => {
-  const key = isICP ? 'icp' : 'pid';
-  let response = await Resolver.getUserDefaultInfo(name);
-  let value = response?.[0]?.[key]?.toString?.();
-  if (!value) {
-    response = await Registry.getRecord(name);
-    value = response?.[0]?.controller?.toString?.();
+  let record = await Resolver.getUserDefaultInfo(name);
+  const { icp, pid: principal } = record?.[0] || {};
+  const accountId = icp?.[0];
+  console.log('registry data', accountId, principal?.toString?.());
+  if (isICP && accountId) {
+    return accountId;
   }
-  console.log('Resolver response', value);
-  return value;
+  if (!principal) {
+    record = await Registry.getRecord(name);
+    const { owner } = record?.[0] || {};
+    console.log('owner', owner?.toString?.());
+    return owner?.toString?.();
+  }
+  return principal?.toString?.();
 };

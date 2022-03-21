@@ -5,7 +5,7 @@ export const CANISTER_REGEX = /(\w{5}-){4}\w{3}/;
 export const CANISTER_MAX_LENGTH = 27;
 
 export const ADDRESS_TYPES = {
-  PRINCIPAL: 'principal',
+  PRINCIPAL: 'principalId',
   ACCOUNT: 'accountId',
   CANISTER: 'canister',
   ICNS: 'icns',

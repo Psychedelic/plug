@@ -210,13 +210,13 @@ export const getKeyringHandler = (type, keyring) => ({
       const { token } = await keyring.getTokenInfo(canisterId);
       const { decimals } = token;
       const parsedAmount = parseFromAmount(amount, decimals);
-
       const { height, transactionId } = await keyring.send(to, parsedAmount, canisterId, opts);
       return {
         height: height ? parseInt(height, 10) : undefined,
         transactionId: transactionId ? parseInt(transactionId, 10) : undefined,
       };
     } catch (error) {
+      console.warn(error);
       return { error: error.message, height: null };
     }
   },
