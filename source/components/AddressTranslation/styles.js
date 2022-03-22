@@ -7,7 +7,7 @@ export default makeStyles(() => ({
   },
   card: {
     width: '100%',
-    margin: '0 10px 20px',
+    marginBottom: '20px',
   },
   addressTranslationContainer: {
     display: 'flex',

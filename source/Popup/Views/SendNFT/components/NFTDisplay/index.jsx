@@ -10,8 +10,8 @@ const NFTDisplay = ({ nft }) => {
     <Card className={classes.nftDisplayContainer}>
       <img className={classes.nftImage} src={nft?.url} />
       <div className={classes.nftInfo}>
-        <Typography variant="subtitle1">{nft?.collection}</Typography>
-        <Typography variant="subtitle2">{`#${nft?.index}`}</Typography>
+        <Typography variant="h2">{nft?.collection}</Typography>
+        <Typography variant="subtitle1">{`#${nft?.index}`}</Typography>
       </div>
     </Card>
   );

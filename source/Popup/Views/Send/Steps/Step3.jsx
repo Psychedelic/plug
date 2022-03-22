@@ -96,7 +96,7 @@ const Step3 = ({
 
   return (
     <Container>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} className={classes.container}>
         <Grid item xs={12} style={{ textAlign: 'center' }}>
           <div className={classes.asset}>
             <TokenIcon image={asset.image} className={classes.image} symbol={asset.symbol} />

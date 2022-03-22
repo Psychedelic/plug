@@ -3,10 +3,11 @@ import { makeStyles } from '@material-ui/core';
 export default makeStyles(() => ({
   nftDisplayContainer: {
     height: 135,
-    width: 313,
-    left: 54,
-    top: 196,
     borderRadius: 12,
+    marginBottom: 20,
+    display: 'flex',
+    alignItems: 'center',
+    padding: 15,
   },
   nftInfo: {
     display: 'flex',
@@ -17,5 +18,6 @@ export default makeStyles(() => ({
     height: 110,
     width: 110,
     borderRadius: 5,
+    marginRight: 20,
   },
 }));
