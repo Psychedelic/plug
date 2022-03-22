@@ -13,10 +13,8 @@ export default function useICNS(address, isICP, delay = 500) {
   useEffect(() => {
     if (debouncedAddress && isICNSName(debouncedAddress)) {
       setLoading(true);
-      console.log('resolving icns');
       resolveICNSName(debouncedAddress, isICP)
         .then((response) => {
-          console.log('resolved?', response);
           setResolvedAddress(response);
           setLoading(false);
         });

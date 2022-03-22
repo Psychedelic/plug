@@ -31,14 +31,12 @@ export default async (name, isICP) => {
   let record = await Resolver.getUserDefaultInfo(name);
   const { icp, pid: principal } = record?.[0] || {};
   const accountId = icp?.[0];
-  console.log('registry data', accountId, principal?.toString?.());
   if (isICP && accountId) {
     return accountId;
   }
   if (!principal) {
     record = await Registry.getRecord(name);
     const { owner } = record?.[0] || {};
-    console.log('owner', owner?.toString?.());
     return owner?.toString?.();
   }
   return principal?.toString?.();
