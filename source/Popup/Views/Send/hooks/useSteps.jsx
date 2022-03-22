@@ -17,8 +17,6 @@ import { useICPPrice } from '@redux/icp';
 import { useICNS } from '@hooks';
 
 import Step1 from '../Steps/Step1';
-// import Step2a from '../Steps/Step2a';
-// import Step2b from '../Steps/Step2b';
 import Step2c from '../Steps/Step2c';
 import Step3 from '../Steps/Step3';
 import XTC_OPTIONS from '../constants/xtc';
@@ -244,30 +242,6 @@ const useSteps = () => {
   const conversionPrice = amount / secondaryValue.price;
 
   const rightButton = <LinkButton value={t('common.cancel')} onClick={() => navigator.navigate('home')} />;
-
-  /*
-  const step2a = {
-    component: <Step2a
-      destination={destination}
-      handleChangeDestination={handleChangeDestination}
-      handleChangeStep={() => handleChangeStep(2)}
-    />,
-    left: <LinkButton value={t('common.back')}
-    onClick={() => { convertToSecondaryAsset(); handleChangeStep(0); }} startIcon={BackIcon} />,
-    right: rightButton,
-    center: `${t('send.review')}`,
-  };
-
-  const step2b = {
-    component: <Step2b
-      handleChangeStep={() => handleChangeStep(2)}
-    />,
-    left: <LinkButton value={t('common.back')}
-    onClick={() => { convertToSecondaryAsset(); handleChangeStep(0); }} startIcon={BackIcon} />,
-    right: rightButton,
-    center: `${t('send.warning')}`,
-  };
-  */
 
   const step2c = {
     component: <Step2c
