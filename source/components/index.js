@@ -24,5 +24,6 @@ export { IconQrCode } from './Icons';
 export { default as TokenIcon } from './TokenIcon';
 export { default as NFTs } from './NFTs';
 export { default as PoweredByDab } from './PoweredByDab';
+export { default as AddressTranslation } from './AddressTranslation';
 
 export * from './Router';

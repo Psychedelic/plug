@@ -6,8 +6,8 @@ import { Typography } from '@material-ui/core';
 
 import ArrowImg from '@assets/icons/send-arrow.svg';
 
-import useStyles from '../../../styles';
-import AddressRow from './AddressRow';
+import useStyles from './styles';
+import AddressRow from './components/AddressRow';
 
 const AddressTranslation = ({ addresses = [], loading }) => {
   const classes = useStyles();
