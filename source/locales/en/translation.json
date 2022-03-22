@@ -323,6 +323,7 @@
     "description": "Description",
     "attributes": "Attributes",
     "send": "Send NFT",
+    "review": "Review Send",
     "sendTo": "To",
     "nft": "NFT",
     "inputPrincipalId": "Enter Principal ID",

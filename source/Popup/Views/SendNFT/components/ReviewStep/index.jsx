@@ -1,18 +1,22 @@
 import React, { useState, useMemo } from 'react';
+
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { IDInput } from '@components';
-import { TABS } from '@components/Router';
-import {
-  Container, FormItem, Select, Button, Alert,
-} from '@ui';
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import { validatePrincipalId } from '@shared/utils/ids';
+
+import { TABS } from '@components/Router';
+import {
+  Container, Button, Alert,
+} from '@ui';
+import { AddressTranslation } from '@components';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { removeNFT, setCollections } from '@redux/wallet';
 import { setSelectedNft } from '@redux/nfts';
+import { ADDRESS_TYPES } from '@shared/constants/addresses';
+
+import { getFilteredCollections } from '../../utils';
+import NFTDisplay from '../NFTDisplay';
 
 const useStyles = makeStyles(() => ({
   appearAnimation: {
@@ -26,53 +30,25 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const getFilteredCollections = (collection, collections, nft) => {
-  const filterNFT = (token) => token.id !== nft?.id;
-  const collectionIndex = collections.indexOf(collection);
-  let filteredCollections = [...collections];
-
-  if (collection.tokens.length > 1) {
-    // If collection has tokens we filter them
-    const filteredCollection = JSON.parse(JSON.stringify(collection));
-    const tokens = collection.tokens.filter(filterNFT);
-
-    filteredCollections = [...collections];
-
-    filteredCollections[collectionIndex] = {
-      ...filteredCollection,
-      tokens,
-    };
-  } else {
-    // If tokens is empty remove collection
-    filteredCollections.splice(collectionIndex, 1);
-  }
-
-  return filteredCollections;
-};
-
 const ReviewStep = () => {
   const { t } = useTranslation();
-  const [address, setAddress] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const [errorMessage, setErrorMessage] = useState('');
-  const dispatch = useDispatch();
-  const { selectedNft: nft } = useSelector((state) => state.nfts);
-  const { collections, principalId } = useSelector((state) => state.wallet);
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const { collections, principalId } = useSelector((state) => state.wallet);
+  const { selectedNft: nft, sendAddress, resolvedSendAddress } = useSelector((state) => state.nfts);
 
   const collection = useMemo(() => collections?.find(
     (col) => col.name === nft?.collection,
   ) || {},
   [collections, nft]);
 
-  const fallbackNftUrl = (url) => (url?.includes?.('https') ? url : `https://qcg3w-tyaaa-aaaah-qakea-cai.raw.ic0.app${url}`);
-  const handleAddressChange = (val) => setAddress(val);
-
   const transferNFT = () => {
     setLoading(true);
     setErrorMessage('');
-    sendMessage({ type: HANDLER_TYPES.TRANSFER_NFT, params: { nft, to: address } },
+    const to = resolvedSendAddress?.address;
+    sendMessage({ type: HANDLER_TYPES.TRANSFER_NFT, params: { nft, to } },
       ({ error }) => {
         setLoading(false);
         if (error) {
@@ -90,38 +66,15 @@ const ReviewStep = () => {
         }
       });
   };
+  const addresses = sendAddress?.type === ADDRESS_TYPES.ICNS
+    ? [sendAddress, resolvedSendAddress]
+    : [sendAddress];
+
   return (
     <Container>
       <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <FormItem
-            label={t('nfts.nft')}
-            component={(
-              <Select
-                image={fallbackNftUrl(nft?.url)}
-                name={nft?.name || `${collection?.name ?? ''} #${nft?.index}`}
-                text={`#${nft?.index}`}
-                imageClassName={classes.nftImage}
-                nft
-                readonly
-                shadow
-              />
-              )}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <FormItem
-            label={t('nfts.sendTo')}
-            component={(
-              <IDInput
-                value={address}
-                onChange={handleAddressChange}
-                isValid={address === null || validatePrincipalId(address)}
-                placeholder={t('nfts.inputPrincipalId')}
-              />
-              )}
-          />
-        </Grid>
+        {/* <NFTDisplay nft={nft} /> */}
+        <AddressTranslation addresses={addresses} loading={loading} />
         <Grid item xs={12}>
           <Button
             variant="rainbow"

@@ -14,8 +14,7 @@ import {
 } from '@shared/utils/ids';
 import { ADDRESS_TYPES, DEFAULT_ICP_FEE, XTC_FEE } from '@shared/constants/addresses';
 import { useICPPrice } from '@redux/icp';
-import { useDebounce } from '@hooks';
-import resolveICNSName from '@shared/services/ICNS';
+import { useICNS } from '@hooks';
 
 import Step1 from '../Steps/Step1';
 // import Step2a from '../Steps/Step2a';
@@ -48,22 +47,16 @@ const useSteps = () => {
   const [destination, setDestination] = useState(XTC_OPTIONS.SEND);
   const [sendError, setError] = useState(false);
   const [sendingXTCtoCanister, setSendingXTCtoCanister] = useState(false);
-  const debouncedAddress = useDebounce(address, 750);
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    if (debouncedAddress && isICNSName(debouncedAddress)) {
-      setLoading(true);
-      resolveICNSName(debouncedAddress, selectedAsset?.symbol === 'ICP')
-        .then((response) => {
-          setAddressInfo({
-            isValid: !!response,
-            type: ADDRESS_TYPES.ICNS,
-            resolvedAddress: response,
-          });
-          setLoading(false);
-        });
-    }
-  }, [debouncedAddress, selectedAsset]);
+
+  const {
+    loading, resolvedAddress, isValid: isValidICNS,
+  } = useICNS(address, selectedAsset?.symbol === 'ICP', 750);
+
+  useEffect(() => setAddressInfo({
+    isValid: isValidICNS,
+    resolvedAddress,
+    type: ADDRESS_TYPES.ICNS,
+  }), [resolvedAddress, isValidICNS]);
 
   const truncateFloatForDisplay = (value) => Number(
     value.toFixed(MAX_DECIMALS).slice(0, -(MAX_DECIMALS - DISPLAY_DECIMALS)),

@@ -1,44 +1,52 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { IDInput } from '@components';
 import {
   Container, FormItem, Select, Button,
 } from '@ui';
 import { Grid } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
-import { validatePrincipalId } from '@shared/utils/ids';
 
-const useStyles = makeStyles(() => ({
-  appearAnimation: {
-    animationName: '$appear',
-    animationDuration: '0.5s',
-  },
-  nftImage: {
-    height: 42,
-    width: 42,
-    borderRadius: 5,
-  },
-}));
+import { validatePrincipalId } from '@shared/utils/ids';
+import { setSendAddress } from '@redux/nfts';
+import { useICNS } from '@hooks';
+import { ADDRESS_TYPES } from '@shared/constants/addresses';
+
+import useStyles from './styles';
+import { fallbackPunksUrl } from '../../utils';
 
 const InputStep = ({ advanceStep }) => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const [address, setAddress] = useState(null);
+  const { resolvedAddress, isValid: isValidICNS, loading } = useICNS(address, false, 500);
 
   const { selectedNft: nft } = useSelector((state) => state.nfts);
   const { collections } = useSelector((state) => state.wallet);
-  const classes = useStyles();
 
   const collection = useMemo(() => collections?.find(
     (col) => col.name === nft?.collection,
   ) || {},
   [collections, nft]);
 
-  const fallbackNftUrl = (url) => (url?.includes?.('https') ? url : `https://qcg3w-tyaaa-aaaah-qakea-cai.raw.ic0.app${url}`);
   const handleAddressChange = (val) => setAddress(val);
-
+  const handleAdvanceStep = () => {
+    dispatch(setSendAddress({
+      address: {
+        address,
+        type: isValidICNS ? ADDRESS_TYPES.ICNS : ADDRESS_TYPES.PRINCIPAL,
+      },
+      resolvedAddress: isValidICNS ? {
+        address: resolvedAddress,
+        type: ADDRESS_TYPES.PRINCIPAL,
+      } : null,
+    }));
+    advanceStep();
+  };
+  const isValid = address === null || validatePrincipalId(address) || isValidICNS;
   return (
     <Container>
       <Grid container spacing={2}>
@@ -47,7 +55,7 @@ const InputStep = ({ advanceStep }) => {
             label={t('nfts.nft')}
             component={(
               <Select
-                image={fallbackNftUrl(nft?.url)}
+                image={fallbackPunksUrl(nft?.url)}
                 name={nft?.name || `${collection?.name ?? ''} #${nft?.index}`}
                 text={`#${nft?.index}`}
                 imageClassName={classes.nftImage}
@@ -63,9 +71,10 @@ const InputStep = ({ advanceStep }) => {
             label={t('nfts.sendTo')}
             component={(
               <IDInput
+                loading={loading}
                 value={address}
                 onChange={handleAddressChange}
-                isValid={address === null || validatePrincipalId(address)}
+                isValid={isValid}
                 placeholder={t('nfts.inputPrincipalId')}
               />
               )}
@@ -78,10 +87,10 @@ const InputStep = ({ advanceStep }) => {
             fullWidth
             disabled={
                 address === null
-                || !validatePrincipalId(address)
                 || address === ''
+                || !isValid
               }
-            onClick={advanceStep}
+            onClick={handleAdvanceStep}
           />
         </Grid>
       </Grid>
