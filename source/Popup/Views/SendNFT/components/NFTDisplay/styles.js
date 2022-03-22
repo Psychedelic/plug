@@ -8,6 +8,7 @@ export default makeStyles(() => ({
     display: 'flex',
     alignItems: 'center',
     padding: 15,
+    width: '90%',
   },
   nftInfo: {
     display: 'flex',

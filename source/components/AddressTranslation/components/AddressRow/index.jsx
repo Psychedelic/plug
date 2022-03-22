@@ -25,6 +25,7 @@ const AddressRow = ({
   const openExplorer = (accountId) => !loading && extension.tabs.create({
     url: getDashboardAccountUrl(accountId),
   });
+  const isICP = type === ADDRESS_TYPES.ACCOUNT;
   return (
     <div className={clsx(classes.addressRow, primary && classes.primaryAddressRow)}>
       <div className={classes.row}>
@@ -42,7 +43,7 @@ const AddressRow = ({
       </div>
       <div className={clsx(classes.row, classes.relative)}>
         <Typography variant="h6">{shortAddress(address)}</Typography>
-        {type === ADDRESS_TYPES.ACCOUNT && (
+        {isICP && (
           <img
             src={ArrowUpRight}
             className={classes.arrowUpRight}
@@ -51,10 +52,16 @@ const AddressRow = ({
         )}
       </div>
       <Dialog
-        title={t('send.icpModalTitle')}
+        title={t('send.addressTranslationTitle')}
         onClose={() => setModalOpen(false)}
         open={modalOpen}
-        component={<TranslationModal loading={loading} closeModal={() => setModalOpen(false)} />}
+        component={(
+          <TranslationModal
+            loading={loading}
+            isICP={isICP}
+            closeModal={() => setModalOpen(false)}
+          />
+        )}
       />
     </div>
   );

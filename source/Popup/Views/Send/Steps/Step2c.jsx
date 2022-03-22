@@ -57,7 +57,7 @@ const Step2c = ({ destination, handleChangeDestination, handleChangeStep }) => {
               <Typography>{t('send.xtcModalText')}</Typography>
               <Button
                 variant="rainbow"
-                value={t('send.icpModalButton1')}
+                value={t('send.addressTranslationButton1')}
                 onClick={() => setOpen(false)}
                 fullWidth
               />

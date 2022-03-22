@@ -9,4 +9,7 @@ export default makeStyles(() => ({
     flexDirection: 'column',
     marginTop: -16,
   },
+  largeModal: {
+    height: 270,
+  },
 }));
