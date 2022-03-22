@@ -9,9 +9,14 @@ import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import {
   CURRENCIES, USD_PER_TC,
 } from '@shared/constants/currencies';
-import { validateAccountId, validateCanisterId, validatePrincipalId } from '@shared/utils/ids';
+import {
+  isICNSName, validateAddress, validateCanisterId, validatePrincipalId,
+} from '@shared/utils/ids';
 import { ADDRESS_TYPES, DEFAULT_ICP_FEE, XTC_FEE } from '@shared/constants/addresses';
 import { useICPPrice } from '@redux/icp';
+import { useDebounce } from '@hooks';
+import resolveICNSName from '@shared/services/ICNS';
+
 import Step1 from '../Steps/Step1';
 // import Step2a from '../Steps/Step2a';
 // import Step2b from '../Steps/Step2b';
@@ -21,6 +26,10 @@ import XTC_OPTIONS from '../constants/xtc';
 
 const MAX_DECIMALS = 12;
 const DISPLAY_DECIMALS = 5;
+const getAddressType = (address) => {
+  const type = validatePrincipalId(address) ? ADDRESS_TYPES.PRINCIPAL : ADDRESS_TYPES.ACCOUNT;
+  return isICNSName(address) ? ADDRESS_TYPES.ICNS : type;
+};
 
 const useSteps = () => {
   const [step, setStep] = useState(0);
@@ -30,17 +39,31 @@ const useSteps = () => {
 
   const { assets, principalId, accountId } = useSelector((state) => state.wallet);
   const icpPrice = useICPPrice();
-  const [selectedAsset, setSelectedAsset] = useState(assets?.[0] || CURRENCIES.get('ICP'));
 
+  const [selectedAsset, setSelectedAsset] = useState(assets?.[0] || CURRENCIES.get('ICP'));
   const [amount, setAmount] = useState(0);
   const [address, setAddress] = useState(null);
   const [addressInfo, setAddressInfo] = useState({ isValid: null, type: null });
   const [trxComplete, setTrxComplete] = useState(false);
-
   const [destination, setDestination] = useState(XTC_OPTIONS.SEND);
   const [sendError, setError] = useState(false);
-
   const [sendingXTCtoCanister, setSendingXTCtoCanister] = useState(false);
+  const debouncedAddress = useDebounce(address, 750);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (debouncedAddress && isICNSName(debouncedAddress)) {
+      setLoading(true);
+      resolveICNSName(debouncedAddress, selectedAsset?.symbol === 'ICP')
+        .then((response) => {
+          setAddressInfo({
+            isValid: !!response,
+            type: ADDRESS_TYPES.ICNS,
+            resolvedAddress: response,
+          });
+          setLoading(false);
+        });
+    }
+  }, [debouncedAddress, selectedAsset]);
 
   const truncateFloatForDisplay = (value) => Number(
     value.toFixed(MAX_DECIMALS).slice(0, -(MAX_DECIMALS - DISPLAY_DECIMALS)),
@@ -86,15 +109,16 @@ const useSteps = () => {
   const getAvailableAmount = (value) => truncateFloatForDisplay(value - getTransactionFee());
 
   const handleSendClick = () => {
+    const to = addressInfo.resolvedAddress || address;
     if (sendingXTCtoCanister && destination === XTC_OPTIONS.BURN) {
       sendMessage({
         type: HANDLER_TYPES.BURN_XTC,
-        params: { to: address, amount: amount.toString() },
+        params: { to, amount: amount.toString() },
       }, parseSendResponse);
     } else {
       sendMessage({
         type: HANDLER_TYPES.SEND_TOKEN,
-        params: { to: address, amount: amount.toString(), canisterId: selectedAsset?.canisterId },
+        params: { to, amount: amount.toString(), canisterId: selectedAsset?.canisterId },
       }, (response) => {
         parseSendResponse(response);
         if (!selectedAsset) {
@@ -115,8 +139,8 @@ const useSteps = () => {
   useEffect(() => {
     if (address !== null) {
       const isUserAddress = [principalId, accountId].includes(address);
-      let isValid = !isUserAddress && (validatePrincipalId(address) || validateAccountId(address));
-      const type = validatePrincipalId(address) ? ADDRESS_TYPES.PRINCIPAL : ADDRESS_TYPES.ACCOUNT;
+      let isValid = !isUserAddress && validateAddress(address);
+      const type = getAddressType(address);
       // check for accountId if cycles selected
       if (type === ADDRESS_TYPES.ACCOUNT && selectedAsset?.symbol !== 'ICP') {
         isValid = false;
@@ -306,6 +330,7 @@ const useSteps = () => {
         addressInfo={addressInfo}
         handleChangeAddressInfo={handleChangeAddressInfo}
         handleChangeStep={handleNextStep}
+        loadingAddress={loading}
       />,
       left: null,
       right: rightButton,

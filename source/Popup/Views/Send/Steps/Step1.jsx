@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 import { IDInput } from '@components';
 import {
@@ -9,7 +10,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
 import NumberFormat from 'react-number-format';
-import { useSelector } from 'react-redux';
+import { ADDRESS_TYPES } from '@shared/constants/addresses';
+
 import useStyles from '../styles';
 
 const Step1 = ({
@@ -27,6 +29,7 @@ const Step1 = ({
   address,
   handleChangeAddress,
   addressInfo,
+  loadingAddress,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -100,6 +103,7 @@ const Step1 = ({
             label={t('send.to')}
             component={(
               <IDInput
+                loading={loadingAddress}
                 value={address}
                 onChange={handleChangeAddress}
                 isValid={addressInfo.isValid}
@@ -108,7 +112,7 @@ const Step1 = ({
           />
         </Grid>
         {
-          addressInfo.type === 'account id' && selectedAsset.id === 'CYCLES'
+          addressInfo.type === ADDRESS_TYPES.ACCOUNT && selectedAsset.id === 'CYCLES'
           && (
             <Grid item xs={12}>
               <div className={classes.appearAnimation}>
@@ -134,6 +138,7 @@ const Step1 = ({
             disabled={
               !(parseFloat(amount) > 0)
               || !addressInfo.isValid
+              || loadingAddress
               || address === null
               || address === ''
             }
@@ -162,4 +167,5 @@ Step1.propTypes = {
   address: PropTypes.objectOf(PropTypes.object).isRequired,
   handleChangeAddress: PropTypes.func.isRequired,
   addressInfo: PropTypes.objectOf(PropTypes.object).isRequired,
+  loadingAddress: PropTypes.bool.isRequired,
 };

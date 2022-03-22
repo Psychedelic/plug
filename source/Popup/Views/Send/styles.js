@@ -70,11 +70,12 @@ export default makeStyles((theme) => ({
     alignItems: 'flex-end',
   },
   addressContainer: {
-    height: 58,
+    height: 25,
+    padding: 2,
     display: 'flex',
-    flexDirection: 'column',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    width: '100%',
   },
   flex: {
     display: 'flex',
@@ -85,8 +86,8 @@ export default makeStyles((theme) => ({
     marginRight: 12,
   },
   arrow: {
-    padding: '6px 10px',
-    marginRight: 8,
+    height: 25,
+    width: 38,
   },
   arrowUpRight: {
     cursor: 'pointer',
@@ -95,17 +96,16 @@ export default makeStyles((theme) => ({
   },
   to: {
     width: 38,
+    marginBottom: 2,
   },
   badge: {
     borderRadius: 6,
     width: 'fit-content',
     padding: '2px 8px',
-  },
-  principalBadge: {
     background: '#F3F5F9',
     color: '#6B7280',
   },
-  accountBadge: {
+  primaryBadge: {
     background: '#D3E1FF',
     color: '#3574F4',
   },
@@ -169,5 +169,46 @@ export default makeStyles((theme) => ({
   sameAddressFromTo: {
     padding: '0 12px 12px',
     color: '#DC2626',
+  },
+  card: {
+    width: '100%',
+    margin: '0 10px 20px',
+  },
+  addressTranslationContainer: {
+    display: 'flex',
+    width: '100%',
+    flexDirection: 'column',
+    padding: '12px 10px 12px 0px',
+    maxHeight: 130,
+  },
+  leftContainer: {
+    maxWidth: 45,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    padding: '8px 0',
+  },
+  rightContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingTop: 6,
+  },
+  row: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  addressRow: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    justifyContent: 'space-between',
+  },
+  relative: {
+    position: 'relative',
+  },
+  primaryAddressRow: {
+    paddingTop: 13,
   },
 }));

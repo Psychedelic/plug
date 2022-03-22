@@ -1,6 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import { Principal } from '@dfinity/principal';
-import { ALPHANUM_REGEX, CANISTER_MAX_LENGTH } from '../constants/addresses';
+import { ALPHANUM_REGEX, CANISTER_MAX_LENGTH, ICNS_REGEX } from '../constants/addresses';
+
+export const isICNSName = (name) => ICNS_REGEX.test(name);
 
 export const validatePrincipalId = (text) => {
   try {
@@ -33,3 +35,6 @@ export const recursiveParsePrincipal = (data) => Object.entries(data).reduce((ac
   }
   return current;
 }, {});
+
+export const validateAddress = (address) => validatePrincipalId(address)
+  || validateAccountId(address);
