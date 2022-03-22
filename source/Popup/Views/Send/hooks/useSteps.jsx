@@ -14,12 +14,9 @@ import {
 } from '@shared/utils/ids';
 import { ADDRESS_TYPES, DEFAULT_ICP_FEE, XTC_FEE } from '@shared/constants/addresses';
 import { useICPPrice } from '@redux/icp';
-import { useDebounce } from '@hooks';
-import resolveICNSName from '@shared/services/ICNS';
+import { useICNS } from '@hooks';
 
 import Step1 from '../Steps/Step1';
-// import Step2a from '../Steps/Step2a';
-// import Step2b from '../Steps/Step2b';
 import Step2c from '../Steps/Step2c';
 import Step3 from '../Steps/Step3';
 import XTC_OPTIONS from '../constants/xtc';
@@ -48,22 +45,16 @@ const useSteps = () => {
   const [destination, setDestination] = useState(XTC_OPTIONS.SEND);
   const [sendError, setError] = useState(false);
   const [sendingXTCtoCanister, setSendingXTCtoCanister] = useState(false);
-  const debouncedAddress = useDebounce(address, 750);
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    if (debouncedAddress && isICNSName(debouncedAddress)) {
-      setLoading(true);
-      resolveICNSName(debouncedAddress, selectedAsset?.symbol === 'ICP')
-        .then((response) => {
-          setAddressInfo({
-            isValid: !!response,
-            type: ADDRESS_TYPES.ICNS,
-            resolvedAddress: response,
-          });
-          setLoading(false);
-        });
-    }
-  }, [debouncedAddress, selectedAsset]);
+
+  const {
+    loading, resolvedAddress, isValid: isValidICNS,
+  } = useICNS(address, selectedAsset?.symbol === 'ICP', 750);
+
+  useEffect(() => setAddressInfo({
+    isValid: isValidICNS,
+    resolvedAddress,
+    type: ADDRESS_TYPES.ICNS,
+  }), [resolvedAddress, isValidICNS]);
 
   const truncateFloatForDisplay = (value) => Number(
     value.toFixed(MAX_DECIMALS).slice(0, -(MAX_DECIMALS - DISPLAY_DECIMALS)),
@@ -251,30 +242,6 @@ const useSteps = () => {
   const conversionPrice = amount / secondaryValue.price;
 
   const rightButton = <LinkButton value={t('common.cancel')} onClick={() => navigator.navigate('home')} />;
-
-  /*
-  const step2a = {
-    component: <Step2a
-      destination={destination}
-      handleChangeDestination={handleChangeDestination}
-      handleChangeStep={() => handleChangeStep(2)}
-    />,
-    left: <LinkButton value={t('common.back')}
-    onClick={() => { convertToSecondaryAsset(); handleChangeStep(0); }} startIcon={BackIcon} />,
-    right: rightButton,
-    center: `${t('send.review')}`,
-  };
-
-  const step2b = {
-    component: <Step2b
-      handleChangeStep={() => handleChangeStep(2)}
-    />,
-    left: <LinkButton value={t('common.back')}
-    onClick={() => { convertToSecondaryAsset(); handleChangeStep(0); }} startIcon={BackIcon} />,
-    right: rightButton,
-    center: `${t('send.warning')}`,
-  };
-  */
 
   const step2c = {
     component: <Step2c

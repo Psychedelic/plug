@@ -6,28 +6,26 @@ import extension from 'extensionizer';
 import { Info } from 'react-feather';
 import clsx from 'clsx';
 
-import { Button, LinkButton, Dialog } from '@ui';
+import { Dialog } from '@ui';
 import { ADDRESS_TYPES } from '@shared/constants/addresses';
-import { getICRocksAccountUrl, icIdsUrl } from '@shared/constants/urls';
+import { getDashboardAccountUrl } from '@shared/constants/urls';
 import ArrowUpRight from '@assets/icons/arrow-up-right.png';
 import shortAddress from '@shared/utils/short-address';
 
-import useStyles from '../../../styles';
+import useStyles from './styles';
+import TranslationModal from '../TranslationModal';
 
 const AddressRow = ({
   loading, type, address, primary,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const [ICPModalOpen, setOpenICPModal] = useState(false);
-  const openTwoIdsBlog = () => {
-    if (!loading) {
-      extension.tabs.create({ url: icIdsUrl });
-    }
-  };
+  const [modalOpen, setModalOpen] = useState(false);
+
   const openExplorer = (accountId) => !loading && extension.tabs.create({
-    url: getICRocksAccountUrl(accountId),
+    url: getDashboardAccountUrl(accountId),
   });
+  const isICP = type === ADDRESS_TYPES.ACCOUNT;
   return (
     <div className={clsx(classes.addressRow, primary && classes.primaryAddressRow)}>
       <div className={classes.row}>
@@ -36,7 +34,7 @@ const AddressRow = ({
         </div>
         {primary && (
           <Info
-            onClick={() => setOpenICPModal(true)}
+            onClick={() => setModalOpen(true)}
             color="#3574F4"
             size={16}
             className={classes.infoIcon}
@@ -45,7 +43,7 @@ const AddressRow = ({
       </div>
       <div className={clsx(classes.row, classes.relative)}>
         <Typography variant="h6">{shortAddress(address)}</Typography>
-        {type === ADDRESS_TYPES.ACCOUNT && (
+        {isICP && (
           <img
             src={ArrowUpRight}
             className={classes.arrowUpRight}
@@ -54,24 +52,15 @@ const AddressRow = ({
         )}
       </div>
       <Dialog
-        title={t('send.icpModalTitle')}
-        onClose={() => setOpenICPModal(false)}
-        open={ICPModalOpen}
+        title={t('send.addressTranslationTitle')}
+        onClose={() => setModalOpen(false)}
+        open={modalOpen}
         component={(
-          <div className={classes.modal}>
-            <Typography>{t('send.icpModalText')}</Typography>
-            <Button
-              variant="rainbow"
-              value={t('send.icpModalButton1')}
-              onClick={() => setOpenICPModal(false)}
-              fullWidth
-              disabled={loading}
-            />
-            <LinkButton
-              value={t('send.icpModalButton2')}
-              onClick={openTwoIdsBlog}
-            />
-          </div>
+          <TranslationModal
+            loading={loading}
+            isICP={isICP}
+            closeModal={() => setModalOpen(false)}
+          />
         )}
       />
     </div>

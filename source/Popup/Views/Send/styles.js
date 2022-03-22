@@ -1,6 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
+  container: {
+    padding: '0 10px',
+  },
   subtitle: {
     width: '100%',
     display: 'flex',
@@ -180,35 +183,5 @@ export default makeStyles((theme) => ({
     flexDirection: 'column',
     padding: '12px 10px 12px 0px',
     maxHeight: 130,
-  },
-  leftContainer: {
-    maxWidth: 45,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    padding: '8px 0',
-  },
-  rightContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    width: '100%',
-    paddingTop: 6,
-  },
-  row: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  addressRow: {
-    display: 'flex',
-    alignItems: 'center',
-    width: '100%',
-    justifyContent: 'space-between',
-  },
-  relative: {
-    position: 'relative',
-  },
-  primaryAddressRow: {
-    paddingTop: 13,
   },
 }));

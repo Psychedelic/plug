@@ -60,22 +60,4 @@ describe("Inpage", () => {
 
     expect(component.root.findByType(Popup).props.initialRoute).toBe('login');
   });
-
-  /*
-  it("Sets initial route to 'home' on unlocked keyring", () => {
-    extension.runtime.sendMessage.mockImplementationOnce((args, cb) => cb({
-      isInitialized: true,
-      isUnlocked: true,
-    }));
-
-    let component;
-    act(() => {
-      component = create(
-        <App />
-      )
-    });
-
-    console.log(component.root.findByType(Popup).props);
-  });
-  */
 });

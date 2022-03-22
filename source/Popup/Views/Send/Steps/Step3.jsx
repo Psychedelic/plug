@@ -15,14 +15,15 @@ import { Typography } from '@material-ui/core';
 import PlugController from '@psychedelic/plug-controller';
 import { Principal } from '@dfinity/principal';
 
-import { useRouter, TokenIcon, TABS } from '@components';
+import {
+  useRouter, TokenIcon, TABS, AddressTranslation,
+} from '@components';
 import { ADDRESS_TYPES, DEFAULT_ICP_FEE, XTC_FEE } from '@shared/constants/addresses';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { useICPPrice } from '@redux/icp';
 import { validatePrincipalId } from '@shared/utils/ids';
 
-import useStyles from '../../styles';
-import AddressTranslation from './components/AddressTranslation';
+import useStyles from '../styles';
 
 const getAddressTranslations = (address, addressInfo, symbol) => {
   const translations = [{ address, type: addressInfo.type }];
@@ -95,7 +96,7 @@ const Step3 = ({
 
   return (
     <Container>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} className={classes.container}>
         <Grid item xs={12} style={{ textAlign: 'center' }}>
           <div className={classes.asset}>
             <TokenIcon image={asset.image} className={classes.image} symbol={asset.symbol} />
