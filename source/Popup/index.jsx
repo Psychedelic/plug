@@ -35,7 +35,6 @@ const App = () => {
           isClockInSync()
             .then((shouldShowClockScreen) => {
               if (!shouldShowClockScreen) {
-                console.log('should show screen: ', !shouldShowClockScreen);
                 setInitialRoute('clockError');
               } else {
                 setInitialRoute('home');

@@ -2,7 +2,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import ClockIcon from '@assets/icons/clock.svg';
 import { Layout } from '@components';
-import { useRouter } from '@components/Router';
 import useStyles from './styles';
 
 const ClockError = () => {
