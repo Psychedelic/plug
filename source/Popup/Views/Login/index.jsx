@@ -9,7 +9,7 @@ import { LinkButton, Button, FormInput } from '@ui';
 import { useRouter } from '@components/Router';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
-import { isClockOutOfSync } from '@shared/utils/time';
+import { isClockInSync } from '@shared/utils/time';
 import PropTypes from 'prop-types';
 import useStyles from './styles';
 
@@ -33,9 +33,9 @@ const Login = ({ redirect }) => {
       params: { password, redirect: true },
     }, (unlocked) => {
       if (unlocked) {
-        isClockOutOfSync()
+        isClockInSync()
           .then((shouldShowClockScreen) => {
-            if (shouldShowClockScreen) {
+            if (!shouldShowClockScreen) {
               navigator.navigate('clockError');
             }
           });
