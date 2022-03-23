@@ -20,7 +20,7 @@ export default function useICNS(address, symbol, delay = 500) {
           setLoading(false);
         });
     }
-  }, [debouncedAddress, symbol]);
+  }, [debouncedAddress, symbol, address]);
 
   return {
     loading, resolvedAddress, isValid: !!resolvedAddress,

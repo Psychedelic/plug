@@ -1,4 +1,6 @@
 import { validateCanisterId, validatePrincipalId, validateAccountId } from '@shared/utils/ids';
+import { XTC_FEE } from '@shared/constants/addresses';
+import { CYCLES_PER_TC } from '@shared/constants/currencies';
 
 import ERRORS from './errors';
 
@@ -37,6 +39,9 @@ export const validateBurnArgs = ({ to, amount }) => {
 
   if (!validateCanisterId(to)) {
     message = 'The transaction failed because the destination address was invalid, it has to be a Canister ID';
+  }
+  if (amount < XTC_FEE * CYCLES_PER_TC) {
+    message = 'You cannot burn less XTC than the minimum fee';
   }
   return message ? ERRORS.CLIENT_ERROR(message) : null;
 };
