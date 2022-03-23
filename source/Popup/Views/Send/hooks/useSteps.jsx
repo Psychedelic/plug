@@ -52,7 +52,7 @@ const useSteps = () => {
 
   const {
     loading, resolvedAddress, isValid: isValidICNS,
-  } = useICNS(address, selectedAsset?.symbol, 750);
+  } = useICNS(address, selectedAsset?.symbol);
 
   const truncateFloatForDisplay = (value) => Number(
     value.toFixed(MAX_DECIMALS).slice(0, -(MAX_DECIMALS - DISPLAY_DECIMALS)),
@@ -62,12 +62,15 @@ const useSteps = () => {
     setAddress(value.trim());
   };
   const handleChangeAddressInfo = (value) => setAddressInfo(value);
-  const handleChangeAsset = (value) => setSelectedAsset({
-    ...value,
-    price: {
-      ICP: icpPrice, XTC: USD_PER_TC, WTC: USD_PER_TC, WICP: icpPrice,
-    }[value?.symbol],
-  });
+  const handleChangeAsset = (value) => {
+    setAddressInfo({ isValid: null, resolvedAddress: null, type: null });
+    setSelectedAsset({
+      ...value,
+      price: {
+        ICP: icpPrice, XTC: USD_PER_TC, WTC: USD_PER_TC, WICP: icpPrice,
+      }[value?.symbol],
+    });
+  };
   const handleChangeStep = (index) => setStep(index);
   const handleChangeAmount = (value) => setAmount(Number(value));
   const handleChangeDestination = (value) => setDestination(value);
@@ -141,7 +144,7 @@ const useSteps = () => {
 
       setSendingXTCtoCanister(selectedAsset?.symbol === 'XTC' && validateCanisterId(address));
     }
-  }, [address, selectedAsset, isValidICNS]);
+  }, [address, selectedAsset, isValidICNS, resolvedAddress]);
 
   const [primaryValue, setPrimaryValue] = useState(
     {

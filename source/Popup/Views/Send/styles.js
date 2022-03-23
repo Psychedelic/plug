@@ -134,6 +134,7 @@ export default makeStyles((theme) => ({
     justifyContent: 'space-between',
     width: '100%',
     fontWeight: 500,
+    marginBottom: 10,
   },
   alertButton: {
     fontWeight: 600,

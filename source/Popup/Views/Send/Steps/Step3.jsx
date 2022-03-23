@@ -11,7 +11,7 @@ import {
   USDFormat,
 } from '@ui';
 import { setAssets, setAssetsLoading } from '@redux/wallet';
-import { Typography } from '@material-ui/core';
+import { capitalize, Typography } from '@material-ui/core';
 import PlugController from '@psychedelic/plug-controller';
 import { Principal } from '@dfinity/principal';
 
@@ -93,7 +93,7 @@ const Step3 = ({
       navigator.navigate('home', TABS.ACTIVITY);
     }
   }, [isTrxCompleted]);
-
+  const addresses = getAddressTranslations(address, addressInfo, asset?.symbol);
   return (
     <Container>
       <Grid container spacing={2} className={classes.container}>
@@ -111,8 +111,14 @@ const Step3 = ({
           )}
         </Grid>
         <AddressTranslation
-          addresses={getAddressTranslations(address, addressInfo, asset?.symbol)}
+          addresses={addresses}
         />
+        {addresses.length > 1 && (
+          <Grid className={classes.alertContainer} item xs={12}>
+            <span>{`You are sending ${asset?.symbol} to ${t(`send.alert.${addresses[1]?.type}`)}`}</span>
+            <span className={classes.alertButton}>{t('common.learnMore')}</span>
+          </Grid>
+        )}
         {isICP && (
           <Grid item xs={12}>
             <InfoRow name={t('common.taxFee')} value={`${DEFAULT_ICP_FEE} ICP ($${fee})`} />
