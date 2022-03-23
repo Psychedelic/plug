@@ -14,14 +14,15 @@ const AddressTranslation = ({ addresses = [], loading }) => {
   const { t } = useTranslation();
 
   const [originalAddress, translatedAddress] = addresses;
+  const hasTranslation = addresses?.length > 1;
   return (
     <Card className={classes.card}>
       <div className={classes.addressTranslationContainer}>
         <div className={classes.row}>
           <Typography variant="subtitle1" className={classes.to}>{t('send.to')}</Typography>
-          <AddressRow loading={loading} {...originalAddress} />
+          <AddressRow primary={!hasTranslation} loading={loading} {...originalAddress} />
         </div>
-        {addresses?.length > 1 && (
+        {hasTranslation && (
         <div className={classes.row}>
           <img src={ArrowImg} className={classes.arrow} />
           <AddressRow primary loading={loading} {...translatedAddress} />

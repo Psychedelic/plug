@@ -40,7 +40,11 @@ const useSteps = () => {
   const [selectedAsset, setSelectedAsset] = useState(assets?.[0] || CURRENCIES.get('ICP'));
   const [amount, setAmount] = useState(0);
   const [address, setAddress] = useState(null);
-  const [addressInfo, setAddressInfo] = useState({ isValid: null, type: null });
+  const [addressInfo, setAddressInfo] = useState({
+    isValid: null,
+    type: null,
+    resolvedAddress: null,
+  });
   const [trxComplete, setTrxComplete] = useState(false);
   const [destination, setDestination] = useState(XTC_OPTIONS.SEND);
   const [sendError, setError] = useState(false);
@@ -49,18 +53,22 @@ const useSteps = () => {
   const {
     loading, resolvedAddress, isValid: isValidICNS,
   } = useICNS(address, selectedAsset?.symbol, 750);
-  useEffect(() => {
-    setAddressInfo({
-      isValid: isValidICNS,
-      resolvedAddress,
-      type: ADDRESS_TYPES.ICNS,
-    });
-  }, [resolvedAddress, isValidICNS, selectedAsset]);
+  // useEffect(() => {
+  //   setAddressInfo({
+  //     isValid: isValidICNS,
+  //     resolvedAddress,
+  //     type: isValidICNS ? ADDRESS_TYPES.ICNS : null,
+  //   });
+  // }, [resolvedAddress, isValidICNS, selectedAsset, address]);
 
   const truncateFloatForDisplay = (value) => Number(
     value.toFixed(MAX_DECIMALS).slice(0, -(MAX_DECIMALS - DISPLAY_DECIMALS)),
   );
-  const handleChangeAddress = (value) => setAddress(value.trim());
+  const handleChangeAddress = (value) => {
+    console.log('hellooo, address changed', value);
+    setAddressInfo({ isValid: null, resolvedAddress: null, type: null });
+    setAddress(value.trim());
+  };
   const handleChangeAddressInfo = (value) => setAddressInfo(value);
   const handleChangeAsset = (value) => setSelectedAsset({
     ...value,
@@ -129,15 +137,15 @@ const useSteps = () => {
   }, [icpPrice]);
 
   useEffect(() => {
-    if (address !== null && !isValidICNS) {
-      const isUserAddress = [principalId, accountId].includes(address);
-      let isValid = !isUserAddress && validateAddress(address);
+    if (address !== null) {
+      const isUserAddress = [principalId, accountId].includes(address); // add icns
+      let isValid = !isUserAddress && (validateAddress(address) || isValidICNS);
       const type = getAddressType(address);
       // check for accountId if cycles selected
       if (type === ADDRESS_TYPES.ACCOUNT && selectedAsset?.symbol !== 'ICP') {
         isValid = false;
       }
-      handleChangeAddressInfo({ isValid, type });
+      setAddressInfo({ isValid, type, resolvedAddress });
 
       setSendingXTCtoCanister(selectedAsset?.symbol === 'XTC' && validateCanisterId(address));
     }
