@@ -8,7 +8,6 @@ import useStyles from './styles';
 const ClockError = () => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { navigator } = useRouter();
 
   return (
     <Layout>
