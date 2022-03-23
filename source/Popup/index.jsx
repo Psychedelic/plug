@@ -33,8 +33,8 @@ const App = () => {
       if (locks?.isInitialized) {
         if (locks?.isUnlocked) {
           isClockInSync()
-            .then((shouldShowClockScreen) => {
-              if (!shouldShowClockScreen) {
+            .then((clockInSync) => {
+              if (!clockInSync) {
                 setInitialRoute('clockError');
               } else {
                 setInitialRoute('home');
