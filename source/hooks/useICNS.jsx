@@ -5,10 +5,11 @@ import { isICNSName } from '@shared/utils/ids';
 
 import useDebounce from './useDebounce';
 
-export default function useICNS(address, isICP, delay = 500) {
+export default function useICNS(address, symbol, delay = 500) {
   const debouncedAddress = useDebounce(address, delay);
   const [resolvedAddress, setResolvedAddress] = useState(null);
   const [loading, setLoading] = useState(false);
+  const isICP = symbol === 'ICP';
 
   useEffect(() => {
     if (debouncedAddress && isICNSName(debouncedAddress)) {
@@ -19,7 +20,7 @@ export default function useICNS(address, isICP, delay = 500) {
           setLoading(false);
         });
     }
-  }, [debouncedAddress, isICP]);
+  }, [debouncedAddress, symbol]);
 
   return {
     loading, resolvedAddress, isValid: !!resolvedAddress,

@@ -48,13 +48,14 @@ const useSteps = () => {
 
   const {
     loading, resolvedAddress, isValid: isValidICNS,
-  } = useICNS(address, selectedAsset?.symbol === 'ICP', 750);
-
-  useEffect(() => setAddressInfo({
-    isValid: isValidICNS,
-    resolvedAddress,
-    type: ADDRESS_TYPES.ICNS,
-  }), [resolvedAddress, isValidICNS]);
+  } = useICNS(address, selectedAsset?.symbol, 750);
+  useEffect(() => {
+    setAddressInfo({
+      isValid: isValidICNS,
+      resolvedAddress,
+      type: ADDRESS_TYPES.ICNS,
+    });
+  }, [resolvedAddress, isValidICNS, selectedAsset]);
 
   const truncateFloatForDisplay = (value) => Number(
     value.toFixed(MAX_DECIMALS).slice(0, -(MAX_DECIMALS - DISPLAY_DECIMALS)),
@@ -128,7 +129,7 @@ const useSteps = () => {
   }, [icpPrice]);
 
   useEffect(() => {
-    if (address !== null) {
+    if (address !== null && !isValidICNS) {
       const isUserAddress = [principalId, accountId].includes(address);
       let isValid = !isUserAddress && validateAddress(address);
       const type = getAddressType(address);
@@ -140,7 +141,7 @@ const useSteps = () => {
 
       setSendingXTCtoCanister(selectedAsset?.symbol === 'XTC' && validateCanisterId(address));
     }
-  }, [address, selectedAsset]);
+  }, [address, selectedAsset, isValidICNS]);
 
   const [primaryValue, setPrimaryValue] = useState(
     {

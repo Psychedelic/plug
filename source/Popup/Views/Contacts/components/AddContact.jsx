@@ -21,7 +21,7 @@ const AddContact = ({ addContact, contacts }) => {
   const [id, setId] = useState(null);
   const [isValidId, setIsValidId] = useState(null);
   const [invalidReason, setInvalidReason] = useState('');
-  const { loading, isValid: isValidICNS } = useICNS(id, false, 500);
+  const { loading, isValid: isValidICNS } = useICNS(id, '', 500);
 
   const handleChangeName = (e) => setName(e.target.value);
 
