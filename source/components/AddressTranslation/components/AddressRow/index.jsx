@@ -42,7 +42,7 @@ const AddressRow = ({
         )}
       </div>
       <div className={clsx(classes.row, classes.relative)}>
-        <Typography variant="h6">{shortAddress(address)}</Typography>
+        <Typography variant="h6">{type === ADDRESS_TYPES.ICNS ? address : shortAddress(address)}</Typography>
         {isICP && (
           <img
             src={ArrowUpRight}

@@ -7,7 +7,10 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { getRandomEmoji } from '@shared/constants/emojis';
 import { Typography } from '@material-ui/core';
-import { validatePrincipalId, validateAccountId } from '@shared/utils/ids';
+import { validateAddress } from '@shared/utils/ids';
+
+import { useICNS } from '@hooks';
+
 import useStyles from '../styles';
 
 const AddContact = ({ addContact, contacts }) => {
@@ -18,6 +21,7 @@ const AddContact = ({ addContact, contacts }) => {
   const [id, setId] = useState(null);
   const [isValidId, setIsValidId] = useState(null);
   const [invalidReason, setInvalidReason] = useState('');
+  const { loading, isValid: isValidICNS } = useICNS(id, '', 500);
 
   const handleChangeName = (e) => setName(e.target.value);
 
@@ -29,7 +33,7 @@ const AddContact = ({ addContact, contacts }) => {
   const handleAddContact = () => addContact({ name, id, image: getRandomEmoji() });
 
   const validateContact = () => {
-    const isValid = validatePrincipalId(id) || validateAccountId(id);
+    const isValid = validateAddress(id) || isValidICNS;
 
     if (isValid) {
       setIsValidId(true);
@@ -56,7 +60,7 @@ const AddContact = ({ addContact, contacts }) => {
     } else {
       setInvalidReason('');
     }
-  }, [id]);
+  }, [id, isValidICNS]);
 
   return (
     <Container>
@@ -109,6 +113,7 @@ const AddContact = ({ addContact, contacts }) => {
               || name === ''
               || !isValidId
             }
+            loading={loading}
             onClick={handleAddContact}
           />
         </Grid>

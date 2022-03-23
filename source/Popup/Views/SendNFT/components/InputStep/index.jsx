@@ -22,7 +22,7 @@ const InputStep = ({ advanceStep }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [address, setAddress] = useState(null);
-  const { resolvedAddress, isValid: isValidICNS, loading } = useICNS(address, false, 500);
+  const { resolvedAddress, isValid: isValidICNS, loading } = useICNS(address, '', 500);
 
   const { selectedNft: nft } = useSelector((state) => state.nfts);
   const { collections } = useSelector((state) => state.wallet);
