@@ -53,19 +53,11 @@ const useSteps = () => {
   const {
     loading, resolvedAddress, isValid: isValidICNS,
   } = useICNS(address, selectedAsset?.symbol, 750);
-  // useEffect(() => {
-  //   setAddressInfo({
-  //     isValid: isValidICNS,
-  //     resolvedAddress,
-  //     type: isValidICNS ? ADDRESS_TYPES.ICNS : null,
-  //   });
-  // }, [resolvedAddress, isValidICNS, selectedAsset, address]);
 
   const truncateFloatForDisplay = (value) => Number(
     value.toFixed(MAX_DECIMALS).slice(0, -(MAX_DECIMALS - DISPLAY_DECIMALS)),
   );
   const handleChangeAddress = (value) => {
-    console.log('hellooo, address changed', value);
     setAddressInfo({ isValid: null, resolvedAddress: null, type: null });
     setAddress(value.trim());
   };
