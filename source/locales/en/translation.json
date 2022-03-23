@@ -268,7 +268,7 @@
     "description": "Name your addresses for a better, safer, more fun experience.",
     "dab": "Powered by Dab",
     "name": "Name",
-    "id": "Principal or Account ID",
+    "id": "Principal, Account ID or ICNS name",
     "deleteTitle": "Delete Contact",
     "deleteText": "Are you sure you want to delete",
     "deleteButton": "Delete",
