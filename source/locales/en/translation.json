@@ -198,11 +198,11 @@
     "canisterDetectedIcp1": "We detected the recipient ID you entered is a Canister. Please be aware that although you can send ICP to a canister, ",
     "canisterDetectedIcp2": "currently there is no way to send ICP out of a canister.",
     "canisterDetectedUnderstand": "I understand. Send ICP to canister anyways.",
-    "addressTranslationTitle": "Why are there two ID’s?",
-    "addressTranslationText": "For .icp names, we query ICNS for the principalId record. If not set, we use the owner's Principal ID.",
-    "addressTranslationTextICP": "ICP can only be sent to Account IDs. When you send ICP to a Principal ID, we derive its associated Account ID.\nIn the case of .icp names, we check for the accountID record, or derive it from the PrincipalID record (or owner field if not available).",
-    "addressTranslationButton1": "Ok, I understand",
-    "addressTranslationButton2": "Learn more about the two ID's",
+    "icnsModalTitle": ".ICP Names - ICNS",
+    "icnsModalText": "Plug supports ICNS when it comes to .icp names. Make sure you to double check you're sending to the correct name.",
+    "icnsModalLearnMore": "Learn more about ICNS",
+    "icnsModalButton1": "Ok, I understand",
+    "icnsModalButton2": "Learn more about the two ID's",
     "transactionInProgress": "Transaction in progress...",
     "transactionSuccess": "Transaction successful",
     "returnHome": "Return home",
@@ -219,7 +219,9 @@
     "alert": {
       "principalId": "a Principal ID",
       "accountId": "an Account ID"
-    }
+    },
+    "invalidICNS": "Invalid or unregistered ICNS name",
+    "invalidAddress": "Invalid address"
   },
   "transfer": {
     "details": "Details",

@@ -8,7 +8,7 @@ import { initReactI18next } from 'react-i18next';
 import browser from 'webextension-polyfill';
 import { theme } from '@ui';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { isClockInSync } from '@shared/utils/time';
+
 import ProviderWrapper from '../shared/ProviderWrapper';
 import Popup from './Popup';
 import initConfig from '../locales';
@@ -32,14 +32,7 @@ const App = () => {
     sendMessage({ type: HANDLER_TYPES.GET_LOCKS, params: {} }, (locks) => {
       if (locks?.isInitialized) {
         if (locks?.isUnlocked) {
-          isClockInSync()
-            .then((clockInSync) => {
-              if (!clockInSync) {
-                setInitialRoute('clockError');
-              } else {
-                setInitialRoute('home');
-              }
-            });
+          setInitialRoute('home');
         } else {
           setInitialRoute('login');
         }

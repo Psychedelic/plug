@@ -34,7 +34,7 @@ const useSteps = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const { assets, principalId, accountId } = useSelector((state) => state.wallet);
+  const { assets } = useSelector((state) => state.wallet);
   const icpPrice = useICPPrice();
 
   const [selectedAsset, setSelectedAsset] = useState(assets?.[0] || CURRENCIES.get('ICP'));
@@ -58,8 +58,10 @@ const useSteps = () => {
     value.toFixed(MAX_DECIMALS).slice(0, -(MAX_DECIMALS - DISPLAY_DECIMALS)),
   );
   const handleChangeAddress = (value) => {
-    setAddressInfo({ isValid: null, resolvedAddress: null, type: null });
-    setAddress(value.trim());
+    if (value !== address) {
+      setAddressInfo({ isValid: null, resolvedAddress: null, type: null });
+      setAddress(value.trim());
+    }
   };
   const handleChangeAddressInfo = (value) => setAddressInfo(value);
   const handleChangeAsset = (value) => {
@@ -133,8 +135,7 @@ const useSteps = () => {
 
   useEffect(() => {
     if (address !== null) {
-      const isUserAddress = [principalId, accountId].includes(address); // add icns
-      let isValid = !isUserAddress && (validateAddress(address) || isValidICNS);
+      let isValid = validateAddress(address) || isValidICNS;
       const type = getAddressType(address);
       // check for accountId if cycles selected
       if (type === ADDRESS_TYPES.ACCOUNT && selectedAsset?.symbol !== 'ICP') {

@@ -27,7 +27,7 @@ const AddressRow = ({
   });
   const isICP = type === ADDRESS_TYPES.ACCOUNT;
   return (
-    <div className={clsx(classes.addressRow, primary && classes.primaryAddressRow)}>
+    <div className={clsx(classes.addressRow, !primary && classes.secondaryAddressRow)}>
       <div className={classes.row}>
         <div className={clsx(classes.badge, primary && classes.primaryBadge)}>
           {t(`common.${type}`)}
@@ -52,7 +52,7 @@ const AddressRow = ({
         )}
       </div>
       <Dialog
-        title={t('send.addressTranslationTitle')}
+        title={t('send.icnsModalTitle')}
         onClose={() => setModalOpen(false)}
         open={modalOpen}
         component={(

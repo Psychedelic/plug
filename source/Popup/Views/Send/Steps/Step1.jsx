@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
 import NumberFormat from 'react-number-format';
 import { ADDRESS_TYPES } from '@shared/constants/addresses';
+import { isICNSName } from '@shared/utils/ids';
 
 import useStyles from '../styles';
 
@@ -106,7 +107,7 @@ const Step1 = ({
                 loading={loadingAddress}
                 value={address}
                 onChange={handleChangeAddress}
-                isValid={addressInfo.isValid}
+                isValid={addressInfo.isValid && !isUserAddress}
               />
             )}
           />
@@ -125,11 +126,12 @@ const Step1 = ({
             </Grid>
           )
         }
-        {
-          isUserAddress
-          && <span className={classes.sameAddressFromTo}>{t('deposit.sameAddressFromTo')}</span>
-        }
-
+        {!!address && !addressInfo?.isValid && !loadingAddress && (
+          <span className={classes.errorMessage}>
+            {isICNSName(address) ? t('send.invalidICNS') : t('send.invalidAddress')}
+          </span>
+        )}
+        {isUserAddress && <span className={classes.errorMessage}>{t('deposit.sameAddressFromTo')}</span>}
         <Grid item xs={12} style={{ paddingTop: '18px' }}>
           <Button
             variant="rainbow"
@@ -141,8 +143,10 @@ const Step1 = ({
               || loadingAddress
               || address === null
               || address === ''
+              || isUserAddress
             }
             onClick={handleChangeStep}
+            loading={loadingAddress}
           />
         </Grid>
       </Grid>

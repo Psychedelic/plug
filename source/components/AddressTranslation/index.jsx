@@ -20,12 +20,12 @@ const AddressTranslation = ({ addresses = [], loading }) => {
       <div className={classes.addressTranslationContainer}>
         <div className={classes.row}>
           <Typography variant="subtitle1" className={classes.to}>{t('send.to')}</Typography>
-          <AddressRow primary={!hasTranslation} loading={loading} {...originalAddress} />
+          <AddressRow primary loading={loading} {...originalAddress} />
         </div>
         {hasTranslation && (
         <div className={classes.row}>
           <img src={ArrowImg} className={classes.arrow} />
-          <AddressRow primary loading={loading} {...translatedAddress} />
+          <AddressRow loading={loading} {...translatedAddress} />
         </div>
         )}
       </div>

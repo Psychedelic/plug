@@ -11,7 +11,6 @@ import {
 import { CircularProgress, Grid } from '@material-ui/core';
 import { useContacts } from '@hooks';
 import { getRandomEmoji } from '@shared/constants/emojis';
-import { isICNSName } from '@shared/utils/ids';
 
 import ActionDialog from '../ActionDialog';
 import ContactItem from '../ContactItem';
@@ -132,9 +131,6 @@ const IDInput = ({
           </>
         )}
       </div>
-      {!isValid && (
-        <span>{isICNSName(value) ? t('send.invalidICNS') : t('send.invalidAddress') }</span>
-      )}
       {shouldDisplayAddToContacts && (
         <Grid item xs={12}>
           <div className={clsx(classes.newAddress, classes.appearAnimation)}>

@@ -6,40 +6,40 @@ import extension from 'extensionizer';
 
 import clsx from 'clsx';
 import { Button, LinkButton } from '@ui';
-import { icIdsUrl } from '@shared/constants/urls';
+import { icnsUrl } from '@shared/constants/urls';
 
 import useStyles from './styles';
 
-const TranslationModal = ({ closeModal, loading, isICP }) => {
+const ICNSModal = ({ closeModal, loading }) => {
   const classes = useStyles();
-  const openTwoIdsBlog = () => {
+  const openICNSPage = () => {
     if (!loading) {
-      extension.tabs.create({ url: icIdsUrl });
+      extension.tabs.create({ url: icnsUrl });
     }
   };
   const { t } = useTranslation();
   return (
-    <div className={clsx(classes.modal, isICP && classes.largeModal)}>
-      <Typography>{t(`send.addressTranslationText${isICP ? 'ICP' : ''}`)}</Typography>
+    <div className={clsx(classes.modal)}>
+      <Typography>{t('send.icnsModalText')}</Typography>
       <Button
         variant="rainbow"
-        value={t('send.addressTranslationButton1')}
+        value={t('send.icnsModalButton1')}
         onClick={closeModal}
         fullWidth
         disabled={loading}
       />
       <LinkButton
-        value={t('send.addressTranslationButton2')}
-        onClick={openTwoIdsBlog}
+        value={t('send.icnsModalLearnMore')}
+        onClick={openICNSPage}
       />
     </div>
   );
 };
 
-TranslationModal.propTypes = {
+ICNSModal.propTypes = {
   closeModal: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   isICP: PropTypes.bool.isRequired,
 };
 
-export default TranslationModal;
+export default ICNSModal;
