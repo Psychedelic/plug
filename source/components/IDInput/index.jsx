@@ -11,6 +11,7 @@ import {
 import { CircularProgress, Grid } from '@material-ui/core';
 import { useContacts } from '@hooks';
 import { getRandomEmoji } from '@shared/constants/emojis';
+
 import ActionDialog from '../ActionDialog';
 import ContactItem from '../ContactItem';
 import ContactList from '../ContactList';
@@ -39,7 +40,7 @@ const IDInput = ({
     .map((c) => c.id)
     .includes(value), [contacts, value]);
 
-  const shouldDisplayAddToContacts = value !== null && isValid && !inContacts && !isUserAddress;
+  const shouldDisplayAddToContacts = value !== null && value !== '' && isValid && !inContacts && !isUserAddress;
 
   const handleSelectedContact = (contact) => setSelectedContact(contact);
 

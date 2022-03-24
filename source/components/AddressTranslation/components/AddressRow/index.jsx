@@ -26,13 +26,14 @@ const AddressRow = ({
     url: getDashboardAccountUrl(accountId),
   });
   const isICP = type === ADDRESS_TYPES.ACCOUNT;
+  const isICNS = type === ADDRESS_TYPES.ICNS;
   return (
-    <div className={clsx(classes.addressRow, primary && classes.primaryAddressRow)}>
+    <div className={clsx(classes.addressRow, !primary && classes.secondaryAddressRow)}>
       <div className={classes.row}>
         <div className={clsx(classes.badge, primary && classes.primaryBadge)}>
           {t(`common.${type}`)}
         </div>
-        {primary && (
+        {primary && isICNS && (
           <Info
             onClick={() => setModalOpen(true)}
             color="#3574F4"
@@ -52,7 +53,7 @@ const AddressRow = ({
         )}
       </div>
       <Dialog
-        title={t('send.addressTranslationTitle')}
+        title={t('send.icnsModalTitle')}
         onClose={() => setModalOpen(false)}
         open={modalOpen}
         component={(

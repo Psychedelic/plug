@@ -15,7 +15,8 @@
     "storage",
     "tabs",
     "notifications",
-    "https://kyasshu.fleek.co/"
+    "https://kyasshu.fleek.co/",
+    "https://www.timeapi.io/api/Time/current/zone?timeZone=Africa/Abidjan"
   ],
   "content_security_policy": "script-src 'self' 'wasm-eval'; object-src 'self'",
   "__chrome|firefox__author": "FleekHQ",

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import extension from 'extensionizer';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
@@ -22,6 +23,7 @@ import { ADDRESS_TYPES, DEFAULT_ICP_FEE, XTC_FEE } from '@shared/constants/addre
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { useICPPrice } from '@redux/icp';
 import { validatePrincipalId } from '@shared/utils/ids';
+import { icIdsUrl } from '@shared/constants/urls';
 
 import useStyles from '../styles';
 
@@ -51,6 +53,8 @@ const getAddressTranslations = (address, addressInfo, symbol) => {
   return translations;
 };
 
+const openIdBlog = () => extension.tabs.create({ url: icIdsUrl });
+
 const Step3 = ({
   asset, amount, address, addressInfo, handleSendClick, error, isTrxCompleted,
 }) => {
@@ -64,9 +68,8 @@ const Step3 = ({
   const icpPrice = useICPPrice();
 
   const subtotal = amount * asset?.price;
-  const fee = +(asset?.price * DEFAULT_ICP_FEE).toFixed(5);
-  const xtcFee = +(asset?.price * XTC_FEE).toFixed(5);
-
+  const fee = isICP ? DEFAULT_ICP_FEE : (isXTC ? XTC_FEE : 0);
+  const usdFee = (fee * asset?.price)?.toFixed(5);
   const onClick = () => {
     setLoading(true);
     handleSendClick();
@@ -93,7 +96,7 @@ const Step3 = ({
       navigator.navigate('home', TABS.ACTIVITY);
     }
   }, [isTrxCompleted]);
-
+  const addresses = getAddressTranslations(address, addressInfo, asset?.symbol);
   return (
     <Container>
       <Grid container spacing={2} className={classes.container}>
@@ -111,19 +114,25 @@ const Step3 = ({
           )}
         </Grid>
         <AddressTranslation
-          addresses={getAddressTranslations(address, addressInfo, asset?.symbol)}
+          addresses={addresses}
         />
-        {isICP && (
-          <Grid item xs={12}>
-            <InfoRow name={t('common.taxFee')} value={`${DEFAULT_ICP_FEE} ICP ($${fee})`} />
+        {addresses.length > 1 && (
+          <Grid className={classes.alertContainer} item xs={12}>
+            <span>{`You are sending ${asset?.symbol} to ${t(`send.alert.${addresses[1]?.type}`)}`}</span>
+            <span
+              className={classes.alertButton}
+              onClick={openIdBlog}
+            >
+              {t('common.learnMore')}
+            </span>
           </Grid>
         )}
-        {isXTC && (
+        {!!fee && (
           <Grid item xs={12}>
-            <InfoRow name={t('common.taxFee')} value={`${XTC_FEE} XTC ($${xtcFee})`} />
+            <InfoRow name={t('common.taxFee')} value={`${fee} ${asset?.symbol} ($${usdFee})`} />
           </Grid>
         )}
-        {asset?.price && (
+        {!!asset?.price && (
           <Grid item xs={12}>
             <InfoRow name={t('common.total')} value={<USDFormat value={subtotal + fee} />} total />
           </Grid>

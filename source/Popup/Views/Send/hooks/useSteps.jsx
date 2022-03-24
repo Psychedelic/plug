@@ -34,13 +34,17 @@ const useSteps = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const { assets, principalId, accountId } = useSelector((state) => state.wallet);
+  const { assets } = useSelector((state) => state.wallet);
   const icpPrice = useICPPrice();
 
   const [selectedAsset, setSelectedAsset] = useState(assets?.[0] || CURRENCIES.get('ICP'));
   const [amount, setAmount] = useState(0);
   const [address, setAddress] = useState(null);
-  const [addressInfo, setAddressInfo] = useState({ isValid: null, type: null });
+  const [addressInfo, setAddressInfo] = useState({
+    isValid: null,
+    type: null,
+    resolvedAddress: null,
+  });
   const [trxComplete, setTrxComplete] = useState(false);
   const [destination, setDestination] = useState(XTC_OPTIONS.SEND);
   const [sendError, setError] = useState(false);
@@ -48,26 +52,27 @@ const useSteps = () => {
 
   const {
     loading, resolvedAddress, isValid: isValidICNS,
-  } = useICNS(address, selectedAsset?.symbol, 750);
-  useEffect(() => {
-    setAddressInfo({
-      isValid: isValidICNS,
-      resolvedAddress,
-      type: ADDRESS_TYPES.ICNS,
-    });
-  }, [resolvedAddress, isValidICNS, selectedAsset]);
+  } = useICNS(address, selectedAsset?.symbol);
 
   const truncateFloatForDisplay = (value) => Number(
     value.toFixed(MAX_DECIMALS).slice(0, -(MAX_DECIMALS - DISPLAY_DECIMALS)),
   );
-  const handleChangeAddress = (value) => setAddress(value.trim());
+  const handleChangeAddress = (value) => {
+    if (value !== address) {
+      setAddressInfo({ isValid: null, resolvedAddress: null, type: null });
+      setAddress(value.trim());
+    }
+  };
   const handleChangeAddressInfo = (value) => setAddressInfo(value);
-  const handleChangeAsset = (value) => setSelectedAsset({
-    ...value,
-    price: {
-      ICP: icpPrice, XTC: USD_PER_TC, WTC: USD_PER_TC, WICP: icpPrice,
-    }[value?.symbol],
-  });
+  const handleChangeAsset = (value) => {
+    setAddressInfo({ isValid: null, resolvedAddress: null, type: null });
+    setSelectedAsset({
+      ...value,
+      price: {
+        ICP: icpPrice, XTC: USD_PER_TC, WTC: USD_PER_TC, WICP: icpPrice,
+      }[value?.symbol],
+    });
+  };
   const handleChangeStep = (index) => setStep(index);
   const handleChangeAmount = (value) => setAmount(Number(value));
   const handleChangeDestination = (value) => setDestination(value);
@@ -129,19 +134,18 @@ const useSteps = () => {
   }, [icpPrice]);
 
   useEffect(() => {
-    if (address !== null && !isValidICNS) {
-      const isUserAddress = [principalId, accountId].includes(address);
-      let isValid = !isUserAddress && validateAddress(address);
+    if (address !== null) {
+      let isValid = validateAddress(address) || isValidICNS;
       const type = getAddressType(address);
       // check for accountId if cycles selected
       if (type === ADDRESS_TYPES.ACCOUNT && selectedAsset?.symbol !== 'ICP') {
         isValid = false;
       }
-      handleChangeAddressInfo({ isValid, type });
+      setAddressInfo({ isValid, type, resolvedAddress });
 
       setSendingXTCtoCanister(selectedAsset?.symbol === 'XTC' && validateCanisterId(address));
     }
-  }, [address, selectedAsset, isValidICNS]);
+  }, [address, selectedAsset, isValidICNS, resolvedAddress]);
 
   const [primaryValue, setPrimaryValue] = useState(
     {

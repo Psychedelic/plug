@@ -134,6 +134,7 @@ export default makeStyles((theme) => ({
     justifyContent: 'space-between',
     width: '100%',
     fontWeight: 500,
+    marginBottom: 10,
   },
   alertButton: {
     fontWeight: 600,
@@ -169,7 +170,7 @@ export default makeStyles((theme) => ({
     padding: '0px 40px',
     textAlign: 'center',
   },
-  sameAddressFromTo: {
+  errorMessage: {
     padding: '0 12px 12px',
     color: '#DC2626',
   },

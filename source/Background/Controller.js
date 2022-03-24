@@ -10,6 +10,7 @@ import { XTC_FEE } from '@shared/constants/addresses';
 import { getApps, setApps, removeApp } from '@modules';
 import {
   /* PROTECTED_CATEGORIES, */ ASSET_CANISTER_IDS,
+  ICP_CANISTER_ID,
 } from '@shared/constants/canisters';
 import { getDabNfts, getDabTokens } from '@shared/services/DAB';
 import NotificationManager from '../lib/NotificationManager';
@@ -384,8 +385,6 @@ backgroundController.exposeController(
   async (opts, transferRequests, callId, portId) => {
     const { callback } = opts;
     const transfer = transferRequests?.[0];
-
-    // Answer this callback no matter if the transfer succeeds or not.
     if (transfer?.status === 'declined') {
       callback(null, true);
       callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
@@ -398,6 +397,7 @@ backgroundController.exposeController(
         const response = await sendToken({
           ...transfer,
           amount: parsedAmount,
+          canisterId: ICP_CANISTER_ID,
         });
 
         if (response.error) {
@@ -807,7 +807,6 @@ backgroundController.exposeController(
       const assets = await getBalance();
       const xtcAmount = assets?.[DEFAULT_CURRENCY_MAP.XTC]?.amount * CYCLES_PER_TC;
       const parsedAmount = transfer.amount / CYCLES_PER_TC;
-
       if (xtcAmount - XTC_FEE > transfer.amount) {
         const response = await burnXTC({
           ...transfer,

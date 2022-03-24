@@ -36,7 +36,7 @@ export default makeStyles(() => ({
   relative: {
     position: 'relative',
   },
-  primaryAddressRow: {
+  secondaryAddressRow: {
     paddingTop: 13,
   },
 }));
