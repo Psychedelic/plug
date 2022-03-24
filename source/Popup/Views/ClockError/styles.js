@@ -29,5 +29,6 @@ export default makeStyles(() => ({
   descriptionLink: {
     color: '#3574F4',
     textDecoration: 'none',
+    fontWeight: 'bold',
   },
 }));
