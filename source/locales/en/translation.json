@@ -199,7 +199,7 @@
     "canisterDetectedIcp2": "currently there is no way to send ICP out of a canister.",
     "canisterDetectedUnderstand": "I understand. Send ICP to canister anyways.",
     "icnsModalTitle": ".ICP Names - ICNS",
-    "icnsModalText": "Plug supports ICNS when it comes to .icp names. Make sure you to double check you're sending to the correct name.",
+    "icnsModalText": "Plug supports ICNS when it comes to .icp name resolution. Make sure to double check you're sending to the correct name.",
     "icnsModalLearnMore": "Learn more about ICNS",
     "icnsModalButton1": "Ok, I understand",
     "icnsModalButton2": "Learn more about the two ID's",
