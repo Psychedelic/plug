@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import NumberFormat from 'react-number-format';
 
-import { formatAssetBySymbol, parseToFloatAmount } from '@shared/constants/currencies';
+import { formatAssetBySymbol, parseToFloatAmount, TOKENS } from '@shared/constants/currencies';
 import { useICPPrice } from '@redux/icp';
 
 import SwapIcon from '../SwapIcon';
@@ -17,14 +17,18 @@ const getSwapData = (swap, iconHovered, icpPrice) => {
     from, to, amountIn, amountOut,
   } = swap || {};
   const inData = {
-    amount: -parseToFloatAmount(amountIn, from?.details?.decimals),
+    amount: -parseToFloatAmount(
+      amountIn, from?.details?.decimals || TOKENS[from?.details?.symbol]?.decimals,
+    ),
     symbol: from?.details?.symbol,
   };
   const outData = {
-    amount: parseToFloatAmount(amountOut, to?.details?.decimals),
+    amount: parseToFloatAmount(
+      amountOut, to?.details?.decimals || TOKENS[to?.details?.symbol]?.decimals,
+    ),
     symbol: to?.details?.symbol,
   };
-  const data = iconHovered ? outData : inData;
+  const data = iconHovered ? inData : outData;
   return formatAssetBySymbol(data?.amount, data.symbol, icpPrice);
 };
 
