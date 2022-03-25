@@ -47,7 +47,12 @@ const TokenItem = ({
     <>
       <ActivityItemDisplay
         image={(
-          <SwapIcon fromCurrency={swap?.from} toCurrency={swap?.to} setHovering={setIconHovered} />
+          <SwapIcon
+            fromCurrency={swap?.from}
+            toCurrency={swap?.to}
+            setHovering={setIconHovered}
+            hovering={iconHovered}
+          />
           )}
         title={`${t('activity.title.swap')} ${swap?.from?.name} ${t('activity.title.for')} ${swap?.to?.name || t('common.unknownToken')}`}
         subtitle={moment(date).format('MMM Do')}
