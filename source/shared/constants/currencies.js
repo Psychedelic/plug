@@ -103,10 +103,10 @@ export const parseToFloatAmount = (amount, decimals) => {
   return `${prefix + amountString.slice(0, Math.abs(difference))}.${amountString.slice(Math.abs(difference))}`;
 };
 
-/* Parse a string representing a floating point number to a strin representing a BigNumber.
-*/
+/* Parse a string representing a floating point number to a strin representing a BigNumber. */
 export const parseToBigIntString = (amount, decimalPlaces) => {
-  const amountString = `${amount}`;
+  if (amount < 10 ** -decimalPlaces) return '0';
+  const amountString = `${amount}`.slice(0, decimalPlaces + 2);
   let decimalsToFill = 0;
   if (amountString.includes('e-')) {
     const [base, exponent] = amountString.split('e-');
