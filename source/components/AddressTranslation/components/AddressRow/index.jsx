@@ -22,7 +22,7 @@ const AddressRow = ({
   const { t } = useTranslation();
   const [modalOpen, setModalOpen] = useState(false);
 
-  const openExplorer = (accountId) => !loading && extension.tabs.create({
+  const openExplorer = (accountId) => () => !loading && extension.tabs.create({
     url: getDashboardAccountUrl(accountId),
   });
   const isICP = type === ADDRESS_TYPES.ACCOUNT;
@@ -48,7 +48,7 @@ const AddressRow = ({
           <img
             src={ArrowUpRight}
             className={classes.arrowUpRight}
-            onClick={openExplorer}
+            onClick={openExplorer(address)}
           />
         )}
       </div>
