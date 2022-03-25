@@ -7,10 +7,7 @@ export const isClockInSync = () => fetch(UTC_TIME_API)
     const apiTime = Date.parse(`${data.dateTime}Z`);
     const localTime = Date.parse(new Date().toUTCString());
     const inValidRange = Math.abs(apiTime - localTime) <= MAX_MS_DIFFERENCE;
-    if (!inValidRange) {
-      return (inValidRange);
-    }
-    return (inValidRange);
+    return inValidRange;
   })
   .catch(() => true);
 

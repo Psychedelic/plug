@@ -34,8 +34,8 @@ const Login = ({ redirect }) => {
     }, (unlocked) => {
       if (unlocked) {
         isClockInSync()
-          .then((shouldShowClockScreen) => {
-            if (!shouldShowClockScreen) {
+          .then((isInRange) => {
+            if (!isInRange) {
               navigator.navigate('clockError');
             }
           });

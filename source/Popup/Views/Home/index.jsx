@@ -57,8 +57,6 @@ const Home = () => {
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
       if (!state?.wallets?.length) {
         sendMessage({ type: HANDLER_TYPES.LOCK, params: {} }, () => navigator.navigate('login'));
-      } else {
-        isClockInSync().then((clockInSync) => !clockInSync && navigator.navigate('clockError'));
       }
       dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
     });
