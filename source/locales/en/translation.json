@@ -373,7 +373,7 @@
   },
   "clock": {
     "title": "Your device clock is set incorrectly",
-    "description": "Please update your device's clock settings and set the time to automatic mode and restart you browser. This is part of the network's security measures, ",
-    "descriptionLink": "read more about it here."
+    "description": "Your device's clock is incorrect and this affects how Plug can communicate with the IC due to its security measures. Set your clock's time to automatic and restart your browser.",
+    "descriptionLink": "Learn more here"
   }
 }
