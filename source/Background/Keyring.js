@@ -3,8 +3,8 @@ import getICPPrice from '@shared/services/ICPPrice';
 import {
   formatAssets,
   parseAssetsAmount,
-  parseFromAmount,
-  parseToAmount,
+  parseToBigIntString,
+  parseToFloatAmount,
   TOKENS,
 } from '@shared/constants/currencies';
 import { setRouter } from '@modules/storageManager';
@@ -20,7 +20,7 @@ const parseTransactionObject = (transactionObject) => {
   const { decimals } = { ...currency, ...token, ...(sonicData?.token ?? {}) };
   // TODO: Decimals are currently not in DAB. Remove once they are added.
   // eslint-disable-next-line max-len
-  const parsedAmount = parseToAmount(amount, decimals || TOKENS[sonicData?.token?.details?.symbol]?.decimals);
+  const parsedAmount = parseToFloatAmount(amount, decimals || TOKENS[sonicData?.token?.details?.symbol]?.decimals);
 
   return {
     ...transactionObject,
@@ -209,7 +209,7 @@ export const getKeyringHandler = (type, keyring) => ({
     try {
       const { token } = await keyring.getTokenInfo(canisterId);
       const { decimals } = token;
-      const parsedAmount = parseFromAmount(amount, decimals);
+      const parsedAmount = parseToBigIntString(amount, decimals);
       const { height, transactionId } = await keyring.send(to, parsedAmount, canisterId, opts);
       return {
         height: height ? parseInt(height, 10) : undefined,

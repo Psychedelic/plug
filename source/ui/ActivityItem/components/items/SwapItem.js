@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import NumberFormat from 'react-number-format';
 
-import { formatAssetBySymbol, parseToAmount } from '@shared/constants/currencies';
+import { formatAssetBySymbol, parseToFloatAmount, TOKENS } from '@shared/constants/currencies';
 import { useICPPrice } from '@redux/icp';
 
 import SwapIcon from '../SwapIcon';
@@ -17,14 +17,18 @@ const getSwapData = (swap, iconHovered, icpPrice) => {
     from, to, amountIn, amountOut,
   } = swap || {};
   const inData = {
-    amount: -parseToAmount(amountIn, from?.details?.decimals),
+    amount: -parseToFloatAmount(
+      amountIn, from?.details?.decimals || TOKENS[from?.details?.symbol]?.decimals,
+    ),
     symbol: from?.details?.symbol,
   };
   const outData = {
-    amount: parseToAmount(amountOut, to?.details?.decimals),
+    amount: parseToFloatAmount(
+      amountOut, to?.details?.decimals || TOKENS[to?.details?.symbol]?.decimals,
+    ),
     symbol: to?.details?.symbol,
   };
-  const data = iconHovered ? outData : inData;
+  const data = iconHovered ? inData : outData;
   return formatAssetBySymbol(data?.amount, data.symbol, icpPrice);
 };
 
@@ -43,7 +47,12 @@ const TokenItem = ({
     <>
       <ActivityItemDisplay
         image={(
-          <SwapIcon fromCurrency={swap?.from} toCurrency={swap?.to} setHovering={setIconHovered} />
+          <SwapIcon
+            fromCurrency={swap?.from}
+            toCurrency={swap?.to}
+            setHovering={setIconHovered}
+            hovering={iconHovered}
+          />
           )}
         title={`${t('activity.title.swap')} ${swap?.from?.name} ${t('activity.title.for')} ${swap?.to?.name || t('common.unknownToken')}`}
         subtitle={moment(date).format('MMM Do')}

@@ -83,7 +83,7 @@ export const formatAssetBySymbol = (_amount, symbol, icpPrice) => {
   );
 };
 
-export const parseToAmount = (amount, decimals) => {
+export const parseToFloatAmount = (amount, decimals) => {
   let amountString = `${amount}`;
   let prefix = '';
 
@@ -103,26 +103,20 @@ export const parseToAmount = (amount, decimals) => {
   return `${prefix + amountString.slice(0, Math.abs(difference))}.${amountString.slice(Math.abs(difference))}`;
 };
 
-export const parseFromAmount = (amount, decimals) => {
-  let stringifiedAmount = `${amount}`;
-  const shouldParseDecimalExponential = stringifiedAmount.search(/e-/);
-
-  if (shouldParseDecimalExponential > -1) {
-    const decimalsToAdd = stringifiedAmount.slice(shouldParseDecimalExponential + 2) - 1;
-    const prefix = stringifiedAmount.slice(0, shouldParseDecimalExponential);
-    stringifiedAmount = `0.${'0'.repeat(decimalsToAdd)}${prefix}`;
+/* Parse a string representing a floating point number to a strin representing a BigNumber.
+*/
+export const parseToBigIntString = (amount, decimalPlaces) => {
+  const amountString = `${amount}`;
+  let decimalsToFill = 0;
+  if (amountString.includes('e-')) {
+    const [base, exponent] = amountString.split('e-');
+    decimalsToFill = Math.max(decimalPlaces - Number(exponent), 0);
+    return base + '0'.repeat(decimalsToFill);
   }
-
-  const commaIndex = stringifiedAmount.search(/[.]/);
-  const decimalsToFill = decimals - (stringifiedAmount.length - commaIndex - 1);
-  const strippedText = stringifiedAmount.slice(0, commaIndex) + stringifiedAmount.slice(commaIndex + 1) + '0'.repeat(decimalsToFill);
-  const notZeroIndex = strippedText.search(/[^0]/);
-
-  if (notZeroIndex > 1) {
-    return strippedText.slice(notZeroIndex);
-  }
-
-  return strippedText;
+  const [main, decimals] = amountString.split('.');
+  decimalsToFill = Math.max(decimalPlaces - Number(decimals?.length || 0), 0);
+  const completeDecimals = (decimals || '') + '0'.repeat(decimalsToFill);
+  return `${main}${completeDecimals}`;
 };
 
 export const parseAssetsAmount = (assets = []) => (
@@ -130,7 +124,7 @@ export const parseAssetsAmount = (assets = []) => (
     const { amount, token } = currentAsset;
     const { decimals } = token;
 
-    const parsedAmount = parseToAmount(amount, decimals);
+    const parsedAmount = parseToFloatAmount(amount, decimals);
 
     return {
       ...currentAsset,

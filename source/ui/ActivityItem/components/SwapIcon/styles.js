@@ -5,6 +5,7 @@ export default makeStyles((theme) => ({
     position: 'relative',
     height: 41,
     width: 41,
+    cursor: 'pointer',
   },
   image: {
     height: 24,
@@ -21,14 +22,13 @@ export default makeStyles((theme) => ({
   toImage: {
     right: -3,
     bottom: -3,
-    cursor: 'pointer',
-    '&:hover': {
-      boxShadow: `0 0 0 1px ${theme.palette.primary.main}`,
-    },
   },
   swapImage: {
     position: 'absolute',
     left: 7,
     bottom: 5,
+  },
+  hovered: {
+    boxShadow: `0 0 0 1px ${theme.palette.primary.main}`,
   },
 }));
