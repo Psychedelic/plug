@@ -313,7 +313,7 @@ const WalletDetails = () => {
                   <Typography>{t('walletDetails.principalDescription')}</Typography>
                   <Button
                     variant="rainbow"
-                    value={t('send.addressTranslationButton1')}
+                    value={t('send.icnsModalButton1')}
                     onClick={() => setOpenPrincipal(false)}
                     fullWidth
                   />
@@ -350,7 +350,7 @@ const WalletDetails = () => {
                   <Typography>{t('walletDetails.accountDescription')}</Typography>
                   <Button
                     variant="rainbow"
-                    value={t('send.addressTranslationButton1')}
+                    value={t('send.icnsModalButton1')}
                     onClick={() => setOpenAccount(false)}
                     fullWidth
                   />

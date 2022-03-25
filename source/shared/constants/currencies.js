@@ -110,8 +110,7 @@ export const parseToBigIntString = (amount, decimalPlaces) => {
   let decimalsToFill = 0;
   if (amountString.includes('e-')) {
     const [base, exponent] = amountString.split('e-');
-    decimalsToFill = Math.max(decimalPlaces - Number(exponent), 0);
-    return base + '0'.repeat(decimalsToFill);
+    return parseToBigIntString(base, decimalPlaces - exponent);
   }
   const [main, decimals] = amountString.split('.');
   decimalsToFill = Math.max(decimalPlaces - Number(decimals?.length || 0), 0);
