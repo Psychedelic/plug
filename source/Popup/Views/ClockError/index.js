@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+
 import ClockIcon from '@assets/icons/clock.svg';
 import { Layout } from '@components';
+import { setClockValidated } from '@redux/clock';
+
 import useStyles from './styles';
 
 const ClockError = () => {
   const classes = useStyles();
   const { t } = useTranslation();
-
+  const dispatch = useDispatch();
+  useEffect(() => dispatch(setClockValidated(true)));
   return (
     <Layout>
       <div className={classes.container}>

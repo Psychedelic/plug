@@ -13,8 +13,8 @@ import {
 import { Tabs } from '@ui';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
-
 import { useICPPrice } from '@redux/icp';
+import { isClockInSync } from '@shared/utils/time';
 
 const Home = () => {
   const { t } = useTranslation();
@@ -23,6 +23,8 @@ const Home = () => {
   const {
     assetsLoading, collectionsLoading, transactionsLoading,
   } = useSelector((state) => state.wallet);
+
+  const { clockValidated } = useSelector((state) => state.clock);
 
   const onChangeTab = (index) => {
     navigator.navigate('home', index);
@@ -57,9 +59,12 @@ const Home = () => {
       if (!state?.wallets?.length) {
         sendMessage({ type: HANDLER_TYPES.LOCK, params: {} }, () => navigator.navigate('login'));
       }
+      if (!clockValidated) {
+        isClockInSync().then((isInSync) => !isInSync && navigator.navigate('clockError'));
+      }
       dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
     });
-  }, []);
+  }, [clockValidated]);
 
   return (
     <Layout>
