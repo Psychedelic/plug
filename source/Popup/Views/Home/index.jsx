@@ -15,7 +15,6 @@ import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
 
 import { useICPPrice } from '@redux/icp';
-import { isClockInSync } from '@shared/utils/time';
 
 const Home = () => {
   const { t } = useTranslation();
