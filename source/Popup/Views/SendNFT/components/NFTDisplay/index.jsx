@@ -2,13 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Typography } from '@material-ui/core';
 
+import { NFTDisplayer } from '@ui';
+
 import useStyles from './styles';
 
 const NFTDisplay = ({ nft }) => {
   const classes = useStyles();
   return (
     <Card className={classes.nftDisplayContainer}>
-      <img className={classes.nftImage} src={nft?.url} />
+      <NFTDisplayer url={nft?.url} className={classes.nftImage} />
       <div className={classes.nftInfo}>
         <Typography variant="h2">{nft?.collection}</Typography>
         <Typography variant="subtitle1">{`#${nft?.index}`}</Typography>

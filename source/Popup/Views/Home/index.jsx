@@ -15,7 +15,6 @@ import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
 
 import { useICPPrice } from '@redux/icp';
-import { isClockInSync } from '@shared/utils/time';
 
 const Home = () => {
   const { t } = useTranslation();
@@ -57,8 +56,6 @@ const Home = () => {
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
       if (!state?.wallets?.length) {
         sendMessage({ type: HANDLER_TYPES.LOCK, params: {} }, () => navigator.navigate('login'));
-      } else {
-        isClockInSync().then((clockInSync) => !clockInSync && navigator.navigate('clockError'));
       }
       dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
     });
