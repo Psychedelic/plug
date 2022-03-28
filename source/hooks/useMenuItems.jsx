@@ -28,6 +28,7 @@ const useMenuItems = (toggleMenu) => {
 
     if (icpPrice) {
       // NFTS
+      dispatch(setCollections([]));
       dispatch(setCollectionsLoading(true));
       sendMessage({
         type: HANDLER_TYPES.GET_NFTS,
