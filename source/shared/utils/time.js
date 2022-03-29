@@ -1,4 +1,3 @@
-// London instead of UTC to consider daytime savings
 const UTC_TIME_API = 'https://www.timeapi.io/api/Time/current/zone?timeZone=Etc/UTC';
 const MAX_MS_DIFFERENCE = 120000;
 
