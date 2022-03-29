@@ -2,7 +2,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles(() => ({
   collectionHeader: {
-    marginLeft: 18,
     marginBottom: 12,
     display: 'flex',
     justifyContent: 'space-between',
