@@ -45,7 +45,7 @@ function NFTCollection({ collection }) {
           >
             <NFTDisplayer
               url={nft.url}
-              className={clsx(classes.nft, expanded && classes.expanded)}
+              className={classes.nft}
               onClick={() => handleNftClick(nft)}
             />
             <Typography className={classes.id} variant="subtitle1">{nft.name || `#${nft.index}`}</Typography>
