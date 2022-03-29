@@ -18,17 +18,20 @@ const NFTs = () => {
 
   useEffect(() => {
     // Update cache
-    dispatch(setCollectionsLoading(true));
-    sendMessage({
-      type: HANDLER_TYPES.GET_NFTS,
-      params: {},
-    }, (nftCollections) => {
-      if (nftCollections?.length && !optimisticNFTUpdate) {
-        dispatch(setCollections({ collections: nftCollections, principalId }));
-      }
-      dispatch(setCollectionsLoading(false));
-    });
+    if (!collectionsLoading) {
+      dispatch(setCollectionsLoading(true));
+      sendMessage({
+        type: HANDLER_TYPES.GET_NFTS,
+        params: {},
+      }, (nftCollections) => {
+        if (nftCollections?.length && !optimisticNFTUpdate) {
+          dispatch(setCollections({ collections: nftCollections, principalId }));
+        }
+        dispatch(setCollectionsLoading(false));
+      });
+    }
   }, [principalId]);
+
   const nfts = collections?.flatMap((c) => c.tokens);
   return (
     <LoadingWrapper loading={!nfts.length && collectionsLoading} className="big">
