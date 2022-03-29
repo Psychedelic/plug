@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import clsx from 'clsx';
 import { Typography } from '@material-ui/core';
+import { ChevronDown } from 'react-feather';
+
 import { useRouter } from '@components/Router';
 import { setSelectedNft } from '@redux/nfts';
 import { NFTDisplayer } from '@ui';
@@ -11,6 +14,7 @@ import useStyles from './styles';
 function NFTCollection({ collection }) {
   const classes = useStyles();
   const { navigator } = useRouter();
+  const [expanded, setExpanded] = useState(false);
   const dispatch = useDispatch();
 
   const handleNftClick = (nft) => {
@@ -18,25 +22,36 @@ function NFTCollection({ collection }) {
     navigator.navigate('nft-details');
   };
 
+  const toggleExpanded = () => setExpanded(!expanded);
+
   return (
     <div className={classes.collection}>
-      <Typography variant="h5" className={classes.title}>{collection?.name}</Typography>
-      <div className={classes.grid}>
-        {
-        collection?.tokens?.map((nft) => (
+      <div className={classes.collectionHeader}>
+        <div className={classes.collectionTitle}>
+          <img loading="lazy" src={collection?.icon} className={classes.collectionIcon} />
+          <Typography variant="h5">{collection?.name}</Typography>
+        </div>
+        <ChevronDown
+          className={clsx(classes.expandIcon, expanded && classes.rotate)}
+          size={20}
+          onClick={toggleExpanded}
+        />
+      </div>
+      <div className={clsx(classes.grid, expanded && classes.expanded)}>
+        {collection?.tokens?.map((nft) => (
           <div
             className={classes.nftContainer}
             onClick={() => handleNftClick(nft)}
           >
             <NFTDisplayer
               url={nft.url}
-              className={classes.nft}
+              className={clsx(classes.nft, expanded && classes.expanded)}
               onClick={() => handleNftClick(nft)}
             />
             <Typography className={classes.id} variant="subtitle1">{nft.name || `#${nft.index}`}</Typography>
           </div>
-        ))
-      }
+        ))}
+
       </div>
     </div>
   );

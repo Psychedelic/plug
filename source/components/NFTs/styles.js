@@ -4,6 +4,9 @@ export default makeStyles((theme) => ({
   root: {
     padding: '18px 6px',
     minHeight: 320 + 118,
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
   },
   title: {
     marginLeft: 18,
