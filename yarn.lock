@@ -1650,10 +1650,10 @@
     axios "^0.24.0"
     cross-fetch "^3.1.4"
 
-"@psychedelic/dab-js@0.4.3":
-  version "0.4.3"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/dab-js/0.4.3/4225683948415af50ed1e8c6fcf54d33fc1dcb3907ce818db1b6f253ed41cbf2#039efce39acbeedaf141cdad9b3f29010ff507d5"
-  integrity sha512-GiZgpPsYybqrnit7dwYAREZ5zdFYVAQnc3uMzXxDqg01eBoqqEWST0cSHGUMawSNnQ0IRwI4OMsRoPQv/41pkw==
+"@psychedelic/dab-js@1.2.1":
+  version "1.2.1"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/dab-js/1.2.1/2eb1669aaa75a5c8d9466678230f03094b7e909a8ac983e91bfc885a9cd694e1#02897a836bcfb2bf456d56f3428ab339bb476b39"
+  integrity sha512-C6IMT+Oj/PXxB3EPDjCLv1lYDFRHBpahFWCBx6lxbBq0Lq7JaVdXSG6mDtmdD1lVPtqRlgqkMkP46cbe5MzJ5w==
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
@@ -1664,31 +1664,17 @@
     cross-fetch "^3.1.4"
     crypto-js "^4.1.1"
 
-"@psychedelic/dab-js@1.2.0":
-  version "1.2.0"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/dab-js/1.2.0/82040d846167035163f13a90eb905f8952bf0c1bdc0d596c3b6dad238bc2a436#839d25a92f32d529c85fbef84ef430f44a266a22"
-  integrity sha512-9ajIMVsu/j53zakV+vbbQk3rr2Vh86rG6DpwMM0F446eSvZ7AAnpEOYwsi7xubLd2oYIFzC/DXcsfAKO3U7IYA==
-  dependencies:
-    "@dfinity/agent" "0.9.3"
-    "@dfinity/candid" "0.9.3"
-    "@dfinity/identity" "0.9.3"
-    "@dfinity/principal" "0.9.3"
-    axios "^0.24.0"
-    buffer-crc32 "^0.2.13"
-    cross-fetch "^3.1.4"
-    crypto-js "^4.1.1"
-
-"@psychedelic/plug-controller@0.15.4":
-  version "0.15.4"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.15.4/079494ea5db8a08e61b7e07dcf6156565ab5f7cdfd4060460b9f3891e2d12eee#b7f060ccbddb9c2e6b2e384ca4fb7a4eaf9f0c94"
-  integrity sha512-8s86IBVmp7+nDaA4ImG9nui1Lxn5U+FIhZzEW3950SC4/OvvKnKc+bmEkW62VLJHLD3tELORWMtULIz69vvLgQ==
+"@psychedelic/plug-controller@0.15.5":
+  version "0.15.5"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.15.5/31efe988ea5d3080c1562f3eab78366ec18122feceeb96f72104c7241b644543#2ef64a2d6a64927fd7077274fa775f64763857fe"
+  integrity sha512-Kt0ki+2RzvKS0TeCcc+yBvFRhHXDlmAWoYPCl0QFjOHbxJTLI6HFpELj8dGtyvdKe0jK/d/2aPH9RBullsdmvA==
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
     "@dfinity/identity" "0.9.3"
     "@dfinity/principal" "0.9.3"
     "@psychedelic/cap-js" "0.0.7"
-    "@psychedelic/dab-js" "1.2.0"
+    "@psychedelic/dab-js" "1.2.1"
     "@types/secp256k1" "^4.0.3"
     axios "^0.21.1"
     babel-jest "^25.5.1"
