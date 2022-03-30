@@ -22,7 +22,7 @@ export const walletSlice = createSlice({
     walletNumber: 0,
     assetsLoading: true,
     collections: [],
-    collectionsLoading: true,
+    collectionsLoading: false,
     transactionsLoading: true,
   },
   reducers: {
