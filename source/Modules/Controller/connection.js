@@ -43,7 +43,7 @@ const fetchCanistersInfo = async (whitelist) => {
 };
 
 // Handler objects
-export const isConnected = {
+const isConnected = {
   methodName: 'isConnected',
   handler: async (opts, url, keyring) => {
     const { callback } = opts;
@@ -59,7 +59,7 @@ export const isConnected = {
   },
 };
 
-export const disconnect = {
+const disconnect = {
   methodName: 'disconnect',
   handler: async (opts, url, keyring) => {
     removeApp(keyring.currentWalletId.toString(), url, (removed) => {
@@ -70,9 +70,12 @@ export const disconnect = {
   },
 };
 
-export const requestConnect = {
+const requestConnect = {
   methodName: 'requestConnect',
   handler: async (opts, metadata, whitelist, timeout, keyring) => {
+    console.log('handler opts ->', opts);
+    console.log('handler metadata ->', metadata);
+    console.log('handler keyring ->', keyring);
     let canistersInfo = [];
     const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
     if (!whitelist.every((canisterId) => validatePrincipalId(canisterId))) {
@@ -164,3 +167,31 @@ export const requestConnect = {
     }
   },
 };
+
+export const HANDLER_OBJECTS = [isConnected, disconnect, requestConnect];
+
+export class connectionModule {
+  constructor(backgroundController, secureController, keyring) {
+    this.backgroundController = backgroundController;
+    this.secureController = secureController;
+    this.keyring = keyring;
+  }
+
+  #secureWrapper({ args, handlerObject }) {
+    return this.secureController(
+      args[0].callback,
+      async () => {
+        handlerObject.handler(...args, this.keyring);
+      }
+    );
+  }
+
+  exposeMethods(backgroundController) {
+    HANDLER_OBJECTS.forEach(handlerObject => {
+      backgroundController.exposeController(
+        handlerObject.methodName,
+        async (...args) => this.#secureWrapper({ args, handlerObject })
+      );
+    });
+  }
+}

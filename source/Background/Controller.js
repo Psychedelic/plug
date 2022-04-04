@@ -12,9 +12,7 @@ import {
   getApp,
   setApps,
   removeApp,
-  isConnected,
-  disconnect,
-  requestConnect,
+  connectionModule,
 } from '@modules';
 import {
   /* PROTECTED_CATEGORIES, */ ASSET_CANISTER_IDS,
@@ -151,8 +149,6 @@ const secureController = async (callback, controller) => {
   }
 };
 
-// EXPOSED METHODS
-
 /* DEPRECATED
 backgroundController.exposeController('isConnected', async (opts, url) => secureController(opts.callback, async () => {
   const { callback } = opts;
@@ -272,26 +268,11 @@ backgroundController.exposeController(
 );
 */
 
-backgroundController.exposeController(
-  isConnected.methodName,
-  async (opts, url) => secureController(opts.callback, async () => {
-    isConnected.handler(opts, url, keyring);
-  }),
-);
+init();
 
-backgroundController.exposeController(
-  disconnect.methodName,
-  async (opts, url) => secureController(opts.callback, async () => {
-    disconnect.handler(opts, url, keyring);
-  }),
-);
-
-backgroundController.exposeController(
-  requestConnect.methodName,
-  async (opts, metadata, whitelist, timeout) => secureController(opts.callback, async () => {
-    requestConnect.handler(opts, metadata, whitelist, timeout, keyring);
-  }),
-);
+// Exposing module methods
+const ConnectionModule = new connectionModule(backgroundController, secureController, keyring);
+ConnectionModule.exposeMethods(backgroundController);
 
 const requestBalance = async (accountId, callback) => {
   const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
