@@ -12,7 +12,7 @@ import {
   getApp,
   setApps,
   removeApp,
-  connectionModule,
+  ConnectionModule,
 } from '@modules';
 import {
   /* PROTECTED_CATEGORIES, */ ASSET_CANISTER_IDS,
@@ -39,7 +39,7 @@ const DEFAULT_CURRENCY_MAP = {
   XTC: 1,
 };
 
-let keyring;
+let keyring = {};
 
 const backgroundController = new BackgroundController({
   name: 'bg-script',
@@ -271,8 +271,8 @@ backgroundController.exposeController(
 init();
 
 // Exposing module methods
-const ConnectionModule = new connectionModule(backgroundController, secureController, keyring);
-ConnectionModule.exposeMethods(backgroundController);
+const connectionModule = new ConnectionModule(backgroundController, secureController, keyring);
+connectionModule.exposeMethods();
 
 const requestBalance = async (accountId, callback) => {
   const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
