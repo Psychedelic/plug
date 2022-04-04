@@ -7,7 +7,15 @@ import PlugController from '@psychedelic/plug-controller';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
 import { XTC_FEE } from '@shared/constants/addresses';
-import { getApps, setApps, removeApp } from '@modules';
+import {
+  getApps,
+  getApp,
+  setApps,
+  removeApp,
+  isConnected,
+  disconnect,
+  requestConnect,
+} from '@modules';
 import {
   /* PROTECTED_CATEGORIES, */ ASSET_CANISTER_IDS,
   ICP_CANISTER_ID,
@@ -143,6 +151,9 @@ const secureController = async (callback, controller) => {
   }
 };
 
+// EXPOSED METHODS
+
+/* DEPRECATED
 backgroundController.exposeController('isConnected', async (opts, url) => secureController(opts.callback, async () => {
   const { callback } = opts;
 
@@ -154,7 +165,9 @@ backgroundController.exposeController('isConnected', async (opts, url) => secure
     }
   });
 }));
+*/
 
+/* DEPRECATED
 backgroundController.exposeController('disconnect', async (opts, url) => secureController(opts.callback, async () => {
   removeApp(keyring.currentWalletId.toString(), url, (removed) => {
     if (!removed) {
@@ -162,7 +175,9 @@ backgroundController.exposeController('disconnect', async (opts, url) => secureC
     }
   });
 }));
+*/
 
+/* DEPRECATED
 backgroundController.exposeController(
   'requestConnect',
   async (opts, metadata, whitelist, timeout) => secureController(opts.callback, async () => {
@@ -253,6 +268,28 @@ backgroundController.exposeController(
         height,
       });
     }
+  }),
+);
+*/
+
+backgroundController.exposeController(
+  isConnected.methodName,
+  async (opts, url) => secureController(opts.callback, async () => {
+    isConnected.handler(opts, url, keyring);
+  }),
+);
+
+backgroundController.exposeController(
+  disconnect.methodName,
+  async (opts, url) => secureController(opts.callback, async () => {
+    disconnect.handler(opts, url, keyring);
+  }),
+);
+
+backgroundController.exposeController(
+  requestConnect.methodName,
+  async (opts, metadata, whitelist, timeout) => secureController(opts.callback, async () => {
+    requestConnect.handler(opts, metadata, whitelist, timeout, keyring);
   }),
 );
 
