@@ -9,9 +9,7 @@ import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
 import { XTC_FEE } from '@shared/constants/addresses';
 import {
   getApps,
-  getApp,
   setApps,
-  removeApp,
   ConnectionModule,
 } from '@modules';
 import {
