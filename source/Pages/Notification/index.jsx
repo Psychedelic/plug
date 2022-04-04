@@ -4,13 +4,15 @@ import ReactDOM from 'react-dom';
 import qs from 'query-string';
 import { theme } from '@ui';
 import extension from 'extensionizer';
+import { capitalize } from '@material-ui/core';
+
 import store from '../../redux/store';
 import ProviderWrapper from '../../shared/ProviderWrapper';
 import Login from '../../Popup/Views/Login';
 import AppConnection from './components/AppConnection';
 import BatchTransactions from './components/Sign/components/BatchTransactions';
 import Transfer from './components/Transfer';
-import Balance from './components/Balance';
+import LoginProxy from './components/LoginProxy';
 import Principal from './components/Principal';
 import AllowAgent from './components/AllowAgent';
 import BurnXTC from './components/BurnXTC';
@@ -20,7 +22,8 @@ import SIZES from './components/Transfer/constants';
 const NOTIFICATION_COMPONENTS = {
   batchTransactions: BatchTransactions,
   transfer: Transfer,
-  balance: Balance,
+  requestBalance: LoginProxy,
+  requestConnectionData: LoginProxy,
   principal: Principal,
   connect: AppConnection,
   allowAgent: AllowAgent,
@@ -99,6 +102,7 @@ const NotificationContainer = () => {
               portId={portId}
               metadata={metadata}
               setOnTimeout={setOnTimeout}
+              handler={`handle${capitalize(type)}`}
             />
           )
           : <Login redirect={handleLogin} />

@@ -1696,15 +1696,14 @@
     text-encoding-shim "^1.0.5"
     tweetnacl "^1.0.3"
 
-"@psychedelic/plug-inpage-provider@1.7.0":
+"@psychedelic/plug-inpage-provider@../plug-inpage-provider":
   version "1.7.0"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/1.7.0/6f705acc36491e366f06393a4982d72a0434e770f1cccee61c2e86b9631bfc1d#996b87990016931ad84437d74393cedfc385216d"
-  integrity sha512-pa/siAsh39cVHfBFlJ4csBqglk3ZvU6UinqIJjYkvcb0ZfJviyoDFS9zJki/2rgrx3IyV66xAdpQzS0AY7deJQ==
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
     "@dfinity/principal" "0.9.3"
     "@fleekhq/browser-rpc" "^2.0.3"
+    "@types/chrome" "^0.0.180"
     buffer-crc32 "^0.2.13"
     crypto-js "^4.1.1"
     json-bigint "^1.0.0"
@@ -1819,6 +1818,14 @@
   version "0.0.114"
   resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.114.tgz#8ceb33fa261f4b9e307fa7344ba8182d8d410d4e"
   integrity sha512-i7qRr74IrxHtbnrZSKUuP5Uvd5EOKwlwJq/yp7+yTPihOXnPhNQO4Z5bqb1XTnrjdbUKEJicaVVbhcgtRijmLA==
+  dependencies:
+    "@types/filesystem" "*"
+    "@types/har-format" "*"
+
+"@types/chrome@^0.0.180":
+  version "0.0.180"
+  resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.180.tgz#b7fb831848f6b6c49abffd85410b73037c02381e"
+  integrity sha512-A/CuuKAaHq2CHEpYBAtl0lp2ib7TTXK7VjJI4q+c+1U/HDvZLJ8IlsdEDzzHdvkNdh36bGONxrMnO9YZrKqbAw==
   dependencies:
     "@types/filesystem" "*"
     "@types/har-format" "*"
