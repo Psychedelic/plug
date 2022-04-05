@@ -21,7 +21,12 @@ export class ConnectionModule {
 
   // Utils
   #getHandlerObjects() {
-    return [this.#isConnected(), this.#disconnect(), this.#requestConnect()];
+    return [
+      this.#getConnectionData(),
+      this.#handleConnectionData(),
+      this.#disconnect(),
+      this.#requestConnect(),
+    ];
   }
 
   #secureWrapper({ args, handlerObject }) {
@@ -63,21 +68,72 @@ export class ConnectionModule {
   }
 
   // Handlers
-  #isConnected() {
+  #getConnectionData() {
     return {
-      methodName: 'isConnected',
+      methodName: 'getConnectionData',
       handler: async (opts, url) => {
+        const { message, sender, callback } = opts;
+        const { id: callId } = message.data.data;
+        const { id: portId } = sender;
+
+        getApp(keyring.currentWalletId.toString(), url, async (apps = {}) => {
+          const app = apps?.[url] || {};
+          if (app?.status === CONNECTION_STATUS.accepted) {
+            if (!keyring.isUnlocked) {
+              const modalUrl = qs.stringifyUrl({
+                url: 'notification.html',
+                query: {
+                  callId,
+                  portId,
+                  type: 'requestConnectionData',
+                  argsJson: '{}',
+                  metadataJson: JSON.stringify({ url }),
+                },
+              });
+
+              extension.windows.create({
+                url: modalUrl,
+                type: 'popup',
+                width: SIZES.width,
+                height: SIZES.loginHeight,
+              });
+            } else {
+              await keyring.getState();
+              const publicKey = await keyring.getPublicKey();
+              const { host, timeout, whitelist } = app;
+              callback(null, {
+                host, whitelist: Object.keys(whitelist), timeout, publicKey,
+              });
+            }
+          } else {
+            callback(null, null);
+          }
+        });
+      }
+    };
+  };
+
+  #handleConnectionData() {
+    return {
+      methodName: 'handleRequestConnectionData',
+      handler: async (opts, url, _, callId, portId) => {
         const { callback } = opts;
 
-        getApp(this.keyring.currentWalletId.toString(), url, (app) => {
-          if (app) {
-            callback(null, app.status === CONNECTION_STATUS.accepted);
-            return;
-          }
+        getApp(keyring.currentWalletId.toString(), url, async (apps = {}) => {
+          const app = apps?.[url] || {};
+          callback(null, true);
 
-          callback(null, false);
+          if (app?.status === CONNECTION_STATUS.accepted) {
+            const publicKey = await keyring.getPublicKey();
+            const { host, timeout, whitelist } = app;
+            callback(null, {
+              host, whitelist: Object.keys(whitelist), timeout, publicKey,
+            }, [{ portId, callId }]);
+          } else {
+            callback(ERRORS.CONNECTION_ERROR, null, [{ portId, callId }]);
+          }
         });
-      },
+      }
     };
   };
 
