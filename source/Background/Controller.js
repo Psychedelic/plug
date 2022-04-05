@@ -143,17 +143,66 @@ const secureController = async (callback, controller) => {
   }
 };
 
-backgroundController.exposeController('isConnected', async (opts, url) => secureController(opts.callback, async () => {
-  const { callback } = opts;
+backgroundController.exposeController('getConnectionData', async (opts, url) => secureController(opts.callback, async () => {
+  const { message, sender, callback } = opts;
+  const { id: callId } = message.data.data;
+  const { id: portId } = sender;
 
-  getApps(keyring.currentWalletId.toString(), (apps = {}) => {
-    if (apps?.[url]) {
-      callback(null, apps?.[url].status === CONNECTION_STATUS.accepted);
+  getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
+    const app = apps?.[url] || {};
+    if (app?.status === CONNECTION_STATUS.accepted) {
+      if (!keyring.isUnlocked) {
+        const modalUrl = qs.stringifyUrl({
+          url: 'notification.html',
+          query: {
+            callId,
+            portId,
+            type: 'requestConnectionData',
+            argsJson: '{}',
+            metadataJson: JSON.stringify({ url }),
+          },
+        });
+
+        extension.windows.create({
+          url: modalUrl,
+          type: 'popup',
+          width: SIZES.width,
+          height: SIZES.loginHeight,
+        });
+      } else {
+        await keyring.getState();
+        const publicKey = await keyring.getPublicKey();
+        const { host, timeout, whitelist } = app;
+        callback(null, {
+          host, whitelist: Object.keys(whitelist), timeout, publicKey,
+        });
+      }
     } else {
-      callback(null, false);
+      callback(null, null);
     }
   });
 }));
+
+backgroundController.exposeController(
+  'handleRequestConnectionData',
+  async (opts, url, _, callId, portId) => {
+    const { callback } = opts;
+    getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
+      const app = apps?.[url] || {};
+      callback(null, true);
+
+      if (app?.status === CONNECTION_STATUS.accepted) {
+        const publicKey = await keyring.getPublicKey();
+        const { host, timeout, whitelist } = app;
+        callback(null, {
+          host, whitelist: Object.keys(whitelist), timeout, publicKey,
+        }, [{ portId, callId }]);
+      } else {
+        callback(ERRORS.CONNECTION_ERROR, null, [{ portId, callId }]);
+      }
+    });
+  },
+);
 
 backgroundController.exposeController('disconnect', async (opts, url) => secureController(opts.callback, async () => {
   removeApp(keyring.currentWalletId.toString(), url, (removed) => {
@@ -282,7 +331,7 @@ backgroundController.exposeController(
             query: {
               callId: message.data.data.id,
               portId: sender.id,
-              type: 'balance',
+              type: 'requestBalance',
               argsJson: accountId,
               metadataJson: JSON.stringify(metadata),
             },
@@ -306,7 +355,7 @@ backgroundController.exposeController(
 
 backgroundController.exposeController(
   'handleRequestBalance',
-  async (opts, url, accountId, callId, portId) => {
+  async (opts, url, subaccount, callId, portId) => {
     const { callback } = opts;
 
     getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
@@ -318,7 +367,7 @@ backgroundController.exposeController(
           HANDLER_TYPES.GET_BALANCE,
           keyring,
         );
-        const icpBalance = await getBalance(accountId);
+        const icpBalance = await getBalance(subaccount);
 
         if (icpBalance.error) {
           callback(ERRORS.SERVER_ERROR(icpBalance.error), null, [
@@ -668,7 +717,6 @@ backgroundController.exposeController(
         callback(null, false);
       }
     } else {
-      plugProvider.deleteAgent();
       callback(ERRORS.AGENT_REJECTED, null, [{ portId, callId }]);
       callback(null, true); // Return true to close the modal
     }

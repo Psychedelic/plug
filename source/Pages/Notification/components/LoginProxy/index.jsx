@@ -10,23 +10,24 @@ const portRPC = new PortRPC({
 
 portRPC.start();
 
-const Balance = ({
-  args: subaccount, metadata, callId, portId,
+const LoginProxy = ({
+  args, metadata, callId, portId, handler,
 }) => {
   useEffect(async () => {
     if (metadata && callId && portId) {
-      await portRPC.call('handleRequestBalance', [metadata.url, subaccount || 0, callId, portId]);
+      await portRPC.call(handler, [metadata.url, args || 0, callId, portId]);
       window.close();
     }
-  }, [metadata, subaccount, callId, portId]);
+  }, [handler, metadata, args, callId, portId]);
   return <div style={{ display: 'none' }} />;
 };
 
-Balance.propTypes = {
+LoginProxy.propTypes = {
   args: PropTypes.string.isRequired,
+  handler: PropTypes.string.isRequired,
   callId: PropTypes.string.isRequired,
   portId: PropTypes.string.isRequired,
   metadata: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
-export default Balance;
+export default LoginProxy;

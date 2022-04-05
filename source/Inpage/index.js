@@ -12,6 +12,8 @@ clientRPC.start();
 const plugProvider = new Provider(clientRPC);
 const ic = window.ic || {};
 
+plugProvider.init();
+
 /* eslint-disable no-console */
 window.ic = {
   ...ic,
