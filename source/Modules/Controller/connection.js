@@ -10,13 +10,12 @@ import {
   getApp,
   removeApp
 } from '../storageManager';
+import ControllerModule from './controllerModule';
 import SIZES from '../../Pages/Notification/components/Transfer/constants';
 
-export class ConnectionModule {
+export class ConnectionModule extends ControllerModule {
   constructor(backgroundController, secureController, keyring) {
-    this.keyring = keyring;
-    this.secureController = secureController;
-    this.backgroundController = backgroundController;
+    super(backgroundController, secureController, keyring);
   }
 
   // Utils
@@ -27,15 +26,6 @@ export class ConnectionModule {
       this.#disconnect(),
       this.#requestConnect(),
     ];
-  }
-
-  #secureWrapper({ args, handlerObject }) {
-    return this.secureController(
-      args[0].callback,
-      async () => {
-        handlerObject.handler(...args);
-      }
-    );
   }
 
   async #fetchCanistersInfo(whitelist) {
@@ -249,11 +239,6 @@ export class ConnectionModule {
 
   // Exposer
   exposeMethods() {
-    this.#getHandlerObjects().forEach(handlerObject => {
-      this.backgroundController.exposeController(
-        handlerObject.methodName,
-        async (...args) => this.#secureWrapper({ args, handlerObject })
-      );
-    });
+    super.exposeMethods(this.#getHandlerObjects());
   }
 }
