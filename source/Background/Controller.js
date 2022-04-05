@@ -147,125 +147,6 @@ const secureController = async (callback, controller) => {
   }
 };
 
-/* DEPRECATED
-backgroundController.exposeController('isConnected', async (opts, url) => secureController(opts.callback, async () => {
-  const { callback } = opts;
-
-  getApps(keyring.currentWalletId.toString(), (apps = {}) => {
-    if (apps?.[url]) {
-      callback(null, apps?.[url].status === CONNECTION_STATUS.accepted);
-    } else {
-      callback(null, false);
-    }
-  });
-}));
-*/
-
-/* DEPRECATED
-backgroundController.exposeController('disconnect', async (opts, url) => secureController(opts.callback, async () => {
-  removeApp(keyring.currentWalletId.toString(), url, (removed) => {
-    if (!removed) {
-      opts.callback(ERRORS.CONNECTION_ERROR, null);
-    }
-  });
-}));
-*/
-
-/* DEPRECATED
-backgroundController.exposeController(
-  'requestConnect',
-  async (opts, metadata, whitelist, timeout) => secureController(opts.callback, async () => {
-    let canistersInfo = [];
-    const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
-    if (!whitelist.every((canisterId) => validatePrincipalId(canisterId))) {
-      opts.callback(ERRORS.CANISTER_ID_ERROR, null);
-      return;
-    }
-    const { message, sender } = opts;
-    const { id: callId } = message.data.data;
-    const { id: portId } = sender;
-    const { url: domainUrl, name, icons } = metadata;
-
-    if (isValidWhitelist) {
-      canistersInfo = await fetchCanistersInfo(whitelist);
-    }
-
-    const date = new Date().toISOString();
-
-    getApps(keyring.currentWalletId.toString(), (apps = {}) => {
-      const newApps = {
-        ...apps,
-        [domainUrl]: {
-          url: domainUrl,
-          name,
-          status: CONNECTION_STATUS.pending,
-          icon: icons[0] || null,
-          timeout,
-          date,
-          events: [
-            ...apps[domainUrl]?.events || [],
-          ],
-          whitelist,
-        },
-      };
-      setApps(keyring.currentWalletId.toString(), newApps);
-    });
-
-    // if we receive a whitelist, we create agent
-    if (isValidWhitelist) {
-      const newMetadata = { ...metadata, requestConnect: true };
-
-      const url = qs.stringifyUrl({
-        url: 'notification.html',
-        query: {
-          callId,
-          portId,
-          metadataJson: JSON.stringify(newMetadata),
-          argsJson: JSON.stringify({ whitelist, canistersInfo, timeout }),
-          type: 'allowAgent',
-        },
-      });
-
-      const height = keyring?.isUnlocked
-        ? Math.min(422 + 37 * whitelist.length, 600)
-        : SIZES.loginHeight;
-
-      extension.windows.create({
-        url,
-        type: 'popup',
-        width: SIZES.width,
-        height,
-        top: 65,
-        left: metadata.pageWidth - SIZES.width,
-      });
-    } else {
-      const url = qs.stringifyUrl({
-        url: 'notification.html',
-        query: {
-          callId,
-          portId,
-          url: domainUrl,
-          icon: icons[0] || null,
-          argsJson: JSON.stringify({ timeout }),
-          type: 'connect',
-        },
-      });
-
-      const height = keyring?.isUnlocked
-        ? SIZES.appConnectHeight
-        : SIZES.loginHeight;
-
-      extension.windows.create({
-        url,
-        type: 'popup',
-        width: SIZES.width,
-        height,
-      });
-    }
-  }),
-);
-*/
-
 init();
 
 // Exposing module methods
@@ -298,7 +179,7 @@ backgroundController.exposeController(
             query: {
               callId: message.data.data.id,
               portId: sender.id,
-              type: 'balance',
+              type: 'requestBalance',
               argsJson: accountId,
               metadataJson: JSON.stringify(metadata),
             },
@@ -322,7 +203,7 @@ backgroundController.exposeController(
 
 backgroundController.exposeController(
   'handleRequestBalance',
-  async (opts, url, accountId, callId, portId) => {
+  async (opts, url, subaccount, callId, portId) => {
     const { callback } = opts;
 
     getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
@@ -334,7 +215,7 @@ backgroundController.exposeController(
           HANDLER_TYPES.GET_BALANCE,
           keyring,
         );
-        const icpBalance = await getBalance(accountId);
+        const icpBalance = await getBalance(subaccount);
 
         if (icpBalance.error) {
           callback(ERRORS.SERVER_ERROR(icpBalance.error), null, [
@@ -684,7 +565,6 @@ backgroundController.exposeController(
         callback(null, false);
       }
     } else {
-      plugProvider.deleteAgent();
       callback(ERRORS.AGENT_REJECTED, null, [{ portId, callId }]);
       callback(null, true); // Return true to close the modal
     }
