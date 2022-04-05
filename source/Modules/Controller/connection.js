@@ -76,10 +76,10 @@ export class ConnectionModule {
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
 
-        getApp(keyring.currentWalletId.toString(), url, async (apps = {}) => {
+        getApp(this.keyring?.currentWalletId?.toString(), url, async (apps = {}) => {
           const app = apps?.[url] || {};
           if (app?.status === CONNECTION_STATUS.accepted) {
-            if (!keyring.isUnlocked) {
+            if (!this.keyring?.isUnlocked) {
               const modalUrl = qs.stringifyUrl({
                 url: 'notification.html',
                 query: {
@@ -98,8 +98,8 @@ export class ConnectionModule {
                 height: SIZES.loginHeight,
               });
             } else {
-              await keyring.getState();
-              const publicKey = await keyring.getPublicKey();
+              await this.keyring?.getState();
+              const publicKey = await this.keyring?.getPublicKey();
               const { host, timeout, whitelist } = app;
               callback(null, {
                 host, whitelist: Object.keys(whitelist), timeout, publicKey,
@@ -119,12 +119,12 @@ export class ConnectionModule {
       handler: async (opts, url, _, callId, portId) => {
         const { callback } = opts;
 
-        getApp(keyring.currentWalletId.toString(), url, async (apps = {}) => {
+        getApp(this.keyring?.currentWalletId?.toString(), url, async (apps = {}) => {
           const app = apps?.[url] || {};
           callback(null, true);
 
           if (app?.status === CONNECTION_STATUS.accepted) {
-            const publicKey = await keyring.getPublicKey();
+            const publicKey = await this.keyring?.getPublicKey();
             const { host, timeout, whitelist } = app;
             callback(null, {
               host, whitelist: Object.keys(whitelist), timeout, publicKey,
@@ -141,7 +141,7 @@ export class ConnectionModule {
     return {
       methodName: 'disconnect',
       handler: async (opts, url) => {
-        removeApp(this.keyring.currentWalletId.toString(), url, (removed) => {
+        removeApp(this.keyring?.currentWalletId?.toString(), url, (removed) => {
           if (!removed) {
             opts.callback(ERRORS.CONNECTION_ERROR, null);
           }
@@ -171,7 +171,7 @@ export class ConnectionModule {
 
         const date = new Date().toISOString();
 
-        getApps(this.keyring.currentWalletId.toString(), (apps = {}) => {
+        getApps(this.keyring?.currentWalletId.toString(), (apps = {}) => {
           const newApps = {
             ...apps,
             [domainUrl]: {
@@ -187,7 +187,7 @@ export class ConnectionModule {
               whitelist,
             },
           };
-          setApps(this.keyring.currentWalletId.toString(), newApps);
+          setApps(this.keyring?.currentWalletId.toString(), newApps);
         });
 
         // if we receive a whitelist, we create agent
