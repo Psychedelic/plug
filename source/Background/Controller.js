@@ -81,7 +81,10 @@ export const init = async () => {
   keyring = new PlugController.PlugKeyRing();
   await keyring.init();
   if (keyring.isUnlocked) {
-    await keyring?.getState();
+    const state = await keyring?.getState();
+    if (!state?.wallets?.length > 0) {
+      await keyring.lock();
+    }
   }
 };
 
@@ -129,7 +132,6 @@ const isInitialized = async () => {
 
 const secureController = async (callback, controller) => {
   const initialized = await isInitialized();
-
   if (!initialized) {
     extension.tabs.create({
       url: 'options.html',
@@ -145,11 +147,12 @@ const secureController = async (callback, controller) => {
   }
 };
 
-init();
-
-// Exposing module methods
-const connectionModule = new ConnectionModule(backgroundController, secureController, keyring);
-connectionModule.exposeMethods();
+let connectionModule;
+init().then(() => {
+  // Exposing module methods
+  connectionModule = new ConnectionModule(backgroundController, secureController, keyring);
+  connectionModule.exposeMethods();
+});
 
 const requestBalance = async (accountId, callback) => {
   const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);

@@ -47,8 +47,8 @@ export class ConnectionModule {
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
         initializeProtectedIds();
-        getApp(this.keyring?.currentWalletId?.toString(), url, async (apps = {}) => {
-          const app = apps?.[url] || {};
+        const walletId = this.keyring?.currentWalletId;
+        getApp(walletId.toString(), url, async (app = {}) => {
           if (app?.status === CONNECTION_STATUS.accepted) {
             if (!this.keyring?.isUnlocked) {
               const modalUrl = qs.stringifyUrl({
@@ -70,7 +70,7 @@ export class ConnectionModule {
               });
             } else {
               await this.keyring?.getState();
-              const publicKey = await this.keyring?.getPublicKey();
+              const publicKey = await this.keyring?.getPublicKey(walletId);
               const { host, timeout, whitelist } = app;
               callback(null, {
                 host, whitelist: Object.keys(whitelist), timeout, publicKey,
@@ -89,13 +89,13 @@ export class ConnectionModule {
       methodName: 'handleRequestConnectionData',
       handler: async (opts, url, _, callId, portId) => {
         const { callback } = opts;
+        const walletId = this.keyring?.currentWalletId;
 
-        getApp(this.keyring?.currentWalletId?.toString(), url, async (apps = {}) => {
-          const app = apps?.[url] || {};
+        getApp(walletId.toString(), url, async (app = {}) => {
           callback(null, true);
-
           if (app?.status === CONNECTION_STATUS.accepted) {
-            const publicKey = await this.keyring?.getPublicKey();
+            await this.keyring?.getState();
+            const publicKey = await this.keyring?.getPublicKey(walletId);
             const { host, timeout, whitelist } = app;
             callback(null, {
               host, whitelist: Object.keys(whitelist), timeout, publicKey,
