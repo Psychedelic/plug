@@ -1,17 +1,16 @@
 import qs from 'query-string';
 import extension from 'extensionizer';
 import ERRORS from '@background/errors';
-import PlugController from '@psychedelic/plug-controller';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import { fetchCanistersInfo, initializeProtectedIds } from '@background/utils';
 import {
   getApps,
   setApps,
   getApp,
-  removeApp
+  removeApp,
 } from '../storageManager';
 import SIZES from '../../Pages/Notification/components/Transfer/constants';
-import { initializeProtectedIds } from '@background/utils';
 
 export class ConnectionModule {
   constructor(backgroundController, secureController, keyring) {
@@ -35,37 +34,8 @@ export class ConnectionModule {
       args[0].callback,
       async () => {
         handlerObject.handler(...args);
-      }
+      },
     );
-  }
-
-  async #fetchCanistersInfo(whitelist) {
-    if (whitelist && whitelist.length > 0) {
-      const canistersInfo = await Promise.all(
-        whitelist.map(async (id) => {
-          let canisterInfo = { id };
-
-          try {
-            const fetchedCanisterInfo = await PlugController.getCanisterInfo(id);
-            canisterInfo = { id, ...fetchedCanisterInfo };
-          } catch (error) {
-            /* eslint-disable-next-line */
-            console.error(error);
-          }
-
-          return canisterInfo;
-        }),
-      );
-
-      const sortedCanistersInfo = canistersInfo.sort((a, b) => {
-        if (a.name && !b.name) return -1;
-        return 1;
-      });
-
-      return sortedCanistersInfo;
-    }
-
-    return [];
   }
 
   // Handlers
@@ -110,9 +80,9 @@ export class ConnectionModule {
             callback(null, null);
           }
         });
-      }
+      },
     };
-  };
+  }
 
   #handleConnectionData() {
     return {
@@ -134,9 +104,9 @@ export class ConnectionModule {
             callback(ERRORS.CONNECTION_ERROR, null, [{ portId, callId }]);
           }
         });
-      }
+      },
     };
-  };
+  }
 
   #disconnect() {
     return {
@@ -149,7 +119,7 @@ export class ConnectionModule {
         });
       },
     };
-  };
+  }
 
   #requestConnect() {
     return {
@@ -168,7 +138,7 @@ export class ConnectionModule {
         const { url: domainUrl, name, icons } = metadata;
 
         if (isValidWhitelist) {
-          canistersInfo = await this.#fetchCanistersInfo(whitelist);
+          canistersInfo = await fetchCanistersInfo(whitelist);
         }
 
         const date = new Date().toISOString();
@@ -219,8 +189,6 @@ export class ConnectionModule {
             top: 65,
             left: metadata.pageWidth - SIZES.width,
           });
-
-          return;
         } else {
           const url = qs.stringifyUrl({
             url: 'notification.html',
@@ -251,11 +219,13 @@ export class ConnectionModule {
 
   // Exposer
   exposeMethods() {
-    this.#getHandlerObjects().forEach(handlerObject => {
+    this.#getHandlerObjects().forEach((handlerObject) => {
       this.backgroundController.exposeController(
         handlerObject.methodName,
-        async (...args) => this.#secureWrapper({ args, handlerObject })
+        async (...args) => this.#secureWrapper({ args, handlerObject }),
       );
     });
   }
 }
+
+export default { ConnectionModule };
