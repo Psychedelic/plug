@@ -10,7 +10,10 @@ import { validatePrincipalId } from '@shared/utils/ids';
 import { areAllElementsIn } from '@shared/utils/array';
 import { XTC_FEE } from '@shared/constants/addresses';
 import {
-  getApps, setApps, removeApp, getProtectedIds,
+  getApps,
+  setApps,
+  ConnectionModule,
+  getProtectedIds,
 } from '@modules';
 
 import NotificationManager from '../lib/NotificationManager';
@@ -24,7 +27,6 @@ import {
   validateTransferArgs,
   validateBurnArgs,
   validateTransactions,
-  initializeProtectedIds,
 } from './utils';
 import ERRORS, { SILENT_ERRORS } from './errors';
 
@@ -33,7 +35,7 @@ const DEFAULT_CURRENCY_MAP = {
   XTC: 1,
 };
 
-let keyring;
+let keyring = {};
 
 const backgroundController = new BackgroundController({
   name: 'bg-script',
@@ -143,168 +145,11 @@ const secureController = async (callback, controller) => {
   }
 };
 
-backgroundController.exposeController('getConnectionData', async (opts, url) => secureController(opts.callback, async () => {
-  const { message, sender, callback } = opts;
-  const { id: callId } = message.data.data;
-  const { id: portId } = sender;
-  initializeProtectedIds();
-  getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
-    const app = apps?.[url] || {};
-    if (app?.status === CONNECTION_STATUS.accepted) {
-      if (!keyring.isUnlocked) {
-        const modalUrl = qs.stringifyUrl({
-          url: 'notification.html',
-          query: {
-            callId,
-            portId,
-            type: 'requestConnectionData',
-            argsJson: '{}',
-            metadataJson: JSON.stringify({ url }),
-          },
-        });
+init();
 
-        extension.windows.create({
-          url: modalUrl,
-          type: 'popup',
-          width: SIZES.width,
-          height: SIZES.loginHeight,
-        });
-      } else {
-        await keyring.getState();
-        const publicKey = await keyring.getPublicKey();
-        const { host, timeout, whitelist } = app;
-        callback(null, {
-          host, whitelist: Object.keys(whitelist), timeout, publicKey,
-        });
-      }
-    } else {
-      callback(null, null);
-    }
-  });
-}));
-
-backgroundController.exposeController(
-  'handleRequestConnectionData',
-  async (opts, url, _, callId, portId) => {
-    const { callback } = opts;
-    getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
-      const app = apps?.[url] || {};
-      callback(null, true);
-
-      if (app?.status === CONNECTION_STATUS.accepted) {
-        const publicKey = await keyring.getPublicKey();
-        const { host, timeout, whitelist } = app;
-        callback(null, {
-          host, whitelist: Object.keys(whitelist), timeout, publicKey,
-        }, [{ portId, callId }]);
-      } else {
-        callback(ERRORS.CONNECTION_ERROR, null, [{ portId, callId }]);
-      }
-    });
-  },
-);
-
-backgroundController.exposeController('disconnect', async (opts, url) => secureController(opts.callback, async () => {
-  removeApp(keyring.currentWalletId.toString(), url, (removed) => {
-    if (!removed) {
-      opts.callback(ERRORS.CONNECTION_ERROR, null);
-    }
-  });
-}));
-
-backgroundController.exposeController(
-  'requestConnect',
-  async (opts, metadata, whitelist, timeout) => secureController(opts.callback, async () => {
-    let canistersInfo = [];
-    const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
-    initializeProtectedIds();
-    if (!whitelist.every((canisterId) => validatePrincipalId(canisterId))) {
-      opts.callback(ERRORS.CANISTER_ID_ERROR, null);
-      return;
-    }
-    const { message, sender } = opts;
-    const { id: callId } = message.data.data;
-    const { id: portId } = sender;
-    const { url: domainUrl, name, icons } = metadata;
-
-    if (isValidWhitelist) {
-      canistersInfo = await fetchCanistersInfo(whitelist);
-    }
-
-    const date = new Date().toISOString();
-
-    getApps(keyring.currentWalletId.toString(), (apps = {}) => {
-      const newApps = {
-        ...apps,
-        [domainUrl]: {
-          url: domainUrl,
-          name,
-          status: CONNECTION_STATUS.pending,
-          icon: icons[0] || null,
-          timeout,
-          date,
-          events: [
-            ...apps[domainUrl]?.events || [],
-          ],
-          whitelist,
-        },
-      };
-      setApps(keyring.currentWalletId.toString(), newApps);
-    });
-
-    // if we receive a whitelist, we create agent
-    if (isValidWhitelist) {
-      const newMetadata = { ...metadata, requestConnect: true };
-
-      const url = qs.stringifyUrl({
-        url: 'notification.html',
-        query: {
-          callId,
-          portId,
-          metadataJson: JSON.stringify(newMetadata),
-          argsJson: JSON.stringify({ whitelist, canistersInfo, timeout }),
-          type: 'allowAgent',
-        },
-      });
-
-      const height = keyring?.isUnlocked
-        ? Math.min(422 + 37 * whitelist.length, 600)
-        : SIZES.loginHeight;
-
-      extension.windows.create({
-        url,
-        type: 'popup',
-        width: SIZES.width,
-        height,
-        top: 65,
-        left: metadata.pageWidth - SIZES.width,
-      });
-    } else {
-      const url = qs.stringifyUrl({
-        url: 'notification.html',
-        query: {
-          callId,
-          portId,
-          url: domainUrl,
-          icon: icons[0] || null,
-          argsJson: JSON.stringify({ timeout }),
-          type: 'connect',
-        },
-      });
-
-      const height = keyring?.isUnlocked
-        ? SIZES.appConnectHeight
-        : SIZES.loginHeight;
-
-      extension.windows.create({
-        url,
-        type: 'popup',
-        width: SIZES.width,
-        height,
-      });
-    }
-  }),
-);
+// Exposing module methods
+const connectionModule = new ConnectionModule(backgroundController, secureController, keyring);
+connectionModule.exposeMethods();
 
 const requestBalance = async (accountId, callback) => {
   const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);

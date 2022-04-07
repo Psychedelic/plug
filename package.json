@@ -69,6 +69,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
+    "@babel/eslint-parser": "^7.17.0",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-proposal-object-rest-spread": "^7.14.7",
     "@babel/plugin-transform-destructuring": "^7.12.1",
@@ -143,5 +144,8 @@
     "setupFilesAfterEnv": [
       "<rootDir>/jest.config"
     ]
+  },
+  "standard": {
+    "parser": "@babel/eslint-parser"
   }
 }
