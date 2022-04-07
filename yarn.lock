@@ -1696,6 +1696,18 @@
     text-encoding-shim "^1.0.5"
     tweetnacl "^1.0.3"
 
+"@psychedelic/plug-inpage-provider@../plug-inpage-provider":
+  version "1.8.0"
+  dependencies:
+    "@dfinity/agent" "0.9.3"
+    "@dfinity/candid" "0.9.3"
+    "@dfinity/principal" "0.9.3"
+    "@fleekhq/browser-rpc" "^2.0.3"
+    "@types/chrome" "^0.0.180"
+    buffer-crc32 "^0.2.13"
+    crypto-js "^4.1.1"
+    json-bigint "^1.0.0"
+
 "@psychedelic/plug-inpage-provider@1.8.0":
   version "1.8.0"
   resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/1.8.0/ecc7a21482477303ff334e94c8d43c82aa12901936e11b8cc0ee61324cb2ed08#f333f6744d76c4fefe7f99d4c600bce396477391"

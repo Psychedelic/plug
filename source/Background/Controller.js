@@ -1,18 +1,18 @@
 import qs from 'query-string';
 import extension from 'extensionizer';
-import { BackgroundController } from '@fleekhq/browser-rpc';
-import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
-import { areAllElementsIn } from '@shared/utils/array';
 import PlugController from '@psychedelic/plug-controller';
-import { validatePrincipalId } from '@shared/utils/ids';
+import { BackgroundController } from '@fleekhq/browser-rpc';
+
+import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
+import { ICP_CANISTER_ID } from '@shared/constants/canisters';
+import { validatePrincipalId } from '@shared/utils/ids';
+import { areAllElementsIn } from '@shared/utils/array';
 import { XTC_FEE } from '@shared/constants/addresses';
-import { getApps, setApps, removeApp } from '@modules';
 import {
-  /* PROTECTED_CATEGORIES, */ ASSET_CANISTER_IDS,
-  ICP_CANISTER_ID,
-} from '@shared/constants/canisters';
-import { getDabNfts, getDabTokens } from '@shared/services/DAB';
+  getApps, setApps, removeApp, getProtectedIds,
+} from '@modules';
+
 import NotificationManager from '../lib/NotificationManager';
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import {
@@ -24,9 +24,9 @@ import {
   validateTransferArgs,
   validateBurnArgs,
   validateTransactions,
+  initializeProtectedIds,
 } from './utils';
 import ERRORS, { SILENT_ERRORS } from './errors';
-import plugProvider from '../Inpage/index';
 
 const DEFAULT_CURRENCY_MAP = {
   ICP: 0,
@@ -147,7 +147,7 @@ backgroundController.exposeController('getConnectionData', async (opts, url) => 
   const { message, sender, callback } = opts;
   const { id: callId } = message.data.data;
   const { id: portId } = sender;
-
+  initializeProtectedIds();
   getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
     const app = apps?.[url] || {};
     if (app?.status === CONNECTION_STATUS.accepted) {
@@ -217,6 +217,7 @@ backgroundController.exposeController(
   async (opts, metadata, whitelist, timeout) => secureController(opts.callback, async () => {
     let canistersInfo = [];
     const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
+    initializeProtectedIds();
     if (!whitelist.every((canisterId) => validatePrincipalId(canisterId))) {
       opts.callback(ERRORS.CANISTER_ID_ERROR, null);
       return;
@@ -475,72 +476,59 @@ backgroundController.exposeController(
     const { canisterId, requestType, preApprove } = requestInfo;
 
     try {
-      getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
-        const app = apps?.[metadata.url] || {};
-        if (app.status !== CONNECTION_STATUS.accepted) {
-          callback(ERRORS.CONNECTION_ERROR, null);
-          return;
-        }
+      const isDangerousUpdateCall = !preApprove && requestType === 'call';
+      if (isDangerousUpdateCall) {
+        getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
+          const app = apps?.[metadata.url] || {};
+          if (app.status !== CONNECTION_STATUS.accepted) {
+            callback(ERRORS.CONNECTION_ERROR, null);
+            return;
+          }
+          if (canisterId && !(canisterId in app.whitelist)) {
+            callback(ERRORS.CANISTER_NOT_WHITLESTED_ERROR(canisterId), null);
+            return;
+          }
+          getProtectedIds(async (protectedIds) => {
+            const canisterInfo = app.whitelist[canisterId];
+            const shouldShowModal = protectedIds.includes(canisterInfo.id);
 
-        if (
-          requestType !== 'read_state'
-          && canisterId
-          && !(canisterId in app.whitelist)
-        ) {
-          callback(ERRORS.CANISTER_NOT_WHITLESTED_ERROR(canisterId), null);
-          return;
-        }
-        const canisterInfo = app.whitelist[canisterId];
-        // TODO REMOVE THIS FOR CATEGORY ATTRIBUTE
-        const nftCanisters = await getDabNfts();
-        const tokenCanisters = await getDabTokens();
-        const PROTECTED_IDS = [
-          ...(nftCanisters || []).map((collection) => collection.principal_id.toString()),
-          ...(tokenCanisters || []).map((token) => token.principal_id.toString()),
-          ...ASSET_CANISTER_IDS,
-        ];
-        const shouldShowModal = !preApprove
-          && (requestInfo.manual
-            || (requestInfo.requestType === 'call'
-              && !!canisterInfo.id
-              && PROTECTED_IDS.includes(canisterInfo.id)));
-        // const shouldShowModal = requestInfo.manual || (requestInfo.requestType === 'call'
-        // && !!canisterInfo.category && canisterInfo.category in PROTECTED_CATEGORIES);
-
-        if (shouldShowModal) {
-          const url = qs.stringifyUrl({
-            url: 'notification.html',
-            query: {
-              callId,
-              portId,
-              type: 'sign',
-              metadataJson: JSON.stringify(metadata),
-              argsJson: JSON.stringify({
-                requestInfo,
-                payload,
-                canisterInfo,
-                timeout: app?.timeout,
-              }),
-            },
+            if (shouldShowModal) {
+              const url = qs.stringifyUrl({
+                url: 'notification.html',
+                query: {
+                  callId,
+                  portId,
+                  type: 'sign',
+                  metadataJson: JSON.stringify(metadata),
+                  argsJson: JSON.stringify({
+                    requestInfo,
+                    payload,
+                    canisterInfo,
+                    timeout: app?.timeout,
+                  }),
+                },
+              });
+              const height = keyring?.isUnlocked
+                ? SIZES.appConnectHeight
+                : SIZES.loginHeight;
+              extension.windows.create({
+                url,
+                type: 'popup',
+                width: SIZES.width,
+                height,
+              });
+            } else {
+              const parsedPayload = new Uint8Array(Object.values(payload));
+              const signed = await keyring.sign(parsedPayload.buffer);
+              callback(null, [...new Uint8Array(signed)]);
+            }
           });
-
-          const height = keyring?.isUnlocked
-            ? SIZES.appConnectHeight
-            : SIZES.loginHeight;
-
-          extension.windows.create({
-            url,
-            type: 'popup',
-            width: SIZES.width,
-            height,
-          });
-        } else {
-          const parsedPayload = new Uint8Array(Object.values(payload));
-
-          const signed = await keyring.sign(parsedPayload.buffer);
-          callback(null, [...new Uint8Array(signed)]);
-        }
-      });
+        });
+      } else {
+        const parsedPayload = new Uint8Array(Object.values(payload));
+        const signed = await keyring.sign(parsedPayload.buffer);
+        callback(null, [...new Uint8Array(signed)]);
+      }
     } catch (e) {
       callback(ERRORS.SERVER_ERROR(e), null);
     }

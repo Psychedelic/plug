@@ -97,3 +97,15 @@ export const clearStorage = (cb = () => {}) => {
     cb(false);
   }
 };
+
+export const setProtectedIds = (protectedIds = [], cb = () => {}) => {
+  secureSetWrapper({ protectedIds }, [], cb);
+};
+
+export const getProtectedIds = (cb) => {
+  const defaultValue = [];
+
+  secureGetWrapper('protectedIds', defaultValue, (state) => {
+    cb(state?.protectedIds || defaultValue);
+  });
+};
