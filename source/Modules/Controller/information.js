@@ -17,6 +17,7 @@ export class InformationModule extends ControllerModule {
   #getHandlerObjects() {
     return [
       this.#requestBalance(),
+      this.#handleRequestBalance(),
     ];
   }
 
@@ -38,9 +39,7 @@ export class InformationModule extends ControllerModule {
         const { callback, message, sender } = opts;
         const { url } = metadata;
 
-
         const currentWalletId = this.keyring?.currentWalletId?.toString();
-
         getApp(currentWalletId, url, (app = {}) => {
           if (app?.status !== CONNECTION_STATUS.accepted) {
             callback(ERRORS.CONNECTION_ERROR, null);
@@ -76,6 +75,43 @@ export class InformationModule extends ControllerModule {
           this.#fetchBalance(accountId, callback);
         });
       }
+    }
+  }
+
+  #handleRequestBalance() {
+    return {
+      methodName: 'handleRequestBalance',
+      handler: async (opts, url, subaccount, callId, portId) => {
+        const { callback } = opts;
+
+        const currentWalletId = this.keyring?.currentWalletId?.toString();
+        getApp(currentWalletId, url, async (app = {}) => {
+          callback(null, true);
+
+          if (app?.status !== CONNECTION_STATUS.accepted) {
+            callback(ERRORS.CONNECTION_ERROR, null, [{ portId, callId }]);
+            return;
+          }
+
+          const getBalance = getKeyringHandler(
+            HANDLER_TYPES.GET_BALANCE,
+            keyring,
+          );
+          const icpBalance = await getBalance(subaccount);
+
+          if (icpBalance.error) {
+            callback(
+              ERRORS.SERVER_ERROR(icpBalance.error),
+              null,
+              [
+                { portId, callId },
+              ]
+            );
+          } else {
+            callback(null, icpBalance, [{ portId, callId }]);
+          }
+        });
+      },
     }
   }
 
