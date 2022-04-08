@@ -11,16 +11,16 @@ class ControllerModule {
       args[0].callback,
       async () => {
         handlerObject.handler(...args);
-      }
+      },
     );
   }
 
   // Exporter
   exposeMethods(handlerObjects) {
-    handlerObjects.forEach(handlerObject => {
+    handlerObjects.forEach((handlerObject) => {
       this.backgroundController.exposeController(
         handlerObject.methodName,
-        async (...args) => this.secureWrapper({ args, handlerObject })
+        async (...args) => this.secureWrapper({ args, handlerObject }),
       );
     });
   }

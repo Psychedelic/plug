@@ -14,10 +14,6 @@ import ControllerModule from './controllerModule';
 import SIZES from '../../Pages/Notification/components/Transfer/constants';
 
 export class ConnectionModule extends ControllerModule {
-  constructor(backgroundController, secureController, keyring) {
-    super(backgroundController, secureController, keyring);
-  }
-
   // Utils
   #getHandlerObjects() {
     return [
