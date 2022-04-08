@@ -13,6 +13,7 @@ import {
   getApps,
   setApps,
   ConnectionModule,
+  InformationModule,
   getProtectedIds,
 } from '@modules';
 
@@ -148,89 +149,15 @@ const secureController = async (callback, controller) => {
 };
 
 let connectionModule;
+let informationModule;
 init().then(() => {
   // Exposing module methods
   connectionModule = new ConnectionModule(backgroundController, secureController, keyring);
   connectionModule.exposeMethods();
+
+  informationModule = new InformationModule(backgroundController, secureController, keyring);
+  informationModule.exposeMethods();
 });
-
-const requestBalance = async (accountId, callback) => {
-  const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
-  const icpBalance = await getBalance(accountId);
-  if (icpBalance.error) {
-    callback(ERRORS.SERVER_ERROR(icpBalance.error), null);
-  } else {
-    callback(null, icpBalance);
-  }
-};
-
-backgroundController.exposeController(
-  'requestBalance',
-  async (opts, metadata, accountId) => secureController(opts.callback, async () => {
-    const { callback, message, sender } = opts;
-
-    getApps(keyring.currentWalletId.toString(), (apps = {}) => {
-      const app = apps?.[metadata.url] || {};
-      if (app?.status === CONNECTION_STATUS.accepted) {
-        if (accountId && Number.isNaN(parseInt(accountId, 10))) {
-          callback(ERRORS.CLIENT_ERROR('Invalid account id'), null);
-        } else if (!keyring.isUnlocked) {
-          const url = qs.stringifyUrl({
-            url: 'notification.html',
-            query: {
-              callId: message.data.data.id,
-              portId: sender.id,
-              type: 'requestBalance',
-              argsJson: accountId,
-              metadataJson: JSON.stringify(metadata),
-            },
-          });
-
-          extension.windows.create({
-            url,
-            type: 'popup',
-            width: SIZES.width,
-            height: SIZES.loginHeight,
-          });
-        } else {
-          requestBalance(accountId, callback);
-        }
-      } else {
-        callback(ERRORS.CONNECTION_ERROR, null);
-      }
-    });
-  }),
-);
-
-backgroundController.exposeController(
-  'handleRequestBalance',
-  async (opts, url, subaccount, callId, portId) => {
-    const { callback } = opts;
-
-    getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
-      const app = apps?.[url] || {};
-      callback(null, true);
-
-      if (app?.status === CONNECTION_STATUS.accepted) {
-        const getBalance = getKeyringHandler(
-          HANDLER_TYPES.GET_BALANCE,
-          keyring,
-        );
-        const icpBalance = await getBalance(subaccount);
-
-        if (icpBalance.error) {
-          callback(ERRORS.SERVER_ERROR(icpBalance.error), null, [
-            { portId, callId },
-          ]);
-        } else {
-          callback(null, icpBalance, [{ portId, callId }]);
-        }
-      } else {
-        callback(ERRORS.CONNECTION_ERROR, null, [{ portId, callId }]);
-      }
-    });
-  },
-);
 
 backgroundController.exposeController(
   'requestTransfer',
@@ -407,16 +334,6 @@ backgroundController.exposeController(
     }
   },
 );
-
-backgroundController.exposeController('getPublicKey', async (opts) => {
-  const { callback } = opts;
-  try {
-    const publicKey = await keyring.getPublicKey();
-    callback(null, publicKey);
-  } catch (e) {
-    callback(ERRORS.SERVER_ERROR(e), null);
-  }
-});
 
 backgroundController.exposeController(
   'verifyWhitelist',
@@ -714,59 +631,6 @@ backgroundController.exposeController(
         callback(ERRORS.BALANCE_ERROR, null, [{ portId, callId }]);
       }
     }
-  },
-);
-
-backgroundController.exposeController('getPrincipal', async (opts, pageUrl) => secureController(opts.callback, async () => {
-  const { callback, message, sender } = opts;
-
-  getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
-    const app = apps?.[pageUrl] || {};
-    if (app?.status === CONNECTION_STATUS.accepted) {
-      if (!keyring.isUnlocked) {
-        const url = qs.stringifyUrl({
-          url: 'notification.html',
-          query: {
-            callId: message.data.data.id,
-            portId: sender.id,
-            type: 'principal',
-            metadataJson: JSON.stringify({ url: pageUrl }),
-          },
-        });
-
-        extension.windows.create({
-          url,
-          type: 'popup',
-          width: SIZES.width,
-          height: SIZES.loginHeight,
-        });
-      } else {
-        callback(
-          null,
-          keyring.state.wallets[keyring.currentWalletId].principal,
-        );
-      }
-    } else {
-      callback(ERRORS.CONNECTION_ERROR, null);
-    }
-  });
-}));
-
-backgroundController.exposeController(
-  'handleGetPrincipal',
-  async (opts, url, callId, portId) => {
-    const { callback } = opts;
-
-    getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
-      const app = apps?.[url] || {};
-      callback(null, true);
-      if (app?.status === CONNECTION_STATUS.accepted) {
-        const { principal } = keyring?.state?.wallets?.[keyring?.currentWalletId] || {};
-        callback(null, principal?.toText(), [{ portId, callId }]);
-      } else {
-        callback(ERRORS.CONNECTION_ERROR, null, [{ portId, callId }]);
-      }
-    });
   },
 );
 
