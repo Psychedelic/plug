@@ -17,6 +17,7 @@ module.exports = {
     INPAGE_SCRIPT: 'readonly',
   },
   extends: ['plugin:react/recommended', 'airbnb'],
+  parser: '@babel/eslint-parser',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,

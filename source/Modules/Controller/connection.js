@@ -1,14 +1,14 @@
 import qs from 'query-string';
 import extension from 'extensionizer';
 import ERRORS from '@background/errors';
-import PlugController from '@psychedelic/plug-controller';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import { fetchCanistersInfo, initializeProtectedIds } from '@background/utils';
 import {
   getApps,
   setApps,
   getApp,
-  removeApp
+  removeApp,
 } from '../storageManager';
 import ControllerModule from './controllerModule';
 import SIZES from '../../Pages/Notification/components/Transfer/constants';
@@ -28,35 +28,6 @@ export class ConnectionModule extends ControllerModule {
     ];
   }
 
-  async #fetchCanistersInfo(whitelist) {
-    if (whitelist && whitelist.length > 0) {
-      const canistersInfo = await Promise.all(
-        whitelist.map(async (id) => {
-          let canisterInfo = { id };
-
-          try {
-            const fetchedCanisterInfo = await PlugController.getCanisterInfo(id);
-            canisterInfo = { id, ...fetchedCanisterInfo };
-          } catch (error) {
-            /* eslint-disable-next-line */
-            console.error(error);
-          }
-
-          return canisterInfo;
-        }),
-      );
-
-      const sortedCanistersInfo = canistersInfo.sort((a, b) => {
-        if (a.name && !b.name) return -1;
-        return 1;
-      });
-
-      return sortedCanistersInfo;
-    }
-
-    return [];
-  }
-
   // Handlers
   #getConnectionData() {
     return {
@@ -65,9 +36,9 @@ export class ConnectionModule extends ControllerModule {
         const { message, sender, callback } = opts;
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
-
-        getApp(this.keyring?.currentWalletId?.toString(), url, async (apps = {}) => {
-          const app = apps?.[url] || {};
+        initializeProtectedIds();
+        const walletId = this.keyring?.currentWalletId;
+        getApp(walletId.toString(), url, async (app = {}) => {
           if (app?.status === CONNECTION_STATUS.accepted) {
             if (!this.keyring?.isUnlocked) {
               const modalUrl = qs.stringifyUrl({
@@ -89,7 +60,7 @@ export class ConnectionModule extends ControllerModule {
               });
             } else {
               await this.keyring?.getState();
-              const publicKey = await this.keyring?.getPublicKey();
+              const publicKey = await this.keyring?.getPublicKey(walletId);
               const { host, timeout, whitelist } = app;
               callback(null, {
                 host, whitelist: Object.keys(whitelist), timeout, publicKey,
@@ -99,22 +70,22 @@ export class ConnectionModule extends ControllerModule {
             callback(null, null);
           }
         });
-      }
+      },
     };
-  };
+  }
 
   #handleConnectionData() {
     return {
       methodName: 'handleRequestConnectionData',
       handler: async (opts, url, _, callId, portId) => {
         const { callback } = opts;
+        const walletId = this.keyring?.currentWalletId;
 
-        getApp(this.keyring?.currentWalletId?.toString(), url, async (apps = {}) => {
-          const app = apps?.[url] || {};
+        getApp(walletId.toString(), url, async (app = {}) => {
           callback(null, true);
-
           if (app?.status === CONNECTION_STATUS.accepted) {
-            const publicKey = await this.keyring?.getPublicKey();
+            await this.keyring?.getState();
+            const publicKey = await this.keyring?.getPublicKey(walletId);
             const { host, timeout, whitelist } = app;
             callback(null, {
               host, whitelist: Object.keys(whitelist), timeout, publicKey,
@@ -123,9 +94,9 @@ export class ConnectionModule extends ControllerModule {
             callback(ERRORS.CONNECTION_ERROR, null, [{ portId, callId }]);
           }
         });
-      }
+      },
     };
-  };
+  }
 
   #disconnect() {
     return {
@@ -138,13 +109,14 @@ export class ConnectionModule extends ControllerModule {
         });
       },
     };
-  };
+  }
 
   #requestConnect() {
     return {
       methodName: 'requestConnect',
       handler: async (opts, metadata, whitelist, timeout) => {
         let canistersInfo = [];
+        initializeProtectedIds();
         const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
         if (!whitelist.every((canisterId) => validatePrincipalId(canisterId))) {
           opts.callback(ERRORS.CANISTER_ID_ERROR, null);
@@ -156,7 +128,7 @@ export class ConnectionModule extends ControllerModule {
         const { url: domainUrl, name, icons } = metadata;
 
         if (isValidWhitelist) {
-          canistersInfo = await this.#fetchCanistersInfo(whitelist);
+          canistersInfo = await fetchCanistersInfo(whitelist);
         }
 
         const date = new Date().toISOString();
@@ -207,8 +179,6 @@ export class ConnectionModule extends ControllerModule {
             top: 65,
             left: metadata.pageWidth - SIZES.width,
           });
-
-          return;
         } else {
           const url = qs.stringifyUrl({
             url: 'notification.html',
@@ -242,3 +212,5 @@ export class ConnectionModule extends ControllerModule {
     super.exposeMethods(this.#getHandlerObjects());
   }
 }
+
+export default { ConnectionModule };
