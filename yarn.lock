@@ -49,6 +49,15 @@
     json5 "^2.1.2"
     semver "^6.3.0"
 
+"@babel/eslint-parser@^7.17.0":
+  version "7.17.0"
+  resolved "https://registry.yarnpkg.com/@babel/eslint-parser/-/eslint-parser-7.17.0.tgz#eabb24ad9f0afa80e5849f8240d0e5facc2d90d6"
+  integrity sha512-PUEJ7ZBXbRkbq3qqM/jZ2nIuakUBqCYc7Qf52Lj7dlZ6zERnqisdHioL0l4wwQZnmskMeasqUNzLBFKs3nylXA==
+  dependencies:
+    eslint-scope "^5.1.1"
+    eslint-visitor-keys "^2.1.0"
+    semver "^6.3.0"
+
 "@babel/generator@^7.17.3", "@babel/generator@^7.17.7", "@babel/generator@^7.7.2":
   version "7.17.7"
   resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.17.7.tgz#8da2599beb4a86194a3b24df6c085931d9ee45ad"
@@ -1696,10 +1705,10 @@
     text-encoding-shim "^1.0.5"
     tweetnacl "^1.0.3"
 
-"@psychedelic/plug-inpage-provider@1.8.0":
-  version "1.8.0"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/1.8.0/ecc7a21482477303ff334e94c8d43c82aa12901936e11b8cc0ee61324cb2ed08#f333f6744d76c4fefe7f99d4c600bce396477391"
-  integrity sha512-1dVU+7ZA9kjZjq/Fv7DIrRAWNr4GlBtS7ZnPk46PcwpDgRUQAFVNoRQNcxuTHptdmxwWEA7yPOCmi4JJte42eA==
+"@psychedelic/plug-inpage-provider@1.8.1":
+  version "1.8.1"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/1.8.1/c525ec5e2d4866f7b9312041a0fdb70b15fa85ae090d4637aa7ae23ec8fbd97f#032155051e51d2f2b705d3a20434bafb4c476989"
+  integrity sha512-IfLLqNKI8IiIDSqEhAbse1sltGBeGzXvd+oGHbZZqEA6y+ThxeQ+9wVRfony9hmE8wGb+3PY2CinA8tv7tvHqA==
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
@@ -5593,7 +5602,7 @@ eslint-visitor-keys@^1.0.0, eslint-visitor-keys@^1.1.0, eslint-visitor-keys@^1.3
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-1.3.0.tgz#30ebd1ef7c2fdff01c3a4f151044af25fab0523e"
   integrity sha512-6J72N8UNa462wa/KFODt/PJ3IU60SDpC3QXC1Hjc1BXXpfL2C9R5+AU7jhe0F6GREqVMh4Juu+NY7xn+6dipUQ==
 
-eslint-visitor-keys@^2.0.0:
+eslint-visitor-keys@^2.0.0, eslint-visitor-keys@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-2.1.0.tgz#f65328259305927392c938ed44eb0a5c9b2bd303"
   integrity sha512-0rSmRBzXgDzIsD6mGdJgevzgezI534Cer5L/vyMX0kHzT/jiB43jRhd9YUlMGYLQy2zprNmoT8qasCGtY+QaKw==

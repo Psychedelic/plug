@@ -1,6 +1,11 @@
+import PlugController from '@psychedelic/plug-controller';
+
 import { validateCanisterId, validatePrincipalId, validateAccountId } from '@shared/utils/ids';
-import { XTC_FEE } from '@shared/constants/addresses';
+import { getDabNfts, getDabTokens } from '@shared/services/DAB';
+import { ASSET_CANISTER_IDS } from '@shared/constants/canisters';
 import { CYCLES_PER_TC } from '@shared/constants/currencies';
+import { XTC_FEE } from '@shared/constants/addresses';
+import { setProtectedIds } from '@modules/storageManager';
 
 import ERRORS from './errors';
 
@@ -50,3 +55,43 @@ export const validateTransactions = (transactions) => Array.isArray(transactions
   && transactions?.every(
     (tx) => tx.idl && tx.canisterId && tx.methodName && tx.args,
   );
+
+export const initializeProtectedIds = async () => {
+  const nftCanisters = await getDabNfts();
+  const tokenCanisters = await getDabTokens();
+  const PROTECTED_IDS = [
+    ...(nftCanisters || []).map((collection) => collection.principal_id.toString()),
+    ...(tokenCanisters || []).map((token) => token.principal_id.toString()),
+    ...ASSET_CANISTER_IDS,
+  ];
+  setProtectedIds(PROTECTED_IDS);
+};
+
+export const fetchCanistersInfo = async (whitelist) => {
+  if (whitelist && whitelist.length > 0) {
+    const canistersInfo = await Promise.all(
+      whitelist.map(async (id) => {
+        let canisterInfo = { id };
+
+        try {
+          const fetchedCanisterInfo = await PlugController.getCanisterInfo(id);
+          canisterInfo = { id, ...fetchedCanisterInfo };
+        } catch (error) {
+          /* eslint-disable-next-line */
+          console.error(error);
+        }
+
+        return canisterInfo;
+      }),
+    );
+
+    const sortedCanistersInfo = canistersInfo.sort((a, b) => {
+      if (a.name && !b.name) return -1;
+      return 1;
+    });
+
+    return sortedCanistersInfo;
+  }
+
+  return [];
+};

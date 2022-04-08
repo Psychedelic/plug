@@ -1,22 +1,21 @@
 import qs from 'query-string';
 import extension from 'extensionizer';
-import { BackgroundController } from '@fleekhq/browser-rpc';
-import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
-import { areAllElementsIn } from '@shared/utils/array';
 import PlugController from '@psychedelic/plug-controller';
-import { validatePrincipalId } from '@shared/utils/ids';
+import { BackgroundController } from '@fleekhq/browser-rpc';
+
+import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
+import { ICP_CANISTER_ID } from '@shared/constants/canisters';
+import { validatePrincipalId } from '@shared/utils/ids';
+import { areAllElementsIn } from '@shared/utils/array';
 import { XTC_FEE } from '@shared/constants/addresses';
 import {
   getApps,
   setApps,
   ConnectionModule,
+  getProtectedIds,
 } from '@modules';
-import {
-  /* PROTECTED_CATEGORIES, */ ASSET_CANISTER_IDS,
-  ICP_CANISTER_ID,
-} from '@shared/constants/canisters';
-import { getDabNfts, getDabTokens } from '@shared/services/DAB';
+
 import NotificationManager from '../lib/NotificationManager';
 import SIZES from '../Pages/Notification/components/Transfer/constants';
 import {
@@ -30,7 +29,6 @@ import {
   validateTransactions,
 } from './utils';
 import ERRORS, { SILENT_ERRORS } from './errors';
-import plugProvider from '../Inpage/index';
 
 const DEFAULT_CURRENCY_MAP = {
   ICP: 0,
@@ -83,7 +81,10 @@ export const init = async () => {
   keyring = new PlugController.PlugKeyRing();
   await keyring.init();
   if (keyring.isUnlocked) {
-    await keyring?.getState();
+    const state = await keyring?.getState();
+    if (!state?.wallets?.length > 0) {
+      await keyring.lock();
+    }
   }
 };
 
@@ -131,7 +132,6 @@ const isInitialized = async () => {
 
 const secureController = async (callback, controller) => {
   const initialized = await isInitialized();
-
   if (!initialized) {
     extension.tabs.create({
       url: 'options.html',
@@ -147,11 +147,12 @@ const secureController = async (callback, controller) => {
   }
 };
 
-init();
-
-// Exposing module methods
-const connectionModule = new ConnectionModule(backgroundController, secureController, keyring);
-connectionModule.exposeMethods();
+let connectionModule;
+init().then(() => {
+  // Exposing module methods
+  connectionModule = new ConnectionModule(backgroundController, secureController, keyring);
+  connectionModule.exposeMethods();
+});
 
 const requestBalance = async (accountId, callback) => {
   const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
@@ -314,6 +315,12 @@ backgroundController.exposeController(
   },
 );
 
+const signData = async (payload, callback) => {
+  const parsedPayload = new Uint8Array(Object.values(payload));
+  const signed = await keyring.sign(parsedPayload.buffer);
+  callback(null, [...new Uint8Array(signed)]);
+};
+
 backgroundController.exposeController(
   'requestSign',
   async (opts, payload, metadata, requestInfo) => {
@@ -323,72 +330,55 @@ backgroundController.exposeController(
     const { canisterId, requestType, preApprove } = requestInfo;
 
     try {
-      getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
-        const app = apps?.[metadata.url] || {};
-        if (app.status !== CONNECTION_STATUS.accepted) {
-          callback(ERRORS.CONNECTION_ERROR, null);
-          return;
-        }
+      const isDangerousUpdateCall = !preApprove && requestType === 'call';
+      if (isDangerousUpdateCall) {
+        getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
+          const app = apps?.[metadata.url] || {};
+          if (app.status !== CONNECTION_STATUS.accepted) {
+            callback(ERRORS.CONNECTION_ERROR, null);
+            return;
+          }
+          if (canisterId && !(canisterId in app.whitelist)) {
+            callback(ERRORS.CANISTER_NOT_WHITLESTED_ERROR(canisterId), null);
+            return;
+          }
+          getProtectedIds(async (protectedIds) => {
+            const canisterInfo = app.whitelist[canisterId];
+            const shouldShowModal = protectedIds.includes(canisterInfo.id);
 
-        if (
-          requestType !== 'read_state'
-          && canisterId
-          && !(canisterId in app.whitelist)
-        ) {
-          callback(ERRORS.CANISTER_NOT_WHITLESTED_ERROR(canisterId), null);
-          return;
-        }
-        const canisterInfo = app.whitelist[canisterId];
-        // TODO REMOVE THIS FOR CATEGORY ATTRIBUTE
-        const nftCanisters = await getDabNfts();
-        const tokenCanisters = await getDabTokens();
-        const PROTECTED_IDS = [
-          ...(nftCanisters || []).map((collection) => collection.principal_id.toString()),
-          ...(tokenCanisters || []).map((token) => token.principal_id.toString()),
-          ...ASSET_CANISTER_IDS,
-        ];
-        const shouldShowModal = !preApprove
-          && (requestInfo.manual
-            || (requestInfo.requestType === 'call'
-              && !!canisterInfo.id
-              && PROTECTED_IDS.includes(canisterInfo.id)));
-        // const shouldShowModal = requestInfo.manual || (requestInfo.requestType === 'call'
-        // && !!canisterInfo.category && canisterInfo.category in PROTECTED_CATEGORIES);
-
-        if (shouldShowModal) {
-          const url = qs.stringifyUrl({
-            url: 'notification.html',
-            query: {
-              callId,
-              portId,
-              type: 'sign',
-              metadataJson: JSON.stringify(metadata),
-              argsJson: JSON.stringify({
-                requestInfo,
-                payload,
-                canisterInfo,
-                timeout: app?.timeout,
-              }),
-            },
+            if (shouldShowModal) {
+              const url = qs.stringifyUrl({
+                url: 'notification.html',
+                query: {
+                  callId,
+                  portId,
+                  type: 'sign',
+                  metadataJson: JSON.stringify(metadata),
+                  argsJson: JSON.stringify({
+                    requestInfo,
+                    payload,
+                    canisterInfo,
+                    timeout: app?.timeout,
+                  }),
+                },
+              });
+              const height = keyring?.isUnlocked
+                ? SIZES.appConnectHeight
+                : SIZES.loginHeight;
+              extension.windows.create({
+                url,
+                type: 'popup',
+                width: SIZES.width,
+                height,
+              });
+            } else {
+              signData(payload, callback);
+            }
           });
-
-          const height = keyring?.isUnlocked
-            ? SIZES.appConnectHeight
-            : SIZES.loginHeight;
-
-          extension.windows.create({
-            url,
-            type: 'popup',
-            width: SIZES.width,
-            height,
-          });
-        } else {
-          const parsedPayload = new Uint8Array(Object.values(payload));
-
-          const signed = await keyring.sign(parsedPayload.buffer);
-          callback(null, [...new Uint8Array(signed)]);
-        }
-      });
+        });
+      } else {
+        signData(payload, callback);
+      }
     } catch (e) {
       callback(ERRORS.SERVER_ERROR(e), null);
     }
