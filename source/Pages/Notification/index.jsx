@@ -5,6 +5,7 @@ import qs from 'query-string';
 import { theme } from '@ui';
 import extension from 'extensionizer';
 import { capitalize } from '@material-ui/core';
+import { PortRPC } from '@fleekhq/browser-rpc';
 
 import store from '../../redux/store';
 import ProviderWrapper from '../../shared/ProviderWrapper';
@@ -18,6 +19,14 @@ import AllowAgent from './components/AllowAgent';
 import BurnXTC from './components/BurnXTC';
 import Sign from './components/Sign';
 import SIZES from './components/Transfer/constants';
+
+const portRPC = new PortRPC({
+  name: 'notification-port',
+  target: 'bg-script',
+  timeout: 20000,
+});
+
+portRPC.start();
 
 const NOTIFICATION_COMPONENTS = {
   batchTransactions: BatchTransactions,
@@ -84,7 +93,12 @@ const NotificationContainer = () => {
     };
   }, [onTimeout]);
 
-  window.onbeforeunload = () => onTimeout?.();
+  const defaultTimeout = async (event) => {
+    event.returnValue = null;
+    await portRPC.call(`handle${capitalize(type)}`, [metadata.url, args || 0, callId, portId]);
+  };
+
+  window.onbeforeunload = (event) => onTimeout?.() || defaultTimeout(event);
 
   const handleLogin = () => setLoggedIn(true);
   const Component = NOTIFICATION_COMPONENTS[type];

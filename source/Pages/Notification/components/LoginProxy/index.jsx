@@ -19,6 +19,9 @@ const LoginProxy = ({
       window.close();
     }
   }, [handler, metadata, args, callId, portId]);
+
+  window.onbeforeunload = null;
+
   return <div style={{ display: 'none' }} />;
 };
 

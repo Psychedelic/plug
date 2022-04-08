@@ -56,12 +56,12 @@ const AllowAgent = ({
 
   const [expand, setExpand] = useState(false);
 
-  const handleAllowAgent = async (status) => {
+  const handleRequestConnect = async (status) => {
     const whitelist = canisters.reduce(
       (accum, canisterInfo) => ({ ...accum, [canisterInfo.id]: canisterInfo }),
       {},
     );
-    const success = await portRPC.call('handleAllowAgent', [
+    const success = await portRPC.call('handleRequestConnect', [
       url,
       { status, whitelist },
       callId,
@@ -76,7 +76,7 @@ const AllowAgent = ({
 
   useEffect(() => {
     setOnTimeout(() => () => {
-      handleAllowAgent(CONNECTION_STATUS.rejected).then(() => {
+      handleRequestConnect(CONNECTION_STATUS.rejected).then(() => {
         setHandled(true);
         window?.close?.();
       });
@@ -94,7 +94,7 @@ const AllowAgent = ({
           + 65 * (canistersLength > 2 ? 2 : canistersLength),
       });
     } else {
-      handleAllowAgent(CONNECTION_STATUS.accepted).then(() => {
+      handleRequestConnect(CONNECTION_STATUS.accepted).then(() => {
         setHandled(true);
         window?.close?.();
       });
@@ -103,7 +103,7 @@ const AllowAgent = ({
 
   window.onbeforeunload = () => {
     if (!handled) {
-      handleAllowAgent(CONNECTION_STATUS.rejected);
+      handleRequestConnect(CONNECTION_STATUS.rejected);
     }
   };
 
@@ -172,7 +172,7 @@ const AllowAgent = ({
                   <Button
                     variant="default"
                     value={t('common.decline')}
-                    onClick={() => handleAllowAgent(
+                    onClick={() => handleRequestConnect(
                       args?.updateWhitelist
                         ? CONNECTION_STATUS.rejectedAgent
                         : CONNECTION_STATUS.rejected,
@@ -183,7 +183,7 @@ const AllowAgent = ({
                   <Button
                     variant="rainbow"
                     value={t('common.allow')}
-                    onClick={() => handleAllowAgent(CONNECTION_STATUS.accepted)}
+                    onClick={() => handleRequestConnect(CONNECTION_STATUS.accepted)}
                     fullWidth
                     style={{ width: '96%' }}
                     wrapperStyle={{ textAlign: 'right' }}

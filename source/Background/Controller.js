@@ -429,7 +429,7 @@ backgroundController.exposeController(
 );
 
 backgroundController.exposeController(
-  'handleAllowAgent',
+  'handleRequestConnect',
   async (opts, url, response, callId, portId) => {
     const { callback } = opts;
 
