@@ -315,6 +315,12 @@ backgroundController.exposeController(
   },
 );
 
+const signData = async (payload, callback) => {
+  const parsedPayload = new Uint8Array(Object.values(payload));
+  const signed = await keyring.sign(parsedPayload.buffer);
+  callback(null, [...new Uint8Array(signed)]);
+};
+
 backgroundController.exposeController(
   'requestSign',
   async (opts, payload, metadata, requestInfo) => {
@@ -366,16 +372,12 @@ backgroundController.exposeController(
                 height,
               });
             } else {
-              const parsedPayload = new Uint8Array(Object.values(payload));
-              const signed = await keyring.sign(parsedPayload.buffer);
-              callback(null, [...new Uint8Array(signed)]);
+              signData(payload, callback);
             }
           });
         });
       } else {
-        const parsedPayload = new Uint8Array(Object.values(payload));
-        const signed = await keyring.sign(parsedPayload.buffer);
-        callback(null, [...new Uint8Array(signed)]);
+        signData(payload, callback);
       }
     } catch (e) {
       callback(ERRORS.SERVER_ERROR(e), null);
