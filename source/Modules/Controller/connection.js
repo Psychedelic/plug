@@ -69,7 +69,6 @@ export class ConnectionModule {
                 height: SIZES.loginHeight,
               });
             } else {
-              await this.keyring?.getState();
               const publicKey = await this.keyring?.getPublicKey(walletId);
               const { host, timeout, whitelist } = app;
               callback(null, {

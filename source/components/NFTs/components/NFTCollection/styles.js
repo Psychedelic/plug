@@ -6,6 +6,7 @@ export default makeStyles(() => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    cursor: 'pointer',
   },
   grid: {
     display: 'grid',

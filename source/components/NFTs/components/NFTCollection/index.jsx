@@ -26,7 +26,7 @@ function NFTCollection({ collection }) {
 
   return (
     <div className={classes.collection}>
-      <div className={classes.collectionHeader}>
+      <div className={classes.collectionHeader} onClick={toggleExpanded}>
         <div className={classes.collectionTitle}>
           <img loading="lazy" src={collection?.icon} className={classes.collectionIcon} />
           <Typography variant="h5">{collection?.name}</Typography>
@@ -34,7 +34,6 @@ function NFTCollection({ collection }) {
         <ChevronDown
           className={clsx(classes.expandIcon, expanded && classes.rotate)}
           size={20}
-          onClick={toggleExpanded}
         />
       </div>
       <div className={clsx(classes.grid, expanded && classes.expanded)}>
