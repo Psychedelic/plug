@@ -34,6 +34,7 @@
   "dependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.16.0",
     "@babel/runtime": "^7.12.5",
+    "@dfinity/principal": "0.9.3",
     "@fleekhq/browser-rpc": "^2.0.2",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",

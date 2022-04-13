@@ -106,9 +106,7 @@ export const fetchCanistersInfo = async (whitelist) => {
 // TokenIdentifier is SYMBOL or  CanisterID
 // Return ICP by default
 export const getToken = (tokenIdentifier, assets) => {
-  if (!tokenIdentifier) {
-    return assets.filter((asset) => asset.canisterId === ICP_CANISTER_ID)[0];
-  }
+  if (!tokenIdentifier) return assets.filter((asset) => asset.canisterId === ICP_CANISTER_ID)[0];
 
   if (validateCanisterId(tokenIdentifier)) {
     return assets.filter((asset) => asset.canisterId === tokenIdentifier)[0];
@@ -116,3 +114,6 @@ export const getToken = (tokenIdentifier, assets) => {
 
   return assets.filter((asset) => asset.symbol === tokenIdentifier)[0];
 };
+export const bufferToBase64 = (buf) => Buffer.from(buf).toString('base64');
+
+export const base64ToBuffer = (base64) => Buffer.from(base64, 'base64');
