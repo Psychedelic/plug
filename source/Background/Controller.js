@@ -1,29 +1,31 @@
-import qs from "query-string";
-import extension from "extensionizer";
-import PlugController from "@psychedelic/plug-controller";
-import { BackgroundController } from "@fleekhq/browser-rpc";
+import qs from 'query-string';
+import extension from 'extensionizer';
+import PlugController from '@psychedelic/plug-controller';
+import { BackgroundController } from '@fleekhq/browser-rpc';
 
-import { CONNECTION_STATUS } from "@shared/constants/connectionStatus";
-import { E8S_PER_ICP, CYCLES_PER_TC } from "@shared/constants/currencies";
-import { ICP_CANISTER_ID } from "@shared/constants/canisters";
-import { validatePrincipalId } from "@shared/utils/ids";
-import { areAllElementsIn } from "@shared/utils/array";
-import { XTC_FEE } from "@shared/constants/addresses";
-import { getApps, setApps, ConnectionModule, getProtectedIds } from "@modules";
+import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
+import { ICP_CANISTER_ID } from '@shared/constants/canisters';
+import { validatePrincipalId } from '@shared/utils/ids';
+import { areAllElementsIn } from '@shared/utils/array';
+import { XTC_FEE } from '@shared/constants/addresses';
+import {
+  getApps, setApps, ConnectionModule, getProtectedIds,
+} from '@modules';
 
-import NotificationManager from "../lib/NotificationManager";
-import SIZES from "../Pages/Notification/components/Transfer/constants";
+import NotificationManager from '../lib/NotificationManager';
+import SIZES from '../Pages/Notification/components/Transfer/constants';
 import {
   getKeyringHandler,
   HANDLER_TYPES,
   getKeyringErrorMessage,
-} from "./Keyring";
+} from './Keyring';
 import {
   validateTransferArgs,
   validateBurnArgs,
   validateTransactions,
-} from "./utils";
-import ERRORS, { SILENT_ERRORS } from "./errors";
+} from './utils';
+import ERRORS, { SILENT_ERRORS } from './errors';
 
 const DEFAULT_CURRENCY_MAP = {
   ICP: 0,
@@ -33,12 +35,12 @@ const DEFAULT_CURRENCY_MAP = {
 let keyring = {};
 
 const backgroundController = new BackgroundController({
-  name: "bg-script",
-  trustedSources: ["plug-content-script", "notification-port"],
+  name: 'bg-script',
+  trustedSources: ['plug-content-script', 'notification-port'],
 });
 
 const notificationManager = new NotificationManager(
-  extension.extension.getURL("../assets/icons/plug.svg")
+  extension.extension.getURL('../assets/icons/plug.svg'),
 );
 
 backgroundController.start();
@@ -49,10 +51,10 @@ const displayPopUp = ({
   argsJson,
   metadataJson,
   type,
-  screenArgs: { height, top, left },
+  screenArgs: { fixedHeight, top, left },
 }) => {
   const url = qs.stringifyUrl({
-    url: "notification.html",
+    url: 'notification.html',
     query: {
       callId,
       portId,
@@ -62,15 +64,14 @@ const displayPopUp = ({
     },
   });
 
-  const height = height
-    ? height
-    : keyring?.isUnlocked
+  const defaultHeight = keyring?.isUnlocked
     ? SIZES.detailHeightSmall
     : SIZES.loginHeight;
+  const height = fixedHeight || defaultHeight;
 
   extension.windows.create({
     url,
-    type: "popup",
+    type: 'popup',
     width: SIZES.width,
     height,
     top,
@@ -93,7 +94,7 @@ const fetchCanistersInfo = async (whitelist) => {
         }
 
         return canisterInfo;
-      })
+      }),
     );
 
     const sortedCanistersInfo = canistersInfo.sort((a, b) => {
@@ -131,7 +132,7 @@ extension.runtime.onMessage.addListener((message, _, sendResponse) => {
         const keyringErrorMessage = getKeyringErrorMessage(type);
         const errorMessage = keyringErrorMessage
           ? `Unexpected error while ${keyringErrorMessage}`
-          : "Unexpected error";
+          : 'Unexpected error';
         console.warn(errorMessage);
         console.warn(e);
       });
@@ -164,7 +165,7 @@ const secureController = async (callback, controller) => {
   const initialized = await isInitialized();
   if (!initialized) {
     extension.tabs.create({
-      url: "options.html",
+      url: 'options.html',
     });
     callback(ERRORS.INITIALIZED_ERROR, null);
     return;
@@ -183,7 +184,7 @@ init().then(() => {
   connectionModule = new ConnectionModule(
     backgroundController,
     secureController,
-    keyring
+    keyring,
   );
   connectionModule.exposeMethods();
 });
@@ -199,36 +200,35 @@ const requestBalance = async (accountId, callback) => {
 };
 
 backgroundController.exposeController(
-  "requestBalance",
-  async (opts, metadata, accountId) =>
-    secureController(opts.callback, async () => {
-      const { callback, message, sender } = opts;
+  'requestBalance',
+  async (opts, metadata, accountId) => secureController(opts.callback, async () => {
+    const { callback, message, sender } = opts;
 
-      getApps(keyring.currentWalletId.toString(), (apps = {}) => {
-        const app = apps?.[metadata.url] || {};
-        if (app?.status === CONNECTION_STATUS.accepted) {
-          if (accountId && Number.isNaN(parseInt(accountId, 10))) {
-            callback(ERRORS.CLIENT_ERROR("Invalid account id"), null);
-          } else if (!keyring.isUnlocked) {
-            displayPopUp({
-              callId: message.data.data.id,
-              portId: sender.id,
-              type: "requestBalance",
-              argsJson: accountId,
-              metadataJson: JSON.stringify(metadata),
-            });
-          } else {
-            requestBalance(accountId, callback);
-          }
+    getApps(keyring.currentWalletId.toString(), (apps = {}) => {
+      const app = apps?.[metadata.url] || {};
+      if (app?.status === CONNECTION_STATUS.accepted) {
+        if (accountId && Number.isNaN(parseInt(accountId, 10))) {
+          callback(ERRORS.CLIENT_ERROR('Invalid account id'), null);
+        } else if (!keyring.isUnlocked) {
+          displayPopUp({
+            callId: message.data.data.id,
+            portId: sender.id,
+            type: 'requestBalance',
+            argsJson: accountId,
+            metadataJson: JSON.stringify(metadata),
+          });
         } else {
-          callback(ERRORS.CONNECTION_ERROR, null);
+          requestBalance(accountId, callback);
         }
-      });
-    })
+      } else {
+        callback(ERRORS.CONNECTION_ERROR, null);
+      }
+    });
+  }),
 );
 
 backgroundController.exposeController(
-  "handleRequestBalance",
+  'handleRequestBalance',
   async (opts, url, subaccount, callId, portId) => {
     const { callback } = opts;
 
@@ -239,7 +239,7 @@ backgroundController.exposeController(
       if (app?.status === CONNECTION_STATUS.accepted) {
         const getBalance = getKeyringHandler(
           HANDLER_TYPES.GET_BALANCE,
-          keyring
+          keyring,
         );
         const icpBalance = await getBalance(subaccount);
 
@@ -254,47 +254,46 @@ backgroundController.exposeController(
         callback(ERRORS.CONNECTION_ERROR, null, [{ portId, callId }]);
       }
     });
-  }
+  },
 );
 
 backgroundController.exposeController(
-  "requestTransfer",
-  async (opts, metadata, args) =>
-    secureController(opts.callback, async () => {
-      const { message, sender, callback } = opts;
+  'requestTransfer',
+  async (opts, metadata, args) => secureController(opts.callback, async () => {
+    const { message, sender, callback } = opts;
 
-      const { id: callId } = message.data.data;
-      const { id: portId } = sender;
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
 
-      getApps(keyring.currentWalletId.toString(), (apps = {}) => {
-        const app = apps?.[metadata?.url] || {};
+    getApps(keyring.currentWalletId.toString(), (apps = {}) => {
+      const app = apps?.[metadata?.url] || {};
 
-        if (app?.status === CONNECTION_STATUS.accepted) {
-          const argsError = validateTransferArgs(args);
-          if (argsError) {
-            callback(argsError, null);
-            return;
-          }
-          displayPopUp({
-            callId,
-            portId,
-            type: "transfer",
-            argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
-            metadataJson: JSON.stringify(metadata),
-          });
-        } else {
-          callback(ERRORS.CONNECTION_ERROR, null);
+      if (app?.status === CONNECTION_STATUS.accepted) {
+        const argsError = validateTransferArgs(args);
+        if (argsError) {
+          callback(argsError, null);
+          return;
         }
-      });
-    })
+        displayPopUp({
+          callId,
+          portId,
+          type: 'transfer',
+          argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
+          metadataJson: JSON.stringify(metadata),
+        });
+      } else {
+        callback(ERRORS.CONNECTION_ERROR, null);
+      }
+    });
+  }),
 );
 
 backgroundController.exposeController(
-  "handleRequestTransfer",
+  'handleRequestTransfer',
   async (opts, transferRequests, callId, portId) => {
     const { callback } = opts;
     const transfer = transferRequests?.[0];
-    if (transfer?.status === "declined") {
+    if (transfer?.status === 'declined') {
       callback(null, true);
       callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
     } else {
@@ -323,7 +322,7 @@ backgroundController.exposeController(
         callback(ERRORS.BALANCE_ERROR, null, [{ portId, callId }]);
       }
     }
-  }
+  },
 );
 
 const signData = async (payload, callback) => {
@@ -333,7 +332,7 @@ const signData = async (payload, callback) => {
 };
 
 backgroundController.exposeController(
-  "requestSign",
+  'requestSign',
   async (opts, payload, metadata, requestInfo) => {
     const { message, sender, callback } = opts;
     const { id: callId } = message.data.data;
@@ -341,7 +340,7 @@ backgroundController.exposeController(
     const { canisterId, requestType, preApprove } = requestInfo;
 
     try {
-      const isDangerousUpdateCall = !preApprove && requestType === "call";
+      const isDangerousUpdateCall = !preApprove && requestType === 'call';
       if (isDangerousUpdateCall) {
         getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
           const app = apps?.[metadata.url] || {};
@@ -361,7 +360,7 @@ backgroundController.exposeController(
               displayPopUp({
                 callId,
                 portId,
-                type: "sign",
+                type: 'sign',
                 argsJson: JSON.stringify({
                   requestInfo,
                   payload,
@@ -381,11 +380,11 @@ backgroundController.exposeController(
     } catch (e) {
       callback(ERRORS.SERVER_ERROR(e), null);
     }
-  }
+  },
 );
 
 backgroundController.exposeController(
-  "handleSign",
+  'handleSign',
   async (opts, status, payload, callId, portId) => {
     const { callback } = opts;
 
@@ -404,10 +403,10 @@ backgroundController.exposeController(
       callback(ERRORS.SIGN_REJECTED, null, [{ portId, callId }]);
       callback(null, true); // Return true to close the modal
     }
-  }
+  },
 );
 
-backgroundController.exposeController("getPublicKey", async (opts) => {
+backgroundController.exposeController('getPublicKey', async (opts) => {
   const { callback } = opts;
   try {
     const publicKey = await keyring.getPublicKey();
@@ -418,88 +417,85 @@ backgroundController.exposeController("getPublicKey", async (opts) => {
 });
 
 backgroundController.exposeController(
-  "verifyWhitelist",
-  async (opts, metadata, whitelist) =>
-    secureController(opts.callback, async () => {
-      const { message, sender, callback } = opts;
+  'verifyWhitelist',
+  async (opts, metadata, whitelist) => secureController(opts.callback, async () => {
+    const { message, sender, callback } = opts;
 
-      const { id: callId } = message.data.data;
-      const { id: portId } = sender;
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
 
-      let canistersInfo = [];
+    let canistersInfo = [];
 
-      const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
+    const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
 
-      if (isValidWhitelist) {
-        canistersInfo = await fetchCanistersInfo(whitelist);
-      }
-      if (!whitelist.every((canisterId) => validatePrincipalId(canisterId))) {
-        callback(ERRORS.CANISTER_ID_ERROR, null);
-        return;
-      }
+    if (isValidWhitelist) {
+      canistersInfo = await fetchCanistersInfo(whitelist);
+    }
+    if (!whitelist.every((canisterId) => validatePrincipalId(canisterId))) {
+      callback(ERRORS.CANISTER_ID_ERROR, null);
+      return;
+    }
 
-      getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
-        const app = apps?.[metadata.url] || {};
-        if (app?.status === CONNECTION_STATUS.accepted) {
-          const allWhitelisted = areAllElementsIn(
-            whitelist,
-            app?.whitelist ? Object.keys(app?.whitelist) : []
-          );
+    getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
+      const app = apps?.[metadata.url] || {};
+      if (app?.status === CONNECTION_STATUS.accepted) {
+        const allWhitelisted = areAllElementsIn(
+          whitelist,
+          app?.whitelist ? Object.keys(app?.whitelist) : [],
+        );
 
-          if (allWhitelisted) {
-            if (!keyring.isUnlocked) {
-              displayPopUp({
-                callId,
-                portId,
-                type: "allowAgent",
-                argsJson: JSON.stringify({
-                  whitelist,
-                  canistersInfo,
-                  updateWhitelist: true,
-                  showList: false,
-                  timeout: app?.timeout,
-                }),
-                metadataJson: JSON.stringify(metadata),
-              });
-            }
-            const publicKey = await keyring.getPublicKey();
-            callback(null, publicKey);
-          } else {
+        if (allWhitelisted) {
+          if (!keyring.isUnlocked) {
             displayPopUp({
               callId,
               portId,
-              type: "allowAgent",
+              type: 'allowAgent',
               argsJson: JSON.stringify({
                 whitelist,
                 canistersInfo,
                 updateWhitelist: true,
-                showList: true,
+                showList: false,
+                timeout: app?.timeout,
               }),
               metadataJson: JSON.stringify(metadata),
-              screenArgs: { top: 65, left: metadata.pageWidth - SIZES.width },
             });
           }
+          const publicKey = await keyring.getPublicKey();
+          callback(null, publicKey);
         } else {
-          callback(ERRORS.CONNECTION_ERROR, null);
+          displayPopUp({
+            callId,
+            portId,
+            type: 'allowAgent',
+            argsJson: JSON.stringify({
+              whitelist,
+              canistersInfo,
+              updateWhitelist: true,
+              showList: true,
+            }),
+            metadataJson: JSON.stringify(metadata),
+            screenArgs: { top: 65, left: metadata.pageWidth - SIZES.width },
+          });
         }
-      });
-    })
+      } else {
+        callback(ERRORS.CONNECTION_ERROR, null);
+      }
+    });
+  }),
 );
 
 backgroundController.exposeController(
-  "handleAllowAgent",
+  'handleAllowAgent',
   async (opts, url, response, callId, portId) => {
     const { callback } = opts;
 
     getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
-      const status =
-        response.status === CONNECTION_STATUS.rejectedAgent
-          ? CONNECTION_STATUS.accepted
-          : response.status;
-      const whitelist =
-        response.status === CONNECTION_STATUS.accepted
-          ? response.whitelist
-          : [];
+      const status = response.status === CONNECTION_STATUS.rejectedAgent
+        ? CONNECTION_STATUS.accepted
+        : response.status;
+      const whitelist = response.status === CONNECTION_STATUS.accepted
+        ? response.whitelist
+        : [];
 
       const date = new Date().toISOString();
 
@@ -535,55 +531,54 @@ backgroundController.exposeController(
       callback(ERRORS.AGENT_REJECTED, null, [{ portId, callId }]);
       callback(null, true); // Return true to close the modal
     }
-  }
+  },
 );
 
 backgroundController.exposeController(
-  "batchTransactions",
-  async (opts, metadata, transactions) =>
-    secureController(opts.callback, async () => {
-      const { message, sender, callback } = opts;
+  'batchTransactions',
+  async (opts, metadata, transactions) => secureController(opts.callback, async () => {
+    const { message, sender, callback } = opts;
 
-      const { id: callId } = message.data.data;
-      const { id: portId } = sender;
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
 
-      getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
-        const app = apps?.[metadata?.url] || {};
+    getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
+      const app = apps?.[metadata?.url] || {};
 
-        if (app?.status === CONNECTION_STATUS.accepted) {
-          const transactionsError = validateTransactions(transactions);
+      if (app?.status === CONNECTION_STATUS.accepted) {
+        const transactionsError = validateTransactions(transactions);
 
-          if (transactionsError) {
-            callback(transactionsError, null);
-            return;
-          }
-          const canistersInfo = app?.whitelist || {};
-          const transactionsWithInfo = transactions.map((tx) => ({
-            ...tx,
-            canisterInfo: canistersInfo[tx.canisterId],
-          }));
-
-          displayPopUp({
-            callId,
-            portId,
-            type: "batchTransactions",
-            argsJson: JSON.stringify({
-              transactions: transactionsWithInfo,
-              canistersInfo,
-              timeout: app?.timeout,
-            }),
-            metadataJson: JSON.stringify(metadata),
-            screenArgs: { top: 65, left: metadata.pageWidth - SIZES.width },
-          });
-        } else {
-          callback(ERRORS.CONNECTION_ERROR, null);
+        if (transactionsError) {
+          callback(transactionsError, null);
+          return;
         }
-      });
-    })
+        const canistersInfo = app?.whitelist || {};
+        const transactionsWithInfo = transactions.map((tx) => ({
+          ...tx,
+          canisterInfo: canistersInfo[tx.canisterId],
+        }));
+
+        displayPopUp({
+          callId,
+          portId,
+          type: 'batchTransactions',
+          argsJson: JSON.stringify({
+            transactions: transactionsWithInfo,
+            canistersInfo,
+            timeout: app?.timeout,
+          }),
+          metadataJson: JSON.stringify(metadata),
+          screenArgs: { top: 65, left: metadata.pageWidth - SIZES.width },
+        });
+      } else {
+        callback(ERRORS.CONNECTION_ERROR, null);
+      }
+    });
+  }),
 );
 
 backgroundController.exposeController(
-  "handleBatchTransactions",
+  'handleBatchTransactions',
   async (opts, accepted, callId, portId) => {
     const { callback } = opts;
     callback(null, true); // close the modal
@@ -592,56 +587,54 @@ backgroundController.exposeController(
     } else {
       callback(ERRORS.TRANSACTION_REJECTED, false, [{ callId, portId }]);
     }
-  }
+  },
 );
 
 backgroundController.exposeController(
-  "requestBurnXTC",
-  async (opts, metadata, args) =>
-    secureController(opts.callback, async () => {
-      const { message, sender, callback } = opts;
+  'requestBurnXTC',
+  async (opts, metadata, args) => secureController(opts.callback, async () => {
+    const { message, sender, callback } = opts;
 
-      const { id: callId } = message.data.data;
-      const { id: portId } = sender;
+    const { id: callId } = message.data.data;
+    const { id: portId } = sender;
 
-      getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
-        const app = apps?.[metadata.url] || {};
-        if (app?.status === CONNECTION_STATUS.accepted) {
-          const argsError = validateBurnArgs(args);
-          if (argsError) {
-            callback(argsError, null);
-            return;
-          }
-          displayPopUp({
-            callId,
-            portId,
-            type: "burnXTC",
-            argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
-            metadataJson: JSON.stringify(metadata),
-          });
-        } else {
-          callback(ERRORS.CONNECTION_ERROR, null);
+    getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
+      const app = apps?.[metadata.url] || {};
+      if (app?.status === CONNECTION_STATUS.accepted) {
+        const argsError = validateBurnArgs(args);
+        if (argsError) {
+          callback(argsError, null);
+          return;
         }
-      });
-    })
+        displayPopUp({
+          callId,
+          portId,
+          type: 'burnXTC',
+          argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
+          metadataJson: JSON.stringify(metadata),
+        });
+      } else {
+        callback(ERRORS.CONNECTION_ERROR, null);
+      }
+    });
+  }),
 );
 
 backgroundController.exposeController(
-  "handleRequestBurnXTC",
+  'handleRequestBurnXTC',
   async (opts, transferRequests, callId, portId) => {
     const { callback } = opts;
     const transfer = transferRequests?.[0];
 
     // Answer this callback no matter if the transfer succeeds or not.
-    if (transfer?.status === "declined") {
+    if (transfer?.status === 'declined') {
       callback(null, true);
       callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
     } else {
       const burnXTC = getKeyringHandler(HANDLER_TYPES.BURN_XTC, keyring);
       const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
       const assets = await getBalance();
-      const xtcAmount =
-        assets?.[DEFAULT_CURRENCY_MAP.XTC]?.amount * CYCLES_PER_TC;
+      const xtcAmount = assets?.[DEFAULT_CURRENCY_MAP.XTC]?.amount * CYCLES_PER_TC;
       const parsedAmount = transfer.amount / CYCLES_PER_TC;
       if (xtcAmount - XTC_FEE > transfer.amount) {
         const response = await burnXTC({
@@ -664,38 +657,36 @@ backgroundController.exposeController(
         callback(ERRORS.BALANCE_ERROR, null, [{ portId, callId }]);
       }
     }
-  }
+  },
 );
 
-backgroundController.exposeController("getPrincipal", async (opts, pageUrl) =>
-  secureController(opts.callback, async () => {
-    const { callback, message, sender } = opts;
+backgroundController.exposeController('getPrincipal', async (opts, pageUrl) => secureController(opts.callback, async () => {
+  const { callback, message, sender } = opts;
 
-    getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
-      const app = apps?.[pageUrl] || {};
-      if (app?.status === CONNECTION_STATUS.accepted) {
-        if (!keyring.isUnlocked) {
-          displayPopUp({
-            callId,
-            portId,
-            type: "principal",
-            metadataJson: JSON.stringify({ url: pageUrl }),
-          });
-        } else {
-          callback(
-            null,
-            keyring.state.wallets[keyring.currentWalletId].principal
-          );
-        }
+  getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
+    const app = apps?.[pageUrl] || {};
+    if (app?.status === CONNECTION_STATUS.accepted) {
+      if (!keyring.isUnlocked) {
+        displayPopUp({
+          callId: message.data.data.id,
+          portId: sender.id,
+          type: 'principal',
+          metadataJson: JSON.stringify({ url: pageUrl }),
+        });
       } else {
-        callback(ERRORS.CONNECTION_ERROR, null);
+        callback(
+          null,
+          keyring.state.wallets[keyring.currentWalletId].principal,
+        );
       }
-    });
-  })
-);
+    } else {
+      callback(ERRORS.CONNECTION_ERROR, null);
+    }
+  });
+}));
 
 backgroundController.exposeController(
-  "handleGetPrincipal",
+  'handleGetPrincipal',
   async (opts, url, callId, portId) => {
     const { callback } = opts;
 
@@ -703,18 +694,17 @@ backgroundController.exposeController(
       const app = apps?.[url] || {};
       callback(null, true);
       if (app?.status === CONNECTION_STATUS.accepted) {
-        const { principal } =
-          keyring?.state?.wallets?.[keyring?.currentWalletId] || {};
+        const { principal } = keyring?.state?.wallets?.[keyring?.currentWalletId] || {};
         callback(null, principal?.toText(), [{ portId, callId }]);
       } else {
         callback(ERRORS.CONNECTION_ERROR, null, [{ portId, callId }]);
       }
     });
-  }
+  },
 );
 
 backgroundController.exposeController(
-  "handleError",
+  'handleError',
   async (opts, metadata, errorMessage) => {
     const { message, sender, callback } = opts;
     const { id: callId } = message.data.data;
@@ -730,11 +720,11 @@ backgroundController.exposeController(
 
     callback(ERRORS.CLIENT_ERROR(errorMessage), null, [{ portId, callId }]);
     callback(null, true);
-  }
+  },
 );
 
 backgroundController.exposeController(
-  "handleTimeout",
+  'handleTimeout',
   async (opts, metadata, errorMessage) => {
     const { message, sender, callback } = opts;
     const { id: callId } = message.data.data;
@@ -744,7 +734,7 @@ backgroundController.exposeController(
 
     callback(ERRORS.CLIENT_ERROR(errorMessage), null, [{ portId, callId }]);
     callback(null, true);
-  }
+  },
 );
 
 export default backgroundController;
