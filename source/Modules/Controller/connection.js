@@ -3,6 +3,7 @@ import extension from 'extensionizer';
 import ERRORS from '@background/errors';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import { areAllElementsIn } from '@shared/utils/array';
 import { fetchCanistersInfo, initializeProtectedIds } from '@background/utils';
 import {
   getApps,
@@ -26,6 +27,8 @@ export class ConnectionModule {
       this.#handleConnectionData(),
       this.#disconnect(),
       this.#requestConnect(),
+      this.#handleAllowAgent(),
+      this.#verifyWhitelist(),
     ];
   }
 
@@ -214,6 +217,155 @@ export class ConnectionModule {
         }
       },
     };
+  }
+
+  // Check SecureController
+  #handleAllowAgent() {
+    return {
+      methodName: 'handleAllowAgent',
+      handler: async (opts, url, response, callId, portId) => {
+        const { callback } = opts;
+
+        getApps(this.keyring?.currentWalletId.toString(), async (apps = {}) => {
+          const status = response.status === CONNECTION_STATUS.rejectedAgent
+            ? CONNECTION_STATUS.accepted
+            : response.status;
+          const whitelist = response.status === CONNECTION_STATUS.accepted
+            ? response.whitelist
+            : [];
+
+          const date = new Date().toISOString();
+
+          const newApps = {
+            ...apps,
+            [url]: {
+              ...apps[url],
+              status: status || CONNECTION_STATUS.rejected,
+              date,
+              whitelist,
+              events: [
+                ...apps[url]?.events || [],
+                {
+                  status: status || CONNECTION_STATUS.rejected,
+                  date,
+                },
+              ],
+            },
+          };
+          setApps(this.keyring?.currentWalletId.toString(), newApps);
+        });
+
+        if (response?.status === CONNECTION_STATUS.accepted) {
+          try {
+            const publicKey = await this.keyring?.getPublicKey();
+            callback(null, publicKey, [{ portId, callId }]);
+            callback(null, true);
+          } catch (e) {
+            callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
+            callback(null, false);
+          }
+        } else {
+          callback(ERRORS.AGENT_REJECTED, null, [{ portId, callId }]);
+          callback(null, true); // Return true to close the modal
+        }
+      },
+    }
+  }
+
+  // Check SecureController
+  #verifyWhitelist() {
+    return {
+      methodName: 'verifyWhitelist',
+      handler: async (opts, metadata, whitelist) => {
+        const { message, sender, callback } = opts;
+
+        const { id: callId } = message.data.data;
+        const { id: portId } = sender;
+
+        let canistersInfo = [];
+
+        const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
+
+        if (isValidWhitelist) {
+          canistersInfo = await fetchCanistersInfo(whitelist);
+        }
+        if (!whitelist.every((canisterId) => validatePrincipalId(canisterId))) {
+          callback(ERRORS.CANISTER_ID_ERROR, null);
+          return;
+        }
+
+        getApps(this.keyring?.currentWalletId.toString(), async (apps = {}) => {
+          const app = apps?.[metadata.url] || {};
+          if (app?.status === CONNECTION_STATUS.accepted) {
+            const allWhitelisted = areAllElementsIn(
+              whitelist,
+              app?.whitelist ? Object.keys(app?.whitelist) : [],
+            );
+            const height = this.keyring?.isUnlocked
+              ? SIZES.detailHeightSmall
+              : SIZES.loginHeight;
+
+            if (allWhitelisted) {
+              if (!this.keyring.isUnlocked) {
+                const url = qs.stringifyUrl({
+                  url: 'notification.html',
+                  query: {
+                    callId,
+                    portId,
+                    metadataJson: JSON.stringify(metadata),
+                    argsJson: JSON.stringify({
+                      whitelist,
+                      canistersInfo,
+                      updateWhitelist: true,
+                      showList: false,
+                      timeout: app?.timeout,
+                    }),
+                    type: 'allowAgent',
+                  },
+                });
+                extension.windows.create({
+                  url,
+                  type: 'popup',
+                  width: SIZES.width,
+                  height,
+                  top: 65,
+                  left: metadata.pageWidth - SIZES.width,
+                });
+              }
+              const publicKey = await this.keyring?.getPublicKey();
+              callback(null, publicKey);
+            } else {
+              const url = qs.stringifyUrl({
+                url: 'notification.html',
+                query: {
+                  callId,
+                  portId,
+                  metadataJson: JSON.stringify(metadata),
+                  argsJson: JSON.stringify({
+                    whitelist,
+                    canistersInfo,
+                    updateWhitelist: true,
+                    showList: true,
+                  }),
+                  type: 'allowAgent',
+                },
+              });
+
+              extension.windows.create({
+                url,
+                type: 'popup',
+                width: SIZES.width,
+                height,
+                top: 65,
+                left: metadata.pageWidth - SIZES.width,
+              });
+            }
+          } else {
+            callback(ERRORS.CONNECTION_ERROR, null);
+          }
+        },
+      },
+    }
   }
 
   // Exposer
