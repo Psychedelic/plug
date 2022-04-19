@@ -7,11 +7,12 @@ import { ChevronDown } from 'react-feather';
 
 import { useRouter } from '@components/Router';
 import { setSelectedNft } from '@redux/nfts';
-import { NFTDisplayer } from '@ui';
+import { NFTDisplayer, ICNSDisplay } from '@ui';
 
 import useStyles from './styles';
+import shortAddress from '@shared/utils/short-address';
 
-function NFTCollection({ collection }) {
+function NFTCollection({ collection, icns }) {
   const classes = useStyles();
   const { navigator } = useRouter();
   const [expanded, setExpanded] = useState(false);
@@ -42,12 +43,28 @@ function NFTCollection({ collection }) {
             className={classes.nftContainer}
             onClick={() => handleNftClick(nft)}
           >
-            <NFTDisplayer
-              url={nft.url}
-              className={classes.nft}
-              onClick={() => handleNftClick(nft)}
-            />
-            <Typography className={classes.id} variant="subtitle1">{nft.name || `#${nft.index}`}</Typography>
+            {
+            icns ? (
+              <ICNSDisplay
+                icns={nft}
+                className={classes.nft}
+                onClick={() => handleNftClick(nft)}
+              />
+            ) : (
+
+              <NFTDisplayer
+                url={nft.url}
+                className={classes.nft}
+                onClick={() => handleNftClick(nft)}
+              />
+            )
+}
+            <Typography
+              className={classes.id}
+              variant="subtitle1"
+            >
+              {(nft.name || `#${nft.index}`).length > 12 ? shortAddress(nft.name || `#${nft.index}`, 3, 5) : (nft.name || `#${nft.index}`)}
+            </Typography>
           </div>
         ))}
 
@@ -57,6 +74,7 @@ function NFTCollection({ collection }) {
 }
 
 NFTCollection.propTypes = {
+  icns: PropTypes.bool.isRequired,
   collection: PropTypes.shape({
     standard: PropTypes.string.isRequired,
     canisterId: PropTypes.string.isRequired,

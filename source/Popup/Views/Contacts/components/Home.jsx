@@ -9,7 +9,6 @@ import Grid from '@material-ui/core/Grid';
 
 const Home = ({ handleChangeView }) => {
   const { t } = useTranslation();
-
   return (
     <Container big>
       <Grid container spacing={1} style={{ textAlign: 'center' }}>

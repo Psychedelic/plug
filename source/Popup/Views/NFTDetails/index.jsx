@@ -40,12 +40,12 @@ const NFTDetails = () => {
 
   const collection = useMemo(() => collections?.find((col) => col.name === nft?.collection),
     [collections, nft]);
-
+  const name = `${nft?.name ?? `#${nft?.index}`}`;
   return (
     <Layout>
       <Header
         left={<LinkButton value={t('common.back')} onClick={handleBack} startIcon={BackIcon} />}
-        center={`#${nft?.index}`}
+        center={name}
         right={null}
       />
       <div className={classes.container}>
@@ -74,7 +74,7 @@ const NFTDetails = () => {
         </div>
         <Section icon={CollectionImg} title={t('nfts.collection')}>
           <Badge value={nft?.collection} icon={collection?.icon} />
-          <Badge value={`#${nft?.index}`} />
+          <Badge value={name} />
         </Section>
         {!!nft?.desc && (
           <Section icon={DescriptionImg} title={t('nfts.description')}>

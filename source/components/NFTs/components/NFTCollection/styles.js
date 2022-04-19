@@ -24,7 +24,6 @@ export default makeStyles(() => ({
     width: 112,
     borderRadius: 15,
     cursor: 'pointer',
-    boxShadow: 'rgb(37 41 46 / 20%) 0px 10px 30px',
     transition: 'all 0.125s ease 0s',
 
     '&:hover': {
