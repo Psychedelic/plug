@@ -363,8 +363,8 @@ export class ConnectionModule {
           } else {
             callback(ERRORS.CONNECTION_ERROR, null);
           }
-        },
-      },
+        })
+      }
     }
   }
 

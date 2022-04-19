@@ -30,7 +30,7 @@ export class TransactionModule {
     this.secureController = secureController;
     this.backgroundController = backgroundController;
 
-    this.#DEFAULT_CURRENCY_MAP = {
+    this.DEFAULT_CURRENCY_MAP = {
       ICP: 0,
       XTC: 1,
     };
@@ -122,7 +122,7 @@ export class TransactionModule {
 
           const assets = await getBalance();
           const parsedAmount = (transfer.amount / E8S_PER_ICP);
-          if (assets?.[this.#DEFAULT_CURRENCY_MAP.ICP]?.amount > parsedAmount) {
+          if (assets?.[this.DEFAULT_CURRENCY_MAP.ICP]?.amount > parsedAmount) {
             const response = await sendToken({
               ...transfer,
               amount: parsedAmount,
@@ -211,7 +211,7 @@ export class TransactionModule {
           const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, this.keyring);
 
           const assets = await getBalance();
-          const xtcAmount = assets?.[this.#DEFAULT_CURRENCY_MAP.XTC]?.amount * CYCLES_PER_TC;
+          const xtcAmount = assets?.[this.DEFAULT_CURRENCY_MAP.XTC]?.amount * CYCLES_PER_TC;
           const parsedAmount = transfer.amount / CYCLES_PER_TC;
 
           if (xtcAmount - XTC_FEE > transfer.amount) {
