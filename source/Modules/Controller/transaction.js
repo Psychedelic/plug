@@ -13,16 +13,10 @@ import { XTC_FEE } from '@shared/constants/addresses';
 import {
   getKeyringHandler,
   HANDLER_TYPES,
-  getKeyringErrorMessage,
 } from '@background/Keyring';
 
 import SIZES from '../../Pages/Notification/components/Transfer/constants';
-import {
-  getApps,
-  setApps,
-  getApp,
-  removeApp,
-} from '../storageManager';
+import { getApps } from '../storageManager';
 
 export class TransactionModule {
   constructor(backgroundController, secureController, keyring) {
@@ -30,7 +24,7 @@ export class TransactionModule {
     this.secureController = secureController;
     this.backgroundController = backgroundController;
 
-    this.#DEFAULT_CURRENCY_MAP = {
+    this.DEFAULT_CURRENCY_MAP = {
       ICP: 0,
       XTC: 1,
     };
@@ -103,7 +97,7 @@ export class TransactionModule {
           }
         });
       },
-    }
+    };
   }
 
   #handleRequestTransfer() {
@@ -122,7 +116,7 @@ export class TransactionModule {
 
           const assets = await getBalance();
           const parsedAmount = (transfer.amount / E8S_PER_ICP);
-          if (assets?.[this.#DEFAULT_CURRENCY_MAP.ICP]?.amount > parsedAmount) {
+          if (assets?.[this.DEFAULT_CURRENCY_MAP.ICP]?.amount > parsedAmount) {
             const response = await sendToken({
               ...transfer,
               amount: parsedAmount,
@@ -144,7 +138,7 @@ export class TransactionModule {
           }
         }
       },
-    }
+    };
   }
 
   #requestBurnXTC() {
@@ -192,7 +186,7 @@ export class TransactionModule {
           }
         });
       },
-    }
+    };
   }
 
   #handleRequestBurnXTC() {
@@ -211,7 +205,7 @@ export class TransactionModule {
           const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, this.keyring);
 
           const assets = await getBalance();
-          const xtcAmount = assets?.[this.#DEFAULT_CURRENCY_MAP.XTC]?.amount * CYCLES_PER_TC;
+          const xtcAmount = assets?.[this.DEFAULT_CURRENCY_MAP.XTC]?.amount * CYCLES_PER_TC;
           const parsedAmount = transfer.amount / CYCLES_PER_TC;
 
           if (xtcAmount - XTC_FEE > transfer.amount) {
@@ -236,7 +230,7 @@ export class TransactionModule {
           }
         }
       },
-    }
+    };
   }
 
   #batchTransactions() {
@@ -295,10 +289,10 @@ export class TransactionModule {
           }
         });
       },
-    }
+    };
   }
 
-  #handleBatchTransactions() {
+  static #handleBatchTransactions() {
     return {
       methodName: 'handleBatchTransactions',
       handler: async (opts, accepted, callId, portId) => {
@@ -310,7 +304,7 @@ export class TransactionModule {
           callback(ERRORS.TRANSACTION_REJECTED, false, [{ callId, portId }]);
         }
       },
-    }
+    };
   }
 
   // Exposer

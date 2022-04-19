@@ -6,7 +6,6 @@ import { BackgroundController } from '@fleekhq/browser-rpc';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import {
   getApps,
-  setApps,
   ConnectionModule,
   TransactionModule,
   InformationModule,
@@ -34,35 +33,6 @@ const notificationManager = new NotificationManager(
 );
 
 backgroundController.start();
-
-const fetchCanistersInfo = async (whitelist) => {
-  if (whitelist && whitelist.length > 0) {
-    const canistersInfo = await Promise.all(
-      whitelist.map(async (id) => {
-        let canisterInfo = { id };
-
-        try {
-          const fetchedCanisterInfo = await PlugController.getCanisterInfo(id);
-          canisterInfo = { id, ...fetchedCanisterInfo };
-        } catch (error) {
-          /* eslint-disable-next-line */
-          console.error(error);
-        }
-
-        return canisterInfo;
-      }),
-    );
-
-    const sortedCanistersInfo = canistersInfo.sort((a, b) => {
-      if (a.name && !b.name) return -1;
-      return 1;
-    });
-
-    return sortedCanistersInfo;
-  }
-
-  return [];
-};
 
 export const init = async () => {
   keyring = new PlugController.PlugKeyRing();
