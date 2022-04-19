@@ -34,8 +34,6 @@ const NFTs = () => {
   }, [principalId]);
 
   const nfts = collections?.flatMap((c) => c.tokens);
-  console.log('icns names', icnsNames);
-  console.log('collections', collections);
   return (
     <LoadingWrapper loading={!nfts.length && collectionsLoading} className="big">
       {
@@ -44,8 +42,7 @@ const NFTs = () => {
           : (
             <div className={classes.root}>
               {collections.map((collection) => !!collection?.tokens?.length
-                && (<NFTCollection collection={collection} />))}
-              {!!icnsNames?.tokens?.length && (<NFTCollection collection={icnsNames} icns />)}
+                && (<NFTCollection collection={collection} icns={collection?.name === 'ICNS'} />))}
             </div>
           )
       }
