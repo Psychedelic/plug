@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Collapsible from 'react-collapsible';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
@@ -26,32 +27,36 @@ function NFTCollection({ collection }) {
 
   return (
     <div className={classes.collection}>
-      <div className={classes.collectionHeader} onClick={toggleExpanded}>
-        <div className={classes.collectionTitle}>
-          <img loading="lazy" src={collection?.icon} className={classes.collectionIcon} />
-          <Typography variant="h5">{collection?.name}</Typography>
-        </div>
-        <ChevronDown
-          className={clsx(classes.expandIcon, expanded && classes.rotate)}
-          size={20}
-        />
-      </div>
-      <div className={clsx(classes.grid, expanded && classes.expanded)}>
-        {collection?.tokens?.map((nft) => (
-          <div
-            className={classes.nftContainer}
-            onClick={() => handleNftClick(nft)}
-          >
+      <Collapsible
+        trigger={
+          <div className={classes.collectionHeader} onClick={toggleExpanded}>
+            <div className={classes.collectionTitle}>
+              <img loading="lazy" src={collection?.icon} className={classes.collectionIcon} />
+              <Typography variant="h5">{collection?.name}</Typography>
+            </div>
+            <ChevronDown
+              className={clsx(classes.expandIcon, expanded && classes.rotate)}
+              size={20}
+            />
+          </div>
+        }
+      >
+        <div className={classes.grid}>
+          { collection?.tokens?.map((nft) => (
+            <div
+              className={classes.nftContainer}
+              onClick={() => handleNftClick(nft)}
+            >
             <NFTDisplayer
               url={nft.url}
               className={classes.nft}
               onClick={() => handleNftClick(nft)}
             />
             <Typography className={classes.id} variant="subtitle1">{nft.name || `#${nft.index}`}</Typography>
-          </div>
+            </div>
         ))}
-
-      </div>
+        </div>
+      </Collapsible>
     </div>
   );
 }
