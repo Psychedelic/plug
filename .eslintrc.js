@@ -10,7 +10,7 @@ module.exports = {
   env: {
     webextensions: true,
     browser: true,
-    es2021: true,
+    es2022: true,
     node: true,
   },
   globals: {
