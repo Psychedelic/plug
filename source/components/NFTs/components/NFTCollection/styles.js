@@ -12,12 +12,7 @@ export default makeStyles(() => ({
     display: 'grid',
     justifyContent: 'space-evenly',
     gridTemplateColumns: 'repeat(auto-fill, 112px)',
-    transition: 'max-height .5s ease-in-out',
-    maxHeight: 0,
     overflow: 'hidden',
-  },
-  expanded: {
-    maxHeight: 200,
   },
   nft: {
     height: 112,
