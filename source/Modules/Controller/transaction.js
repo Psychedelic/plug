@@ -42,6 +42,8 @@ export class TransactionModule {
       this.#handleRequestBurnXTC(),
       this.#batchTransactions(),
       this.#handleBatchTransactions(),
+      this.#requestSign(),
+      this.#handleSign(),
     ];
   }
 
