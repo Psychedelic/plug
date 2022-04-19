@@ -13,15 +13,12 @@ import { XTC_FEE } from '@shared/constants/addresses';
 import {
   getKeyringHandler,
   HANDLER_TYPES,
-  getKeyringErrorMessage,
 } from '@background/Keyring';
 
 import SIZES from '../../Pages/Notification/components/Transfer/constants';
 import {
   getApps,
-  setApps,
-  getApp,
-  removeApp,
+  getProtectedIds,
 } from '../storageManager';
 
 export class TransactionModule {
@@ -45,6 +42,8 @@ export class TransactionModule {
       this.#handleRequestBurnXTC(),
       this.#batchTransactions(),
       this.#handleBatchTransactions(),
+      this.#requestSign(),
+      this.#handleSign(),
     ];
   }
 
@@ -55,6 +54,12 @@ export class TransactionModule {
         handlerObject.handler(...args);
       },
     );
+  }
+
+  async #signData(payload, callback) {
+    const parsedPayload = new Uint8Array(Object.values(payload));
+    const signed = await this.keyring?.sign(parsedPayload.buffer);
+    callback(null, [...new Uint8Array(signed)]);
   }
 
   // Methods
@@ -90,6 +95,7 @@ export class TransactionModule {
             const height = this.keyring?.isUnlocked
               ? SIZES.detailHeightSmall
               : SIZES.loginHeight;
+
             extension.windows.create({
               url,
               type: 'popup',
@@ -103,7 +109,7 @@ export class TransactionModule {
           }
         });
       },
-    }
+    };
   }
 
   #handleRequestTransfer() {
@@ -144,7 +150,7 @@ export class TransactionModule {
           }
         }
       },
-    }
+    };
   }
 
   #requestBurnXTC() {
@@ -192,7 +198,7 @@ export class TransactionModule {
           }
         });
       },
-    }
+    };
   }
 
   #handleRequestBurnXTC() {
@@ -236,7 +242,7 @@ export class TransactionModule {
           }
         }
       },
-    }
+    };
   }
 
   #batchTransactions() {
@@ -295,10 +301,10 @@ export class TransactionModule {
           }
         });
       },
-    }
+    };
   }
 
-  #handleBatchTransactions() {
+  static #handleBatchTransactions() {
     return {
       methodName: 'handleBatchTransactions',
       handler: async (opts, accepted, callId, portId) => {
@@ -310,7 +316,98 @@ export class TransactionModule {
           callback(ERRORS.TRANSACTION_REJECTED, false, [{ callId, portId }]);
         }
       },
-    }
+    };
+  }
+
+  #requestSign() {
+    return {
+      methodName: 'requestSign',
+      handler: async (opts, payload, metadata, requestInfo) => {
+        const { message, sender, callback } = opts;
+        const { id: callId } = message.data.data;
+        const { id: portId } = sender;
+        const { canisterId, requestType, preApprove } = requestInfo;
+
+        try {
+          const isDangerousUpdateCall = !preApprove && requestType === 'call';
+          if (isDangerousUpdateCall) {
+            getApps(this.keyring?.currentWalletId.toString(), async (apps = {}) => {
+              const app = apps?.[metadata.url] || {};
+              if (app.status !== CONNECTION_STATUS.accepted) {
+                callback(ERRORS.CONNECTION_ERROR, null);
+                return;
+              }
+              if (canisterId && !(canisterId in app.whitelist)) {
+                callback(ERRORS.CANISTER_NOT_WHITLESTED_ERROR(canisterId), null);
+                return;
+              }
+              getProtectedIds(async (protectedIds) => {
+                const canisterInfo = app.whitelist[canisterId];
+                const shouldShowModal = protectedIds.includes(canisterInfo.id);
+
+                if (shouldShowModal) {
+                  const url = qs.stringifyUrl({
+                    url: 'notification.html',
+                    query: {
+                      callId,
+                      portId,
+                      type: 'sign',
+                      metadataJson: JSON.stringify(metadata),
+                      argsJson: JSON.stringify({
+                        requestInfo,
+                        payload,
+                        canisterInfo,
+                        timeout: app?.timeout,
+                      }),
+                    },
+                  });
+                  const height = this.keyring?.isUnlocked
+                    ? SIZES.appConnectHeight
+                    : SIZES.loginHeight;
+                  extension.windows.create({
+                    url,
+                    type: 'popup',
+                    width: SIZES.width,
+                    height,
+                  });
+                } else {
+                  this.#signData(payload, callback);
+                }
+              });
+            });
+          } else {
+            this.#signData(payload, callback);
+          }
+        } catch (e) {
+          callback(ERRORS.SERVER_ERROR(e), null);
+        }
+      },
+    };
+  }
+
+  #handleSign() {
+    return {
+      methodName: 'handleSign',
+      handler: async (opts, status, payload, callId, portId) => {
+        const { callback } = opts;
+
+        if (status === CONNECTION_STATUS.accepted) {
+          try {
+            const parsedPayload = new Uint8Array(Object.values(payload));
+
+            const signed = await this.keyring?.sign(parsedPayload.buffer);
+            callback(null, new Uint8Array(signed), [{ callId, portId }]);
+            callback(null, true);
+          } catch (e) {
+            callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
+            callback(null, false);
+          }
+        } else {
+          callback(ERRORS.SIGN_REJECTED, null, [{ portId, callId }]);
+          callback(null, true); // Return true to close the modal
+        }
+      },
+    };
   }
 
   // Exposer

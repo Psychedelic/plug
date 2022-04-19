@@ -4,6 +4,7 @@ import ERRORS from '@background/errors';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { getKeyringHandler, HANDLER_TYPES } from '@background/Keyring';
 import { getApps } from '../storageManager';
+import SIZES from '../../Pages/Notification/components/Transfer/constants';
 
 export class InformationModule {
   constructor(backgroundController, secureController, keyring) {
@@ -40,7 +41,7 @@ export class InformationModule {
     } else {
       callback(null, icpBalance);
     }
-  };
+  }
 
   // Methods
   #requestBalance() {
@@ -81,7 +82,7 @@ export class InformationModule {
           }
         });
       },
-    }
+    };
   }
 
   #handleRequestBalance() {
@@ -113,7 +114,7 @@ export class InformationModule {
           }
         });
       },
-    }
+    };
   }
 
   #getPublicKey() {
@@ -128,7 +129,7 @@ export class InformationModule {
           callback(ERRORS.SERVER_ERROR(e), null);
         }
       },
-    }
+    };
   }
 
   #getPrincipal() {
@@ -169,7 +170,7 @@ export class InformationModule {
           }
         });
       },
-    }
+    };
   }
 
   #handleGetPrincipal() {
@@ -182,14 +183,15 @@ export class InformationModule {
           const app = apps?.[url] || {};
           callback(null, true);
           if (app?.status === CONNECTION_STATUS.accepted) {
-            const { principal } = this.keyring?.state?.wallets?.[keyring?.currentWalletId] || {};
+            const { principal } = this.keyring?.state?.wallets?.
+              [this.keyring?.currentWalletId] || {};
             callback(null, principal?.toText(), [{ portId, callId }]);
           } else {
             callback(ERRORS.CONNECTION_ERROR, null, [{ portId, callId }]);
           }
         });
       },
-    }
+    };
   }
 
   // Exposer
@@ -203,4 +205,4 @@ export class InformationModule {
   }
 }
 
-export default { InformationModule }
+export default { InformationModule };

@@ -1,19 +1,14 @@
-import qs from 'query-string';
 import extension from 'extensionizer';
 import PlugController from '@psychedelic/plug-controller';
 import { BackgroundController } from '@fleekhq/browser-rpc';
 
-import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import {
-  getApps,
   ConnectionModule,
   TransactionModule,
   InformationModule,
-  getProtectedIds,
 } from '@modules';
 
 import NotificationManager from '../lib/NotificationManager';
-import SIZES from '../Pages/Notification/components/Transfer/constants';
 import {
   getKeyringHandler,
   HANDLER_TYPES,
@@ -33,69 +28,6 @@ const notificationManager = new NotificationManager(
 );
 
 backgroundController.start();
-
-const displayPopUp = ({
-  callId,
-  portId,
-  argsJson,
-  metadataJson,
-  type,
-  screenArgs: { fixedHeight, top, left },
-}) => {
-  const url = qs.stringifyUrl({
-    url: 'notification.html',
-    query: {
-      callId,
-      portId,
-      type,
-      argsJson,
-      metadataJson,
-    },
-  });
-
-  const defaultHeight = keyring?.isUnlocked
-    ? SIZES.detailHeightSmall
-    : SIZES.loginHeight;
-  const height = fixedHeight || defaultHeight;
-
-  extension.windows.create({
-    url,
-    type: 'popup',
-    width: SIZES.width,
-    height,
-    top,
-    left,
-  });
-};
-
-const fetchCanistersInfo = async (whitelist) => {
-  if (whitelist && whitelist.length > 0) {
-    const canistersInfo = await Promise.all(
-      whitelist.map(async (id) => {
-        let canisterInfo = { id };
-
-        try {
-          const fetchedCanisterInfo = await PlugController.getCanisterInfo(id);
-          canisterInfo = { id, ...fetchedCanisterInfo };
-        } catch (error) {
-          /* eslint-disable-next-line */
-          console.error(error);
-        }
-
-        return canisterInfo;
-      }),
-    );
-
-    const sortedCanistersInfo = canistersInfo.sort((a, b) => {
-      if (a.name && !b.name) return -1;
-      return 1;
-    });
-
-    return sortedCanistersInfo;
-  }
-
-  return [];
-};
 
 export const init = async () => {
   keyring = new PlugController.PlugKeyRing();
@@ -185,87 +117,6 @@ init().then(() => {
   informationModule = new InformationModule(backgroundController, secureController, keyring);
   informationModule.exposeMethods();
 });
-
-const signData = async (payload, callback) => {
-  const parsedPayload = new Uint8Array(Object.values(payload));
-  const signed = await keyring.sign(parsedPayload.buffer);
-  callback(null, [...new Uint8Array(signed)]);
-};
-
-backgroundController.exposeController(
-  'requestSign',
-  async (opts, payload, metadata, requestInfo) => {
-    const { message, sender, callback } = opts;
-    const { id: callId } = message.data.data;
-    const { id: portId } = sender;
-    const { canisterId, requestType, preApprove } = requestInfo;
-
-    try {
-      const isDangerousUpdateCall = !preApprove && requestType === 'call';
-      if (isDangerousUpdateCall) {
-        getApps(keyring.currentWalletId.toString(), async (apps = {}) => {
-          const app = apps?.[metadata.url] || {};
-          if (app.status !== CONNECTION_STATUS.accepted) {
-            callback(ERRORS.CONNECTION_ERROR, null);
-            return;
-          }
-          if (canisterId && !(canisterId in app.whitelist)) {
-            callback(ERRORS.CANISTER_NOT_WHITLESTED_ERROR(canisterId), null);
-            return;
-          }
-          getProtectedIds(async (protectedIds) => {
-            const canisterInfo = app.whitelist[canisterId];
-            const shouldShowModal = protectedIds.includes(canisterInfo.id);
-
-            if (shouldShowModal) {
-              displayPopUp({
-                callId,
-                portId,
-                type: 'sign',
-                argsJson: JSON.stringify({
-                  requestInfo,
-                  payload,
-                  canisterInfo,
-                  timeout: app?.timeout,
-                }),
-                metadataJson: JSON.stringify(metadata),
-              });
-            } else {
-              signData(payload, callback);
-            }
-          });
-        });
-      } else {
-        signData(payload, callback);
-      }
-    } catch (e) {
-      callback(ERRORS.SERVER_ERROR(e), null);
-    }
-  },
-);
-
-backgroundController.exposeController(
-  'handleSign',
-  async (opts, status, payload, callId, portId) => {
-    const { callback } = opts;
-
-    if (status === CONNECTION_STATUS.accepted) {
-      try {
-        const parsedPayload = new Uint8Array(Object.values(payload));
-
-        const signed = await keyring.sign(parsedPayload.buffer);
-        callback(null, new Uint8Array(signed), [{ callId, portId }]);
-        callback(null, true);
-      } catch (e) {
-        callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
-        callback(null, false);
-      }
-    } else {
-      callback(ERRORS.SIGN_REJECTED, null, [{ portId, callId }]);
-      callback(null, true); // Return true to close the modal
-    }
-  },
-);
 
 backgroundController.exposeController(
   'handleError',

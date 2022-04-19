@@ -269,7 +269,7 @@ export class ConnectionModule {
           callback(null, true); // Return true to close the modal
         }
       },
-    }
+    };
   }
 
   // Check SecureController
@@ -363,9 +363,9 @@ export class ConnectionModule {
           } else {
             callback(ERRORS.CONNECTION_ERROR, null);
           }
-        })
-      }
-    }
+        });
+      },
+    };
   }
 
   // Exposer
