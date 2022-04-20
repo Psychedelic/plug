@@ -29,6 +29,40 @@ const notificationManager = new NotificationManager(
 
 backgroundController.start();
 
+const displayPopUp = ({
+  callId,
+  portId,
+  argsJson,
+  metadataJson,
+  type,
+  screenArgs: { fixedHeight, top, left },
+}) => {
+  const url = qs.stringifyUrl({
+    url: 'notification.html',
+    query: {
+      callId,
+      portId,
+      type,
+      argsJson,
+      metadataJson,
+    },
+  });
+
+  const defaultHeight = keyring?.isUnlocked
+    ? SIZES.detailHeightSmall
+    : SIZES.loginHeight;
+  const height = fixedHeight || defaultHeight;
+
+  extension.windows.create({
+    url,
+    type: 'popup',
+    width: SIZES.width,
+    height,
+    top,
+    left,
+  });
+};
+
 export const init = async () => {
   keyring = new PlugController.PlugKeyRing();
   await keyring.init();
@@ -111,11 +145,19 @@ init().then(() => {
   );
   connectionModule.exposeMethods();
 
-  transactionModule = new TransactionModule(backgroundController, secureController, keyring);
-  transactionModule.exposeMethods();
-
-  informationModule = new InformationModule(backgroundController, secureController, keyring);
+  informationModule = new InformationModule(
+    backgroundController,
+    secureController,
+    keyring,
+  );
   informationModule.exposeMethods();
+
+  transactionModule = new TransactionModule(
+    backgroundController,
+    secureController,
+    keyring
+  );
+  transactionModule.exposeMethods();
 });
 
 backgroundController.exposeController(
