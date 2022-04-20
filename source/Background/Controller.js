@@ -10,10 +10,7 @@ import { validatePrincipalId } from '@shared/utils/ids';
 import { areAllElementsIn } from '@shared/utils/array';
 import { XTC_FEE } from '@shared/constants/addresses';
 import {
-  getApps,
-  setApps,
-  ConnectionModule,
-  getProtectedIds,
+  getApps, setApps, ConnectionModule, getProtectedIds,
 } from '@modules';
 
 import NotificationManager from '../lib/NotificationManager';
@@ -47,6 +44,40 @@ const notificationManager = new NotificationManager(
 );
 
 backgroundController.start();
+
+const displayPopUp = ({
+  callId,
+  portId,
+  argsJson,
+  metadataJson,
+  type,
+  screenArgs: { fixedHeight, top, left },
+}) => {
+  const url = qs.stringifyUrl({
+    url: 'notification.html',
+    query: {
+      callId,
+      portId,
+      type,
+      argsJson,
+      metadataJson,
+    },
+  });
+
+  const defaultHeight = keyring?.isUnlocked
+    ? SIZES.detailHeightSmall
+    : SIZES.loginHeight;
+  const height = fixedHeight || defaultHeight;
+
+  extension.windows.create({
+    url,
+    type: 'popup',
+    width: SIZES.width,
+    height,
+    top,
+    left,
+  });
+};
 
 const fetchCanistersInfo = async (whitelist) => {
   if (whitelist && whitelist.length > 0) {
@@ -150,7 +181,11 @@ const secureController = async (callback, controller) => {
 let connectionModule;
 init().then(() => {
   // Exposing module methods
-  connectionModule = new ConnectionModule(backgroundController, secureController, keyring);
+  connectionModule = new ConnectionModule(
+    backgroundController,
+    secureController,
+    keyring,
+  );
   connectionModule.exposeMethods();
 });
 
@@ -175,22 +210,12 @@ backgroundController.exposeController(
         if (accountId && Number.isNaN(parseInt(accountId, 10))) {
           callback(ERRORS.CLIENT_ERROR('Invalid account id'), null);
         } else if (!keyring.isUnlocked) {
-          const url = qs.stringifyUrl({
-            url: 'notification.html',
-            query: {
-              callId: message.data.data.id,
-              portId: sender.id,
-              type: 'requestBalance',
-              argsJson: accountId,
-              metadataJson: JSON.stringify(metadata),
-            },
-          });
-
-          extension.windows.create({
-            url,
-            type: 'popup',
-            width: SIZES.width,
-            height: SIZES.loginHeight,
+          displayPopUp({
+            callId: message.data.data.id,
+            portId: sender.id,
+            type: 'requestBalance',
+            argsJson: accountId,
+            metadataJson: JSON.stringify(metadata),
           });
         } else {
           requestBalance(accountId, callback);
@@ -249,27 +274,12 @@ backgroundController.exposeController(
           callback(argsError, null);
           return;
         }
-        const url = qs.stringifyUrl({
-          url: 'notification.html',
-          query: {
-            callId,
-            portId,
-            metadataJson: JSON.stringify(metadata),
-            argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
-            type: 'transfer',
-          },
-        });
-
-        const height = keyring?.isUnlocked
-          ? SIZES.detailHeightSmall
-          : SIZES.loginHeight;
-        extension.windows.create({
-          url,
-          type: 'popup',
-          width: SIZES.width,
-          height,
-          top: 65,
-          left: metadata.pageWidth - SIZES.width,
+        displayPopUp({
+          callId,
+          portId,
+          type: 'transfer',
+          argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
+          metadataJson: JSON.stringify(metadata),
         });
       } else {
         callback(ERRORS.CONNECTION_ERROR, null);
@@ -290,7 +300,7 @@ backgroundController.exposeController(
       const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, keyring);
       const sendToken = getKeyringHandler(HANDLER_TYPES.SEND_TOKEN, keyring);
       const assets = await getBalance();
-      const parsedAmount = (transfer.amount / E8S_PER_ICP);
+      const parsedAmount = transfer.amount / E8S_PER_ICP;
       if (assets?.[DEFAULT_CURRENCY_MAP.ICP]?.amount > parsedAmount) {
         const response = await sendToken({
           ...transfer,
@@ -347,29 +357,17 @@ backgroundController.exposeController(
             const shouldShowModal = protectedIds.includes(canisterInfo.id);
 
             if (shouldShowModal) {
-              const url = qs.stringifyUrl({
-                url: 'notification.html',
-                query: {
-                  callId,
-                  portId,
-                  type: 'sign',
-                  metadataJson: JSON.stringify(metadata),
-                  argsJson: JSON.stringify({
-                    requestInfo,
-                    payload,
-                    canisterInfo,
-                    timeout: app?.timeout,
-                  }),
-                },
-              });
-              const height = keyring?.isUnlocked
-                ? SIZES.appConnectHeight
-                : SIZES.loginHeight;
-              extension.windows.create({
-                url,
-                type: 'popup',
-                width: SIZES.width,
-                height,
+              displayPopUp({
+                callId,
+                portId,
+                type: 'sign',
+                argsJson: JSON.stringify({
+                  requestInfo,
+                  payload,
+                  canisterInfo,
+                  timeout: app?.timeout,
+                }),
+                metadataJson: JSON.stringify(metadata),
               });
             } else {
               signData(payload, callback);
@@ -445,63 +443,38 @@ backgroundController.exposeController(
           whitelist,
           app?.whitelist ? Object.keys(app?.whitelist) : [],
         );
-        const height = keyring?.isUnlocked
-          ? SIZES.detailHeightSmall
-          : SIZES.loginHeight;
 
         if (allWhitelisted) {
           if (!keyring.isUnlocked) {
-            const url = qs.stringifyUrl({
-              url: 'notification.html',
-              query: {
-                callId,
-                portId,
-                metadataJson: JSON.stringify(metadata),
-                argsJson: JSON.stringify({
-                  whitelist,
-                  canistersInfo,
-                  updateWhitelist: true,
-                  showList: false,
-                  timeout: app?.timeout,
-                }),
-                type: 'allowAgent',
-              },
-            });
-            extension.windows.create({
-              url,
-              type: 'popup',
-              width: SIZES.width,
-              height,
-              top: 65,
-              left: metadata.pageWidth - SIZES.width,
+            displayPopUp({
+              callId,
+              portId,
+              type: 'allowAgent',
+              argsJson: JSON.stringify({
+                whitelist,
+                canistersInfo,
+                updateWhitelist: true,
+                showList: false,
+                timeout: app?.timeout,
+              }),
+              metadataJson: JSON.stringify(metadata),
             });
           }
           const publicKey = await keyring.getPublicKey();
           callback(null, publicKey);
         } else {
-          const url = qs.stringifyUrl({
-            url: 'notification.html',
-            query: {
-              callId,
-              portId,
-              metadataJson: JSON.stringify(metadata),
-              argsJson: JSON.stringify({
-                whitelist,
-                canistersInfo,
-                updateWhitelist: true,
-                showList: true,
-              }),
-              type: 'allowAgent',
-            },
-          });
-
-          extension.windows.create({
-            url,
-            type: 'popup',
-            width: SIZES.width,
-            height,
-            top: 65,
-            left: metadata.pageWidth - SIZES.width,
+          displayPopUp({
+            callId,
+            portId,
+            type: 'allowAgent',
+            argsJson: JSON.stringify({
+              whitelist,
+              canistersInfo,
+              updateWhitelist: true,
+              showList: true,
+            }),
+            metadataJson: JSON.stringify(metadata),
+            screenArgs: { top: 65, left: metadata.pageWidth - SIZES.width },
           });
         }
       } else {
@@ -534,7 +507,7 @@ backgroundController.exposeController(
           date,
           whitelist,
           events: [
-            ...apps[url]?.events || [],
+            ...(apps[url]?.events || []),
             {
               status: status || CONNECTION_STATUS.rejected,
               date,
@@ -584,32 +557,18 @@ backgroundController.exposeController(
           ...tx,
           canisterInfo: canistersInfo[tx.canisterId],
         }));
-        const url = qs.stringifyUrl({
-          url: 'notification.html',
-          query: {
-            callId,
-            portId,
-            metadataJson: JSON.stringify(metadata),
-            argsJson: JSON.stringify({
-              transactions: transactionsWithInfo,
-              canistersInfo,
-              timeout: app?.timeout,
-            }),
-            type: 'batchTransactions',
-          },
-        });
 
-        const height = keyring?.isUnlocked
-          ? SIZES.detailHeightSmall
-          : SIZES.loginHeight;
-
-        extension.windows.create({
-          url,
-          type: 'popup',
-          width: SIZES.width,
-          height,
-          top: 65,
-          left: metadata.pageWidth - SIZES.width,
+        displayPopUp({
+          callId,
+          portId,
+          type: 'batchTransactions',
+          argsJson: JSON.stringify({
+            transactions: transactionsWithInfo,
+            canistersInfo,
+            timeout: app?.timeout,
+          }),
+          metadataJson: JSON.stringify(metadata),
+          screenArgs: { top: 65, left: metadata.pageWidth - SIZES.width },
         });
       } else {
         callback(ERRORS.CONNECTION_ERROR, null);
@@ -647,28 +606,12 @@ backgroundController.exposeController(
           callback(argsError, null);
           return;
         }
-        const url = qs.stringifyUrl({
-          url: 'notification.html',
-          query: {
-            callId,
-            portId,
-            metadataJson: JSON.stringify(metadata),
-            argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
-            type: 'burnXTC',
-          },
-        });
-
-        const height = keyring?.isUnlocked
-          ? SIZES.detailHeightSmall
-          : SIZES.loginHeight;
-
-        extension.windows.create({
-          url,
-          type: 'popup',
-          width: SIZES.width,
-          height,
-          top: 65,
-          left: metadata.pageWidth - SIZES.width,
+        displayPopUp({
+          callId,
+          portId,
+          type: 'burnXTC',
+          argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
+          metadataJson: JSON.stringify(metadata),
         });
       } else {
         callback(ERRORS.CONNECTION_ERROR, null);
@@ -724,21 +667,11 @@ backgroundController.exposeController('getPrincipal', async (opts, pageUrl) => s
     const app = apps?.[pageUrl] || {};
     if (app?.status === CONNECTION_STATUS.accepted) {
       if (!keyring.isUnlocked) {
-        const url = qs.stringifyUrl({
-          url: 'notification.html',
-          query: {
-            callId: message.data.data.id,
-            portId: sender.id,
-            type: 'principal',
-            metadataJson: JSON.stringify({ url: pageUrl }),
-          },
-        });
-
-        extension.windows.create({
-          url,
-          type: 'popup',
-          width: SIZES.width,
-          height: SIZES.loginHeight,
+        displayPopUp({
+          callId: message.data.data.id,
+          portId: sender.id,
+          type: 'principal',
+          metadataJson: JSON.stringify({ url: pageUrl }),
         });
       } else {
         callback(
