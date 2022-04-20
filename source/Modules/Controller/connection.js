@@ -126,7 +126,7 @@ export class ConnectionModule {
   #requestConnect() {
     return {
       methodName: 'requestConnect',
-      handler: async (opts, metadata, whitelist, timeout) => {
+      handler: async (opts, metadata, whitelist, timeout, host) => {
         let canistersInfo = [];
         initializeProtectedIds();
         const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
@@ -159,6 +159,7 @@ export class ConnectionModule {
                 ...apps[domainUrl]?.events || [],
               ],
               whitelist,
+              host,
             },
           };
           setApps(this.keyring?.currentWalletId.toString(), newApps);
