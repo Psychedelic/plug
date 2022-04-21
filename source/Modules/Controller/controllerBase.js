@@ -46,7 +46,7 @@ export class ControllerModuleBase {
     const height = fixedHeight || defaultHeight;
 
     extension.windows.create({
-      stringifiedUrl,
+      url: stringifiedUrl,
       type: 'popup',
       width: SIZES.width,
       height,

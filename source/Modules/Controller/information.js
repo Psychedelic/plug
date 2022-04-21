@@ -2,10 +2,9 @@ import ERRORS from '@background/errors';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { getKeyringHandler, HANDLER_TYPES } from '@background/Keyring';
 import { getApps } from '../storageManager';
-import SIZES from '../../Pages/Notification/components/Transfer/constants';
-import { ControllerModuleBase }  from './controllerBase';
+import { ControllerModuleBase } from './controllerBase';
 
-export class InformationModule {
+export class InformationModule extends ControllerModuleBase {
   // Utils
   #getHandlerObjects() {
     return [

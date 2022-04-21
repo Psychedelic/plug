@@ -18,7 +18,7 @@ import {
   getApps,
   getProtectedIds,
 } from '../storageManager';
-import { ControllerModuleBase }  from './controllerBase';
+import { ControllerModuleBase } from './controllerBase';
 
 export class TransactionModule extends ControllerModuleBase {
   // Utils

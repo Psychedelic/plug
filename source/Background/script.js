@@ -55,9 +55,9 @@ class BackgroundScript {
     } catch (e) {
       this.notificationManager.notificateError(e.message);
     }
-  };
+  }
 
-  #getHandlerMethods() {
+  static #getControllerModules() {
     return [
       ConnectionModule,
       InformationModule,
@@ -79,13 +79,16 @@ class BackgroundScript {
             const errorMessage = keyringErrorMessage
               ? `Unexpected error while ${keyringErrorMessage}`
               : 'Unexpected error';
+
+            // eslint-disable-next-line
             console.warn(errorMessage);
+            // eslint-disable-next-line
             console.warn(e);
           });
       };
 
       if (!this.keyring) {
-        init().then(() => {
+        this.init().then(() => {
           handleOnMessage();
         });
       } else {
@@ -107,8 +110,8 @@ class BackgroundScript {
 
         if (
           !Object.values(SILENT_ERRORS)
-          .map((e) => e.message)
-          .includes(errorMessage)
+            .map((e) => e.message)
+            .includes(errorMessage)
         ) {
           this.notificationManager.notificateError(errorMessage);
         }
@@ -149,7 +152,7 @@ class BackgroundScript {
       this.#hookListener();
       this.#exposeStandaloneMethods();
 
-      this.#getHandlerMethods().forEach((Module) => {
+      BackgroundScript.#getControllerModules().forEach((Module) => {
         const moduleInstance = new Module(
           this.backgroundController,
           this.secureController.bind(this),
@@ -158,7 +161,6 @@ class BackgroundScript {
 
         moduleInstance.exposeMethods();
       });
-
     });
 
     this.backgroundController.start();

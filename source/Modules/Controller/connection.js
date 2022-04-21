@@ -10,7 +10,7 @@ import {
   removeApp,
 } from '../storageManager';
 import SIZES from '../../Pages/Notification/components/Transfer/constants';
-import { ControllerModuleBase }  from './controllerBase';
+import { ControllerModuleBase } from './controllerBase';
 
 export class ConnectionModule extends ControllerModuleBase {
   // Utils
