@@ -23,7 +23,6 @@ const MenuItem = ({
   className,
 }) => {
   const classes = useStyles();
-
   return (
     <MuiMenuItem
       key={name}

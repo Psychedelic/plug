@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
 
-import shortAddress from '@shared/utils/short-address';
-import { ICNS_LOGO } from '@shared/services/ICNS';
+import { ICNS_LOGO, shortICNSName } from '@shared/services/ICNS';
 
 import useStyles from './styles';
 
 const ICNSDisplay = ({
-  icns, className, onClick,
+  icns, className, onClick, large,
 }) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
@@ -21,8 +20,8 @@ const ICNSDisplay = ({
         onLoad={() => setLoading(false)}
         src={icns.url}
       />
-      <span className={classes.icnsName}>
-        {icns.name?.length > 12 ? shortAddress(icns?.name, 3, 6) : icns?.name}
+      <span className={`${classes.icnsName} ${large ? classes.large : ''}`}>
+        {icns.name?.length > 12 ? shortICNSName(icns?.name) : icns?.name}
       </span>
       <img className={classes.icnsLogo} src={ICNS_LOGO} />
       { loading && (

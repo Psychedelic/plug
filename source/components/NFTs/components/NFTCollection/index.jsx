@@ -6,11 +6,11 @@ import clsx from 'clsx';
 import { Typography } from '@material-ui/core';
 import { ChevronDown } from 'react-feather';
 
+import { shortICNSName } from '@shared/services/ICNS';
 import { useRouter } from '@components/Router';
 import { setSelectedNft } from '@redux/nfts';
 import { NFTDisplayer, ICNSDisplay } from '@ui';
 
-import shortAddress from '@shared/utils/short-address';
 import useStyles from './styles';
 
 function NFTCollection({ collection, icns }) {
@@ -32,7 +32,13 @@ function NFTCollection({ collection, icns }) {
         trigger={(
           <div className={classes.collectionHeader} onClick={toggleExpanded}>
             <div className={classes.collectionTitle}>
-              <img loading="lazy" src={collection?.icon} className={classes.collectionIcon} />
+              <div className={classes.iconContainer}>
+                <img
+                  loading="lazy"
+                  src={collection?.icon}
+                  className={clsx(classes.collectionIcon, icns && classes.icnsIcon)}
+                />
+              </div>
               <Typography variant="h5">{collection?.name}</Typography>
             </div>
             <ChevronDown
@@ -43,32 +49,37 @@ function NFTCollection({ collection, icns }) {
         )}
       >
         <div className={clsx(classes.grid, expanded && classes.expanded)}>
-          {collection?.tokens?.map((nft) => (
-            <div
-              className={classes.nftContainer}
-              onClick={() => handleNftClick(nft)}
-            >
-              {icns ? (
-                <ICNSDisplay
-                  icns={nft}
-                  className={classes.nft}
-                  onClick={() => handleNftClick(nft)}
-                />
-              ) : (
-                <NFTDisplayer
-                  url={nft.url}
-                  className={classes.nft}
-                  onClick={() => handleNftClick(nft)}
-                />
-              )}
-              <Typography
-                className={classes.id}
-                variant="subtitle1"
+          {collection?.tokens?.map((nft) => {
+            const name = nft.name || `#${nft.index}`;
+            return (
+              <div
+                className={classes.nftContainer}
+                onClick={() => handleNftClick(nft)}
               >
-                {(nft.name || `#${nft.index}`).length > 12 ? shortAddress(nft.name || `#${nft.index}`, 3, 5) : (nft.name || `#${nft.index}`)}
-              </Typography>
-            </div>
-          ))}
+                {icns ? (
+                  <ICNSDisplay
+                    icns={nft}
+                    className={classes.nft}
+                    onClick={() => handleNftClick(nft)}
+                  />
+                ) : (
+                  <NFTDisplayer
+                    url={nft.url}
+                    className={classes.nft}
+                    onClick={() => handleNftClick(nft)}
+                  />
+                )}
+                {!icns && (
+                  <Typography
+                    className={classes.id}
+                    variant="subtitle1"
+                  >
+                    {name.length > 12 ? shortICNSName(name) : name}
+                  </Typography>
+                )}
+              </div>
+            )
+          })}
         </div>
       </Collapsible>
     </div>

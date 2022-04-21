@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { ACTIVITY_STATUS } from '@shared/constants/activity';
 import {
   formatAssetBySymbol,
@@ -6,22 +6,8 @@ import {
   TOKENS,
   TOKEN_IMAGES,
 } from '@shared/constants/currencies';
-import { formatICNSCollection, getNamesForPrincipal } from '@shared/services/ICNS';
 
 const sortCollections = (a, b) => b?.tokens.length - a?.tokens.length;
-export const getICNSNames = createAsyncThunk(
-  'wallet/getICNSNames',
-  async (raw, { getState }) => {
-    try {
-      const state = getState();
-      const names = await getNamesForPrincipal(state.wallet.principalId, raw);
-      return formatICNSCollection(names);
-    } catch (e) {
-      console.log('Get ICNS Names error', e);
-      return [];
-    }
-  },
-);
 
 /* eslint-disable no-param-reassign */
 export const walletSlice = createSlice({
@@ -38,7 +24,6 @@ export const walletSlice = createSlice({
     collections: [],
     collectionsLoading: false,
     transactionsLoading: true,
-    icnsNames: formatICNSCollection([]),
   },
   reducers: {
     updateWalletDetails: (state, action) => {
@@ -140,11 +125,6 @@ export const walletSlice = createSlice({
       }));
       state.collections = collections.filter((col) => col.tokens.length);
       state.optimisticNFTUpdate = true;
-    },
-  },
-  extraReducers: {
-    [getICNSNames.fulfilled]: (state, action) => {
-      state.icnsNames = { ...(action.payload || {}) };
     },
   },
 });

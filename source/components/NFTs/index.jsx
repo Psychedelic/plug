@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import LoadingWrapper from '../LoadingWrapper';
-import { getICNSNames, setCollections, setCollectionsLoading } from '../../redux/wallet';
+import { setCollections, setCollectionsLoading } from '../../redux/wallet';
 import useStyles from './styles';
 import EmptyState from './components/EmptyState';
 import NFTCollection from './components/NFTCollection';
@@ -20,7 +20,6 @@ const NFTs = () => {
     // Update cache
     if (!collectionsLoading) {
       dispatch(setCollectionsLoading(true));
-      dispatch(getICNSNames());
       sendMessage({
         type: HANDLER_TYPES.GET_NFTS,
         params: {},

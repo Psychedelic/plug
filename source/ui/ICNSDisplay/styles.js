@@ -5,6 +5,7 @@ export default makeStyles(() => ({
     overflow: 'hidden',
     position: 'relative',
     transition: 'box-shadow 1s',
+    marginBottom: 20,
   },
   loadingContainer: {
     display: 'flex',
@@ -27,15 +28,18 @@ export default makeStyles(() => ({
   },
   icnsName: {
     position: 'absolute',
-    bottom: 10,
-    left: 10,
+    bottom: '10%',
+    left: '10%',
     fontWeight: 'bold',
     fontSize: 16,
   },
   icnsLogo: {
-    width: 40,
+    width: '40%',
     position: 'absolute',
-    top: 10,
-    left: 10,
+    top: '10%',
+    left: '10%',
   },
+  large: {
+    fontSize: 32,
+  }
 }));
