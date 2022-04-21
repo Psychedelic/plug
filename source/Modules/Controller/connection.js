@@ -1,5 +1,3 @@
-import qs from 'query-string';
-import extension from 'extensionizer';
 import ERRORS from '@background/errors';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
@@ -12,14 +10,9 @@ import {
   removeApp,
 } from '../storageManager';
 import SIZES from '../../Pages/Notification/components/Transfer/constants';
+import { ControllerModuleBase }  from './controllerBase';
 
-export class ConnectionModule {
-  constructor(backgroundController, secureController, keyring) {
-    this.keyring = keyring;
-    this.secureController = secureController;
-    this.backgroundController = backgroundController;
-  }
-
+export class ConnectionModule extends ControllerModuleBase {
   // Utils
   #getHandlerObjects() {
     return [
@@ -32,15 +25,6 @@ export class ConnectionModule {
     ];
   }
 
-  #secureWrapper({ args, handlerObject }) {
-    return this.secureController(
-      args[0].callback,
-      async () => {
-        handlerObject.handler(...args);
-      },
-    );
-  }
-
   // Handlers
   #getConnectionData() {
     return {
@@ -51,25 +35,17 @@ export class ConnectionModule {
         const { id: portId } = sender;
         initializeProtectedIds();
         const walletId = this.keyring?.currentWalletId;
+
         getApp(walletId.toString(), url, async (app = {}) => {
           if (app?.status === CONNECTION_STATUS.accepted) {
             if (!this.keyring?.isUnlocked) {
-              const modalUrl = qs.stringifyUrl({
-                url: 'notification.html',
-                query: {
-                  callId,
-                  portId,
-                  type: 'requestConnectionData',
-                  argsJson: '{}',
-                  metadataJson: JSON.stringify({ url }),
-                },
-              });
-
-              extension.windows.create({
-                url: modalUrl,
-                type: 'popup',
-                width: SIZES.width,
-                height: SIZES.loginHeight,
+              this.displayPopUp({
+                callId,
+                portId,
+                argsJson: '{}',
+                metadataJson: JSON.stringify({ url }),
+                type: 'requestConnectionData',
+                screenArgs: { fixedHeight: SIZES.loginHeight },
               });
             } else {
               const publicKey = await this.keyring?.getPublicKey(walletId);
@@ -169,58 +145,43 @@ export class ConnectionModule {
         if (isValidWhitelist) {
           const newMetadata = { ...metadata, requestConnect: true };
 
-          const url = qs.stringifyUrl({
-            url: 'notification.html',
-            query: {
-              callId,
-              portId,
-              metadataJson: JSON.stringify(newMetadata),
-              argsJson: JSON.stringify({ whitelist, canistersInfo, timeout }),
-              type: 'allowAgent',
-            },
-          });
-
           const height = this.keyring?.isUnlocked
             ? Math.min(422 + 37 * whitelist.length, 600)
             : SIZES.loginHeight;
 
-          extension.windows.create({
-            url,
-            type: 'popup',
-            width: SIZES.width,
-            height,
-            top: 65,
-            left: metadata.pageWidth - SIZES.width,
-          });
-        } else {
-          const url = qs.stringifyUrl({
-            url: 'notification.html',
-            query: {
-              callId,
-              portId,
-              url: domainUrl,
-              icon: icons[0] || null,
-              argsJson: JSON.stringify({ timeout }),
-              type: 'connect',
+          this.displayPopUp({
+            callId,
+            portId,
+            argsJson: JSON.stringify({ whitelist, canistersInfo, timeout }),
+            metadataJson: JSON.stringify(newMetadata),
+            type: 'allowAgent',
+            screenArgs: {
+              fixedHeight: height,
+              top: 65,
+              left: metadata.pageWidth - SIZES.width,
             },
           });
-
+        } else {
           const height = this.keyring?.isUnlocked
             ? SIZES.appConnectHeight
             : SIZES.loginHeight;
 
-          extension.windows.create({
-            url,
-            type: 'popup',
-            width: SIZES.width,
-            height,
+          this.displayPopUp({
+            callId,
+            portId,
+            url: domainUrl,
+            icon: icons[0] || null,
+            argsJson: JSON.stringify({ timeout }),
+            type: 'connect',
+            screenArgs: {
+              fixedHeight: height,
+            },
           });
         }
       },
     };
   }
 
-  // Check SecureController
   #handleAllowAgent() {
     return {
       methodName: 'handleAllowAgent',
@@ -273,7 +234,6 @@ export class ConnectionModule {
     };
   }
 
-  // Check SecureController
   #verifyWhitelist() {
     return {
       methodName: 'verifyWhitelist',
@@ -308,37 +268,7 @@ export class ConnectionModule {
 
             if (allWhitelisted) {
               if (!this.keyring.isUnlocked) {
-                const url = qs.stringifyUrl({
-                  url: 'notification.html',
-                  query: {
-                    callId,
-                    portId,
-                    metadataJson: JSON.stringify(metadata),
-                    argsJson: JSON.stringify({
-                      whitelist,
-                      canistersInfo,
-                      updateWhitelist: true,
-                      showList: false,
-                      timeout: app?.timeout,
-                    }),
-                    type: 'allowAgent',
-                  },
-                });
-                extension.windows.create({
-                  url,
-                  type: 'popup',
-                  width: SIZES.width,
-                  height,
-                  top: 65,
-                  left: metadata.pageWidth - SIZES.width,
-                });
-              }
-              const publicKey = await this.keyring?.getPublicKey();
-              callback(null, publicKey);
-            } else {
-              const url = qs.stringifyUrl({
-                url: 'notification.html',
-                query: {
+                this.displayPopUp({
                   callId,
                   portId,
                   metadataJson: JSON.stringify(metadata),
@@ -346,19 +276,36 @@ export class ConnectionModule {
                     whitelist,
                     canistersInfo,
                     updateWhitelist: true,
-                    showList: true,
+                    showList: false,
+                    timeout: app?.timeout,
                   }),
                   type: 'allowAgent',
+                  screenArgs: {
+                    fixedHeight: height,
+                    top: 65,
+                    left: metadata.pageWidth - SIZES.width,
+                  },
+                });
+              }
+              const publicKey = await this.keyring?.getPublicKey();
+              callback(null, publicKey);
+            } else {
+              this.displayPopUp({
+                callId,
+                portId,
+                metadataJson: JSON.stringify(metadata),
+                argsJson: JSON.stringify({
+                  whitelist,
+                  canistersInfo,
+                  updateWhitelist: true,
+                  showList: true,
+                }),
+                type: 'allowAgent',
+                screenArgs: {
+                  fixedHeight: height,
+                  top: 65,
+                  left: metadata.pageWidth - SIZES.width,
                 },
-              });
-
-              extension.windows.create({
-                url,
-                type: 'popup',
-                width: SIZES.width,
-                height,
-                top: 65,
-                left: metadata.pageWidth - SIZES.width,
               });
             }
           } else {
@@ -374,7 +321,7 @@ export class ConnectionModule {
     this.#getHandlerObjects().forEach((handlerObject) => {
       this.backgroundController.exposeController(
         handlerObject.methodName,
-        async (...args) => this.#secureWrapper({ args, handlerObject }),
+        async (...args) => this.secureWrapper({ args, handlerObject }),
       );
     });
   }

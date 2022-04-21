@@ -1,5 +1,3 @@
-import qs from 'query-string';
-import extension from 'extensionizer';
 import ERRORS from '@background/errors';
 import {
   validateTransferArgs,
@@ -20,19 +18,9 @@ import {
   getApps,
   getProtectedIds,
 } from '../storageManager';
+import { ControllerModuleBase }  from './controllerBase';
 
-export class TransactionModule {
-  constructor(backgroundController, secureController, keyring) {
-    this.keyring = keyring;
-    this.secureController = secureController;
-    this.backgroundController = backgroundController;
-
-    this.DEFAULT_CURRENCY_MAP = {
-      ICP: 0,
-      XTC: 1,
-    };
-  }
-
+export class TransactionModule extends ControllerModuleBase {
   // Utils
   #getHandlerObjects() {
     return [
@@ -45,15 +33,6 @@ export class TransactionModule {
       this.#requestSign(),
       this.#handleSign(),
     ];
-  }
-
-  #secureWrapper({ args, handlerObject }) {
-    return this.secureController(
-      args[0].callback,
-      async () => {
-        handlerObject.handler(...args);
-      },
-    );
   }
 
   async #signData(payload, callback) {
@@ -81,28 +60,22 @@ export class TransactionModule {
               callback(argsError, null);
               return;
             }
-            const url = qs.stringifyUrl({
-              url: 'notification.html',
-              query: {
-                callId,
-                portId,
-                metadataJson: JSON.stringify(metadata),
-                argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
-                type: 'transfer',
-              },
-            });
 
             const height = this.keyring?.isUnlocked
               ? SIZES.detailHeightSmall
               : SIZES.loginHeight;
 
-            extension.windows.create({
-              url,
-              type: 'popup',
-              width: SIZES.width,
-              height,
-              top: 65,
-              left: metadata.pageWidth - SIZES.width,
+            this.displayPopUp({
+              callId,
+              portId,
+              metadataJson: JSON.stringify(metadata),
+              argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
+              type: 'transfer',
+              screenArgs: {
+                fixedHeight: height,
+                top: 65,
+                left: metadata.pageWidth - SIZES.width,
+              },
             });
           } else {
             callback(ERRORS.CONNECTION_ERROR, null);
@@ -170,28 +143,21 @@ export class TransactionModule {
               callback(argsError, null);
               return;
             }
-            const url = qs.stringifyUrl({
-              url: 'notification.html',
-              query: {
-                callId,
-                portId,
-                metadataJson: JSON.stringify(metadata),
-                argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
-                type: 'burnXTC',
-              },
-            });
-
             const height = this.keyring?.isUnlocked
               ? SIZES.detailHeightSmall
               : SIZES.loginHeight;
 
-            extension.windows.create({
-              url,
-              type: 'popup',
-              width: SIZES.width,
-              height,
-              top: 65,
-              left: metadata.pageWidth - SIZES.width,
+            this.displayPopUp({
+              callId,
+              portId,
+              metadataJson: JSON.stringify(metadata),
+              argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
+              type: 'burnXTC',
+              screenArgs: {
+                fixedHeight: height,
+                top: 65,
+                left: metadata.pageWidth - SIZES.width,
+              },
             });
           } else {
             callback(ERRORS.CONNECTION_ERROR, null);
@@ -269,32 +235,25 @@ export class TransactionModule {
               ...tx,
               canisterInfo: canistersInfo[tx.canisterId],
             }));
-            const url = qs.stringifyUrl({
-              url: 'notification.html',
-              query: {
-                callId,
-                portId,
-                metadataJson: JSON.stringify(metadata),
-                argsJson: JSON.stringify({
-                  transactions: transactionsWithInfo,
-                  canistersInfo,
-                  timeout: app?.timeout,
-                }),
-                type: 'batchTransactions',
-              },
-            });
-
             const height = this.keyring?.isUnlocked
               ? SIZES.detailHeightSmall
               : SIZES.loginHeight;
 
-            extension.windows.create({
-              url,
-              type: 'popup',
-              width: SIZES.width,
-              height,
-              top: 65,
-              left: metadata.pageWidth - SIZES.width,
+            this.displayPopUp({
+              callId,
+              portId,
+              metadataJson: JSON.stringify(metadata),
+              argsJson: JSON.stringify({
+                transactions: transactionsWithInfo,
+                canistersInfo,
+                timeout: app?.timeout,
+              }),
+              type: 'batchTransactions',
+              screenArgs: {
+                fixedHeight: height,
+                top: 65,
+                left: metadata.pageWidth - SIZES.width,
+              },
             });
           } else {
             callback(ERRORS.CONNECTION_ERROR, null);
@@ -346,29 +305,24 @@ export class TransactionModule {
                 const shouldShowModal = protectedIds.includes(canisterInfo.id);
 
                 if (shouldShowModal) {
-                  const url = qs.stringifyUrl({
-                    url: 'notification.html',
-                    query: {
-                      callId,
-                      portId,
-                      type: 'sign',
-                      metadataJson: JSON.stringify(metadata),
-                      argsJson: JSON.stringify({
-                        requestInfo,
-                        payload,
-                        canisterInfo,
-                        timeout: app?.timeout,
-                      }),
-                    },
-                  });
                   const height = this.keyring?.isUnlocked
                     ? SIZES.appConnectHeight
                     : SIZES.loginHeight;
-                  extension.windows.create({
-                    url,
-                    type: 'popup',
-                    width: SIZES.width,
-                    height,
+
+                  this.displayPopUp({
+                    callId,
+                    portId,
+                    type: 'sign',
+                    metadataJson: JSON.stringify(metadata),
+                    argsJson: JSON.stringify({
+                      requestInfo,
+                      payload,
+                      canisterInfo,
+                      timeout: app?.timeout,
+                    }),
+                    screenArgs: {
+                      fixedHeight: height,
+                    },
                   });
                 } else {
                   this.#signData(payload, callback);
@@ -415,7 +369,7 @@ export class TransactionModule {
     this.#getHandlerObjects().forEach((handlerObject) => {
       this.backgroundController.exposeController(
         handlerObject.methodName,
-        async (...args) => this.#secureWrapper({ args, handlerObject }),
+        async (...args) => this.secureWrapper({ args, handlerObject }),
       );
     });
   }
