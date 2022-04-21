@@ -7,7 +7,7 @@ import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { useRouter } from '@components/Router';
 import { AMOUNT_ERROR } from '@shared/constants/currencies';
 import { useICPPrice } from '@redux/icp';
-import { setICNSNames } from '@redux/wallet';
+import { setICNSData } from '@redux/icns';
 import useStyles from './styles';
 
 const Tokens = () => {
@@ -43,10 +43,11 @@ const Tokens = () => {
 
   useEffect(() => {
     sendMessage({
-      type: HANDLER_TYPES.GET_ICNS_NAMES,
+      type: HANDLER_TYPES.GET_ICNS_DATA,
       params: {},
-    }, (icnsNames) => {
-      dispatch(setICNSNames(icnsNames));
+    }, (icnsData) => {
+      console.log('icns data', icnsData)
+      dispatch(setICNSData(icnsData));
     });
   }, []);
 

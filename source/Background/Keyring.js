@@ -95,7 +95,7 @@ export const HANDLER_TYPES = {
   BURN_XTC: 'burn-xtc',
   GET_NFTS: 'get-nfts',
   TRANSFER_NFT: 'transfer-nft',
-  GET_ICNS_NAMES: 'get-icns-names',
+  GET_ICNS_DATA: 'get-icns-data',
 };
 
 export const getKeyringErrorMessage = (type) => ({
@@ -119,7 +119,7 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.BURN_XTC]: 'burning XTC.',
   [HANDLER_TYPES.GET_NFTS]: 'getting your NTF\'s.',
   [HANDLER_TYPES.TRANSFER_NFT]: 'transfering your NFT.',
-  [HANDLER_TYPES.GET_ICNS_NAMES]: 'getting your ICNS names.',
+  [HANDLER_TYPES.GET_ICNS_DATA]: 'getting your ICNS data.',
 }[type]);
 
 export const sendMessage = (args, callback) => {
@@ -289,8 +289,9 @@ export const getKeyringHandler = (type, keyring) => ({
         return { error: e.message };
       }
     },
-  [HANDLER_TYPES.GET_ICNS_NAMES]: async () => {
-    const icnsNames = await keyring.getICNSNames();
+  [HANDLER_TYPES.GET_ICNS_DATA]: async () => {
+    console.log('GET_ICNS_DATA');
+    const icnsNames = await keyring.getICNSData();
     console.log('ok actually fetching them from controller', icnsNames);
     return (icnsNames || [])?.map((icns) => recursiveParseBigint(icns));
   },

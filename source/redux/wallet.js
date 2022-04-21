@@ -127,9 +127,6 @@ export const walletSlice = createSlice({
       state.collections = collections.filter((col) => col.tokens.length);
       state.optimisticNFTUpdate = true;
     },
-    setICNSNames: (state, action) => {
-      state.icnsNames = action.payload;
-    }
   }
 });
 

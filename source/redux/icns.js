@@ -9,11 +9,9 @@ export const icnsSlice = createSlice({
     loading: false,
   },
   reducers: {
-    setICNSNames: (state, action) => {
-      state.names = action.payload;
-    },
-    setResolvedName: (state, action) => {
-      state.resolved = action.payload;
+    setICNSData: (state, action) => {
+      state.names = action?.payload?.names || [];
+      state.resolved = action?.payload?.reverseResolvedName || null;
     },
     setICNSLoading: (state, action) => {
       state.loading = action.payload;
@@ -21,6 +19,6 @@ export const icnsSlice = createSlice({
   },
 });
 
-export const { setICNSLoading, setICNSNames, setResolvedName } = icnsSlice.actions;
+export const { setICNSLoading, setICNSData } = icnsSlice.actions;
 
 export default icnsSlice.reducer;
