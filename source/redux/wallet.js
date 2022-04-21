@@ -1,4 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { asyncSendMessage, HANDLER_TYPES } from '@background/Keyring';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { ACTIVITY_STATUS } from '@shared/constants/activity';
 import {
   formatAssetBySymbol,
@@ -126,7 +127,10 @@ export const walletSlice = createSlice({
       state.collections = collections.filter((col) => col.tokens.length);
       state.optimisticNFTUpdate = true;
     },
-  },
+    setICNSNames: (state, action) => {
+      state.icnsNames = action.payload;
+    }
+  }
 });
 
 export const {

@@ -95,6 +95,7 @@ export const HANDLER_TYPES = {
   BURN_XTC: 'burn-xtc',
   GET_NFTS: 'get-nfts',
   TRANSFER_NFT: 'transfer-nft',
+  GET_ICNS_NAMES: 'get-icns-names',
 };
 
 export const getKeyringErrorMessage = (type) => ({
@@ -118,6 +119,7 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.BURN_XTC]: 'burning XTC.',
   [HANDLER_TYPES.GET_NFTS]: 'getting your NTF\'s.',
   [HANDLER_TYPES.TRANSFER_NFT]: 'transfering your NFT.',
+  [HANDLER_TYPES.GET_ICNS_NAMES]: 'getting your ICNS names.',
 }[type]);
 
 export const sendMessage = (args, callback) => {
@@ -133,6 +135,21 @@ export const sendMessage = (args, callback) => {
     callback(parsedResponse);
   });
 };
+
+export const asyncSendMessage = async (args) => {
+  console.log('before');
+  const response = await extension.runtime.sendMessage(args);
+  console.log('after', response);
+  let parsedResponse = response;
+  if (typeof response === 'string') {
+    try {
+      parsedResponse = JSON.parse(response);
+    } catch (error) {
+      parsedResponse = response;
+    }
+  }
+  return parsedResponse;
+}
 
 export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.LOCK]: async () => keyring.lock(),
@@ -272,4 +289,9 @@ export const getKeyringHandler = (type, keyring) => ({
         return { error: e.message };
       }
     },
+  [HANDLER_TYPES.GET_ICNS_NAMES]: async () => {
+    const icnsNames = await keyring.getICNSNames();
+    console.log('ok actually fetching them from controller', icnsNames);
+    return (icnsNames || [])?.map((icns) => recursiveParseBigint(icns));
+  },
 }[type]);

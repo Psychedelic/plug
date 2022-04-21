@@ -1,6 +1,6 @@
 import { Typography } from '@material-ui/core';
 import { Button, Container } from '@ui';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import ContactIcon from '@assets/icons/contacts.svg';
 import PropTypes from 'prop-types';
@@ -9,6 +9,7 @@ import Grid from '@material-ui/core/Grid';
 
 const Home = ({ handleChangeView }) => {
   const { t } = useTranslation();
+
   return (
     <Container big>
       <Grid container spacing={1} style={{ textAlign: 'center' }}>
