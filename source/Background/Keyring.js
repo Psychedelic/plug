@@ -96,6 +96,7 @@ export const HANDLER_TYPES = {
   GET_NFTS: 'get-nfts',
   TRANSFER_NFT: 'transfer-nft',
   GET_ICNS_DATA: 'get-icns-data',
+  SET_REVERSE_RESOLVED_NAME: 'set-reverse-resolved-name',
 };
 
 export const getKeyringErrorMessage = (type) => ({
@@ -120,6 +121,7 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.GET_NFTS]: 'getting your NTF\'s.',
   [HANDLER_TYPES.TRANSFER_NFT]: 'transfering your NFT.',
   [HANDLER_TYPES.GET_ICNS_DATA]: 'getting your ICNS data.',
+  [HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME]: 'setting your reverse resolved name.',
 }[type]);
 
 export const sendMessage = (args, callback) => {
@@ -280,19 +282,32 @@ export const getKeyringHandler = (type, keyring) => ({
     }
     return (collections || [])?.map((collection) => recursiveParseBigint(collection));
   },
-  [HANDLER_TYPES.TRANSFER_NFT]:
-    async ({ to, nft }) => {
-      try {
-        const response = await keyring.transferNFT({ to, token: nft });
-        return recursiveParseBigint(response);
-      } catch (e) {
-        return { error: e.message };
-      }
-    },
-  [HANDLER_TYPES.GET_ICNS_DATA]: async () => {
-    console.log('GET_ICNS_DATA');
-    const icnsNames = await keyring.getICNSData();
-    console.log('ok actually fetching them from controller', icnsNames);
-    return (icnsNames || [])?.map((icns) => recursiveParseBigint(icns));
+  [HANDLER_TYPES.TRANSFER_NFT]: async ({ to, nft }) => {
+    try {
+      const response = await keyring.transferNFT({ to, token: nft });
+      return recursiveParseBigint(response);
+    } catch (e) {
+      console.log('Error transfering NFT', e);
+      return { error: e.message };
+    }
+  },
+  [HANDLER_TYPES.GET_ICNS_DATA]: async ({ refresh }) => {
+    const { wallets, currentWalletId } = await keyring.getState();
+    let icnsData = wallets?.[currentWalletId]?.icnsData || { names: [] };
+    console.log('local icnsData', icnsData);
+    if (!icnsData?.names?.length || refresh) {
+      icnsData = await keyring.getICNSData();
+    } else {
+      keyring.getICNSData();
+    }
+    return icnsData;
+  },
+  [HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME]: async (name) => {
+    try {
+      return keyring.setICNSResolvedName(name);
+    } catch (e) {
+      console.log('Error setting reverse resolution', e);
+      return { error: e.message };
+    }
   },
 }[type]);

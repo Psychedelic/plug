@@ -11,7 +11,7 @@ const WalletInfo = () => {
   const [copied, setCopied] = useState(false);
 
   const { name, principalId } = useSelector((state) => state.wallet);
-
+  const { resolved } = useSelector((state) => state.icns);
   const { t } = useTranslation();
   const copyText = t('copy.copyText');
   const copiedText = t('copy.copiedText');
@@ -32,7 +32,7 @@ const WalletInfo = () => {
       setTooltipText(copyText);
     }, 3000);
   };
-
+  console.log('resolved name: ', resolved);
   return (
     <Tooltip
       classes={{ tooltipPlacementBottom: classes.tooltip }}
@@ -47,7 +47,7 @@ const WalletInfo = () => {
         onMouseOver={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
       >
-        <Typography variant="h5">{name}</Typography>
+        <Typography variant="h5">{resolved || name}</Typography>
         <Typography variant="subtitle2">{shortAddress(principalId)}</Typography>
       </div>
     </Tooltip>
