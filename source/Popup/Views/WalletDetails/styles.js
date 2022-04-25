@@ -132,6 +132,12 @@ export default makeStyles((theme) => ({
     left: 40,
     right: 40,
     zIndex: 1,
+  },
+  detailsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: `0 ${theme.spacing(2)}px`,
   }
 }));
 

@@ -1,36 +1,39 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import clsx from 'clsx';
-import useStyles from './styles';
-import { useTranslation } from 'react-i18next';
-import { Info, Globe } from 'react-feather';
+import { Info } from 'react-feather';
 
+import ICNS_IMG from '@assets/icons/icns.svg';
 import Switch from '@components/Switch';
+
+import useStyles from './styles';
 
 const ICNSToggle = () => {
   const classes = useStyles();
-  const { t } = useTranslation();
-  const [publicAccount, setPublicAccount] = useState(true);
-  const handleChangePublicAccount = (event) => setPublicAccount(event.target.checked);
+  const { names } = useSelector((state) => state.icns);
+  const [active, setActive] = useState(true);
+  const handleToggleICNS = (event) => setActive(event.target.checked);
 
   return (
     <div className={clsx(
-      classes.accountContainer,
-      publicAccount ? classes.publicAccount : classes.privateAccount,
-    )}
-    >
-      <Globe
-        className={classes.globe}
-        size={20}
-      />
-      <span>{t('walletDetails.publicAccount')}</span>
-      <Info
-        className={classes.info}
-        size={20}
-      />
-      <Switch
-        checked={publicAccount}
-        onChange={handleChangePublicAccount}
-      />
+      classes.icnsContainer,
+      active && classes.active,
+    )}>
+      <div className={classes.toggleContainer}
+      >
+        <img
+          className={classes.icnsImg}
+          src={ICNS_IMG}
+        />
+        <Info
+          className={classes.info}
+          size={20}
+        />
+        <Switch
+          checked={active}
+          onChange={handleToggleICNS}
+        />
+      </div>
     </div>
   )
 };

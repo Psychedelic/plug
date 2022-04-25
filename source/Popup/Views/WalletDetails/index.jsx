@@ -156,7 +156,7 @@ const WalletDetails = () => {
           />
         </div>
         {expand && (
-          <>
+          <div className={classes.detailsContainer}>
             <DetailItem
               name="principalId"
               value={principalId}
@@ -169,7 +169,7 @@ const WalletDetails = () => {
               setInfoOpen={setOpenAccount}
               isOpen={openAccount}
             />
-          </>
+          </div>
         )}
       </div>
     </Layout>
