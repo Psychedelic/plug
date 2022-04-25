@@ -30,6 +30,7 @@ const WalletDetails = () => {
   const {
     name, emoji, accountId, principalId, walletNumber,
   } = useSelector((state) => state.wallet);
+  const { resolved } = useSelector(state => state.icns);
   const { navigator } = useRouter();
   const { t } = useTranslation();
   const [openEmojis, setOpenEmojis] = useState(false);
@@ -37,6 +38,7 @@ const WalletDetails = () => {
   const [currentEmoji, setCurrentEmoji] = useState(emoji);
   const [edit, setEdit] = useState(false);
   const [expand, setExpand] = useState(false);
+  const [active, setActive] = useState(true);
 
   const [openAccount, setOpenAccount] = useState(false);
   const [openPrincipal, setOpenPrincipal] = useState(false);
@@ -87,6 +89,8 @@ const WalletDetails = () => {
     }
   };
 
+  const handleToggleICNS = (event) => setActive(event.target.checked);
+  const hasActiveICNS = resolved && active;
   return (
     <Layout>
       <Header
@@ -109,10 +113,10 @@ const WalletDetails = () => {
           />
           <InputBase
             classes={{ root: clsx(classes.name, edit && classes.nameEdit) }}
-            value={walletName}
+            value={hasActiveICNS ? resolved : walletName}
             type="text"
             onChange={handleChange}
-            readOnly={!edit}
+            readOnly={!edit || hasActiveICNS}
             inputRef={textInput}
           />
           {edit
@@ -133,7 +137,15 @@ const WalletDetails = () => {
         </div>
         {openEmojis && edit && (
           <Picker
-            pickerStyle={classes.pickerStyle}
+            pickerStyle={{
+              height: 190,
+              width: 'auto',
+              position: 'absolute',
+              top: 150,
+              left: 40,
+              right: 40,
+              zIndex: 1,
+            }}
             onEmojiClick={onEmojiClick}
             native
             disableSearchBar
@@ -143,7 +155,7 @@ const WalletDetails = () => {
             }}
           />
         )}
-        <ICNSToggle />
+        <ICNSToggle active={active} handleToggle={handleToggleICNS} />
         <div
           className={classes.viewMore}
           onClick={toggleExpand}

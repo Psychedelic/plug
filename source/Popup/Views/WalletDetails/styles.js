@@ -16,10 +16,9 @@ export default makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
     borderRadius: 10,
     width: 370,
-    height: 92,
+    height: 80,
     background: '#FFFFFF',
     border: '1px solid #D1D5DB',
     boxShadow: SHADOW_1,
@@ -97,6 +96,7 @@ export default makeStyles((theme) => ({
     color: '#6B7280',
     cursor: 'pointer',
     fontSize: 16,
+    marginBottom: 10,
   },
   chevron: {
     transition: 'transform .2s ease-in-out',
@@ -121,23 +121,12 @@ export default makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: `0 ${theme.spacing(2)}px`,
-    height: 118+320,
-  },
-  pickerStyle: {
-    height: 190,
-    width: 'auto',
-    position: 'absolute',
-    top: 150,
-    left: 40,
-    right: 40,
-    zIndex: 1,
+    padding: `0 ${theme.spacing(2)}px ${theme.spacing(2)}px`,
   },
   detailsContainer: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: `0 ${theme.spacing(2)}px`,
   }
 }));
 

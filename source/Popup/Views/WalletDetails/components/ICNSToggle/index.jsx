@@ -7,12 +7,11 @@ import ICNS_IMG from '@assets/icons/icns.svg';
 import Switch from '@components/Switch';
 
 import useStyles from './styles';
+import ICNSSelector from '../ICNSSelector';
 
-const ICNSToggle = () => {
+const ICNSToggle = ({ active, handleToggle }) => {
   const classes = useStyles();
   const { names } = useSelector((state) => state.icns);
-  const [active, setActive] = useState(true);
-  const handleToggleICNS = (event) => setActive(event.target.checked);
 
   return (
     <div className={clsx(
@@ -21,19 +20,22 @@ const ICNSToggle = () => {
     )}>
       <div className={classes.toggleContainer}
       >
-        <img
-          className={classes.icnsImg}
-          src={ICNS_IMG}
-        />
-        <Info
-          className={classes.info}
-          size={20}
-        />
+        <div className={classes.titleContainer}>
+          <img
+            className={classes.icnsImg}
+            src={ICNS_IMG}
+          />
+          <Info
+            className={classes.info}
+            size={20}
+          />
+        </div>
         <Switch
           checked={active}
-          onChange={handleToggleICNS}
+          onChange={handleToggle}
         />
       </div>
+      {active && !!names?.length && <ICNSSelector  />}
     </div>
   )
 };

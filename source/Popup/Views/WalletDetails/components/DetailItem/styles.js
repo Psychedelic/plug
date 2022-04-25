@@ -12,6 +12,7 @@ export default makeStyles((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     position: 'relative',
+    marginBottom: 10,
   },
   id: {
     fontSize: 14,
