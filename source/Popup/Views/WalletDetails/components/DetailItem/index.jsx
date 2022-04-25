@@ -1,19 +1,13 @@
 import React from 'react';
-import { Grid, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { Info } from 'react-feather';
-import extension from 'extensionizer';
 import { useTranslation } from 'react-i18next';
 
-import { icIdsUrl } from '@shared/constants/urls';
 import { CopyButton } from '@components';
-import {
-  LinkButton,
-  FormItem,
-  Dialog,
-  Button,
-} from '@ui';
+import { FormItem } from '@ui';
 
 import useStyles from './styles';
+import InfoModal from '../InfoModal';
 
 const DetailItem = ({ value, name, setInfoOpen, isOpen }) => {
   const classes = useStyles();
@@ -36,25 +30,12 @@ const DetailItem = ({ value, name, setInfoOpen, isOpen }) => {
           </div>
         )}
       />
-      <Dialog
+      <InfoModal
         title={t(`walletDetails.${name}InfoTitle`)}
         onClose={() => setInfoOpen(false)}
-        open={isOpen}
-        component={(
-          <div className={classes.modal}>
-            <Typography>{t(`walletDetails.${name}Description`)}</Typography>
-            <Button
-              variant="rainbow"
-              value={t('common.okIUnderstand')}
-              onClick={() => setInfoOpen(false)}
-              fullWidth
-            />
-            <LinkButton
-              value={t(`walletDetails.${name}LearnMore`)}
-              onClick={() => extension.tabs.create({ url: icIdsUrl })}
-            />
-          </div>
-        )}
+        isOpen={isOpen}
+        content={t(`walletDetails.${name}Description`)}
+        buttonText={t(`walletDetails.${name}LearnMore`)}
       />
     </>
   )

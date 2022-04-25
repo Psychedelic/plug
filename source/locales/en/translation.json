@@ -140,7 +140,10 @@
     "principalIdLearnMore": "Learn more about Principal ID's",
     "accountIdInfoTitle": "What is an Account ID?",
     "accountIdDescription": "An Account ID is an address derived from your Principal ID, that represents your ICP balance on the ledger.",
-    "accountIdLearnMore": "Learn more about Account ID's"
+    "accountIdLearnMore": "Learn more about Account ID's",
+    "icnsLearnMore": "Learn more about ICNS",
+    "icnsInfoTitle": "What is ICNS?",
+    "icnsDescription": "TBD"
   },
   "seedPhrase": {
     "title": "Secret Recovery Phrase",

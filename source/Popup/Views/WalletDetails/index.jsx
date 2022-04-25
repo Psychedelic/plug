@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import Picker from 'emoji-picker-react';
@@ -24,6 +24,7 @@ import {
 import useStyles from './styles';
 import DetailItem from './components/DetailItem';
 import ICNSToggle from './components/ICNSToggle';
+import { getUseICNS, setUseICNS } from '@modules/storageManager';
 
 const WalletDetails = () => {
   const classes = useStyles();
@@ -38,7 +39,7 @@ const WalletDetails = () => {
   const [currentEmoji, setCurrentEmoji] = useState(emoji);
   const [edit, setEdit] = useState(false);
   const [expand, setExpand] = useState(false);
-  const [active, setActive] = useState(true);
+  const [icnsActive, setICNSActive] = useState(true);
 
   const [openAccount, setOpenAccount] = useState(false);
   const [openPrincipal, setOpenPrincipal] = useState(false);
@@ -89,8 +90,17 @@ const WalletDetails = () => {
     }
   };
 
-  const handleToggleICNS = (event) => setActive(event.target.checked);
-  const hasActiveICNS = resolved && active;
+  useEffect(() => {
+    getUseICNS(walletNumber, (useICNS) => {
+      setICNSActive(useICNS);
+    })
+  }, [])
+
+  const handleToggleICNS = (event) => {
+    setICNSActive(event.target.checked);
+    setUseICNS(walletNumber, event.target.checked);
+  }
+  const hasActiveResolvedICNS = resolved && icnsActive;
   return (
     <Layout>
       <Header
@@ -113,10 +123,10 @@ const WalletDetails = () => {
           />
           <InputBase
             classes={{ root: clsx(classes.name, edit && classes.nameEdit) }}
-            value={hasActiveICNS ? resolved : walletName}
+            value={hasActiveResolvedICNS ? resolved : walletName}
             type="text"
             onChange={handleChange}
-            readOnly={!edit || hasActiveICNS}
+            readOnly={!edit || hasActiveResolvedICNS}
             inputRef={textInput}
           />
           {edit
@@ -155,7 +165,7 @@ const WalletDetails = () => {
             }}
           />
         )}
-        <ICNSToggle active={active} handleToggle={handleToggleICNS} />
+        <ICNSToggle active={icnsActive} handleToggle={handleToggleICNS} />
         <div
           className={classes.viewMore}
           onClick={toggleExpand}

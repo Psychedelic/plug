@@ -117,3 +117,17 @@ export const getProtectedIds = (cb) => {
     cb(state?.protectedIds || defaultValue);
   });
 };
+
+export const setUseICNS = (currentWalletId, useICNS, cb = () => {}) => {
+  const defaultValue = false;
+
+  secureSetWrapper({ [currentWalletId]: { useICNS } }, defaultValue, cb);
+};
+
+export const getUseICNS = (currentWalletId, cb) => {
+  const defaultValue = true;
+
+  secureGetWrapper(currentWalletId, defaultValue, (state) => (
+    cb(state?.[parseInt(currentWalletId, 10)]?.useICNS || defaultValue)
+  ));
+};
