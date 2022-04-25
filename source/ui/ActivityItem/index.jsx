@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import extension from 'extensionizer';
 import ReactJson from 'react-json-view';
 
+import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { getICNetworkStatusUrl } from '@shared/constants/urls';
 import { Dialog } from '@ui';
 
@@ -64,9 +65,13 @@ const ActivityItem = (props) => {
     }, 1500);
   };
 
+  const isTransaction = ['SEND', 'RECEIVE'].includes(type) && symbol === 'ICP';
+
   const getComponent = () => {
     if (type === 'PLUG') {
-      return PlugItem;
+      const { status } = props;
+
+      return status === CONNECTION_STATUS.refused ? null : PlugItem;
     }
     if (type === 'SWAP') {
       return SwapItem;
@@ -78,9 +83,12 @@ const ActivityItem = (props) => {
 
     return TokenItem;
   };
+
   const Component = getComponent();
 
-  const isTransaction = ['SEND', 'RECEIVE'].includes(type) && symbol === 'ICP';
+  // If component is null should return null to avoid weird spacing
+  if (Component === null) return null;
+
   return (
     <div
       className={clsx(classes.root, isTransaction && classes.pointer)}
