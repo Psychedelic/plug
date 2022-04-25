@@ -12,7 +12,6 @@ import InfoModal from '../InfoModal';
 const DetailItem = ({ value, name, setInfoOpen, isOpen }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  console.log('hello>');
   return (
     <>
       <FormItem

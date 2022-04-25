@@ -1,5 +1,4 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { SHADOW_1 } from '@shared/styles/shadows';
 
 export default makeStyles((theme) => ({
   icnsSelectContainer: {
@@ -22,4 +21,23 @@ export default makeStyles((theme) => ({
     color: '#111827',
     width: 20,
   },
+  namesContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  nameContainer: {
+    padding: `0 ${theme.spacing(2)}px`,
+    '&:hover': {
+      cursor: 'pointer',
+      backgroundColor: '#F3F4F6',
+    }
+  },
+  name: {
+    fontWeight: 500,
+    fontSize: 16,
+    padding: '15px 0',
+  },
+  borderBottom: {
+    borderBottom: '1px solid #E5E7EB',
+  }
 }));
