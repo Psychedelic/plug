@@ -1,11 +1,13 @@
 import { makeStyles } from '@material-ui/core/styles';
 
+const EXTENSION_HEIGHT = 438;
+
 export default makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
     padding: `${theme.spacing(2)}px 0`,
-    height: 320 + 118,
+    height: EXTENSION_HEIGHT,
   },
   image: {
     width: 46,
@@ -18,7 +20,7 @@ export default makeStyles((theme) => ({
     justifyContent: 'center',
     padding: `${theme.spacing(1)}px ${theme.spacing(4)}px`,
     textAlign: 'center',
-    height: 320 + 118,
+    height: EXTENSION_HEIGHT,
     whiteSpace: 'pre-line',
   },
   emptyText: {

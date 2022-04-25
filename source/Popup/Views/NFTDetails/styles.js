@@ -34,4 +34,9 @@ export default makeStyles(() => ({
   description: {
     whiteSpace: 'pre-line',
   },
+  icnsIcon: {
+    width: '100%',
+    padding: 5,
+    height: 'auto',
+  }
 }));

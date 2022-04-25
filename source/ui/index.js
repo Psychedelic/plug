@@ -40,3 +40,4 @@ export { default as CanisterInfoItem } from './CanisterInfo/components/Item';
 export { default as Badge } from './Badge';
 export { default as Title } from './Title';
 export { default as NFTDisplayer } from './NFTDisplayer';
+export { default as ICNSDisplay } from './ICNSDisplay';

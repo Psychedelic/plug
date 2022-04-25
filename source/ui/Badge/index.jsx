@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import useStyles from './styles';
 
-const Badge = ({ name, value, icon }) => {
+const Badge = ({ name, value, icon, iconClassName }) => {
   const classes = useStyles();
 
   return (
@@ -16,7 +16,7 @@ const Badge = ({ name, value, icon }) => {
           icon
           && (
           <div className={classes.iconContainer}>
-            <img className={classes.icon} src={icon} />
+            <img className={`${classes.icon} ${iconClassName}`} src={icon} />
           </div>
           )
         }
@@ -31,10 +31,12 @@ export default Badge;
 Badge.defaultProps = {
   name: null,
   icon: null,
+  iconClassName: '',
 };
 
 Badge.propTypes = {
   name: PropTypes.string,
   value: PropTypes.string.isRequired,
   icon: PropTypes.string,
+  iconClassName: PropTypes.string,
 };

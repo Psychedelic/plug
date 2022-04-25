@@ -19,7 +19,6 @@ export default makeStyles(() => ({
     width: 112,
     borderRadius: 15,
     cursor: 'pointer',
-    boxShadow: 'rgb(37 41 46 / 20%) 0px 10px 30px',
     transition: 'all 0.125s ease 0s',
 
     '&:hover': {
@@ -30,12 +29,20 @@ export default makeStyles(() => ({
     display: 'flex',
     alignItems: 'center',
   },
-  collectionIcon: {
+  iconContainer: {
     width: 24,
     height: 24,
     filter: 'drop-shadow(0px 2px 8px #B5B5B5)',
-    borderRadius: '50%',
     marginRight: 10,
+  },
+  collectionIcon: {
+    borderRadius: '50%',
+    width: '100%',
+    height: '100%',
+  },
+  icnsIcon: {
+    height: 'auto',
+    borderRadius: 0,
   },
   id: {
     paddingTop: 3,

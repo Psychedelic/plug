@@ -6,13 +6,14 @@ import clsx from 'clsx';
 import { Typography } from '@material-ui/core';
 import { ChevronDown } from 'react-feather';
 
+import { shortICNSName } from '@shared/services/ICNS';
 import { useRouter } from '@components/Router';
 import { setSelectedNft } from '@redux/nfts';
-import { NFTDisplayer } from '@ui';
+import { NFTDisplayer, ICNSDisplay } from '@ui';
 
 import useStyles from './styles';
 
-function NFTCollection({ collection }) {
+function NFTCollection({ collection, icns }) {
   const classes = useStyles();
   const { navigator } = useRouter();
   const [expanded, setExpanded] = useState(false);
@@ -28,10 +29,16 @@ function NFTCollection({ collection }) {
   return (
     <div className={classes.collection}>
       <Collapsible
-        trigger={
+        trigger={(
           <div className={classes.collectionHeader} onClick={toggleExpanded}>
             <div className={classes.collectionTitle}>
-              <img loading="lazy" src={collection?.icon} className={classes.collectionIcon} />
+              <div className={classes.iconContainer}>
+                <img
+                  loading="lazy"
+                  src={collection?.icon}
+                  className={clsx(classes.collectionIcon, icns && classes.icnsIcon)}
+                />
+              </div>
               <Typography variant="h5">{collection?.name}</Typography>
             </div>
             <ChevronDown
@@ -39,22 +46,40 @@ function NFTCollection({ collection }) {
               size={20}
             />
           </div>
-        }
+        )}
       >
-        <div className={classes.grid}>
-          { collection?.tokens?.map((nft) => (
-            <div
-              className={classes.nftContainer}
-              onClick={() => handleNftClick(nft)}
-            >
-            <NFTDisplayer
-              url={nft.url}
-              className={classes.nft}
-              onClick={() => handleNftClick(nft)}
-            />
-            <Typography className={classes.id} variant="subtitle1">{nft.name || `#${nft.index}`}</Typography>
-            </div>
-        ))}
+        <div className={clsx(classes.grid, expanded && classes.expanded)}>
+          {collection?.tokens?.map((nft) => {
+            const name = nft.name || `#${nft.index}`;
+            return (
+              <div
+                className={classes.nftContainer}
+                onClick={() => handleNftClick(nft)}
+              >
+                {icns ? (
+                  <ICNSDisplay
+                    icns={nft}
+                    className={classes.nft}
+                    onClick={() => handleNftClick(nft)}
+                  />
+                ) : (
+                  <NFTDisplayer
+                    url={nft.url}
+                    className={classes.nft}
+                    onClick={() => handleNftClick(nft)}
+                  />
+                )}
+                {!icns && (
+                  <Typography
+                    className={classes.id}
+                    variant="subtitle1"
+                  >
+                    {name.length > 12 ? shortICNSName(name) : name}
+                  </Typography>
+                )}
+              </div>
+            )
+          })}
         </div>
       </Collapsible>
     </div>
@@ -62,6 +87,7 @@ function NFTCollection({ collection }) {
 }
 
 NFTCollection.propTypes = {
+  icns: PropTypes.bool.isRequired,
   collection: PropTypes.shape({
     standard: PropTypes.string.isRequired,
     canisterId: PropTypes.string.isRequired,

@@ -13,7 +13,7 @@ const NFTs = () => {
   const dispatch = useDispatch();
 
   const {
-    collections, collectionsLoading, principalId, optimisticNFTUpdate,
+    collections, collectionsLoading, principalId, optimisticNFTUpdate, icnsNames,
   } = useSelector((state) => state.wallet);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const NFTs = () => {
           : (
             <div className={classes.root}>
               {collections.map((collection) => !!collection?.tokens?.length
-                && (<NFTCollection collection={collection} />))}
+                && (<NFTCollection collection={collection} icns={collection?.name === 'ICNS'} />))}
             </div>
           )
       }

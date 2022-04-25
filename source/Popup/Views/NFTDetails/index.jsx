@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Layout } from '@components';
 import {
-  Header, Button, Badge, LinkButton, NFTDisplayer,
+  Header, Button, Badge, LinkButton, NFTDisplayer, ICNSDisplay,
 } from '@ui';
 import { useTranslation } from 'react-i18next';
 import BackIcon from '@assets/icons/back.svg';
@@ -41,15 +41,21 @@ const NFTDetails = () => {
   const collection = useMemo(() => collections?.find((col) => col.name === nft?.collection),
     [collections, nft]);
 
+  const name = `${nft?.name ?? `#${nft?.index}`}`;
+  const isICNS = nft?.collection === 'ICNS';
   return (
     <Layout>
       <Header
         left={<LinkButton value={t('common.back')} onClick={handleBack} startIcon={BackIcon} />}
-        center={`#${nft?.index}`}
+        center={name}
         right={null}
       />
       <div className={classes.container}>
-        <NFTDisplayer url={nft?.url} className={classes.image} interactive />
+        {isICNS ? (
+          <ICNSDisplay icns={nft} className={classes.image} large />
+          ) : (
+          <NFTDisplayer url={nft?.url} className={classes.image} interactive />
+        )}
         <div className={classes.buttonContainer}>
           <Button
             variant="default"
@@ -70,11 +76,12 @@ const NFTDetails = () => {
             wrapperStyle={{ textAlign: 'right' }}
             fullWidth
             onClick={() => navigator.navigate('send-nft')}
+            disabled={isICNS}
           />
         </div>
         <Section icon={CollectionImg} title={t('nfts.collection')}>
-          <Badge value={nft?.collection} icon={collection?.icon} />
-          <Badge value={`#${nft?.index}`} />
+          <Badge value={nft?.collection} icon={collection?.icon} iconClassName={classes.icnsIcon} />
+          <Badge value={name} />
         </Section>
         {!!nft?.desc && (
           <Section icon={DescriptionImg} title={t('nfts.description')}>

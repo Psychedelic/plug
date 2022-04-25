@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import resolveICNSName from '@shared/services/ICNS';
+import { resolveName } from '@shared/services/ICNS';
 import { isICNSName } from '@shared/utils/ids';
 
 import useDebounce from './useDebounce';
@@ -14,7 +14,7 @@ export default function useICNS(address, symbol, delay = 300) {
   useEffect(() => {
     if (debouncedAddress === address && isICNSName(address)) {
       setLoading(true);
-      resolveICNSName(debouncedAddress, isICP)
+      resolveName(debouncedAddress, isICP)
         .then((response) => {
           setResolvedAddress(response);
           setLoading(false);
