@@ -45,17 +45,19 @@ export const walletSlice = createSlice({
       state.walletNumber = walletNumber;
     },
     setTransactions: (state, action) => {
+      const { transactions, useICNS, icpPrice } = action.payload || {};
       const mapTransaction = (trx) => {
-        const { sonicData } = trx?.details || {};
+        const { details, hash, canisterInfo, caller, timestamp } = trx || {};
+        const { sonicData } = details || {};
         const getSymbol = () => {
-          if ('tokenRegistryInfo' in (trx?.details?.canisterInfo || [])) return trx?.details?.canisterInfo.tokenRegistryInfo.symbol;
-          if ('nftRegistryInfo' in (trx?.details?.canisterInfo || [])) return 'NFT';
-          return trx?.details?.currency?.symbol ?? sonicData?.token?.details?.symbol ?? '';
+          if ('tokenRegistryInfo' in (details?.canisterInfo || [])) return details?.canisterInfo.tokenRegistryInfo.symbol;
+          if ('nftRegistryInfo' in (details?.canisterInfo || [])) return 'NFT';
+          return details?.currency?.symbol ?? sonicData?.token?.details?.symbol ?? '';
         };
         const asset = formatAssetBySymbol(
           trx?.details?.amount,
           getSymbol(),
-          action?.payload?.icpPrice,
+          icpPrice,
         );
         const isOwnTx = [state.principalId, state.accountId].includes(trx?.caller);
         const getType = () => {
@@ -68,20 +70,20 @@ export const walletSlice = createSlice({
         const transaction = {
           ...asset,
           type: getType(),
-          hash: trx?.hash,
-          to: trx?.details?.to,
-          from: trx?.details?.from || trx?.caller,
-          date: new Date(trx?.timestamp),
-          status: ACTIVITY_STATUS[trx?.details?.status],
-          image: trx?.details?.canisterInfo?.icon || TOKEN_IMAGES[getSymbol()] || '',
+          hash: hash,
+          to: useICNS ? details?.to?.icns : details?.to?.principal,
+          from: (useICNS ? details?.from?.icns : details?.from?.principal) || caller,
+          date: new Date(timestamp),
+          status: ACTIVITY_STATUS[details?.status],
+          image: details?.canisterInfo?.icon || TOKEN_IMAGES[getSymbol()] || '',
           symbol: getSymbol(),
-          canisterId: trx?.details?.canisterInfo?.canisterId,
-          canisterInfo: trx?.canisterInfo,
-          details: { ...trx?.details, caller: trx?.caller },
+          canisterId: details?.canisterInfo?.canisterId,
+          canisterInfo: canisterInfo,
+          details: { ...details, caller },
         };
         return transaction;
       };
-      const parsedTrx = action.payload?.transactions?.map(mapTransaction) || [];
+      const parsedTrx = transactions?.map(mapTransaction) || [];
       state.transactions = parsedTrx.slice(0, 50); // TODO: Move paging to BE
     },
     setTransactionsLoading: (state, action) => {

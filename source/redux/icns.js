@@ -18,7 +18,6 @@ export const icnsSlice = createSlice({
       state.loading = action.payload;
     },
     setUseICNS: (state, action) => {
-      console.log('hello?');
       state.useICNS = action.payload;
     }
   },

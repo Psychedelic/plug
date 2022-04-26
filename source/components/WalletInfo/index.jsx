@@ -21,7 +21,6 @@ const WalletInfo = () => {
   const [renderedName, setRenderedName] = useState(name);
 
   useEffect(() => {
-      console.log('Setting rendered name', useICNS, resolved, name);
       setRenderedName(useICNS ? resolved ?? name : name);
   }, [resolved, name, walletNumber, useICNS])
 
@@ -38,7 +37,6 @@ const WalletInfo = () => {
       setTooltipText(copyText);
     }, 3000);
   };
-  console.log('rendered name', renderedName);
   return (
     <Tooltip
       classes={{ tooltipPlacementBottom: classes.tooltip }}

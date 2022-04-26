@@ -17,7 +17,6 @@ const secureSetWrapper = (setArguments, defaultValue, cb) => {
     // Callback true after setting item
     storage.set(setArguments, () => { cb(true); });
   } catch (e) {
-    console.log('error setting', e);
     cb(defaultValue);
   }
 };

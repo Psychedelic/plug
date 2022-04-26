@@ -138,21 +138,6 @@ export const sendMessage = (args, callback) => {
   });
 };
 
-export const asyncSendMessage = async (args) => {
-  console.log('before');
-  const response = await extension.runtime.sendMessage(args);
-  console.log('after', response);
-  let parsedResponse = response;
-  if (typeof response === 'string') {
-    try {
-      parsedResponse = JSON.parse(response);
-    } catch (error) {
-      parsedResponse = response;
-    }
-  }
-  return parsedResponse;
-}
-
 export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.LOCK]: async () => keyring.lock(),
   [HANDLER_TYPES.UNLOCK]: async (params) => {
