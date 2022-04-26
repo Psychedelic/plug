@@ -7,6 +7,7 @@ export const icnsSlice = createSlice({
     resolved: null,
     names: [],
     loading: false,
+    useICNS: true,
   },
   reducers: {
     setICNSData: (state, action) => {
@@ -15,10 +16,14 @@ export const icnsSlice = createSlice({
     },
     setICNSLoading: (state, action) => {
       state.loading = action.payload;
+    },
+    setUseICNS: (state, action) => {
+      console.log('hello?');
+      state.useICNS = action.payload;
     }
   },
 });
 
-export const { setICNSLoading, setICNSData } = icnsSlice.actions;
+export const { setICNSLoading, setICNSData, setUseICNS } = icnsSlice.actions;
 
 export default icnsSlice.reducer;

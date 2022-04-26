@@ -46,7 +46,6 @@ const Tokens = () => {
       type: HANDLER_TYPES.GET_ICNS_DATA,
       params: {},
     }, (icnsData) => {
-      console.log('icns data', icnsData)
       dispatch(setICNSData(icnsData));
     });
   }, []);

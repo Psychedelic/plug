@@ -26,6 +26,9 @@ export default makeStyles((theme) => ({
     flexDirection: 'column',
   },
   nameContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding: `0 ${theme.spacing(2)}px`,
     '&:hover': {
       cursor: 'pointer',

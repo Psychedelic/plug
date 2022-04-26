@@ -24,14 +24,15 @@ import {
 import useStyles from './styles';
 import DetailItem from './components/DetailItem';
 import ICNSToggle from './components/ICNSToggle';
-import { getUseICNS, setUseICNS } from '@modules/storageManager';
+import { setUseICNS } from '@modules/storageManager';
+import { setUseICNS as setReduxUseICNS } from '@redux/icns';
 
 const WalletDetails = () => {
   const classes = useStyles();
   const {
     name, emoji, accountId, principalId, walletNumber,
   } = useSelector((state) => state.wallet);
-  const { resolved } = useSelector(state => state.icns);
+  const { resolved, useICNS } = useSelector(state => state.icns);
   const { navigator } = useRouter();
   const { t } = useTranslation();
   const [openEmojis, setOpenEmojis] = useState(false);
@@ -39,7 +40,6 @@ const WalletDetails = () => {
   const [currentEmoji, setCurrentEmoji] = useState(emoji);
   const [edit, setEdit] = useState(false);
   const [expand, setExpand] = useState(false);
-  const [icnsActive, setICNSActive] = useState(true);
 
   const [openAccount, setOpenAccount] = useState(false);
   const [openPrincipal, setOpenPrincipal] = useState(false);
@@ -90,17 +90,11 @@ const WalletDetails = () => {
     }
   };
 
-  useEffect(() => {
-    getUseICNS(walletNumber, (useICNS) => {
-      setICNSActive(useICNS);
-    })
-  }, [])
-
   const handleToggleICNS = (event) => {
-    setICNSActive(event.target.checked);
+    dispatch(setReduxUseICNS(event.target.checked));
     setUseICNS(walletNumber, event.target.checked);
   }
-  const hasActiveResolvedICNS = resolved && icnsActive;
+  const hasActiveResolvedICNS = resolved && useICNS;
   return (
     <Layout>
       <Header
@@ -165,7 +159,7 @@ const WalletDetails = () => {
             }}
           />
         )}
-        <ICNSToggle active={icnsActive} handleToggle={handleToggleICNS} />
+        <ICNSToggle active={useICNS} handleToggle={handleToggleICNS} />
         <div
           className={classes.viewMore}
           onClick={toggleExpand}

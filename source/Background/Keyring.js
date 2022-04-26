@@ -294,7 +294,6 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.GET_ICNS_DATA]: async ({ refresh }) => {
     const { wallets, currentWalletId } = await keyring.getState();
     let icnsData = wallets?.[currentWalletId]?.icnsData || { names: [] };
-    console.log('local icnsData', icnsData);
     if (!icnsData?.names?.length || refresh) {
       icnsData = await keyring.getICNSData();
     } else {
@@ -304,7 +303,9 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME]: async (name) => {
     try {
-      return keyring.setICNSResolvedName(name);
+      console.log('Setting reverse resolution', name);
+      const res = await keyring.setICNSResolvedName(name);
+      return res;
     } catch (e) {
       console.log('Error setting reverse resolution', e);
       return { error: e.message };

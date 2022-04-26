@@ -1,23 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography';
 import shortAddress from '@shared/utils/short-address';
 import { useSelector } from 'react-redux';
 import useStyles from './styles';
+import { getUseICNS } from '@modules/storageManager';
 
 const WalletInfo = () => {
   const classes = useStyles();
   const [copied, setCopied] = useState(false);
 
-  const { name, principalId } = useSelector((state) => state.wallet);
-  const { resolved } = useSelector((state) => state.icns);
+  const { name, principalId, walletNumber } = useSelector((state) => state.wallet);
+  const { resolved, useICNS } = useSelector((state) => state.icns);
   const { t } = useTranslation();
   const copyText = t('copy.copyText');
   const copiedText = t('copy.copiedText');
 
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipText, setTooltipText] = useState(copyText);
+  const [renderedName, setRenderedName] = useState(name);
+
+  useEffect(() => {
+      console.log('Setting rendered name', useICNS, resolved, name);
+      setRenderedName(useICNS ? resolved ?? name : name);
+  }, [resolved, name, walletNumber, useICNS])
 
   const handleWalletClick = () => {
     navigator.clipboard.writeText(principalId);
@@ -32,7 +39,7 @@ const WalletInfo = () => {
       setTooltipText(copyText);
     }, 3000);
   };
-  console.log('resolved name: ', resolved);
+  console.log('rendered name', renderedName);
   return (
     <Tooltip
       classes={{ tooltipPlacementBottom: classes.tooltip }}
@@ -47,7 +54,7 @@ const WalletInfo = () => {
         onMouseOver={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
       >
-        <Typography variant="h5">{resolved || name}</Typography>
+        <Typography variant="h5">{renderedName || name}</Typography>
         <Typography variant="subtitle2">{shortAddress(principalId)}</Typography>
       </div>
     </Tooltip>
