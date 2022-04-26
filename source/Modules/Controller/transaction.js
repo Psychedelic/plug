@@ -3,6 +3,7 @@ import {
   validateTransferArgs,
   validateTransactions,
   validateBurnArgs,
+  getToken
 } from '@background/utils';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { ICP_CANISTER_ID } from '@shared/constants/canisters';
@@ -26,6 +27,8 @@ export class TransactionModule extends ControllerModuleBase {
     return [
       this.#requestTransfer(),
       this.#handleRequestTransfer(),
+      this.#requestTransferToken(),
+      this.#handleRequestTransferToken(),
       this.#requestBurnXTC(),
       this.#handleRequestBurnXTC(),
       this.#batchTransactions(),
@@ -106,6 +109,105 @@ export class TransactionModule extends ControllerModuleBase {
               ...transfer,
               amount: parsedAmount,
               canisterId: ICP_CANISTER_ID,
+            });
+
+            if (response.error) {
+              callback(null, false);
+              callback(ERRORS.SERVER_ERROR(response.error), null, [
+                { portId, callId },
+              ]);
+            } else {
+              callback(null, true);
+              callback(null, response, [{ portId, callId }]);
+            }
+          } else {
+            callback(null, false);
+            callback(ERRORS.BALANCE_ERROR, null, [{ portId, callId }]);
+          }
+        }
+      },
+    };
+  }
+
+  #requestTransferToken() {
+    return {
+      methodName: 'requestTransferToken',
+      handler: async (opts, metadata, args) => {
+        const { message, sender, callback } = opts;
+
+        const { id: callId } = message.data.data;
+        const { id: portId } = sender;
+
+        getApps(this.keyring?.currentWalletId.toString(), async  (apps = {}) => {
+          const app = apps?.[metadata?.url] || {};
+
+          if (app?.status === CONNECTION_STATUS.accepted) {
+            const argsError = validateTransferArgs(args);
+            if (argsError) {
+              callback(argsError, null);
+              return;
+            }
+
+            const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, this.keyring);
+            const assets = await getBalance();
+
+            const token = getToken(args.token, assets);
+
+            if (!token) {
+              callback(ERRORS.CONNECTION_ERROR, null, [{ portId, callId }]);
+            }
+
+
+            const url = qs.stringifyUrl({
+              url: 'notification.html',
+              query: {
+                callId,
+                portId,
+                metadataJson: JSON.stringify(metadata),
+                argsJson: JSON.stringify({ ...args, token, timeout: app?.timeout }),
+                type: 'transfer',
+              },
+            });
+
+            const height = this.keyring?.isUnlocked
+              ? SIZES.detailHeightSmall
+              : SIZES.loginHeight;
+
+            extension.windows.create({
+              url,
+              type: 'popup',
+              width: SIZES.width,
+              height,
+              top: 65,
+              left: metadata.pageWidth - SIZES.width,
+            });
+          } else {
+            callback(ERRORS.CONNECTION_ERROR, null);
+          }
+        });
+      },
+    };
+  }
+
+  #handleRequestTransferToken() {
+    return {
+      methodName: 'handleRequestTransferToken',
+      handler: async (opts, transferRequests, callId, portId) => {
+        const { callback } = opts;
+        const transfer = transferRequests?.[0];
+        const amount = parseFloat(transfer.strAmount)
+
+        if (transfer?.status === 'declined') {
+          callback(null, true);
+          callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
+        } else {
+          const sendToken = getKeyringHandler(HANDLER_TYPES.SEND_TOKEN, this.keyring);
+
+          if (transfer.token.amount > amount) {
+            const response = await sendToken({
+              ...transfer,
+              amount: amount,
+              canisterId: transfer.token.canisterId,
             });
 
             if (response.error) {
