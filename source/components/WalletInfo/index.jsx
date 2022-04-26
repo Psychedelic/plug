@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import shortAddress from '@shared/utils/short-address';
 import { useSelector } from 'react-redux';
 import useStyles from './styles';
-import { getUseICNS } from '@modules/storageManager';
 
 const WalletInfo = () => {
   const classes = useStyles();

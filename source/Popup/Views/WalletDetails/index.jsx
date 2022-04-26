@@ -92,7 +92,10 @@ const WalletDetails = () => {
 
   const handleToggleICNS = (event) => {
     dispatch(setReduxUseICNS(event.target.checked));
-    setUseICNS(walletNumber, event.target.checked);
+    setUseICNS(event.target.checked, walletNumber, (res) => {
+      console.log('should have set', walletNumber, event.target.checked);
+      console.log('res', res);
+    });
   }
   const hasActiveResolvedICNS = resolved && useICNS;
   return (
