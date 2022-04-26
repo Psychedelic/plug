@@ -13,7 +13,7 @@ const NFTs = () => {
   const dispatch = useDispatch();
 
   const {
-    collections, collectionsLoading, principalId, optimisticNFTUpdate,
+    collections, collectionsLoading, principalId, optimisticNFTUpdate, icnsNames,
   } = useSelector((state) => state.wallet);
 
   useEffect(() => {

@@ -1,18 +1,10 @@
-import qs from 'query-string';
-import extension from 'extensionizer';
 import ERRORS from '@background/errors';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { getKeyringHandler, HANDLER_TYPES } from '@background/Keyring';
 import { getApps } from '../storageManager';
-import SIZES from '../../Pages/Notification/components/Transfer/constants';
+import { ControllerModuleBase } from './controllerBase';
 
-export class InformationModule {
-  constructor(backgroundController, secureController, keyring) {
-    this.keyring = keyring;
-    this.secureController = secureController;
-    this.backgroundController = backgroundController;
-  }
-
+export class InformationModule extends ControllerModuleBase {
   // Utils
   #getHandlerObjects() {
     return [
@@ -22,15 +14,6 @@ export class InformationModule {
       this.#getPrincipal(),
       this.#handleGetPrincipal(),
     ];
-  }
-
-  #secureWrapper({ args, handlerObject }) {
-    return this.secureController(
-      args[0].callback,
-      async () => {
-        handlerObject.handler(...args);
-      },
-    );
   }
 
   async #internalRequestBalance(accountId, callback) {
@@ -57,22 +40,12 @@ export class InformationModule {
             if (accountId && Number.isNaN(parseInt(accountId, 10))) {
               callback(ERRORS.CLIENT_ERROR('Invalid account id'), null);
             } else if (!this.keyring?.isUnlocked) {
-              const url = qs.stringifyUrl({
-                url: 'notification.html',
-                query: {
-                  callId: message.data.data.id,
-                  portId: sender.id,
-                  type: 'requestBalance',
-                  argsJson: accountId,
-                  metadataJson: JSON.stringify(metadata),
-                },
-              });
-
-              extension.windows.create({
-                url,
-                type: 'popup',
-                width: SIZES.width,
-                height: SIZES.loginHeight,
+              this.displayPopUp({
+                callId: message.data.data.id,
+                portId: sender.id,
+                type: 'requestBalance',
+                argsJson: accountId,
+                metadataJson: JSON.stringify(metadata),
               });
             } else {
               this.#internalRequestBalance(accountId, callback);
@@ -143,21 +116,12 @@ export class InformationModule {
 
           if (app?.status === CONNECTION_STATUS.accepted) {
             if (!this.keyring?.isUnlocked) {
-              const url = qs.stringifyUrl({
+              this.displayPopUp({
                 url: 'notification.html',
-                query: {
-                  callId: message.data.data.id,
-                  portId: sender.id,
-                  type: 'principal',
-                  metadataJson: JSON.stringify({ url: pageUrl }),
-                },
-              });
-
-              extension.windows.create({
-                url,
-                type: 'popup',
-                width: SIZES.width,
-                height: SIZES.loginHeight,
+                callId: message.data.data.id,
+                portId: sender.id,
+                type: 'principal',
+                metadataJson: JSON.stringify({ url: pageUrl }),
               });
             } else {
               callback(
@@ -199,7 +163,7 @@ export class InformationModule {
     this.#getHandlerObjects().forEach((handlerObject) => {
       this.backgroundController.exposeController(
         handlerObject.methodName,
-        async (...args) => this.#secureWrapper({ args, handlerObject }),
+        async (...args) => this.secureWrapper({ args, handlerObject }),
       );
     });
   }
