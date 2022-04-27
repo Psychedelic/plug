@@ -10,13 +10,13 @@ export default makeStyles((theme) => ({
     width: '100%',
     height: 'auto',
     alignItems: 'center',
-    marginTop: 10,
+    margin: '10px 0',
   },
   changeText: {
     cursor: 'pointer',
     fontFamily: 'Inter',
     fontWeight: 500,
-    color: '#3574F4', 
+    color: '#3574F4',
   },
   arrowDown: {
     color: '#111827',
@@ -34,7 +34,7 @@ export default makeStyles((theme) => ({
     '&:hover': {
       cursor: 'pointer',
       backgroundColor: '#F3F4F6',
-    }
+    },
   },
   name: {
     fontWeight: 500,
@@ -43,5 +43,5 @@ export default makeStyles((theme) => ({
   },
   borderBottom: {
     borderBottom: '1px solid #E5E7EB',
-  }
+  },
 }));

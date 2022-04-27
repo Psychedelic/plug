@@ -33,5 +33,11 @@ export default makeStyles((theme) => ({
   titleContainer: {
     display: 'flex',
     alignItems: 'center',
-  }
+  },
+  icnsButton: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 }));

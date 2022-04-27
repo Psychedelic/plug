@@ -11,7 +11,7 @@ module.exports = {
     webextensions: true,
     browser: true,
     node: true,
-    es2021: true
+    es2021: true,
   },
   globals: {
     INPAGE_SCRIPT: 'readonly',
