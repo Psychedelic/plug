@@ -1,5 +1,4 @@
-import { asyncSendMessage, HANDLER_TYPES } from '@background/Keyring';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { ACTIVITY_STATUS } from '@shared/constants/activity';
 import {
   formatAssetBySymbol,
@@ -47,7 +46,9 @@ export const walletSlice = createSlice({
     setTransactions: (state, action) => {
       const { transactions, useICNS, icpPrice } = action.payload || {};
       const mapTransaction = (trx) => {
-        const { details, hash, canisterInfo, caller, timestamp } = trx || {};
+        const {
+          details, hash, canisterInfo, caller, timestamp,
+        } = trx || {};
         const { sonicData } = details || {};
         const getSymbol = () => {
           if ('tokenRegistryInfo' in (details?.canisterInfo || [])) return details?.canisterInfo.tokenRegistryInfo.symbol;
@@ -70,7 +71,7 @@ export const walletSlice = createSlice({
         const transaction = {
           ...asset,
           type: getType(),
-          hash: hash,
+          hash,
           to: useICNS ? details?.to?.icns : details?.to?.principal,
           from: (useICNS ? details?.from?.icns : details?.from?.principal) || caller,
           date: new Date(timestamp),
@@ -78,7 +79,7 @@ export const walletSlice = createSlice({
           image: details?.canisterInfo?.icon || TOKEN_IMAGES[getSymbol()] || '',
           symbol: getSymbol(),
           canisterId: details?.canisterInfo?.canisterId,
-          canisterInfo: canisterInfo,
+          canisterInfo,
           details: { ...details, caller },
         };
         return transaction;
@@ -129,7 +130,7 @@ export const walletSlice = createSlice({
       state.collections = collections.filter((col) => col.tokens.length);
       state.optimisticNFTUpdate = true;
     },
-  }
+  },
 });
 
 export const {

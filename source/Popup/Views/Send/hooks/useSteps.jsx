@@ -14,6 +14,7 @@ import {
 } from '@shared/utils/ids';
 import { ADDRESS_TYPES, DEFAULT_ICP_FEE, XTC_FEE } from '@shared/constants/addresses';
 import { useICPPrice } from '@redux/icp';
+import { useICNS } from '@hooks';
 
 import Step1 from '../Steps/Step1';
 import Step2c from '../Steps/Step2c';
@@ -34,7 +35,7 @@ const useSteps = () => {
   const dispatch = useDispatch();
 
   const { assets } = useSelector((state) => state.wallet);
-  const { useICNS } = useSelector((state) => state.icns);
+  const { useICNS: icnsActive } = useSelector((state) => state.icns);
   const icpPrice = useICPPrice();
 
   const [selectedAsset, setSelectedAsset] = useState(assets?.[0] || CURRENCIES.get('ICP'));
@@ -121,7 +122,7 @@ const useSteps = () => {
         if (!selectedAsset) {
           sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: {} },
             (transactions) => {
-              dispatch(setTransactions({ ...transactions, icpPrice, useICNS }));
+              dispatch(setTransactions({ ...transactions, icpPrice, useICNS: icnsActive }));
             });
         }
       });

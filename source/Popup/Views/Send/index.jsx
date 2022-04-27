@@ -10,7 +10,6 @@ const Send = () => {
     right,
     center,
   } = useSteps();
-
   return (
     <Layout>
       <Header left={left} center={center} right={right} />

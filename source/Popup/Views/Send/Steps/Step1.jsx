@@ -44,7 +44,6 @@ const Step1 = ({
     setOpenAssets(false);
     handleChangeAsset(value);
   };
-
   return (
     <Container>
       <Grid container spacing={2}>

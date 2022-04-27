@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import Picker from 'emoji-picker-react';
@@ -20,19 +20,19 @@ import {
   Header,
   LinkButton,
 } from '@ui';
+import { setUseICNS } from '@modules/storageManager';
+import { setUseICNS as setReduxUseICNS } from '@redux/icns';
 
 import useStyles from './styles';
 import DetailItem from './components/DetailItem';
 import ICNSToggle from './components/ICNSToggle';
-import { setUseICNS } from '@modules/storageManager';
-import { setUseICNS as setReduxUseICNS } from '@redux/icns';
 
 const WalletDetails = () => {
   const classes = useStyles();
   const {
     name, emoji, accountId, principalId, walletNumber,
   } = useSelector((state) => state.wallet);
-  const { resolved, useICNS } = useSelector(state => state.icns);
+  const { resolved, useICNS } = useSelector((state) => state.icns);
   const { navigator } = useRouter();
   const { t } = useTranslation();
   const [openEmojis, setOpenEmojis] = useState(false);
@@ -60,7 +60,7 @@ const WalletDetails = () => {
   const openEditWalletName = () => {
     setEdit(true);
     textInput.current.focus();
-  }
+  };
 
   const handleEditWalletName = () => {
     if (walletName.length > 20) {
@@ -93,7 +93,8 @@ const WalletDetails = () => {
   const handleToggleICNS = (event) => {
     dispatch(setReduxUseICNS(event.target.checked));
     setUseICNS(event.target.checked, walletNumber);
-  }
+  };
+
   const hasActiveResolvedICNS = resolved && useICNS;
   return (
     <Layout>
@@ -137,7 +138,7 @@ const WalletDetails = () => {
                 src={Pencil}
                 onClick={openEditWalletName}
               />
-          )}
+            )}
         </div>
         {openEmojis && edit && (
           <Picker

@@ -288,7 +288,6 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME]: async (name) => {
     try {
-      console.log('Setting reverse resolution', name);
       const res = await keyring.setICNSResolvedName(name);
       return res;
     } catch (e) {

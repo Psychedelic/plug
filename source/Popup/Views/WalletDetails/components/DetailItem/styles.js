@@ -1,7 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { SHADOW_1 } from '@shared/styles/shadows';
 
-export default makeStyles((theme) => ({
+export default makeStyles(() => ({
   ids: {
     width: '100%',
     background: '#F3F4F6',
@@ -30,6 +29,5 @@ export default makeStyles((theme) => ({
     padding: '0 20px',
     flexDirection: 'column',
     marginTop: -16,
-  }
+  },
 }));
-
