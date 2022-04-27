@@ -12,7 +12,7 @@ import useStyles from './styles';
 
 const ICNSSelector = () => {
   const classes = useStyles();
-  const { names, resolved } = useSelector(state => state.icns);
+  const { names, resolved } = useSelector((state) => state.icns);
   const [isOpen, setIsOpen] = useState(false);
   const [nameLoading, setLoading] = useState();
   const dispatch = useDispatch();
@@ -21,12 +21,14 @@ const ICNSSelector = () => {
   const resetModal = () => {
     setLoading(false);
     setIsOpen(false);
-  }
+  };
+
   const setReverseResolutionName = (name) => {
     setLoading(name);
     if (name === resolved) {
-      resetModal()
-    };
+      resetModal();
+    }
+
     sendMessage({
       type: HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME,
       params: name,
@@ -42,7 +44,7 @@ const ICNSSelector = () => {
           resetModal();
         });
       }
-    })
+    });
   };
 
   return (
@@ -52,11 +54,10 @@ const ICNSSelector = () => {
           {resolved ?? 'Select' }
         </Typography>
         {resolved ? (
-            <Typography variant="subtitle2" className={classes.changeText}>
-              Change
-            </Typography>
-          ) : <ChevronDown className={classes.arrowDown} />
-        }
+          <Typography variant="subtitle2" className={classes.changeText}>
+            Change
+          </Typography>
+        ) : <ChevronDown className={classes.arrowDown} />}
       </InputBase>
       <Dialog
         title="Select ICNS"
@@ -68,7 +69,11 @@ const ICNSSelector = () => {
               <div className={classes.nameContainer} onClick={() => setReverseResolutionName(name)}>
                 <Typography
                   className={
-                    clsx(classes.name, names?.length > 1 && index < names.length - 1 && classes.borderBottom)}
+                    clsx(
+                      classes.name,
+                      names?.length > 1 && index < names.length - 1 && classes.borderBottom,
+                    )
+                  }
                 >
                   {name}
                 </Typography>
@@ -79,7 +84,7 @@ const ICNSSelector = () => {
         )}
       />
     </>
-  )
+  );
 };
 
 export default ICNSSelector;
