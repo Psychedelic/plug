@@ -19,7 +19,7 @@ export const icnsSlice = createSlice({
     },
     setUseICNS: (state, action) => {
       state.useICNS = action.payload;
-    }
+    },
   },
 });
 

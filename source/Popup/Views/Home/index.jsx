@@ -71,7 +71,7 @@ const Home = () => {
     getUseICNS(walletNumber, (useICNS) => {
       dispatch(setUseICNS(useICNS));
     });
-  }, [walletNumber])
+  }, [walletNumber]);
 
   return (
     <Layout>
