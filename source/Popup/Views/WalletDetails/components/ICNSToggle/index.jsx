@@ -41,7 +41,7 @@ const ICNSToggle = ({ active, handleToggle }) => {
             onChange={handleToggle}
           />
         </div>
-        {active && !!names?.length && <ICNSSelector  />}
+        {active && <ICNSSelector  />}
       </div>
       <InfoModal
         title={t('walletDetails.icnsInfoTitle')}

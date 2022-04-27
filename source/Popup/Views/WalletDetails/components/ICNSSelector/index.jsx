@@ -47,17 +47,36 @@ const ICNSSelector = () => {
     });
   };
 
-  return (
-    <>
-      <InputBase className={classes.icnsSelectContainer} onClick={openSelectDialog}>
-        <Typography variant="subtitle2">
-          {resolved ?? 'Select' }
-        </Typography>
-        {resolved ? (
+  const emptyICNS = (
+    <Typography variant="subtitle2">
+      No ICNS names owned
+    </Typography>
+  );
+
+  const getInputContent = () => {
+    if (names?.length === 0) return emptyICNS;
+    if (resolved) {
+      return (
+        <>
+          <Typography variant="subtitle2">
+            {resolved ?? 'Select' }
+          </Typography>
           <Typography variant="subtitle2" className={classes.changeText}>
             Change
           </Typography>
-        ) : <ChevronDown className={classes.arrowDown} />}
+        </>
+      )
+    }
+    return (
+      <ChevronDown className={classes.arrowDown} />
+    )
+  };
+
+
+  return (
+    <>
+      <InputBase className={classes.icnsSelectContainer} onClick={openSelectDialog}>
+        { getInputContent() }
       </InputBase>
       <Dialog
         title="Select ICNS"
