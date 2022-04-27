@@ -72,7 +72,7 @@ export const walletSlice = createSlice({
           ...asset,
           type: getType(),
           hash,
-          to: useICNS ? details?.to?.icns : details?.to?.principal,
+          to: (useICNS ? details?.to?.icns : details?.to?.principal) ?? details?.to?.principal,
           from: (useICNS ? details?.from?.icns : details?.from?.principal) || caller,
           date: new Date(timestamp),
           status: ACTIVITY_STATUS[details?.status],
