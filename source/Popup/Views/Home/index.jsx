@@ -69,7 +69,6 @@ const Home = () => {
 
   useEffect(() => {
     getUseICNS(walletNumber, (useICNS) => {
-      console.log('should use icns: ', useICNS);
       dispatch(setUseICNS(useICNS));
     });
   }, [walletNumber]);
