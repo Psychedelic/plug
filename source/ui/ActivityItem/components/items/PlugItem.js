@@ -13,6 +13,12 @@ const PlugItem = ({
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
+
+  // So it doesn't display refused connections
+  if (status === CONNECTION_STATUS.refused) {
+    return null;
+  }
+
   return (
     <ActivityItemDisplay
       image={<img className={classes.image} src={icon} />}
