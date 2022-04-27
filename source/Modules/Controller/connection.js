@@ -169,7 +169,6 @@ export class ConnectionModule extends ControllerModuleBase {
           this.displayPopUp({
             callId,
             portId,
-            url: domainUrl,
             icon: icons[0] || null,
             argsJson: JSON.stringify({ timeout }),
             type: 'connect',
