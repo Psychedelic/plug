@@ -33,6 +33,7 @@ const NFTs = () => {
   }, [principalId]);
 
   const nfts = collections?.flatMap((c) => c.tokens);
+
   return (
     <LoadingWrapper loading={!nfts.length && collectionsLoading} className="big">
       {

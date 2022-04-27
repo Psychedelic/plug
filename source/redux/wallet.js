@@ -7,7 +7,7 @@ import {
   TOKEN_IMAGES,
 } from '@shared/constants/currencies';
 
-const sortCollections = (a, b) => b?.tokens.length - a?.tokens.length;
+const sortCollections = (a, b) => b?.collection - a?.collection;
 
 /* eslint-disable no-param-reassign */
 export const walletSlice = createSlice({
