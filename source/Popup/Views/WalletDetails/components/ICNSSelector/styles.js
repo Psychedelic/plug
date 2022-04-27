@@ -13,6 +13,7 @@ export default makeStyles((theme) => ({
     marginTop: 10,
   },
   changeText: {
+    cursor: 'pointer',
     fontFamily: 'Inter',
     fontWeight: 500,
     color: '#3574F4', 
