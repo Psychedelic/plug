@@ -42,7 +42,6 @@ const NotificationContainer = () => {
   const { query } = qs.parseUrl(window.location.href);
   const [onTimeout, setOnTimeout] = useState(null);
   const [timeoutId, setTimeoutId] = useState(null);
-
   const {
     callId, metadataJson = '{}', argsJson = '{}', type, portId,
   } = query;
