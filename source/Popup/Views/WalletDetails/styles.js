@@ -97,6 +97,7 @@ export default makeStyles((theme) => ({
     cursor: 'pointer',
     fontSize: 16,
     marginBottom: 10,
+    marginTop: 14,
   },
   chevron: {
     transition: 'transform .2s ease-in-out',
