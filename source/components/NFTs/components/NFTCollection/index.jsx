@@ -29,6 +29,7 @@ function NFTCollection({ collection, icns }) {
   return (
     <div className={classes.collection}>
       <Collapsible
+        transitionTime={200}
         trigger={(
           <div className={classes.collectionHeader} onClick={toggleExpanded}>
             <div className={classes.collectionTitle}>
