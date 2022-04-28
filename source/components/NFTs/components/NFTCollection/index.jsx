@@ -13,10 +13,10 @@ import { NFTDisplayer, ICNSDisplay } from '@ui';
 
 import useStyles from './styles';
 
-function NFTCollection({ collection, icns }) {
+function NFTCollection({ collection, icns, defaultOpen }) {
   const classes = useStyles();
   const { navigator } = useRouter();
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(defaultOpen);
   const dispatch = useDispatch();
 
   const handleNftClick = (nft) => {
@@ -30,6 +30,7 @@ function NFTCollection({ collection, icns }) {
     <div className={classes.collection}>
       <Collapsible
         transitionTime={200}
+        open={expanded}
         trigger={(
           <div className={classes.collectionHeader} onClick={toggleExpanded}>
             <div className={classes.collectionTitle}>
@@ -87,8 +88,13 @@ function NFTCollection({ collection, icns }) {
   );
 }
 
+NFTCollection.defaultProps = {
+  defaultOpen: false,
+};
+
 NFTCollection.propTypes = {
   icns: PropTypes.bool.isRequired,
+  defaultOpen: PropTypes.bool,
   collection: PropTypes.shape({
     standard: PropTypes.string.isRequired,
     canisterId: PropTypes.string.isRequired,
