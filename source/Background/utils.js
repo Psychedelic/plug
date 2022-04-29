@@ -6,8 +6,11 @@ import { ASSET_CANISTER_IDS, ICP_CANISTER_ID } from '@shared/constants/canisters
 import { CYCLES_PER_TC } from '@shared/constants/currencies';
 import { XTC_FEE } from '@shared/constants/addresses';
 import { setProtectedIds } from '@modules/storageManager';
+import { Principal } from '@dfinity/principal';
+import { blobFromBuffer, blobToUint8Array } from '@dfinity/candid';
 
 import ERRORS from './errors';
+import { recursiveParseBigint } from './Keyring';
 
 const validateAmount = (amount) => !Number.isNaN(amount) && Number.isInteger(amount) && amount >= 0;
 const validateFloatStrAmount = (amount) => !Number.isNaN(parseFloat(amount))
@@ -117,3 +120,43 @@ export const getToken = (tokenIdentifier, assets) => {
 export const bufferToBase64 = (buf) => Buffer.from(buf).toString('base64');
 
 export const base64ToBuffer = (base64) => Buffer.from(base64, 'base64');
+
+export const handleCallRequest = async ({
+  keyring, request, callId, portId, callback, redirected,
+}) => {
+  const arg = blobFromBuffer(base64ToBuffer(request.arguments));
+  try {
+    const signed = await keyring
+      .getAgent().call(
+        Principal.fromText(request.canisterId),
+        {
+          methodName: request.methodName,
+          arg,
+        },
+      );
+    callback(null, {
+      ...signed,
+      requestId: bufferToBase64(blobToUint8Array(signed.requestId)),
+    }, [
+      { callId, portId },
+    ]);
+    if (redirected) callback(null, true);
+  } catch (e) {
+    callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
+    if (redirected) callback(null, false);
+  }
+};
+
+export const generateRequestInfo = (args) => {
+  const decodedArguments = Object.values(recursiveParseBigint(
+    PlugController.IDLDecode(blobFromBuffer(base64ToBuffer(args.arg))),
+  ));
+  return {
+    canisterId: args.canisterId,
+    methodName: args.methodName,
+    sender: args.sender,
+    arguments: args.arg,
+    decodedArguments,
+    type: 'call',
+  };
+};
