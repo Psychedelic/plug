@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { Info } from 'react-feather';
 import { useTranslation } from 'react-i18next';
+import extension from 'extensionizer';
 
 import ICNS_IMG from '@assets/icons/icns.svg';
 import Switch from '@components/Switch';
+import { Button } from '@ui';
 
 import useStyles from './styles';
 import ICNSSelector from '../ICNSSelector';
@@ -22,9 +25,9 @@ const ICNSToggle = ({ active, handleToggle }) => {
       <div className={clsx(
         classes.icnsContainer,
         active && classes.active,
-      )}>
-        <div className={classes.toggleContainer}
-        >
+      )}
+      >
+        <div className={classes.toggleContainer}>
           <div className={classes.titleContainer}>
             <img
               className={classes.icnsImg}
@@ -41,7 +44,20 @@ const ICNSToggle = ({ active, handleToggle }) => {
             onChange={handleToggle}
           />
         </div>
-        {active && <ICNSSelector  />}
+        {active && (
+        <>
+          <ICNSSelector />
+          {!names?.length && (
+            <Button
+              onClick={() => extension.tabs.create({ url: 'https://icns.id' })}
+              value={t('walletDetails.getICNS')}
+              fullWidth
+              variant="blue"
+              wrapperStyle={{ textAlign: 'center' }}
+            />
+          )}
+        </>
+        )}
       </div>
       <InfoModal
         title={t('walletDetails.icnsInfoTitle')}
@@ -51,30 +67,12 @@ const ICNSToggle = ({ active, handleToggle }) => {
         buttonText={t('walletDetails.icnsLearnMore')}
       />
     </>
-  )
+  );
+};
+
+ICNSToggle.propTypes = {
+  active: PropTypes.bool.isRequired,
+  handleToggle: PropTypes.func.isRequired,
 };
 
 export default ICNSToggle;
-
-/**
- *       <Dialog
-        title={t('walletDetails.icnsInfoTitle')}
-        onClose={() => setInfoOpen(false)}
-        open={infoOpen}
-        component={(
-          <div className={classes.modal}>
-            <Typography>{t('walletDetails.icnsDescription')}</Typography>
-            <Button
-              variant="rainbow"
-              value={t('common.okIUnderstand')}
-              onClick={() => setInfoOpen(false)}
-              fullWidth
-            />
-            <LinkButton
-              value={t('walletDetails.icnsLearnMore')}
-              onClick={() => extension.tabs.create({ url: icIdsUrl })}
-            />
-          </div>
-        )}
-      />
- */

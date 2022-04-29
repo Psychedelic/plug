@@ -1,9 +1,11 @@
 import ERRORS from '@background/errors';
+import qs from 'query-string';
+import extension from 'extensionizer';
 import {
   validateTransferArgs,
   validateTransactions,
   validateBurnArgs,
-  getToken
+  getToken,
 } from '@background/utils';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { ICP_CANISTER_ID } from '@shared/constants/canisters';
@@ -138,7 +140,7 @@ export class TransactionModule extends ControllerModuleBase {
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
 
-        getApps(this.keyring?.currentWalletId.toString(), async  (apps = {}) => {
+        getApps(this.keyring?.currentWalletId.toString(), async (apps = {}) => {
           const app = apps?.[metadata?.url] || {};
 
           if (app?.status === CONNECTION_STATUS.accepted) {
@@ -156,7 +158,6 @@ export class TransactionModule extends ControllerModuleBase {
             if (!token) {
               callback(ERRORS.CONNECTION_ERROR, null, [{ portId, callId }]);
             }
-
 
             const url = qs.stringifyUrl({
               url: 'notification.html',
@@ -195,7 +196,7 @@ export class TransactionModule extends ControllerModuleBase {
       handler: async (opts, transferRequests, callId, portId) => {
         const { callback } = opts;
         const transfer = transferRequests?.[0];
-        const amount = parseFloat(transfer.strAmount)
+        const amount = parseFloat(transfer.strAmount);
 
         if (transfer?.status === 'declined') {
           callback(null, true);
@@ -206,7 +207,7 @@ export class TransactionModule extends ControllerModuleBase {
           if (transfer.token.amount > amount) {
             const response = await sendToken({
               ...transfer,
-              amount: amount,
+              amount,
               canisterId: transfer.token.canisterId,
             });
 
