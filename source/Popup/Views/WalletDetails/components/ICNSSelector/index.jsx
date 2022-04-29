@@ -24,6 +24,7 @@ const ICNSSelector = () => {
   };
 
   const setReverseResolutionName = (name) => {
+    setIsOpen(false);
     setLoading(name);
     if (name === resolved) {
       resetModal();
@@ -55,6 +56,16 @@ const ICNSSelector = () => {
 
   const getInputContent = () => {
     if (names?.length === 0) return emptyICNS;
+    if (nameLoading) {
+      return (
+        <>
+          <Typography variant="subtitle2">
+            {nameLoading}
+          </Typography>
+          <CircularProgress size={24} />
+        </>
+      )
+    }
     if (resolved) {
       return (
         <>
