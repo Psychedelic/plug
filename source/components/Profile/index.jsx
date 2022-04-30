@@ -132,6 +132,7 @@ const Profile = ({ disableProfile }) => {
     <>
       <HoverAnimation
         disabled={disableProfile}
+        style={{ padding: '15px' }}
       >
         <Button
           onClick={handleToggle}
