@@ -68,7 +68,7 @@ TokenIcon.propTypes = {
   nft: PropTypes.bool,
   color: PropTypes.shape({
     values: PropTypes.shape({
-      rgb: PropTypes.arrayOf(PropTypes.string),
+      rgb: PropTypes.arrayOf(PropTypes.number),
     }),
   }),
   small: PropTypes.bool,
