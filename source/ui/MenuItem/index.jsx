@@ -34,7 +34,7 @@ const MenuItem = ({
       }}
     >
       {
-        icon && icon
+        icon
       }
       {
         !icon && image && (
