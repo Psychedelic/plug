@@ -29,7 +29,7 @@ const NavBar = ({ disableProfile, disableNavigation }) => {
 
 NavBar.propTypes = {
   disableProfile: PropTypes.bool.isRequired,
-  disableNavigation: PropTypes.string,
+  disableNavigation: PropTypes.bool,
 };
 
 NavBar.defaultProps = {
