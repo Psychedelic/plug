@@ -1,5 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 
+import { RAINBOW_GRADIENT } from '@shared/styles/gradients';
+
 export default makeStyles((theme) => ({
   root: {
     borderRadius: 6,
@@ -22,8 +24,7 @@ export default makeStyles((theme) => ({
   hover: {
     '&:hover': {
       border: 'double 1px transparent',
-      backgroundImage:
-        'linear-gradient(white, white), radial-gradient(circle at top left,#FFE701,#FA51D3,#10D9ED,#53FF54)',
+      backgroundImage: RAINBOW_GRADIENT,
       backgroundOrigin: 'border-box',
       backgroundClip: 'padding-box, border-box',
     },
@@ -36,8 +37,7 @@ export default makeStyles((theme) => ({
     padding: '3px 11px',
     borderRadius: 6,
     border: 'double 2px transparent !important',
-    backgroundImage:
-      'linear-gradient(white, white), radial-gradient(circle at top left,#FFE701,#FA51D3,#10D9ED,#53FF54) !important',
+    backgroundImage: `${RAINBOW_GRADIENT} !important`,
     backgroundOrigin: 'border-box',
     backgroundClip: 'padding-box, border-box',
   },

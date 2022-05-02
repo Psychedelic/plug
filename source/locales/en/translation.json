@@ -47,6 +47,7 @@
     "noActivityText": "When you deposit, send, or swap,\nyour activity will be displayed here."
   },
   "common": {
+    "okIUnderstand": "Ok, I understand",
     "arguments": "Arguments",
     "to": "to",
     "delete": "delete",
@@ -134,12 +135,16 @@
     "accountId": "ICP Account ID",
     "publicAccount": "Public Account",
     "viewMore": "View additional wallet details",
-    "whatIsPrincipal": "What is a Principal ID?",
-    "principalDescription": "It is your main unique identifier on the Internet Computer, and your wallet's main address in Plug.",
-    "learnMorePrincipal": "Learn more about Principal ID's",
-    "whatIsAccount": "What is an Account ID?",
-    "accountDescription": "An Account ID is an address derived from your Principal ID, that represents your ICP balance on the ledger.",
-    "learnMoreAccount": "Learn more about Account ID's"
+    "principalIdInfoTitle": "What is a Principal ID?",
+    "principalIdDescription": "It is your main unique identifier on the Internet Computer, and your wallet's main address in Plug.",
+    "principalIdLearnMore": "Learn more about Principal ID's",
+    "accountIdInfoTitle": "What is an Account ID?",
+    "accountIdDescription": "An Account ID is an address derived from your Principal ID, that represents your ICP balance on the ledger.",
+    "accountIdLearnMore": "Learn more about Account ID's",
+    "icnsLearnMore": "Learn more about ICNS",
+    "icnsInfoTitle": "What is ICNS?",
+    "icnsDescription": "TBD",
+    "getICNS": "Buy an ICNS"
   },
   "seedPhrase": {
     "title": "Secret Recovery Phrase",
@@ -201,7 +206,6 @@
     "icnsModalTitle": ".ICP Names - ICNS",
     "icnsModalText": "Plug supports ICNS when it comes to .icp name resolution. Make sure to double check you're sending to the correct name.",
     "icnsModalLearnMore": "Learn more about ICNS",
-    "icnsModalButton1": "Ok, I understand",
     "icnsModalButton2": "Learn more about the two ID's",
     "transactionInProgress": "Transaction in progress...",
     "transactionSuccess": "Transaction successful",

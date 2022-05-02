@@ -21,6 +21,7 @@ const useMenuItems = (toggleMenu) => {
   const dispatch = useDispatch();
   const icpPrice = useICPPrice();
   const { principalId } = useSelector((state) => state.wallet);
+  const { useICNS } = useSelector((state) => state.icns);
 
   const refreshWallet = () => {
     navigator.navigate('home', TABS.TOKENS);
@@ -45,7 +46,7 @@ const useMenuItems = (toggleMenu) => {
         type: HANDLER_TYPES.GET_TRANSACTIONS,
         params: {},
       }, (trxs) => {
-        dispatch(setTransactions({ ...trxs, icpPrice }));
+        dispatch(setTransactions({ ...trxs, icpPrice, useICNS }));
         dispatch(setTransactionsLoading(false));
       });
 

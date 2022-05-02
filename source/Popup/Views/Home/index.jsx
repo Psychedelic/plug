@@ -14,14 +14,16 @@ import { Tabs } from '@ui';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
 import { useICPPrice } from '@redux/icp';
+import { setUseICNS } from '@redux/icns';
 import { isClockInSync } from '@shared/utils/time';
+import { getUseICNS } from '@modules/storageManager';
 
 const Home = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { navigator, tabIndex } = useRouter();
   const {
-    assetsLoading, collectionsLoading, transactionsLoading,
+    assetsLoading, collectionsLoading, transactionsLoading, walletNumber,
   } = useSelector((state) => state.wallet);
 
   const { clockValidated } = useSelector((state) => state.clock);
@@ -64,6 +66,12 @@ const Home = () => {
       dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
     });
   }, [clockValidated]);
+
+  useEffect(() => {
+    getUseICNS(walletNumber, (useICNS) => {
+      dispatch(setUseICNS(useICNS));
+    });
+  }, [walletNumber]);
 
   return (
     <Layout>

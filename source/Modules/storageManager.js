@@ -14,7 +14,7 @@ const secureGetWrapper = (key, defaultValue, cb) => {
 
 const secureSetWrapper = (setArguments, defaultValue, cb) => {
   try {
-    // Callsback true after setting item
+    // Callback true after setting item
     storage.set(setArguments, () => { cb(true); });
   } catch (e) {
     cb(defaultValue);
@@ -115,5 +115,17 @@ export const getProtectedIds = (cb) => {
 
   secureGetWrapper('protectedIds', defaultValue, (state) => {
     cb(state?.protectedIds || defaultValue);
+  });
+};
+
+export const setUseICNS = (useICNS, walletNumber, cb = () => {}) => {
+  const defaultValue = true;
+  secureSetWrapper({ icns: { [walletNumber]: useICNS } }, defaultValue, cb);
+};
+
+export const getUseICNS = (walletNumber, cb) => {
+  const defaultValue = true;
+  secureGetWrapper('icns', defaultValue, (state) => {
+    cb(state?.icns?.[parseInt(walletNumber, 10)] ?? defaultValue);
   });
 };

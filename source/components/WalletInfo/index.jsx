@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography';
@@ -10,14 +10,19 @@ const WalletInfo = () => {
   const classes = useStyles();
   const [copied, setCopied] = useState(false);
 
-  const { name, principalId } = useSelector((state) => state.wallet);
-
+  const { name, principalId, walletNumber } = useSelector((state) => state.wallet);
+  const { resolved, useICNS } = useSelector((state) => state.icns);
   const { t } = useTranslation();
   const copyText = t('copy.copyText');
   const copiedText = t('copy.copiedText');
 
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipText, setTooltipText] = useState(copyText);
+  const [renderedName, setRenderedName] = useState(name);
+
+  useEffect(() => {
+      setRenderedName(useICNS ? resolved ?? name : name);
+  }, [resolved, name, walletNumber, useICNS])
 
   const handleWalletClick = () => {
     navigator.clipboard.writeText(principalId);
@@ -32,7 +37,6 @@ const WalletInfo = () => {
       setTooltipText(copyText);
     }, 3000);
   };
-
   return (
     <Tooltip
       classes={{ tooltipPlacementBottom: classes.tooltip }}
@@ -47,7 +51,7 @@ const WalletInfo = () => {
         onMouseOver={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
       >
-        <Typography variant="h5">{name}</Typography>
+        <Typography variant="h5">{renderedName || name}</Typography>
         <Typography variant="subtitle2">{shortAddress(principalId)}</Typography>
       </div>
     </Tooltip>

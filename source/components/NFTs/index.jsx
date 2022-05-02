@@ -33,6 +33,7 @@ const NFTs = () => {
   }, [principalId]);
 
   const nfts = collections?.flatMap((c) => c.tokens);
+
   return (
     <LoadingWrapper loading={!nfts.length && collectionsLoading} className="big">
       {
@@ -40,8 +41,15 @@ const NFTs = () => {
           ? <EmptyState />
           : (
             <div className={classes.root}>
-              {collections.map((collection) => !!collection?.tokens?.length
-                && (<NFTCollection collection={collection} icns={collection?.name === 'ICNS'} />))}
+              {collections.map((collection, index) => !!collection?.tokens?.length
+                && (
+                  <NFTCollection
+                    collection={collection}
+                    defaultOpen={index === 0}
+                    icns={collection?.name === 'ICNS'}
+                  />
+                )
+              )}
             </div>
           )
       }

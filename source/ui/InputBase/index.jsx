@@ -4,10 +4,10 @@ import clsx from 'clsx';
 
 import useStyles from './styles';
 
-const InputBase = ({ children, className }) => {
+const InputBase = ({ children, className, onClick }) => {
   const classes = useStyles();
   return (
-    <div className={clsx(classes.root, className)}>
+    <div className={clsx(classes.root, className)} onClick={onClick}>
       {children}
     </div>
   );
@@ -22,4 +22,5 @@ InputBase.defaultProps = {
 InputBase.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
+  onClick: PropTypes.func,
 };

@@ -39,7 +39,6 @@ export class ControllerModuleBase {
         metadataJson,
       },
     });
-
     const defaultHeight = this.keyring?.isUnlocked
       ? SIZES.detailHeightSmall
       : SIZES.loginHeight;
