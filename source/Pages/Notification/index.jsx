@@ -21,14 +21,15 @@ import SIZES from './components/Transfer/constants';
 
 const NOTIFICATION_COMPONENTS = {
   batchTransactions: BatchTransactions,
-  transfer: Transfer,
-  requestBalance: LoginProxy,
-  requestConnectionData: LoginProxy,
-  principal: Principal,
   connect: AppConnection,
   allowAgent: AllowAgent,
+  principal: Principal,
+  transfer: Transfer,
   burnXTC: BurnXTC,
   sign: Sign,
+  getICNSInfo: LoginProxy,
+  requestBalance: LoginProxy,
+  requestConnectionData: LoginProxy,
 };
 
 const resizeToLogin = () => {
