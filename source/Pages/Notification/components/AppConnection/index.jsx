@@ -49,7 +49,7 @@ const AppConnection = ({ setOnTimeout }) => {
   } = query;
 
   const handleResponse = async () => {
-    const success = await portRPC.call('handleAllowAgent', [url, { status: status || CONNECTION_STATUS.rejected, whitelist: [] }, callId, portId]);
+    const success = await portRPC.call('handleAllowAgent', [url, { status: status || CONNECTION_STATUS.refused, whitelist: [] }, callId, portId]);
     if (success) {
       window.close();
     }
@@ -71,13 +71,13 @@ const AppConnection = ({ setOnTimeout }) => {
 
   window.onbeforeunload = () => {
     if (status === null) {
-      setStatus(CONNECTION_STATUS.rejected);
+      setStatus(CONNECTION_STATUS.refused);
     }
   };
 
   useEffect(() => {
     setOnTimeout(() => () => {
-      setStatus(CONNECTION_STATUS.rejected);
+      setStatus(CONNECTION_STATUS.refused);
     });
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
       (state) => {
@@ -100,7 +100,7 @@ const AppConnection = ({ setOnTimeout }) => {
                   <Button
                     variant="default"
                     value={t('common.decline')}
-                    onClick={() => setStatus(CONNECTION_STATUS.rejected)}
+                    onClick={() => setStatus(CONNECTION_STATUS.refused)}
                     style={{ width: '96%' }}
                     fullWidth
                   />
