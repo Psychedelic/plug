@@ -154,6 +154,7 @@ export class ConnectionModule extends ControllerModuleBase {
             portId,
             argsJson: JSON.stringify({ whitelist, canistersInfo, timeout }),
             metadataJson: JSON.stringify(newMetadata),
+            domainUrl,
             type: 'allowAgent',
             screenArgs: {
               fixedHeight: height,
@@ -175,6 +176,7 @@ export class ConnectionModule extends ControllerModuleBase {
             screenArgs: {
               fixedHeight: height,
             },
+            domainUrl,
           });
         }
       },
@@ -278,6 +280,7 @@ export class ConnectionModule extends ControllerModuleBase {
                     showList: false,
                     timeout: app?.timeout,
                   }),
+                  domainUrl: metadata.url,
                   type: 'allowAgent',
                   screenArgs: {
                     fixedHeight: height,
@@ -293,6 +296,7 @@ export class ConnectionModule extends ControllerModuleBase {
                 callId,
                 portId,
                 metadataJson: JSON.stringify(metadata),
+                domainUrl: metadata.url,
                 argsJson: JSON.stringify({
                   whitelist,
                   canistersInfo,

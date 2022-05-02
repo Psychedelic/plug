@@ -35,7 +35,7 @@ const ICNSSelector = () => {
       params: name,
     }, (response) => {
       if (response.error) {
-        console.log('error'); // TODO HANDLE ERROR (shouldnt happen tho)
+        console.log('Error when setting your reverse resolved name', response.error); // TODO HANDLE ERROR (shouldnt happen tho)
       } else {
         sendMessage({
           type: HANDLER_TYPES.GET_ICNS_DATA,
@@ -64,7 +64,7 @@ const ICNSSelector = () => {
           </Typography>
           <CircularProgress size={24} />
         </>
-      )
+      );
     }
     if (resolved) {
       return (
@@ -76,13 +76,12 @@ const ICNSSelector = () => {
             Change
           </Typography>
         </>
-      )
+      );
     }
     return (
       <ChevronDown className={classes.arrowDown} />
-    )
+    );
   };
-
 
   return (
     <>

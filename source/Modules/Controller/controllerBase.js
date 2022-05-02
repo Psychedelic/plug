@@ -26,7 +26,8 @@ export class ControllerModuleBase {
     metadataJson,
     type,
     icon,
-    screenArgs: { fixedHeight, top, left },
+    screenArgs: { fixedHeight, top, left } = {},
+    domainUrl,
   }) {
     const stringifiedUrl = qs.stringifyUrl({
       url,
@@ -37,6 +38,7 @@ export class ControllerModuleBase {
         icon,
         argsJson,
         metadataJson,
+        url: domainUrl,
       },
     });
     const defaultHeight = this.keyring?.isUnlocked
