@@ -24,6 +24,14 @@ import {
 import { ControllerModuleBase } from './controllerBase';
 
 export class TransactionModule extends ControllerModuleBase {
+  constructor(backgroundController, secureController, keyring) {
+    super(backgroundController, secureController, keyring);
+    this.DEFAULT_CURRENCY_MAP = {
+      ICP: 0,
+      XTC: 1,
+    };
+  }
+
   // Utils
   #getHandlerObjects() {
     return [
