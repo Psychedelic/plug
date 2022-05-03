@@ -371,9 +371,9 @@ export class TransactionModule extends ControllerModuleBase {
       methodName: 'handleBatchTransactions',
       handler: async (opts, accepted, callId, portId) => {
         const { callback } = opts;
-        callback(null, true); // close the modal
         if (accepted) {
           callback(null, accepted, [{ callId, portId }]);
+          callback(null, true); // close the modal
         } else {
           callback(ERRORS.TRANSACTION_REJECTED, false, [{ callId, portId }]);
         }
