@@ -21,8 +21,8 @@ const WalletInfo = () => {
   const [renderedName, setRenderedName] = useState(name);
 
   useEffect(() => {
-      setRenderedName(useICNS ? resolved ?? name : name);
-  }, [resolved, name, walletNumber, useICNS])
+    setRenderedName(useICNS ? resolved ?? name : name);
+  }, [resolved, name, walletNumber, useICNS]);
 
   const handleWalletClick = () => {
     navigator.clipboard.writeText(principalId);

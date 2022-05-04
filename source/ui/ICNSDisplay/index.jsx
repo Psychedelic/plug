@@ -43,11 +43,13 @@ ICNSDisplay.propTypes = {
   }).isRequired,
   className: PropTypes.string,
   onClick: PropTypes.func,
+  large: PropTypes.bool,
 };
 
 ICNSDisplay.defaultProps = {
   className: '',
   onClick: () => {},
+  large: false,
 };
 
 export default ICNSDisplay;

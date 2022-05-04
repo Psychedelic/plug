@@ -7,7 +7,13 @@ import {
   TOKEN_IMAGES,
 } from '@shared/constants/currencies';
 
-const sortCollections = (a, b) => b?.collection - a?.collection;
+const sortCollections = (collections = []) => {
+  const icns = collections.find((col) => col.name === 'ICNS');
+  const sorted = collections
+    .filter((col) => col.name !== 'ICNS')
+    .sort((a, b) => b?.name - a?.name);
+  return [icns, ...sorted].filter((col) => !!col);
+};
 
 /* eslint-disable no-param-reassign */
 export const walletSlice = createSlice({
@@ -109,13 +115,13 @@ export const walletSlice = createSlice({
         state?.collections.splice(
           collectionIndex, collectionIndex < 0 ? 0 : 1, collection,
         );
-        state.collections = state?.collections?.sort(sortCollections);
+        state.collections = sortCollections(state?.collections);
       }
     },
     setCollections: (state, action) => {
       const { collections, principalId } = action.payload;
       if (state.principalId === principalId && collections) {
-        state.collections = collections?.sort(sortCollections);
+        state.collections = sortCollections(collections);
       }
       state.optimisticNFTUpdate = false;
     },

@@ -13,7 +13,7 @@ const NFTs = () => {
   const dispatch = useDispatch();
 
   const {
-    collections, collectionsLoading, principalId, optimisticNFTUpdate, icnsNames,
+    collections, collectionsLoading, principalId, optimisticNFTUpdate,
   } = useSelector((state) => state.wallet);
 
   useEffect(() => {
@@ -48,8 +48,7 @@ const NFTs = () => {
                     defaultOpen={index === 0}
                     icns={collection?.name === 'ICNS'}
                   />
-                )
-              )}
+                ))}
             </div>
           )
       }
