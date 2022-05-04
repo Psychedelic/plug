@@ -153,7 +153,15 @@ export const getKeyringHandler = (type, keyring) => ({
     }
     return unlocked;
   },
-  [HANDLER_TYPES.CREATE]: async (params) => keyring.create(params),
+  [HANDLER_TYPES.CREATE]: async (params) => {
+    try {
+      const { mnemonic } = await keyring.create(params);
+      return { mnemonic };
+    } catch (e) {
+      console.log('Error creating wallet', e);
+      return null;
+    }
+  },
   [HANDLER_TYPES.CREATE_PRINCIPAL]: async (params) => keyring.createPrincipal(params),
   [HANDLER_TYPES.SET_CURRENT_PRINCIPAL]:
     async (walletNumber) => {

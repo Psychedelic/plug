@@ -86,14 +86,7 @@ class BackgroundScript {
             console.warn(e);
           });
       };
-
-      if (!this.keyring) {
-        this.init().then(() => {
-          handleOnMessage();
-        });
-      } else {
-        handleOnMessage();
-      }
+      handleOnMessage();
 
       // Usually we would not return, but it seems firefox needs us to
       return true; // eslint-disable-line
