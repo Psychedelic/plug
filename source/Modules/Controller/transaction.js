@@ -19,7 +19,9 @@ import { getKeyringHandler, HANDLER_TYPES } from '@background/Keyring';
 import { blobFromBuffer, blobToUint8Array } from '@dfinity/candid';
 
 import SIZES from '../../Pages/Notification/components/Transfer/constants';
-import { getApps, getProtectedIds } from '../storageManager';
+import {
+  getBatchTransactions, getProtectedIds, setBatchTransactions, getApp,
+} from '../storageManager';
 import { ControllerModuleBase } from './controllerBase';
 
 export class TransactionModule extends ControllerModuleBase {
@@ -42,8 +44,6 @@ export class TransactionModule extends ControllerModuleBase {
       this.#handleRequestBurnXTC(),
       this.#batchTransactions(),
       TransactionModule.#handleBatchTransactions(),
-      this.#requestSign(),
-      this.#handleSign(),
       this.#requestCall(),
       this.#handleCall(),
       this.#requestReadState(),
@@ -67,9 +67,7 @@ export class TransactionModule extends ControllerModuleBase {
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
 
-        getApps(this.keyring?.currentWalletId.toString(), (apps = {}) => {
-          const app = apps?.[metadata?.url] || {};
-
+        getApp(this.keyring?.currentWalletId.toString(), metadata.url, app => {
           if (app?.status === CONNECTION_STATUS.accepted) {
             const argsError = validateTransferArgs(args);
             if (argsError) {
@@ -156,9 +154,7 @@ export class TransactionModule extends ControllerModuleBase {
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
 
-        getApps(this.keyring?.currentWalletId.toString(), async (apps = {}) => {
-          const app = apps?.[metadata?.url] || {};
-
+        getApp(this.keyring?.currentWalletId.toString(), metadata.url,  async (app = {}) => {
           if (app?.status === CONNECTION_STATUS.accepted) {
             const argsError = validateTransferArgs(args);
             if (argsError) {
@@ -264,8 +260,7 @@ export class TransactionModule extends ControllerModuleBase {
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
 
-        getApps(this.keyring?.currentWalletId.toString(), async (apps = {}) => {
-          const app = apps?.[metadata.url] || {};
+        getApp(this.keyring?.currentWalletId.toString(), metadata.url, async (app = {}) => {
           if (app?.status === CONNECTION_STATUS.accepted) {
             const argsError = validateBurnArgs(args);
             if (argsError) {
@@ -354,11 +349,9 @@ export class TransactionModule extends ControllerModuleBase {
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
 
-        getApps(this.keyring?.currentWalletId.toString(), async (apps = {}) => {
-          const app = apps?.[metadata?.url] || {};
-
+        getApp(this.keyring?.currentWalletId.toString(), metadata.url, async (app = {}) => {
           if (app?.status === CONNECTION_STATUS.accepted) {
-            const transactionsError = validateTransactions(transactions);
+            const transactionsError = !validateTransactions(transactions);
 
             if (transactionsError) {
               callback(transactionsError, null);
@@ -400,107 +393,25 @@ export class TransactionModule extends ControllerModuleBase {
   static #handleBatchTransactions() {
     return {
       methodName: 'handleBatchTransactions',
-      handler: async (opts, accepted, callId, portId) => {
+      handler: async (opts, accepted, transactions, callId, portId) => {
         const { callback } = opts;
         if (accepted) {
-          callback(null, accepted, [{ callId, portId }]);
-          callback(null, true); // close the modal
+          getBatchTransactions(async (err, batchTransactions) => {
+            const newBatchTransactionId = crypto.randomUUID();
+            const updatedBatchTransactions = {
+              ...batchTransactions,
+              [newBatchTransactionId]: transactions
+                .map((tx) => ({
+                  canisterId: tx.canisterId, methodName: tx.methodName, args: tx.arguments,
+                })),
+            };
+            setBatchTransactions(updatedBatchTransactions);
+
+            callback(null, { status: accepted, txId: newBatchTransactionId }, [{ callId, portId }]);
+            callback(null, true); // close the modal
+          });
         } else {
-          callback(ERRORS.TRANSACTION_REJECTED, false, [{ callId, portId }]);
-        }
-      },
-    };
-  }
-
-  #requestSign() {
-    return {
-      methodName: 'requestSign',
-      handler: async (opts, payload, metadata, requestInfo) => {
-        const { message, sender, callback } = opts;
-        const { id: callId } = message.data.data;
-        const { id: portId } = sender;
-        const { canisterId, requestType, preApprove } = requestInfo;
-
-        try {
-          const isDangerousUpdateCall = !preApprove && requestType === 'call';
-          if (isDangerousUpdateCall) {
-            getApps(
-              this.keyring?.currentWalletId.toString(),
-              async (apps = {}) => {
-                const app = apps?.[metadata.url] || {};
-                if (app.status !== CONNECTION_STATUS.accepted) {
-                  callback(ERRORS.CONNECTION_ERROR, null);
-                  return;
-                }
-                if (canisterId && !(canisterId in app.whitelist)) {
-                  callback(
-                    ERRORS.CANISTER_NOT_WHITLESTED_ERROR(canisterId),
-                    null,
-                  );
-                  return;
-                }
-                getProtectedIds(async (protectedIds) => {
-                  const canisterInfo = app.whitelist[canisterId];
-                  const shouldShowModal = protectedIds.includes(
-                    canisterInfo.id,
-                  );
-
-                  if (shouldShowModal) {
-                    const height = this.keyring?.isUnlocked
-                      ? SIZES.appConnectHeight
-                      : SIZES.loginHeight;
-
-                    this.displayPopUp({
-                      callId,
-                      portId,
-                      type: 'sign',
-                      metadataJson: JSON.stringify(metadata),
-                      argsJson: JSON.stringify({
-                        requestInfo,
-                        payload,
-                        canisterInfo,
-                        timeout: app?.timeout,
-                      }),
-                      screenArgs: {
-                        fixedHeight: height,
-                      },
-                    });
-                  } else {
-                    this.#signData(payload, callback);
-                  }
-                });
-              },
-            );
-          } else {
-            this.#signData(payload, callback);
-          }
-        } catch (e) {
-          callback(ERRORS.SERVER_ERROR(e), null);
-        }
-      },
-    };
-  }
-
-  #handleSign() {
-    return {
-      methodName: 'handleSign',
-      handler: async (opts, status, request, callId, portId) => {
-        const { callback } = opts;
-
-        if (status === CONNECTION_STATUS.accepted) {
-          try {
-            const parsedPayload = new Uint8Array(Object.values(request.payload));
-
-            const signed = await this.keyring?.sign(parsedPayload.buffer);
-            callback(null, new Uint8Array(signed), [{ callId, portId }]);
-            callback(null, true);
-          } catch (e) {
-            callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
-            callback(null, false);
-          }
-        } else {
-          callback(ERRORS.SIGN_REJECTED, null, [{ portId, callId }]);
-          callback(null, true); // Return true to close the modal
+          callback(ERRORS.TRANSACTION_REJECTED, { status: false }, [{ callId, portId }]);
         }
       },
     };
@@ -509,7 +420,7 @@ export class TransactionModule extends ControllerModuleBase {
   #requestCall() {
     return {
       methodName: 'requestCall',
-      handler: async (opts, metadata, args, preAprove) => {
+      handler: async (opts, metadata, args, batchTxId) => {
         const { message, sender, callback } = opts;
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
@@ -520,10 +431,10 @@ export class TransactionModule extends ControllerModuleBase {
         ]
           .principal;
         try {
-          getApps(
+          getApp(
             this.keyring.currentWalletId.toString(),
-            async (apps = {}) => {
-              const app = apps?.[metadata.url] || {};
+            metadata.url,
+            async (app = {}) => {
               if (app.status !== CONNECTION_STATUS.accepted) {
                 callback(ERRORS.CONNECTION_ERROR, null);
                 return;
@@ -537,7 +448,8 @@ export class TransactionModule extends ControllerModuleBase {
               }
               getProtectedIds(async (protectedIds) => {
                 const canisterInfo = app.whitelist[canisterId];
-                const shouldShowModal = !preAprove && protectedIds.includes(canisterInfo.id);
+                const shouldShowModal = (!batchTxId || batchTxId.lenght === 0)
+                  && protectedIds.includes(canisterInfo.id);
                 const requestInfo = generateRequestInfo({ ...args, sender: senderPID });
 
                 if (shouldShowModal) {
@@ -553,14 +465,24 @@ export class TransactionModule extends ControllerModuleBase {
                     metadataJson: JSON.stringify(metadata),
                   });
                 } else {
-                  handleCallRequest({
-                    keyring: this.keyring,
-                    request: {
-                      arguments: arg, methodName, canisterId,
-                    },
-                    portId,
-                    callId,
-                    callback,
+                  getBatchTransactions((batchTransactions) => {
+                    const savedBatchTrx = batchTxId
+                      ? batchTransactions[batchTxId].shift()
+                      : undefined;
+
+                    setBatchTransactions({
+                      ...batchTransactions,
+                    }, () => {
+                      handleCallRequest({
+                        keyring: this.keyring,
+                        request: {
+                          arguments: arg, methodName, canisterId, savedBatchTrx, batchTxId,
+                        },
+                        portId,
+                        callId,
+                        callback,
+                      });
+                    });
                   });
                 }
               });

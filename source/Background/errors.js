@@ -23,5 +23,8 @@ export default {
   ICNS_ERROR: { code: 400, message: 'There was an error trying to fetch your ICNS information.' },
   CLIENT_ERROR: (message) => ({ code: 400, message }),
   SERVER_ERROR: (message) => ({ code: 500, message }),
+  NOT_VALID_BATCH_TRANSACTION: {
+    code: 401, message: 'The transaction that was just attempted failed because it was not a valid batch transaction. Please contact the project’s developers.',
+  },
   ...SILENT_ERRORS,
 };
