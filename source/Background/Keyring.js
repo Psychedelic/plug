@@ -125,18 +125,15 @@ export const getKeyringErrorMessage = (type) => ({
 }[type]);
 
 export const sendMessage = (args, callback) => {
-  console.log('sending message', args);
   extension.runtime.sendMessage(args, (response) => {
     let parsedResponse = response;
     if (typeof response === 'string') {
       try {
         parsedResponse = JSON.parse(response);
       } catch (error) {
-        console.log('error parsing response', error);
         parsedResponse = response;
       }
     }
-    console.log('sendMessage response', response, parsedResponse);
     callback(parsedResponse);
   });
 };
