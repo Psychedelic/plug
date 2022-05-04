@@ -25,7 +25,8 @@
     "lint": "eslint ./source --ext .js,.jsx",
     "lint:fix": "eslint ./source --ext .js,.jsx --fix",
     "prepare": "husky install",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test": "jest --runInBand"
   },
   "dependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.16.0",
@@ -76,7 +77,7 @@
     "@babel/preset-react": "^7.14.5",
     "autoprefixer": "^10.0.2",
     "babel-eslint": "^10.1.0",
-    "babel-jest": "^27.0.6",
+    "babel-jest": "^28.0.3",
     "babel-loader": "^8.2.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
@@ -98,9 +99,10 @@
     "html-webpack-plugin": "^4.5.0",
     "husky": ">=6",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^27.0.6",
+    "jest": "^28.0.3",
     "jest-chrome": "^0.7.1",
     "jest-environment-jsdom": "^27.0.6",
+    "jest-puppeteer": "^6.1.0",
     "jest-webextension-mock": "^3.7.18",
     "jsconfig-paths-jest-mapper": "^1.0.0",
     "lint-staged": ">=10",
@@ -131,14 +133,6 @@
   "lint-staged": {
     "*.{js,jsx}": "eslint --cache --fix",
     "*.{js,css,md}": "prettier --write"
-  },
-  "jest": {
-    "setupFiles": [
-      "<rootDir>/tests/__setup__/setup.js"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/jest.config"
-    ]
   },
   "standard": {
     "parser": "@babel/eslint-parser"

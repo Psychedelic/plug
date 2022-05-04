@@ -1,9 +1,7 @@
 const puppeteer = require('puppeteer');
 
 (async () => {
-  console.log('Calling this shit');
   const pathToExtension = require('path').join(__dirname, '..', 'extension', 'chrome');
-  console.log('Path to extension ->', pathToExtension);
   const browser = await puppeteer.launch({
     headless: false,
     args: [
