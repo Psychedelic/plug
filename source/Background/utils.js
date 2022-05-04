@@ -2,16 +2,17 @@ import PlugController from '@psychedelic/plug-controller';
 
 import { validateCanisterId, validatePrincipalId, validateAccountId } from '@shared/utils/ids';
 import { getDabNfts, getDabTokens } from '@shared/services/DAB';
-import { ASSET_CANISTER_IDS } from '@shared/constants/canisters';
+import { ASSET_CANISTER_IDS, ICP_CANISTER_ID } from '@shared/constants/canisters';
 import { CYCLES_PER_TC } from '@shared/constants/currencies';
 import { XTC_FEE } from '@shared/constants/addresses';
 import { setProtectedIds } from '@modules/storageManager';
 
 import ERRORS from './errors';
-import { ICP_CANISTER_ID } from '../shared/constants/canisters';
 
 const validateAmount = (amount) => !Number.isNaN(amount) && Number.isInteger(amount) && amount >= 0;
-const validateFloatStrAmount = (amount) => !Number.isNaN(parseFloat(amount)) && parseFloat(amount) >= 0;
+const validateFloatStrAmount = (amount) => !Number.isNaN(parseFloat(amount))
+  && parseFloat(amount) >= 0;
+
 const isValidBigInt = (str) => {
   try {
     BigInt(str);
@@ -27,7 +28,6 @@ export const validateTransferArgs = ({ to, amount, opts, strAmount }) => {
   if (amount && !validateAmount(amount)) {
     message = 'The transaction failed because the amount entered was invalid. \n';
   }
-
 
   if (strAmount && !validateFloatStrAmount(strAmount)) {
     message = 'The transaction failed because the amount entered was invalid. \n';
@@ -106,9 +106,13 @@ export const fetchCanistersInfo = async (whitelist) => {
 // TokenIdentifier is SYMBOL or  CanisterID
 // Return ICP by default
 export const getToken = (tokenIdentifier, assets) => {
-  if (!tokenIdentifier) return assets.filter(asset => asset.canisterId === ICP_CANISTER_ID)[0]
+  if (!tokenIdentifier) {
+    return assets.filter((asset) => asset.canisterId === ICP_CANISTER_ID)[0];
+  }
 
-  if (validateCanisterId(tokenIdentifier)) return assets.filter(asset => asset.canisterId === tokenIdentifier)[0]
+  if (validateCanisterId(tokenIdentifier)) {
+    return assets.filter((asset) => asset.canisterId === tokenIdentifier)[0];
+  }
 
-  return assets.filter(asset => asset.symbol === tokenIdentifier)[0]
-}
+  return assets.filter((asset) => asset.symbol === tokenIdentifier)[0];
+};

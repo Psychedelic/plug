@@ -18,9 +18,9 @@ const Data = ({ data }) => {
   return (
     <div className={classes.innerContainer}>
       {
-        data.map((item, index) => (
+        data.map((item) => (
           <FormItem
-            key={index.toString()}
+            key={item.label}
             label={item.label}
             component={item.component}
             style={{ marginBottom: 24 }}

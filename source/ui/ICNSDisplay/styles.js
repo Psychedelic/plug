@@ -41,5 +41,5 @@ export default makeStyles(() => ({
   },
   large: {
     fontSize: 32,
-  }
+  },
 }));

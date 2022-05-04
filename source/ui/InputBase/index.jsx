@@ -24,3 +24,7 @@ InputBase.propTypes = {
   className: PropTypes.string,
   onClick: PropTypes.func,
 };
+
+InputBase.defaultProps = {
+  onClick: () => {},
+};

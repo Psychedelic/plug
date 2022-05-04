@@ -1,9 +1,10 @@
 import { Actor, HttpAgent } from '@dfinity/agent';
-import { Principal } from '@dfinity/principal';
 import crossFetch from 'cross-fetch';
+
+import shortAddress from '@shared/utils/short-address';
+
 import resolverIDL from '../utils/ic/icns/resolver.did';
 import registryIDL from '../utils/ic/icns/registry.did';
-import shortAddress from '@shared/utils/short-address';
 
 const ICNS_REGISTRY_ID = 'e5kvl-zyaaa-aaaan-qabaq-cai';
 const ICNS_RESOLVER_ID = 'euj6x-pqaaa-aaaan-qabba-cai';
