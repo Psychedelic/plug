@@ -24,6 +24,14 @@ import {
 import { ControllerModuleBase } from './controllerBase';
 
 export class TransactionModule extends ControllerModuleBase {
+  constructor(backgroundController, secureController, keyring) {
+    super(backgroundController, secureController, keyring);
+    this.DEFAULT_CURRENCY_MAP = {
+      ICP: 0,
+      XTC: 1,
+    };
+  }
+
   // Utils
   #getHandlerObjects() {
     return [
@@ -371,9 +379,9 @@ export class TransactionModule extends ControllerModuleBase {
       methodName: 'handleBatchTransactions',
       handler: async (opts, accepted, callId, portId) => {
         const { callback } = opts;
-        callback(null, true); // close the modal
         if (accepted) {
           callback(null, accepted, [{ callId, portId }]);
+          callback(null, true); // close the modal
         } else {
           callback(ERRORS.TRANSACTION_REJECTED, false, [{ callId, portId }]);
         }
