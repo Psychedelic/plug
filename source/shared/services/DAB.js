@@ -1,8 +1,16 @@
 import { getTokens, getAllNFTS, getTokenActor } from '@psychedelic/dab-js';
 import { HttpAgent } from '@dfinity/agent';
 import { Principal } from '@dfinity/principal';
+import { recursiveParseBigint } from '@background/Keyring';
+import { recursiveParsePrincipal } from '@shared/utils/ids';
 
-export const getDabTokens = async () => getTokens({});
+export const getDabTokens = async () => {
+  const tokens = await getTokens({});
+  const parsedTokens = (tokens || []).map(
+    (token) => recursiveParseBigint(recursiveParsePrincipal(token)),
+  );
+  return parsedTokens.map((token) => ({ ...token, canisterId: token?.principal_id }));
+};
 
 export const getDabNfts = async () => getAllNFTS({});
 

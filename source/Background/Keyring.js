@@ -189,11 +189,10 @@ export const getKeyringHandler = (type, keyring) => ({
       } else {
         keyring.getBalances();
       }
-
       assets = parseAssetsAmount(assets);
-
-      return assets;
+      return (assets || []).map((asset) => recursiveParseBigint(asset));
     } catch (e) {
+      console.log('Error while fetching the assets', e);
       return { error: e.message };
     }
   },
@@ -204,6 +203,7 @@ export const getKeyringHandler = (type, keyring) => ({
       const icpPrice = await getICPPrice();
       return formatAssets(parsedAssets, icpPrice);
     } catch (error) {
+      console.log('Error when fetching token balances', error);
       return { error: error.message };
     }
   },
@@ -213,14 +213,14 @@ export const getKeyringHandler = (type, keyring) => ({
     try {
       const { token } = await keyring.getTokenInfo(canisterId);
       const { decimals } = token;
-      const parsedAmount = parseToBigIntString(amount, decimals);
+      const parsedAmount = parseToBigIntString(amount, parseInt(decimals, 10));
       const { height, transactionId } = await keyring.send(to, parsedAmount, canisterId, opts);
       return {
         height: height ? parseInt(height, 10) : undefined,
         transactionId: transactionId ? parseInt(transactionId, 10) : undefined,
       };
     } catch (error) {
-      console.warn(error);
+      console.log('Error while sending token', error);
       return { error: error.message, height: null };
     }
   },
@@ -236,15 +236,19 @@ export const getKeyringHandler = (type, keyring) => ({
         const tokenInfo = await keyring.getTokenInfo(canisterId, standard);
         return { ...tokenInfo, amount: tokenInfo.amount.toString() };
       } catch (e) {
+        console.log('Error while fetching token info', e);
         return { error: e.message };
       }
     },
   [HANDLER_TYPES.ADD_CUSTOM_TOKEN]:
-    async ({ canisterId, standard }) => {
+    async ({ canisterId, standard, logo }) => {
       try {
-        const response = await keyring.registerToken(canisterId, standard);
-        return response;
+        const tokens = await keyring.registerToken(
+          canisterId, standard, keyring.currentWalletId, logo,
+        );
+        return (tokens || []).map((token) => recursiveParseBigint(token));
       } catch (e) {
+        console.log('Error registering token', e);
         return { error: e.message };
       }
     },
@@ -256,6 +260,7 @@ export const getKeyringHandler = (type, keyring) => ({
         const response = await keyring.burnXTC({ to, amount });
         return recursiveParseBigint(response);
       } catch (e) {
+        console.log('Error while burning XTC', e);
         return { error: e.message };
       }
     },
