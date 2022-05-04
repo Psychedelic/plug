@@ -123,7 +123,7 @@ export const parseAssetsAmount = (assets = []) => (
     const { amount, token } = currentAsset;
     const { decimals } = token;
 
-    const parsedAmount = parseToFloatAmount(amount, decimals);
+    const parsedAmount = parseToFloatAmount(amount, parseInt(decimals.toString(), 10));
 
     return {
       ...currentAsset,
