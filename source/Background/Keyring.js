@@ -189,9 +189,7 @@ export const getKeyringHandler = (type, keyring) => ({
       } else {
         keyring.getBalances();
       }
-
       assets = parseAssetsAmount(assets);
-
       return (assets || []).map((asset) => recursiveParseBigint(asset));
     } catch (e) {
       console.log('Error while fetching the assets', e);
@@ -243,9 +241,11 @@ export const getKeyringHandler = (type, keyring) => ({
       }
     },
   [HANDLER_TYPES.ADD_CUSTOM_TOKEN]:
-    async ({ canisterId, standard }) => {
+    async ({ canisterId, standard, logo }) => {
       try {
-        const tokens = await keyring.registerToken(canisterId, standard);
+        const tokens = await keyring.registerToken(
+          canisterId, standard, keyring.currentWalletId, logo,
+        );
         return (tokens || []).map((token) => recursiveParseBigint(token));
       } catch (e) {
         console.log('Error registering token', e);
