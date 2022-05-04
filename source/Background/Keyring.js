@@ -125,15 +125,18 @@ export const getKeyringErrorMessage = (type) => ({
 }[type]);
 
 export const sendMessage = (args, callback) => {
+  console.log('sending message', args);
   extension.runtime.sendMessage(args, (response) => {
     let parsedResponse = response;
     if (typeof response === 'string') {
       try {
         parsedResponse = JSON.parse(response);
       } catch (error) {
+        console.log('error parsing response', error);
         parsedResponse = response;
       }
     }
+    console.log('sendMessage response', response, parsedResponse);
     callback(parsedResponse);
   });
 };
@@ -167,7 +170,7 @@ export const getKeyringHandler = (type, keyring) => ({
     async (walletNumber) => {
       await keyring.setCurrentPrincipal(walletNumber);
 
-      return keyring.getState();
+      return recursiveParseBigint(await keyring.getState());
     },
   [HANDLER_TYPES.IMPORT]: async (params) => keyring.importMnemonic(params),
   [HANDLER_TYPES.GET_LOCKS]: async () => ({

@@ -13,8 +13,10 @@ import {
   getKeyringHandler,
   HANDLER_TYPES,
   getKeyringErrorMessage,
+  recursiveParseBigint,
 } from './Keyring';
 import ERRORS, { SILENT_ERRORS } from './errors';
+import { recursiveParsePrincipal } from '@shared/utils/ids';
 
 class BackgroundScript {
   constructor() {
@@ -73,7 +75,10 @@ class BackgroundScript {
         if (!keyringHandler) return;
 
         keyringHandler(params)
-          .then((res) => sendResponse(res))
+          .then((res) => {
+            const parsedRes = recursiveParseBigint(res);
+            return sendResponse(parsedRes);
+          })
           .catch((e) => {
             const keyringErrorMessage = getKeyringErrorMessage(type);
             const errorMessage = keyringErrorMessage
