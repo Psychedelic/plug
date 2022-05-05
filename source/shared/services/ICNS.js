@@ -41,11 +41,10 @@ export const resolveName = async (name, isICP) => {
   if (isICP && accountId) {
     return accountId;
   }
-  if (!principal) {
+  if (!principal || !principal.length) {
     record = await Registry.getRecord(name);
     const { owner } = record?.[0] || {};
     return owner?.toString?.();
   }
-  return principal?.toString?.();
+  return Array.isArray(principal) ? principal?.[0]?.toString() : principal?.toString?.();
 };
-
