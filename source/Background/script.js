@@ -75,10 +75,7 @@ class BackgroundScript {
         if (!keyringHandler) return;
 
         keyringHandler(params)
-          .then((res) => {
-            const parsedRes = recursiveParseBigint(res);
-            return sendResponse(parsedRes);
-          })
+          .then((res) => sendResponse(recursiveParseBigint(res)))
           .catch((e) => {
             const keyringErrorMessage = getKeyringErrorMessage(type);
             const errorMessage = keyringErrorMessage
