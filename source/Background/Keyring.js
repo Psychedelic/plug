@@ -49,7 +49,7 @@ const parseTransaction = (transaction) => {
 };
 
 const parseTransactions = (transactionsObject) => {
-  const { transactions } = transactionsObject;
+  const { transactions = [] } = transactionsObject;
 
   return {
     ...transactionsObject,
@@ -61,7 +61,7 @@ export const recursiveParseBigint = (obj) => {
   if (Array.isArray(obj)) {
     return obj.map(recursiveParseBigint);
   }
-  if (typeof obj === 'object') {
+  if (obj && typeof obj === 'object') {
     return Object.keys(obj).reduce((acc, key) => {
       acc[key] = recursiveParseBigint(obj[key]);
       return acc;
@@ -179,8 +179,12 @@ export const getKeyringHandler = (type, keyring) => ({
     return recursiveParseBigint(response);
   },
   [HANDLER_TYPES.GET_TRANSACTIONS]: async () => {
+    console.log('getting transactions');
     const response = await keyring.getTransactions();
-    return parseTransactions(response);
+    console.log('got transactions', response);
+    const parsed = parseTransactions(response);
+    console.log('parsed tx', parsed);
+    return parsed;
   },
   [HANDLER_TYPES.GET_ASSETS]: async ({ refresh }) => {
     try {
