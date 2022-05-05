@@ -57,21 +57,22 @@ const parseTransactions = (transactionsObject) => {
   };
 };
 
-export const recursiveParseBigint = (obj) => Object.entries(obj).reduce(
-  (acum, [key, val]) => {
-    if (val instanceof Object) {
-      const res = Array.isArray(val)
-        ? val.map((el) => recursiveParseBigint(el))
-        : recursiveParseBigint(val);
-      return { ...acum, [key]: res };
-    }
-    if (typeof val === 'bigint') {
-      return { ...acum, [key]: parseInt(val.toString(), 10) };
-    }
-    return { ...acum, [key]: val };
-  },
-  { ...obj },
-);
+export const recursiveParseBigint = (obj) => {
+  if (!obj) return obj;
+  if (Array.isArray(obj)) {
+    return obj.map(recursiveParseBigint);
+  }
+  if (typeof obj === 'object') {
+    return Object.keys(obj).reduce((acc, key) => {
+      acc[key] = recursiveParseBigint(obj[key]);
+      return acc;
+    }, {});
+  }
+  if (typeof obj === 'bigint') {
+    return parseInt(obj.toString(), 10);
+  }
+  return obj;
+};
 
 export const HANDLER_TYPES = {
   LOCK: 'lock-keyring',
@@ -167,7 +168,7 @@ export const getKeyringHandler = (type, keyring) => ({
     async (walletNumber) => {
       await keyring.setCurrentPrincipal(walletNumber);
 
-      return keyring.getState();
+      return recursiveParseBigint(await keyring.getState());
     },
   [HANDLER_TYPES.IMPORT]: async (params) => keyring.importMnemonic(params),
   [HANDLER_TYPES.GET_LOCKS]: async () => ({
