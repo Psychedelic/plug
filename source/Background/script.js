@@ -16,7 +16,6 @@ import {
   recursiveParseBigint,
 } from './Keyring';
 import ERRORS, { SILENT_ERRORS } from './errors';
-import { recursiveParsePrincipal } from '@shared/utils/ids';
 
 class BackgroundScript {
   constructor() {

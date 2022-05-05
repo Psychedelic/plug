@@ -58,7 +58,6 @@ const parseTransactions = (transactionsObject) => {
 };
 
 export const recursiveParseBigint = (obj) => {
-  if (!obj) return obj;
   if (Array.isArray(obj)) {
     return obj.map(recursiveParseBigint);
   }

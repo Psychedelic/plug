@@ -143,7 +143,7 @@
     "accountIdLearnMore": "Learn more about Account ID's",
     "icnsLearnMore": "Learn more about ICNS",
     "icnsInfoTitle": "What is ICNS?",
-    "icnsDescription": "TBD",
+    "icnsDescription": "An ICNS name maps your wallet ID to a human readable name (ex. 'plug.icp'). Once set, you can send and receive tokens & NFT's to your ICNS name in addition to your wallet ID.",
     "getICNS": "Buy an ICNS"
   },
   "seedPhrase": {
