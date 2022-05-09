@@ -40,14 +40,14 @@ const NFTDetails = () => {
     [collections, nft]);
 
   const name = `${nft?.name ?? `#${nft?.index}`}`;
+  const isICNS = nft?.collection === 'ICNS';
 
-  console.log('selected NFT', nft);
   const openNFT = (url) => () => extension.tabs.create({
     url: isICNS
       ? `https://icns.id/domains/${nft?.name.replace('.icp', '')}/detail`
-      : url
-    });
-  
+      : url,
+  });
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -62,7 +62,7 @@ const NFTDetails = () => {
       <div className={classes.container}>
         {isICNS ? (
           <ICNSDisplay icns={nft} className={classes.image} large />
-          ) : (
+        ) : (
           <NFTDisplayer url={nft?.url} className={classes.image} interactive />
         )}
         <div className={classes.buttonContainer}>
