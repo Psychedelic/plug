@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import extension from 'extensionizer';
 
 import ICNS_IMG from '@assets/icons/icns.svg';
-import Switch from '@components/Switch';
+import { Switch } from '@components';
 import { Button } from '@ui';
 
 import useStyles from './styles';
