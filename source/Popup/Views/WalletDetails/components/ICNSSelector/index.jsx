@@ -48,14 +48,14 @@ const ICNSSelector = () => {
     });
   };
 
-  const emptyICNS = (
-    <Typography variant="subtitle2">
-      No ICNS names owned
-    </Typography>
-  );
-
   const getInputContent = () => {
-    if (names?.length === 0) return emptyICNS;
+    if (names?.length === 0) {
+      return (
+        <Typography variant="subtitle2">
+          No ICNS names owned
+        </Typography>
+      );
+    }
     if (nameLoading) {
       return (
         <>
@@ -66,20 +66,19 @@ const ICNSSelector = () => {
         </>
       );
     }
-    if (resolved) {
-      return (
-        <>
-          <Typography variant="subtitle2">
-            {resolved ?? 'Select' }
-          </Typography>
+    return (
+      <>
+        <Typography variant="subtitle2">
+          {resolved ?? 'Select an ICNS name' }
+        </Typography>
+        {resolved ? (
           <Typography variant="subtitle2" className={classes.changeText}>
             Change
           </Typography>
-        </>
-      );
-    }
-    return (
-      <ChevronDown className={classes.arrowDown} />
+        ) : (
+          <ChevronDown className={classes.arrowDown} />
+        )}
+      </>
     );
   };
 
