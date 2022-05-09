@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Layout } from '@components';
 import {
   Header, Button, Badge, LinkButton, NFTDisplayer, ICNSDisplay,
@@ -36,13 +36,22 @@ const NFTDetails = () => {
     navigator.navigate('home', TABS.NFTS);
   };
 
-  const openNFT = (url) => () => extension.tabs.create({ url });
-
   const collection = useMemo(() => collections?.find((col) => col.name === nft?.collection),
     [collections, nft]);
 
   const name = `${nft?.name ?? `#${nft?.index}`}`;
   const isICNS = nft?.collection === 'ICNS';
+
+  const openNFT = (url) => () => extension.tabs.create({
+    url: isICNS
+      ? `https://icns.id/domains/${nft?.name.replace('.icp', '')}/detail`
+      : url,
+  });
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <Layout>
       <Header
@@ -53,7 +62,7 @@ const NFTDetails = () => {
       <div className={classes.container}>
         {isICNS ? (
           <ICNSDisplay icns={nft} className={classes.image} large />
-          ) : (
+        ) : (
           <NFTDisplayer url={nft?.url} className={classes.image} interactive />
         )}
         <div className={classes.buttonContainer}>
