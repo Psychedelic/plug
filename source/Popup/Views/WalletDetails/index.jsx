@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import Picker from 'emoji-picker-react';
@@ -21,7 +21,7 @@ import {
   LinkButton,
 } from '@ui';
 import { setUseICNS } from '@modules/storageManager';
-import { setUseICNS as setReduxUseICNS } from '@redux/icns';
+import { setICNSData, setUseICNS as setReduxUseICNS } from '@redux/icns';
 
 import useStyles from './styles';
 import DetailItem from './components/DetailItem';
@@ -91,9 +91,36 @@ const WalletDetails = () => {
   };
 
   const handleToggleICNS = (event) => {
-    dispatch(setReduxUseICNS(event.target.checked));
-    setUseICNS(event.target.checked, walletNumber);
+    const { checked } = event.target;
+    dispatch(setReduxUseICNS(checked));
+    setUseICNS(checked, walletNumber);
+    if (!checked) {
+      sendMessage({
+        type: HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME,
+        params: '',
+      }, (response) => {
+        if (response.error) {
+          console.log('Error when resetting your reverse resolved name', response.error); // TODO HANDLE ERROR (shouldnt happen tho)
+        } else {
+          sendMessage({
+            type: HANDLER_TYPES.GET_ICNS_DATA,
+            params: { refresh: true },
+          }, (icnsData) => {
+            dispatch(setICNSData(icnsData));
+          });
+        }
+      });
+    }
   };
+
+  useEffect(() => {
+    sendMessage({
+      type: HANDLER_TYPES.GET_ICNS_DATA,
+      params: { refresh: true },
+    }, (icnsData) => {
+      dispatch(setICNSData(icnsData));
+    });
+  }, []);
 
   const hasActiveResolvedICNS = resolved && useICNS;
   return (
