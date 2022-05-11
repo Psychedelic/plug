@@ -26,6 +26,7 @@
     "lint:fix": "eslint ./source --ext .js,.jsx --fix",
     "prepare": "husky install",
     "test:watch": "jest --watch",
+    "pretest": "yarn build:inpage && cross-env NODE_ENV=test cross-env TARGET_BROWSER=chrome webpack",
     "test": "jest --runInBand"
   },
   "dependencies": {
