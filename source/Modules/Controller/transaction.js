@@ -1,10 +1,11 @@
+import ERRORS from '@background/errors';
 import qs from 'query-string';
 import extension from 'extensionizer';
-import ERRORS from '@background/errors';
 import {
   validateTransferArgs,
   validateTransactions,
   validateBurnArgs,
+  getToken,
 } from '@background/utils';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { ICP_CANISTER_ID } from '@shared/constants/canisters';
@@ -20,13 +21,11 @@ import {
   getApps,
   getProtectedIds,
 } from '../storageManager';
+import { ControllerModuleBase } from './controllerBase';
 
-export class TransactionModule {
+export class TransactionModule extends ControllerModuleBase {
   constructor(backgroundController, secureController, keyring) {
-    this.keyring = keyring;
-    this.secureController = secureController;
-    this.backgroundController = backgroundController;
-
+    super(backgroundController, secureController, keyring);
     this.DEFAULT_CURRENCY_MAP = {
       ICP: 0,
       XTC: 1,
@@ -38,6 +37,8 @@ export class TransactionModule {
     return [
       this.#requestTransfer(),
       this.#handleRequestTransfer(),
+      this.#requestTransferToken(),
+      this.#handleRequestTransferToken(),
       this.#requestBurnXTC(),
       this.#handleRequestBurnXTC(),
       this.#batchTransactions(),
@@ -45,15 +46,6 @@ export class TransactionModule {
       this.#requestSign(),
       this.#handleSign(),
     ];
-  }
-
-  #secureWrapper({ args, handlerObject }) {
-    return this.secureController(
-      args[0].callback,
-      async () => {
-        handlerObject.handler(...args);
-      },
-    );
   }
 
   async #signData(payload, callback) {
@@ -81,13 +73,106 @@ export class TransactionModule {
               callback(argsError, null);
               return;
             }
+
+            const height = this.keyring?.isUnlocked
+              ? SIZES.detailHeightSmall
+              : SIZES.loginHeight;
+
+            this.displayPopUp({
+              callId,
+              portId,
+              metadataJson: JSON.stringify(metadata),
+              argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
+              type: 'transfer',
+              screenArgs: {
+                fixedHeight: height,
+                top: 65,
+                left: metadata.pageWidth - SIZES.width,
+              },
+            });
+          } else {
+            callback(ERRORS.CONNECTION_ERROR, null);
+          }
+        });
+      },
+    };
+  }
+
+  #handleRequestTransfer() {
+    return {
+      methodName: 'handleRequestTransfer',
+      handler: async (opts, transferRequests, callId, portId) => {
+        const { callback } = opts;
+        const transfer = transferRequests?.[0];
+
+        if (transfer?.status === 'declined') {
+          callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
+        } else {
+          const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, this.keyring);
+          const sendToken = getKeyringHandler(HANDLER_TYPES.SEND_TOKEN, this.keyring);
+
+          const assets = await getBalance();
+          const parsedAmount = (transfer.amount / E8S_PER_ICP);
+          if (assets?.[this.DEFAULT_CURRENCY_MAP.ICP]?.amount > parsedAmount) {
+            const response = await sendToken({
+              ...transfer,
+              amount: parsedAmount,
+              canisterId: ICP_CANISTER_ID,
+            });
+
+            if (response.error) {
+              callback(null, false);
+              callback(ERRORS.SERVER_ERROR(response.error), null, [
+                { portId, callId },
+              ]);
+            } else {
+              callback(null, true);
+              callback(null, response, [{ portId, callId }]);
+            }
+          } else {
+            callback(null, false);
+            callback(ERRORS.BALANCE_ERROR, null, [{ portId, callId }]);
+          }
+        }
+      },
+    };
+  }
+
+  #requestTransferToken() {
+    return {
+      methodName: 'requestTransferToken',
+      handler: async (opts, metadata, args) => {
+        const { message, sender, callback } = opts;
+
+        const { id: callId } = message.data.data;
+        const { id: portId } = sender;
+
+        getApps(this.keyring?.currentWalletId.toString(), async (apps = {}) => {
+          const app = apps?.[metadata?.url] || {};
+
+          if (app?.status === CONNECTION_STATUS.accepted) {
+            const argsError = validateTransferArgs(args);
+            if (argsError) {
+              callback(argsError, null);
+              return;
+            }
+
+            const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, this.keyring);
+            const assets = await getBalance();
+
+            const token = getToken(args.token, assets);
+
+            if (!token) {
+              callback(ERRORS.CONNECTION_ERROR, null, [{ portId, callId }]);
+            }
+
             const url = qs.stringifyUrl({
               url: 'notification.html',
               query: {
                 callId,
                 portId,
                 metadataJson: JSON.stringify(metadata),
-                argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
+                argsJson: JSON.stringify({ ...args, token, timeout: app?.timeout }),
                 type: 'transfer',
               },
             });
@@ -112,27 +197,25 @@ export class TransactionModule {
     };
   }
 
-  #handleRequestTransfer() {
+  #handleRequestTransferToken() {
     return {
-      methodName: 'handleRequestTransfer',
+      methodName: 'handleRequestTransferToken',
       handler: async (opts, transferRequests, callId, portId) => {
         const { callback } = opts;
         const transfer = transferRequests?.[0];
+        const amount = parseFloat(transfer.strAmount);
 
         if (transfer?.status === 'declined') {
           callback(null, true);
           callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
         } else {
-          const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, this.keyring);
           const sendToken = getKeyringHandler(HANDLER_TYPES.SEND_TOKEN, this.keyring);
 
-          const assets = await getBalance();
-          const parsedAmount = (transfer.amount / E8S_PER_ICP);
-          if (assets?.[this.DEFAULT_CURRENCY_MAP.ICP]?.amount > parsedAmount) {
+          if (transfer.token.amount > amount) {
             const response = await sendToken({
               ...transfer,
-              amount: parsedAmount,
-              canisterId: ICP_CANISTER_ID,
+              amount,
+              canisterId: transfer.token.canisterId,
             });
 
             if (response.error) {
@@ -170,28 +253,21 @@ export class TransactionModule {
               callback(argsError, null);
               return;
             }
-            const url = qs.stringifyUrl({
-              url: 'notification.html',
-              query: {
-                callId,
-                portId,
-                metadataJson: JSON.stringify(metadata),
-                argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
-                type: 'burnXTC',
-              },
-            });
-
             const height = this.keyring?.isUnlocked
               ? SIZES.detailHeightSmall
               : SIZES.loginHeight;
 
-            extension.windows.create({
-              url,
-              type: 'popup',
-              width: SIZES.width,
-              height,
-              top: 65,
-              left: metadata.pageWidth - SIZES.width,
+            this.displayPopUp({
+              callId,
+              portId,
+              metadataJson: JSON.stringify(metadata),
+              argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
+              type: 'burnXTC',
+              screenArgs: {
+                fixedHeight: height,
+                top: 65,
+                left: metadata.pageWidth - SIZES.width,
+              },
             });
           } else {
             callback(ERRORS.CONNECTION_ERROR, null);
@@ -210,7 +286,6 @@ export class TransactionModule {
 
         // Answer this callback no matter if the transfer succeeds or not.
         if (transfer?.status === 'declined') {
-          callback(null, true);
           callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
         } else {
           const burnXTC = getKeyringHandler(HANDLER_TYPES.BURN_XTC, this.keyring);
@@ -269,32 +344,25 @@ export class TransactionModule {
               ...tx,
               canisterInfo: canistersInfo[tx.canisterId],
             }));
-            const url = qs.stringifyUrl({
-              url: 'notification.html',
-              query: {
-                callId,
-                portId,
-                metadataJson: JSON.stringify(metadata),
-                argsJson: JSON.stringify({
-                  transactions: transactionsWithInfo,
-                  canistersInfo,
-                  timeout: app?.timeout,
-                }),
-                type: 'batchTransactions',
-              },
-            });
-
             const height = this.keyring?.isUnlocked
               ? SIZES.detailHeightSmall
               : SIZES.loginHeight;
 
-            extension.windows.create({
-              url,
-              type: 'popup',
-              width: SIZES.width,
-              height,
-              top: 65,
-              left: metadata.pageWidth - SIZES.width,
+            this.displayPopUp({
+              callId,
+              portId,
+              metadataJson: JSON.stringify(metadata),
+              argsJson: JSON.stringify({
+                transactions: transactionsWithInfo,
+                canistersInfo,
+                timeout: app?.timeout,
+              }),
+              type: 'batchTransactions',
+              screenArgs: {
+                fixedHeight: height,
+                top: 65,
+                left: metadata.pageWidth - SIZES.width,
+              },
             });
           } else {
             callback(ERRORS.CONNECTION_ERROR, null);
@@ -309,9 +377,9 @@ export class TransactionModule {
       methodName: 'handleBatchTransactions',
       handler: async (opts, accepted, callId, portId) => {
         const { callback } = opts;
-        callback(null, true); // close the modal
         if (accepted) {
           callback(null, accepted, [{ callId, portId }]);
+          callback(null, true); // close the modal
         } else {
           callback(ERRORS.TRANSACTION_REJECTED, false, [{ callId, portId }]);
         }
@@ -346,29 +414,24 @@ export class TransactionModule {
                 const shouldShowModal = protectedIds.includes(canisterInfo.id);
 
                 if (shouldShowModal) {
-                  const url = qs.stringifyUrl({
-                    url: 'notification.html',
-                    query: {
-                      callId,
-                      portId,
-                      type: 'sign',
-                      metadataJson: JSON.stringify(metadata),
-                      argsJson: JSON.stringify({
-                        requestInfo,
-                        payload,
-                        canisterInfo,
-                        timeout: app?.timeout,
-                      }),
-                    },
-                  });
                   const height = this.keyring?.isUnlocked
                     ? SIZES.appConnectHeight
                     : SIZES.loginHeight;
-                  extension.windows.create({
-                    url,
-                    type: 'popup',
-                    width: SIZES.width,
-                    height,
+
+                  this.displayPopUp({
+                    callId,
+                    portId,
+                    type: 'sign',
+                    metadataJson: JSON.stringify(metadata),
+                    argsJson: JSON.stringify({
+                      requestInfo,
+                      payload,
+                      canisterInfo,
+                      timeout: app?.timeout,
+                    }),
+                    screenArgs: {
+                      fixedHeight: height,
+                    },
                   });
                 } else {
                   this.#signData(payload, callback);
@@ -415,7 +478,7 @@ export class TransactionModule {
     this.#getHandlerObjects().forEach((handlerObject) => {
       this.backgroundController.exposeController(
         handlerObject.methodName,
-        async (...args) => this.#secureWrapper({ args, handlerObject }),
+        async (...args) => this.secureWrapper({ args, handlerObject }),
       );
     });
   }

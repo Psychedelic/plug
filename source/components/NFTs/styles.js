@@ -6,7 +6,6 @@ export default makeStyles((theme) => ({
   root: {
     padding: '18px 25px',
     minHeight: EXTENSION_HEIGHT,
-    maxHeight: EXTENSION_HEIGHT,
     display: 'flex',
     flexDirection: 'column',
     width: '100%',

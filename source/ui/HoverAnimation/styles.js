@@ -2,6 +2,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles({
   '@keyframes hoverEffect': {
+    '0%': {
+      transform: 'translateX(0)',
+    },
     '50%': {
       transform: 'translateY(-3px)',
     },
@@ -17,8 +20,8 @@ export default makeStyles({
       animationIterationCount: 'infinite',
       animationDirection: 'alternate',
       animationTimingFunction: 'linear',
-      animationDelay: '.3s',
       transform: 'translateY(-6px)',
+      willChange: 'transform',
     },
   },
 });

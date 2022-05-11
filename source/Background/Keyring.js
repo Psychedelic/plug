@@ -49,7 +49,7 @@ const parseTransaction = (transaction) => {
 };
 
 const parseTransactions = (transactionsObject) => {
-  const { transactions } = transactionsObject;
+  const { transactions = [] } = transactionsObject;
 
   return {
     ...transactionsObject,
@@ -57,21 +57,21 @@ const parseTransactions = (transactionsObject) => {
   };
 };
 
-export const recursiveParseBigint = (obj) => Object.entries(obj).reduce(
-  (acum, [key, val]) => {
-    if (val instanceof Object) {
-      const res = Array.isArray(val)
-        ? val.map((el) => recursiveParseBigint(el))
-        : recursiveParseBigint(val);
-      return { ...acum, [key]: res };
-    }
-    if (typeof val === 'bigint') {
-      return { ...acum, [key]: parseInt(val.toString(), 10) };
-    }
-    return { ...acum, [key]: val };
-  },
-  { ...obj },
-);
+export const recursiveParseBigint = (obj) => {
+  if (Array.isArray(obj)) {
+    return obj.map(recursiveParseBigint);
+  }
+  if (obj && typeof obj === 'object') {
+    return Object.keys(obj).reduce((acc, key) => {
+      acc[key] = recursiveParseBigint(obj[key]);
+      return acc;
+    }, {});
+  }
+  if (typeof obj === 'bigint') {
+    return parseInt(obj.toString(), 10);
+  }
+  return obj;
+};
 
 export const HANDLER_TYPES = {
   LOCK: 'lock-keyring',
@@ -95,6 +95,8 @@ export const HANDLER_TYPES = {
   BURN_XTC: 'burn-xtc',
   GET_NFTS: 'get-nfts',
   TRANSFER_NFT: 'transfer-nft',
+  GET_ICNS_DATA: 'get-icns-data',
+  SET_REVERSE_RESOLVED_NAME: 'set-reverse-resolved-name',
 };
 
 export const getKeyringErrorMessage = (type) => ({
@@ -118,6 +120,8 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.BURN_XTC]: 'burning XTC.',
   [HANDLER_TYPES.GET_NFTS]: 'getting your NTF\'s.',
   [HANDLER_TYPES.TRANSFER_NFT]: 'transfering your NFT.',
+  [HANDLER_TYPES.GET_ICNS_DATA]: 'getting your ICNS data.',
+  [HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME]: 'setting your reverse resolved name.',
 }[type]);
 
 export const sendMessage = (args, callback) => {
@@ -149,13 +153,21 @@ export const getKeyringHandler = (type, keyring) => ({
     }
     return unlocked;
   },
-  [HANDLER_TYPES.CREATE]: async (params) => keyring.create(params),
+  [HANDLER_TYPES.CREATE]: async (params) => {
+    try {
+      const { mnemonic } = await keyring.create(params);
+      return { mnemonic };
+    } catch (e) {
+      console.log('Error creating wallet', e);
+      return null;
+    }
+  },
   [HANDLER_TYPES.CREATE_PRINCIPAL]: async (params) => keyring.createPrincipal(params),
   [HANDLER_TYPES.SET_CURRENT_PRINCIPAL]:
     async (walletNumber) => {
       await keyring.setCurrentPrincipal(walletNumber);
 
-      return keyring.getState();
+      return recursiveParseBigint(await keyring.getState());
     },
   [HANDLER_TYPES.IMPORT]: async (params) => keyring.importMnemonic(params),
   [HANDLER_TYPES.GET_LOCKS]: async () => ({
@@ -168,7 +180,8 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.GET_TRANSACTIONS]: async () => {
     const response = await keyring.getTransactions();
-    return parseTransactions(response);
+    const parsed = parseTransactions(response);
+    return parsed;
   },
   [HANDLER_TYPES.GET_ASSETS]: async ({ refresh }) => {
     try {
@@ -185,11 +198,10 @@ export const getKeyringHandler = (type, keyring) => ({
       } else {
         keyring.getBalances();
       }
-
       assets = parseAssetsAmount(assets);
-
-      return assets;
+      return (assets || []).map((asset) => recursiveParseBigint(asset));
     } catch (e) {
+      console.log('Error while fetching the assets', e);
       return { error: e.message };
     }
   },
@@ -200,6 +212,7 @@ export const getKeyringHandler = (type, keyring) => ({
       const icpPrice = await getICPPrice();
       return formatAssets(parsedAssets, icpPrice);
     } catch (error) {
+      console.log('Error when fetching token balances', error);
       return { error: error.message };
     }
   },
@@ -209,14 +222,14 @@ export const getKeyringHandler = (type, keyring) => ({
     try {
       const { token } = await keyring.getTokenInfo(canisterId);
       const { decimals } = token;
-      const parsedAmount = parseToBigIntString(amount, decimals);
+      const parsedAmount = parseToBigIntString(amount, parseInt(decimals, 10));
       const { height, transactionId } = await keyring.send(to, parsedAmount, canisterId, opts);
       return {
         height: height ? parseInt(height, 10) : undefined,
         transactionId: transactionId ? parseInt(transactionId, 10) : undefined,
       };
     } catch (error) {
-      console.warn(error);
+      console.log('Error while sending token', error);
       return { error: error.message, height: null };
     }
   },
@@ -232,15 +245,19 @@ export const getKeyringHandler = (type, keyring) => ({
         const tokenInfo = await keyring.getTokenInfo(canisterId, standard);
         return { ...tokenInfo, amount: tokenInfo.amount.toString() };
       } catch (e) {
+        console.log('Error while fetching token info', e);
         return { error: e.message };
       }
     },
   [HANDLER_TYPES.ADD_CUSTOM_TOKEN]:
-    async ({ canisterId, standard }) => {
+    async ({ canisterId, standard, logo }) => {
       try {
-        const response = await keyring.registerToken(canisterId, standard);
-        return response;
+        const tokens = await keyring.registerToken(
+          canisterId, standard, keyring.currentWalletId, logo,
+        );
+        return (tokens || []).map((token) => recursiveParseBigint(token));
       } catch (e) {
+        console.log('Error registering token', e);
         return { error: e.message };
       }
     },
@@ -252,6 +269,7 @@ export const getKeyringHandler = (type, keyring) => ({
         const response = await keyring.burnXTC({ to, amount });
         return recursiveParseBigint(response);
       } catch (e) {
+        console.log('Error while burning XTC', e);
         return { error: e.message };
       }
     },
@@ -263,13 +281,32 @@ export const getKeyringHandler = (type, keyring) => ({
     }
     return (collections || [])?.map((collection) => recursiveParseBigint(collection));
   },
-  [HANDLER_TYPES.TRANSFER_NFT]:
-    async ({ to, nft }) => {
-      try {
-        const response = await keyring.transferNFT({ to, token: nft });
-        return recursiveParseBigint(response);
-      } catch (e) {
-        return { error: e.message };
-      }
-    },
+  [HANDLER_TYPES.TRANSFER_NFT]: async ({ to, nft }) => {
+    try {
+      const response = await keyring.transferNFT({ to, token: nft });
+      return recursiveParseBigint(response);
+    } catch (e) {
+      console.log('Error transfering NFT', e);
+      return { error: e.message };
+    }
+  },
+  [HANDLER_TYPES.GET_ICNS_DATA]: async ({ refresh }) => {
+    const { wallets, currentWalletId } = await keyring.getState();
+    let icnsData = wallets?.[currentWalletId]?.icnsData || { names: [] };
+    if (!icnsData?.names?.length || refresh) {
+      icnsData = await keyring.getICNSData();
+    } else {
+      keyring.getICNSData();
+    }
+    return icnsData;
+  },
+  [HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME]: async (name) => {
+    try {
+      const res = await keyring.setICNSResolvedName(name);
+      return res;
+    } catch (e) {
+      console.log('Error setting reverse resolution', e);
+      return { error: e.message };
+    }
+  },
 }[type]);

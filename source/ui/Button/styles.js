@@ -1,7 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 
+import { RAINBOW_GRADIENT } from '@shared/styles/gradients';
+import { SHADOW_1 } from '@shared/styles/shadows';
+
 const defaultBoxShadow = '0px 1px 2px rgba(0, 0, 0, 0.05)';
-const boxShadow = '0px 0px 0px rgba(6, 44, 82, 0.1), 0px 1px 3px rgba(64, 66, 69, 0.12), 0px 2px 16px rgba(33, 43, 54, 0.08)';
 
 export default makeStyles((theme) => ({
   root: {
@@ -20,16 +22,16 @@ export default makeStyles((theme) => ({
     fontWeight: 700,
     color: 'white',
     background: theme.palette.primary.main,
-    boxShadow,
+    boxShadow: SHADOW_1,
     '&:hover': {
       opacity: 0.9,
-      boxShadow,
+      boxShadow: SHADOW_1,
       background: theme.palette.primary.main,
     },
     '&:disabled': {
       opacity: 0.6,
       color: 'white',
-      boxShadow,
+      boxShadow: SHADOW_1,
       background: theme.palette.primary.main,
     },
   },
@@ -37,33 +39,33 @@ export default makeStyles((theme) => ({
     fontWeight: 700,
     color: 'white',
     background: theme.palette.primary.mainGradient,
-    boxShadow,
+    boxShadow: SHADOW_1,
     '&:hover': {
       opacity: 0.9,
-      boxShadow,
+      boxShadow: SHADOW_1,
     },
     '&:disabled': {
       opacity: 0.6,
       color: 'white',
-      boxShadow,
+      boxShadow: SHADOW_1,
     },
   },
   danger: {
     fontWeight: 700,
     color: 'white',
     background: theme.palette.danger.main,
-    boxShadow,
+    boxShadow: SHADOW_1,
 
     '&:hover': {
       opacity: 0.9,
       background: theme.palette.danger.main,
-      boxShadow,
+      boxShadow: SHADOW_1,
     },
     '&:disabled': {
       opacity: 0.6,
       color: 'white',
       background: theme.palette.danger.main,
-      boxShadow,
+      boxShadow: SHADOW_1,
     },
   },
   default: {
@@ -102,8 +104,7 @@ export default makeStyles((theme) => ({
   rainbowOutlined: {
     color: '#111827',
     border: 'double 2px transparent',
-    backgroundImage:
-      'linear-gradient(white, white), radial-gradient(circle at top left,#FFE701,#FA51D3,#10D9ED,#53FF54)',
+    backgroundImage: RAINBOW_GRADIENT,
     backgroundOrigin: 'border-box',
     backgroundClip: 'padding-box, border-box',
     boxShadow: 'none',
@@ -129,5 +130,22 @@ export default makeStyles((theme) => ({
   },
   fullWidth: {
     width: '100%',
+  },
+  blue: {
+    color: 'white',
+    border: 'none',
+    boxShadow: 'none',
+    filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
+    background: '#3574F4',
+    fontWeight: 'bold',
+    '&:hover': {
+      opacity: 0.9,
+      boxShadow: 'none',
+      background: '#3574F4',
+    },
+    '&:disabled': {
+      opacity: 0.6,
+      boxShadow: 'none',
+    },
   },
 }));

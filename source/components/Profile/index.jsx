@@ -32,6 +32,7 @@ import ActionDialog from '../ActionDialog';
 import useMenuItems from '../../hooks/useMenuItems';
 import useStyles from './styles';
 import UserIcon from '../UserIcon';
+import { setICNSData } from '../../redux/icns';
 
 const Profile = ({ disableProfile }) => {
   const classes = useStyles();
@@ -106,10 +107,18 @@ const Profile = ({ disableProfile }) => {
     sendMessage({ type: HANDLER_TYPES.SET_CURRENT_PRINCIPAL, params: wallet },
       (state) => {
         if (state?.wallets?.length) {
-          dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
+          const newWallet = state.wallets[state.currentWalletId];
+          dispatch(setAccountInfo(newWallet));
+          dispatch(setICNSData(newWallet.icnsData));
           dispatch(setAssetsLoading(true));
           dispatch(setTransactions([]));
           dispatch(setTransactionsLoading(true));
+          sendMessage({
+            type: HANDLER_TYPES.GET_ICNS_DATA,
+            params: { refresh: true },
+          }, (icnsData) => {
+            dispatch(setICNSData(icnsData));
+          });
           sendMessage({
             type: HANDLER_TYPES.GET_ASSETS,
             params: {},
@@ -132,6 +141,7 @@ const Profile = ({ disableProfile }) => {
     <>
       <HoverAnimation
         disabled={disableProfile}
+        style={{ padding: '15px' }}
       >
         <Button
           onClick={handleToggle}

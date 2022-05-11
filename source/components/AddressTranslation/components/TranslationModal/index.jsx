@@ -23,7 +23,7 @@ const ICNSModal = ({ closeModal, loading }) => {
       <Typography>{t('send.icnsModalText')}</Typography>
       <Button
         variant="rainbow"
-        value={t('send.icnsModalButton1')}
+        value={t('common.okIUnderstand')}
         onClick={closeModal}
         fullWidth
         disabled={loading}

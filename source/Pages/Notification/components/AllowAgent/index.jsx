@@ -76,7 +76,7 @@ const AllowAgent = ({
 
   useEffect(() => {
     setOnTimeout(() => () => {
-      handleAllowAgent(CONNECTION_STATUS.rejected).then(() => {
+      handleAllowAgent(CONNECTION_STATUS.refused).then(() => {
         setHandled(true);
         window?.close?.();
       });
@@ -103,7 +103,7 @@ const AllowAgent = ({
 
   window.onbeforeunload = () => {
     if (!handled) {
-      handleAllowAgent(CONNECTION_STATUS.rejected);
+      handleAllowAgent(CONNECTION_STATUS.refused);
     }
   };
 
@@ -175,7 +175,7 @@ const AllowAgent = ({
                     onClick={() => handleAllowAgent(
                       args?.updateWhitelist
                         ? CONNECTION_STATUS.rejectedAgent
-                        : CONNECTION_STATUS.rejected,
+                        : CONNECTION_STATUS.refused,
                     )}
                     style={{ width: '96%' }}
                     fullWidth

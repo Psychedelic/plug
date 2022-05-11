@@ -1,6 +1,6 @@
 import { Typography } from '@material-ui/core';
 import { Button, Container } from '@ui';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import ContactIcon from '@assets/icons/contacts.svg';
 import PropTypes from 'prop-types';

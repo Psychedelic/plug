@@ -37,8 +37,7 @@ const MenuItem = ({
         icon
       }
       {
-        !icon
-        && (
+        !icon && image && (
           <ListItemIcon className={classes.icon}>
             <TokenIcon
               image={image}
@@ -83,11 +82,12 @@ MenuItem.defaultProps = {
   endText: null,
   symbol: '',
   className: '',
+  image: null,
 };
 
 MenuItem.propTypes = {
   name: PropTypes.string.isRequired,
-  image: PropTypes.string.isRequired,
+  image: PropTypes.string,
   onClick: PropTypes.func.isRequired,
   className: PropTypes.string,
   size: PropTypes.oneOf(['small', 'medium', 'large']),

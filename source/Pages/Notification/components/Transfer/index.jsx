@@ -60,6 +60,8 @@ const Transfer = ({
           image={icons[0] || null}
           amount={(requests?.[currentRequest] || args)?.amount}
           requestCount={requestCount}
+          token={(requests?.[currentRequest] || args)?.token}
+          strAmount={(requests?.[currentRequest] || args)?.strAmount}
         />
       ),
     },

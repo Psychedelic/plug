@@ -5,6 +5,8 @@ import { NFTDisplayer } from '@ui';
 import randomColor from 'random-color';
 import clsx from 'clsx';
 
+import { SHADOW_1 } from '@shared/styles/shadows';
+
 const useStyles = makeStyles((theme) => ({
   genericToken: {
     width: '41px',
@@ -22,8 +24,7 @@ const useStyles = makeStyles((theme) => ({
     width: 29,
     marginRight: theme.spacing(1),
     borderRadius: 26,
-    boxShadow:
-      '0px 0px 0px rgba(6, 44, 82, 0.1), 0px 1px 3px rgba(64, 66, 69, 0.12), 0px 2px 16px rgba(33, 43, 54, 0.08)',
+    boxShadow: SHADOW_1,
   },
   icon: {
     width: '100%',
@@ -68,7 +69,7 @@ TokenIcon.propTypes = {
   nft: PropTypes.bool,
   color: PropTypes.shape({
     values: PropTypes.shape({
-      rgb: PropTypes.arrayOf(PropTypes.string),
+      rgb: PropTypes.arrayOf(PropTypes.number),
     }),
   }),
   small: PropTypes.bool,

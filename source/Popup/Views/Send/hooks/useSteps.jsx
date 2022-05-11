@@ -35,6 +35,7 @@ const useSteps = () => {
   const dispatch = useDispatch();
 
   const { assets } = useSelector((state) => state.wallet);
+  const { useICNS: icnsActive } = useSelector((state) => state.icns);
   const icpPrice = useICPPrice();
 
   const [selectedAsset, setSelectedAsset] = useState(assets?.[0] || CURRENCIES.get('ICP'));
@@ -121,7 +122,7 @@ const useSteps = () => {
         if (!selectedAsset) {
           sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: {} },
             (transactions) => {
-              dispatch(setTransactions({ ...transactions, icpPrice }));
+              dispatch(setTransactions({ ...transactions, icpPrice, useICNS: icnsActive }));
             });
         }
       });

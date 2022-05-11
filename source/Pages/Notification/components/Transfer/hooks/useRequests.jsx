@@ -52,7 +52,8 @@ const useRequests = (incomingRequests, callId, portId) => {
   useEffect(async () => {
     if (requests.length === 0) {
       setLoading(true);
-      const success = await portRPC.call('handleRequestTransfer', [response, callId, portId]);
+      const handler  = response[0].token ? 'handleRequestTransferToken' : 'handleRequestTransfer'
+      const success = await portRPC.call(handler, [response, callId, portId]);
       if (success) {
         window.close();
       }
@@ -66,7 +67,8 @@ const useRequests = (incomingRequests, callId, portId) => {
 
   const handleDeclineAll = async () => {
     const declinedRequests = requests.map((r) => ({ ...r, status: 'declined' }));
-    await portRPC.call('handleRequestTransfer', [declinedRequests, callId, portId]);
+    const handler  = declinedRequests[0].token ? 'handleRequestTransferToken' : 'handleRequestTransfer'
+    await portRPC.call(handler, [declinedRequests, callId, portId]);
     window.close();
   };
 

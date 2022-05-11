@@ -1,5 +1,8 @@
 import { makeStyles } from '@material-ui/core/styles';
 
+import { SHADOW_1 } from '@shared/styles/shadows';
+import { RAINBOW_GRADIENT } from '@shared/styles/gradients';
+
 export default makeStyles((theme) => ({
   leftContainer: {
     padding: '12px 16px',
@@ -29,8 +32,7 @@ export default makeStyles((theme) => ({
     width: 29,
     marginRight: theme.spacing(1),
     borderRadius: 26,
-    boxShadow:
-      '0px 0px 0px rgba(6, 44, 82, 0.1), 0px 1px 3px rgba(64, 66, 69, 0.12), 0px 2px 16px rgba(33, 43, 54, 0.08)',
+    boxShadow: SHADOW_1,
   },
   alignRight: {
     marginLeft: theme.spacing(1),
@@ -79,7 +81,7 @@ export default makeStyles((theme) => ({
         borderBottomLeftRadius: 0,
         border: 'double 1px transparent',
         backgroundImage:
-          'linear-gradient(white, white), radial-gradient(circle at top left,#FFE701,#FA51D3,#10D9ED,#53FF54)',
+          RAINBOW_GRADIENT,
         backgroundOrigin: 'border-box',
         backgroundClip: 'padding-box, border-box',
       },
@@ -90,7 +92,7 @@ export default makeStyles((theme) => ({
         borderBottomLeftRadius: 0,
         border: 'double 2px transparent',
         backgroundImage:
-          'linear-gradient(white, white), radial-gradient(circle at top left,#FFE701,#FA51D3,#10D9ED,#53FF54)',
+          RAINBOW_GRADIENT,
         backgroundOrigin: 'border-box',
         backgroundClip: 'padding-box, border-box',
       },

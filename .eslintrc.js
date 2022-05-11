@@ -10,8 +10,8 @@ module.exports = {
   env: {
     webextensions: true,
     browser: true,
-    es2022: true,
     node: true,
+    es2021: true,
   },
   globals: {
     INPAGE_SCRIPT: 'readonly',
@@ -22,7 +22,7 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: 12,
+    ecmaVersion: 2022,
     sourceType: 'module',
   },
   plugins: ['react'],
