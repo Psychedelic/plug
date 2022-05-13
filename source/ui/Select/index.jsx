@@ -4,8 +4,8 @@ import { Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import ChevronDown from '@assets/icons/chevron-down.svg';
 import { TokenIcon } from '@components';
-import { InputBase } from '@ui';
 
+import InputBase from '../InputBase';
 import useStyles from './styles';
 
 const Select = ({

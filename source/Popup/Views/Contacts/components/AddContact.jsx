@@ -126,5 +126,5 @@ export default AddContact;
 
 AddContact.propTypes = {
   addContact: PropTypes.func.isRequired,
-  contacts: PropTypes.arrayOf(PropTypes.object).isRequired,
+  contacts: PropTypes.arrayOf(PropTypes.object()).isRequired,
 };

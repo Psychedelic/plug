@@ -58,7 +58,7 @@ const Apps = () => {
                 </div>
                 {apps.map((app, index) => (
                   <AppItem
-                    key={index.toString()}
+                    key={`${index.toString()}-${app.name}`}
                     onDelete={handleOpenDelete(app)}
                     onDetail={handleOpenDetail(app)}
                     {...app}

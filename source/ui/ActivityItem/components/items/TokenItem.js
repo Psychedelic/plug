@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { capitalize } from '@material-ui/core';
 
 import UnknownIcon from '@assets/icons/unknown-icon.svg';
-import { GenericIcon } from '@ui';
 
+import GenericIcon from '../../../GenericIcon';
 import ActivityItemDisplay from '../ActivityItemDisplay';
 import ActivityItemDetails from '../ActivityItemDetails';
 
@@ -78,7 +78,7 @@ TokenItem.defaultProps = {
 TokenItem.propTypes = {
   type: PropTypes.number,
   canisterId: PropTypes.string,
-  details: PropTypes.objectOf(PropTypes.any),
+  details: PropTypes.objectOf(PropTypes.any()),
   to: PropTypes.string,
   from: PropTypes.string,
   amount: PropTypes.oneOfType([

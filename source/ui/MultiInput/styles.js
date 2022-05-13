@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-import { SHADOW_1 } from '@shared/styles/shadows';
-import { RAINBOW_GRADIENT } from '@shared/styles/gradients';
+import SHADOW_1 from '@shared/styles/shadows';
+import RAINBOW_GRADIENT from '@shared/styles/gradients';
 
 export default makeStyles((theme) => ({
   leftContainer: {

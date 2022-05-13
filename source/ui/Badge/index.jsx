@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import useStyles from './styles';
 
-const Badge = ({ name, value, icon, iconClassName }) => {
+const Badge = ({
+  name, value, icon, iconClassName,
+}) => {
   const classes = useStyles();
 
   return (

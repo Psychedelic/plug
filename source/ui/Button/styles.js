@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-import { RAINBOW_GRADIENT } from '@shared/styles/gradients';
-import { SHADOW_1 } from '@shared/styles/shadows';
+import RAINBOW_GRADIENT from '@shared/styles/gradients';
+import SHADOW_1 from '@shared/styles/shadows';
 
 const defaultBoxShadow = '0px 1px 2px rgba(0, 0, 0, 0.05)';
 

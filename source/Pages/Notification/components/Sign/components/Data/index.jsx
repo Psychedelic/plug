@@ -42,7 +42,7 @@ const Data = ({ transactionsData, withArguments }) => {
       {
         transactionsData?.[currentIndex]?.formItems?.map((item, index) => (
           <FormItem
-            key={index.toString()}
+            key={`${index.toString()}-${item.label}`}
             label={item.label}
             component={item.component}
             style={{ marginBottom: 24 }}

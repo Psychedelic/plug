@@ -6,7 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { capitalize } from '@material-ui/core';
 import UnknownIcon from '@assets/icons/unknown-icon.svg';
 import shortAddress from '@shared/utils/short-address';
-import { GenericIcon } from '@ui';
+
+import GenericIcon from '../../../GenericIcon';
 
 import ActivityItemDisplay from '../ActivityItemDisplay';
 import ActivityItemDetails from '../ActivityItemDetails';
@@ -70,7 +71,7 @@ NFTItem.defaultProps = {
 NFTItem.propTypes = {
   type: PropTypes.number,
   canisterId: PropTypes.string,
-  details: PropTypes.objectOf(PropTypes.any),
+  details: PropTypes.objectOf(PropTypes.any()),
   to: PropTypes.string,
   from: PropTypes.string,
   image: PropTypes.string.isRequired,
