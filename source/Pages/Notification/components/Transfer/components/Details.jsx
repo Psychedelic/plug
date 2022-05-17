@@ -60,7 +60,7 @@ Details.defaultProps = {
 };
 
 Details.propTypes = {
-  token: PropTypes.objectOf(PropTypes.object()),
+  token: PropTypes.object,
   amount: PropTypes.number.isRequired,
   image: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
