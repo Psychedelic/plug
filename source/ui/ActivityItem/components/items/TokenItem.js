@@ -78,7 +78,7 @@ TokenItem.defaultProps = {
 TokenItem.propTypes = {
   type: PropTypes.number,
   canisterId: PropTypes.string,
-  details: PropTypes.objectOf(PropTypes.any()),
+  details: PropTypes.objectOf(PropTypes.string),
   to: PropTypes.string,
   from: PropTypes.string,
   amount: PropTypes.oneOfType([

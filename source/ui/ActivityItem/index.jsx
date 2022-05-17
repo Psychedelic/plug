@@ -153,10 +153,10 @@ ActivityItem.defaultProps = {
 };
 
 ActivityItem.propTypes = {
-  canisterInfo: PropTypes.objectOf(PropTypes.any()),
+  canisterInfo: PropTypes.objectOf(PropTypes.string),
   type: PropTypes.number,
   canisterId: PropTypes.string,
-  details: PropTypes.objectOf(PropTypes.any()),
+  details: PropTypes.objectOf(PropTypes.string),
   to: PropTypes.string,
   from: PropTypes.string,
   amount: PropTypes.oneOfType([

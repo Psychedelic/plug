@@ -3,11 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Plus } from 'react-feather';
 import { AssetItem } from '@ui';
 import { setAssets, setAssetsLoading } from '@redux/wallet';
+import clsx from 'clsx';
+
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { useRouter } from '@components/Router';
 import { AMOUNT_ERROR } from '@shared/constants/currencies';
 import { useICPPrice } from '@redux/icp';
 import { setICNSData } from '@redux/icns';
+import { useScroll } from '@hooks';
+
 import useStyles from './styles';
 
 const Tokens = () => {
@@ -17,6 +21,7 @@ const Tokens = () => {
   const dispatch = useDispatch();
   const icpPrice = useICPPrice();
   const { navigator } = useRouter();
+  const { onScroll, fullScroll } = useScroll();
 
   const fetchAssets = () => {
     if (icpPrice) {
@@ -52,7 +57,12 @@ const Tokens = () => {
 
   return (
     <div className={classes.root}>
-      <div className={classes.tokenContainer}>
+      <div
+        className={clsx(
+          classes.tokenContainer, !fullScroll && classes.scrollShadow,
+        )}
+        onScroll={onScroll}
+      >
         {
           assets?.map((asset) => (
             <AssetItem

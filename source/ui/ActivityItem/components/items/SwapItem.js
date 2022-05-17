@@ -76,7 +76,7 @@ TokenItem.defaultProps = {
 };
 
 TokenItem.propTypes = {
-  details: PropTypes.objectOf(PropTypes.any()),
+  details: PropTypes.objectOf(PropTypes.string),
   date: PropTypes.oneOfType([
     PropTypes.instanceOf(Date),
     PropTypes.string,

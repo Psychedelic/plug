@@ -70,5 +70,5 @@ Button.propTypes = {
   loading: PropTypes.bool,
   disabled: PropTypes.bool,
   fullWidth: PropTypes.bool,
-  wrapperStyle: PropTypes.objectOf(PropTypes.object()),
+  wrapperStyle: PropTypes.objectOf(PropTypes.string),
 };
