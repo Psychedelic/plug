@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Typography } from '@material-ui/core';
 import { Info } from 'react-feather';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +10,9 @@ import { FormItem } from '@ui';
 import useStyles from './styles';
 import InfoModal from '../InfoModal';
 
-const DetailItem = ({ value, name, setInfoOpen, isOpen }) => {
+const DetailItem = ({
+  value, name, setInfoOpen, isOpen,
+}) => {
   const classes = useStyles();
   const { t } = useTranslation();
   return (
@@ -37,7 +40,14 @@ const DetailItem = ({ value, name, setInfoOpen, isOpen }) => {
         buttonText={t(`walletDetails.${name}LearnMore`)}
       />
     </>
-  )
-}
+  );
+};
+
+DetailItem.propTypes = {
+  value: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  setInfoOpen: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+};
 
 export default DetailItem;

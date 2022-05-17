@@ -40,5 +40,5 @@ GenericIcon.defaultProps = {
 GenericIcon.propTypes = {
   image: PropTypes.string.isRequired,
   type: PropTypes.string,
-  style: PropTypes.objectOf(PropTypes.object),
+  style: PropTypes.objectOf(PropTypes.object()),
 };

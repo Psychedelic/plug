@@ -80,7 +80,7 @@ function NFTCollection({ collection, icns, defaultOpen }) {
                   </Typography>
                 )}
               </div>
-            )
+            );
           })}
         </div>
       </Collapsible>

@@ -40,8 +40,8 @@ const IDInput = ({
     .map((c) => c.id)
     .includes(value), [contacts, value]);
 
-  const shouldDisplayAddToContacts = value !== null && value !== '' &&
-    !loading && isValid && !inContacts && !isUserAddress;
+  const shouldDisplayAddToContacts = value !== null && value !== ''
+    && !loading && isValid && !inContacts && !isUserAddress;
 
   const handleSelectedContact = (contact) => setSelectedContact(contact);
 

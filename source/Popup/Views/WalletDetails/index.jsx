@@ -100,6 +100,7 @@ const WalletDetails = () => {
         params: '',
       }, (response) => {
         if (response.error) {
+          // eslint-disable-next-line
           console.log('Error when resetting your reverse resolved name', response.error); // TODO HANDLE ERROR (shouldnt happen tho)
         } else {
           sendMessage({

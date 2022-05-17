@@ -39,7 +39,6 @@ const ICNSModal = ({ closeModal, loading }) => {
 ICNSModal.propTypes = {
   closeModal: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
-  isICP: PropTypes.bool.isRequired,
 };
 
 export default ICNSModal;

@@ -7,8 +7,8 @@ import ReactJson from 'react-json-view';
 
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { getICNetworkStatusUrl } from '@shared/constants/urls';
-import { Dialog } from '@ui';
 
+import Dialog from '../Dialog';
 import PlugItem from './components/items/PlugItem';
 import SwapItem from './components/items/SwapItem';
 import NFTItem from './components/items/NFTItem';
@@ -153,10 +153,10 @@ ActivityItem.defaultProps = {
 };
 
 ActivityItem.propTypes = {
-  canisterInfo: PropTypes.objectOf(PropTypes.any),
+  canisterInfo: PropTypes.objectOf(PropTypes.any()),
   type: PropTypes.number,
   canisterId: PropTypes.string,
-  details: PropTypes.objectOf(PropTypes.any),
+  details: PropTypes.objectOf(PropTypes.any()),
   to: PropTypes.string,
   from: PropTypes.string,
   amount: PropTypes.oneOfType([
