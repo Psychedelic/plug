@@ -71,7 +71,7 @@ NFTItem.defaultProps = {
 NFTItem.propTypes = {
   type: PropTypes.number,
   canisterId: PropTypes.string,
-  details: PropTypes.objectOf(PropTypes.any()),
+  details: PropTypes.objectOf(PropTypes.any),
   to: PropTypes.string,
   from: PropTypes.string,
   image: PropTypes.string.isRequired,

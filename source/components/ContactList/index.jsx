@@ -61,7 +61,7 @@ const ContactList = ({
 export default ContactList;
 
 ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(PropTypes.object()).isRequired,
+  contacts: PropTypes.arrayOf(PropTypes.object).isRequired,
   handleRemoveContact: PropTypes.func.isRequired,
   onClick: PropTypes.func,
   selectable: PropTypes.bool,

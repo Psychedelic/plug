@@ -44,5 +44,5 @@ SwapInfo.propTypes = {
 AssetInfo.propTypes = {
   asset: PropTypes.shape(currencyPropTypes).isRequired,
   amount: PropTypes.number.isRequired,
-  classes: PropTypes.objectOf(PropTypes.object()).isRequired,
+  classes: PropTypes.objectOf(PropTypes.object).isRequired,
 };
