@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { createValueObj, buildContactObject, parseContactFromDab } from '@shared/utils/contacts';
+import { buildContactObject, parseContactFromDab } from '@shared/utils/contacts';
 import {
   getContacts as callGetContacts,
   addContact as callAddContact,
@@ -10,27 +10,27 @@ const getFirstLetterFrom = (value) => value.slice(0, 1).toUpperCase();
 
 const groupContacts = (contacts) => (
   contacts
-  .reduce((list, contact) => {
-    const { name } = contact;
-    const listItem = list.find(
-      (item) => item.letter && item.letter === getFirstLetterFrom(name),
-    );
-    if (!listItem) {
-      list.push({ letter: getFirstLetterFrom(name), contacts: [contact] });
-    } else {
-      listItem.contacts.push(contact);
-    }
+    .reduce((list, contact) => {
+      const { name } = contact;
+      const listItem = list.find(
+        (item) => item.letter && item.letter === getFirstLetterFrom(name),
+      );
+      if (!listItem) {
+        list.push({ letter: getFirstLetterFrom(name), contacts: [contact] });
+      } else {
+        listItem.contacts.push(contact);
+      }
 
-    return list;
-  }, [])
+      return list;
+    }, [])
 );
 
 const getContacts = createAsyncThunk(
   'contacts/getContacts',
-  async (clearList = false) => {
+  async () => {
     const contacts = await callGetContacts();
     return contacts.map(parseContactFromDab);
-  }
+  },
 );
 
 const addContact = createAsyncThunk(
@@ -39,7 +39,7 @@ const addContact = createAsyncThunk(
     const parsedObject = buildContactObject(contact);
     const res = await callAddContact(parsedObject);
     return res;
-  }
+  },
 );
 
 const removeContact = createAsyncThunk(
@@ -49,7 +49,7 @@ const removeContact = createAsyncThunk(
 
     const res = await callRemoveContact(name);
     return res;
-  }
+  },
 );
 
 /* eslint-disable no-param-reassign */
@@ -100,7 +100,7 @@ export const contactSlice = createSlice({
 
         state.contacts = newContactList;
         state.groupedContacts = groupContacts(newContactList);
-      })
+      });
   },
 });
 

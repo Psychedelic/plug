@@ -353,35 +353,25 @@ export const getKeyringHandler = (type, keyring) => ({
   },
 }[type]);
 
-export const getContacts = () => {
-  return new Promise((resolve, reject) => {
-    sendMessage({
-      type: HANDLER_TYPES.GET_CONTACTS,
-    }, (contactList) => {
-      if (contactList) return resolve(contactList);
-      return reject(contactList);
-    });
+export const getContacts = () => new Promise((resolve, reject) => {
+  sendMessage({
+    type: HANDLER_TYPES.GET_CONTACTS,
+  }, (contactList) => {
+    if (contactList) return resolve(contactList);
+    return reject(contactList);
   });
-};
+});
 
-export const addContact = (contact) => {
-  return new Promise((resolve, reject) => {
-    sendMessage({
-      type: HANDLER_TYPES.ADD_CONTACT,
-      params: contact,
-    }, (res) => {
-      return resolve(res);
-    });
-  });
-};
+export const addContact = (contact) => new Promise((resolve) => {
+  sendMessage({
+    type: HANDLER_TYPES.ADD_CONTACT,
+    params: contact,
+  }, (res) => resolve(res));
+});
 
-export const deleteContact = (contactName) => {
-  return new Promise((resolve, reject) => {
-    sendMessage({
-      type: HANDLER_TYPES.REMOVE_CONTACT,
-      params: contactName,
-    }, (res) => {
-      return resolve(res);
-    });
-  });
-};
+export const deleteContact = (contactName) => new Promise((resolve) => {
+  sendMessage({
+    type: HANDLER_TYPES.REMOVE_CONTACT,
+    params: contactName,
+  }, (res) => resolve(res));
+});

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { LinkButton, Button } from '@ui';
 import {
   addContact,
-  removeContact
+  removeContact,
 } from '@redux/contacts';
 import BackIcon from '@assets/icons/back.svg';
 import { useTranslation } from 'react-i18next';

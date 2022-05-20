@@ -4,7 +4,6 @@ import Grid from '@material-ui/core/Grid';
 import {
   FormItem, Container, Button, TextInput,
 } from '@ui';
-import { addContact as addContactAction } from '@redux/contacts';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { getRandomEmoji } from '@shared/constants/emojis';
