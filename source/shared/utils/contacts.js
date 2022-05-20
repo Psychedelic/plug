@@ -53,12 +53,13 @@ export const parseContactFromDab = (contact) => {
 export const syncContactsToDab = async () => {
   return new Promise((resolve, reject) => {
     const parseAndSyncContacts = async (contacts) => {
+      console.log('Contacts to upload ->', contacts);
       resolve(Promise.all(contacts.map(async (contact) => {
         const parsedContact = buildContactObject(contact);
 
         return await addContact(parsedContact).then((res) => {
           if (res === true) {
-            const filteredContacts = contacts.filter(c => c.id === currentId);
+            const filteredContacts = contacts.filter(c => c.id !== contact.id);
             setContacts(filteredContacts);
           }
         });
