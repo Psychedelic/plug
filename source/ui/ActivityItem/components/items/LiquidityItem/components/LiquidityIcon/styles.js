@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import SHADOW_1 from '@shared/styles/shadows';
+import { SHADOW_1 } from '@shared/styles/shadows';
 
 export default makeStyles((theme) => ({
   root: {
@@ -9,19 +9,19 @@ export default makeStyles((theme) => ({
     cursor: 'pointer',
   },
   image: {
-    height: 24,
-    width: 24,
-    borderRadius: 26,
+    height: 28,
+    width: 28,
+    borderRadius: '50%',
     position: 'absolute',
     boxShadow: SHADOW_1,
   },
   fromImage: {
-    top: -3,
-    left: -3,
+    top: -2,
+    left: 0,
   },
   toImage: {
-    right: -3,
-    bottom: -3,
+    right: 0,
+    bottom: 0,
   },
   swapImage: {
     position: 'absolute',

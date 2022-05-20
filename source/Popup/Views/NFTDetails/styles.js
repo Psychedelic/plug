@@ -38,5 +38,5 @@ export default makeStyles(() => ({
     width: '100%',
     padding: 5,
     height: 'auto',
-  }
+  },
 }));

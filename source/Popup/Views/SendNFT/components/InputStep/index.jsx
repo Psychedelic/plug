@@ -26,6 +26,10 @@ const InputStep = ({ advanceStep }) => {
 
   const { selectedNft: nft } = useSelector((state) => state.nfts);
   const { collections } = useSelector((state) => state.wallet);
+  const { principalId, accountId } = useSelector((state) => state.wallet);
+
+  const isUserAddress = [principalId, accountId].includes(address)
+    || [principalId, accountId].includes(resolvedAddress);
 
   const collection = useMemo(() => collections?.find(
     (col) => col.name === nft?.collection,
@@ -46,7 +50,8 @@ const InputStep = ({ advanceStep }) => {
     }));
     advanceStep();
   };
-  const isValid = address === null || validatePrincipalId(address) || isValidICNS;
+  const isValid = !isUserAddress
+    && (address === null || validatePrincipalId(address) || isValidICNS);
   return (
     <Container>
       <Grid container spacing={2}>
@@ -79,6 +84,7 @@ const InputStep = ({ advanceStep }) => {
               />
               )}
           />
+          {isUserAddress && <span className={classes.errorMessage}>{t('deposit.sameAddressFromTo')}</span>}
         </Grid>
         <Grid item xs={12}>
           <Button

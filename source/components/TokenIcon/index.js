@@ -5,7 +5,7 @@ import { NFTDisplayer } from '@ui';
 import randomColor from 'random-color';
 import clsx from 'clsx';
 
-import { SHADOW_1 } from '@shared/styles/shadows';
+import SHADOW_1 from '@shared/styles/shadows';
 
 const useStyles = makeStyles((theme) => ({
   genericToken: {

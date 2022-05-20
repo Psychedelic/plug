@@ -45,7 +45,7 @@ const Dialog = ({
           (items && items.length > 0)
             ? items.map((item, index) => (
               <MenuItem
-                key={index.toString()}
+                key={`${index.toString()}-${item.name}`}
                 onClick={() => handleItemClick(item)}
                 border={index !== items.length - 1}
                 size="medium"

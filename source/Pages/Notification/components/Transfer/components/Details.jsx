@@ -11,15 +11,15 @@ import useStyles from '../styles';
 import SIZES from '../constants';
 
 const Details = ({
-  amount: e8s, image, url, requestCount, token, strAmount
+  amount: e8s, image, url, requestCount, token, strAmount,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
 
   const icpPrice = useICPPrice();
 
-  const asset = token || CURRENCIES.get('ICP');
-  const amount = strAmount? parseFloat(strAmount) : e8s / E8S_PER_ICP;
+  const asset = token;
+  const amount = strAmount ? parseFloat(strAmount) : e8s / E8S_PER_ICP;
   const value = asset.symbol === 'ICP' ? (amount * icpPrice) : 0;
 
   extension.windows.update(
@@ -55,9 +55,15 @@ const Details = ({
 
 export default Details;
 
+Details.defaultProps = {
+  token: CURRENCIES.get('ICP'),
+};
+
 Details.propTypes = {
+  token: PropTypes.object,
   amount: PropTypes.number.isRequired,
   image: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
   requestCount: PropTypes.number.isRequired,
+  strAmount: PropTypes.string.isRequired,
 };

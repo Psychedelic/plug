@@ -71,7 +71,7 @@ const theme = createTheme({
     },
     h5: {
       fontWeight: 500,
-      fontSize: 16,
+      fontSize: 15,
       lineHeight: '19.2px',
       color: primaryFontColor,
     },

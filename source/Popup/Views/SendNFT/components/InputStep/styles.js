@@ -10,4 +10,8 @@ export default makeStyles(() => ({
     width: 42,
     borderRadius: 5,
   },
+  errorMessage: {
+    padding: '0 12px 12px',
+    color: '#DC2626',
+  },
 }));

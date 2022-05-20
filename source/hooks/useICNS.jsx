@@ -21,6 +21,7 @@ export default function useICNS(address, symbol, delay = 300) {
         })
         .catch((err) => {
           setResolvedAddress(null);
+          // eslint-disable-next-line
           console.warn(err);
         });
     }

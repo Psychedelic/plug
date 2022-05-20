@@ -7,12 +7,13 @@ import ReactJson from 'react-json-view';
 
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { getICNetworkStatusUrl } from '@shared/constants/urls';
-import { Dialog } from '@ui';
 
+import Dialog from '../Dialog';
 import PlugItem from './components/items/PlugItem';
 import SwapItem from './components/items/SwapItem';
 import NFTItem from './components/items/NFTItem';
 import TokenItem from './components/items/TokenItem';
+import LiquidityItem from './components/items/LiquidityItem';
 import useStyles from './styles';
 import { getAddress } from './utils';
 
@@ -75,6 +76,10 @@ const ActivityItem = (props) => {
     }
     if (type === 'SWAP') {
       return SwapItem;
+    }
+
+    if (type.includes('LIQUIDITY')) {
+      return LiquidityItem;
     }
 
     if (symbol === 'NFT') {
