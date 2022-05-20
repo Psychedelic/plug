@@ -53,7 +53,6 @@ export const parseContactFromDab = (contact) => {
 export const syncContactsToDab = async () => {
   return new Promise((resolve, reject) => {
     const parseAndSyncContacts = async (contacts) => {
-      console.log('Contacts to upload ->', contacts);
       resolve(Promise.all(contacts.map(async (contact) => {
         const parsedContact = buildContactObject(contact);
 

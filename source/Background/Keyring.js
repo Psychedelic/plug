@@ -355,11 +355,9 @@ export const getKeyringHandler = (type, keyring) => ({
 
 export const getContacts = () => {
   return new Promise((resolve, reject) => {
-    console.log('GETTING CONTACTS');
     sendMessage({
       type: HANDLER_TYPES.GET_CONTACTS,
     }, (contactList) => {
-      console.log('GOT CONTACTS ->', contactList);
       if (contactList) return resolve(contactList);
       return reject(contactList);
     });
@@ -368,12 +366,10 @@ export const getContacts = () => {
 
 export const addContact = (contact) => {
   return new Promise((resolve, reject) => {
-    console.log('ADDING CONTACT');
     sendMessage({
       type: HANDLER_TYPES.ADD_CONTACT,
       params: contact,
     }, (res) => {
-      console.log('ADDED CONTACT ->', res);
       return resolve(res);
     });
   });
@@ -381,12 +377,10 @@ export const addContact = (contact) => {
 
 export const deleteContact = (contactName) => {
   return new Promise((resolve, reject) => {
-    console.log('DELETING CONTACT');
     sendMessage({
       type: HANDLER_TYPES.REMOVE_CONTACT,
       params: contactName,
     }, (res) => {
-      console.log('DELETED CONTACT ->', res);
       return resolve(res);
     });
   });
