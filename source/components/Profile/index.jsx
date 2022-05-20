@@ -24,6 +24,7 @@ import BluePencil from '@assets/icons/blue-pencil.svg';
 import VisibleIcon from '@assets/icons/visible.svg';
 import InvisibleIcon from '@assets/icons/invisible.svg';
 import { getRandomEmoji } from '@shared/constants/emojis';
+import { getContacts } from '@redux/contacts';
 import clsx from 'clsx';
 import { useICPPrice } from '@redux/icp';
 import { toggleAccountHidden, useHiddenAccounts } from '@redux/profile';
@@ -109,6 +110,7 @@ const Profile = ({ disableProfile }) => {
         if (state?.wallets?.length) {
           const newWallet = state.wallets[state.currentWalletId];
           dispatch(setAccountInfo(newWallet));
+          dispatch(getContacts(true));
           dispatch(setICNSData(newWallet.icnsData));
           dispatch(setAssetsLoading(true));
           dispatch(setTransactions([]));
