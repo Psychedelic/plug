@@ -16,6 +16,7 @@ const portRPC = new PortRPC({
 portRPC.start();
 
 const formatRequest = ({ requestInfo, canisterInfo, payload }) => ({
+  type: requestInfo.type || 'sign',
   canisterId: requestInfo.canisterId,
   methodName: requestInfo.methodName,
   sender: requestInfo.sender,
@@ -46,8 +47,9 @@ const useRequests = (incomingRequest, callId, portId) => {
 
   const handleResponse = async (status) => {
     request.status = status;
+    const handler = request.type === 'sign' ? 'handleSign' : 'handleCall';
 
-    const success = await portRPC.call('handleSign', [status, request.payload, callId, portId]);
+    const success = await portRPC.call(handler, [status, request, callId, portId]);
     if (success) {
       window.close();
     }
