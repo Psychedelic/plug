@@ -13,3 +13,4 @@ export const ADDRESS_TYPES = {
 
 export const DEFAULT_ICP_FEE = 0.0001;
 export const XTC_FEE = 0.002;
+export const OGY_FEE = 0.002;

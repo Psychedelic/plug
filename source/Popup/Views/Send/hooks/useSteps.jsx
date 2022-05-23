@@ -12,7 +12,7 @@ import {
 import {
   isICNSName, validateAddress, validateCanisterId, validatePrincipalId,
 } from '@shared/utils/ids';
-import { ADDRESS_TYPES, DEFAULT_ICP_FEE, XTC_FEE } from '@shared/constants/addresses';
+import { ADDRESS_TYPES, DEFAULT_ICP_FEE, OGY_FEE, XTC_FEE } from '@shared/constants/addresses';
 import { useICPPrice } from '@redux/icp';
 import { useICNS } from '@hooks';
 
@@ -86,25 +86,14 @@ const useSteps = () => {
     }
   };
 
-  const getTransactionFee = () => {
-    let currentFee;
+  // TODO: Serialize fees and decimals in assets and remove this.
+  const fee = {
+    ICP: DEFAULT_ICP_FEE,
+    XTC: XTC_FEE,
+    OGY: OGY_FEE,
+  }[selectedAsset?.symbol] || 0.0;
 
-    switch (selectedAsset?.symbol) {
-      case 'ICP':
-        currentFee = DEFAULT_ICP_FEE;
-        break;
-      case 'XTC':
-        currentFee = XTC_FEE;
-        break;
-      default:
-        currentFee = 0.0;
-        break;
-    }
-
-    return currentFee;
-  };
-
-  const getAvailableAmount = (value) => truncateFloatForDisplay(value - getTransactionFee());
+  const getAvailableAmount = (value) => truncateFloatForDisplay(value - fee);
 
   const handleSendClick = () => {
     const to = addressInfo.resolvedAddress || address;
@@ -138,8 +127,8 @@ const useSteps = () => {
     if (address !== null) {
       let isValid = validateAddress(address) || isValidICNS;
       const type = getAddressType(address);
-      // check for accountId if cycles selected
-      if (type === ADDRESS_TYPES.ACCOUNT && selectedAsset?.symbol !== 'ICP') {
+      // TODO: Serialize token standard in asset and check for 'icp' standard tokens here
+      if (type === ADDRESS_TYPES.ACCOUNT && !['ICP', 'OGY'].includes(selectedAsset?.symbol)) {
         isValid = false;
       }
       setAddressInfo({ isValid, type, resolvedAddress });
