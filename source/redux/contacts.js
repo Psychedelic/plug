@@ -83,8 +83,29 @@ export const contactSlice = createSlice({
         }
       })
       .addCase(getContacts.fulfilled, (state, action) => {
-        state.contacts = action.payload;
-        state.groupedContacts = groupContacts(action.payload);
+        let newContactList = [...state.contacts, ...action.payload];
+
+        const getIndexOfContact = (contact, contactList) => {
+          let index = -1;
+          contactList.map((c, i) => {
+            if (c.id === contact.id) {
+              index = i;
+              return;
+            }
+          });
+
+          return index;
+        }
+
+        newContactList = newContactList.reduce((acc, c) => {
+          if (getIndexOfContact(c, acc) === -1) {
+            return [...acc, c];
+          }
+          return acc;
+        }, []);
+
+        state.contacts = newContactList;
+        state.groupedContacts = groupContacts(newContactList);
       })
       .addCase(removeContact.pending, (state, action) => {
         const contact = action.meta.arg;
