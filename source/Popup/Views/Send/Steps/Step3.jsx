@@ -19,7 +19,7 @@ import { Principal } from '@dfinity/principal';
 import {
   useRouter, TokenIcon, TABS, AddressTranslation,
 } from '@components';
-import { ADDRESS_TYPES, getFee } from '@shared/constants/addresses';
+import { ADDRESS_TYPES, getAssetFee } from '@shared/constants/addresses';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { useICPPrice } from '@redux/icp';
 import { validatePrincipalId } from '@shared/utils/ids';
@@ -66,7 +66,7 @@ const Step3 = ({
   const icpPrice = useICPPrice();
 
   const subtotal = amount * asset?.price;
-  const fee = getFee(asset?.symbol);
+  const fee = getAssetFee(asset);
   const usdFee = (fee * asset?.price)?.toFixed(5);
   const onClick = () => {
     setLoading(true);

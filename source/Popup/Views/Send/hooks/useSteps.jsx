@@ -12,7 +12,7 @@ import {
 import {
   isICNSName, validateAddress, validateCanisterId, validatePrincipalId,
 } from '@shared/utils/ids';
-import { ADDRESS_TYPES, getFee } from '@shared/constants/addresses';
+import { ADDRESS_TYPES, getAssetFee } from '@shared/constants/addresses';
 import { useICPPrice } from '@redux/icp';
 import { useICNS } from '@hooks';
 
@@ -86,7 +86,7 @@ const useSteps = () => {
     }
   };
 
-  const fee = getFee(selectedAsset?.symbol);
+  const fee = getAssetFee(selectedAsset);
   const getAvailableAmount = (value) => truncateFloatForDisplay(value - fee);
 
   const handleSendClick = () => {
