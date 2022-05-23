@@ -64,7 +64,6 @@ const Step3 = ({
   const { navigator } = useRouter();
   const dispatch = useDispatch();
   const icpPrice = useICPPrice();
-
   const subtotal = amount * asset?.price;
   const fee = getAssetFee(asset);
   const usdFee = (fee * asset?.price)?.toFixed(5);
@@ -127,7 +126,7 @@ const Step3 = ({
         )}
         {!!fee && (
           <Grid item xs={12}>
-            <InfoRow name={t('common.taxFee')} value={`${fee} ${asset?.symbol} ($${usdFee})`} />
+            <InfoRow name={t('common.taxFee')} value={`${fee} ${asset?.symbol} ${asset?.price ? `($${usdFee})` : ''}`} />
           </Grid>
         )}
         {!!asset?.price && (
