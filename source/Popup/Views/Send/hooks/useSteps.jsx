@@ -12,7 +12,7 @@ import {
 import {
   isICNSName, validateAddress, validateCanisterId, validatePrincipalId,
 } from '@shared/utils/ids';
-import { ADDRESS_TYPES, DEFAULT_ICP_FEE, OGY_FEE, XTC_FEE } from '@shared/constants/addresses';
+import { ADDRESS_TYPES, getFee } from '@shared/constants/addresses';
 import { useICPPrice } from '@redux/icp';
 import { useICNS } from '@hooks';
 
@@ -86,13 +86,7 @@ const useSteps = () => {
     }
   };
 
-  // TODO: Serialize fees and decimals in assets and remove this.
-  const fee = {
-    ICP: DEFAULT_ICP_FEE,
-    XTC: XTC_FEE,
-    OGY: OGY_FEE,
-  }[selectedAsset?.symbol] || 0.0;
-
+  const fee = getFee(selectedAsset?.symbol);
   const getAvailableAmount = (value) => truncateFloatForDisplay(value - fee);
 
   const handleSendClick = () => {

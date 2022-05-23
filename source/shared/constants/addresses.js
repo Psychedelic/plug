@@ -14,3 +14,10 @@ export const ADDRESS_TYPES = {
 export const DEFAULT_ICP_FEE = 0.0001;
 export const XTC_FEE = 0.002;
 export const OGY_FEE = 0.002;
+
+// TODO: Serialize fee and decimals in assets and remove this.
+export const getFee = (symbol) => ({
+  ICP: DEFAULT_ICP_FEE,
+  XTC: XTC_FEE,
+  OGY: OGY_FEE,
+}[symbol] || 0.0);
