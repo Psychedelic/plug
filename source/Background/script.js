@@ -1,6 +1,6 @@
 import extension from 'extensionizer';
 import PlugController from '@psychedelic/plug-controller';
-import { BackgroundController } from '@fleekhq/browser-rpc';
+import { BackgroundController, PortRPC } from '@fleekhq/browser-rpc';
 
 import {
   ConnectionModule,
@@ -27,6 +27,8 @@ class BackgroundScript {
     this.notificationManager = new NotificationManager(
       extension.extension.getURL('../assets/icons/plug.svg'),
     );
+    this.port = new PortRPC({ name: 'background-updater', target: 'plug-inpage-script' });
+    this.port.start();
   }
 
   // Utils
@@ -68,29 +70,36 @@ class BackgroundScript {
 
   #hookListener() {
     extension.runtime.onMessage.addListener((message, _, sendResponse) => {
-      const handleOnMessage = () => {
-        const { params, type } = message;
-        const keyringHandler = getKeyringHandler(type, this.keyring);
-        if (!keyringHandler) return;
+      // Wait for some one connect to it
+      const { params, type } = message;
+      const keyringHandler = getKeyringHandler(type, this.keyring);
+      keyringHandler?.(params)
+        .then((res) => sendResponse(recursiveParseBigint(res)))
+        .catch((e) => {
+          const keyringErrorMessage = getKeyringErrorMessage(type);
+          const errorMessage = keyringErrorMessage
+            ? `Unexpected error while ${keyringErrorMessage}`
+            : 'Unexpected error';
 
-        keyringHandler(params)
-          .then((res) => sendResponse(recursiveParseBigint(res)))
-          .catch((e) => {
-            const keyringErrorMessage = getKeyringErrorMessage(type);
-            const errorMessage = keyringErrorMessage
-              ? `Unexpected error while ${keyringErrorMessage}`
-              : 'Unexpected error';
-
-            // eslint-disable-next-line
-            console.warn(errorMessage);
-            // eslint-disable-next-line
-            console.warn(e);
-          });
-      };
-      handleOnMessage();
-
+          // eslint-disable-next-line
+          console.warn(errorMessage);
+          // eslint-disable-next-line
+          console.warn(e);
+        });
       // Usually we would not return, but it seems firefox needs us to
       return true; // eslint-disable-line
+    });
+
+    // Hook up port communication with content script
+    extension.runtime.onConnect.addListener((portFrom) => {
+      console.log('received port connection', portFrom);
+      if (portFrom.name === 'background-content') {
+        // This is how you add listener to a port.
+        portFrom.onMessage.addListener((message) => {
+          // Do something to duck
+          console.log('DUCK MSG', message);
+        });
+      }
     });
   }
 

@@ -167,7 +167,14 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.SET_CURRENT_PRINCIPAL]:
     async (walletNumber) => {
       await keyring.setCurrentPrincipal(walletNumber);
-
+      // Update app storage
+      // Update provider
+      extension.tabs.query({}, (tabList) => {
+        tabList.forEach((tab) => {
+          console.log('upate provider in', tab.url);
+          extension.tabs.sendMessage(tab.id, { action: 'updateConnection' });
+        });
+      });
       return recursiveParseBigint(await keyring.getState());
     },
   [HANDLER_TYPES.IMPORT]: async (params) => keyring.importMnemonic(params),
