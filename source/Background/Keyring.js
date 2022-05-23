@@ -366,12 +366,16 @@ export const addContact = (contact) => new Promise((resolve) => {
   sendMessage({
     type: HANDLER_TYPES.ADD_CONTACT,
     params: contact,
-  }, (res) => resolve(res));
+  }, (res) => {
+    resolve(res);
+  });
 });
 
 export const deleteContact = (contactName) => new Promise((resolve) => {
   sendMessage({
     type: HANDLER_TYPES.REMOVE_CONTACT,
     params: contactName,
-  }, (res) => resolve(res));
+  }, (res) => {
+    resolve(res);
+  });
 });

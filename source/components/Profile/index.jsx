@@ -110,7 +110,7 @@ const Profile = ({ disableProfile }) => {
         if (state?.wallets?.length) {
           const newWallet = state.wallets[state.currentWalletId];
           dispatch(setAccountInfo(newWallet));
-          dispatch(getContacts(true));
+          dispatch(getContacts());
           dispatch(setICNSData(newWallet.icnsData));
           dispatch(setAssetsLoading(true));
           dispatch(setTransactions([]));
