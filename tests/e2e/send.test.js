@@ -4,9 +4,9 @@ describe('Send', () => {
 
   beforeAll(async () => {
     chromeBrowser = await setupChrome();
-    page = await chromeBrowser.newPage();
+    page = await utils.createNewPage(chromeBrowser);
 
-    await utils.optionsPage.importAccountAndUnlock(page, secrets.seedphrase, secrets.password);
+    await optionsPage.importAccountAndUnlock(page, secrets.seedphrase, secrets.password);
   });
 
   afterEach(async () => {
@@ -18,19 +18,18 @@ describe('Send', () => {
   });
 
   test('Send ICP', async () => {
-    await utils.popupPage.refreshWallet(page);
-    await utils.waitForRender(9000);
-    const [availableICPTag] = await utils.getXPathElements(page, 'span', 'ICP', true);
-    const availableICPString = await page.evaluate(tag => tag.innerText, availableICPTag);
+    await popupPage.refreshWallet(page);
+    const [availableICPTag] = await page.getXPathElements('span', 'ICP', true);
+    const availableICPString = await page.evaluate((tag) => tag.innerText, availableICPTag);
 
-    const [sendButtonElement] = await utils.getXPathElements(page, 'span', 'Send');
+    const [sendButtonElement] = await page.getXPathElements('span', 'Send');
     await sendButtonElement.click();
 
-    const [amountInput, addressInput] = await utils.getInputs(page);
+    const [amountInput, addressInput] = await page.getInputs();
 
     await addressInput.type(secrets.subAccountId);
 
-    await amountInput.focus()
+    await amountInput.focus();
 
     await page.keyboard.press('ArrowLeft');
     await page.keyboard.press('ArrowLeft');
@@ -38,19 +37,17 @@ describe('Send', () => {
     await page.keyboard.press('ArrowLeft');
     await page.keyboard.type('1');
 
-    const [continueBtn] = await utils.getXPathElements(page, 'span', 'Continue');
+    const [continueBtn] = await page.getXPathElements('span', 'Continue');
     await continueBtn.click();
 
-    const [sendBtn] = await utils.getXPathElements(page, 'span', 'Send');
+    const [sendBtn] = await page.getXPathElements('span', 'Send', true);
     await sendBtn.click();
 
-    await utils.waitForRender(9000);
-    await utils.popupPage.refreshWallet(page);
-    await utils.waitForRender(20000);
+    await popupPage.refreshWallet(page);
 
-    const [newAvailableICPTag] = await utils.getXPathElements(page, 'span', 'ICP', true);
-    await page.evaluate(tag => tag.innerText, availableICPTag);
-    const newAvailableICPString = await page.evaluate(tag => tag.innerText, availableICPTag);
+    const [newAvailableICPTag] = await page.getXPathElements('span', 'ICP', true);
+    await page.evaluate((tag) => tag.innerText, availableICPTag);
+    const newAvailableICPString = await page.evaluate((tag) => tag.innerText, availableICPTag);
 
     console.log(newAvailableICPString);
     console.log(availableICPString);
@@ -58,7 +55,7 @@ describe('Send', () => {
     const newAvailableIsLower = newAvailableICPString < availableICPString;
 
     // Gotta do more tests before checking amount :p
-    //expect(newAvailableIsLower).toBe(true);
+    // expect(newAvailableIsLower).toBe(true);
     expect(2).toBe(2);
   });
 });

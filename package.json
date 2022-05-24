@@ -25,9 +25,9 @@
     "lint": "eslint ./source --ext .js,.jsx",
     "lint:fix": "eslint ./source --ext .js,.jsx --fix",
     "prepare": "husky install",
-    "test:watch": "jest --watch",
     "pretest": "yarn build:inpage && cross-env NODE_ENV=test cross-env TARGET_BROWSER=chrome webpack",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.16.0",

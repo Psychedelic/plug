@@ -1,6 +1,10 @@
 const PAGE_TITLE = 'Plug';
 const CHROME_PATH = require('path').join(__dirname, '..', '..', 'extension', 'chrome');
 
+const seedphrase = 'expect side wasp imitate insane combine silk indoor surprise diary dose hover';
+const subAccountId = 'bgh3g-vypo7-y5ikn-d7462-6oocz-plyog-z4uj4-laflk-63cky-b6wqo-fqe';
+const password = '555555555555';
+
 jest.setTimeout(50000); // in milliseconds
 
 global.secrets = {
@@ -34,8 +38,8 @@ global.setupChrome = async () => {
 
   global.chromeData = {
     baseUrl,
-    optionsUrl: `${baseUrl}/options.html`,
-    popupUrl: `${baseUrl}/popup.html`,
+    optionsUrl,
+    popupUrl,
   };
 
   return browser;
@@ -49,21 +53,17 @@ const waitForRender = async (time) => {
 
 const getElements = async (page, selector, wait = false) => {
   if (wait) await page.waitForSelector(selector);
-  return await page.$$(selector);
+  return page.$$(selector);
 };
 
 const getElement = async (page, selector, wait = false) => {
   if (wait) await page.waitForSelector(selector);
-  return await page.$(selector);
+  return page.$(selector);
 };
 
-const getButtons = async (page, wait) => {
-  return await getElements(page, 'button', wait);
-}
+const getButtons = (page, wait) => getElements(page, 'button', wait);
 
-const getInputs = async (page, wait) => {
-  return await getElements(page, 'input', wait);
-}
+const getInputs = (page, wait) => getElements(page, 'input', wait);
 
 const getInputWithIndex = async (page, index, wait) => {
   const inputs = await getInputs(page, wait);
@@ -79,7 +79,21 @@ const getXPathElements = async (page, elementType, content, wait = false) => {
   const xPath = `//${elementType}[contains(.,"${content}")]`;
 
   if (wait) await page.waitForXPath(xPath);
-  return await page.$x(xPath);
+  return page.$x(xPath);
+};
+
+const createNewPage = async (browser) => {
+  const newPage = await browser.newPage();
+
+  newPage.getElements = (...args) => getElements(newPage, ...args);
+  newPage.getElement = (...args) => getElement(newPage, ...args);
+  newPage.getButtons = (...args) => getButtons(newPage, ...args);
+  newPage.getInputs = (...args) => getInputs(newPage, ...args);
+  newPage.getInputWithIndex = (...args) => getInputWithIndex(newPage, ...args);
+  newPage.getButtonWithIndex = (...args) => getButtonWithIndex(newPage, ...args);
+  newPage.getXPathElements = (...args) => getXPathElements(newPage, ...args);
+
+  return newPage;
 };
 
 // Options page utils
@@ -115,14 +129,10 @@ const importAccountAndUnlock = async (page, seedphrase, password) => {
   await unlockPlugButton.click();
 };
 
-const optionsPage = {
-  importAccountAndUnlock,
-};
-
 // Popup page utils
 
 const navigateToTab = async (page, tabName, shouldAwait) => {
-  const [tabElement] = await utils.getXPathElements(page, 'span', tabName, shouldAwait);
+  const [tabElement] = await getXPathElements(page, 'span', tabName, shouldAwait);
   await tabElement.click();
 };
 
@@ -162,9 +172,13 @@ const switchToSubAccount = async (page, subAccountName) => {
   const [accountIdElement] = await getXPathElements(page, 'h5', subAccountName, true);
   await accountIdElement.click();
 
-  const accountId = await page.evaluate(async () => await navigator.clipboard.readText());
+  const accountId = await page.evaluate(navigator.clipboard.readText);
 
   return accountId;
+};
+
+const optionsPage = {
+  importAccountAndUnlock,
 };
 
 const popupPage = {
@@ -174,15 +188,10 @@ const popupPage = {
   navigateToTab,
 };
 
+global.popupPage = popupPage;
+global.optionsPage = optionsPage;
+
 global.utils = {
+  createNewPage,
   waitForRender,
-  getElements,
-  getElement,
-  getButtons,
-  getButtonWithIndex,
-  getInputs,
-  getInputWithIndex,
-  getXPathElements,
-  optionsPage,
-  popupPage,
 };
