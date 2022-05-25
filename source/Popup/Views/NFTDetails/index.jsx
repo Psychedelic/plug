@@ -48,6 +48,8 @@ const NFTDetails = () => {
       : url,
   });
 
+  const nftDefaultTag = nft.canisterId === 'pk6rk-6aaaa-aaaae-qaazq-cai' ? 'iframe' : undefined;
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -63,7 +65,7 @@ const NFTDetails = () => {
         {isICNS ? (
           <ICNSDisplay icns={nft} className={classes.image} large />
         ) : (
-          <NFTDisplayer url={nft?.url} className={classes.image} interactive />
+          <NFTDisplayer url={nft?.url} className={classes.image} defaultTag={nftDefaultTag} interactive />
         )}
         <div className={classes.buttonContainer}>
           <Button

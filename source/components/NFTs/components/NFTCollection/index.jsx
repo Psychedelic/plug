@@ -25,6 +25,7 @@ function NFTCollection({ collection, icns, defaultOpen }) {
   };
 
   const toggleExpanded = () => setExpanded(!expanded);
+  const nftDefaultTag = collection.canisterId === 'pk6rk-6aaaa-aaaae-qaazq-cai' ? 'iframe' : undefined;
 
   return (
     <div className={classes.collection}>
@@ -68,6 +69,7 @@ function NFTCollection({ collection, icns, defaultOpen }) {
                   <NFTDisplayer
                     url={nft.url}
                     className={classes.nft}
+                    defaultTag={nftDefaultTag}
                     onClick={() => handleNftClick(nft)}
                   />
                 )}

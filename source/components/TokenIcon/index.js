@@ -44,9 +44,11 @@ const TokenIcon = ({
   const classes = useStyles();
   const backgroundColor = `rgb(${color.values.rgb.join(',')})`;
 
+  const nftDefaultTag = nft.canisterId === 'pk6rk-6aaaa-aaaae-qaazq-cai' ? 'iframe' : undefined;
+
   if (image) {
     return nft ? (
-      <NFTDisplayer url={image} className={className} {...props} />
+      <NFTDisplayer url={image} className={className} defaultTag={nftDefaultTag} {...props} />
     ) : (
       <img src={image} className={clsx(classes.icon, className)} {...props} />
     );
