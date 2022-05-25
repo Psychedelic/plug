@@ -1,9 +1,9 @@
 const PAGE_TITLE = 'Plug';
 const CHROME_PATH = require('path').join(__dirname, '..', '..', 'extension', 'chrome');
 
-const seedphrase = 'expect side wasp imitate insane combine silk indoor surprise diary dose hover';
-const subAccountId = 'bgh3g-vypo7-y5ikn-d7462-6oocz-plyog-z4uj4-laflk-63cky-b6wqo-fqe';
-const password = '555555555555';
+const seedphrase = '';
+const subAccountId = '';
+const password = '';
 
 jest.setTimeout(50000); // in milliseconds
 
