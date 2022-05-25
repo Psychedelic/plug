@@ -13,7 +13,7 @@ import AttributesImg from '@assets/icons/nfts/attributes.png';
 import AboutImg from '@assets/icons/nfts/about.png';
 import { Typography } from '@material-ui/core';
 import { setSelectedNft } from '@redux/nfts';
-import { Maximize2 } from 'react-feather';
+import { Maximize2, ArrowUpRight } from 'react-feather';
 import extension from 'extensionizer';
 
 import Section from './components/section';
@@ -52,6 +52,8 @@ const NFTDetails = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  const ButtonIconElement = isICNS ? ArrowUpRight : Maximize2;
+
   return (
     <Layout>
       <Header
@@ -68,12 +70,12 @@ const NFTDetails = () => {
         <div className={classes.buttonContainer}>
           <Button
             variant="default"
-            value={t('nfts.expandNFT')}
+            value={t(`nfts.${isICNS ? 'manage' : 'expandNFT'}`)}
             style={{ width: '96%' }}
             fullWidth
             onClick={openNFT(nft?.url?.replace('type=thumbnail', ''))}
-            startIcon={(
-              <Maximize2
+            endIcon={(
+              <ButtonIconElement
                 size="20"
               />
             )}

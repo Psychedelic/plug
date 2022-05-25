@@ -332,6 +332,7 @@
     "description": "Description",
     "attributes": "Attributes",
     "send": "Send NFT",
+    "manage": "Manage",
     "review": "Review Send",
     "sendTo": "To",
     "nft": "NFT",
