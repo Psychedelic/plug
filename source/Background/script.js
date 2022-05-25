@@ -91,16 +91,16 @@ class BackgroundScript {
     });
 
     // Hook up port communication with content script
-    extension.runtime.onConnect.addListener((portFrom) => {
-      console.log('received port connection', portFrom);
-      if (portFrom.name === 'background-content') {
-        // This is how you add listener to a port.
-        portFrom.onMessage.addListener((message) => {
-          // Do something to duck
-          console.log('DUCK MSG', message);
-        });
-      }
-    });
+    // extension.runtime.onConnect.addListener((portFrom) => {
+    //   console.log('received port connection', portFrom);
+    //   if (portFrom.name === 'background-content') {
+    //     // This is how you add listener to a port.
+    //     portFrom.onMessage.addListener((message) => {
+    //       // Do something to duck
+    //       console.log('DUCK MSG', message);
+    //     });
+    //   }
+    // });
   }
 
   #exposeStandaloneMethods() {

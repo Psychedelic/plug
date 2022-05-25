@@ -1,6 +1,7 @@
 import extension from 'extensionizer';
 
 import { addDisconnectedEntry } from '@shared/utils/apps';
+import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 
 const storage = extension.storage.local;
 
@@ -127,5 +128,31 @@ export const getUseICNS = (walletNumber, cb) => {
   const defaultValue = true;
   secureGetWrapper('icns', defaultValue, (state) => {
     cb(state?.icns?.[parseInt(walletNumber, 10)] ?? defaultValue);
+  });
+};
+
+export const isAnyWalletConnectedToUrl = (url, walletIds, cb) => {
+  let anyConnection = false;
+  walletIds.forEach((id) => {
+    getApps(id, (_apps = {}) => {
+      if (_apps[url]?.status === CONNECTION_STATUS.accepted) {
+        anyConnection = true;
+      }
+    });
+  });
+  cb(anyConnection);
+};
+
+export const getWalletsConnectedToUrl = (url, walletIds, cb) => {
+  const wallets = [];
+  walletIds.forEach((id) => {
+    getApps(id.toString(), (_apps = {}) => {
+      if (_apps[url]?.status === CONNECTION_STATUS.accepted) {
+        wallets.push(id);
+      }
+      if (id === walletIds.length - 1) {
+        cb(wallets);
+      }
+    });
   });
 };

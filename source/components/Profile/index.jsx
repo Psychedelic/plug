@@ -10,6 +10,7 @@ import Divider from '@material-ui/core/Divider';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
+import extensionizer from 'extensionizer';
 import Plus from '@assets/icons/plus.svg';
 import {
   setAccountInfo,
@@ -26,6 +27,7 @@ import InvisibleIcon from '@assets/icons/invisible.svg';
 import { getRandomEmoji } from '@shared/constants/emojis';
 import clsx from 'clsx';
 import { useICPPrice } from '@redux/icp';
+import { getWalletsConnectedToUrl } from '@modules/storageManager';
 import { toggleAccountHidden, useHiddenAccounts } from '@redux/profile';
 import { TABS, useRouter } from '../Router';
 import ActionDialog from '../ActionDialog';
@@ -33,6 +35,7 @@ import useMenuItems from '../../hooks/useMenuItems';
 import useStyles from './styles';
 import UserIcon from '../UserIcon';
 import { setICNSData } from '../../redux/icns';
+import ConnectAccountsModal from './components/ConnectAccountsModal';
 
 const Profile = ({ disableProfile }) => {
   const classes = useStyles();
@@ -46,8 +49,10 @@ const Profile = ({ disableProfile }) => {
 
   const [open, setOpen] = useState(false);
   const [accounts, setAccounts] = useState([]);
+  const [selectedWallet, setSelectedWallet] = useState(null);
 
   const [openCreateAccount, setOpenCreateAccount] = useState(false);
+  const [openConnectAccount, setOpenConnectAccount] = useState(false);
   const [accountName, setAccountName] = useState('');
 
   const handleToggle = () => {
@@ -83,9 +88,9 @@ const Profile = ({ disableProfile }) => {
       type: HANDLER_TYPES.CREATE_PRINCIPAL,
       params: { name: accountName, icon: getRandomEmoji() },
     },
-    (wallet) => {
-      if (wallet) {
-        setAccounts([...accounts, wallet]);
+    (newWallet) => {
+      if (newWallet) {
+        setAccounts([...accounts, newWallet]);
       }
       setAccountName('');
       setOpenCreateAccount(false);
@@ -102,7 +107,7 @@ const Profile = ({ disableProfile }) => {
     dispatch(toggleAccountHidden(account));
   };
 
-  const handleChangeAccount = (wallet) => () => {
+  const executeAccountSwitch = (wallet) => {
     dispatch(setCollections({ collections: [], principalId }));
     sendMessage({ type: HANDLER_TYPES.SET_CURRENT_PRINCIPAL, params: wallet },
       (state) => {
@@ -129,7 +134,28 @@ const Profile = ({ disableProfile }) => {
           setOpen(false);
           navigator.navigate('home', TABS.TOKENS);
         }
+        // Clear selected wallet for all flows
+        setSelectedWallet(null);
       });
+  };
+
+  const handleChangeAccount = (wallet) => () => {
+    setSelectedWallet(wallet);
+    extensionizer.tabs.query({ active: true }, (tab) => {
+      const url = new URL(tab?.[0]?.url);
+      const ids = accounts.map((_, idx) => idx);
+      // Check if new wallet is connected to the current page
+      getWalletsConnectedToUrl(url.host, ids, async (wallets = {}) => {
+        const currentConnected = wallets.includes(walletNumber);
+        const newConnected = wallets.includes(wallet);
+        // If current was connected but new one isnt, prompt modal
+        if (currentConnected && !newConnected) {
+          setOpenConnectAccount(true);
+        } else {
+          executeAccountSwitch(wallet);
+        }
+      });
+    });
   };
 
   const handleOpenCreateAccount = () => {
@@ -178,7 +204,13 @@ const Profile = ({ disableProfile }) => {
         onClick={handleCreateAccount}
         onClose={() => setOpenCreateAccount(false)}
       />
-
+      <ConnectAccountsModal
+        open={openConnectAccount}
+        onClose={() => setOpenConnectAccount(false)}
+        executeAccountSwitch={executeAccountSwitch}
+        selectedWallet={selectedWallet}
+        wallets={accounts}
+      />
       {
         !disableProfile
         && (
