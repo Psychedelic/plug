@@ -1,12 +1,11 @@
 require('dotenv').config();
+
 const PAGE_TITLE = 'Plug';
 const CHROME_PATH = require('path').join(__dirname, '..', '..', 'extension', 'chrome');
 
-const seedphrase = '';
-const subAccountId = '';
-const password = '';
+const profileButtonSelector = '[aria-label="Emoji"]';
 
-jest.setTimeout(50000); // in milliseconds
+jest.setTimeout(500000); // in milliseconds
 
 global.secrets = {
   seedphrase: process.env.SEEDPHRASE,
@@ -99,11 +98,9 @@ const createNewPage = async (browser) => {
 
 // Options page utils
 
-const importAccountAndUnlock = async (page, seedphrase, password) => {
-  // Navigates to options page
+const importAccount = async (page, seedphrase, password) => {
   await page.goto(chromeData.optionsUrl);
 
-  // Starts import flow
   const importButton = await getButtonWithIndex(page, 0);
   await importButton.click();
 
@@ -119,8 +116,9 @@ const importAccountAndUnlock = async (page, seedphrase, password) => {
 
   const submitPasswordButton = await getButtonWithIndex(page, 0);
   await submitPasswordButton.click();
+};
 
-  // Unlock plug
+const unlock = async (page, password) => {
   await page.goto(chromeData.popupUrl);
 
   const popupPasswordInput = await getInputWithIndex(page, 0);
@@ -137,9 +135,11 @@ const navigateToTab = async (page, tabName, shouldAwait) => {
   await tabElement.click();
 };
 
+const waitForProfileButton = (page) => page.waitForSelector(profileButtonSelector);
+
 const refreshWallet = async (page) => {
-  await page.waitForSelector('[aria-label="Emoji"]');
-  const profileButton = await page.$('[aria-label="Emoji"]');
+  await waitForProfileButton(page);
+  const profileButton = await page.$(profileButtonSelector);
 
   await profileButton.click();
 
@@ -148,8 +148,8 @@ const refreshWallet = async (page) => {
 };
 
 const createSubAccount = async (page, subAccountName) => {
-  await page.waitForSelector('[aria-label="Emoji"]');
-  const profileButton = await page.$('[aria-label="Emoji"]');
+  await waitForProfileButton(page);
+  const profileButton = await page.$(profileButtonSelector);
   await profileButton.click();
 
   const [createAccountButton] = await getXPathElements(page, 'h6', 'Create Account', true);
@@ -164,7 +164,7 @@ const createSubAccount = async (page, subAccountName) => {
 
 const switchToSubAccount = async (page, subAccountName) => {
   await waitForRender(1000);
-  const profileButton = await page.$('[aria-label="Emoji"]');
+  const profileButton = await page.$(profileButtonSelector);
   await profileButton.click();
 
   const [subAccountTab] = await getXPathElements(page, 'h6', subAccountName);
@@ -178,19 +178,21 @@ const switchToSubAccount = async (page, subAccountName) => {
   return accountId;
 };
 
-const optionsPage = {
-  importAccountAndUnlock,
+const optionsPageUtils = {
+  importAccount,
+  unlock,
 };
 
-const popupPage = {
+const popupPageUtils = {
   createSubAccount,
   switchToSubAccount,
   refreshWallet,
   navigateToTab,
+  waitForProfileButton,
 };
 
-global.popupPage = popupPage;
-global.optionsPage = optionsPage;
+global.popupPageUtils = popupPageUtils;
+global.optionsPageUtils = optionsPageUtils;
 
 global.utils = {
   createNewPage,
