@@ -15,6 +15,7 @@ import { Typography } from '@material-ui/core';
 import { setSelectedNft } from '@redux/nfts';
 import { Maximize2 } from 'react-feather';
 import extension from 'extensionizer';
+import { NFT_COLLECTION_DEFAULT_TYPES } from '@shared/constants/nft';
 
 import Section from './components/section';
 import useStyles from './styles';
@@ -48,7 +49,7 @@ const NFTDetails = () => {
       : url,
   });
 
-  const nftDefaultTag = nft.canisterId === 'pk6rk-6aaaa-aaaae-qaazq-cai' ? 'iframe' : undefined;
+  const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[nft.canisterId];
 
   useEffect(() => {
     window.scrollTo(0, 0);

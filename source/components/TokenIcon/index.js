@@ -5,6 +5,7 @@ import { NFTDisplayer } from '@ui';
 import randomColor from 'random-color';
 import clsx from 'clsx';
 
+import { NFT_COLLECTION_DEFAULT_TYPES } from '@shared/constants/nft';
 import SHADOW_1 from '@shared/styles/shadows';
 
 const useStyles = makeStyles((theme) => ({
@@ -44,7 +45,7 @@ const TokenIcon = ({
   const classes = useStyles();
   const backgroundColor = `rgb(${color.values.rgb.join(',')})`;
 
-  const nftDefaultTag = nft.canisterId === 'pk6rk-6aaaa-aaaae-qaazq-cai' ? 'iframe' : undefined;
+  const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[nft.canisterId];
 
   if (image) {
     return nft ? (

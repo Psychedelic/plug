@@ -10,6 +10,7 @@ import { shortICNSName } from '@shared/services/ICNS';
 import { useRouter } from '@components/Router';
 import { setSelectedNft } from '@redux/nfts';
 import { NFTDisplayer, ICNSDisplay } from '@ui';
+import { NFT_COLLECTION_DEFAULT_TYPES } from '@shared/constants/nft';
 
 import useStyles from './styles';
 
@@ -25,7 +26,7 @@ function NFTCollection({ collection, icns, defaultOpen }) {
   };
 
   const toggleExpanded = () => setExpanded(!expanded);
-  const nftDefaultTag = collection.canisterId === 'pk6rk-6aaaa-aaaae-qaazq-cai' ? 'iframe' : undefined;
+  const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[collection.canisterId];
 
   return (
     <div className={classes.collection}>
