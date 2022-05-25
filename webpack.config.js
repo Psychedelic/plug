@@ -59,7 +59,7 @@ module.exports = {
     hash: true,
   },
 
-  mode: nodeEnv,
+  mode: nodeEnv === 'test' ? 'none' : nodeEnv,
 
   entry: {
     manifest: path.join(sourcePath, 'manifest.json'),
@@ -212,7 +212,7 @@ module.exports = {
   ],
 
   optimization: {
-    minimize: nodeEnv !== 'development',
+    minimize: nodeEnv === 'production',
     minimizer: [
       new TerserPlugin({
         parallel: true,

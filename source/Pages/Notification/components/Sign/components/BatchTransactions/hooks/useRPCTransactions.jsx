@@ -34,6 +34,7 @@ const useTransactions = (transactions, callId, portId) => {
     setLoading(true);
     await portRPC.call('handleBatchTransactions', [
       accepted,
+      transactions,
       callId,
       portId,
     ]);

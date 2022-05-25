@@ -103,6 +103,6 @@ const Step2 = ({ selectedToken, handleClose }) => {
 export default Step2;
 
 Step2.propTypes = {
-  selectedToken: PropTypes.objectOf(PropTypes.string).isRequired,
+  selectedToken: PropTypes.object.isRequired,
   handleClose: PropTypes.func.isRequired,
 };

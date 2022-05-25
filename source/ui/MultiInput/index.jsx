@@ -116,8 +116,8 @@ MultiInput.propTypes = {
   onClick: PropTypes.func.isRequired,
   value: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
-  primaryValue: PropTypes.objectOf(PropTypes.string).isRequired,
-  secondaryValue: PropTypes.objectOf(PropTypes.string).isRequired,
+  primaryValue: PropTypes.object.isRequired,
+  secondaryValue: PropTypes.object.isRequired,
   conversionPrice: PropTypes.number.isRequired,
   handleSwapValues: PropTypes.func.isRequired,
   availableAmount: PropTypes.number.isRequired,
@@ -129,7 +129,7 @@ MultiInput.defaultProps = {
 };
 
 NumberFormatCustom.propTypes = {
-  inputRef: PropTypes.objectOf(PropTypes.string).isRequired,
+  inputRef: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   prefix: PropTypes.string.isRequired,
   suffix: PropTypes.string.isRequired,
