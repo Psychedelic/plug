@@ -64,7 +64,7 @@ const InputStep = ({ advanceStep }) => {
                 name={nft?.name || `${collection?.name ?? ''} #${nft?.index}`}
                 text={`#${nft?.index}`}
                 imageClassName={classes.nftImage}
-                nft
+                nft={nft}
                 readonly
                 shadow
               />

@@ -30,20 +30,22 @@ const TAG_PROPS = {
 };
 
 const NFTDisplayer = ({
-  url, className, onClick, interactive,
+  url, className, onClick, interactive, defaultTag
 }) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const [type, setType] = useState('image/png');
 
   useEffect(() => {
-    fetch(url)
-      .then((response) => {
-        setType(response.headers.get('Content-Type'));
-      });
+    if (defaultTag === undefined) {
+      fetch(url)
+        .then((response) => {
+          setType(response.headers.get('Content-Type'));
+        });
+    }
   }, []);
 
-  const Tag = TYPE_MAP[type] || 'img';
+  const Tag = defaultTag || TYPE_MAP[type] || 'img';
   const customProps = TAG_PROPS[Tag] || {};
 
   if (Tag === 'iframe') {
@@ -85,6 +87,7 @@ const NFTDisplayer = ({
 
 NFTDisplayer.propTypes = {
   url: PropTypes.string.isRequired,
+  defaultTag: PropTypes.string,
   className: PropTypes.string,
   onClick: PropTypes.func,
   interactive: PropTypes.bool,
@@ -94,6 +97,7 @@ NFTDisplayer.defaultProps = {
   className: '',
   onClick: () => {},
   interactive: false,
+  defaultTag: undefined,
 };
 
 export default NFTDisplayer;
