@@ -1,12 +1,13 @@
+require('dotenv').config();
 const PAGE_TITLE = 'Plug';
 const CHROME_PATH = require('path').join(__dirname, '..', '..', 'extension', 'chrome');
 
 jest.setTimeout(50000); // in milliseconds
 
 global.secrets = {
-  seedphrase,
-  subAccountId,
-  password,
+  seedphrase: process.env.SEEDPHRASE,
+  subAccountId: process.env.SUB_ACCOUNT_ID,
+  password: process.env.PASSWORD,
 };
 
 global.setupChrome = async () => {
