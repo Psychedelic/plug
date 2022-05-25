@@ -66,7 +66,12 @@ const NFTDetails = () => {
         {isICNS ? (
           <ICNSDisplay icns={nft} className={classes.image} large />
         ) : (
-          <NFTDisplayer url={nft?.url} className={classes.image} defaultTag={nftDefaultTag} interactive />
+          <NFTDisplayer
+            url={nft?.url}
+            className={classes.image}
+            defaultTag={nftDefaultTag}
+            interactive
+          />
         )}
         <div className={classes.buttonContainer}>
           <Button
