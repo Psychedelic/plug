@@ -19,7 +19,7 @@ import { Principal } from '@dfinity/principal';
 import {
   useRouter, TokenIcon, TABS, AddressTranslation,
 } from '@components';
-import { ADDRESS_TYPES, DEFAULT_ICP_FEE, XTC_FEE } from '@shared/constants/addresses';
+import { ADDRESS_TYPES, getAssetFee } from '@shared/constants/addresses';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { useICPPrice } from '@redux/icp';
 import { validatePrincipalId } from '@shared/utils/ids';
@@ -62,13 +62,10 @@ const Step3 = ({
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const { navigator } = useRouter();
-  const isICP = asset?.symbol === 'ICP';
-  const isXTC = asset?.symbol === 'XTC';
   const dispatch = useDispatch();
   const icpPrice = useICPPrice();
-
   const subtotal = amount * asset?.price;
-  const fee = isICP ? DEFAULT_ICP_FEE : (isXTC ? XTC_FEE : 0);
+  const fee = getAssetFee(asset);
   const usdFee = (fee * asset?.price)?.toFixed(5);
   const onClick = () => {
     setLoading(true);
@@ -129,7 +126,7 @@ const Step3 = ({
         )}
         {!!fee && (
           <Grid item xs={12}>
-            <InfoRow name={t('common.taxFee')} value={`${fee} ${asset?.symbol} ($${usdFee})`} />
+            <InfoRow name={t('common.taxFee')} value={`${fee} ${asset?.symbol} ${asset?.price ? `($${usdFee})` : ''}`} />
           </Grid>
         )}
         {!!asset?.price && (
