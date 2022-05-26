@@ -27,4 +27,3 @@ SwapInfo.propTypes = {
   toAsset: PropTypes.shape(currencyPropTypes).isRequired,
   toAmount: PropTypes.number.isRequired,
 };
-

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import MInputBase from '@material-ui/core/InputBase';
 import BookIcon from '@assets/icons/notebook.svg';
@@ -9,8 +9,8 @@ import {
   Button, Dialog, FormItem, InputBase, TextInput,
 } from '@ui';
 import { CircularProgress, Grid } from '@material-ui/core';
-import { useContacts } from '@hooks';
 import { getRandomEmoji } from '@shared/constants/emojis';
+import { addContact as addContactAction } from '@redux/contacts';
 
 import ActionDialog from '../ActionDialog';
 import ContactItem from '../ContactItem';
@@ -23,13 +23,14 @@ const IDInput = ({
   const classes = useStyles();
   const { t } = useTranslation();
 
+  const dispatch = useDispatch();
   const [selectedContact, setSelectedContact] = useState(null);
   const [isContactsOpened, setIsContactsOpened] = useState(false);
   const [contactName, setContactName] = useState('');
   const [openContacts, setOpenContacts] = useState(false);
 
   const { principalId, accountId } = useSelector((state) => state.wallet);
-  const { contacts, handleAddContact } = useContacts();
+  const { groupedContacts: contacts } = useSelector((state) => state.contacts);
 
   const isUserAddress = useMemo(
     () => [principalId, accountId].includes(value), [principalId, accountId, value],
@@ -68,7 +69,7 @@ const IDInput = ({
       id: value,
       image: getRandomEmoji(),
     };
-    handleAddContact(contact);
+    dispatch(addContactAction(contact));
     setSelectedContact(contact);
     onChange(contact.id);
     setIsContactsOpened(false);
@@ -123,7 +124,6 @@ const IDInput = ({
                 open={openContacts}
                 component={(
                   <ContactList
-                    contacts={contacts}
                     selectable
                     onClick={handleSelectContact}
                   />

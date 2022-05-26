@@ -15,6 +15,7 @@ import { Typography } from '@material-ui/core';
 import { setSelectedNft } from '@redux/nfts';
 import { Maximize2 } from 'react-feather';
 import extension from 'extensionizer';
+import { NFT_COLLECTION_DEFAULT_TYPES } from '@shared/constants/nft';
 
 import Section from './components/section';
 import useStyles from './styles';
@@ -48,6 +49,8 @@ const NFTDetails = () => {
       : url,
   });
 
+  const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[nft.canisterId];
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -63,7 +66,7 @@ const NFTDetails = () => {
         {isICNS ? (
           <ICNSDisplay icns={nft} className={classes.image} large />
         ) : (
-          <NFTDisplayer url={nft?.url} className={classes.image} interactive />
+          <NFTDisplayer url={nft?.url} className={classes.image} defaultTag={nftDefaultTag} interactive />
         )}
         <div className={classes.buttonContainer}>
           <Button

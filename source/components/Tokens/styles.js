@@ -4,11 +4,11 @@ export default makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    padding: '10px 0',
+    padding: '10px 0 0',
     height: 320,
   },
   tokenContainer: {
-    height: 250,
+    height: '100%',
     overflow: 'auto',
   },
   buttonWrapper: {

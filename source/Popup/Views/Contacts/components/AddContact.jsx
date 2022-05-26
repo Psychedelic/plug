@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import {
   FormItem, Container, Button, TextInput,
@@ -13,9 +14,10 @@ import { useICNS } from '@hooks';
 
 import useStyles from '../styles';
 
-const AddContact = ({ addContact, contacts }) => {
+const AddContact = ({ handleAddContact }) => {
   const { t } = useTranslation();
   const classes = useStyles();
+  const { contacts } = useSelector((state) => state.contacts);
 
   const [name, setName] = useState('');
   const [id, setId] = useState(null);
@@ -30,7 +32,7 @@ const AddContact = ({ addContact, contacts }) => {
     setId(value.trim());
   };
 
-  const handleAddContact = () => addContact({ name, id, image: getRandomEmoji() });
+  const addContact = () => handleAddContact({ name, id, image: getRandomEmoji() });
 
   const validateContact = () => {
     const isValid = validateAddress(id) || isValidICNS;
@@ -114,7 +116,7 @@ const AddContact = ({ addContact, contacts }) => {
               || !isValidId
             }
             loading={loading}
-            onClick={handleAddContact}
+            onClick={addContact}
           />
         </Grid>
       </Grid>
@@ -125,6 +127,5 @@ const AddContact = ({ addContact, contacts }) => {
 export default AddContact;
 
 AddContact.propTypes = {
-  addContact: PropTypes.func.isRequired,
-  contacts: PropTypes.arrayOf(PropTypes.object).isRequired,
+  handleAddContact: PropTypes.func.isRequired,
 };

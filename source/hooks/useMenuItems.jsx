@@ -13,6 +13,7 @@ import {
   setCollections,
   setCollectionsLoading,
 } from '@redux/wallet';
+import { getContacts } from '@redux/contacts';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 
 const useMenuItems = (toggleMenu) => {
@@ -28,6 +29,9 @@ const useMenuItems = (toggleMenu) => {
     toggleMenu();
 
     if (icpPrice) {
+      // Contacts
+      dispatch(getContacts(true));
+
       // NFTS
       dispatch(setCollectionsLoading(true));
       sendMessage({
