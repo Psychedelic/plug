@@ -59,7 +59,7 @@ const Tokens = () => {
     <div className={classes.root}>
       <div
         className={clsx(
-          classes.tokenContainer, !fullScroll && classes.scrollShadow,
+          classes.tokenContainer, assets?.length > 4 && !fullScroll && classes.scrollShadow,
         )}
         onScroll={onScroll}
       >
