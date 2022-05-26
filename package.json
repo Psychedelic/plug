@@ -1,6 +1,6 @@
 {
   "name": "plug",
-  "version": "0.5.1",
+  "version": "0.5.1.1",
   "description": "Your plug into the Internet Computer",
   "private": true,
   "repository": "https://github.com/Psychedelic/plug",
@@ -25,21 +25,20 @@
     "lint": "eslint ./source --ext .js,.jsx",
     "lint:fix": "eslint ./source --ext .js,.jsx --fix",
     "prepare": "husky install",
-    "test": "jest",
-    "test:sinon": "jest ./tests/sinon",
-    "test:selenium": "jest ./tests/selenium",
-    "pretest:selenium": "cross-env SELENIUM_BROWSER=chrome yarn && cross-env SELENIUM_BROWSER=firefox yarn",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "pretest": "yarn build:inpage && cross-env NODE_ENV=test cross-env TARGET_BROWSER=chrome webpack",
+    "test": "jest --runInBand"
   },
   "dependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.16.0",
     "@babel/runtime": "^7.12.5",
+    "@dfinity/principal": "0.9.3",
     "@fleekhq/browser-rpc": "^2.0.2",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@psychedelic/dab-js": "1.3.2",
     "@psychedelic/plug-controller": "0.16.12",
-    "@psychedelic/plug-inpage-provider": "1.9.4",
+    "@psychedelic/plug-inpage-provider": "2.0.1",
     "@reduxjs/toolkit": "^1.6.0",
     "advanced-css-reset": "^1.2.2",
     "axios": "^0.21.1",
@@ -52,6 +51,7 @@
     "from-exponential": "^1.1.1",
     "i18next": "^20.2.1",
     "moment": "^2.29.1",
+    "puppeteer": "^13.6.0",
     "qrcode": "^1.4.4",
     "query-string": "^7.0.0",
     "random-color": "^1.0.1",
@@ -79,18 +79,18 @@
     "@babel/preset-react": "^7.14.5",
     "autoprefixer": "^10.0.2",
     "babel-eslint": "^10.1.0",
-    "babel-jest": "^27.0.6",
+    "babel-jest": "^28.0.3",
     "babel-loader": "^8.2.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
-    "chromedriver": "^92.0.1",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^6.3.1",
     "cross-env": "^7.0.2",
     "css-loader": "^5.0.1",
+    "dotenv": "^16.0.1",
     "eslint": "^7.21.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-import-resolver-alias": "^1.1.2",
@@ -102,9 +102,10 @@
     "html-webpack-plugin": "^4.5.0",
     "husky": ">=6",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^27.0.6",
+    "jest": "^28.0.3",
     "jest-chrome": "^0.7.1",
     "jest-environment-jsdom": "^27.0.6",
+    "jest-puppeteer": "^6.1.0",
     "jest-webextension-mock": "^3.7.18",
     "jsconfig-paths-jest-mapper": "^1.0.0",
     "lint-staged": ">=10",
@@ -116,8 +117,6 @@
     "react-test-renderer": "^17.0.2",
     "regenerator-runtime": "^0.13.9",
     "resolve-url-loader": "^3.1.2",
-    "selenium-webdriver": "^4.0.0-beta.4",
-    "sinon-chrome": "^3.0.1",
     "svg-jest": "^1.0.1",
     "terser-webpack-plugin": "^4.2.3",
     "webpack": "^4.44.2",
@@ -137,14 +136,6 @@
   "lint-staged": {
     "*.{js,jsx}": "eslint --cache --fix",
     "*.{js,css,md}": "prettier --write"
-  },
-  "jest": {
-    "setupFiles": [
-      "<rootDir>/tests/__setup__/setup.js"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/jest.config"
-    ]
   },
   "standard": {
     "parser": "@babel/eslint-parser"

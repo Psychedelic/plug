@@ -1,16 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Typography } from '@material-ui/core';
-
+import { NFT_COLLECTION_DEFAULT_TYPES } from '@shared/constants/nft';
 import { NFTDisplayer } from '@ui';
 
 import useStyles from './styles';
 
 const NFTDisplay = ({ nft }) => {
   const classes = useStyles();
+
+  const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[nft.canisterId];
+
   return (
     <Card className={classes.nftDisplayContainer}>
-      <NFTDisplayer url={nft?.url} className={classes.nftImage} />
+      <NFTDisplayer url={nft?.url} className={classes.nftImage} defaultTag={nftDefaultTag} />
       <div className={classes.nftInfo}>
         <Typography variant="h2">{nft?.collection}</Typography>
         <Typography variant="subtitle1">{`#${nft?.index}`}</Typography>

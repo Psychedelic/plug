@@ -6,8 +6,11 @@ import { ASSET_CANISTER_IDS, ICP_CANISTER_ID } from '@shared/constants/canisters
 import { CYCLES_PER_TC } from '@shared/constants/currencies';
 import { XTC_FEE } from '@shared/constants/addresses';
 import { setProtectedIds } from '@modules/storageManager';
+import { Principal } from '@dfinity/principal';
+import { blobFromBuffer, blobToUint8Array } from '@dfinity/candid';
 
 import ERRORS from './errors';
+import { recursiveParseBigint } from './Keyring';
 
 const validateAmount = (amount) => !Number.isNaN(amount) && Number.isInteger(amount) && amount >= 0;
 const validateFloatStrAmount = (amount) => !Number.isNaN(parseFloat(amount))
@@ -60,7 +63,7 @@ export const validateBurnArgs = ({ to, amount }) => {
 
 export const validateTransactions = (transactions) => Array.isArray(transactions)
   && transactions?.every(
-    (tx) => tx.idl && tx.canisterId && tx.methodName && tx.args,
+    (tx) => tx.sender && tx.canisterId && tx.methodName,
   );
 
 export const initializeProtectedIds = async () => {
@@ -106,13 +109,103 @@ export const fetchCanistersInfo = async (whitelist) => {
 // TokenIdentifier is SYMBOL or  CanisterID
 // Return ICP by default
 export const getToken = (tokenIdentifier, assets) => {
-  if (!tokenIdentifier) {
-    return assets.filter((asset) => asset.canisterId === ICP_CANISTER_ID)[0];
-  }
+  if (!tokenIdentifier) return assets.find((asset) => asset.canisterId === ICP_CANISTER_ID);
 
   if (validateCanisterId(tokenIdentifier)) {
-    return assets.filter((asset) => asset.canisterId === tokenIdentifier)[0];
+    return assets.find((asset) => asset.canisterId === tokenIdentifier);
   }
 
-  return assets.filter((asset) => asset.symbol === tokenIdentifier)[0];
+  return assets.find((asset) => asset.symbol === tokenIdentifier);
+};
+export const bufferToBase64 = (buf) => Buffer.from(buf).toString('base64');
+
+export const base64ToBuffer = (base64) => Buffer.from(base64, 'base64');
+
+export const isDeepEqualObject = (obj1, obj2) => JSON.stringify(obj1) === JSON.stringify(obj2);
+
+export const validateBatchTx = (savedTxInfo, canisterId, methodName, arg) => {
+  if (!savedTxInfo
+    || savedTxInfo.canisterId !== canisterId
+    || savedTxInfo.methodName !== methodName) {
+    // if you dont have savedTxInfo
+    // or the methodName or cannotisterId is different from the savedTxInfo
+    // the batch tx is not valid
+    return false;
+  }
+
+  if (savedTxInfo.args) {
+    // if there is args saved in the savedTxInfo
+    // coming args must be the same as the saved args
+    // args and savedTxInfo.args gonna be base64 encoded
+    return savedTxInfo.args === arg;
+  }
+
+  return true;
+};
+
+export const handleCallRequest = async ({
+  keyring, request, callId, portId, callback, redirected,
+}) => {
+  const arg = blobFromBuffer(base64ToBuffer(request.arguments));
+  try {
+    if (request.batchTxId && request.batchTxId.lenght !== 0 && !request.savedBatchTrx) {
+      callback(ERRORS.NOT_VALID_BATCH_TRANSACTION, null, [{ portId, callId }]);
+      if (redirected) callback(null, false);
+      return false;
+    }
+    if (request.savedBatchTrx) {
+      const validate = validateBatchTx(
+        request.savedBatchTrx,
+        request.canisterId,
+        request.methodName,
+        request.arguments,
+      );
+      if (!validate) {
+        callback(ERRORS.NOT_VALID_BATCH_TRANSACTION, null, [{ portId, callId }]);
+        if (redirected) callback(null, false);
+        return false;
+      }
+    }
+    const signed = await keyring
+      .getAgent().call(
+        Principal.fromText(request.canisterId),
+        {
+          methodName: request.methodName,
+          arg,
+        },
+      );
+    callback(null, {
+      ...signed,
+      requestId: bufferToBase64(blobToUint8Array(signed.requestId)),
+    }, [
+      { callId, portId },
+    ]);
+    if (redirected) callback(null, true);
+    return true;
+  } catch (e) {
+    callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
+    if (redirected) callback(null, false);
+    return false;
+  }
+};
+
+export const generateRequestInfo = (args) => {
+  const decodedArguments = recursiveParseBigint(
+    PlugController.IDLDecode(blobFromBuffer(base64ToBuffer(args.arg))),
+  );
+  return {
+    canisterId: args.canisterId,
+    methodName: args.methodName,
+    sender: args.sender,
+    arguments: args.arg,
+    decodedArguments,
+    type: 'call',
+  };
+};
+
+export const lebEncodeArgs = (args) => {
+  if (!Array.isArray(args) || args.length() === 0) {
+    return undefined;
+  }
+  return PlugController.IDLEncode(args);
 };
