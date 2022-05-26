@@ -1,23 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DoubleArrowImg from '@assets/icons/double-arrow-right.svg';
-import { Typography } from '@material-ui/core';
-import NumberFormat from 'react-number-format';
 import { currencyPropTypes } from '@shared/constants/currencies';
-import TokenIcon from '@components/TokenIcon';
-import useStyles from './styles';
 
-const AssetInfo = ({ asset, amount, classes }) => (
-  <div className={classes.assetInfo}>
-    <TokenIcon image={asset.image} className={classes.icon} symbol={asset?.symbol} />
-    <Typography variant="h3" className={classes.asset}>
-      <NumberFormat value={amount} displayType="text" thousandSeparator="," suffix={` ${asset.value}`} />
-    </Typography>
-    <Typography variant="subtitle2">
-      <NumberFormat value={amount * asset.price} displayType="text" thousandSeparator="," prefix="$" />
-    </Typography>
-  </div>
-);
+import useStyles from './styles';
+import AssetInfo from './components/AssetInfo';
 
 const SwapInfo = ({
   fromAsset, fromAmount, toAsset, toAmount,
@@ -39,10 +26,4 @@ SwapInfo.propTypes = {
   fromAmount: PropTypes.number.isRequired,
   toAsset: PropTypes.shape(currencyPropTypes).isRequired,
   toAmount: PropTypes.number.isRequired,
-};
-
-AssetInfo.propTypes = {
-  asset: PropTypes.shape(currencyPropTypes).isRequired,
-  amount: PropTypes.number.isRequired,
-  classes: PropTypes.objectOf(PropTypes.object).isRequired,
 };

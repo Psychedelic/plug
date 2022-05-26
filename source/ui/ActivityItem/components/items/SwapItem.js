@@ -32,7 +32,7 @@ const getSwapData = (swap, iconHovered, icpPrice) => {
   return formatAssetBySymbol(data?.amount, data.symbol, icpPrice);
 };
 
-const TokenItem = ({
+const SwapItem = ({
   date,
   details,
   setOpenDetail,
@@ -68,14 +68,14 @@ const TokenItem = ({
   );
 };
 
-export default TokenItem;
+export default SwapItem;
 
-TokenItem.defaultProps = {
+SwapItem.defaultProps = {
   details: null,
   hovering: false,
 };
 
-TokenItem.propTypes = {
+SwapItem.propTypes = {
   details: PropTypes.objectOf(PropTypes.any),
   date: PropTypes.oneOfType([
     PropTypes.instanceOf(Date),

@@ -22,7 +22,7 @@ const Data = ({ data, principalId }) => {
       {
         data.map((item, index) => (
           <FormItem
-            key={index.toString()}
+            key={`${index.toString()}-${item.label}`}
             label={item.label}
             component={item.component}
             style={{ marginBottom: 24 }}
@@ -43,5 +43,5 @@ Data.propTypes = {
       component: PropTypes.node.isRequired,
     }),
   ).isRequired,
-  principalId: PropTypes.objectOf(PropTypes.object).isRequired,
+  principalId: PropTypes.object.isRequired,
 };

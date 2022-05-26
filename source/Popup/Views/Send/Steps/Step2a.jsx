@@ -18,6 +18,7 @@ const Step2a = ({ destination, handleChangeDestination, handleChangeStep }) => {
 
   const buttons = [
     {
+      key: 'dank-btn',
       startImage: DankImg,
       value: t('send.keepDank'),
       endImage: InfoImg,
@@ -25,6 +26,7 @@ const Step2a = ({ destination, handleChangeDestination, handleChangeStep }) => {
       onClick: () => handleChangeDestination(dank),
     },
     {
+      key: 'withdraw-btn',
       startImage: CanisterImg,
       value: t('send.withdrawCanister'),
       endImage: InfoImg,
@@ -40,8 +42,8 @@ const Step2a = ({ destination, handleChangeDestination, handleChangeStep }) => {
           <Typography variant="subtitle1">{t('send.canisterDetected')}</Typography>
         </Grid>
         {
-          buttons.map((item, index) => (
-            <Grid item xs={12} key={index.toString()}>
+          buttons.map((item) => (
+            <Grid item xs={12} key={item.key}>
               <SelectButton {...item} />
             </Grid>
           ))

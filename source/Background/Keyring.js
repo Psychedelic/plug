@@ -158,6 +158,7 @@ export const getKeyringHandler = (type, keyring) => ({
       const { mnemonic } = await keyring.create(params);
       return { mnemonic };
     } catch (e) {
+      // eslint-disable-next-line
       console.log('Error creating wallet', e);
       return null;
     }
@@ -201,6 +202,7 @@ export const getKeyringHandler = (type, keyring) => ({
       assets = parseAssetsAmount(assets);
       return (assets || []).map((asset) => recursiveParseBigint(asset));
     } catch (e) {
+      // eslint-disable-next-line
       console.log('Error while fetching the assets', e);
       return { error: e.message };
     }
@@ -212,6 +214,7 @@ export const getKeyringHandler = (type, keyring) => ({
       const icpPrice = await getICPPrice();
       return formatAssets(parsedAssets, icpPrice);
     } catch (error) {
+      // eslint-disable-next-line
       console.log('Error when fetching token balances', error);
       return { error: error.message };
     }
@@ -229,6 +232,7 @@ export const getKeyringHandler = (type, keyring) => ({
         transactionId: transactionId ? parseInt(transactionId, 10) : undefined,
       };
     } catch (error) {
+      // eslint-disable-next-line
       console.log('Error while sending token', error);
       return { error: error.message, height: null };
     }
@@ -245,6 +249,7 @@ export const getKeyringHandler = (type, keyring) => ({
         const tokenInfo = await keyring.getTokenInfo(canisterId, standard);
         return { ...tokenInfo, amount: tokenInfo.amount.toString() };
       } catch (e) {
+        // eslint-disable-next-line
         console.log('Error while fetching token info', e);
         return { error: e.message };
       }
@@ -257,6 +262,7 @@ export const getKeyringHandler = (type, keyring) => ({
         );
         return (tokens || []).map((token) => recursiveParseBigint(token));
       } catch (e) {
+        // eslint-disable-next-line
         console.log('Error registering token', e);
         return { error: e.message };
       }
@@ -269,6 +275,7 @@ export const getKeyringHandler = (type, keyring) => ({
         const response = await keyring.burnXTC({ to, amount });
         return recursiveParseBigint(response);
       } catch (e) {
+        // eslint-disable-next-line
         console.log('Error while burning XTC', e);
         return { error: e.message };
       }
@@ -286,6 +293,7 @@ export const getKeyringHandler = (type, keyring) => ({
       const response = await keyring.transferNFT({ to, token: nft });
       return recursiveParseBigint(response);
     } catch (e) {
+      // eslint-disable-next-line
       console.log('Error transfering NFT', e);
       return { error: e.message };
     }
@@ -305,6 +313,7 @@ export const getKeyringHandler = (type, keyring) => ({
       const res = await keyring.setICNSResolvedName(name);
       return res;
     } catch (e) {
+      // eslint-disable-next-line
       console.log('Error setting reverse resolution', e);
       return { error: e.message };
     }

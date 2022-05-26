@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { SHADOW_1 } from '@shared/styles/shadows';
+import SHADOW_1 from '@shared/styles/shadows';
 
 export default makeStyles((theme) => ({
   badge: {
@@ -128,6 +128,5 @@ export default makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-  }
+  },
 }));
-

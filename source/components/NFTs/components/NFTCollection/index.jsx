@@ -10,6 +10,7 @@ import { shortICNSName } from '@shared/services/ICNS';
 import { useRouter } from '@components/Router';
 import { setSelectedNft } from '@redux/nfts';
 import { NFTDisplayer, ICNSDisplay } from '@ui';
+import { NFT_COLLECTION_DEFAULT_TYPES } from '@shared/constants/nft';
 
 import useStyles from './styles';
 
@@ -25,6 +26,7 @@ function NFTCollection({ collection, icns, defaultOpen }) {
   };
 
   const toggleExpanded = () => setExpanded(!expanded);
+  const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[collection.canisterId];
 
   return (
     <div className={classes.collection}>
@@ -68,6 +70,7 @@ function NFTCollection({ collection, icns, defaultOpen }) {
                   <NFTDisplayer
                     url={nft.url}
                     className={classes.nft}
+                    defaultTag={nftDefaultTag}
                     onClick={() => handleNftClick(nft)}
                   />
                 )}
@@ -80,7 +83,7 @@ function NFTCollection({ collection, icns, defaultOpen }) {
                   </Typography>
                 )}
               </div>
-            )
+            );
           })}
         </div>
       </Collapsible>

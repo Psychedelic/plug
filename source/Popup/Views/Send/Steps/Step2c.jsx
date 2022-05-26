@@ -18,12 +18,14 @@ const Step2c = ({ destination, handleChangeDestination, handleChangeStep }) => {
 
   const buttons = [
     {
+      key: 'xtc-btn',
       startImage: XTCImg,
       value: t('send.sendXtc'),
       selected: destination === XTC_OPTIONS.SEND,
       onClick: () => handleChangeDestination(XTC_OPTIONS.SEND),
     },
     {
+      key: 'cycles-btn',
       startImage: CyclesImg,
       value: t('send.sendCycles'),
       selected: destination === XTC_OPTIONS.BURN,
@@ -38,8 +40,8 @@ const Step2c = ({ destination, handleChangeDestination, handleChangeStep }) => {
           <Typography variant="subtitle1">{t('send.xtcCanisterDetected')}</Typography>
         </Grid>
         {
-          buttons.map((item, index) => (
-            <Grid item xs={12} key={index.toString()}>
+          buttons.map((item) => (
+            <Grid item xs={12} key={item.key}>
               <SelectButton {...item} />
             </Grid>
           ))

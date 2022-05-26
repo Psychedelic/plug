@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { capitalize } from '@material-ui/core';
 
 import UnknownIcon from '@assets/icons/unknown-icon.svg';
-import { GenericIcon } from '@ui';
 
+import GenericIcon from '../../../GenericIcon';
 import ActivityItemDisplay from '../ActivityItemDisplay';
 import ActivityItemDetails from '../ActivityItemDetails';
 

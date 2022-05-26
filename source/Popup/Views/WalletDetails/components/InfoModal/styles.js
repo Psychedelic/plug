@@ -8,6 +8,5 @@ export default makeStyles(() => ({
     padding: '0 20px',
     flexDirection: 'column',
     marginTop: -16,
-  }
+  },
 }));
-

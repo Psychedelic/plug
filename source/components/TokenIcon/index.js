@@ -5,7 +5,8 @@ import { NFTDisplayer } from '@ui';
 import randomColor from 'random-color';
 import clsx from 'clsx';
 
-import { SHADOW_1 } from '@shared/styles/shadows';
+import { NFT_COLLECTION_DEFAULT_TYPES } from '@shared/constants/nft';
+import SHADOW_1 from '@shared/styles/shadows';
 
 const useStyles = makeStyles((theme) => ({
   genericToken: {
@@ -44,9 +45,11 @@ const TokenIcon = ({
   const classes = useStyles();
   const backgroundColor = `rgb(${color.values.rgb.join(',')})`;
 
+  const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[nft.canisterId];
+
   if (image) {
     return nft ? (
-      <NFTDisplayer url={image} className={className} {...props} />
+      <NFTDisplayer url={image} className={className} defaultTag={nftDefaultTag} {...props} />
     ) : (
       <img src={image} className={clsx(classes.icon, className)} {...props} />
     );
