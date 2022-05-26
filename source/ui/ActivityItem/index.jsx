@@ -13,6 +13,7 @@ import PlugItem from './components/items/PlugItem';
 import SwapItem from './components/items/SwapItem';
 import NFTItem from './components/items/NFTItem';
 import TokenItem from './components/items/TokenItem';
+import LiquidityItem from './components/items/LiquidityItem';
 import useStyles from './styles';
 import { getAddress } from './utils';
 
@@ -75,6 +76,10 @@ const ActivityItem = (props) => {
     }
     if (type === 'SWAP') {
       return SwapItem;
+    }
+
+    if (type.includes('LIQUIDITY')) {
+      return LiquidityItem;
     }
 
     if (symbol === 'NFT') {
@@ -153,10 +158,10 @@ ActivityItem.defaultProps = {
 };
 
 ActivityItem.propTypes = {
-  canisterInfo: PropTypes.objectOf(PropTypes.string),
+  canisterInfo: PropTypes.objectOf(PropTypes.any),
   type: PropTypes.number,
   canisterId: PropTypes.string,
-  details: PropTypes.objectOf(PropTypes.string),
+  details: PropTypes.objectOf(PropTypes.any),
   to: PropTypes.string,
   from: PropTypes.string,
   amount: PropTypes.oneOfType([

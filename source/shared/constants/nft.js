@@ -33,3 +33,7 @@ export const NFT_DESCRIPTIONS = {
   ICPuppies: 'ICPuppies is a collection of 10,000 randomly generated 8-bit puppies that will be deployed on the Internet Computer. We want ICPuppies to be a fun, easy-going collection of NFTs!',
   ICPBunny: '',
 };
+
+export const NFT_COLLECTION_DEFAULT_TYPES = {
+  "pk6rk-6aaaa-aaaae-qaazq-cai": "iframe",
+};

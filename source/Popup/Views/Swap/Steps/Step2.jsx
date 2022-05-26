@@ -55,7 +55,7 @@ const Step2 = ({
 export default Step2;
 
 Step2.propTypes = {
-  fromAsset: PropTypes.objectOf(PropTypes.string).isRequired,
+  fromAsset: PropTypes.object.isRequired,
   fromAmount: PropTypes.number.isRequired,
-  toAsset: PropTypes.objectOf(PropTypes.string).isRequired,
+  toAsset: PropTypes.object.isRequired,
 };
