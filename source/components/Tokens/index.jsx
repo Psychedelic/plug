@@ -74,6 +74,7 @@ const Tokens = () => {
             />
           ))
         }
+        <div className={classes.emptyAsset} />
       </div>
       <div
         onClick={() => navigator.navigate('add-token')}
