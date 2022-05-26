@@ -5,6 +5,7 @@ import nftReducer from './nfts';
 import profileReducer from './profile';
 import clockReducer from './clock';
 import icnsReducer from './icns';
+import contactsReducer from './contacts';
 
 const reducer = {
   wallet: walletReducer,
@@ -13,6 +14,7 @@ const reducer = {
   profile: profileReducer,
   clock: clockReducer,
   icns: icnsReducer,
+  contacts: contactsReducer,
 };
 
 const store = configureStore({

@@ -97,6 +97,9 @@ export const HANDLER_TYPES = {
   TRANSFER_NFT: 'transfer-nft',
   GET_ICNS_DATA: 'get-icns-data',
   SET_REVERSE_RESOLVED_NAME: 'set-reverse-resolved-name',
+  GET_CONTACTS: 'get-contacts',
+  ADD_CONTACT: 'add-contact',
+  REMOVE_CONTACT: 'remove-contact',
 };
 
 export const getKeyringErrorMessage = (type) => ({
@@ -318,4 +321,61 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: e.message };
     }
   },
+  [HANDLER_TYPES.GET_CONTACTS]: async () => {
+    try {
+      const res = await keyring.getContacts();
+      return res;
+    } catch (e) {
+      // eslint-disable-next-line
+      console.log('Error getting contacts', e);
+      return { error: e.message };
+    }
+  },
+  [HANDLER_TYPES.ADD_CONTACT]: async (contact) => {
+    try {
+      const res = await keyring.addContact(contact);
+      return res;
+    } catch (e) {
+      // eslint-disable-next-line
+      console.log('Error adding contact', e);
+      return { error: e.message };
+    }
+  },
+  [HANDLER_TYPES.REMOVE_CONTACT]: async (contactName) => {
+    try {
+      const res = await keyring.deleteContact(contactName);
+      return res;
+    } catch (e) {
+      // eslint-disable-next-line
+      console.log('Error removing contact', e);
+      return { error: e.message };
+    }
+  },
 }[type]);
+
+export const getContacts = () => new Promise((resolve, reject) => {
+  sendMessage({
+    type: HANDLER_TYPES.GET_CONTACTS,
+  }, (contactList) => {
+    if (contactList) return resolve(contactList);
+    return reject(contactList);
+  });
+});
+
+export const addContact = (contact) => new Promise((resolve) => {
+  sendMessage({
+    type: HANDLER_TYPES.ADD_CONTACT,
+    params: contact,
+  }, (res) => {
+    resolve(res);
+  });
+});
+
+export const deleteContact = (contactName) => new Promise((resolve) => {
+  sendMessage({
+    type: HANDLER_TYPES.REMOVE_CONTACT,
+    params: contactName,
+  }, (res) => {
+    resolve(res);
+  });
+});

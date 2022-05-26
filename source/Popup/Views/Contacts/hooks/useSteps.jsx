@@ -1,27 +1,34 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { LinkButton, Button } from '@ui';
+import {
+  addContact,
+  removeContact,
+} from '@redux/contacts';
 import BackIcon from '@assets/icons/back.svg';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from '@components/Router';
-import { useContacts } from '@hooks';
 import { ContactList } from '@components';
 import AddContact from '../components/AddContact';
 import Home from '../components/Home';
 
 const useSteps = () => {
   const {
-    contacts, handleAddContact, handleRemoveContact, ungroupedContacts,
-  } = useContacts();
+    groupedContacts: contacts,
+  } = useSelector((state) => state.contacts);
 
   const [currentView, setCurrentView] = useState(0);
 
-  const { navigator } = useRouter();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const { navigator } = useRouter();
 
   const handleChangeView = (index) => setCurrentView(index);
 
-  const addContact = (contact) => {
-    handleAddContact(contact);
+  const handleRemoveContact = (contact) => dispatch(removeContact(contact));
+
+  const handleAddContact = (contact) => {
+    dispatch(addContact(contact));
     handleChangeView(0);
   };
 
@@ -29,7 +36,7 @@ const useSteps = () => {
 
   const firstView = contacts.length > 0
     ? {
-      component: <ContactList contacts={contacts} handleRemoveContact={handleRemoveContact} />,
+      component: <ContactList handleRemoveContact={handleRemoveContact} />,
       left: leftButton(() => navigator.navigate('settings')),
       right: <Button
         variant="rainbowOutlined"
@@ -55,7 +62,7 @@ const useSteps = () => {
       ...firstView,
     },
     {
-      component: <AddContact addContact={addContact} contacts={ungroupedContacts} />,
+      component: <AddContact handleAddContact={handleAddContact} />,
       left: leftButton(() => handleChangeView(0)),
       right: null,
       center: t('contacts.addContact'),

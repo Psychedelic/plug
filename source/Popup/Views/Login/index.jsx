@@ -10,14 +10,17 @@ import { useRouter } from '@components/Router';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
 import { isClockInSync } from '@shared/utils/time';
+import { syncContactsToDab } from '@shared/utils/contacts';
+import { getContacts } from '@redux/contacts';
+
 import PropTypes from 'prop-types';
 import useStyles from './styles';
 
 const Login = ({ redirect }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const { navigator } = redirect ? {} : useRouter();
-  const dispatch = useDispatch();
 
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
@@ -33,6 +36,9 @@ const Login = ({ redirect }) => {
       params: { password, redirect: true },
     }, (unlocked) => {
       if (unlocked) {
+        // Upload contacts
+        syncContactsToDab().then(() => dispatch(getContacts()));
+
         isClockInSync()
           .then((isInRange) => {
             if (!isInRange) {
