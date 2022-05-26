@@ -4,11 +4,11 @@ export default makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    padding: '10px 0',
+    padding: '10px 0 0',
     height: 320,
   },
   tokenContainer: {
-    height: 250,
+    height: '100%',
     overflow: 'auto',
   },
   buttonWrapper: {
@@ -30,5 +30,9 @@ export default makeStyles((theme) => ({
   },
   icon: {
     color: 'white',
+  },
+  scrollShadow: {
+    boxShadow: 'inset 0 -10px 10px -10px rgb(0 0 0 / 0.4)',
+    transition: 'box-shadow 0.3s',
   },
 }));
