@@ -37,6 +37,7 @@ import useStyles from './styles';
 import UserIcon from '../UserIcon';
 import { setICNSData } from '../../redux/icns';
 import ConnectAccountsModal from './components/ConnectAccountsModal';
+import { getTabURL } from '../../shared/utils/chrome-tabs';
 
 const Profile = ({ disableProfile }) => {
   const classes = useStyles();
@@ -143,11 +144,11 @@ const Profile = ({ disableProfile }) => {
 
   const handleChangeAccount = (wallet) => () => {
     setSelectedWallet(wallet);
-    extensionizer.tabs.query({ active: true }, (tab) => {
-      const url = new URL(tab?.[0]?.url);
+    extensionizer.tabs.query({ active: true }, (tabs) => {
+      const url = getTabURL(tabs?.[0]);
       const ids = accounts.map((_, idx) => idx);
       // Check if new wallet is connected to the current page
-      getWalletsConnectedToUrl(url.host, ids, async (wallets = {}) => {
+      getWalletsConnectedToUrl(url, ids, async (wallets = {}) => {
         const currentConnected = wallets.includes(walletNumber);
         const newConnected = wallets.includes(wallet);
         // If current was connected but new one isnt, prompt modal
