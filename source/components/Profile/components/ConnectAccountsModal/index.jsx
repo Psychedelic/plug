@@ -90,8 +90,6 @@ const ConnectAccountsModal = ({
     setWalletsToUpdate(newWalletsToUpdate);
   };
 
-  console.log('wallets to update', walletsToUpdate);
-  console.log('connectedWallets', connectedWallets);
   return (
     <ActionDialog
       open={open}

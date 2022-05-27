@@ -152,7 +152,6 @@ const Profile = ({ disableProfile }) => {
       getWalletsConnectedToUrl(url, ids, async (wallets = []) => {
         const currentConnected = wallets.includes(walletNumber);
         const newConnected = wallets.includes(wallet);
-        console.log('setting connected wallets', wallets);
         setConnectedWallets(wallets);
         // If current was connected but new one isnt, prompt modal
         if (currentConnected && !newConnected) {
