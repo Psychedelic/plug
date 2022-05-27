@@ -10,11 +10,14 @@ export default makeStyles((theme) => ({
   },
   center: {
     position: 'absolute',
+    display: 'flex',
   },
   left: {
     marginRight: 'auto',
+    display: 'flex',
   },
   right: {
     marginLeft: 'auto',
+    display: 'flex',
   },
 }));
