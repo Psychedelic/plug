@@ -8,10 +8,6 @@ const serverRPC = new ProxyRPC(window, {
   target: 'plug-inpage-provider',
 });
 
-// const contentPort = extensionizer.runtime.connect({
-//   name: 'background-content',
-// });
-
 // Listen for runtime message
 extensionizer.runtime.onMessage.addListener((message) => {
   if (message.action === 'updateConnection') {
@@ -19,12 +15,6 @@ extensionizer.runtime.onMessage.addListener((message) => {
     window.dispatchEvent(event);
   }
 });
-
-// window.addEventListener('message', (event) => {
-//   if (event.data.action === 'updatedProvider') {
-//     contentPort.postMessage({ type: 'updatedProvider', payload: event.data.payload });
-//   }
-// }, false);
 
 serverRPC.exposeHandler('test', (props, name) => {
   const { callback } = props;

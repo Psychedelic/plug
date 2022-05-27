@@ -143,23 +143,11 @@ export const getBatchTransactions = (cb) => {
   });
 };
 
-export const isAnyWalletConnectedToUrl = (url, walletIds, cb) => {
-  let anyConnection = false;
-  walletIds.forEach((id) => {
-    getApps(id, (_apps = {}) => {
-      if (_apps[url]?.status === CONNECTION_STATUS.accepted) {
-        anyConnection = true;
-      }
-    });
-  });
-  cb(anyConnection);
-};
-
 export const getWalletsConnectedToUrl = (url, walletIds, cb) => {
   const wallets = [];
   walletIds.forEach((id) => {
-    getApps(id.toString(), (_apps = {}) => {
-      if (_apps[url]?.status === CONNECTION_STATUS.accepted) {
+    getApp(id.toString(), url, (app = {}) => {
+      if (app?.status === CONNECTION_STATUS.accepted) {
         wallets.push(id);
       }
       if (id === walletIds.length - 1) {
