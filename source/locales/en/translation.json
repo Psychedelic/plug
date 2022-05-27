@@ -328,6 +328,7 @@
   "nfts": {
     "allNfts": "All NFTs",
     "expandNFT": "View",
+    "copyLink": "Copy Link",
     "collection": "Collection",
     "description": "Description",
     "attributes": "Attributes",
