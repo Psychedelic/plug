@@ -23,6 +23,7 @@ const ConnectAccountsModal = ({
   onClose,
   executeAccountSwitch,
   selectedWallet,
+  connectedWallets,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
@@ -31,7 +32,7 @@ const ConnectAccountsModal = ({
   const [walletsToUpdate, setWalletsToUpdate] = useState({});
   const [selectAllWallets, setSelectAllWallets] = useState(false);
   const { walletNumber: currentWalletNumber } = useSelector((state) => state.wallet);
-  const { onScroll, fullScroll, scrollTop } = useScroll();
+  const { onScroll, fullScroll } = useScroll();
 
   useEffect(() => {
     extension.tabs.query({ active: true }, (tabs) => {
@@ -90,6 +91,7 @@ const ConnectAccountsModal = ({
   };
 
   console.log('wallets to update', walletsToUpdate);
+  console.log('connectedWallets', connectedWallets);
   return (
     <ActionDialog
       open={open}
@@ -118,26 +120,33 @@ const ConnectAccountsModal = ({
 }
             onScroll={onScroll}
           >
-            {wallets.map((wallet) => (
-              <div
-                key={wallet.walletNumber}
-                className={clsx(
-                  classes.flex,
-                  classes.walletContainer,
-                )}
-              >
-                <div className={classes.flex}>
-                  <Checkbox
-                    className={classes.checkbox}
-                    checked={!!walletsToUpdate[wallet.walletNumber]}
-                    handleChange={onCheckWallet(wallet.walletNumber)}
-                  />
-                  <UserIcon size="small" icon={wallet.icon} style={{ marginLeft: -6, marginRight: 12 }} />
-                  <Typography variant="h6">{wallet.name}</Typography>
+            {wallets.map((wallet) => {
+              const alreadyConnected = connectedWallets.includes(wallet.walletNumber);
+              return (
+                <div
+                  key={wallet.walletNumber}
+                  className={clsx(
+                    classes.flex,
+                    classes.walletContainer,
+                    alreadyConnected && classes.walletConnected,
+                  )}
+                >
+                  <div className={classes.flex}>
+                    <Checkbox
+                      className={classes.checkbox}
+                      checked={
+                        !!walletsToUpdate[wallet.walletNumber]
+                        || alreadyConnected
+                      }
+                      handleChange={!alreadyConnected && onCheckWallet(wallet.walletNumber)}
+                    />
+                    <UserIcon size="small" icon={wallet.icon} style={{ marginLeft: -6, marginRight: 12 }} />
+                    <Typography variant="h6" className={classes.walletName}>{wallet.name}</Typography>
+                  </div>
+                  <Typography variant="h6">{shortAddress(wallet.principal)}</Typography>
                 </div>
-                <Typography variant="h4">{shortAddress(wallet.principal)}</Typography>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
         </div>
@@ -152,10 +161,15 @@ const ConnectAccountsModal = ({
 
 ConnectAccountsModal.propTypes = {
   wallets: PropTypes.arrayOf(PropTypes.object).isRequired,
-  selectedWallet: PropTypes.arrayOf(PropTypes.object).isRequired,
+  selectedWallet: PropTypes.number.isRequired,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   executeAccountSwitch: PropTypes.func.isRequired,
+  connectedWallets: PropTypes.arrayOf(PropTypes.number),
+};
+
+ConnectAccountsModal.defaultProps = {
+  connectedWallets: [],
 };
 
 export default ConnectAccountsModal;

@@ -166,5 +166,5 @@ export const getWalletsConnectedToUrl = (url, walletIds, cb) => {
         cb(wallets);
       }
     });
-  })
+  });
 };

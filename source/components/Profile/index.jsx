@@ -56,6 +56,7 @@ const Profile = ({ disableProfile }) => {
   const [openCreateAccount, setOpenCreateAccount] = useState(false);
   const [openConnectAccount, setOpenConnectAccount] = useState(false);
   const [accountName, setAccountName] = useState('');
+  const [connectedWallets, setConnectedWallets] = useState([]);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -148,9 +149,11 @@ const Profile = ({ disableProfile }) => {
       const url = getTabURL(tabs?.[0]);
       const ids = accounts.map((_, idx) => idx);
       // Check if new wallet is connected to the current page
-      getWalletsConnectedToUrl(url, ids, async (wallets = {}) => {
+      getWalletsConnectedToUrl(url, ids, async (wallets = []) => {
         const currentConnected = wallets.includes(walletNumber);
         const newConnected = wallets.includes(wallet);
+        console.log('setting connected wallets', wallets);
+        setConnectedWallets(wallets);
         // If current was connected but new one isnt, prompt modal
         if (currentConnected && !newConnected) {
           setOpenConnectAccount(true);
@@ -213,6 +216,7 @@ const Profile = ({ disableProfile }) => {
         executeAccountSwitch={executeAccountSwitch}
         selectedWallet={selectedWallet}
         wallets={accounts}
+        connectedWallets={connectedWallets}
       />
       {
         !disableProfile

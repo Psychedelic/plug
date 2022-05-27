@@ -53,4 +53,10 @@ export default makeStyles({
   modalContainer: {
     top: 100,
   },
+  walletConnected: {
+    opacity: 0.6,
+  },
+  walletName: {
+    fontWeight: 'bold',
+  },
 });
