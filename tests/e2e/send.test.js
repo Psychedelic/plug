@@ -1,24 +1,56 @@
 const { getTokenAmount } = require('../utils/string');
 
-const sendCancel = async (page) => {
+const sendViewCancel = async (page) => {
   const [cancelButtonElement] = await page.getXPathElements('span', 'Cancel');
   await cancelButtonElement.click();
 };
 
-const sendOpen = async (page) => {
+const sendViewOpen = async (page) => {
   const [sendButtonElement] = await page.getXPathElements('span', 'Send');
   await sendButtonElement.click();
 };
 
+// Utilities
+
+const selectToken = async (page, { currentName, newName }) => {
+  const [selectHandle] = await page.getXPathElements('h4', currentName);
+  await selectHandle.click();
+
+  const [selectMenuItem] = await page.getXPathElements('li', newName, true);
+  await selectMenuItem.click();
+};
+
+const getUniversalInputValue = (page) => page.evaluate(() => document.querySelector('.MuiInputBase-input').value);
+
+const getAvailableICP = async (page) => {
+  const [availableICPTag] = await page.getXPathElements('span', 'ICP', true);
+  return page.evaluate((tag) => tag.innerText, availableICPTag);
+};
+
+const waitForAmount = async (page) => {
+  await page.waitForTimeout(500);
+  await sendViewCancel(page);
+  await sendViewOpen(page);
+
+  const availableICPString = await getAvailableICP(page);
+  const amount = getTokenAmount(availableICPString);
+
+  if (amount <= 0) {
+    return waitForAmount(page);
+  }
+
+  return amount;
+};
+
 describe('Send View', () => {
-  let chromeBrowser;
+  let browser;
   let page;
 
   beforeAll(async () => {
-    chromeBrowser = await setupChrome();
+    browser = await setupChrome();
 
     // Importing and unlocking the account
-    page = await utils.createNewPage(chromeBrowser);
+    page = await utils.createNewPage(browser);
 
     await optionsPageUtils.importAccount(page, secrets.seedphrase, secrets.password);
     await optionsPageUtils.unlock(page, secrets.password);
@@ -27,7 +59,7 @@ describe('Send View', () => {
   });
 
   beforeEach(async () => {
-    page = await utils.createNewPage(chromeBrowser);
+    page = await utils.createNewPage(browser);
     await page.goto(chromeData.popupUrl);
     await popupPageUtils.waitForProfileButton(page);
     const [sendButtonElement] = await page.getXPathElements('span', 'Send');
@@ -39,32 +71,47 @@ describe('Send View', () => {
   });
 
   afterAll(async () => {
-    await chromeBrowser.close();
+    await browser.close();
+  });
+
+  test('switching between tokens', async () => {
+    await selectToken(page, { currentName: 'ICP', newName: 'Cycles' });
+    await page.waitForTimeout(1000);
+    await selectToken(page, { currentName: 'XTC', newName: 'Wrapped ICP' });
+    await page.waitForTimeout(1000);
+    await selectToken(page, { currentName: 'WICP', newName: 'ICP' });
+  });
+
+  test('replacing currency from ICP to USD and vice versa', async () => {
+    const swapButton = await page.getElement('button.makeStyles-swapIcon-135');
+    await swapButton.click();
+
+    const usdValue = await getUniversalInputValue(page);
+    expect(usdValue).toBe('$0.00000 USD');
+
+    await swapButton.click();
+    const icpValue = await getUniversalInputValue(page);
+    expect(icpValue).toBe('0.00000 ICP');
+  });
+
+  test('selecting max value', async () => {
+    const amount = await waitForAmount(page);
+    expect(amount).toBeGreaterThan(0);
+    const [maxButton] = await page.getXPathElements('span', 'Max');
+    await maxButton.click();
+    const inputValue = await getUniversalInputValue(page);
+    const availableICP = await getAvailableICP(page);
+
+    expect(inputValue).toBe(availableICP);
   });
 
   test('cancelling the send operation', async () => {
-    await sendCancel(page);
-    await sendOpen(page);
+    await sendViewCancel(page);
+    await sendViewOpen(page);
   });
+
   test('sending an ICP', async () => {
-    const waitForAmount = async () => {
-      await utils.waitForRender(500);
-      await sendCancel(page);
-      await sendOpen(page);
-
-      const [availableICPTag] = await page.getXPathElements('span', 'ICP', true);
-      const availableICPString = await page.evaluate((tag) => tag.innerText, availableICPTag);
-
-      const amount = getTokenAmount(availableICPString);
-
-      if (amount <= 0) {
-        return waitForAmount();
-      }
-
-      return amount;
-    };
-
-    const amount = await waitForAmount();
+    const amount = await waitForAmount(page);
     expect(amount).toBeGreaterThan(0);
 
     const [amountInput, addressInput] = await page.getInputs();
@@ -80,18 +127,14 @@ describe('Send View', () => {
     const [sendBtn] = await page.getXPathElements('span', 'Send');
     await sendBtn.click();
 
-    await utils.waitForRender(9000);
+    await page.waitForTimeout(15000);
     await popupPageUtils.refreshWallet(page);
-    await utils.waitForRender(20000);
+    await page.waitForTimeout(8000);
 
-    const [newAvailableICPTag] = await page.getXPathElements('span', 'ICP', true);
-    await page.evaluate((tag) => tag.innerText, availableICPTag);
-    const newAvailableICPString = await page.evaluate((tag) => tag.innerText, availableICPTag);
+    const [availableICPTag] = await page.getXPathElements('span', 'ICP', true);
+    const availableICPString = await page.evaluate((tag) => tag.innerText, availableICPTag);
 
-    const newAvailableIsLower = newAvailableICPString < availableICPString;
-
-    // Gotta do more tests before checking amount :p
-    // expect(newAvailableIsLower).toBe(true);
-    expect(2).toBe(2);
+    const newAmount = getTokenAmount(availableICPString);
+    expect(newAmount).toBeLessThan(amount);
   });
 });

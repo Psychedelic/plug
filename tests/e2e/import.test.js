@@ -11,7 +11,7 @@ const getCreateButton = async (page) => {
 };
 
 describe('Import/Create', () => {
-  let chromeBrowser;
+  let browser;
   let page;
 
   const passwordErrorLabel = '#options-root > div > div.MuiContainer-root.MuiContainer-maxWidthSm > div > div.MuiGrid-root.makeStyles-passwordError-4.MuiGrid-item.MuiGrid-grid-xs-12 > p';
@@ -19,11 +19,11 @@ describe('Import/Create', () => {
   const badSeedphrase = 'sadf adsf adfdfasd adfad adfafd sdfsd sdfsdf sdfds sdfd sdf sfsfs sdfadsf';
 
   beforeAll(async () => {
-    chromeBrowser = await setupChrome();
+    browser = await setupChrome();
   });
 
   beforeEach(async () => {
-    page = await utils.createNewPage(chromeBrowser);
+    page = await utils.createNewPage(browser);
     await page.goto(chromeData.optionsUrl);
   });
 
@@ -32,7 +32,7 @@ describe('Import/Create', () => {
   });
 
   afterAll(async () => {
-    await chromeBrowser.close();
+    await browser.close();
   });
 
   describe('Import', () => {
@@ -62,7 +62,7 @@ describe('Import/Create', () => {
       const submitImport = await page.getButtonWithIndex(0);
       await submitImport.click();
 
-      await utils.waitForRender(500);
+      await page.waitForTimeout(500);
       const [passwordInput, confirmPasswordInput] = await page.getInputs();
       await passwordInput.type('TestPassword123');
       await confirmPasswordInput.type('MissMatchedPassword');

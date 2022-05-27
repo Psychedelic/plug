@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const PAGE_TITLE = 'Plug';
-const CHROME_PATH = require('path').join(__dirname, '..', '..', 'extension', 'chrome');
+const EXTENSION_PATH = require('path').join(__dirname, '..', '..', 'extension', 'chrome');
 
 const profileButtonSelector = '[aria-label="Emoji"]';
 
@@ -16,15 +16,16 @@ global.secrets = {
 global.setupChrome = async () => {
   const puppeteer = require('puppeteer');
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: false, // Can only run extension in head-full mode.
+    devtools: true,
     args: [
-      `--disable-extensions-except=${CHROME_PATH}`,
-      `--load-extension=${CHROME_PATH}`,
+      `--disable-extensions-except=${EXTENSION_PATH}`,
+      `--load-extension=${EXTENSION_PATH}`,
       '--enable-automation',
     ],
   });
   const targets = await browser.targets();
-  extensionTarget = targets.find(({ _targetInfo }) => _targetInfo.title === PAGE_TITLE);
+  const extensionTarget = targets.find(({ _targetInfo }) => _targetInfo.title === PAGE_TITLE);
 
   const partialExtensionUrl = extensionTarget._targetInfo.url || '';
   const [, , extensionID] = partialExtensionUrl.split('/');
@@ -163,7 +164,7 @@ const createSubAccount = async (page, subAccountName) => {
 };
 
 const switchToSubAccount = async (page, subAccountName) => {
-  await waitForRender(1000);
+  await page.waitForTimeout(1000);
   const profileButton = await page.$(profileButtonSelector);
   await profileButton.click();
 
