@@ -12,6 +12,8 @@ import { Checkbox } from '@ui';
 import { Typography } from '@material-ui/core';
 import shortAddress from '@shared/utils/short-address';
 import { getTabURL } from '@shared/utils/chrome-tabs';
+import { useScroll } from '@hooks';
+
 import UserIcon from '../../../UserIcon';
 import useStyles from './styles';
 
@@ -29,6 +31,7 @@ const ConnectAccountsModal = ({
   const [walletsToUpdate, setWalletsToUpdate] = useState({});
   const [selectAllWallets, setSelectAllWallets] = useState(false);
   const { walletNumber: currentWalletNumber } = useSelector((state) => state.wallet);
+  const { onScroll, fullScroll, scrollTop } = useScroll();
 
   useEffect(() => {
     extension.tabs.query({ active: true }, (tabs) => {
@@ -77,18 +80,21 @@ const ConnectAccountsModal = ({
     });
   };
 
-  const handleSelectAll = () => {
+  const handleSelectAll = (event) => {
     const newWalletsToUpdate = {};
     wallets.forEach((wallet) => {
-      newWalletsToUpdate[wallet.walletNumber] = true;
+      newWalletsToUpdate[wallet.walletNumber] = event.target.checked;
     });
-    setSelectAllWallets(!selectAllWallets);
+    setSelectAllWallets(event.target.checked);
     setWalletsToUpdate(newWalletsToUpdate);
   };
+
+  console.log('wallets to update', walletsToUpdate);
   return (
     <ActionDialog
       open={open}
       title={t('profile.subaccountNotConnected')}
+      className={classes.modalContainer}
       content={(
         <div>
           {tab && app && (
@@ -103,16 +109,27 @@ const ConnectAccountsModal = ({
             handleChange={handleSelectAll}
             label="Select all"
           />
-          <div className={classes.walletsContainer}>
+          <div
+            className={
+              clsx(
+                classes.walletsContainer,
+                wallets?.length > 3 && !fullScroll && classes.scrollShadow,
+              )
+}
+            onScroll={onScroll}
+          >
             {wallets.map((wallet) => (
               <div
                 key={wallet.walletNumber}
-                className={clsx(classes.flex, classes.walletContainer)}
+                className={clsx(
+                  classes.flex,
+                  classes.walletContainer,
+                )}
               >
                 <div className={classes.flex}>
                   <Checkbox
                     className={classes.checkbox}
-                    checked={walletsToUpdate[wallet.walletNumber]}
+                    checked={!!walletsToUpdate[wallet.walletNumber]}
                     handleChange={onCheckWallet(wallet.walletNumber)}
                   />
                   <UserIcon size="small" icon={wallet.icon} style={{ marginLeft: -6, marginRight: 12 }} />

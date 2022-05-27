@@ -12,10 +12,11 @@ export default makeStyles({
     width: 'auto !important',
   },
   walletsContainer: {
-    maxHeight: 190,
+    maxHeight: 180,
     borderRadius: 10,
     border: walletBorder,
-    overflow: 'hidden',
+    marginTop: 10,
+    overflow: 'auto',
   },
   walletContainer: {
     padding: 10,
@@ -44,5 +45,12 @@ export default makeStyles({
     overflow: 'hidden',
     textAlign: 'center',
     marginBottom: 10,
+  },
+  scrollShadow: {
+    boxShadow: 'inset 0 -10px 10px -10px rgb(0 0 0 / 0.4)',
+    transition: 'box-shadow 0.3s',
+  },
+  modalContainer: {
+    top: 100,
   },
 });
