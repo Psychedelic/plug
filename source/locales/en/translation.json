@@ -14,6 +14,8 @@
     "myAccounts": "My Accounts",
     "createAccount": "Create Account",
     "settings": "Settings",
+    "subaccountNotConnected": "This account is not connected",
+    "wantToConnect": "Do you want to connect your accounts?",
     "help": "Help",
     "lock": "Lock",
     "refreshWallet": "Refresh Wallet"

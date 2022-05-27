@@ -9,7 +9,11 @@ import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { Typography } from '@material-ui/core';
+import clsx from 'clsx';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import extensionizer from 'extensionizer';
+
 import Plus from '@assets/icons/plus.svg';
 import {
   setAccountInfo,
@@ -19,21 +23,23 @@ import {
   setTransactions,
   setTransactionsLoading,
 } from '@redux/wallet';
-import { useDispatch, useSelector } from 'react-redux';
 import BluePencil from '@assets/icons/blue-pencil.svg';
 import VisibleIcon from '@assets/icons/visible.svg';
 import InvisibleIcon from '@assets/icons/invisible.svg';
 import { getRandomEmoji } from '@shared/constants/emojis';
-import { getContacts } from '@redux/contacts';
-import clsx from 'clsx';
-import { useICPPrice } from '@redux/icp';
+import { getTabURL } from '@shared/utils/chrome-tabs';
+import { getWalletsConnectedToUrl, getApp } from '@modules/storageManager';
 import { toggleAccountHidden, useHiddenAccounts } from '@redux/profile';
+import { getContacts } from '@redux/contacts';
+import { setICNSData } from '@redux/icns';
+import { useICPPrice } from '@redux/icp';
+import { ConnectAccountsModal } from '@components';
+import { useMenuItems } from '@hooks';
+
 import { TABS, useRouter } from '../Router';
 import ActionDialog from '../ActionDialog';
-import useMenuItems from '../../hooks/useMenuItems';
-import useStyles from './styles';
 import UserIcon from '../UserIcon';
-import { setICNSData } from '../../redux/icns';
+import useStyles from './styles';
 
 const Profile = ({ disableProfile }) => {
   const classes = useStyles();
@@ -47,9 +53,14 @@ const Profile = ({ disableProfile }) => {
 
   const [open, setOpen] = useState(false);
   const [accounts, setAccounts] = useState([]);
+  const [selectedWallet, setSelectedWallet] = useState(null);
+  const [app, setApp] = useState(null);
+  const [tab, setTab] = useState(null);
 
   const [openCreateAccount, setOpenCreateAccount] = useState(false);
+  const [openConnectAccount, setOpenConnectAccount] = useState(false);
   const [accountName, setAccountName] = useState('');
+  const [connectedWallets, setConnectedWallets] = useState([]);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -84,9 +95,9 @@ const Profile = ({ disableProfile }) => {
       type: HANDLER_TYPES.CREATE_PRINCIPAL,
       params: { name: accountName, icon: getRandomEmoji() },
     },
-    (wallet) => {
-      if (wallet) {
-        setAccounts([...accounts, wallet]);
+    (newWallet) => {
+      if (newWallet) {
+        setAccounts([...accounts, newWallet]);
       }
       setAccountName('');
       setOpenCreateAccount(false);
@@ -103,7 +114,7 @@ const Profile = ({ disableProfile }) => {
     dispatch(toggleAccountHidden(account));
   };
 
-  const handleChangeAccount = (wallet) => () => {
+  const executeAccountSwitch = (wallet) => {
     dispatch(setCollections({ collections: [], principalId }));
     sendMessage({ type: HANDLER_TYPES.SET_CURRENT_PRINCIPAL, params: wallet },
       (state) => {
@@ -131,7 +142,33 @@ const Profile = ({ disableProfile }) => {
           setOpen(false);
           navigator.navigate('home', TABS.TOKENS);
         }
+        // Clear selected wallet for all flows
+        setSelectedWallet(null);
       });
+  };
+
+  const handleChangeAccount = (wallet) => () => {
+    setSelectedWallet(wallet);
+    extensionizer.tabs.query({ active: true }, (tabs) => {
+      const url = getTabURL(tabs?.[0]);
+      const ids = accounts.map((_, idx) => idx);
+      setTab(tabs?.[0]);
+      // Check if new wallet is connected to the current page
+      getWalletsConnectedToUrl(url, ids, async (wallets = []) => {
+        const currentConnected = wallets.includes(walletNumber);
+        const newConnected = wallets.includes(wallet);
+        setConnectedWallets(wallets);
+        getApp(walletNumber.toString(), url, (currentApp) => {
+          setApp(currentApp);
+          // If current was connected but new one isnt, prompt modal
+          if (currentConnected && !newConnected) {
+            setOpenConnectAccount(true);
+          } else {
+            executeAccountSwitch(wallet);
+          }
+        });
+      });
+    });
   };
 
   const handleOpenCreateAccount = () => {
@@ -180,7 +217,15 @@ const Profile = ({ disableProfile }) => {
         onClick={handleCreateAccount}
         onClose={() => setOpenCreateAccount(false)}
       />
-
+      <ConnectAccountsModal
+        open={openConnectAccount}
+        onClose={() => setOpenConnectAccount(false)}
+        onConfirm={() => executeAccountSwitch(selectedWallet)}
+        wallets={accounts}
+        connectedWallets={connectedWallets}
+        app={app}
+        tab={tab}
+      />
       {
         !disableProfile
         && (
