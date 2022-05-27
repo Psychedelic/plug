@@ -3,19 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import extension from 'extensionizer';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
 
 import { ActionDialog } from '@components';
 import { getApps, setApps } from '@modules/storageManager';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
-import { Checkbox } from '@ui';
-import { Typography } from '@material-ui/core';
-import shortAddress from '@shared/utils/short-address';
-import { getTabURL } from '@shared/utils/chrome-tabs';
-import { useScroll } from '@hooks';
 
-import UserIcon from '../../../UserIcon';
+import { getTabURL } from '@shared/utils/chrome-tabs';
 import useStyles from './styles';
+import ConnectAccountsModalLayout from './layout';
 
 const ConnectAccountsModal = ({
   wallets,
@@ -32,7 +27,6 @@ const ConnectAccountsModal = ({
   const [walletsToUpdate, setWalletsToUpdate] = useState({});
   const [selectAllWallets, setSelectAllWallets] = useState(false);
   const { walletNumber: currentWalletNumber } = useSelector((state) => state.wallet);
-  const { onScroll, fullScroll } = useScroll();
 
   useEffect(() => {
     extension.tabs.query({ active: true }, (tabs) => {
@@ -95,64 +89,22 @@ const ConnectAccountsModal = ({
       open={open}
       title={t('profile.subaccountNotConnected')}
       className={classes.modalContainer}
-      content={(
-        <div>
-          {tab && app && (
-            <div className={classes.infoContainer}>
-              <img src={app?.icon} className={classes.appImage} />
-              <Typography variant="h2" className={classes.title}>{getTabURL(tab)}</Typography>
-              <Typography variant="subtitle1">{t('profile.wantToConnect')}</Typography>
-            </div>
-          )}
-          <Checkbox
-            checked={selectAllWallets}
-            handleChange={handleSelectAll}
-            label="Select all"
-          />
-          <div
-            className={
-              clsx(
-                classes.walletsContainer,
-                wallets?.length > 3 && !fullScroll && classes.scrollShadow,
-              )
-}
-            onScroll={onScroll}
-          >
-            {wallets.map((wallet) => {
-              const alreadyConnected = connectedWallets.includes(wallet.walletNumber);
-              return (
-                <div
-                  key={wallet.walletNumber}
-                  className={clsx(
-                    classes.flex,
-                    classes.walletContainer,
-                    alreadyConnected && classes.walletConnected,
-                  )}
-                >
-                  <div className={classes.flex}>
-                    <Checkbox
-                      className={classes.checkbox}
-                      checked={
-                        !!walletsToUpdate[wallet.walletNumber]
-                        || alreadyConnected
-                      }
-                      handleChange={!alreadyConnected && onCheckWallet(wallet.walletNumber)}
-                    />
-                    <UserIcon size="small" icon={wallet.icon} style={{ marginLeft: -6, marginRight: 12 }} />
-                    <Typography variant="h6" className={classes.walletName}>{wallet.name}</Typography>
-                  </div>
-                  <Typography variant="h6">{shortAddress(wallet.principal)}</Typography>
-                </div>
-              );
-            })}
-          </div>
-
-        </div>
-        )}
       button={t('common.allow')}
       buttonVariant="rainbow"
       onClick={onConfirm}
       onClose={onClose}
+      content={(
+        <ConnectAccountsModalLayout
+          tab={tab}
+          app={app}
+          wallets={wallets}
+          selectAllWallets={selectAllWallets}
+          handleSelectAll={handleSelectAll}
+          onCheckWallet={onCheckWallet}
+          connectedWallets={connectedWallets}
+          walletsToUpdate={walletsToUpdate}
+        />
+)}
     />
   );
 };
