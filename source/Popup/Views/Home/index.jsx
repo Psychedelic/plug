@@ -66,19 +66,21 @@ const Home = () => {
 
   const validateProviderConnection = (state) => {
     extensionizer.tabs.query({ active: true }, (browserTabs) => {
-      const tab = browserTabs?.[0];
-      const url = getTabURL(tab);
+      const currentTab = browserTabs?.[0];
+      const url = getTabURL(currentTab);
       const ids = state.wallets.map((_, idx) => idx);
-      setTab(tab);
+      setTab(currentTab);
       getWalletsConnectedToUrl(url, ids, (_connectedWallets = []) => {
         setConnectedWallets(_connectedWallets);
-        getApp(walletNumber.toString(), url, (currentApp) => {
-          setApp(currentApp);
-          const isConnected = _connectedWallets.includes(state.currentWalletId);
-          if (!isConnected) {
-            setConnectAccountsOpen(true);
-          }
-        });
+        if (_connectedWallets.length > 0) {
+          getApp(walletNumber.toString(), url, (currentApp) => {
+            setApp(currentApp);
+            const isConnected = _connectedWallets.includes(state.currentWalletId);
+            if (!isConnected) {
+              setConnectAccountsOpen(true);
+            }
+          });
+        }
       });
     });
   };
