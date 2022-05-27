@@ -28,7 +28,7 @@ import VisibleIcon from '@assets/icons/visible.svg';
 import InvisibleIcon from '@assets/icons/invisible.svg';
 import { getRandomEmoji } from '@shared/constants/emojis';
 import { getTabURL } from '@shared/utils/chrome-tabs';
-import { getWalletsConnectedToUrl } from '@modules/storageManager';
+import { getWalletsConnectedToUrl, getApp } from '@modules/storageManager';
 import { toggleAccountHidden, useHiddenAccounts } from '@redux/profile';
 import { getContacts } from '@redux/contacts';
 import { setICNSData } from '@redux/icns';
@@ -54,6 +54,8 @@ const Profile = ({ disableProfile }) => {
   const [open, setOpen] = useState(false);
   const [accounts, setAccounts] = useState([]);
   const [selectedWallet, setSelectedWallet] = useState(null);
+  const [app, setApp] = useState(null);
+  const [tab, setTab] = useState(null);
 
   const [openCreateAccount, setOpenCreateAccount] = useState(false);
   const [openConnectAccount, setOpenConnectAccount] = useState(false);
@@ -150,17 +152,21 @@ const Profile = ({ disableProfile }) => {
     extensionizer.tabs.query({ active: true }, (tabs) => {
       const url = getTabURL(tabs?.[0]);
       const ids = accounts.map((_, idx) => idx);
+      setTab(tabs?.[0]);
       // Check if new wallet is connected to the current page
       getWalletsConnectedToUrl(url, ids, async (wallets = []) => {
         const currentConnected = wallets.includes(walletNumber);
         const newConnected = wallets.includes(wallet);
         setConnectedWallets(wallets);
-        // If current was connected but new one isnt, prompt modal
-        if (currentConnected && !newConnected) {
-          setOpenConnectAccount(true);
-        } else {
-          executeAccountSwitch(wallet);
-        }
+        getApp(walletNumber.toString(), url, (currentApp) => {
+          setApp(currentApp);
+          // If current was connected but new one isnt, prompt modal
+          if (currentConnected && !newConnected) {
+            setOpenConnectAccount(true);
+          } else {
+            executeAccountSwitch(wallet);
+          }
+        });
       });
     });
   };
@@ -214,10 +220,11 @@ const Profile = ({ disableProfile }) => {
       <ConnectAccountsModal
         open={openConnectAccount}
         onClose={() => setOpenConnectAccount(false)}
-        executeAccountSwitch={executeAccountSwitch}
-        selectedWallet={selectedWallet}
+        onConfirm={() => executeAccountSwitch(selectedWallet)}
         wallets={accounts}
         connectedWallets={connectedWallets}
+        app={app}
+        tab={tab}
       />
       {
         !disableProfile

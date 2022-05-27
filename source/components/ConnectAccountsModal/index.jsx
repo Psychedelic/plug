@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import extension from 'extensionizer';
 import PropTypes from 'prop-types';
 
 import { getApps, setApps } from '@modules/storageManager';
@@ -16,28 +14,15 @@ const ConnectAccountsModal = ({
   wallets,
   open,
   onClose,
-  executeAccountSwitch,
-  selectedWallet,
   connectedWallets,
+  onConfirm,
+  app,
+  tab,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const [app, setApp] = useState(null);
-  const [tab, setTab] = useState(null);
   const [walletsToUpdate, setWalletsToUpdate] = useState({});
   const [selectAllWallets, setSelectAllWallets] = useState(false);
-  const { walletNumber: currentWalletNumber } = useSelector((state) => state.wallet);
-
-  useEffect(() => {
-    extension.tabs.query({ active: true }, (tabs) => {
-      setTab(tabs?.[0]);
-      getApps(currentWalletNumber.toString(), (apps) => {
-        const url = getTabURL(tabs?.[0]);
-        const currentApp = apps[url];
-        setApp(currentApp);
-      });
-    });
-  }, [open, currentWalletNumber]);
 
   const connectAccountToTab = (wallet) => {
     getApps(wallet.walletNumber.toString(), (apps) => {
@@ -62,9 +47,11 @@ const ConnectAccountsModal = ({
     });
   };
 
-  const onConfirm = () => {
+  const handleConfirm = () => {
     Object.keys(walletsToUpdate).forEach((walletId) => connectAccountToTab(wallets[walletId], tab));
-    executeAccountSwitch(selectedWallet);
+    onConfirm?.();
+    setWalletsToUpdate({});
+    setSelectAllWallets(false);
     onClose();
   };
 
@@ -83,6 +70,7 @@ const ConnectAccountsModal = ({
     setSelectAllWallets(event.target.checked);
     setWalletsToUpdate(newWalletsToUpdate);
   };
+
   return (
     <ActionDialog
       open={open}
@@ -90,7 +78,7 @@ const ConnectAccountsModal = ({
       className={classes.modalContainer}
       button={t('common.allow')}
       buttonVariant="rainbow"
-      onClick={onConfirm}
+      onClick={handleConfirm}
       onClose={onClose}
       content={(
         <ConnectAccountsModalLayout
@@ -110,10 +98,11 @@ const ConnectAccountsModal = ({
 
 ConnectAccountsModal.propTypes = {
   wallets: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
-  selectedWallet: PropTypes.number.isRequired,
+  app: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
+  tab: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  executeAccountSwitch: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
   connectedWallets: PropTypes.arrayOf(PropTypes.number),
 };
 
