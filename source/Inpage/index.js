@@ -9,7 +9,7 @@ const clientRPC = new BrowserRPC(window, {
 
 clientRPC.start();
 
-const plugProvider = new Provider(clientRPC);
+const plugProvider = new Provider(clientRPC, window);
 const ic = window.ic || {};
 
 plugProvider.init();

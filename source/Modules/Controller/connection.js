@@ -35,7 +35,6 @@ export class ConnectionModule extends ControllerModuleBase {
         const { id: portId } = sender;
         initializeProtectedIds();
         const walletId = this.keyring?.currentWalletId;
-
         getApp(walletId.toString(), url, async (app = {}) => {
           if (app?.status === CONNECTION_STATUS.accepted) {
             if (!this.keyring?.isUnlocked) {

@@ -1,6 +1,7 @@
 import extension from 'extensionizer';
 
 import { addDisconnectedEntry } from '@shared/utils/apps';
+import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 
 const storage = extension.storage.local;
 
@@ -139,5 +140,19 @@ export const getBatchTransactions = (cb) => {
 
   secureGetWrapper('batchTransactions', defaultValue, (state) => {
     cb(state?.batchTransactions || defaultValue);
+  });
+};
+
+export const getWalletsConnectedToUrl = (url, walletIds, cb) => {
+  const wallets = [];
+  walletIds.forEach((id) => {
+    getApp(id.toString(), url, (app = {}) => {
+      if (app?.status === CONNECTION_STATUS.accepted) {
+        wallets.push(id);
+      }
+      if (id === walletIds.length - 1) {
+        cb(wallets);
+      }
+    });
   });
 };

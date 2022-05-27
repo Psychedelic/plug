@@ -26,5 +26,6 @@ export { default as NFTs } from './NFTs';
 export { default as PoweredByDab } from './PoweredByDab';
 export { default as AddressTranslation } from './AddressTranslation';
 export { default as Switch } from './Switch';
+export { default as ConnectAccountsModal } from './ConnectAccountsModal';
 
 export * from './Router';

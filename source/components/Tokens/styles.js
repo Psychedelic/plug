@@ -35,4 +35,9 @@ export default makeStyles((theme) => ({
     boxShadow: 'inset 0 -10px 10px -10px rgb(0 0 0 / 0.4)',
     transition: 'box-shadow 0.3s',
   },
+  emptyAsset: {
+    display: 'flex',
+    flexDirection: 'row',
+    height: 60,
+  },
 }));
