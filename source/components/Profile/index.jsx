@@ -9,8 +9,11 @@ import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { Typography } from '@material-ui/core';
+import clsx from 'clsx';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import extensionizer from 'extensionizer';
+
 import Plus from '@assets/icons/plus.svg';
 import {
   setAccountInfo,
@@ -20,24 +23,23 @@ import {
   setTransactions,
   setTransactionsLoading,
 } from '@redux/wallet';
-import { useDispatch, useSelector } from 'react-redux';
 import BluePencil from '@assets/icons/blue-pencil.svg';
 import VisibleIcon from '@assets/icons/visible.svg';
 import InvisibleIcon from '@assets/icons/invisible.svg';
 import { getRandomEmoji } from '@shared/constants/emojis';
-import { getContacts } from '@redux/contacts';
-import clsx from 'clsx';
-import { useICPPrice } from '@redux/icp';
+import { getTabURL } from '@shared/utils/chrome-tabs';
 import { getWalletsConnectedToUrl } from '@modules/storageManager';
 import { toggleAccountHidden, useHiddenAccounts } from '@redux/profile';
+import { getContacts } from '@redux/contacts';
+import { setICNSData } from '@redux/icns';
+import { useICPPrice } from '@redux/icp';
+import { ConnectAccountsModal } from '@components';
+import { useMenuItems } from '@hooks';
+
 import { TABS, useRouter } from '../Router';
 import ActionDialog from '../ActionDialog';
-import useMenuItems from '../../hooks/useMenuItems';
-import useStyles from './styles';
 import UserIcon from '../UserIcon';
-import { setICNSData } from '../../redux/icns';
-import ConnectAccountsModal from './components/ConnectAccountsModal';
-import { getTabURL } from '../../shared/utils/chrome-tabs';
+import useStyles from './styles';
 
 const Profile = ({ disableProfile }) => {
   const classes = useStyles();

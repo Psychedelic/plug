@@ -37,10 +37,10 @@ const ConnectAccountItem = ({
 };
 
 ConnectAccountItem.propTypes = {
-  wallet: PropTypes.object.isRequired,
+  wallet: PropTypes.objectOf(PropTypes.string).isRequired,
   connected: PropTypes.bool.isRequired,
   checked: PropTypes.bool.isRequired,
   onCheck: PropTypes.func.isRequired,
-}
+};
 
 export default ConnectAccountItem;

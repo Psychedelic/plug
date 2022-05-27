@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { Checkbox } from '@ui';
+import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
 
 import { getTabURL } from '@shared/utils/chrome-tabs';
 import { useScroll } from '@hooks';
+import { Checkbox } from '@ui';
 
-import ConnectAccountItem from '../ConnectAccountItem';
+import ConnectAccountItem from './components/ConnectAccountItem';
 import useStyles from './styles';
 
 const ConnectAccountsModalLayout = ({
@@ -20,6 +21,7 @@ const ConnectAccountsModalLayout = ({
   connectedWallets,
   walletsToUpdate,
 }) => {
+  const { t } = useTranslation();
   const { onScroll, fullScroll } = useScroll();
   const classes = useStyles();
   const headerReady = tab && app;
@@ -47,7 +49,7 @@ const ConnectAccountsModalLayout = ({
           return (
             <ConnectAccountItem
               wallet={wallet}
-              conected={alreadyConnected}
+              connected={alreadyConnected}
               checked={
                   !!walletsToUpdate[wallet.walletNumber]
                   || alreadyConnected
@@ -63,7 +65,7 @@ const ConnectAccountsModalLayout = ({
 };
 
 ConnectAccountsModalLayout.propTypes = {
-  wallets: PropTypes.arrayOf(PropTypes.object).isRequired,
+  wallets: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
   connectedWallets: PropTypes.arrayOf(PropTypes.number),
   onCheckWallet: PropTypes.func.isRequired,
   handleSelectAll: PropTypes.func.isRequired,

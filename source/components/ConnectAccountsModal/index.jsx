@@ -4,11 +4,11 @@ import { useSelector } from 'react-redux';
 import extension from 'extensionizer';
 import PropTypes from 'prop-types';
 
-import { ActionDialog } from '@components';
 import { getApps, setApps } from '@modules/storageManager';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
-
 import { getTabURL } from '@shared/utils/chrome-tabs';
+
+import ActionDialog from '../ActionDialog';
 import useStyles from './styles';
 import ConnectAccountsModalLayout from './layout';
 
@@ -83,7 +83,6 @@ const ConnectAccountsModal = ({
     setSelectAllWallets(event.target.checked);
     setWalletsToUpdate(newWalletsToUpdate);
   };
-
   return (
     <ActionDialog
       open={open}
@@ -110,7 +109,7 @@ const ConnectAccountsModal = ({
 };
 
 ConnectAccountsModal.propTypes = {
-  wallets: PropTypes.arrayOf(PropTypes.object).isRequired,
+  wallets: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
   selectedWallet: PropTypes.number.isRequired,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
