@@ -18,7 +18,8 @@
     "wantToConnect": "Do you want to connect your accounts?",
     "help": "Help",
     "lock": "Lock",
-    "refreshWallet": "Refresh Wallet"
+    "refreshWallet": "Refresh Wallet",
+    "accountNameTooLong": "Account name must be less than 24 characters long"
   },
   "tabs": {
     "tokens": "Tokens",
