@@ -39,4 +39,9 @@ export default makeStyles(() => ({
     padding: 5,
     height: 'auto',
   },
+  expandIcon: {
+    width: '16px',
+    height: '18px',
+    cursor: 'pointer',
+  },
 }));
