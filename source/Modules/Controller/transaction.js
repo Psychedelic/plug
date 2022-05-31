@@ -225,6 +225,7 @@ export class TransactionModule extends ControllerModuleBase {
     return {
       methodName: 'handleRequestTransferToken',
       handler: async (opts, transferRequests, callId, portId) => {
+        console.log('Received request in handle request transfer');
         const { callback } = opts;
         const transfer = transferRequests?.[0];
         const amount = parseFloat(transfer.strAmount);

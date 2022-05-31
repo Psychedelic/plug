@@ -71,10 +71,19 @@ const useRequests = (incomingRequests, callId, portId, transactionId) => {
   const handleDeclineAll = async () => {
     const declinedRequests = requests.map((r) => ({ ...r, status: 'declined' }));
     const handler = declinedRequests[0].token ? 'handleRequestTransferToken' : 'handleRequestTransfer';
-    reviewPendingTransaction(transactionId, async () => {
-      await portRPC.call(handler, [declinedRequests, callId, portId, transactionId]);
-      window.close();
+    const declinePromise = new Promise((resolve, reject) => {
+      reviewPendingTransaction(transactionId, async () => {
+        try {
+          await portRPC.call(handler, [declinedRequests, callId, portId, transactionId]);
+          resolve();
+        } catch (e) {
+          reject(e);
+        }
+      });
     });
+    console.log('decline promise', declinePromise);
+    await declinePromise();
+    window.close();
   };
 
   const handleRequest = async (request, status) => {

@@ -84,7 +84,10 @@ const NotificationContainer = () => {
     };
   }, [onTimeout]);
 
-  window.onbeforeunload = () => onTimeout?.();
+  useEffect(() => {
+    console.log('setting on timeout', onTimeout);
+    window.onbeforeunload = onTimeout;
+  }, [onTimeout]);
 
   const handleLogin = () => setLoggedIn(true);
   const Component = NOTIFICATION_COMPONENTS[type];

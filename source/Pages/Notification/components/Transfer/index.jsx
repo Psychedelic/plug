@@ -40,8 +40,8 @@ const Transfer = ({
     loading,
   } = useRequests([args], callId, portId, transactionId);
   useEffect(() => {
+    console.log('setting timeout as', handleDeclineAll);
     setOnTimeout(() => () => {
-      alert('Timeout');
       handleDeclineAll();
     });
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
@@ -51,6 +51,7 @@ const Transfer = ({
     });
   }, []);
 
+  console.log('window.onbeforeunload', window.onbeforeunload);
   const requestCount = requests.length;
   const tabs = [
     {
@@ -103,7 +104,7 @@ const Transfer = ({
                 <Button
                   variant="default"
                   value={t('common.decline')}
-                  onClick={() => handleRequest(requests[currentRequest], 'declined')}
+                  onClick={window.close}
                   fullWidth
                   style={{ width: '96%' }}
                   disabled={loading}
@@ -123,7 +124,7 @@ const Transfer = ({
                   value={`${t('transfer.decline')} ${requestCount} ${t(
                     'transfer.transactions',
                   )}`}
-                  onClick={() => handleDeclineAll()}
+                  onClick={handleDeclineAll}
                   style={{ marginTop: 24 }}
                 />
               )}
