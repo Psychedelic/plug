@@ -21,6 +21,7 @@ import initConfig from '../../../../locales';
 import SIZES from '../Transfer/constants';
 import ErrorScreen from '../NotificationError';
 import useStyles from './styles';
+import { reviewPendingTransaction } from '@modules/storageManager';
 
 i18n.use(initReactI18next).init(initConfig);
 
@@ -32,7 +33,7 @@ const portRPC = new PortRPC({
 
 portRPC.start();
 
-const AppConnection = ({ setOnTimeout }) => {
+const AppConnection = ({ setOnTimeout, transactionId }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const [status, setStatus] = useState(null);
@@ -49,11 +50,22 @@ const AppConnection = ({ setOnTimeout }) => {
   } = query;
 
   const handleResponse = async () => {
-    const success = await portRPC.call('handleAllowAgent', [url, { status: status || CONNECTION_STATUS.refused, whitelist: [] }, callId, portId]);
-    if (success) {
-      window.close();
-    }
-    setError(!success);
+    reviewPendingTransaction(transactionId, async () => {
+      const success = await portRPC.call(
+        'handleAllowAgent',
+        [
+          url,
+          { status: status || CONNECTION_STATUS.refused, whitelist: [] },
+          callId,
+          portId,
+          transactionId,
+        ],
+      );
+      if (success) {
+        window.close();
+      }
+      setError(!success);
+    });
   };
 
   extension.windows.update(

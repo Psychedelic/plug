@@ -1,7 +1,7 @@
 import qs from 'query-string';
 import extension from 'extensionizer';
-import { v4 as uuidv4 } from 'uuid';
 
+import { checkPendingTransaction, createPendingTransaction, removePendingTransaction, resetPendingTransactions } from '@modules/storageManager';
 import SIZES from '../../Pages/Notification/components/Transfer/constants';
 
 export class ControllerModuleBase {
@@ -9,42 +9,48 @@ export class ControllerModuleBase {
     this.keyring = keyring;
     this.secureController = secureController;
     this.backgroundController = backgroundController;
-    this.activeTransactions = {};
+    resetPendingTransactions();
   }
 
-  secureWrapper({ args, handlerObject, modifier }) {
+  secureWrapper({ args, handlerObject }) {
     return this.secureController(
       args[0].callback,
       async () => {
-        modifier?.();
         handlerObject.handler(...args);
       },
     );
   }
 
-  initTransaction(type, args) {
-    const transactionId = uuidv4();
-    this.activeTransactions[transactionId] = { type, args, status: 'pending' };
-  }
-
-  checkTransaction(id, args) {
-    const transaction = this.activeTransactions[id];
-    if (!transaction) {
-      return false;
-    }
-    return transaction.status === 'confirmed' && JSON.stringify(args) === JSON.stringify(transaction.args);
-  }
-
-  removeTransaction(id) {
-    delete this.activeTransactions[id];
-  }
-
+  // Create non-accepted transaction ID in storage and pass it as first arg
   secureHandler({ handlerObject, args }) {
-    console.log('secureHandler', handlerObject, args);
-    return this.secureWrapper({
-      args,
-      handlerObject,
-      modifier: this.initTransaction(handlerObject.type, args),
+    return this.secureController(
+      args[0].callback,
+      async () => {
+        createPendingTransaction((transactionId) => {
+          console.log('created transaction', transactionId);
+          handlerObject.handler(...args, transactionId);
+        });
+      },
+    );
+  }
+
+  secureExecutor({ args: methodArgs = [], handlerObject }) {
+    console.log('methodArgs in secureExecutor', methodArgs);
+    const transactionId = methodArgs.pop(methodArgs.length - 1);
+    console.log('post pop', methodArgs, transactionId);
+    checkPendingTransaction(transactionId, (status) => {
+      console.log('transaction id', transactionId);
+      console.log('status', status, status === 'reviewed');
+      if (status !== 'reviewed') throw new Error('Unauthorized call to provider executor');
+      return this.secureController(
+        methodArgs[0].callback,
+        async () => {
+          handlerObject.handler(...methodArgs);
+          removePendingTransaction(transactionId, () => {
+            console.log('removed transaction', transactionId);
+          });
+        },
+      );
     });
   }
 

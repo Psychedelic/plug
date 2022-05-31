@@ -1,4 +1,5 @@
 import extension from 'extensionizer';
+import { v4 as uuidv4 } from 'uuid';
 
 import { addDisconnectedEntry } from '@shared/utils/apps';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
@@ -157,5 +158,28 @@ export const getWalletsConnectedToUrl = (url, walletIds, cb) => {
   });
 };
 
-export const getPendingTransactions = () => {};
-export const setPendingTransactions = () => {};
+export const createPendingTransaction = (cb) => {
+  const id = uuidv4();
+  console.log('cratePendingTransaction', id);
+  secureSetWrapper({ activeTransactions: { [id]: 'pending' } }, {}, () => cb(id));
+};
+export const checkPendingTransaction = (transactionId, cb) => {
+  console.log('checkPendingTransaction', transactionId);
+  secureGetWrapper('activeTransactions', 'pending', (entry) => {
+    console.log('entry', entry);
+    cb(entry.activeTransactions[transactionId]);
+  });
+};
+
+export const reviewPendingTransaction = (transactionId, cb) => {
+  console.log('reviewPendingTransaction', transactionId);
+  secureSetWrapper({ activeTransactions: { [transactionId]: 'reviewed' } }, {}, cb);
+};
+export const removePendingTransaction = (transactionId, cb) => {
+  console.log('removePendingTransaction', transactionId);
+  secureSetWrapper({ activeTransactions: { [transactionId]: undefined } }, {}, cb);
+};
+
+export const resetPendingTransactions = () => {
+  secureSetWrapper({ activeTransactions: { } }, {}, () => {});
+};

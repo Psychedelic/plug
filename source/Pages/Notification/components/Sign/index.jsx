@@ -20,7 +20,7 @@ import useStyles from './styles';
 i18n.use(initReactI18next).init(initConfig);
 
 const AssetsWarning = ({
-  args, callId, portId, metadata, setOnTimeout,
+  args, callId, portId, metadata, setOnTimeout, transactionId,
 }) => {
   const { t } = useTranslation();
   const { url, icons } = metadata;
@@ -36,7 +36,7 @@ const AssetsWarning = ({
     data,
     handleAccept,
     handleDecline,
-  } = useRequest(args, callId, portId);
+  } = useRequest(args, callId, portId, transactionId);
   const handleBackdropClick = (event) => {
     if (showModal) {
       event.preventDefault();

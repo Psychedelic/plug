@@ -25,7 +25,7 @@ const formatTransaction = ({ transaction }) => ({
   category: transaction?.canisterInfo?.category,
 });
 
-const useTransactions = (transactions, callId, portId) => {
+const useTransactions = (transactions, callId, portId, transactionId) => {
   const { t } = useTranslation();
 
   const [loading, setLoading] = useState(false);
@@ -37,6 +37,7 @@ const useTransactions = (transactions, callId, portId) => {
       transactions,
       callId,
       portId,
+      transactionId,
     ]);
     setLoading(false);
     window.close();

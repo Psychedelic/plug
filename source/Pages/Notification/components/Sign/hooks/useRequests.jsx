@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { PortRPC } from '@fleekhq/browser-rpc';
 import { v4 as uuidv4 } from 'uuid';
 import { validateCanisterId } from '@shared/utils/ids';
+import { reviewPendingTransaction } from '@modules/storageManager';
 
 const portRPC = new PortRPC({
   name: 'notification-port',
@@ -13,7 +14,7 @@ const portRPC = new PortRPC({
 
 portRPC.start();
 
-const useRequests = (incomingRequests, callId, portId) => {
+const useRequests = (incomingRequests, callId, portId, transactionId) => {
   const { t } = useTranslation();
   const [currentRequest, setCurrentRequest] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -39,12 +40,14 @@ const useRequests = (incomingRequests, callId, portId) => {
   useEffect(async () => {
     if (requests.length === 0) {
       setLoading(true);
-      const success = await portRPC.call('handleSign', [response, callId, portId]);
-      if (success) {
-        window.close();
-      }
-      setError(!success);
-      setLoading(false);
+      reviewPendingTransaction(transactionId, async () => {
+        const success = await portRPC.call('handleSign', [response, callId, portId, transactionId]);
+        if (success) {
+          window.close();
+        }
+        setError(!success);
+        setLoading(false);
+      });
     }
   }, [requests]);
 
@@ -53,8 +56,10 @@ const useRequests = (incomingRequests, callId, portId) => {
 
   const handleDeclineAll = async () => {
     const declinedRequests = requests.map((r) => ({ ...r, status: 'declined' }));
-    await portRPC.call('handleSign', [declinedRequests, callId, portId]);
-    window.close();
+    reviewPendingTransaction(transactionId, async () => {
+      await portRPC.call('handleSign', [declinedRequests, callId, portId, transactionId]);
+      window.close();
+    });
   };
 
   const handleRequest = async (request, status) => {

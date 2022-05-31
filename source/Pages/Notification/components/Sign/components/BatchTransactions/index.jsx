@@ -26,7 +26,7 @@ import SIZES from '../../constants';
 i18n.use(initReactI18next).init(initConfig);
 
 const BatchTransactions = ({
-  args, callId, portId, metadata, setOnTimeout,
+  args, callId, portId, metadata, setOnTimeout, transactionId,
 }) => {
   const { transactions } = args || {};
   const { url, icons } = metadata;
@@ -43,7 +43,7 @@ const BatchTransactions = ({
     transactions: _transactions,
     data,
     loading,
-  } = useRPCTransactions(transactions, callId, portId);
+  } = useRPCTransactions(transactions, callId, portId, transactionId);
 
   useEffect(() => {
     if (decline) {

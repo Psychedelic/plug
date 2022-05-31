@@ -19,14 +19,14 @@ import Data from './components/Data';
 i18n.use(initReactI18next).init(initConfig);
 
 const Transfer = ({
-  args, callId, portId, metadata, setOnTimeout,
+  args, callId, portId, metadata, setOnTimeout, transactionId,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
   const { url, icons } = metadata;
   const { selectedTab, handleChangeTab } = useTabs();
-
+  console.log('Transfer tx id', transactionId);
   const {
     requests,
     currentRequest,
@@ -38,9 +38,10 @@ const Transfer = ({
     principalId,
     error,
     loading,
-  } = useRequests([args], callId, portId);
+  } = useRequests([args], callId, portId, transactionId);
   useEffect(() => {
     setOnTimeout(() => () => {
+      alert('Timeout');
       handleDeclineAll();
     });
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
@@ -102,7 +103,7 @@ const Transfer = ({
                 <Button
                   variant="default"
                   value={t('common.decline')}
-                  onClick={() => window.close()}
+                  onClick={() => handleRequest(requests[currentRequest], 'declined')}
                   fullWidth
                   style={{ width: '96%' }}
                   disabled={loading}
