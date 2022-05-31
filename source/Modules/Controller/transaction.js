@@ -560,7 +560,7 @@ export class TransactionModule extends ControllerModuleBase {
     this.#getHandlerObjects().forEach((handlerObject) => {
       this.backgroundController.exposeController(
         handlerObject.methodName,
-        async (...args) => this.secureWrapper({ args, handlerObject }),
+        async (...args) => this.secureHandler({ args, handlerObject }),
       );
     });
   }

@@ -156,3 +156,6 @@ export const getWalletsConnectedToUrl = (url, walletIds, cb) => {
     });
   });
 };
+
+export const getPendingTransactions = () => {};
+export const setPendingTransactions = () => {};
