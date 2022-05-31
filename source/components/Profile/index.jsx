@@ -149,7 +149,7 @@ const Profile = ({ disableProfile }) => {
 
   const handleChangeAccount = (wallet) => () => {
     setSelectedWallet(wallet);
-    extensionizer.tabs.query({ active: true }, (tabs) => {
+    extensionizer.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
       const url = getTabURL(tabs?.[0]);
       const ids = accounts.map((_, idx) => idx);
       setTab(tabs?.[0]);
@@ -157,6 +157,7 @@ const Profile = ({ disableProfile }) => {
       getWalletsConnectedToUrl(url, ids, async (wallets = []) => {
         const currentConnected = wallets.includes(walletNumber);
         const newConnected = wallets.includes(wallet);
+
         setConnectedWallets(wallets);
         getApp(walletNumber.toString(), url, (currentApp) => {
           setApp(currentApp);
