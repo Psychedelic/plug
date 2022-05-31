@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { buildContactObject, parseContactFromDab } from '@shared/utils/contacts';
 import {
+  setDabContacts as setLocalDabContacs,
+  getDabContacts as getLocalDabContacts,
+} from '@modules/storageManager';
+import {
   getContacts as callGetContacts,
   addContact as callAddContact,
   deleteContact as callRemoveContact,
@@ -66,12 +70,16 @@ export const contactSlice = createSlice({
         const contact = action.meta.arg;
         const newContactList = [...state.contacts, contact];
 
+        setLocalDabContacs(newContactList);
+
         state.contacts = newContactList;
         state.groupedContacts = groupContacts(newContactList);
       })
       .addCase(addContact.rejected, (state, action) => {
         const contact = action.meta.arg;
         const filteredContacts = state.contacts.filter((c) => c.id === contact.id);
+
+        setLocalDabContacs(filteredContacts);
 
         state.contacts = filteredContacts;
         state.groupedContacts = groupContacts(filteredContacts);
@@ -80,6 +88,12 @@ export const contactSlice = createSlice({
         if (action.meta.arg) {
           state.contacts = [];
           state.groupedContacts = [];
+          setLocalDabContacs([]);
+        } else {
+          getLocalDabContacts((newContactList) => {
+            state.contacts = newContactList;
+            state.groupedContacts = groupContacts(newContactList);
+          });
         }
       })
       .addCase(getContacts.fulfilled, (state, action) => {
@@ -87,15 +101,14 @@ export const contactSlice = createSlice({
 
         const getIndexOfContact = (contact, contactList) => {
           let index = -1;
-          contactList.map((c, i) => {
+          contactList.forEach((c, i) => {
             if (c.id === contact.id) {
               index = i;
-              return;
             }
           });
 
           return index;
-        }
+        };
 
         newContactList = newContactList.reduce((acc, c) => {
           if (getIndexOfContact(c, acc) === -1) {
@@ -104,12 +117,16 @@ export const contactSlice = createSlice({
           return acc;
         }, []);
 
+        setLocalDabContacs(newContactList);
+
         state.contacts = newContactList;
         state.groupedContacts = groupContacts(newContactList);
       })
       .addCase(removeContact.pending, (state, action) => {
         const contact = action.meta.arg;
         const filteredContacts = state.contacts.filter((c) => c.name !== contact.name);
+
+        setLocalDabContacs(filteredContacts);
 
         state.contacts = filteredContacts;
         state.groupedContacts = groupContacts(filteredContacts);
@@ -118,6 +135,8 @@ export const contactSlice = createSlice({
         const contact = action.meta.arg;
 
         const newContactList = [...state.contacts, contact];
+
+        setLocalDabContacs(newContactList);
 
         state.contacts = newContactList;
         state.groupedContacts = groupContacts(newContactList);
