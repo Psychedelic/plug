@@ -9,7 +9,6 @@ export class ControllerModuleBase {
     this.keyring = keyring;
     this.secureController = secureController;
     this.backgroundController = backgroundController;
-    resetPendingTransactions();
   }
 
   secureWrapper({ args, handlerObject }) {

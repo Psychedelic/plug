@@ -420,12 +420,12 @@ export class TransactionModule extends ControllerModuleBase {
                 })),
             };
             setBatchTransactions(updatedBatchTransactions);
-
+            callback(null, true);
             callback(null, { status: accepted, txId: newBatchTransactionId }, [{ callId, portId }]);
-            callback(null, true); // close the modal
           });
         } else {
           callback(ERRORS.TRANSACTION_REJECTED, { status: false }, [{ callId, portId }]);
+          callback(null, true);
         }
       },
     };

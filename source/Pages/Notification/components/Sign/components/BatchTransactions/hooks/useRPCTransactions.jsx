@@ -3,6 +3,7 @@ import { DataDisplay } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { PortRPC } from '@fleekhq/browser-rpc';
 import ReactJson from 'react-json-view';
+import { reviewPendingTransaction } from '@modules/storageManager';
 
 const portRPC = new PortRPC({
   name: 'notification-port',
@@ -32,6 +33,7 @@ const useTransactions = (transactions, callId, portId, transactionId) => {
 
   const processAll = async (accepted) => {
     setLoading(true);
+    await reviewPendingTransaction(transactionId, (res) => res);
     await portRPC.call('handleBatchTransactions', [
       accepted,
       transactions,

@@ -171,9 +171,16 @@ export const checkPendingTransaction = (transactionId, cb) => {
   });
 };
 
-export const reviewPendingTransaction = (transactionId, cb) => {
+export const reviewPendingTransaction = async (transactionId, cb) => {
   console.log('reviewPendingTransaction', transactionId);
-  secureSetWrapper({ activeTransactions: { [transactionId]: 'reviewed' } }, {}, cb);
+  const setData = () => new Promise((resolve) => {
+    console.log('second');
+    secureSetWrapper({ activeTransactions: { [transactionId]: 'reviewed' } }, {}, resolve);
+  });
+  console.log('first');
+  const result = await setData();
+  console.log('third');
+  return cb(result);
 };
 export const removePendingTransaction = (transactionId, cb) => {
   console.log('removePendingTransaction', transactionId);

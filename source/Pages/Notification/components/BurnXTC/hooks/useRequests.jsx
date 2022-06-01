@@ -42,14 +42,13 @@ const useRequests = (incomingRequests, callId, portId, transactionId) => {
   useEffect(async () => {
     if (requests.length === 0) {
       setLoading(true);
-      reviewPendingTransaction(transactionId, async () => {
-        const success = await portRPC.call('handleRequestBurnXTC', [response, callId, portId, transactionId]);
-        if (success) {
-          window.close();
-        }
-        setError(!success);
-        setLoading(false);
-      });
+      await reviewPendingTransaction(transactionId, async () => {});
+      const success = await portRPC.call('handleRequestBurnXTC', [response, callId, portId, transactionId]);
+      if (success) {
+        window.close();
+      }
+      setError(!success);
+      setLoading(false);
     }
   }, [requests]);
 
@@ -58,10 +57,9 @@ const useRequests = (incomingRequests, callId, portId, transactionId) => {
 
   const handleDeclineAll = async () => {
     const declinedRequests = requests.map((r) => ({ ...r, status: 'declined' }));
-    reviewPendingTransaction(transactionId, async () => {
-      await portRPC.call('handleRequestBurnXTC', [declinedRequests, callId, portId, transactionId]);
-      window.close();
-    });
+    await reviewPendingTransaction(transactionId, async () => {});
+    await portRPC.call('handleRequestBurnXTC', [declinedRequests, callId, portId, transactionId]);
+    window.close();
   };
 
   const handleRequest = async (request, status) => {

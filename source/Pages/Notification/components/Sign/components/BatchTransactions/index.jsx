@@ -48,7 +48,7 @@ const BatchTransactions = ({
   useEffect(() => {
     if (decline) {
       setOnTimeout(() => () => {
-        decline().then(() => window?.close?.());
+        decline();
       });
     }
   }, []);
@@ -85,7 +85,6 @@ const BatchTransactions = ({
       />,
     },
   ];
-
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
@@ -101,7 +100,7 @@ const BatchTransactions = ({
               <Button
                 variant="default"
                 value={t('common.decline')}
-                onClick={() => window.close()}
+                onClick={decline}
                 fullWidth
                 style={{ width: '96%' }}
               />

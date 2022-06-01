@@ -16,10 +16,9 @@ const Principal = ({
 }) => {
   useEffect(async () => {
     if (metadata && callId && portId) {
-      reviewPendingTransaction(transactionId, async () => {
-        await portRPC.call('handleGetPrincipal', [metadata.url, callId, portId, transactionId]);
-        window.close();
-      });
+      await reviewPendingTransaction(transactionId, async () => {});
+      await portRPC.call('handleGetPrincipal', [metadata.url, callId, portId, transactionId]);
+      window.close();
     }
   }, [metadata, callId, portId]);
   return <div style={{ display: 'none' }} />;

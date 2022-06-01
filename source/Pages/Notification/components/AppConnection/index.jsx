@@ -50,22 +50,21 @@ const AppConnection = ({ setOnTimeout, transactionId }) => {
   } = query;
 
   const handleResponse = async () => {
-    reviewPendingTransaction(transactionId, async () => {
-      const success = await portRPC.call(
-        'handleAllowAgent',
-        [
-          url,
-          { status: status || CONNECTION_STATUS.refused, whitelist: [] },
-          callId,
-          portId,
-          transactionId,
-        ],
-      );
-      if (success) {
-        window.close();
-      }
-      setError(!success);
-    });
+    await reviewPendingTransaction(transactionId, async () => {});
+    const success = await portRPC.call(
+      'handleAllowAgent',
+      [
+        url,
+        { status: status || CONNECTION_STATUS.refused, whitelist: [] },
+        callId,
+        portId,
+        transactionId,
+      ],
+    );
+    if (success) {
+      window.close();
+    }
+    setError(!success);
   };
 
   extension.windows.update(

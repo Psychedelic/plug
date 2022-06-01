@@ -62,20 +62,19 @@ const AllowAgent = ({
       (accum, canisterInfo) => ({ ...accum, [canisterInfo.id]: canisterInfo }),
       {},
     );
-    reviewPendingTransaction(transactionId, async () => {
-      const success = await portRPC.call('handleAllowAgent', [
-        url,
-        { status, whitelist },
-        callId,
-        portId,
-        transactionId,
-      ]);
-      setHandled(true);
-      if (success) {
-        window.close();
-      }
-      setError(!success);
-    });
+    await reviewPendingTransaction(transactionId, () => {});
+    const success = await portRPC.call('handleAllowAgent', [
+      url,
+      { status, whitelist },
+      callId,
+      portId,
+      transactionId,
+    ]);
+    setHandled(true);
+    if (success) {
+      window.close();
+    }
+    setError(!success);
   };
 
   useEffect(() => {
