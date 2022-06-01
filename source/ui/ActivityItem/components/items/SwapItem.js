@@ -58,7 +58,7 @@ const SwapItem = ({
         subtitle={moment(date).format('MMM Do')}
       />
       <ActivityItemDetails
-        main={<NumberFormat value={data.amount} displayType="text" thousandSeparator="," suffix={` ${data.symbol}`} decimalScale={5} />}
+        main={<NumberFormat value={data.amount} displayType="text" thousandSeparator="," suffix={` ${data.symbol || ''}`} decimalScale={5} />}
         secondary={<NumberFormat value={data.value} displayType="text" thousandSeparator="," prefix="$" suffix=" USD" decimalScale={2} />}
         hovering={hovering}
         details={details}

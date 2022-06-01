@@ -141,8 +141,6 @@ Step1.propTypes = {
   amount: PropTypes.number.isRequired,
   handleChangeAmount: PropTypes.func.isRequired,
   handleChangeStep: PropTypes.func.isRequired,
-  // fromAssets: PropTypes.objectOf(PropTypes.object).isRequired,
-  // toAssets: PropTypes.objectOf(PropTypes.object).isRequired,
   selectedFromAsset: PropTypes.object.isRequired,
   selectedToAsset: PropTypes.object.isRequired,
   availableAmount: PropTypes.object.isRequired,
@@ -150,8 +148,6 @@ Step1.propTypes = {
   secondaryValue: PropTypes.object.isRequired,
   conversionPrice: PropTypes.number.isRequired,
   handleSwapValues: PropTypes.func.isRequired,
-  // handleChangeFromAsset: PropTypes.func.isRequired,
-  // handleChangeToAsset: PropTypes.func.isRequired,
 };
 
 const SwapsComingSoon = () => {

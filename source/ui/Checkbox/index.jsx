@@ -7,13 +7,13 @@ import clsx from 'clsx';
 import useStyles from './styles';
 
 const Checkbox = ({
-  checked, handleChange, label, ...other
+  checked, handleChange, label, className, ...other
 }) => {
   const classes = useStyles();
 
   return (
     <FormControlLabel
-      className={classes.formLabel}
+      className={clsx(classes.formLabel, className)}
       control={(
         <MuiCheckbox
           className={classes.root}
@@ -36,4 +36,9 @@ Checkbox.propTypes = {
   checked: PropTypes.bool.isRequired,
   handleChange: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
+  className: PropTypes.string,
+};
+
+Checkbox.defaultProps = {
+  className: '',
 };

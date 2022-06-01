@@ -5,6 +5,7 @@ import {
 } from '@ui';
 import { useTranslation } from 'react-i18next';
 import BackIcon from '@assets/icons/back.svg';
+import ExpandIcon from '@assets/icons/expand.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { TABS, useRouter } from '@components/Router';
 import CollectionImg from '@assets/icons/nfts/collection.png';
@@ -13,8 +14,9 @@ import AttributesImg from '@assets/icons/nfts/attributes.png';
 import AboutImg from '@assets/icons/nfts/about.png';
 import { Typography } from '@material-ui/core';
 import { setSelectedNft } from '@redux/nfts';
-import { Maximize2 } from 'react-feather';
+import { ArrowUpRight } from 'react-feather';
 import extension from 'extensionizer';
+import { NFT_COLLECTION_DEFAULT_TYPES } from '@shared/constants/nft';
 
 import Section from './components/section';
 import useStyles from './styles';
@@ -23,17 +25,17 @@ const NFTDetails = () => {
   const { t } = useTranslation();
   const { selectedNft: nft } = useSelector((state) => state.nfts);
   const { collections } = useSelector((state) => state.wallet);
-  const { navigator } = useRouter();
+  const { navigator: routerNavigator } = useRouter();
   const classes = useStyles();
   const dispatch = useDispatch();
   if (!nft) {
-    navigator.navigate('home');
+    routerNavigator.navigate('home');
     return null;
   }
 
   const handleBack = () => {
     dispatch(setSelectedNft(null));
-    navigator.navigate('home', TABS.NFTS);
+    routerNavigator.navigate('home', TABS.NFTS);
   };
 
   const collection = useMemo(() => collections?.find((col) => col.name === nft?.collection),
@@ -42,11 +44,22 @@ const NFTDetails = () => {
   const name = `${nft?.name ?? `#${nft?.index}`}`;
   const isICNS = nft?.collection === 'ICNS';
 
-  const openNFT = (url) => () => extension.tabs.create({
-    url: isICNS
+  const openNFT = (url) => {
+    const parsedUrl = isICNS
       ? `https://icns.id/domains/${nft?.name.replace('.icp', '')}/detail`
-      : url,
-  });
+      : url;
+
+    extension.tabs.create({
+      url: parsedUrl,
+    });
+  };
+
+  const copyNFT = (url) => navigator.clipboard.writeText(url);
+
+  // eslint-disable-next-line no-confusing-arrow
+  const handleButtonClick = (url) => isICNS ? openNFT(url) : copyNFT(url);
+
+  const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[nft.canisterId];
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -57,23 +70,29 @@ const NFTDetails = () => {
       <Header
         left={<LinkButton value={t('common.back')} onClick={handleBack} startIcon={BackIcon} />}
         center={name}
-        right={null}
+        right={!isICNS && (
+          <img
+            className={classes.expandIcon}
+            src={ExpandIcon}
+            onClick={() => openNFT(nft?.url?.replace('type=thumbnail', ''))}
+          />
+        )}
       />
       <div className={classes.container}>
         {isICNS ? (
           <ICNSDisplay icns={nft} className={classes.image} large />
         ) : (
-          <NFTDisplayer url={nft?.url} className={classes.image} interactive />
+          <NFTDisplayer url={nft?.url} className={classes.image} defaultTag={nftDefaultTag} interactive />
         )}
         <div className={classes.buttonContainer}>
           <Button
             variant="default"
-            value={t('nfts.expandNFT')}
+            value={t(`nfts.${isICNS ? 'manage' : 'copyLink'}`)}
             style={{ width: '96%' }}
             fullWidth
-            onClick={openNFT(nft?.url?.replace('type=thumbnail', ''))}
-            startIcon={(
-              <Maximize2
+            onClick={() => handleButtonClick(nft?.url?.replace('type=thumbnail', ''))}
+            endIcon={isICNS && (
+              <ArrowUpRight
                 size="20"
               />
             )}
@@ -84,7 +103,7 @@ const NFTDetails = () => {
             style={{ width: '96%' }}
             wrapperStyle={{ textAlign: 'right' }}
             fullWidth
-            onClick={() => navigator.navigate('send-nft')}
+            onClick={() => routerNavigator.navigate('send-nft')}
             disabled={isICNS}
           />
         </div>

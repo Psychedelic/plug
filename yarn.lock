@@ -1529,6 +1529,13 @@
     prop-types "^15.7.2"
     react-is "^16.8.0 || ^17.0.0"
 
+"@metamask/post-message-stream@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@metamask/post-message-stream/-/post-message-stream-4.0.0.tgz#72f120e562346ca86ccc9b3684023ad44265f0df"
+  integrity sha512-r0JcoWXNuHycProx8ClxiIElJY/GVb/0/WWXTMsZu7qDejLo52VNXlwfydCdVjbMXeoT2nK1Yt3d5gjmHy5BWw==
+  dependencies:
+    readable-stream "2.3.3"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -1740,17 +1747,31 @@
     cross-fetch "^3.1.4"
     crypto-js "^4.1.1"
 
-"@psychedelic/plug-controller@0.16.11":
-  version "0.16.11"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.16.11/35cc5ae87cfb1594c3c3e466465cb4b57df2539aba3e37ecf3bcd751bb3629b3#79eae4d5cb44ca5c5acf49630dbd8183110b32bf"
-  integrity sha512-IhGyS6LObNQpbIKy36oacHZkvrlx2uKCfiIgCpx6lhPtU3q9TX4rL5OWv+XPCxhSm8bQxTjNdE8GBZoMs/2MLA==
+"@psychedelic/dab-js@1.3.3":
+  version "1.3.3"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/dab-js/1.3.3/ec179013388f2ebb0400916140830217d7358d12f03684abf79dcdab67dc8fdc#f33c2a467d10a336888edf22ee4bb01f00a17d56"
+  integrity sha512-6m8XFPhp7qeK2eaqymSPuvkoq30giZrLXWcGKdqDJusQQnvhy6gHppIVgbpL2OEmYwHmj+XQ7o8db0B6ivmPTg==
+  dependencies:
+    "@dfinity/agent" "0.9.3"
+    "@dfinity/candid" "0.9.3"
+    "@dfinity/identity" "0.9.3"
+    "@dfinity/principal" "0.9.3"
+    axios "^0.24.0"
+    buffer-crc32 "^0.2.13"
+    cross-fetch "^3.1.4"
+    crypto-js "^4.1.1"
+
+"@psychedelic/plug-controller@0.16.12":
+  version "0.16.12"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.16.12/2c3e3ab8e17dab59d9cfe5537beb485ec55e7f988013ab22d9c4da9e8c9c7e67#cb4f55d7323f8422314ab7c272387c46bef58239"
+  integrity sha512-LIwJhb5jpyCe33PfUfJW0I7e1fwgVbfbNqakouYQ+Bz8TWBazB42T1NgnvIUa0ngIOudoja3FfGJulrLrNnYIw==
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
     "@dfinity/identity" "0.9.3"
     "@dfinity/principal" "0.9.3"
     "@psychedelic/cap-js" "0.0.7"
-    "@psychedelic/dab-js" "1.3.2"
+    "@psychedelic/dab-js" "1.3.3"
     "@types/secp256k1" "^4.0.3"
     axios "^0.21.1"
     babel-jest "^25.5.1"
@@ -1772,10 +1793,10 @@
     text-encoding-shim "^1.0.5"
     tweetnacl "^1.0.3"
 
-"@psychedelic/plug-inpage-provider@2.0.1":
-  version "2.0.1"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/2.0.1/d6efde7527ee0663771ca57b5c4550c70b354a21bc3501e7a996de79841d271b#fa69f079ad6b1bd79b193953516cd0748509b0e9"
-  integrity sha512-XkO69/6afCi7diyfL1jxCACre6MZviRoDUAS3rEc4IB7/IchdfrV4+OO0t1KK0xyFVBKa6D/B2SgMZEyy7dt9A==
+"@psychedelic/plug-inpage-provider@2.1.0":
+  version "2.1.0"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/2.1.0/27bb21c95061238dd046135c8e162c2087c8421a8c37ab96a40cf023fc8225a3#0cf43430a3767d13131017e7ac0e6aefd9535897"
+  integrity sha512-NvPSVC84Cec5oeyLiB6vWl765CEz4c+O4ZNhL7BjWR6xWOZAkMJlmsBX9mTuGeHRjO5nWftdeFHMNh4u+Bhaog==
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
@@ -10355,6 +10376,11 @@ proc-log@^1.0.0:
   resolved "https://registry.yarnpkg.com/proc-log/-/proc-log-1.0.0.tgz#0d927307401f69ed79341e83a0b2c9a13395eb77"
   integrity sha512-aCk8AO51s+4JyuYGg3Q/a6gnrlDO09NpVWePtjp7xwphcoQ04x5WAfCyugcsbLooWcMJ87CLkD4+604IckEdhg==
 
+process-nextick-args@~1.0.6:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-1.0.7.tgz#150e20b756590ad3f91093f25a4f2ad8bff30ba3"
+  integrity sha1-FQ4gt1ZZCtP5EJPyWk8q2L/zC6M=
+
 process-nextick-args@~2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
@@ -10813,6 +10839,19 @@ read@1, read@^1.0.7, read@~1.0.1, read@~1.0.7:
     process-nextick-args "~2.0.0"
     safe-buffer "~5.1.1"
     string_decoder "~1.1.1"
+    util-deprecate "~1.0.1"
+
+readable-stream@2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.3.3.tgz#368f2512d79f9d46fdfc71349ae7878bbc1eb95c"
+  integrity sha512-m+qzzcn7KUxEmd1gMbchF+Y2eIUbieUaxkWtptyHywrX0rE8QEYqPC07Vuy4Wm32/xE16NcdBctb8S0Xe/5IeQ==
+  dependencies:
+    core-util-is "~1.0.0"
+    inherits "~2.0.3"
+    isarray "~1.0.0"
+    process-nextick-args "~1.0.6"
+    safe-buffer "~5.1.1"
+    string_decoder "~1.0.3"
     util-deprecate "~1.0.1"
 
 readable-stream@^3.1.1, readable-stream@^3.4.0, readable-stream@^3.6.0:
@@ -11862,6 +11901,13 @@ string_decoder@^1.0.0, string_decoder@^1.1.1:
   integrity sha512-hkRX8U1WjJFd8LsDJ2yQ/wWWxaopEsABU1XfkM8A+j0+85JAGppt16cr1Whg6KIbb4okU6Mql6BOj+uup/wKeA==
   dependencies:
     safe-buffer "~5.2.0"
+
+string_decoder@~1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-1.0.3.tgz#0fc67d7c141825de94282dd536bec6b9bce860ab"
+  integrity sha512-4AH6Z5fzNNBcH+6XDMfA/BTt87skxqJlO0lAh3Dker5zThcAxG6mKz+iGu308UKoPPQ8Dcqx/4JhujzltRa+hQ==
+  dependencies:
+    safe-buffer "~5.1.0"
 
 string_decoder@~1.1.1:
   version "1.1.1"
