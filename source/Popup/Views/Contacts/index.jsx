@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Layout } from '@components';
 import { Header } from '@ui';
-import { useContacts } from '@hooks';
 import useSteps from './hooks/useSteps';
 
 const Contacts = () => {
@@ -11,9 +10,6 @@ const Contacts = () => {
     right,
     center,
   } = useSteps();
-  const { getContacts } = useContacts();
-
-  useEffect(getContacts, []);
 
   return (
     <Layout>
