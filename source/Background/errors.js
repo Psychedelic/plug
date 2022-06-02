@@ -1,7 +1,7 @@
 export const SILENT_ERRORS = {
   AGENT_REJECTED: { code: 401, message: 'The agent creation was rejected.' },
-  SIGN_REJECTED: { code: 401, message: 'The sign was rejected.' },
-  TRANSACTION_REJECTED: { code: 401, message: 'The transactions was rejected.' },
+  SIGN_REJECTED: { code: 401, message: 'The signature was rejected.' },
+  TRANSACTION_REJECTED: { code: 401, message: 'The transaction was rejected.' },
 };
 
 export default {

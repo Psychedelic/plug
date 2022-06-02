@@ -26,7 +26,6 @@ export class ControllerModuleBase {
       args[0].callback,
       async () => {
         createPendingTransaction((transactionId) => {
-          console.log('created transaction', transactionId);
           handlerObject.handler(...args, transactionId);
         });
       },
@@ -34,19 +33,14 @@ export class ControllerModuleBase {
   }
 
   secureExecutor({ args: methodArgs = [], handlerObject }) {
-    console.log('methodArgs in secureExecutor', methodArgs);
     const transactionId = methodArgs.pop(methodArgs.length - 1);
-    console.log('post pop', methodArgs, transactionId);
     checkPendingTransaction(transactionId, (status) => {
-      console.log('transaction id', transactionId);
-      console.log('status', status, status === 'reviewed');
       if (status !== 'reviewed') throw new Error('Unauthorized call to provider executor');
       return this.secureController(
         methodArgs[0].callback,
         async () => {
           handlerObject.handler(...methodArgs);
           removePendingTransaction(transactionId, () => {
-            console.log('removed transaction', transactionId);
           });
         },
       );

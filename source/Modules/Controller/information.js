@@ -6,14 +6,24 @@ import { ControllerModuleBase } from './controllerBase';
 
 export class InformationModule extends ControllerModuleBase {
   // Utils
+  #getSafeHandlerObjects() {
+    return [
+      this.#getPublicKey(),
+    ];
+  }
+
   #getHandlerObjects() {
     return [
       this.#requestBalance(),
-      this.#handleRequestBalance(),
-      this.#getPublicKey(),
       this.#getPrincipal(),
-      this.#handleGetPrincipal(),
       this.#getICNSInfo(),
+    ];
+  }
+
+  #getExecutorObjects() {
+    return [
+      this.#handleRequestBalance(),
+      this.#handleGetPrincipal(),
       this.#handleGetICNSInfo(),
     ];
   }
@@ -32,7 +42,7 @@ export class InformationModule extends ControllerModuleBase {
   #requestBalance() {
     return {
       methodName: 'requestBalance',
-      handler: async (opts, metadata, subaccount) => {
+      handler: async (opts, metadata, subaccount, transactionId) => {
         const { callback, message, sender } = opts;
 
         getApps(this.keyring?.currentWalletId.toString(), (apps = {}) => {
@@ -46,7 +56,7 @@ export class InformationModule extends ControllerModuleBase {
                 callId: message.data.data.id,
                 portId: sender.id,
                 type: 'requestBalance',
-                argsJson: JSON.stringify({ subaccount }),
+                argsJson: JSON.stringify({ subaccount, transactionId }),
                 metadataJson: JSON.stringify(metadata),
               });
             } else {
@@ -110,7 +120,7 @@ export class InformationModule extends ControllerModuleBase {
   #getPrincipal() {
     return {
       methodName: 'getPrincipal',
-      handler: async (opts, pageUrl) => {
+      handler: async (opts, pageUrl, transactionId) => {
         const { callback, message, sender } = opts;
 
         getApps(this.keyring?.currentWalletId.toString(), async (apps = {}) => {
@@ -124,6 +134,7 @@ export class InformationModule extends ControllerModuleBase {
                 portId: sender.id,
                 type: 'principal',
                 metadataJson: JSON.stringify({ url: pageUrl }),
+                argsJson: JSON.stringify({ transactionId }),
               });
             } else {
               callback(
@@ -163,7 +174,7 @@ export class InformationModule extends ControllerModuleBase {
   #getICNSInfo() {
     return {
       methodName: 'getICNSInfo',
-      handler: async (opts, metadata) => {
+      handler: async (opts, metadata, transactionId) => {
         const { callback, message, sender } = opts;
 
         getApps(this.keyring?.currentWalletId.toString(), async (apps = {}) => {
@@ -175,7 +186,7 @@ export class InformationModule extends ControllerModuleBase {
                 callId: message.data.data.id,
                 portId: sender.id,
                 type: 'getICNSInfo',
-                argsJson: JSON.stringify({}),
+                argsJson: JSON.stringify({ transactionId }),
                 metadataJson: JSON.stringify(metadata),
               });
             } else {
@@ -223,10 +234,22 @@ export class InformationModule extends ControllerModuleBase {
 
   // Exposer
   exposeMethods() {
-    this.#getHandlerObjects().forEach((handlerObject) => {
+    this.#getSafeHandlerObjects().forEach((handlerObject) => {
       this.backgroundController.exposeController(
         handlerObject.methodName,
         async (...args) => this.secureWrapper({ args, handlerObject }),
+      );
+    });
+    this.#getHandlerObjects().forEach((handlerObject) => {
+      this.backgroundController.exposeController(
+        handlerObject.methodName,
+        async (...args) => this.secureHandler({ args, handlerObject }),
+      );
+    });
+    this.#getExecutorObjects().forEach((handlerObject) => {
+      this.backgroundController.exposeController(
+        handlerObject.methodName,
+        async (...args) => this.secureExecutor({ args, handlerObject }),
       );
     });
   }

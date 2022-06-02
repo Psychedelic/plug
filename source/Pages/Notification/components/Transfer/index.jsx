@@ -40,7 +40,6 @@ const Transfer = ({
     loading,
   } = useRequests([args], callId, portId, transactionId);
   useEffect(() => {
-    console.log('setting timeout as', handleDeclineAll);
     setOnTimeout(() => () => {
       handleDeclineAll();
     });

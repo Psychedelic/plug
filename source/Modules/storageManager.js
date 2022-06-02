@@ -160,30 +160,22 @@ export const getWalletsConnectedToUrl = (url, walletIds, cb) => {
 
 export const createPendingTransaction = (cb) => {
   const id = uuidv4();
-  console.log('cratePendingTransaction', id);
   secureSetWrapper({ activeTransactions: { [id]: 'pending' } }, {}, () => cb(id));
 };
 export const checkPendingTransaction = (transactionId, cb) => {
-  console.log('checkPendingTransaction', transactionId);
   secureGetWrapper('activeTransactions', 'pending', (entry) => {
-    console.log('entry', entry);
     cb(entry.activeTransactions[transactionId]);
   });
 };
 
 export const reviewPendingTransaction = async (transactionId, cb) => {
-  console.log('reviewPendingTransaction', transactionId);
   const setData = () => new Promise((resolve) => {
-    console.log('second');
     secureSetWrapper({ activeTransactions: { [transactionId]: 'reviewed' } }, {}, resolve);
   });
-  console.log('first');
   const result = await setData();
-  console.log('third');
   return cb(result);
 };
 export const removePendingTransaction = (transactionId, cb) => {
-  console.log('removePendingTransaction', transactionId);
   secureSetWrapper({ activeTransactions: { [transactionId]: undefined } }, {}, cb);
 };
 

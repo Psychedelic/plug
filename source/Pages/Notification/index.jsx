@@ -48,7 +48,6 @@ const NotificationContainer = () => {
   } = query;
   const metadata = JSON.parse(metadataJson || '{}');
   const args = JSON.parse(argsJson || '{}'); // single request for now
-  console.log('notification args', args);
   useEffect(() => {
     try {
       sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
@@ -85,7 +84,6 @@ const NotificationContainer = () => {
   }, [onTimeout]);
 
   useEffect(() => {
-    console.log('setting on timeout', onTimeout);
     window.onbeforeunload = onTimeout;
   }, [onTimeout]);
 
