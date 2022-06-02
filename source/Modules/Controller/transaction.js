@@ -90,7 +90,7 @@ export class TransactionModule extends ControllerModuleBase {
                 top: 65,
                 left: metadata.pageWidth - SIZES.width,
               },
-            });
+            }, callback);
           } else {
             callback(ERRORS.CONNECTION_ERROR, null);
           }
@@ -282,7 +282,7 @@ export class TransactionModule extends ControllerModuleBase {
                 top: 65,
                 left: metadata.pageWidth - SIZES.width,
               },
-            });
+            }, callback);
           } else {
             callback(ERRORS.CONNECTION_ERROR, null);
           }
@@ -381,7 +381,7 @@ export class TransactionModule extends ControllerModuleBase {
                 top: 65,
                 left: metadata.pageWidth - SIZES.width,
               },
-            });
+            }, callback);
           } else {
             callback(ERRORS.CONNECTION_ERROR, null);
           }
@@ -463,7 +463,7 @@ export class TransactionModule extends ControllerModuleBase {
                       timeout: app?.timeout,
                     }),
                     metadataJson: JSON.stringify(metadata),
-                  });
+                  }, callback);
                 } else {
                   getBatchTransactions((batchTransactions) => {
                     const savedBatchTrx = batchTxId
