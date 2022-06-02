@@ -12,11 +12,11 @@ const ActionsStep = ({ handleChangeBranch }) => {
   return (
     <>
       <Grid item xs={12} md={6}>
-        <ActionCard icon={ImportImg} title={t('welcome.importWallet')} subtitle={t('welcome.importText')} button={t('welcome.importWallet')} onClick={() => handleChangeBranch('import')} />
+        <ActionCard icon={ImportImg} title={t('welcome.importWallet')} subtitle={t('welcome.importText')} button={t('welcome.importWallet')} onClick={() => handleChangeBranch('import')} buttonProps={{ 'data-testid': 'import-wallet-button' }} />
       </Grid>
 
       <Grid item xs={12} md={6}>
-        <ActionCard icon={CreateImg} title={t('welcome.createWallet')} subtitle={t('welcome.createText')} button={t('welcome.createWallet')} onClick={() => handleChangeBranch('create')} />
+        <ActionCard icon={CreateImg} title={t('welcome.createWallet')} subtitle={t('welcome.createText')} button={t('welcome.createWallet')} onClick={() => handleChangeBranch('create')} buttonProps={{ 'data-testid': 'create-wallet-button' }} />
       </Grid>
     </>
   );

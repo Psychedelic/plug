@@ -9,7 +9,7 @@ import MenuItem from '../MenuItem';
 import useStyles from './styles';
 
 const Dialog = ({
-  title, items, onClose, selectedValue, open, component, closeable,
+  title, items, onClose, selectedValue, open, component, closeable, titleTestId, menuItemTestId,
 }) => {
   const classes = useStyles();
 
@@ -34,7 +34,7 @@ const Dialog = ({
     >
       {title && (
         <DialogTitle disableTypography>
-          <span className={classes.title}>{title}</span>
+          <span className={classes.title} data-testid={titleTestId}>{title}</span>
           <IconButton className={classes.closeButton} onClick={handleClose}>
             <CloseIcon />
           </IconButton>
@@ -50,6 +50,7 @@ const Dialog = ({
                 border={index !== items.length - 1}
                 size="medium"
                 {...item}
+                data-testid={`${menuItemTestId}-${item.name}`}
               />
             ))
             : component
@@ -65,6 +66,8 @@ Dialog.defaultProps = {
   component: null,
   selectedValue: null,
   closeable: true,
+  titleTestId: 'dialog-title',
+  menuItemTestId: 'dialog-menu-item',
 };
 
 Dialog.propTypes = {
@@ -78,4 +81,6 @@ Dialog.propTypes = {
   selectedValue: PropTypes.objectOf(PropTypes.string),
   component: PropTypes.node,
   closeable: PropTypes.bool,
+  titleTestId: PropTypes.string,
+  menuItemTestId: PropTypes.string,
 };

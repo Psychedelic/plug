@@ -208,10 +208,17 @@ const Profile = ({ disableProfile }) => {
                 onChange={handleChangeAccountName}
                 type="text"
                 className={classes.createAccountInput}
+                data-testid="create-account-name-input"
               />
             )}
           />
         )}
+        cancelButtonProps={{
+          'data-testid': 'create-account-cancel-button',
+        }}
+        submitButtonProps={{
+          'data-testid': 'create-account-submit-button',
+        }}
         button={t('common.create')}
         buttonVariant="rainbow"
         onClick={handleCreateAccount}
@@ -281,6 +288,7 @@ const Profile = ({ disableProfile }) => {
                   alignLeft
                   image={Plus}
                   onClick={handleOpenCreateAccount}
+                  data-testid="create-account-button"
                 />
                 <Divider style={{ margin: '6px 0' }} />
                 {
@@ -288,10 +296,7 @@ const Profile = ({ disableProfile }) => {
                     <MenuItem
                       size="small"
                       key={item.name}
-                      name={item.name}
-                      image={item.image}
-                      alignLeft={item.alignLeft}
-                      onClick={() => item.onClick()}
+                      {...item}
                     />
                   ))
                 }

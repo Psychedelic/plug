@@ -48,34 +48,6 @@ global.setupChrome = async () => {
 
 // General utils
 
-const waitForRender = async (time) => {
-  await new Promise((r) => setTimeout(r, time));
-};
-
-const getElements = async (page, selector, wait = false) => {
-  if (wait) await page.waitForSelector(selector);
-  return page.$$(selector);
-};
-
-const getElement = async (page, selector, wait = false) => {
-  if (wait) await page.waitForSelector(selector);
-  return page.$(selector);
-};
-
-const getButtons = (page, wait) => getElements(page, 'button', wait);
-
-const getInputs = (page, wait) => getElements(page, 'input', wait);
-
-const getInputWithIndex = async (page, index, wait) => {
-  const inputs = await getInputs(page, wait);
-  return inputs[index];
-};
-
-const getButtonWithIndex = async (page, index, wait) => {
-  const buttons = await getButtons(page, wait);
-  return buttons[index];
-};
-
 const getXPathElements = async (page, elementType, content, wait = false) => {
   const xPath = `//${elementType}[contains(.,"${content}")]`;
 
@@ -83,16 +55,25 @@ const getXPathElements = async (page, elementType, content, wait = false) => {
   return page.$x(xPath);
 };
 
+const getTestIdSelector = (id) => `[data-testid="${id}"]`;
+const waitForTestIdSelector = (page, id, ...otherOptions) => {
+  const selector = getTestIdSelector(id);
+  return page.waitForSelector(selector, ...otherOptions);
+};
+
+const getTestIdElement = async (page, id, shouldWait = false, ...waitOptions) => {
+  const selector = getTestIdSelector(id);
+  if (shouldWait) {
+    return page.waitForSelector(selector, ...waitOptions);
+  }
+  return page.$(selector);
+};
+
 const createNewPage = async (browser) => {
   const newPage = await browser.newPage();
 
-  newPage.getElements = (...args) => getElements(newPage, ...args);
-  newPage.getElement = (...args) => getElement(newPage, ...args);
-  newPage.getButtons = (...args) => getButtons(newPage, ...args);
-  newPage.getInputs = (...args) => getInputs(newPage, ...args);
-  newPage.getInputWithIndex = (...args) => getInputWithIndex(newPage, ...args);
-  newPage.getButtonWithIndex = (...args) => getButtonWithIndex(newPage, ...args);
-  newPage.getXPathElements = (...args) => getXPathElements(newPage, ...args);
+  newPage.getTestIdElement = (...args) => getTestIdElement(newPage, ...args);
+  newPage.waitForTestIdSelector = (...args) => waitForTestIdSelector(newPage, ...args);
 
   return newPage;
 };
@@ -102,49 +83,46 @@ const createNewPage = async (browser) => {
 const importAccount = async (page, seedphrase, password) => {
   await page.goto(chromeData.optionsUrl);
 
-  const importButton = await getButtonWithIndex(page, 0);
+  const importButton = await getTestIdElement(page, 'import-wallet-button');
   await importButton.click();
 
-  const seedphraseTextArea = await getElement(page, 'textarea');
+  const seedphraseTextArea = await getTestIdElement(page, 'seedphrase-input');
   await seedphraseTextArea.type(seedphrase);
 
-  const confirmSeedphraseButton = await getButtonWithIndex(page, 0);
+  const confirmSeedphraseButton = await getTestIdElement(page, 'confirm-seedphrase-button');
   await confirmSeedphraseButton.click();
 
-  const [passwordInput, confirmPasswordInput] = await getInputs(page);
-  await passwordInput.type(password);
+  const newPasswordInput = await getTestIdElement(page, 'new-password-input');
+  const confirmPasswordInput = await getTestIdElement(page, 'confirm-password-input');
+
+  await newPasswordInput.type(password);
   await confirmPasswordInput.type(password);
 
-  const submitPasswordButton = await getButtonWithIndex(page, 0);
+  const submitPasswordButton = await getTestIdElement(page, 'password-confirmation-button');
   await submitPasswordButton.click();
 };
 
 const unlock = async (page, password) => {
   await page.goto(chromeData.popupUrl);
 
-  const popupPasswordInput = await getInputWithIndex(page, 0);
+  const popupPasswordInput = await getTestIdElement(page, 'enter-password-input');
   await popupPasswordInput.type(password);
 
-  const unlockPlugButton = await getButtonWithIndex(page, 0);
+  const unlockPlugButton = await getTestIdElement(page, 'unlock-wallet-button');
   await unlockPlugButton.click();
 };
 
 // Popup page utils
 
-const navigateToTab = async (page, tabName, shouldAwait) => {
-  const [tabElement] = await getXPathElements(page, 'span', tabName, shouldAwait);
-  await tabElement.click();
-};
-
 const waitForProfileButton = (page) => page.waitForSelector(profileButtonSelector);
 
 const refreshWallet = async (page) => {
   await waitForProfileButton(page);
-  const profileButton = await page.$(profileButtonSelector);
 
+  const profileButton = await page.$(profileButtonSelector);
   await profileButton.click();
 
-  const [refreshWalletBtn] = await getXPathElements(page, 'h6', 'Refresh Wallet', true);
+  const refreshWalletBtn = await getTestIdElement(page, 'refresh-wallet-button', true);
   await refreshWalletBtn.click();
 };
 
@@ -153,14 +131,14 @@ const createSubAccount = async (page, subAccountName) => {
   const profileButton = await page.$(profileButtonSelector);
   await profileButton.click();
 
-  const [createAccountButton] = await getXPathElements(page, 'h6', 'Create Account', true);
+  const createAccountButton = await getTestIdElement(page, 'create-account-button', true);
   await createAccountButton.click();
 
-  const subAccountNameInput = await getInputWithIndex(page, 0);
-  await subAccountNameInput.type(subAccountName);
+  const createAccountNameInput = await getTestIdElement(page, 'create-account-name-input');
+  await createAccountNameInput.type(subAccountName);
 
-  const createSubAccountButton = await getButtonWithIndex(page, 11);
-  await createSubAccountButton.click();
+  const createAccountSubmitButton = await getTestIdElement(page, 'create-account-submit-button');
+  await createAccountSubmitButton.click();
 };
 
 const switchToSubAccount = async (page, subAccountName) => {
@@ -188,7 +166,6 @@ const popupPageUtils = {
   createSubAccount,
   switchToSubAccount,
   refreshWallet,
-  navigateToTab,
   waitForProfileButton,
 };
 
@@ -197,5 +174,5 @@ global.optionsPageUtils = optionsPageUtils;
 
 global.utils = {
   createNewPage,
-  waitForRender,
+  getTestIdSelector,
 };

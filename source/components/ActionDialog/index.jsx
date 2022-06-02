@@ -11,7 +11,16 @@ import { Button } from '@ui';
 import useStyles from './styles';
 
 const ActionDialog = ({
-  title, content, button, buttonVariant, onClick, onClose, open, className,
+  title,
+  content,
+  button,
+  buttonVariant,
+  onClick,
+  onClose,
+  open,
+  className,
+  cancelButtonProps,
+  submitButtonProps,
 }) => {
   const classes = useStyles();
 
@@ -37,6 +46,7 @@ const ActionDialog = ({
             onClick={onClose}
             style={{ width: '96%' }}
             fullWidth
+            {...cancelButtonProps}
           />
           <Button
             variant={buttonVariant}
@@ -45,6 +55,7 @@ const ActionDialog = ({
             style={{ width: '96%' }}
             wrapperStyle={{ textAlign: 'right' }}
             fullWidth
+            {...submitButtonProps}
           />
         </div>
       </DialogContent>
@@ -53,6 +64,11 @@ const ActionDialog = ({
 };
 
 export default ActionDialog;
+
+ActionDialog.defaultProps = {
+  cancelButtonProps: {},
+  submitButtonProps: {},
+};
 
 ActionDialog.propTypes = {
   title: PropTypes.string.isRequired,
@@ -63,6 +79,8 @@ ActionDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   className: PropTypes.string,
+  cancelButtonProps: PropTypes.object,
+  submitButtonProps: PropTypes.object,
 };
 
 ActionDialog.defaultProps = {
