@@ -313,6 +313,7 @@ export class TransactionModule extends ControllerModuleBase {
 
         // Answer this callback no matter if the transfer succeeds or not.
         if (transfer?.status === 'declined') {
+          callback(null, true);
           callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
         } else {
           const burnXTC = getKeyringHandler(

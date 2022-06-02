@@ -26,7 +26,7 @@ const Transfer = ({
   const dispatch = useDispatch();
   const { url, icons } = metadata;
   const { selectedTab, handleChangeTab } = useTabs();
-  console.log('Transfer tx id', transactionId);
+
   const {
     requests,
     currentRequest,
@@ -51,7 +51,6 @@ const Transfer = ({
     });
   }, []);
 
-  console.log('window.onbeforeunload', window.onbeforeunload);
   const requestCount = requests.length;
   const tabs = [
     {
@@ -104,7 +103,7 @@ const Transfer = ({
                 <Button
                   variant="default"
                   value={t('common.decline')}
-                  onClick={window.close}
+                  onClick={handleDeclineAll}
                   fullWidth
                   style={{ width: '96%' }}
                   disabled={loading}
