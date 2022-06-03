@@ -11,18 +11,18 @@ import {
 
 const getFirstLetterFrom = (value) => value.slice(0, 1).toUpperCase();
 
+const getIndexOfContact = (contact, contactList) => {
+  let index = -1;
+  contactList.forEach((c, i) => {
+    if (c.id === contact.id) {
+      index = i;
+    }
+  });
+
+  return index;
+};
+
 const filterContactsById = (contacts) => {
-  const getIndexOfContact = (contact, contactList) => {
-    let index = -1;
-    contactList.forEach((c, i) => {
-      if (c.id === contact.id) {
-        index = i;
-      }
-    });
-
-    return index;
-  };
-
   return contacts.reduce((acc, c) => {
     if (getIndexOfContact(c, acc) === -1) {
       return [...acc, c];
@@ -114,7 +114,7 @@ export const contactSlice = createSlice({
         }
       })
       .addCase(getContacts.fulfilled, (state, action) => {
-        let newContactList = [...state.contacts, ...action.payload, ...action.meta.arg.localContacts];
+        let newContactList = [...state?.contacts, ...action?.payload, ...action.meta.arg?.localContacts];
 
         newContactList = filterContactsById(newContactList);
         setLocalDabContacts(newContactList);
