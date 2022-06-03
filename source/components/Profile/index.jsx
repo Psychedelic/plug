@@ -30,11 +30,11 @@ import { getRandomEmoji } from '@shared/constants/emojis';
 import { getTabURL } from '@shared/utils/chrome-tabs';
 import { getWalletsConnectedToUrl, getApp } from '@modules/storageManager';
 import { toggleAccountHidden, useHiddenAccounts } from '@redux/profile';
-import { getContacts } from '@redux/contacts';
 import { setICNSData } from '@redux/icns';
 import { useICPPrice } from '@redux/icp';
 import { ConnectAccountsModal } from '@components';
 import { useMenuItems } from '@hooks';
+import { useContacts } from '@hooks';
 
 import { TABS, useRouter } from '../Router';
 import ActionDialog from '../ActionDialog';
@@ -62,6 +62,7 @@ const Profile = ({ disableProfile }) => {
   const [accountName, setAccountName] = useState('');
   const [error, setError] = useState(null);
   const [connectedWallets, setConnectedWallets] = useState([]);
+  const { getContacts } = useContacts();
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -127,7 +128,7 @@ const Profile = ({ disableProfile }) => {
         if (state?.wallets?.length) {
           const newWallet = state.wallets[state.currentWalletId];
           dispatch(setAccountInfo(newWallet));
-          dispatch(getContacts());
+          getContacts();
           dispatch(setICNSData(newWallet.icnsData));
           dispatch(setAssetsLoading(true));
           dispatch(setTransactions([]));
