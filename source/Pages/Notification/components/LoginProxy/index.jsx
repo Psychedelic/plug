@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { PortRPC } from '@fleekhq/browser-rpc';
+import { reviewPendingTransaction } from '@modules/storageManager';
 
 const portRPC = new PortRPC({
   name: 'notification-port',
@@ -11,11 +12,12 @@ const portRPC = new PortRPC({
 portRPC.start();
 
 const LoginProxy = ({
-  args, metadata, callId, portId, handler,
+  args, metadata, callId, portId, handler, transactionId,
 }) => {
   useEffect(async () => {
     if (metadata && callId && portId) {
-      await portRPC.call(handler, [metadata.url, args || {}, callId, portId]);
+      await reviewPendingTransaction(transactionId, async () => {});
+      await portRPC.call(handler, [metadata.url, args || {}, callId, portId, transactionId]);
       window.close();
     }
   }, [handler, metadata, args, callId, portId]);

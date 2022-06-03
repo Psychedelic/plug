@@ -21,7 +21,7 @@ import Data from './components/Data';
 i18n.use(initReactI18next).init(initConfig);
 
 const BurnXTC = ({
-  args, callId, portId, metadata, setOnTimeout,
+  args, callId, portId, metadata, setOnTimeout, transactionId,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -40,7 +40,7 @@ const BurnXTC = ({
     error,
     loading,
     handleDeclineAll,
-  } = useRequests([args], callId, portId);
+  } = useRequests([args], callId, portId, transactionId);
 
   useEffect(() => {
     setOnTimeout(() => () => {
@@ -97,7 +97,7 @@ const BurnXTC = ({
                 <Button
                   variant="default"
                   value={t('common.decline')}
-                  onClick={() => window.close()}
+                  onClick={handleDeclineAll}
                   fullWidth
                   style={{ width: '96%' }}
                   disabled={loading}
