@@ -1,6 +1,6 @@
 import extension from 'extensionizer';
 import PlugController from '@psychedelic/plug-controller';
-import { BackgroundController, PortRPC } from '@fleekhq/browser-rpc';
+import { BackgroundController } from '@fleekhq/browser-rpc';
 
 import {
   ConnectionModule,
@@ -27,8 +27,6 @@ class BackgroundScript {
     this.notificationManager = new NotificationManager(
       extension.extension.getURL('../assets/icons/plug.svg'),
     );
-    this.port = new PortRPC({ name: 'background-updater', target: 'plug-inpage-script' });
-    this.port.start();
   }
 
   // Utils

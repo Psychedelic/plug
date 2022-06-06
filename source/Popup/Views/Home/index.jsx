@@ -65,7 +65,7 @@ const Home = () => {
   ], [assetsLoading, collectionsLoading, transactionsLoading]);
 
   const validateProviderConnection = (state) => {
-    extensionizer.tabs.query({ active: true }, (browserTabs) => {
+    extensionizer.tabs.query({ active: true, lastFocusedWindow: true }, (browserTabs) => {
       const currentTab = browserTabs?.[0];
       const url = getTabURL(currentTab);
       const ids = state.wallets.map((_, idx) => idx);
