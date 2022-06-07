@@ -55,7 +55,7 @@ export class ConnectionModule extends ControllerModuleBase {
                 metadataJson: JSON.stringify({ url }),
                 type: 'requestConnectionData',
                 screenArgs: { fixedHeight: SIZES.loginHeight },
-              });
+              }, callback);
             } else {
               const publicKey = await this.keyring?.getPublicKey(walletId);
               const { host, timeout, whitelist } = app;
@@ -158,24 +158,24 @@ export class ConnectionModule extends ControllerModuleBase {
             ? Math.min(422 + 37 * whitelist.length, 600)
             : SIZES.loginHeight;
 
-          this.displayPopUp({
-            callId,
-            portId,
-            argsJson: JSON.stringify({
-              whitelist,
-              canistersInfo,
-              timeout,
-              transactionId,
-            }),
-            metadataJson: JSON.stringify(newMetadata),
-            domainUrl,
-            type: 'allowAgent',
-            screenArgs: {
-              fixedHeight: height,
-              top: 65,
-              left: metadata.pageWidth - SIZES.width,
+          this.displayPopUp(
+            {
+              callId,
+              portId,
+              argsJson: JSON.stringify({
+                whitelist, canistersInfo, timeout, transactionId,
+              }),
+              metadataJson: JSON.stringify(newMetadata),
+              domainUrl,
+              type: 'allowAgent',
+              screenArgs: {
+                fixedHeight: height,
+                top: 65,
+                left: metadata.pageWidth - SIZES.width,
+              },
             },
-          });
+            opts.callback,
+          );
         } else {
           const height = this.keyring?.isUnlocked
             ? SIZES.appConnectHeight
@@ -191,7 +191,7 @@ export class ConnectionModule extends ControllerModuleBase {
               fixedHeight: height,
             },
             domainUrl,
-          });
+          }, opts.callback);
         }
       },
     };
@@ -301,7 +301,7 @@ export class ConnectionModule extends ControllerModuleBase {
                     top: 65,
                     left: metadata.pageWidth - SIZES.width,
                   },
-                });
+                }, callback);
               }
               const publicKey = await this.keyring?.getPublicKey();
               callback(null, publicKey);
@@ -323,7 +323,7 @@ export class ConnectionModule extends ControllerModuleBase {
                   top: 65,
                   left: metadata.pageWidth - SIZES.width,
                 },
-              });
+              }, callback);
             }
           } else {
             callback(ERRORS.CONNECTION_ERROR, null);

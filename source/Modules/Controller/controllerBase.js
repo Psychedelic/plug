@@ -1,7 +1,8 @@
 import qs from 'query-string';
 import extension from 'extensionizer';
 
-import { checkPendingTransaction, createPendingTransaction, removePendingTransaction, resetPendingTransactions } from '@modules/storageManager';
+import { checkPendingTransaction, createPendingTransaction, removePendingTransaction } from '@modules/storageManager';
+import ERRORS from '@background/errors';
 import SIZES from '../../Pages/Notification/components/Transfer/constants';
 
 export class ControllerModuleBase {
@@ -57,7 +58,7 @@ export class ControllerModuleBase {
     icon,
     screenArgs: { fixedHeight, top, left } = {},
     domainUrl,
-  }) {
+  }, callback) {
     const stringifiedUrl = qs.stringifyUrl({
       url,
       query: {
@@ -82,6 +83,10 @@ export class ControllerModuleBase {
       height,
       top,
       left,
+    }, (res) => {
+      if (!res) {
+        callback(ERRORS.SIZE_ERROR, null);
+      }
     });
   }
 }

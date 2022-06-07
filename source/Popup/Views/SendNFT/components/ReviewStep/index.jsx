@@ -43,7 +43,6 @@ const ReviewStep = () => {
           setErrorMessage(error);
         } else {
           const filteredCollections = getFilteredCollections(collection, collections, nft);
-
           dispatch(setCollections({
             collections: filteredCollections,
             principalId,

@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles({
+export default makeStyles((theme) => ({
   fancyCircle: {
     width: 37,
     height: 37,
@@ -61,4 +61,7 @@ export default makeStyles({
   createAccountInput: {
     marginBottom: '6px',
   },
-});
+  errorMessage: {
+    color: theme.palette.danger.main,
+  },
+}));

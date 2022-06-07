@@ -131,7 +131,9 @@ export const walletSlice = createSlice({
     removeNFT: (state, action) => {
       const collections = state.collections.map((col) => ({
         ...col,
-        tokens: col.tokens.filter((token) => token.id !== action.payload?.id),
+        tokens: action.payload.collection === col.name
+          ? col.tokens.filter((token) => token.index !== action.payload?.index)
+          : col.tokens,
       }));
       state.collections = collections.filter((col) => col.tokens.length);
       state.optimisticNFTUpdate = true;

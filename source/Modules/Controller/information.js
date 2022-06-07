@@ -58,7 +58,7 @@ export class InformationModule extends ControllerModuleBase {
                 type: 'requestBalance',
                 argsJson: JSON.stringify({ subaccount, transactionId }),
                 metadataJson: JSON.stringify(metadata),
-              });
+              }, callback);
             } else {
               this.#internalRequestBalance(subaccount, callback);
             }
@@ -135,7 +135,7 @@ export class InformationModule extends ControllerModuleBase {
                 type: 'principal',
                 metadataJson: JSON.stringify({ url: pageUrl }),
                 argsJson: JSON.stringify({ transactionId }),
-              });
+              }, callback);
             } else {
               callback(
                 null,
@@ -188,7 +188,7 @@ export class InformationModule extends ControllerModuleBase {
                 type: 'getICNSInfo',
                 argsJson: JSON.stringify({ transactionId }),
                 metadataJson: JSON.stringify(metadata),
-              });
+              }, callback);
             } else {
               try {
                 const getICNSData = getKeyringHandler(HANDLER_TYPES.GET_ICNS_DATA, this.keyring);

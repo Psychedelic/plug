@@ -60,6 +60,7 @@ const Profile = ({ disableProfile }) => {
   const [openCreateAccount, setOpenCreateAccount] = useState(false);
   const [openConnectAccount, setOpenConnectAccount] = useState(false);
   const [accountName, setAccountName] = useState('');
+  const [error, setError] = useState(null);
   const [connectedWallets, setConnectedWallets] = useState([]);
   const { getContacts } = useContacts();
 
@@ -81,7 +82,12 @@ const Profile = ({ disableProfile }) => {
   }, []);
 
   const handleChangeAccountName = (e) => {
-    setAccountName(e.target.value);
+    const name = e.target.value;
+    if (name.length > 24) {
+      setError(t('profile.accountNameTooLong'));
+    } else {
+      setAccountName(e.target.value);
+    }
   };
 
   const handleEditAccount = (e) => {
@@ -150,7 +156,7 @@ const Profile = ({ disableProfile }) => {
 
   const handleChangeAccount = (wallet) => () => {
     setSelectedWallet(wallet);
-    extensionizer.tabs.query({ active: true }, (tabs) => {
+    extensionizer.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
       const url = getTabURL(tabs?.[0]);
       const ids = accounts.map((_, idx) => idx);
       setTab(tabs?.[0]);
@@ -158,6 +164,7 @@ const Profile = ({ disableProfile }) => {
       getWalletsConnectedToUrl(url, ids, async (wallets = []) => {
         const currentConnected = wallets.includes(walletNumber);
         const newConnected = wallets.includes(wallet);
+
         setConnectedWallets(wallets);
         getApp(walletNumber.toString(), url, (currentApp) => {
           setApp(currentApp);
@@ -199,19 +206,23 @@ const Profile = ({ disableProfile }) => {
         open={openCreateAccount}
         title={t('settings.createAccountTitle')}
         content={(
-          <FormItem
-            label={t('common.name')}
-            smallLabel
-            component={(
-              <TextInput
-                fullWidth
-                value={accountName}
-                onChange={handleChangeAccountName}
-                type="text"
-                className={classes.createAccountInput}
-              />
-            )}
-          />
+          <div>
+            <FormItem
+              label={t('common.name')}
+              smallLabel
+              component={(
+                <TextInput
+                  fullWidth
+                  value={accountName}
+                  onChange={handleChangeAccountName}
+                  type="text"
+                  className={classes.createAccountInput}
+                  error={!!error}
+                />
+              )}
+            />
+            {error && <span className={classes.errorMessage}>{error}</span>}
+          </div>
         )}
         button={t('common.create')}
         buttonVariant="rainbow"
