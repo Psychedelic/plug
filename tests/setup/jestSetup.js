@@ -176,5 +176,4 @@ global.optionsPageUtils = optionsPageUtils;
 global.utils = {
   createNewPage,
   getTestIdSelector,
-  focusTestIdElement,
 };
