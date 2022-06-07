@@ -33,7 +33,7 @@ const useTransactions = (transactions, callId, portId, transactionId) => {
 
   const processAll = async (accepted) => {
     setLoading(true);
-    await reviewPendingTransaction(transactionId, (res) => res);
+    reviewPendingTransaction(transactionId, (res) => res);
     await portRPC.call('handleBatchTransactions', [
       accepted,
       transactions,

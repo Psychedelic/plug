@@ -97,7 +97,7 @@ const BurnXTC = ({
                 <Button
                   variant="default"
                   value={t('common.decline')}
-                  onClick={handleDeclineAll}
+                  onClick={window.close}
                   fullWidth
                   style={{ width: '96%' }}
                   disabled={loading}

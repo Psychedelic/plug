@@ -49,7 +49,7 @@ const useRequests = (incomingRequest, callId, portId, transactionId) => {
   const handleResponse = async (status) => {
     request.status = status;
     const handler = request.type === 'sign' ? 'handleSign' : 'handleCall';
-    await reviewPendingTransaction(transactionId, async () => {});
+    reviewPendingTransaction(transactionId, async () => {});
     const success = await portRPC.call(handler, [status, request, callId, portId, transactionId]);
     if (success) {
       window.close();
