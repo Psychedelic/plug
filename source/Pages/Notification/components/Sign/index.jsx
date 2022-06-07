@@ -29,7 +29,7 @@ const AssetsWarning = ({
   const classes = useStyles();
   const [showModal, setShowModal] = useState(false);
 
-  const shouldWarn = !(args?.requestInfo?.decodedArguments);
+  const shouldWarn = args?.requestInfo?.shouldWarn;
 
   const {
     request,

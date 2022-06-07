@@ -433,7 +433,7 @@ export class TransactionModule extends ControllerModuleBase {
   #requestCall() {
     return {
       methodName: 'requestCall',
-      handler: async (opts, metadata, args, batchTxId, transactionId) => {
+      handler: async (opts, metadata, args, batchTxId, transactionId, decodedArgs) => {
         const { message, sender, callback } = opts;
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
@@ -463,7 +463,10 @@ export class TransactionModule extends ControllerModuleBase {
                 const canisterInfo = app.whitelist[canisterId];
                 const shouldShowModal = (!batchTxId || batchTxId.lenght === 0)
                   && protectedIds.includes(canisterInfo.id);
-                const requestInfo = generateRequestInfo({ ...args, sender: senderPID });
+                const requestInfo = generateRequestInfo({
+                  ...args,
+                  sender: senderPID,
+                }, decodedArgs);
 
                 if (shouldShowModal) {
                   this.displayPopUp({
