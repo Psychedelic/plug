@@ -13,7 +13,7 @@ import {
   setCollections,
   setCollectionsLoading,
 } from '@redux/wallet';
-import { getContacts } from '@redux/contacts';
+import { useContacts } from '@hooks';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 
 const useMenuItems = (toggleMenu) => {
@@ -21,6 +21,7 @@ const useMenuItems = (toggleMenu) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const icpPrice = useICPPrice();
+  const { getContacts } = useContacts();
   const { principalId } = useSelector((state) => state.wallet);
   const { useICNS } = useSelector((state) => state.icns);
 
@@ -30,7 +31,7 @@ const useMenuItems = (toggleMenu) => {
 
     if (icpPrice) {
       // Contacts
-      dispatch(getContacts(true));
+      getContacts(true);
 
       // NFTS
       dispatch(setCollectionsLoading(true));

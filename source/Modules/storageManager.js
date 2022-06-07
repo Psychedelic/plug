@@ -158,6 +158,18 @@ export const getWalletsConnectedToUrl = (url, walletIds, cb) => {
   });
 };
 
+export const getDabContacts = (cb) => {
+  const defaultValue = [];
+
+  secureGetWrapper('dabContacts', defaultValue, (state) => {
+    cb(state?.dabContacts || defaultValue);
+  });
+};
+
+export const setDabContacts = (dabContacts = [], cb = () => ([])) => {
+  secureSetWrapper({ dabContacts }, [], cb);
+};
+
 export const createPendingTransaction = (cb) => {
   const id = uuidv4();
   secureSetWrapper({ activeTransactions: { [id]: 'pending' } }, {}, () => cb(id));
