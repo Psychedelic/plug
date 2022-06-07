@@ -172,9 +172,7 @@ export const reviewPendingTransaction = async (transactionId) => {
   const setData = () => new Promise((resolve) => {
     secureSetWrapper({ activeTransactions: { [transactionId]: 'reviewed' } }, {}, resolve);
   });
-  console.log('SETTING DATAAAAA//////');
   const result = await setData();
-  console.log('SET DATA aaaaaaa///', result);
   return result;
 };
 export const removePendingTransaction = (transactionId, cb) => {

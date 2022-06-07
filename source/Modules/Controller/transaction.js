@@ -114,7 +114,6 @@ export class TransactionModule extends ControllerModuleBase {
       methodName: 'handleRequestTransfer',
       handler: async (opts, transferRequests, callId, portId) => {
         const { callback } = opts;
-        console.log('ok Im here');
         const transfer = transferRequests?.[0];
         if (transfer?.status === 'declined') {
           callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);

@@ -34,7 +34,6 @@ export class ControllerModuleBase {
 
   secureExecutor({ args: methodArgs = [], handlerObject }) {
     const transactionId = methodArgs.pop(methodArgs.length - 1);
-    console.log('checking pending tx');
     checkPendingTransaction(transactionId, (status) => {
       if (status !== 'reviewed') throw new Error('Unauthorized call to provider executor');
       return this.secureController(
