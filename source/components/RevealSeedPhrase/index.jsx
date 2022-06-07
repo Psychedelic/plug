@@ -11,6 +11,7 @@ const RevealSeedPhrase = ({ onClick, ...other }) => {
     <div
       className={classes.root}
       onClick={onClick}
+      data-testid="reveal-seedphrase-button"
       {...other}
     >
       <div className={classes.blur} />

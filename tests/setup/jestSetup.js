@@ -61,10 +61,10 @@ const waitForTestIdSelector = (page, id, ...otherOptions) => {
   return page.waitForSelector(selector, ...otherOptions);
 };
 
-const getTestIdElement = async (page, id, shouldWait = false, ...waitOptions) => {
+const getByTestId = async (page, id, shouldWait = false, ...waitOptions) => {
   const selector = getTestIdSelector(id);
   if (shouldWait) {
-    return page.waitForSelector(selector, ...waitOptions);
+    await page.waitForSelector(selector, ...waitOptions);
   }
   return page.$(selector);
 };
@@ -72,7 +72,7 @@ const getTestIdElement = async (page, id, shouldWait = false, ...waitOptions) =>
 const createNewPage = async (browser) => {
   const newPage = await browser.newPage();
 
-  newPage.getTestIdElement = (...args) => getTestIdElement(newPage, ...args);
+  newPage.getByTestId = (...args) => getByTestId(newPage, ...args);
   newPage.waitForTestIdSelector = (...args) => waitForTestIdSelector(newPage, ...args);
 
   return newPage;
@@ -83,32 +83,33 @@ const createNewPage = async (browser) => {
 const importAccount = async (page, seedphrase, password) => {
   await page.goto(chromeData.optionsUrl);
 
-  const importButton = await getTestIdElement(page, 'import-wallet-button');
+  const importButton = await getByTestId(page, 'import-wallet-button');
   await importButton.click();
 
-  const seedphraseTextArea = await getTestIdElement(page, 'seedphrase-input');
+  const seedphraseTextArea = await getByTestId(page, 'seedphrase-input');
+  await seedphraseTextArea.click();
   await seedphraseTextArea.type(seedphrase);
 
-  const confirmSeedphraseButton = await getTestIdElement(page, 'confirm-seedphrase-button');
+  const confirmSeedphraseButton = await getByTestId(page, 'confirm-seedphrase-button');
   await confirmSeedphraseButton.click();
 
-  const newPasswordInput = await getTestIdElement(page, 'new-password-input');
-  const confirmPasswordInput = await getTestIdElement(page, 'confirm-password-input');
+  const newPasswordInput = await getByTestId(page, 'new-password-input');
+  const confirmPasswordInput = await getByTestId(page, 'confirm-password-input');
 
   await newPasswordInput.type(password);
   await confirmPasswordInput.type(password);
 
-  const submitPasswordButton = await getTestIdElement(page, 'password-confirmation-button');
+  const submitPasswordButton = await getByTestId(page, 'password-confirmation-button');
   await submitPasswordButton.click();
 };
 
 const unlock = async (page, password) => {
   await page.goto(chromeData.popupUrl);
 
-  const popupPasswordInput = await getTestIdElement(page, 'enter-password-input');
+  const popupPasswordInput = await getByTestId(page, 'enter-password-input');
   await popupPasswordInput.type(password);
 
-  const unlockPlugButton = await getTestIdElement(page, 'unlock-wallet-button');
+  const unlockPlugButton = await getByTestId(page, 'unlock-wallet-button');
   await unlockPlugButton.click();
 };
 
@@ -122,7 +123,7 @@ const refreshWallet = async (page) => {
   const profileButton = await page.$(profileButtonSelector);
   await profileButton.click();
 
-  const refreshWalletBtn = await getTestIdElement(page, 'refresh-wallet-button', true);
+  const refreshWalletBtn = await getByTestId(page, 'refresh-wallet-button', true);
   await refreshWalletBtn.click();
 };
 
@@ -131,13 +132,13 @@ const createSubAccount = async (page, subAccountName) => {
   const profileButton = await page.$(profileButtonSelector);
   await profileButton.click();
 
-  const createAccountButton = await getTestIdElement(page, 'create-account-button', true);
+  const createAccountButton = await getByTestId(page, 'create-account-button', true);
   await createAccountButton.click();
 
-  const createAccountNameInput = await getTestIdElement(page, 'create-account-name-input');
+  const createAccountNameInput = await getByTestId(page, 'create-account-name-input');
   await createAccountNameInput.type(subAccountName);
 
-  const createAccountSubmitButton = await getTestIdElement(page, 'create-account-submit-button');
+  const createAccountSubmitButton = await getByTestId(page, 'create-account-submit-button');
   await createAccountSubmitButton.click();
 };
 
@@ -175,4 +176,5 @@ global.optionsPageUtils = optionsPageUtils;
 global.utils = {
   createNewPage,
   getTestIdSelector,
+  focusTestIdElement,
 };

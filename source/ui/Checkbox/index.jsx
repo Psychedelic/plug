@@ -22,6 +22,7 @@ const Checkbox = ({
           checked={checked}
           onChange={handleChange}
           color="primary"
+          {...other}
         />
       )}
       label={<Typography variant="h6">{label}</Typography>}
