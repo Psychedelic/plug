@@ -9,7 +9,7 @@ import useStyles from './styles';
 const NFTDisplay = ({ nft }) => {
   const classes = useStyles();
 
-  const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[nft.canisterId];
+  const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[nft?.canisterId];
 
   return (
     <Card className={classes.nftDisplayContainer}>
@@ -27,6 +27,7 @@ NFTDisplay.propTypes = {
     url: PropTypes.string,
     collection: PropTypes.string,
     index: PropTypes.number,
+    canisterId: PropTypes.string,
   }).isRequired,
 };
 

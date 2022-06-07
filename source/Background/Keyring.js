@@ -334,9 +334,9 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: e.message };
     }
   },
-  [HANDLER_TYPES.ADD_CONTACT]: async (contact) => {
+  [HANDLER_TYPES.ADD_CONTACT]: async (contact, walletNumber = 0) => {
     try {
-      const res = await keyring.addContact(contact);
+      const res = await keyring.addContact(contact, walletNumber);
       return res;
     } catch (e) {
       // eslint-disable-next-line
@@ -344,9 +344,9 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: e.message };
     }
   },
-  [HANDLER_TYPES.REMOVE_CONTACT]: async (contactName) => {
+  [HANDLER_TYPES.REMOVE_CONTACT]: async (contactName, walletNumber = 0) => {
     try {
-      const res = await keyring.deleteContact(contactName);
+      const res = await keyring.deleteContact(contactName, walletNumber);
       return res;
     } catch (e) {
       // eslint-disable-next-line
