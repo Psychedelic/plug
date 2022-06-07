@@ -17,12 +17,12 @@ export class ConnectionModule extends ControllerModuleBase {
   #getSafeHandlerObjects() {
     return [
       this.#disconnect(),
-      this.#verifyWhitelist(),
     ];
   }
 
   #getHandlerObjects() {
     return [
+      this.#verifyWhitelist(),
       this.#getConnectionData(),
       this.#requestConnect(),
     ];
@@ -252,7 +252,7 @@ export class ConnectionModule extends ControllerModuleBase {
   #verifyWhitelist() {
     return {
       methodName: 'verifyWhitelist',
-      handler: async (opts, metadata, whitelist) => {
+      handler: async (opts, metadata, whitelist, transactionId) => {
         const { message, sender, callback } = opts;
 
         const { id: callId } = message.data.data;
@@ -293,6 +293,7 @@ export class ConnectionModule extends ControllerModuleBase {
                     updateWhitelist: true,
                     showList: false,
                     timeout: app?.timeout,
+                    transactionId,
                   }),
                   domainUrl: metadata.url,
                   type: 'allowAgent',
@@ -316,6 +317,7 @@ export class ConnectionModule extends ControllerModuleBase {
                   canistersInfo,
                   updateWhitelist: true,
                   showList: true,
+                  transactionId,
                 }),
                 type: 'allowAgent',
                 screenArgs: {
