@@ -13,7 +13,7 @@ const sendViewButtonClick = async (page) => {
 // Utilities
 
 const selectToken = async (page, tokenName) => {
-  const selectTokenButton = await page.waitForTestIdSelector('select-token-button');
+  const selectTokenButton = await page.waitForTestIdSelector('select-token-button', true);
   await selectTokenButton.click();
 
   const menuItem = await page.waitForTestIdSelector(`select-token-button-${tokenName}`, { visible: true });
@@ -52,7 +52,7 @@ describe('Send View', () => {
   beforeAll(async () => {
     browser = await setupChrome();
 
-    // Importing and unlocking the account
+    // Importing and unlocking the accoun
     page = await utils.createNewPage(browser);
 
     await optionsPageUtils.importAccount(page, secrets.seedphrase, secrets.password);
@@ -115,7 +115,9 @@ describe('Send View', () => {
     const amount = await waitForAmount(page);
     expect(amount).toBeGreaterThan(0);
 
-    const [amountInput, addressInput] = await page.getInputs();
+    const amountInput = await page.getByTestId('');
+    const addressInput = await page.getByTestId('');
+
     await addressInput.type(secrets.subAccountId);
     await amountInput.focus();
     await page.keyboard.press('ArrowLeft');

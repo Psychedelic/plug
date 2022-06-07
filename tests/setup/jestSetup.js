@@ -96,7 +96,9 @@ const importAccount = async (page, seedphrase, password) => {
   const newPasswordInput = await getByTestId(page, 'new-password-input');
   const confirmPasswordInput = await getByTestId(page, 'confirm-password-input');
 
+  await newPasswordInput.click();
   await newPasswordInput.type(password);
+  await confirmPasswordInput.click();
   await confirmPasswordInput.type(password);
 
   const submitPasswordButton = await getByTestId(page, 'password-confirmation-button');
@@ -106,7 +108,8 @@ const importAccount = async (page, seedphrase, password) => {
 const unlock = async (page, password) => {
   await page.goto(chromeData.popupUrl);
 
-  const popupPasswordInput = await getByTestId(page, 'enter-password-input');
+  const popupPasswordInput = await getByTestId(page, 'enter-password-input', true);
+  await popupPasswordInput.click();
   await popupPasswordInput.type(password);
 
   const unlockPlugButton = await getByTestId(page, 'unlock-wallet-button');

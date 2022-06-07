@@ -124,7 +124,8 @@ describe('Import/Create', () => {
       const unlockPlugButton = await page.getByTestId('unlock-wallet-button');
       await unlockPlugButton.click();
 
-      const plugBanner = await page.getByTestId('banner-text');
+      const plugBanner = await page.getByTestId('banner-text', true);
+
       const value = await page.evaluate((el) => el.textContent, plugBanner);
 
       expect(value).toMatch(/Plug/i);
@@ -187,7 +188,7 @@ describe('Import/Create', () => {
       const submitPasswordButton = await page.getByTestId('password-confirmation-button');
       await submitPasswordButton.click();
 
-      const revealSeedphraseElement = await page.getByTestId('reveal-seedphrase-button');
+      const revealSeedphraseElement = await page.getByTestId('reveal-seedphrase-button', true);
       await revealSeedphraseElement.click();
 
       const seedphraseElement = await page.getByTestId('seedphrase-confirmation-checkbox');
@@ -197,14 +198,14 @@ describe('Import/Create', () => {
       await seedphraseContinueButton.click();
 
       await page.goto(chromeData.popupUrl);
-      const popupPasswordInput = await page.getByTestId('enter-password-input');
+      const popupPasswordInput = await page.getByTestId('enter-password-input', true);
       await popupPasswordInput.click();
       await popupPasswordInput.type(secrets.password);
 
       const unlockPlugButton = await page.getByTestId('unlock-wallet-button');
       await unlockPlugButton.click();
 
-      const plugBanner = await page.getByTestId('banner-text');
+      const plugBanner = await page.getByTestId('banner-text', true);
       const value = await page.evaluate((el) => el.textContent, plugBanner);
 
       expect(value).toMatch(/Plug/i);
