@@ -115,11 +115,11 @@ describe('Send View', () => {
     const amount = await waitForAmount(page);
     expect(amount).toBeGreaterThan(0);
 
-    const amountInput = await page.getByTestId('');
-    const addressInput = await page.getByTestId('');
-
+    const amountInput = await page.getByTestId('select-token-input');
+    const addressInput = await page.getByTestId('send-to-principalID-input');
+    await addressInput.click();
     await addressInput.type(secrets.subAccountId);
-    await amountInput.focus();
+    await amountInput.click();
     await page.keyboard.press('ArrowLeft');
     await page.keyboard.press('ArrowLeft');
     await page.keyboard.press('ArrowLeft');
