@@ -37,7 +37,7 @@ const NFTDisplay = ({
       const nftId = getNFTId(request);
       const index = (nftId && Number.isNaN(Number(nftId))) ? decodeTokenId(nftId) : nftId;
       const canisterName = request?.canisterName ? request?.canisterName : '';
-      setSubtitle(index ? `${canisterName} #${index}` : `Uknown ${canisterName}`);
+      setSubtitle((index || index === 0) ? `${canisterName} #${index}` : `Uknown ${canisterName}`);
     } else {
       setSubtitle(request?.methodName ? formatMethodName(request?.methodName) : t('sign.warning.unknownCollection'));
     }
