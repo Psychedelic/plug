@@ -430,7 +430,7 @@ export class TransactionModule extends ControllerModuleBase {
   #requestCall() {
     return {
       methodName: 'requestCall',
-      handler: async (opts, metadata, args, batchTxId, transactionId, decodedArgs) => {
+      handler: async (opts, metadata, args, batchTxId, decodedArgs, transactionId) => {
         const { message, sender, callback } = opts;
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
