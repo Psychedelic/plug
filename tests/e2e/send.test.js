@@ -13,10 +13,10 @@ const sendViewButtonClick = async (page) => {
 // Utilities
 
 const selectToken = async (page, tokenName) => {
-  const selectTokenButton = await page.waitForTestIdSelector('select-token-button', true);
+  await page.waitForTestIdSelector('select-asset-dialog', { hidden: true });
+  const selectTokenButton = await page.getByTestId('select-token-button', true);
   await selectTokenButton.click();
-
-  const menuItem = await page.waitForTestIdSelector(`select-token-button-${tokenName}`, { visible: true });
+  const menuItem = await page.getByTestId(`select-token-button-${tokenName}`, true);
   await menuItem.click();
 };
 
@@ -78,9 +78,9 @@ describe('Send View', () => {
 
   test('switching between tokens', async () => {
     // TODO: Add assertions
-    await selectToken(page, 'ICP');
-    await selectToken(page, 'Cycles');
-    await selectToken(page, 'Wrapped ICP');
+    const tokenNames = ['ICP', 'Cycles', 'Wrapped ICP'];
+    const promises = tokenNames.map((name) => selectToken(page, name));
+    await Promise.all(promises);
   });
 
   test('replacing currency from ICP to USD and vice versa', async () => {
@@ -132,7 +132,6 @@ describe('Send View', () => {
 
     await page.waitForTimeout(15000);
     await popupPageUtils.refreshWallet(page);
-    await page.waitForTimeout(8000);
 
     const assetAmount = await page.waitForTestIdSelector('asset-amount-ICP');
     const assetAmountString = await page.evaluate((element) => element.innerText, assetAmount);

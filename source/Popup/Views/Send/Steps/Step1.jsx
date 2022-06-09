@@ -102,6 +102,7 @@ const Step1 = ({
             open={openAssets}
             titleTestId="select-asset"
             menuItemTestId="select-token-button"
+            data-testid="select-asset-dialog"
           />
 
         </Grid>

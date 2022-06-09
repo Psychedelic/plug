@@ -5,7 +5,7 @@ const EXTENSION_PATH = require('path').join(__dirname, '..', '..', 'extension', 
 
 const profileButtonSelector = '[aria-label="Emoji"]';
 
-jest.setTimeout(500000); // in milliseconds
+jest.setTimeout(50000); // in milliseconds
 
 global.secrets = {
   seedphrase: process.env.SEEDPHRASE,
@@ -56,6 +56,7 @@ const getXPathElements = async (page, elementType, content, wait = false) => {
 };
 
 const getTestIdSelector = (id) => `[data-testid="${id}"]`;
+
 const waitForTestIdSelector = (page, id, ...otherOptions) => {
   const selector = getTestIdSelector(id);
   return page.waitForSelector(selector, ...otherOptions);
@@ -145,22 +146,6 @@ const createSubAccount = async (page, subAccountName) => {
   await createAccountSubmitButton.click();
 };
 
-const switchToSubAccount = async (page, subAccountName) => {
-  await page.waitForTimeout(1000);
-  const profileButton = await page.$(profileButtonSelector);
-  await profileButton.click();
-
-  const [subAccountTab] = await getXPathElements(page, 'h6', subAccountName);
-  await subAccountTab.click();
-
-  const [accountIdElement] = await getXPathElements(page, 'h5', subAccountName, true);
-  await accountIdElement.click();
-
-  const accountId = await page.evaluate(navigator.clipboard.readText);
-
-  return accountId;
-};
-
 const optionsPageUtils = {
   importAccount,
   unlock,
@@ -168,7 +153,6 @@ const optionsPageUtils = {
 
 const popupPageUtils = {
   createSubAccount,
-  switchToSubAccount,
   refreshWallet,
   waitForProfileButton,
 };
