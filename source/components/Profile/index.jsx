@@ -33,8 +33,7 @@ import { toggleAccountHidden, useHiddenAccounts } from '@redux/profile';
 import { setICNSData } from '@redux/icns';
 import { useICPPrice } from '@redux/icp';
 import { ConnectAccountsModal } from '@components';
-import { useMenuItems } from '@hooks';
-import { useContacts } from '@hooks';
+import { useMenuItems, useContacts } from '@hooks';
 
 import { TABS, useRouter } from '../Router';
 import ActionDialog from '../ActionDialog';
@@ -218,12 +217,19 @@ const Profile = ({ disableProfile }) => {
                   type="text"
                   className={classes.createAccountInput}
                   error={!!error}
+                  data-testid="create-account-name-input"
                 />
               )}
             />
             {error && <span className={classes.errorMessage}>{error}</span>}
           </div>
         )}
+        cancelButtonProps={{
+          'data-testid': 'create-account-cancel-button',
+        }}
+        submitButtonProps={{
+          'data-testid': 'create-account-submit-button',
+        }}
         button={t('common.create')}
         buttonVariant="rainbow"
         onClick={handleCreateAccount}
@@ -293,6 +299,7 @@ const Profile = ({ disableProfile }) => {
                   alignLeft
                   image={Plus}
                   onClick={handleOpenCreateAccount}
+                  data-testid="create-account-button"
                 />
                 <Divider style={{ margin: '6px 0' }} />
                 {
@@ -300,10 +307,7 @@ const Profile = ({ disableProfile }) => {
                     <MenuItem
                       size="small"
                       key={item.name}
-                      name={item.name}
-                      image={item.image}
-                      alignLeft={item.alignLeft}
-                      onClick={() => item.onClick()}
+                      {...item}
                     />
                   ))
                 }

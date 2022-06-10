@@ -73,12 +73,14 @@ const useMenuItems = (toggleMenu) => {
       name: t('profile.settings'),
       alignLeft: true,
       onClick: () => navigator.navigate('settings'),
+      'data-testid': 'settings-button',
     },
     {
       image: RefreshIcon,
       name: t('profile.refreshWallet'),
       alignLeft: true,
       onClick: refreshWallet,
+      'data-testid': 'refresh-wallet-button',
     },
     {
       image: LockIcon,
@@ -89,6 +91,7 @@ const useMenuItems = (toggleMenu) => {
           navigator.navigate('login');
         });
       }),
+      'data-testid': 'lock-button',
     },
   ];
 };

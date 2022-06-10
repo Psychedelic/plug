@@ -141,6 +141,7 @@ const Step3 = ({
             onClick={onClick}
             fullWidth
             loading={loading}
+            data-testid="send-button"
           />
         </Grid>
       </Grid>

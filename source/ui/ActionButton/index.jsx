@@ -32,7 +32,7 @@ const ACTION_SETTINGS = {
   },
 };
 
-const ActionButton = ({ type, onClick }) => {
+const ActionButton = ({ type, onClick, buttonTestId }) => {
   const {
     name,
     icon,
@@ -63,7 +63,11 @@ const ActionButton = ({ type, onClick }) => {
             onMouseEnter={onMouseOver}
             onMouseLeave={onMouseLeave}
           >
-            <IconButton className={clsx(classes.icon, classes[iconClass])} disabled={disabled}>
+            <IconButton
+              data-testid={buttonTestId}
+              className={clsx(classes.icon, classes[iconClass])}
+              disabled={disabled}
+            >
               {icon}
             </IconButton>
             <span className={clsx(classes.text, classes[textClass])}>
@@ -83,7 +87,11 @@ const ActionButton = ({ type, onClick }) => {
         onMouseEnter={onMouseOver}
         onMouseLeave={onMouseLeave}
       >
-        <IconButton className={clsx(classes.icon, classes[iconClass])} disabled={disabled}>
+        <IconButton
+          className={clsx(classes.icon, classes[iconClass])}
+          disabled={disabled}
+          data-testid={buttonTestId}
+        >
           {icon}
         </IconButton>
         <span className={clsx(classes.text, classes[textClass])}>
@@ -96,7 +104,12 @@ const ActionButton = ({ type, onClick }) => {
 
 export default ActionButton;
 
+ActionButton.defaultProps = {
+  buttonTestId: 'action-button',
+};
+
 ActionButton.propTypes = {
   type: PropTypes.oneOf(['deposit', 'send', 'swap']).isRequired,
   onClick: PropTypes.func.isRequired,
+  buttonTestId: PropTypes.string,
 };

@@ -105,6 +105,7 @@ const IDInput = ({
               type="text"
               onChange={(e) => onChange(e.target.value)}
               placeholder={placeholder || t('send.inputId')}
+              data-testId="send-to-principalID-input"
             />
             <div className={classes.iconContainer}>
               {loading ? (

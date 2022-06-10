@@ -18,7 +18,7 @@ const Actions = ({ visible }) => {
     <div className={clsx(classes.root, visible ? classes.visible : classes.invisible)}>
       {
         ACTIONS.map((action) => (
-          <ActionButton key={action} type={action} onClick={navigate(action)} />
+          <ActionButton key={action} type={action} onClick={navigate(action)} buttonTestId={`open-${action}-view-button`} />
         ))
       }
     </div>
