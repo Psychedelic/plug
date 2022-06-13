@@ -167,7 +167,7 @@ const IDInput = ({
                     )}
                   />
                 )}
-                button={t('common.add')}
+                confirmText={t('common.add')}
                 buttonVariant="rainbow"
                 onClick={addContact}
                 onClose={() => setIsContactsOpened(false)}

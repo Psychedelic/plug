@@ -184,6 +184,12 @@ const Profile = ({ disableProfile }) => {
     setOpenCreateAccount(true);
   };
 
+  const handleDeclineConnect = () => {
+    executeAccountSwitch(selectedWallet);
+    setOpenConnectAccount(false);
+    setSelectedWallet(null);
+  };
+
   return (
     <>
       <HoverAnimation
@@ -224,14 +230,14 @@ const Profile = ({ disableProfile }) => {
             {error && <span className={classes.errorMessage}>{error}</span>}
           </div>
         )}
-        button={t('common.create')}
+        confirmText={t('common.create')}
         buttonVariant="rainbow"
         onClick={handleCreateAccount}
         onClose={() => setOpenCreateAccount(false)}
       />
       <ConnectAccountsModal
         open={openConnectAccount}
-        onClose={() => setOpenConnectAccount(false)}
+        onClose={handleDeclineConnect}
         onConfirm={() => executeAccountSwitch(selectedWallet)}
         wallets={accounts}
         connectedWallets={connectedWallets}
