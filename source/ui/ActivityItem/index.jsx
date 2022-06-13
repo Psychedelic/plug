@@ -6,7 +6,7 @@ import extension from 'extensionizer';
 import ReactJson from 'react-json-view';
 
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
-import { getICNetworkStatusUrl } from '@shared/constants/urls';
+import { getDashboardTransactionURL } from '@shared/constants/urls';
 
 import Dialog from '../Dialog';
 import PlugItem from './components/items/PlugItem';
@@ -18,7 +18,7 @@ import useStyles from './styles';
 import { getAddress } from './utils';
 
 const openICNetworkTx = (hash) => {
-  extension.tabs.create({ url: getICNetworkStatusUrl(hash) });
+  extension.tabs.create({ url: getDashboardTransactionURL(hash) });
 };
 
 const ActivityItem = (props) => {

@@ -6,7 +6,7 @@ import ArrowUpRight from '@assets/icons/arrow-up-right.png';
 import extension from 'extensionizer';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { getICRocksPrincipalUrl } from '@shared/constants/urls';
+import { getPrincipalDashboardURL } from '@shared/constants/urls';
 import useStyles from './styles';
 
 const CanisterInfoItem = ({
@@ -19,7 +19,7 @@ const CanisterInfoItem = ({
   } = canister || {};
 
   const createICRocksPrincipalTab = useCallback(() => {
-    extension.tabs.create({ url: getICRocksPrincipalUrl(id) });
+    extension.tabs.create({ url: getPrincipalDashboardURL(id) });
   }, [id]);
 
   return (
