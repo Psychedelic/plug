@@ -230,7 +230,7 @@ const useSteps = () => {
 
   const conversionPrice = amount / secondaryValue.price;
 
-  const rightButton = <LinkButton value={t('common.cancel')} onClick={() => navigator.navigate('home')} />;
+  const rightButton = <LinkButton value={t('common.cancel')} onClick={() => navigator.navigate('home')} spanTestId="cancel-button" />;
 
   const step2c = {
     component: <Step2c

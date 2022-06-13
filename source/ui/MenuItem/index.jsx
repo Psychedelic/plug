@@ -21,6 +21,7 @@ const MenuItem = ({
   endText,
   symbol,
   className,
+  ...other
 }) => {
   const classes = useStyles();
   return (
@@ -32,6 +33,7 @@ const MenuItem = ({
       classes={{
         root: selected ? classes.selected : null,
       }}
+      {...other}
     >
       {
         icon

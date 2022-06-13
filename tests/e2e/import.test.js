@@ -1,31 +1,17 @@
 describe('Import/Create', () => {
-  let chromeBrowser;
+  let browser;
   let page;
 
   const passwordErrorLabel = '#options-root > div > div.MuiContainer-root.MuiContainer-maxWidthSm > div > div.MuiGrid-root.makeStyles-passwordError-4.MuiGrid-item.MuiGrid-grid-xs-12 > p';
 
   const badSeedphrase = 'sadf adsf adfdfasd adfad adfafd sdfsd sdfsdf sdfds sdfd sdf sfsfs sdfadsf';
 
-  const getButtonCollection = async (page) => {
-    return await page.$$('button');
-  }
-
-  const getImportButton = async (page) => {
-    const buttonCollection = await getButtonCollection(page);
-    return buttonCollection[0];
-  };
-
-  const getCreateButton = async (page) => {
-    const buttonCollection = await getButtonCollection(page);
-    return buttonCollection[1];
-  };
-
   beforeAll(async () => {
-    chromeBrowser = await setupChrome();
+    browser = await setupChrome();
   });
-  
+
   beforeEach(async () => {
-    page = await chromeBrowser.newPage();
+    page = await utils.createNewPage(browser);
     await page.goto(chromeData.optionsUrl);
   });
 
@@ -34,164 +20,193 @@ describe('Import/Create', () => {
   });
 
   afterAll(async () => {
-    await chromeBrowser.close();
+    await browser.close();
   });
 
-  describe('Import', () => {
+  describe('Importing wallet', () => {
     beforeEach(async () => {
-      const importButton = await utils.getButtonWithIndex(page, 0);
+      const importButton = await page.getByTestId('import-wallet-button');
       await importButton.click();
     });
 
-    test('Fails on incorrect seedphrase', async () => {
-      const importInputElement = await utils.getElement(page, 'textarea');
-      await importInputElement.type(badSeedphrase);
+    test('failing on incorrect seedphrase', async () => {
+      const seedphraseTextarea = await page.getByTestId('seedphrase-input');
+      await seedphraseTextarea.click();
+      await seedphraseTextarea.type(badSeedphrase);
 
-      const submitImport = await utils.getButtonWithIndex(page, 0);
-      await submitImport.click();
+      const submitImportButton = await page.getByTestId('confirm-seedphrase-button');
+      await submitImportButton.click();
 
-      const updatedImportBtn = await utils.getButtonWithIndex(page, 0);
-      const importButtonClassName = await (await updatedImportBtn.getProperty('className')).jsonValue();
+      const updatedImportButton = await page.getByTestId('confirm-seedphrase-button');
+
+      const importButtonClassName = await (await updatedImportButton.getProperty('className')).jsonValue();
       const importButtonClassNameArray = importButtonClassName.split(' ');
 
       expect(importButtonClassNameArray).toEqual(expect.arrayContaining(['Mui-disabled']));
     });
 
-    test('Fails on missmatched passwords', async () => {
-      const importInputElement = await utils.getElement(page, 'textarea');
-      await importInputElement.type(secrets.seedphrase);
+    test('failing on missmatched passwords', async () => {
+      const seedphraseTextarea = await page.getByTestId('seedphrase-input');
+      await seedphraseTextarea.click();
+      await seedphraseTextarea.type(secrets.seedphrase);
 
-      const submitImport = await utils.getButtonWithIndex(page, 0);
-      await submitImport.click();
+      const submitImportButton = await page.getByTestId('confirm-seedphrase-button');
+      await submitImportButton.click();
 
-      await utils.waitForRender(500);
-      const [passwordInput, confirmPasswordInput] = await utils.getInputs(page);
-      await passwordInput.type('TestPassword123');
+      const newPasswordInput = await page.getByTestId('new-password-input');
+      const confirmPasswordInput = await page.getByTestId('confirm-password-input');
+
+      await newPasswordInput.click();
+      await newPasswordInput.type('TestPassword123');
+      await confirmPasswordInput.click();
       await confirmPasswordInput.type('MissMatchedPassword');
 
-      const submitPassword = await utils.getButtonWithIndex(page, 0);
-      await submitPassword.click();
+      const submitPasswordButton = await page.getByTestId('password-confirmation-button');
+      await submitPasswordButton.click();
 
       await page.waitForSelector(passwordErrorLabel);
-      const labelErrorElement = await page.$(passwordErrorLabel)
-      const value = await page.evaluate(el => el.textContent, labelErrorElement);
+      const labelErrorElement = await page.$(passwordErrorLabel);
+      const errorMessage = await page.evaluate((el) => el.textContent, labelErrorElement);
 
-      expect(value).toBe('The passwords gotta match, smh!');
+      expect(errorMessage).toBe('The passwords gotta match, smh!');
     });
 
-    test('Fails on password shorter than 12 characters', async () => {
-      const importInputElement = await utils.getElement(page, 'textarea');
-      await importInputElement.type(secrets.seedphrase);
+    test('failing on password shorter than 12 characters', async () => {
+      const seedphraseTextarea = await page.getByTestId('seedphrase-input');
+      await seedphraseTextarea.click();
+      await seedphraseTextarea.type(secrets.seedphrase);
 
-      const submitImport = await utils.getButtonWithIndex(page, 0);
-      await submitImport.click();
+      const submitImportButton = await page.getByTestId('confirm-seedphrase-button');
+      await submitImportButton.click();
 
-      const [passwordInput, confirmPasswordInput] = await utils.getInputs(page);
-      await passwordInput.type('123');
+      const newPasswordInput = await page.getByTestId('new-password-input');
+      const confirmPasswordInput = await page.getByTestId('confirm-password-input');
+
+      await newPasswordInput.click();
+      await newPasswordInput.type('123');
+      await confirmPasswordInput.click();
       await confirmPasswordInput.type('123');
 
-      const submitPassword = await utils.getButtonWithIndex(page, 0);
-      await submitPassword.click();
+      const submitPasswordButton = await page.getByTestId('password-confirmation-button');
+      await submitPasswordButton.click();
 
       await page.waitForSelector(passwordErrorLabel);
-      const labelErrorElement = await page.$(passwordErrorLabel)
-      const value = await page.evaluate(el => el.textContent, labelErrorElement);
+      const labelErrorElement = await page.$(passwordErrorLabel);
+      const value = await page.evaluate((el) => el.textContent, labelErrorElement);
 
       expect(value).toBe('The minimum is 12 characters, smh!');
     });
 
-    test('Correctly imports', async () => {
-      const importInputElement = await utils.getElement(page, 'textarea');
-      await importInputElement.type(secrets.seedphrase);
+    test('importing wallet correctly', async () => {
+      const seedphraseTextarea = await page.getByTestId('seedphrase-input');
+      await seedphraseTextarea.click();
+      await seedphraseTextarea.type(secrets.seedphrase);
 
-      const submitImport = await utils.getButtonWithIndex(page, 0);
-      await submitImport.click();
+      const submitImportButton = await page.getByTestId('confirm-seedphrase-button');
+      await submitImportButton.click();
 
-      const [passwordInput, confirmPasswordInput] = await utils.getInputs(page, true);
-      await passwordInput.type(secrets.password);
+      const newPasswordInput = await page.getByTestId('new-password-input');
+      const confirmPasswordInput = await page.getByTestId('confirm-password-input');
+
+      await newPasswordInput.click();
+      await newPasswordInput.type(secrets.password);
+      await confirmPasswordInput.click();
       await confirmPasswordInput.type(secrets.password);
 
-      const submitPassword = await utils.getButtonWithIndex(page, 0);
-      await submitPassword.click();
+      const submitPasswordButton = await page.getByTestId('password-confirmation-button');
+      await submitPasswordButton.click();
 
       await page.goto(chromeData.popupUrl);
 
-      const popupPasswordInput = await utils.getInputWithIndex(page, 0, true);
+      const popupPasswordInput = await page.getByTestId('enter-password-input');
       await popupPasswordInput.type(secrets.password);
 
-      const unlockPlugButton = await utils.getButtonWithIndex(page, 0);
+      const unlockPlugButton = await page.getByTestId('unlock-wallet-button');
       await unlockPlugButton.click();
 
-      const [plugBanner] = await utils.getXPathElements(page, 'span', 'Alpha Release', true);
-      const value = await page.evaluate(el => el.textContent, plugBanner);
+      const plugBanner = await page.getByTestId('banner-text', true);
+
+      const value = await page.evaluate((el) => el.textContent, plugBanner);
 
       expect(value).toMatch(/Plug/i);
     });
   });
 
-  describe('Create', () => {
+  describe('Creating wallet', () => {
     beforeEach(async () => {
-      const createButton = await utils.getButtonWithIndex(page, 1);
+      const createButton = await page.getByTestId('create-wallet-button');
       await createButton.click();
     });
 
-    test('Fails on missmatched passwords', async () => {
-      const [passwordInput, confirmPasswordInput] = await utils.getInputs(page);
-      await passwordInput.type('TestPassword123');
+    test('fails on missmatched passwords', async () => {
+      const newPasswordInput = await page.getByTestId('new-password-input');
+      await newPasswordInput.click();
+      await newPasswordInput.type('TestPassword123');
+
+      const confirmPasswordInput = await page.getByTestId('confirm-password-input');
+      await confirmPasswordInput.click();
       await confirmPasswordInput.type('MissMatchedPassword');
 
-      const submitPasswordButton = await utils.getButtonWithIndex(page, 0);
+      const submitPasswordButton = await page.getByTestId('password-confirmation-button');
       await submitPasswordButton.click();
 
       await page.waitForSelector(passwordErrorLabel);
-      const labelErrorElement = await page.$(passwordErrorLabel)
-      const value = await page.evaluate(el => el.textContent, labelErrorElement);
+      const labelErrorElement = await page.$(passwordErrorLabel);
+      const value = await page.evaluate((el) => el.textContent, labelErrorElement);
 
       expect(value).toBe('The passwords gotta match, smh!');
     });
 
-    test('Fails on password shorter than 12 characters', async () => {
-      const [passwordInput, confirmPasswordInput] = await utils.getInputs(page);
-      await passwordInput.type('123');
+    test('fails on password shorter than 12 characters', async () => {
+      const newPasswordInput = await page.getByTestId('new-password-input');
+      await newPasswordInput.click();
+      await newPasswordInput.type('123');
+
+      const confirmPasswordInput = await page.getByTestId('confirm-password-input');
+      await confirmPasswordInput.click();
       await confirmPasswordInput.type('123');
 
-      const submitPasswordButton = await utils.getButtonWithIndex(page, 0);
+      const submitPasswordButton = await page.getByTestId('password-confirmation-button');
       await submitPasswordButton.click();
 
       await page.waitForSelector(passwordErrorLabel);
-      const labelErrorElement = await page.$(passwordErrorLabel)
-      const value = await page.evaluate(el => el.textContent, labelErrorElement);
+      const labelErrorElement = await page.$(passwordErrorLabel);
+      const value = await page.evaluate((el) => el.textContent, labelErrorElement);
 
       expect(value).toBe('The minimum is 12 characters, smh!');
     });
 
-    test('Correctly creates', async () => {
-      const [passwordInput, confirmPasswordInput] = await utils.getInputs(page);
-      await passwordInput.type(secrets.password);
+    test('correctly creates', async () => {
+      const newPasswordInput = await page.getByTestId('new-password-input');
+      await newPasswordInput.click();
+      await newPasswordInput.type(secrets.password);
+
+      const confirmPasswordInput = await page.getByTestId('confirm-password-input');
+      await confirmPasswordInput.click();
       await confirmPasswordInput.type(secrets.password);
 
-      const submitPasswordButton = await utils.getButtonWithIndex(page, 0);
+      const submitPasswordButton = await page.getByTestId('password-confirmation-button');
       await submitPasswordButton.click();
 
-      const [revealSeedphraseElement] = await utils.getXPathElements(page, 'span', 'Reveal Secret Recovery Phrase', true);
+      const revealSeedphraseElement = await page.getByTestId('reveal-seedphrase-button', true);
       await revealSeedphraseElement.click();
 
-      const confirmSeedphraseElement = await utils.getInputWithIndex(page, 0);
-      await confirmSeedphraseElement.click();
+      const seedphraseElement = await page.getByTestId('seedphrase-confirmation-checkbox');
+      await seedphraseElement.click();
 
-      const continueBtn = await utils.getButtonWithIndex(page, 0);
-      await continueBtn.click();
+      const seedphraseContinueButton = await page.getByTestId('reveal-seedphrase-continue-button');
+      await seedphraseContinueButton.click();
 
       await page.goto(chromeData.popupUrl);
-
-      const popupPasswordInput = await utils.getInputWithIndex(page, 0, true);
+      const popupPasswordInput = await page.getByTestId('enter-password-input', true);
+      await popupPasswordInput.click();
       await popupPasswordInput.type(secrets.password);
 
-      const unlockPlugButton = await utils.getButtonWithIndex(page, 0);
+      const unlockPlugButton = await page.getByTestId('unlock-wallet-button');
       await unlockPlugButton.click();
 
-      const [plugBanner] = await utils.getXPathElements(page, 'span', 'Alpha Release', true);
-      const value = await page.evaluate(el => el.textContent, plugBanner);
+      const plugBanner = await page.getByTestId('banner-text', true);
+      const value = await page.evaluate((el) => el.textContent, plugBanner);
 
       expect(value).toMatch(/Plug/i);
     });

@@ -38,7 +38,7 @@ const SeedPhraseStep = ({ handleNextStep, mnemonic }) => {
           <SeedPhrase words={mnemonic.split(' ')} />
         </Grid>
         <Grid item xs={12}>
-          <Checkbox style={{ margin: 0 }} checked={checked} handleChange={handleChangeCheckbox} label={t('welcome.seedCheckbox')} />
+          <Checkbox style={{ margin: 0 }} checked={checked} handleChange={handleChangeCheckbox} label={t('welcome.seedCheckbox')} data-testid="seedphrase-confirmation-checkbox" />
         </Grid>
         <Grid item xs={12}>
           <Button
@@ -47,6 +47,7 @@ const SeedPhraseStep = ({ handleNextStep, mnemonic }) => {
             onClick={handleNextStep}
             fullWidth
             disabled={!checked || !reveal}
+            data-testid="reveal-seedphrase-continue-button"
           />
         </Grid>
       </>
