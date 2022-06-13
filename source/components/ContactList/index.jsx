@@ -49,7 +49,7 @@ const ContactList = ({
             open={open}
             title={t('contacts.deleteTitle')}
             content={<Typography>{t('contacts.deleteText')} <b>{selectedContact.name}</b>?</Typography>}
-            button={t('contacts.deleteButton')}
+            confirmText={t('contacts.deleteButton')}
             buttonVariant="danger"
             onClick={() => { handleRemoveContact(selectedContact); setOpen(false); }}
             onClose={() => setOpen(false)}
