@@ -19,7 +19,7 @@ import { setUseICNS } from '@redux/icns';
 import { isClockInSync } from '@shared/utils/time';
 import { getApp, getUseICNS, getWalletsConnectedToUrl } from '@modules/storageManager';
 import { getTabURL } from '@shared/utils/chrome-tabs';
-import extensionizer from 'extensionizer';
+import extension from 'extensionizer';
 
 const Home = () => {
   const { t } = useTranslation();
@@ -33,6 +33,7 @@ const Home = () => {
   const [wallets, setWallets] = useState([]);
   const [isConnectAccountsOpen, setConnectAccountsOpen] = useState(false);
   const [connectedWallets, setConnectedWallets] = useState([]);
+
   const [app, setApp] = useState(null);
   const [tab, setTab] = useState(null);
 
@@ -65,7 +66,7 @@ const Home = () => {
   ], [assetsLoading, collectionsLoading, transactionsLoading]);
 
   const validateProviderConnection = (state) => {
-    extensionizer.tabs.query({ active: true, lastFocusedWindow: true }, (browserTabs) => {
+    extension.tabs.query({ active: true, lastFocusedWindow: true }, (browserTabs) => {
       const currentTab = browserTabs?.[0];
       const url = getTabURL(currentTab);
       const ids = state.wallets.map((_, idx) => idx);
@@ -83,6 +84,15 @@ const Home = () => {
         }
       });
     });
+  };
+
+  const updateProviderConnection = async () => {
+    const currentWallet = wallets?.[walletNumber] || null;
+    if (currentWallet) {
+      extension.tabs.query({ active: true }, (activeTabs) => {
+        extension.tabs.sendMessage(activeTabs[0].id, { action: 'updateConnection' });
+      });
+    }
   };
 
   useEffect(() => {
@@ -116,7 +126,7 @@ const Home = () => {
         wallets={wallets}
         open={isConnectAccountsOpen}
         onClose={() => setConnectAccountsOpen(false)}
-        onConfirm={() => setConnectAccountsOpen(false)}
+        onConfirm={updateProviderConnection}
         connectedWallets={connectedWallets}
         app={app}
         tab={tab}
