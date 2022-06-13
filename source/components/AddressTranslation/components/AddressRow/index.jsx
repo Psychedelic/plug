@@ -8,7 +8,7 @@ import clsx from 'clsx';
 
 import { Dialog } from '@ui';
 import { ADDRESS_TYPES } from '@shared/constants/addresses';
-import { getDashboardAccountUrl } from '@shared/constants/urls';
+import { getAccountDashboardURL } from '@shared/constants/urls';
 import ArrowUpRight from '@assets/icons/arrow-up-right.png';
 import shortAddress from '@shared/utils/short-address';
 
@@ -23,7 +23,7 @@ const AddressRow = ({
   const [modalOpen, setModalOpen] = useState(false);
 
   const openExplorer = (accountId) => () => !loading && extension.tabs.create({
-    url: getDashboardAccountUrl(accountId),
+    url: getAccountDashboardURL(accountId),
   });
   const isICP = type === ADDRESS_TYPES.ACCOUNT;
   const isICNS = type === ADDRESS_TYPES.ICNS;

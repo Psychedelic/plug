@@ -10,7 +10,7 @@ import useStyles from './styles';
 import UserIcon from '../../../UserIcon';
 
 const ConnectAccountItem = ({
-  connected, wallet, checked, onCheck,
+  connected, wallet, checked, onCheck, name,
 }) => {
   const classes = useStyles();
   return (
@@ -29,7 +29,7 @@ const ConnectAccountItem = ({
           handleChange={!connected && onCheck(wallet.walletNumber)}
         />
         <UserIcon size="small" icon={wallet.icon} style={{ marginLeft: -6, marginRight: 12 }} />
-        <Typography variant="h6" className={classes.walletName}>{wallet.name}</Typography>
+        <Typography variant="h6" className={classes.walletName}>{name || ''}</Typography>
       </div>
       <Typography variant="h6">{shortAddress(wallet.principal)}</Typography>
     </div>
@@ -41,6 +41,7 @@ ConnectAccountItem.propTypes = {
   connected: PropTypes.bool.isRequired,
   checked: PropTypes.bool.isRequired,
   onCheck: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
 };
 
 export default ConnectAccountItem;

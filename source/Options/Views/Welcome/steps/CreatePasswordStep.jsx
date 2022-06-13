@@ -71,6 +71,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
               value={password}
               onChange={handleChangePassword}
               type="password"
+              data-testid="new-password-input"
             />
           )}
         />
@@ -85,6 +86,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
               value={confirmPassword}
               onChange={handleChangeConfirmPassword}
               type="password"
+              data-testid="confirm-password-input"
             />
           )}
         />
@@ -95,6 +97,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
           value={t('welcome.passwordButton')}
           onClick={handleCreateAccount}
           fullWidth
+          data-testid="password-confirmation-button"
         />
       </Grid>
       <Grid item xs={12}>

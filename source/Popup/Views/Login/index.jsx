@@ -84,6 +84,7 @@ const Login = ({ redirect }) => {
           id="password"
           error={error}
           autoFocus
+          data-testid="enter-password-input"
         />
         <Button
           value={t('login.unlock')}
@@ -91,6 +92,7 @@ const Login = ({ redirect }) => {
           fullWidth
           disabled={password === ''}
           onClick={handleLogin}
+          data-testid="unlock-wallet-button"
         />
       </div>
 

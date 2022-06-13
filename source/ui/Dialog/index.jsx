@@ -9,7 +9,16 @@ import MenuItem from '../MenuItem';
 import useStyles from './styles';
 
 const Dialog = ({
-  title, items, onClose, selectedValue, open, component, closeable,
+  title,
+  items,
+  onClose,
+  selectedValue,
+  open,
+  component,
+  closeable,
+  titleTestId,
+  menuItemTestId,
+  ...rest
 }) => {
   const classes = useStyles();
 
@@ -31,29 +40,31 @@ const Dialog = ({
       onClose={handleClose}
       open={open}
       PaperProps={{ className: classes.paper }}
+      {...rest}
     >
       {title && (
         <DialogTitle disableTypography>
-          <span className={classes.title}>{title}</span>
+          <span className={classes.title} data-testid={titleTestId}>
+            {title}
+          </span>
           <IconButton className={classes.closeButton} onClick={handleClose}>
             <CloseIcon />
           </IconButton>
         </DialogTitle>
       )}
       <MenuList className={classes.root}>
-        {
-          (items && items.length > 0)
-            ? items.map((item, index) => (
-              <MenuItem
-                key={`${index.toString()}-${item.name}`}
-                onClick={() => handleItemClick(item)}
-                border={index !== items.length - 1}
-                size="medium"
-                {...item}
-              />
-            ))
-            : component
-        }
+        {items && items.length > 0
+          ? items.map((item, index) => (
+            <MenuItem
+              key={`${index.toString()}-${item.name}`}
+              onClick={() => handleItemClick(item)}
+              border={index !== items.length - 1}
+              size="medium"
+              {...item}
+              data-testid={`${menuItemTestId}-${item.name}`}
+            />
+          ))
+          : component}
       </MenuList>
     </MuiDialog>
   );
@@ -65,17 +76,23 @@ Dialog.defaultProps = {
   component: null,
   selectedValue: null,
   closeable: true,
+  titleTestId: 'dialog-title',
+  menuItemTestId: 'dialog-menu-item',
 };
 
 Dialog.propTypes = {
   title: PropTypes.string.isRequired,
-  items: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired,
-  })).isRequired,
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   selectedValue: PropTypes.objectOf(PropTypes.string),
   component: PropTypes.node,
   closeable: PropTypes.bool,
+  titleTestId: PropTypes.string,
+  menuItemTestId: PropTypes.string,
 };

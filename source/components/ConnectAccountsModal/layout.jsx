@@ -20,6 +20,7 @@ const ConnectAccountsModalLayout = ({
   onCheckWallet,
   connectedWallets,
   walletsToUpdate,
+  icnsNames,
 }) => {
   const { t } = useTranslation();
   const { onScroll, fullScroll } = useScroll();
@@ -48,6 +49,7 @@ const ConnectAccountsModalLayout = ({
           const alreadyConnected = connectedWallets.includes(wallet.walletNumber);
           return (
             <ConnectAccountItem
+              name={icnsNames[wallet?.principal] || wallet?.name}
               wallet={wallet}
               connected={alreadyConnected}
               checked={
@@ -73,10 +75,12 @@ ConnectAccountsModalLayout.propTypes = {
   app: PropTypes.objectOf(PropTypes.string).isRequired,
   tab: PropTypes.objectOf(PropTypes.string).isRequired,
   selectAllWallets: PropTypes.bool.isRequired,
+  icnsNames: PropTypes.objectOf(PropTypes.string),
 };
 
 ConnectAccountsModalLayout.defaultProps = {
   connectedWallets: [],
+  icnsNames: {},
 };
 
 export default ConnectAccountsModalLayout;
