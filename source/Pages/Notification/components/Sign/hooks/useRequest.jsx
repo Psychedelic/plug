@@ -6,6 +6,7 @@ import ReactJson from 'react-json-view';
 // import { v4 as uuidv4 } from 'uuid';
 import { validateCanisterId } from '@shared/utils/ids';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import { reviewPendingTransaction } from '@modules/storageManager';
 
 const portRPC = new PortRPC({
   name: 'notification-port',
@@ -30,7 +31,7 @@ const formatRequest = ({ requestInfo, canisterInfo, payload }) => ({
   payload,
 });
 
-const useRequests = (incomingRequest, callId, portId) => {
+const useRequests = (incomingRequest, callId, portId, transactionId) => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [request] = useState(formatRequest(incomingRequest));
@@ -48,8 +49,8 @@ const useRequests = (incomingRequest, callId, portId) => {
   const handleResponse = async (status) => {
     request.status = status;
     const handler = request.type === 'sign' ? 'handleSign' : 'handleCall';
-
-    const success = await portRPC.call(handler, [status, request, callId, portId]);
+    reviewPendingTransaction(transactionId, async () => {});
+    const success = await portRPC.call(handler, [status, request, callId, portId, transactionId]);
     if (success) {
       window.close();
     }

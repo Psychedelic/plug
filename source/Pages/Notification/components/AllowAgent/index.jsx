@@ -25,6 +25,7 @@ import clsx from 'clsx';
 import ErrorScreen from '../NotificationError';
 import initConfig from '../../../../locales';
 import useStyles from './styles';
+import { reviewPendingTransaction } from '@modules/storageManager';
 
 i18n.use(initReactI18next).init(initConfig);
 
@@ -37,7 +38,7 @@ const portRPC = new PortRPC({
 portRPC.start();
 
 const AllowAgent = ({
-  args, metadata, callId, portId, setOnTimeout,
+  args, metadata, callId, portId, setOnTimeout, transactionId,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
@@ -61,11 +62,13 @@ const AllowAgent = ({
       (accum, canisterInfo) => ({ ...accum, [canisterInfo.id]: canisterInfo }),
       {},
     );
+    reviewPendingTransaction(transactionId, () => {});
     const success = await portRPC.call('handleAllowAgent', [
       url,
       { status, whitelist },
       callId,
       portId,
+      transactionId,
     ]);
     setHandled(true);
     if (success) {

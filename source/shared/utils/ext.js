@@ -15,6 +15,7 @@ export const from32bits = (ba) => {
 };
 
 export const decodeTokenId = (tokenId) => {
+  if (!tokenId) return null;
   const binaryArray = Principal.from(tokenId).toUint8Array();
   const index = from32bits(binaryArray.slice(-4));
   return index;

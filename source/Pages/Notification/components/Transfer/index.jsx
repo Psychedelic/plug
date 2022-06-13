@@ -19,7 +19,7 @@ import Data from './components/Data';
 i18n.use(initReactI18next).init(initConfig);
 
 const Transfer = ({
-  args, callId, portId, metadata, setOnTimeout,
+  args, callId, portId, metadata, setOnTimeout, transactionId,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -38,7 +38,7 @@ const Transfer = ({
     principalId,
     error,
     loading,
-  } = useRequests([args], callId, portId);
+  } = useRequests([args], callId, portId, transactionId);
   useEffect(() => {
     setOnTimeout(() => () => {
       handleDeclineAll();
@@ -102,7 +102,7 @@ const Transfer = ({
                 <Button
                   variant="default"
                   value={t('common.decline')}
-                  onClick={() => window.close()}
+                  onClick={window.close}
                   fullWidth
                   style={{ width: '96%' }}
                   disabled={loading}
@@ -122,7 +122,7 @@ const Transfer = ({
                   value={`${t('transfer.decline')} ${requestCount} ${t(
                     'transfer.transactions',
                   )}`}
-                  onClick={() => handleDeclineAll()}
+                  onClick={handleDeclineAll}
                   style={{ marginTop: 24 }}
                 />
               )}

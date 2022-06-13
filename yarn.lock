@@ -1779,10 +1779,10 @@
     text-encoding-shim "^1.0.5"
     tweetnacl "^1.0.3"
 
-"@psychedelic/plug-inpage-provider@2.1.0":
-  version "2.1.0"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/2.1.0/27bb21c95061238dd046135c8e162c2087c8421a8c37ab96a40cf023fc8225a3#0cf43430a3767d13131017e7ac0e6aefd9535897"
-  integrity sha512-NvPSVC84Cec5oeyLiB6vWl765CEz4c+O4ZNhL7BjWR6xWOZAkMJlmsBX9mTuGeHRjO5nWftdeFHMNh4u+Bhaog==
+"@psychedelic/plug-inpage-provider@2.1.1":
+  version "2.1.1"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/2.1.1/8fb073d7ee8cf970dc7f8d1d8577d360e928a1a9952d210c9bb78d1dd6111dc5#824c4c6999e3d81b9c2d9bb83ea6475b45326473"
+  integrity sha512-kGR/ctFqQK2OlF/VIvWxNC93xPAM2+LXoKSyu4xA/N5FU8NX0ignmMtwmEAichGw/W2GlrL0MAEyYRxldffzew==
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
@@ -12634,15 +12634,15 @@ utila@~0.4:
   resolved "https://registry.yarnpkg.com/utila/-/utila-0.4.0.tgz#8a16a05d445657a3aea5eecc5b12a4fa5379772c"
   integrity sha1-ihagXURWV6Oupe7MWxKk+lN5dyw=
 
-uuid@8.3.2, uuid@^8.3.2:
-  version "8.3.2"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
-  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
-
 uuid@^3.3.2:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
+
+uuid@^8.3.2:
+  version "8.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
+  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
 v8-compile-cache@^2.0.3:
   version "2.3.0"

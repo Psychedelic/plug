@@ -35,8 +35,9 @@ const NFTDisplay = ({
   useEffect(() => {
     if (request?.decodedArguments) {
       const nftId = getNFTId(request);
-      const index = Number.isNaN(Number(nftId)) ? decodeTokenId(nftId) : nftId;
-      setSubtitle(`${request?.canisterName ? request?.canisterName : ''} #${index}`);
+      const index = (nftId && Number.isNaN(Number(nftId))) ? decodeTokenId(nftId) : nftId;
+      const canisterName = request?.canisterName ? request?.canisterName : '';
+      setSubtitle((index || index === 0) ? `${canisterName} #${index}` : `Uknown ${canisterName}`);
     } else {
       setSubtitle(request?.methodName ? formatMethodName(request?.methodName) : t('sign.warning.unknownCollection'));
     }
