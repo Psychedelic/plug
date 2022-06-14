@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
-import extension from 'extensionizer';
 import ReactJson from 'react-json-view';
 
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
-import { getDashboardTransactionURL } from '@shared/constants/urls';
 
 import Dialog from '../Dialog';
 import PlugItem from './components/items/PlugItem';
@@ -15,11 +13,10 @@ import NFTItem from './components/items/NFTItem';
 import TokenItem from './components/items/TokenItem';
 import LiquidityItem from './components/items/LiquidityItem';
 import useStyles from './styles';
-import { getAddress } from './utils';
+import { getAddress, openICNetworkTx } from './utils';
+import JellyItem from './components/items/JellyItem';
 
-const openICNetworkTx = (hash) => {
-  extension.tabs.create({ url: getDashboardTransactionURL(hash) });
-};
+const JELLY_CANISTER_ID = 'getti-aiaaa-aaaah-abkkq-cai';
 
 const ActivityItem = (props) => {
   const {
@@ -77,7 +74,9 @@ const ActivityItem = (props) => {
     if (type === 'SWAP') {
       return SwapItem;
     }
-
+    if (canisterId === JELLY_CANISTER_ID) {
+      return JellyItem;
+    }
     if (type.includes('LIQUIDITY')) {
       return LiquidityItem;
     }
@@ -158,10 +157,10 @@ ActivityItem.defaultProps = {
 };
 
 ActivityItem.propTypes = {
-  canisterInfo: PropTypes.objectOf(PropTypes.any),
+  canisterInfo: PropTypes.objectOf(PropTypes.string),
   type: PropTypes.number,
   canisterId: PropTypes.string,
-  details: PropTypes.objectOf(PropTypes.any),
+  details: PropTypes.objectOf(PropTypes.string),
   to: PropTypes.string,
   from: PropTypes.string,
   amount: PropTypes.oneOfType([
