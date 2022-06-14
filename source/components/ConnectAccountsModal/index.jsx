@@ -82,16 +82,17 @@ const ConnectAccountsModal = ({
     setSelectAllWallets(event.target.checked);
     setWalletsToUpdate(newWalletsToUpdate);
   };
-
+  const disabled = !Object.values(walletsToUpdate).some((value) => value);
   return (
     <ActionDialog
       open={open}
       className={classes.modalContainer}
-      confirmText={t('common.allow')}
+      confirmText={t('common.connect')}
       cancelText={t('common.decline')}
       buttonVariant="rainbow"
       onClick={handleConfirm}
       onClose={onClose}
+      submitButtonProps={{ disabled }}
       content={(
         <ConnectAccountsModalLayout
           tab={tab}

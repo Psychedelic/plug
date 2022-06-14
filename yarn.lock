@@ -1747,10 +1747,10 @@
     cross-fetch "^3.1.4"
     crypto-js "^4.1.1"
 
-"@psychedelic/plug-controller@0.17.0":
-  version "0.17.0"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.17.0/d0a7c716a95e32077cbab1e41507351f15073c1ba8747c5550024ee62ab88bcd#cf2a8b29275b56408ab79929c5b3b38f8bfac474"
-  integrity sha512-c9c5TnB6fN0toCt8rzdlUwThPOSqcUrDRRRUYoemId2XHsmVqB2wCQbQKrq4u1HXYEXcmcCMqMt60qwNmbug2g==
+"@psychedelic/plug-controller@0.17.2":
+  version "0.17.2"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.17.2/9603a67bb3d798b7c54323654ab8f477505e42a43dc5b11f8f23ad126c5795c6#89a597ca104b5d1959aad3a444c6c088cd206309"
+  integrity sha512-5nHVGu1qQZ4149WngxEf3Y5a00HWe3nm6Nv0ZY+Jy+VnmHUn31vSBsbDL0qbIcF+xdjpX/G0tjsUzV20DnbrsQ==
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
@@ -1779,10 +1779,10 @@
     text-encoding-shim "^1.0.5"
     tweetnacl "^1.0.3"
 
-"@psychedelic/plug-inpage-provider@2.1.1":
-  version "2.1.1"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/2.1.1/8fb073d7ee8cf970dc7f8d1d8577d360e928a1a9952d210c9bb78d1dd6111dc5#824c4c6999e3d81b9c2d9bb83ea6475b45326473"
-  integrity sha512-kGR/ctFqQK2OlF/VIvWxNC93xPAM2+LXoKSyu4xA/N5FU8NX0ignmMtwmEAichGw/W2GlrL0MAEyYRxldffzew==
+"@psychedelic/plug-inpage-provider@2.1.2":
+  version "2.1.2"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/2.1.2/ad720049d164796d0de1cd513ea7423beaef59d2dffc26416c2006a935b272e2#7b42861b860758bb59fe1d6a080f6ed1f2e62964"
+  integrity sha512-BsutLGWpIEYUw5Fz6vLKq1BjmTXzOKbstUrGBiIM/KtwQ9ralD5jMAOPkcLdQRxiZL0tE7VdnIKARBNNzenWIQ==
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
