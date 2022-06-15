@@ -382,3 +382,21 @@ export const deleteContact = (contactName) => new Promise((resolve) => {
     resolve(res);
   });
 });
+
+export const sendToken = ({ to, amount, canisterId, opts }) =>  new Promise((resolve) => {
+  sendMessage({
+    type: HANDLER_TYPES.SEND_TOKEN,
+    params: { to, amount, canisterId, opts },
+  }, (res) => {
+    resolve(res);
+  });
+});
+
+export const burnXTC = ({ to, amount }) => new Promise((resolve) => {
+  sendMessage({
+    type: HANDLER_TYPES.BURN_XTC,
+    params: { to, amount },
+  }, (res) => {
+    resolve(res);
+  });
+});
