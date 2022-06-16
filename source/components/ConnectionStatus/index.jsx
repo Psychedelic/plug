@@ -7,7 +7,9 @@ import PropTypes from 'prop-types';
 import browser from 'webextension-polyfill';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { getAppsKey } from '@modules/storageManager';
+
 import useStyles from './styles';
+import ConnectionControls from './components/ConnectionControls';
 
 const CONNECTION_CONFIG = {
   [CONNECTION_STATUS.accepted]: {
@@ -70,6 +72,7 @@ const ConnectionStatus = ({ incStatus = null }) => {
         status === CONNECTION_STATUS.accepted
         && <span className={classes.web}>&nbsp;{activeTab}</span>
       }
+      <ConnectionControls />
     </div>
   );
 };

@@ -9,7 +9,8 @@ export default makeStyles((theme) => ({
     lineHeight: '14px',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    padding: '0 25px',
     fontWeight: 500,
   },
   active: {
