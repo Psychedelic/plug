@@ -1,4 +1,12 @@
 {
+  "network": {
+    "network": "Network",
+    "name": "Network Name",
+    "host": "Host URL",
+    "ledgerId": "Ledger canister Id",
+    "addNetwork": "Add Network",
+    "addNetworkDescription": "Add a custom network to use Plug on test networks."
+  },
   "connectionStatus": {
     "plugged": "You're plugged into",
     "notPlugged": "You're not plugged in",
@@ -130,7 +138,9 @@
     "createAccountTitle": "Create Account",
     "helpDescription": "Resources to better understand Plug.",
     "exportIdentity": "Export DFX Identity",
-    "exportIdentityDescription": "Get a pem file to use in DFX."
+    "exportIdentityDescription": "Get a pem file to use in DFX.",
+    "network": "Network",
+    "networkDescription": "Add, edit, and remove custom networks."
   },
   "walletDetails": {
     "title": "Account Details",
