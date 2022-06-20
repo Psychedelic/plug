@@ -1,21 +1,22 @@
 // Utilities
 const nftsTabButtonClick = async (page) => {
-  const nftsTabButton = await page.waitForTestIdSelector('tab-item-NFTs', { visible: true });
+  const nftsTabButton = await page.getByTestId('tab-item-NFTs', true);
   await nftsTabButton.click();
 };
 
-const cronicCollectionChevronClick = async (page) => {
-  const collectionChevronDownIcon = await page.waitForTestIdSelector('nft-collection-dropdown-icon-Cronic Wearables', { visible: true });
-  await collectionChevronDownIcon.click();
+const nftCollectionDropdownClick = async (page, collectionName = 'Cronic Wearables') => {
+  const collectionButton = await page.getByTestId(`nft-collection-dropdown-${collectionName}`, true);
+  await collectionButton.click();
+  await page.waitForSelector('[aria-expanded="true"]');
 };
 
-const cancelButtonClick = async (page) => {
-  const cancelButton = await page.waitForTestIdSelector('link-button-text');
+const backButtonClick = async (page) => {
+  const cancelButton = await page.getByTestId('link-button-text', true);
   await cancelButton.click();
 };
 
 const nftClick = async (page) => {
-  const nftIdSpan = await page.waitForTestIdSelector('nft-id-#49312', { visible: true });
+  const nftIdSpan = await page.getByTestId('nft-id-#49312', true);
   await nftIdSpan.click();
 };
 
@@ -40,7 +41,8 @@ describe('NFTs Send View', () => {
     await page.goto(chromeData.popupUrl);
     await popupPageUtils.waitForProfileButton(page);
     await nftsTabButtonClick(page);
-    await cronicCollectionChevronClick(page);
+    await nftCollectionDropdownClick(page);
+    await page.waitForTimeout(500);
     await nftClick(page);
   });
 
@@ -53,20 +55,16 @@ describe('NFTs Send View', () => {
   });
 
   test('canceling the send operation', async () => {
-    await cancelButtonClick(page);
+    await backButtonClick(page);
     await nftsTabButtonClick(page);
   });
 
   test('copying nft link to clipboard', async () => {
-    const copyLinkButton = await page.waitForTestIdSelector('copy-link-button', { visible: true });
+    const copyLinkButton = await page.getByTestId('copy-link-button', true);
     await copyLinkButton.click();
+
+    const copiedText = await page.evaluate(() => navigator.clipboard.readText());
+
+    expect(copiedText).toBe('https://tde7l-3qaaa-aaaah-qansa-cai.raw.ic0.app/?&tokenid=ylfgf-gykor-uwiaa-aaaaa-b4adm-qaqca-aaycq-a');
   });
 });
-// await page.evaluate((dataInternal) => {
-//   // mock clipboard
-//   let clipboardText = null;
-//   window["navigator"]["clipboard"] = {
-//       writeText: text => new Promise(resolve => clipboardText = text),
-//       readText: () => new Promise(resolve => resolve(clipboardText)),
-//   }
-// }

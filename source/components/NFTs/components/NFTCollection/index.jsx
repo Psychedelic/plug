@@ -31,12 +31,12 @@ function NFTCollection({
   const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[collection.canisterId];
 
   return (
-    <div className={classes.collection} data-testid={`${collectionTestID}-${collection?.name}`}>
+    <div className={classes.collection}>
       <Collapsible
         transitionTime={200}
         open={expanded}
         trigger={(
-          <div className={classes.collectionHeader} onClick={toggleExpanded}>
+          <div className={classes.collectionHeader} onClick={toggleExpanded} data-testid={`${collectionTestID}-${collection?.name}`}>
             <div className={classes.collectionTitle}>
               <div className={classes.iconContainer}>
                 <img
@@ -50,7 +50,7 @@ function NFTCollection({
             <ChevronDown
               className={clsx(classes.expandIcon, expanded && classes.rotate)}
               size={20}
-              data-testID={`nft-collection-dropdown-icon-${collection?.name}`}
+
             />
           </div>
         )}
@@ -62,6 +62,7 @@ function NFTCollection({
               <div
                 className={classes.nftContainer}
                 onClick={() => handleNftClick(nft)}
+                data-testid={`nft-id-${name}`}
               >
                 {icns ? (
                   <ICNSDisplay
@@ -81,7 +82,7 @@ function NFTCollection({
                   <Typography
                     className={classes.id}
                     variant="subtitle1"
-                    data-testID={`nft-id-${name}`}
+
                   >
                     {name.length > 12 ? shortICNSName(name) : name}
                   </Typography>
