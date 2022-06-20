@@ -14,7 +14,9 @@ import { NFT_COLLECTION_DEFAULT_TYPES } from '@shared/constants/nft';
 
 import useStyles from './styles';
 
-function NFTCollection({ collection, icns, defaultOpen }) {
+function NFTCollection({
+  collection, icns, defaultOpen, collectionTestID,
+}) {
   const classes = useStyles();
   const { navigator } = useRouter();
   const [expanded, setExpanded] = useState(defaultOpen);
@@ -29,7 +31,7 @@ function NFTCollection({ collection, icns, defaultOpen }) {
   const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[collection.canisterId];
 
   return (
-    <div className={classes.collection}>
+    <div className={classes.collection} data-testid={`${collectionTestID}-${collection?.name}`}>
       <Collapsible
         transitionTime={200}
         open={expanded}
@@ -48,6 +50,7 @@ function NFTCollection({ collection, icns, defaultOpen }) {
             <ChevronDown
               className={clsx(classes.expandIcon, expanded && classes.rotate)}
               size={20}
+              data-testID={`nft-collection-dropdown-icon-${collection?.name}`}
             />
           </div>
         )}
@@ -78,6 +81,7 @@ function NFTCollection({ collection, icns, defaultOpen }) {
                   <Typography
                     className={classes.id}
                     variant="subtitle1"
+                    data-testID={`nft-id-${name}`}
                   >
                     {name.length > 12 ? shortICNSName(name) : name}
                   </Typography>
@@ -93,11 +97,13 @@ function NFTCollection({ collection, icns, defaultOpen }) {
 
 NFTCollection.defaultProps = {
   defaultOpen: false,
+  collectionTestID: '',
 };
 
 NFTCollection.propTypes = {
   icns: PropTypes.bool.isRequired,
   defaultOpen: PropTypes.bool,
+  collectionTestID: PropTypes.string,
   collection: PropTypes.shape({
     standard: PropTypes.string.isRequired,
     canisterId: PropTypes.string.isRequired,

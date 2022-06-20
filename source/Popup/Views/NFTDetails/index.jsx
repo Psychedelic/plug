@@ -91,6 +91,7 @@ const NFTDetails = () => {
             style={{ width: '96%' }}
             fullWidth
             onClick={() => handleButtonClick(nft?.url?.replace('type=thumbnail', ''))}
+            buttonTestId="copy-link-button"
             endIcon={isICNS && (
               <ArrowUpRight
                 size="20"
