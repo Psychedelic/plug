@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { addDisconnectedEntry } from '@shared/utils/apps';
 import { getApps, setApps as setStorageApps } from '@modules';
+import extensionizer from 'extensionizer';
 
 const useApps = () => {
   const [apps, setApps] = useState({});
@@ -24,7 +25,11 @@ const useApps = () => {
   }, [walletNumber]);
 
   useEffect(() => {
-    setStorageApps(walletNumber, apps);
+    setStorageApps(walletNumber, apps, () => {
+      extensionizer.tabs.query({ active: true }, (activeTabs) => {
+        extensionizer.tabs.sendMessage(activeTabs[0].id, { action: 'updateConnection' });
+      });
+    });
     const parsed = Object.values(apps) || [];
 
     const allEvents = parsed?.flatMap((app) => app?.events?.map((event) => ({

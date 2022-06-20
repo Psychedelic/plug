@@ -34,20 +34,30 @@ export class TransactionModule extends ControllerModuleBase {
   }
 
   // Utils
+  #getSafeHandlerObjects() {
+    return [
+      this.#requestReadState(),
+      this.#requestQuery(),
+    ];
+  }
+
   #getHandlerObjects() {
     return [
       this.#requestTransfer(),
-      this.#handleRequestTransfer(),
       this.#requestTransferToken(),
-      this.#handleRequestTransferToken(),
       this.#requestBurnXTC(),
-      this.#handleRequestBurnXTC(),
       this.#batchTransactions(),
-      TransactionModule.#handleBatchTransactions(),
       this.#requestCall(),
+    ];
+  }
+
+  #getExecutorObjects() {
+    return [
+      this.#handleRequestTransfer(),
+      this.#handleRequestTransferToken(),
+      this.#handleRequestBurnXTC(),
+      TransactionModule.#handleBatchTransactions(),
       this.#handleCall(),
-      this.#requestReadState(),
-      this.#requestQuery(),
     ];
   }
 
@@ -61,13 +71,13 @@ export class TransactionModule extends ControllerModuleBase {
   #requestTransfer() {
     return {
       methodName: 'requestTransfer',
-      handler: async (opts, metadata, args) => {
+      handler: async (opts, metadata, args, transactionId) => {
         const { message, sender, callback } = opts;
 
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
 
-        getApp(this.keyring?.currentWalletId.toString(), metadata.url, app => {
+        getApp(this.keyring?.currentWalletId.toString(), metadata.url, (app) => {
           if (app?.status === CONNECTION_STATUS.accepted) {
             const argsError = validateTransferArgs(args);
             if (argsError) {
@@ -83,7 +93,7 @@ export class TransactionModule extends ControllerModuleBase {
               callId,
               portId,
               metadataJson: JSON.stringify(metadata),
-              argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
+              argsJson: JSON.stringify({ ...args, timeout: app?.timeout, transactionId }),
               type: 'transfer',
               screenArgs: {
                 fixedHeight: height,
@@ -105,7 +115,6 @@ export class TransactionModule extends ControllerModuleBase {
       handler: async (opts, transferRequests, callId, portId) => {
         const { callback } = opts;
         const transfer = transferRequests?.[0];
-
         if (transfer?.status === 'declined') {
           callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
         } else {
@@ -148,13 +157,13 @@ export class TransactionModule extends ControllerModuleBase {
   #requestTransferToken() {
     return {
       methodName: 'requestTransferToken',
-      handler: async (opts, metadata, args) => {
+      handler: async (opts, metadata, args, transactionId) => {
         const { message, sender, callback } = opts;
 
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
 
-        getApp(this.keyring?.currentWalletId.toString(), metadata.url,  async (app = {}) => {
+        getApp(this.keyring?.currentWalletId.toString(), metadata.url, async (app = {}) => {
           if (app?.status === CONNECTION_STATUS.accepted) {
             const argsError = validateTransferArgs(args);
             if (argsError) {
@@ -182,6 +191,7 @@ export class TransactionModule extends ControllerModuleBase {
                 metadataJson: JSON.stringify(metadata),
                 argsJson: JSON.stringify({
                   ...args,
+                  transactionId,
                   token,
                   timeout: app?.timeout,
                 }),
@@ -254,7 +264,7 @@ export class TransactionModule extends ControllerModuleBase {
   #requestBurnXTC() {
     return {
       methodName: 'requestBurnXTC',
-      handler: async (opts, metadata, args) => {
+      handler: async (opts, metadata, args, transactionId) => {
         const { message, sender, callback } = opts;
 
         const { id: callId } = message.data.data;
@@ -275,7 +285,7 @@ export class TransactionModule extends ControllerModuleBase {
               callId,
               portId,
               metadataJson: JSON.stringify(metadata),
-              argsJson: JSON.stringify({ ...args, timeout: app?.timeout }),
+              argsJson: JSON.stringify({ ...args, timeout: app?.timeout, transactionId }),
               type: 'burnXTC',
               screenArgs: {
                 fixedHeight: height,
@@ -298,7 +308,6 @@ export class TransactionModule extends ControllerModuleBase {
         const { callback } = opts;
         const transfer = transferRequests?.[0];
 
-        // Answer this callback no matter if the transfer succeeds or not.
         if (transfer?.status === 'declined') {
           callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
         } else {
@@ -343,7 +352,7 @@ export class TransactionModule extends ControllerModuleBase {
   #batchTransactions() {
     return {
       methodName: 'batchTransactions',
-      handler: async (opts, metadata, transactions) => {
+      handler: async (opts, metadata, transactions, transactionId) => {
         const { message, sender, callback } = opts;
 
         const { id: callId } = message.data.data;
@@ -372,6 +381,7 @@ export class TransactionModule extends ControllerModuleBase {
               metadataJson: JSON.stringify(metadata),
               argsJson: JSON.stringify({
                 transactions: transactionsWithInfo,
+                transactionId,
                 canistersInfo,
                 timeout: app?.timeout,
               }),
@@ -406,12 +416,12 @@ export class TransactionModule extends ControllerModuleBase {
                 })),
             };
             setBatchTransactions(updatedBatchTransactions);
-
+            callback(null, true);
             callback(null, { status: accepted, txId: newBatchTransactionId }, [{ callId, portId }]);
-            callback(null, true); // close the modal
           });
         } else {
           callback(ERRORS.TRANSACTION_REJECTED, { status: false }, [{ callId, portId }]);
+          callback(null, true);
         }
       },
     };
@@ -420,7 +430,7 @@ export class TransactionModule extends ControllerModuleBase {
   #requestCall() {
     return {
       methodName: 'requestCall',
-      handler: async (opts, metadata, args, batchTxId) => {
+      handler: async (opts, metadata, args, batchTxId, decodedArgs, transactionId) => {
         const { message, sender, callback } = opts;
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
@@ -450,7 +460,10 @@ export class TransactionModule extends ControllerModuleBase {
                 const canisterInfo = app.whitelist[canisterId];
                 const shouldShowModal = (!batchTxId || batchTxId.lenght === 0)
                   && protectedIds.includes(canisterInfo.id);
-                const requestInfo = generateRequestInfo({ ...args, sender: senderPID });
+                const requestInfo = generateRequestInfo({
+                  ...args,
+                  sender: senderPID,
+                }, decodedArgs);
 
                 if (shouldShowModal) {
                   this.displayPopUp({
@@ -458,6 +471,7 @@ export class TransactionModule extends ControllerModuleBase {
                     portId,
                     type: 'sign',
                     argsJson: JSON.stringify({
+                      transactionId,
                       canisterInfo,
                       requestInfo,
                       timeout: app?.timeout,
@@ -557,10 +571,22 @@ export class TransactionModule extends ControllerModuleBase {
 
   // Exposer
   exposeMethods() {
-    this.#getHandlerObjects().forEach((handlerObject) => {
+    this.#getSafeHandlerObjects().forEach((handlerObject) => {
       this.backgroundController.exposeController(
         handlerObject.methodName,
         async (...args) => this.secureWrapper({ args, handlerObject }),
+      );
+    });
+    this.#getHandlerObjects().forEach((handlerObject) => {
+      this.backgroundController.exposeController(
+        handlerObject.methodName,
+        async (...args) => this.secureHandler({ args, handlerObject }),
+      );
+    });
+    this.#getExecutorObjects().forEach((handlerObject) => {
+      this.backgroundController.exposeController(
+        handlerObject.methodName,
+        async (...args) => this.secureExecutor({ args, handlerObject }),
       );
     });
   }

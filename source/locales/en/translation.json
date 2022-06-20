@@ -88,7 +88,8 @@
     "account": "Account",
     "learnMore": "Learn more",
     "send": "Send",
-    "unknownToken": "unknown token"
+    "unknownToken": "unknown token",
+    "connect": "Connect"
   },
   "apps": {
     "title": "Connected Apps",

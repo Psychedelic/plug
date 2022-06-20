@@ -1,4 +1,5 @@
 import extension from 'extensionizer';
+import { v4 as uuidv4 } from 'uuid';
 
 import { addDisconnectedEntry } from '@shared/utils/apps';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
@@ -167,4 +168,29 @@ export const getDabContacts = (cb) => {
 
 export const setDabContacts = (dabContacts = [], cb = () => ([])) => {
   secureSetWrapper({ dabContacts }, [], cb);
+};
+
+export const createPendingTransaction = (cb) => {
+  const id = uuidv4();
+  secureSetWrapper({ activeTransactions: { [id]: 'pending' } }, {}, () => cb(id));
+};
+export const checkPendingTransaction = (transactionId, cb) => {
+  secureGetWrapper('activeTransactions', 'pending', (entry) => {
+    cb(entry.activeTransactions[transactionId]);
+  });
+};
+
+export const reviewPendingTransaction = async (transactionId) => {
+  const setData = () => new Promise((resolve) => {
+    secureSetWrapper({ activeTransactions: { [transactionId]: 'reviewed' } }, {}, resolve);
+  });
+  const result = await setData();
+  return result;
+};
+export const removePendingTransaction = (transactionId, cb) => {
+  secureSetWrapper({ activeTransactions: { [transactionId]: undefined } }, {}, cb);
+};
+
+export const resetPendingTransactions = () => {
+  secureSetWrapper({ activeTransactions: { } }, {}, () => {});
 };

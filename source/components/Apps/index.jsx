@@ -76,7 +76,7 @@ const Apps = () => {
             open={openDelete}
             title={t('apps.disconnectTitle')}
             content={<Typography>{t('apps.disconnectText')} <b>{selectedApp.name}</b>?</Typography>}
-            button={t('common.disconnect')}
+            confirmText={t('common.disconnect')}
             buttonVariant="danger"
             onClick={() => handleRemoveApp(selectedApp)}
             onClose={() => setOpenDelete(false)}

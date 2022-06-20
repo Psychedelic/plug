@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { CURRENCIES } from '@shared/constants/currencies';
 import { validateCanisterId } from '@shared/utils/ids';
 import { XTC_FEE } from '@shared/constants/addresses';
+import { reviewPendingTransaction } from '@modules/storageManager';
 
 const portRPC = new PortRPC({
   name: 'notification-port',
@@ -15,7 +16,7 @@ const portRPC = new PortRPC({
 
 portRPC.start();
 
-const useRequests = (incomingRequests, callId, portId) => {
+const useRequests = (incomingRequests, callId, portId, transactionId) => {
   const { t } = useTranslation();
   const [currentRequest, setCurrentRequest] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -41,7 +42,8 @@ const useRequests = (incomingRequests, callId, portId) => {
   useEffect(async () => {
     if (requests.length === 0) {
       setLoading(true);
-      const success = await portRPC.call('handleRequestBurnXTC', [response, callId, portId]);
+      reviewPendingTransaction(transactionId, async () => {});
+      const success = await portRPC.call('handleRequestBurnXTC', [response, callId, portId, transactionId]);
       if (success) {
         window.close();
       }
@@ -55,7 +57,8 @@ const useRequests = (incomingRequests, callId, portId) => {
 
   const handleDeclineAll = async () => {
     const declinedRequests = requests.map((r) => ({ ...r, status: 'declined' }));
-    await portRPC.call('handleRequestBurnXTC', [declinedRequests, callId, portId]);
+    reviewPendingTransaction(transactionId, async () => {});
+    await portRPC.call('handleRequestBurnXTC', [declinedRequests, callId, portId, transactionId]);
     window.close();
   };
 

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { PortRPC } from '@fleekhq/browser-rpc';
+import { reviewPendingTransaction } from '@modules/storageManager';
 
 const portRPC = new PortRPC({
   name: 'notification-port',
@@ -11,11 +12,12 @@ const portRPC = new PortRPC({
 portRPC.start();
 
 const Principal = ({
-  metadata, callId, portId,
+  metadata, callId, portId, transactionId,
 }) => {
   useEffect(async () => {
     if (metadata && callId && portId) {
-      await portRPC.call('handleGetPrincipal', [metadata.url, callId, portId]);
+      reviewPendingTransaction(transactionId, async () => {});
+      await portRPC.call('handleGetPrincipal', [metadata.url, callId, portId, transactionId]);
       window.close();
     }
   }, [metadata, callId, portId]);
@@ -25,6 +27,7 @@ const Principal = ({
 Principal.propTypes = {
   callId: PropTypes.string.isRequired,
   portId: PropTypes.string.isRequired,
+  transactionId: PropTypes.string.isRequired,
   metadata: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 

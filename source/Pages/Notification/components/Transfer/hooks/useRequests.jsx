@@ -9,6 +9,7 @@ import PlugController from '@psychedelic/plug-controller';
 import { Principal } from '@dfinity/principal';
 import { validatePrincipalId } from '@shared/utils/ids';
 import { DEFAULT_ICP_FEE } from '@shared/constants/addresses';
+import { reviewPendingTransaction } from '@modules/storageManager';
 
 const portRPC = new PortRPC({
   name: 'notification-port',
@@ -18,7 +19,7 @@ const portRPC = new PortRPC({
 
 portRPC.start();
 
-const useRequests = (incomingRequests, callId, portId) => {
+const useRequests = (incomingRequests, callId, portId, transactionId) => {
   const { t } = useTranslation();
   const [currentRequest, setCurrentRequest] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -53,7 +54,8 @@ const useRequests = (incomingRequests, callId, portId) => {
     if (requests.length === 0) {
       setLoading(true);
       const handler = response[0].token ? 'handleRequestTransferToken' : 'handleRequestTransfer';
-      const success = await portRPC.call(handler, [response, callId, portId]);
+      reviewPendingTransaction(transactionId, async () => {});
+      const success = await portRPC.call(handler, [response, callId, portId, transactionId]);
       if (success) {
         window.close();
       }
@@ -68,7 +70,11 @@ const useRequests = (incomingRequests, callId, portId) => {
   const handleDeclineAll = async () => {
     const declinedRequests = requests.map((r) => ({ ...r, status: 'declined' }));
     const handler = declinedRequests[0].token ? 'handleRequestTransferToken' : 'handleRequestTransfer';
-    await portRPC.call(handler, [declinedRequests, callId, portId]);
+    await Promise.all([
+      reviewPendingTransaction(transactionId, async () => {}),
+      portRPC.call(handler, [declinedRequests, callId, portId, transactionId]),
+    ]);
+
     window.close();
   };
 

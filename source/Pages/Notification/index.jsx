@@ -48,7 +48,6 @@ const NotificationContainer = () => {
   } = query;
   const metadata = JSON.parse(metadataJson || '{}');
   const args = JSON.parse(argsJson || '{}'); // single request for now
-
   useEffect(() => {
     try {
       sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
@@ -103,6 +102,7 @@ const NotificationContainer = () => {
               metadata={metadata}
               setOnTimeout={setOnTimeout}
               handler={`handle${capitalize(type)}`}
+              transactionId={args?.transactionId}
             />
           )
           : <Login redirect={handleLogin} />
