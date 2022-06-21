@@ -51,7 +51,7 @@ const AssetDisplay = ({
 
   const title = shouldWarn ? t('sign.warning.unknownAmount') : formatMethodName(request?.methodName);
   const subtitle = `${asset?.amount ?? '???'} ${asset?.symbol ?? ''} ${asset?.amount !== null && asset?.value ? `(~$${asset?.value?.toFixed?.(2)})` : ''}`;
-  console.log(asset);
+
   return (
     asset && (
       <DisplayBox

@@ -183,6 +183,7 @@ export const handleCallRequest = async ({
     if (redirected) callback(null, true);
     return true;
   } catch (e) {
+    console.log('Error when executing update transaction', e);
     callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
     if (redirected) callback(null, false);
     return false;
