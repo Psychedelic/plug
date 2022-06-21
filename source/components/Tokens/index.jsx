@@ -24,16 +24,14 @@ const Tokens = () => {
   const { onScroll, fullScroll } = useScroll();
 
   const fetchAssets = () => {
-    if (icpPrice) {
-      sendMessage({
-        type: HANDLER_TYPES.GET_ASSETS,
-        params: {},
-      }, (keyringAssets) => {
-        dispatch(setAssets({ keyringAssets, icpPrice }));
-        dispatch(setAssetsLoading(false));
-        setLoading(false);
-      });
-    }
+    sendMessage({
+      type: HANDLER_TYPES.GET_ASSETS,
+      params: {},
+    }, (keyringAssets) => {
+      dispatch(setAssets({ keyringAssets, icpPrice }));
+      dispatch(setAssetsLoading(false));
+      setLoading(false);
+    });
   };
 
   useEffect(() => {
