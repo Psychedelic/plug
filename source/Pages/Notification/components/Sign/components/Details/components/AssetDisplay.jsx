@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { formatAssetBySymbol } from '@shared/constants/currencies';
 import { useICPPrice } from '@redux/icp';
 
+import { getDabTokens } from '@shared/services/DAB';
 import DisplayBox from './DisplayBox';
 
 import SIZES from '../../../constants';
@@ -27,24 +28,40 @@ const AssetDisplay = ({
     );
   }
 
-  useEffect(() => {
+  const formatRequest = async () => {
     const amount = getAssetAmount(request);
-    const assetData = getAssetData(request?.canisterId);
-    const formattedAsset = formatAssetBySymbol(amount, assetData.symbol, icpPrice);
+    let assetData = getAssetData(request?.canisterId);
+    if (!assetData) {
+      const tokenData = await getDabTokens();
+      assetData = tokenData.find(
+        (token) => token?.principal_id?.toString() === request?.canisterId,
+      );
+    }
+    const formattedAsset = {
+      ...assetData,
+      ...formatAssetBySymbol(amount, assetData?.symbol, icpPrice),
+    };
     formattedAsset.amount = formattedAsset.amount === 'Error' || Number.isNaN(formattedAsset.amount) ? null : formattedAsset.amount;
-    setAsset(formattedAsset);
+    return formattedAsset;
+  };
+
+  useEffect(() => {
+    formatRequest().then((formattedAsset) => setAsset(formattedAsset));
   }, [request, icpPrice]);
 
   const title = shouldWarn ? t('sign.warning.unknownAmount') : formatMethodName(request?.methodName);
-  const subtitle = `${asset?.amount ?? '???'} ${asset?.symbol ?? ''} ${asset?.amount !== null && icpPrice ? `(~$${asset?.value?.toFixed?.(2)})` : ''}`;
+  const subtitle = `${asset?.amount ?? '???'} ${asset?.symbol ?? ''} ${asset?.amount !== null && asset?.value ? `(~$${asset?.value?.toFixed?.(2)})` : ''}`;
+  console.log(asset);
   return (
-    <DisplayBox
-      shouldWarn={shouldWarn}
-      title={title}
-      subtitle={subtitle}
-      img={asset?.image}
-      toggleModal={toggleModal}
-    />
+    asset && (
+      <DisplayBox
+        shouldWarn={shouldWarn}
+        title={title}
+        subtitle={subtitle}
+        img={asset?.image || asset?.logo}
+        toggleModal={toggleModal}
+      />
+    )
   );
 };
 
