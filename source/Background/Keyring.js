@@ -101,6 +101,7 @@ export const HANDLER_TYPES = {
   GET_CONTACTS: 'get-contacts',
   ADD_CONTACT: 'add-contact',
   REMOVE_CONTACT: 'remove-contact',
+  GET_MNEMONIC: 'get-mnemonic',
 };
 
 export const getKeyringErrorMessage = (type) => ({
@@ -126,6 +127,7 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.TRANSFER_NFT]: 'transfering your NFT.',
   [HANDLER_TYPES.GET_ICNS_DATA]: 'getting your ICNS data.',
   [HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME]: 'setting your reverse resolved name.',
+  [HANDLER_TYPES.GET_MNEMONIC]: 'getting your mnemonic.',
 }[type]);
 
 export const sendMessage = (args, callback) => {
@@ -367,6 +369,16 @@ export const getKeyringHandler = (type, keyring) => ({
     } catch (e) {
       // eslint-disable-next-line
       console.log('Error removing contact', e);
+      return { error: e.message };
+    }
+  },
+  [HANDLER_TYPES.GET_MNEMONIC]: async ({ password }) => {
+    try {
+      const res = await keyring.getMnemonic(password);
+      return res;
+    } catch (e) {
+      // eslint-disable-next-line
+      console.log('Error getting mnemonic', e);
       return { error: e.message };
     }
   },
