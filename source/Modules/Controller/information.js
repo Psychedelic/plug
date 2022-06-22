@@ -28,9 +28,9 @@ export class InformationModule extends ControllerModuleBase {
     ];
   }
 
-  async #internalRequestBalance(accountId, callback) {
+  async #internalRequestBalance(subaccount, callback) {
     const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, this.keyring);
-    const icpBalance = await getBalance(accountId);
+    const icpBalance = await getBalance({ subaccount });
     if (icpBalance.error) {
       callback(ERRORS.SERVER_ERROR(icpBalance.error), null);
     } else {
@@ -85,7 +85,7 @@ export class InformationModule extends ControllerModuleBase {
               HANDLER_TYPES.GET_BALANCE,
               this.keyring,
             );
-            const icpBalance = await getBalance(subaccount);
+            const icpBalance = await getBalance({ subaccount });
 
             if (icpBalance.error) {
               callback(ERRORS.SERVER_ERROR(icpBalance.error), null, [

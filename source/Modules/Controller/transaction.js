@@ -63,7 +63,7 @@ export class TransactionModule extends ControllerModuleBase {
 
   async #signData(payload, callback) {
     const parsedPayload = new Uint8Array(Object.values(payload));
-    const signed = await this.keyring?.sign(parsedPayload.buffer);
+    const signed = await this.keyring?.sign({ payload: parsedPayload.buffer });
     callback(null, [...new Uint8Array(signed)]);
   }
 
