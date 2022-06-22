@@ -8,6 +8,7 @@ import Step2 from '../Steps/Step2';
 
 const useSteps = () => {
   const [step, setStep] = useState(0);
+  const [password, setPassword] = useState('');
   const { navigator } = useRouter();
   const { t } = useTranslation();
 
@@ -18,12 +19,16 @@ const useSteps = () => {
 
   const steps = [
     {
-      component: <Step1 handleChangeStep={() => handleChangeStep(1)} />,
+      component: <Step1
+        handleChangeStep={() => handleChangeStep(1)}
+        password={password}
+        setPassword={setPassword}
+      />,
       left: leftButton(() => navigator.navigate('settings')),
       right: rightButton(t('common.close')),
     },
     {
-      component: <Step2 />,
+      component: <Step2 password={password} />,
       left: null,
       right: rightButton(t('common.done')),
       next: null,

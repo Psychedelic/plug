@@ -7,9 +7,8 @@ import { useTranslation } from 'react-i18next';
 import Grid from '@material-ui/core/Grid';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 
-const Step1 = ({ handleChangeStep }) => {
+const Step1 = ({ handleChangeStep, password, setPassword }) => {
   const [checked, setChecked] = useState(false);
-  const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
 
   const { t } = useTranslation();
@@ -66,4 +65,6 @@ export default Step1;
 
 Step1.propTypes = {
   handleChangeStep: PropTypes.func.isRequired,
+  password: PropTypes.string.isRequired,
+  setPassword: PropTypes.func.isRequired,
 };
