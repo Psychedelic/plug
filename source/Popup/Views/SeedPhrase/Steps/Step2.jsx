@@ -27,6 +27,6 @@ const Step2 = ({ password }) => {
 
 Step2.propTypes = {
   password: PropTypes.string.isRequired,
-}
+};
 
 export default Step2;
