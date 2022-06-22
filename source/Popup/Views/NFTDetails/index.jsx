@@ -74,6 +74,7 @@ const NFTDetails = () => {
           <img
             className={classes.expandIcon}
             src={ExpandIcon}
+            data-testid="expand-nft"
             onClick={() => openNFT(nft?.url?.replace('type=thumbnail', ''))}
           />
         )}
@@ -106,6 +107,7 @@ const NFTDetails = () => {
             fullWidth
             onClick={() => routerNavigator.navigate('send-nft')}
             disabled={isICNS}
+            data-testid="send-nft-button"
           />
         </div>
         <Section icon={CollectionImg} title={t('nfts.collection')}>
