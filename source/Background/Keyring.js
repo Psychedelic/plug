@@ -1,4 +1,5 @@
 import extension from 'extensionizer';
+import Principal from '@dfinity/principal';
 import getICPPrice from '@shared/services/ICPPrice';
 import {
   formatAssets,
@@ -215,7 +216,7 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.GET_BALANCE]: async (subaccount) => {
     try {
-      const assets = await keyring.getBalances(subaccount);
+      const assets = await keyring.getBalances({ subaccount });
       const parsedAssets = parseAssetsAmount(assets);
       const icpPrice = await getICPPrice();
       return formatAssets(parsedAssets, icpPrice);
@@ -229,10 +230,12 @@ export const getKeyringHandler = (type, keyring) => ({
     to, amount, canisterId, opts,
   }) => {
     try {
-      const { token } = await keyring.getTokenInfo(canisterId);
+      const { token } = await keyring.getTokenInfo({ canisterId });
       const { decimals } = token;
       const parsedAmount = parseToBigIntString(amount, parseInt(decimals, 10));
-      const { height, transactionId } = await keyring.send(to, parsedAmount, canisterId, opts);
+      const { height, transactionId } = await keyring.send({
+        to, amount: parsedAmount, canisterId, opts,
+      });
       return {
         height: height ? parseInt(height, 10) : undefined,
         transactionId: transactionId ? parseInt(transactionId, 10) : undefined,
@@ -252,7 +255,7 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.GET_TOKEN_INFO]:
     async ({ canisterId, standard }) => {
       try {
-        const tokenInfo = await keyring.getTokenInfo(canisterId, standard);
+        const tokenInfo = await keyring.getTokenInfo({ canisterId, standard });
         return { ...tokenInfo, amount: tokenInfo.amount.toString() };
       } catch (e) {
         // eslint-disable-next-line
@@ -263,9 +266,9 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.ADD_CUSTOM_TOKEN]:
     async ({ canisterId, standard, logo }) => {
       try {
-        const tokens = await keyring.registerToken(
-          canisterId, standard, keyring.currentWalletId, logo,
-        );
+        const tokens = await keyring.registerToken({
+          canisterId, standard, subaccount: keyring.currentWalletId, image: logo,
+        });
         return (tokens || []).map((token) => recursiveParseBigint(token));
       } catch (e) {
         // eslint-disable-next-line
@@ -290,7 +293,7 @@ export const getKeyringHandler = (type, keyring) => ({
     const { wallets, currentWalletId } = await keyring.getState();
     let collections = wallets?.[currentWalletId]?.collections || [];
     if (!collections.length || refresh) {
-      collections = await keyring.getNFTs(currentWalletId, refresh);
+      collections = await keyring.getNFTs({ subaccount: currentWalletId, refresh });
     }
     return (collections || [])?.map((collection) => recursiveParseBigint(collection));
   },
@@ -316,7 +319,7 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME]: async (name) => {
     try {
-      const res = await keyring.setICNSResolvedName(name);
+      const res = await keyring.setReverseResolvedName(name);
       return res;
     } catch (e) {
       // eslint-disable-next-line
@@ -326,17 +329,30 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.GET_CONTACTS]: async () => {
     try {
-      const res = await keyring.getContacts();
-      return res;
+      const contacts = await keyring.getContacts();
+      return contacts.map((c) => {
+        const { value } = c || {};
+        if (value?.PrincipalId) {
+          value.PrincipalId = value.PrincipalId.toText();
+        }
+        return {
+          ...c,
+          value,
+        };
+      });
     } catch (e) {
       // eslint-disable-next-line
       console.log('Error getting contacts', e);
       return { error: e.message };
     }
   },
-  [HANDLER_TYPES.ADD_CONTACT]: async (contact, walletNumber = 0) => {
+  [HANDLER_TYPES.ADD_CONTACT]: async (contact, subaccount = 0) => {
     try {
-      const res = await keyring.addContact(contact, walletNumber);
+      const { value } = contact || {};
+      if (value?.PrincipalId && typeof value?.PrincipalId === 'string') {
+        value.PrincipalId = Principal.fromText(value.PrincipalId);
+      }
+      const res = await keyring.addContact({ contact, subaccount });
       return res;
     } catch (e) {
       // eslint-disable-next-line
@@ -344,9 +360,9 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: e.message };
     }
   },
-  [HANDLER_TYPES.REMOVE_CONTACT]: async (contactName, walletNumber = 0) => {
+  [HANDLER_TYPES.REMOVE_CONTACT]: async (contactName, subaccount = 0) => {
     try {
-      const res = await keyring.deleteContact(contactName, walletNumber);
+      const res = await keyring.deleteContact({ addressName: contactName, subaccount });
       return res;
     } catch (e) {
       // eslint-disable-next-line
