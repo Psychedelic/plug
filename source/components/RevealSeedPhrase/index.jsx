@@ -8,8 +8,7 @@ const RevealSeedPhrase = ({ onClick, ...other }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   return (
-    <button
-      type="button"
+    <div
       className={classes.root}
       onClick={onClick}
       data-testid="reveal-seedphrase-button"
@@ -20,7 +19,7 @@ const RevealSeedPhrase = ({ onClick, ...other }) => {
         <img src={WhiteKeyImage} />
         <span className={classes.text}>{t('seedPhrase.reveal')}</span>
       </div>
-    </button>
+    </div>
   );
 };
 
