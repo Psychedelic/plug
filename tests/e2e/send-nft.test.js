@@ -130,8 +130,6 @@ describe('NFTs Send View', () => {
     const confirmSendingButton = await page.getByTestId('confirmation-button', true);
     await confirmSendingButton.click();
 
-    await page.waitForTimeout(10000);
-
     const noNftsTitle = await page.getByTestId('no-nft-title', true);
     const content = await page.evaluate((el) => el.textContent, noNftsTitle);
 
