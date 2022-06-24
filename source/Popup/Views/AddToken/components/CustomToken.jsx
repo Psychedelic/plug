@@ -68,6 +68,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
                 onChange={handleChangeId}
                 type="text"
                 error={invalidToken}
+                data-testid="token-canister-id-input"
               />
             )}
           />
@@ -83,6 +84,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
                 onClick={() => setDialogOpen(true)}
                 shadow
                 className={classes.select}
+                data-testid="token-standard-select"
               />
             )}
           />
@@ -94,6 +96,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
             onClose={handleCloseDialog}
             selectedValue={standard}
             open={dialogOpen}
+            menuItemTestId="standard-item"
           />
         )}
         {
@@ -128,6 +131,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
             fullWidth
             disabled={!canisterId || invalidToken || loading}
             loading={loading}
+            data-testid="continue-button"
           />
         </Grid>
       </Grid>
