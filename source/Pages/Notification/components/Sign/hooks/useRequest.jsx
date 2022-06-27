@@ -16,7 +16,9 @@ const portRPC = new PortRPC({
 
 portRPC.start();
 
-const formatRequest = ({ requestInfo, canisterInfo, payload }) => ({
+const formatRequest = ({
+  requestInfo, canisterInfo, payload, host,
+}) => ({
   type: requestInfo.type || 'sign',
   canisterId: requestInfo.canisterId,
   methodName: requestInfo.methodName,
@@ -29,6 +31,7 @@ const formatRequest = ({ requestInfo, canisterInfo, payload }) => ({
   decodedArguments: requestInfo.decodedArguments,
   category: canisterInfo?.category,
   payload,
+  host,
 });
 
 const useRequests = (incomingRequest, callId, portId, transactionId) => {

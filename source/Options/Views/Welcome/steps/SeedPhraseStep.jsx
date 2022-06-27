@@ -43,7 +43,8 @@ const SeedPhraseStep = ({ handleNextStep, mnemonic }) => {
             checked={checked}
             handleChange={handleChangeCheckbox}
             label={t('welcome.seedCheckbox')}
-            data-testid="seedphrase-confirmation-checkbox" />
+            data-testid="seedphrase-confirmation-checkbox"
+          />
         </Grid>
         <Grid item xs={12}>
           <Button

@@ -144,7 +144,7 @@ export const validateBatchTx = (savedTxInfo, canisterId, methodName, arg) => {
 };
 
 export const handleCallRequest = async ({
-  keyring, request, callId, portId, callback, redirected,
+  keyring, request, callId, portId, callback, redirected, host,
 }) => {
   const arg = blobFromBuffer(base64ToBuffer(request.arguments));
   try {
@@ -167,7 +167,7 @@ export const handleCallRequest = async ({
       }
     }
     const signed = await keyring
-      .getAgent().call(
+      .getAgent({ host }).call(
         Principal.fromText(request.canisterId),
         {
           methodName: request.methodName,
