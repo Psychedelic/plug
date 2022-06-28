@@ -1,24 +1,44 @@
 const { getTokenAmount } = require('../utils/string');
 
-async function addCustomToken(page, { name, canisterId, standard }) {
+const addCustomTokenButtonClick = async (page) => {
   const addCustomTokenButton = await page.getByTestId('add-custom-token-button', true);
   await addCustomTokenButton.click();
+};
 
-  const customTokenTab = await page.getByTestId('tab-item-Custom', true);
+const addCustomTokenTabItemClick = async (page, tabName) => {
+  const customTokenTab = await page.getByTestId(`tab-item-${tabName}`, true);
   await customTokenTab.click();
+};
 
+const fillCanisterIdInput = async (page, canisterId) => {
   const canisterIdInput = await page.getByTestId('token-canister-id-input', true);
   await canisterIdInput.click();
   await canisterIdInput.type(canisterId);
+};
 
+const tokenStandardItemSelection = async (page, standard) => {
   const tokenStandardSelect = await page.getByTestId('token-standard-select', true);
   await tokenStandardSelect.click();
 
-  const dip20StandardItem = await page.getByTestId(`standard-item-${standard}`, true);
-  await dip20StandardItem.click();
+  const standardItem = await page.getByTestId(`standard-item-${standard}`, true);
+  await standardItem.click();
+};
 
+const continueButtonClick = async (page) => {
   const continueButton = await page.getByTestId('continue-button', true);
   await continueButton.click();
+};
+
+async function addCustomToken(page, { name, canisterId, standard }) {
+  await addCustomTokenButtonClick(page);
+
+  await addCustomTokenTabItemClick(page, 'Custom');
+
+  await fillCanisterIdInput(page, canisterId);
+
+  await tokenStandardItemSelection(page, standard);
+
+  await continueButtonClick(page);
 
   const addButton = await page.getByTestId('add-button', true);
   await addButton.click();
@@ -36,19 +56,21 @@ const sendViewButtonClick = async (page) => {
 const selectToken = async (page, tokenName) => {
   const selectTokenButton = await page.getByTestId('select-token-button', true);
   await selectTokenButton.click();
+
   const menuItem = await page.getByTestId(`select-token-button-${tokenName}`, true);
   await menuItem.click();
+
   await page.waitForTestIdSelector('select-asset-dialog', { hidden: true });
 };
 
 const getAvailableAmount = async (page) => {
-  const availableICP = await page.getByTestId('available-amount', true);
-  return page.evaluate((element) => element.innerText, availableICP);
+  const availableAmount = await page.getByTestId('available-amount', true);
+  return page.evaluate((element) => element.innerText, availableAmount);
 };
 
 const waitForAmount = async (page) => {
-  const availableICPString = await getAvailableAmount(page);
-  const amount = getTokenAmount(availableICPString);
+  const availableAmountString = await getAvailableAmount(page);
+  const amount = getTokenAmount(availableAmountString);
 
   if (amount <= 0) {
     return waitForAmount(page);
@@ -69,6 +91,17 @@ const tokenBalanceCheck = async (page, { previousAmount, name }) => {
   expect(newAmount).toBeLessThan(previousAmount);
 };
 
+async function pressKey(page, key, numberOfPresses = 4) {
+  const array = Array.from(Array(numberOfPresses).keys());
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const data of array) {
+    console.log(data);
+    // eslint-disable-next-line no-await-in-loop
+    await page.keyboard.press(key);
+  }
+}
+
 async function sendCustomToken(page, name) {
   await sendViewButtonClick(page);
   await selectToken(page, name);
@@ -82,16 +115,16 @@ async function sendCustomToken(page, name) {
 
   const amountInput = await page.getByTestId('select-token-input', true);
   await amountInput.click();
-  await page.keyboard.press('ArrowLeft');
-  await page.keyboard.press('ArrowLeft');
-  await page.keyboard.press('ArrowLeft');
-  await page.keyboard.press('ArrowLeft');
+
+  await pressKey(page, 'ArrowLeft', 4);
   await page.keyboard.type('1');
 
   const continueButton = await page.getByTestId('continue-button', true);
   await continueButton.click();
+
   const sendButton = await page.getByTestId('send-button', true);
   await sendButton.click();
+
   return amount;
 }
 
@@ -130,33 +163,49 @@ describe('Send View', () => {
     await browser.close();
   });
 
+  test('entering wrong token standard', async () => {
+    await addCustomTokenButtonClick(page);
+
+    for (const { canisterId, standard } of tokenData) {
+      await addCustomTokenTabItemClick(page, 'Custom');
+      await fillCanisterIdInput(page, canisterId);
+      await tokenStandardItemSelection(page, standard === 'EXT' ? 'DIP20' : 'EXT');
+      await continueButtonClick(page);
+      await page.waitForTestIdSelector('token-error');
+      await addCustomTokenTabItemClick(page, 'Search');
+    }
+  });
+
   test('adding custom token', async () => {
-    // eslint-disable-next-line no-restricted-syntax
     for (const data of tokenData) {
-      // eslint-disable-next-line no-await-in-loop
       await addCustomToken(page, data);
     }
   });
 
   test('sending custom token', async () => {
     const previousAmounts = [];
-    // eslint-disable-next-line no-restricted-syntax
     for (const data of tokenData) {
-      // eslint-disable-next-line no-await-in-loop
       const previousAmount = await sendCustomToken(page, data.name);
       previousAmounts.push(previousAmount);
-      // eslint-disable-next-line no-await-in-loop
       await popupPageUtils.refreshWallet(page);
     }
-    await popupPageUtils.refreshWallet(page);
+
     await waitForBalanceChange(page);
-    // eslint-disable-next-line no-restricted-syntax
+
     for (const [index, data] of tokenData.entries()) {
-      // eslint-disable-next-line no-await-in-loop
       const previousAmount = previousAmounts[index];
-      // eslint-disable-next-line no-await-in-loop
       await tokenBalanceCheck(page, { previousAmount, name: data.name });
-      // eslint-disable-next-line no-await-in-loop
     }
+  });
+
+  test('entering wrong canister ID ', async () => {
+    await addCustomTokenButtonClick(page);
+
+    await addCustomTokenTabItemClick(page, 'Custom');
+
+    await fillCanisterIdInput(page, secrets.wrongCanisterId);
+
+    const isContinueButtonDisabled = await page.$('[data-testid="continue-button"][disabled]') !== null;
+    expect(isContinueButtonDisabled).toBe(true);
   });
 });

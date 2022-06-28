@@ -108,7 +108,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
                   type="danger"
                   title={(
                     <div>
-                      <span>{t('addToken.tokenError')}</span>
+                      <span data-testid="token-error">{t('addToken.tokenError')}</span>
                       <br />
                       <span
                         className={classes.learnMore}

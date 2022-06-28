@@ -15,6 +15,7 @@ global.secrets = {
   dustCanisterId: process.env.DUST_CANISTER_ID,
   betaCanisterId: process.env.BETA_CANISTER_ID,
   wtcCanisterId: process.env.WTC_CANISTER_ID,
+  wrongCanisterId: process.env.WRONG_CANISTER_ID,
 };
 
 global.setupChrome = async () => {
