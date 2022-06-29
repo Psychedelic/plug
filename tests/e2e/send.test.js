@@ -1,5 +1,45 @@
 const { getTokenAmount } = require('../utils/string');
 
+// Utilities
+
+const getUniversalInputValue = async (page) => {
+  const universalInput = await page.waitForTestIdSelector('select-token-input');
+  return page.evaluate((input) => input.value, universalInput);
+};
+
+const getAvailableAmount = async (page) => {
+  const availableAmount = await page.waitForTestIdSelector('available-amount');
+  return page.evaluate((element) => element.innerText, availableAmount);
+};
+
+const waitForBalanceChange = async (page) => {
+  await page.waitForTimeout(30000);
+};
+
+const addCustomTokenButtonClick = async (page) => {
+  const addCustomTokenButton = await page.getByTestId('add-custom-token-button', true);
+  await addCustomTokenButton.click();
+};
+
+const addCustomTokenTabItemClick = async (page, tabName) => {
+  const customTokenTab = await page.getByTestId(`tab-item-${tabName}`, true);
+  await customTokenTab.click();
+};
+
+const fillCanisterIdInput = async (page, canisterId) => {
+  const canisterIdInput = await page.getByTestId('token-canister-id-input', true);
+  await canisterIdInput.click();
+  await canisterIdInput.type(canisterId);
+};
+
+const tokenStandardItemSelection = async (page, standard) => {
+  const tokenStandardSelect = await page.getByTestId('token-standard-select', true);
+  await tokenStandardSelect.click();
+
+  const standardItem = await page.getByTestId(`standard-item-${standard}`, true);
+  await standardItem.click();
+};
+
 const cancelButtonClick = async (page) => {
   const cancelButton = await page.waitForTestIdSelector('cancel-button');
   await cancelButton.click();
@@ -10,7 +50,28 @@ const sendViewButtonClick = async (page) => {
   await sendViewButton.click();
 };
 
-// Utilities
+const continueButtonClick = async (page) => {
+  const continueButton = await page.waitForTestIdSelector('continue-button');
+  await continueButton.click();
+};
+
+async function addCustomToken(page, { name, canisterId, standard }) {
+  await addCustomTokenButtonClick(page);
+
+  await addCustomTokenTabItemClick(page, 'Custom');
+
+  await fillCanisterIdInput(page, canisterId);
+
+  await tokenStandardItemSelection(page, standard);
+
+  await continueButtonClick(page);
+
+  const addButton = await page.getByTestId('add-button', true);
+  await addButton.click();
+
+  const assetTitle = await page.getByTestId(`asset-name-${name}`, true);
+  await page.evaluate((el) => el.textContent, assetTitle);
+}
 
 const selectToken = async (page, tokenName) => {
   const selectTokenButton = await page.getByTestId('select-token-button', true);
@@ -20,16 +81,6 @@ const selectToken = async (page, tokenName) => {
   await menuItem.click();
 
   await page.waitForTestIdSelector('select-asset-dialog', { hidden: true });
-};
-
-const getUniversalInputValue = async (page) => {
-  const universalInput = await page.waitForTestIdSelector('select-token-input');
-  return page.evaluate((input) => input.value, universalInput);
-};
-
-const getAvailableAmount = async (page) => {
-  const availableAmount = await page.waitForTestIdSelector('available-amount');
-  return page.evaluate((element) => element.innerText, availableAmount);
 };
 
 const waitForAmount = async (page) => {
@@ -45,10 +96,6 @@ const waitForAmount = async (page) => {
   }
 
   return amount;
-};
-
-const waitForBalanceChange = async (page) => {
-  await page.waitForTimeout(30000);
 };
 
 const tokenBalanceCheck = async (page, { previousAmount, name }) => {
@@ -76,16 +123,13 @@ const contactSelect = async (page) => {
 async function pressKey(page, key, numberOfPresses = 4) {
   const array = Array.from(Array(numberOfPresses).keys());
 
-  // eslint-disable-next-line no-restricted-syntax
-  for (const data of array) {
-    console.log(data);
-    // eslint-disable-next-line no-await-in-loop
+  // eslint-disable-next-line no-unused-vars
+  for (const _ of array) {
     await page.keyboard.press(key);
   }
 }
 
-const sendToken = async (page, tokenName) => {
-  await sendViewButtonClick(page);
+async function sendToken(page, tokenName) {
   await selectToken(page, tokenName);
 
   const amount = await waitForAmount(page);
@@ -106,12 +150,12 @@ const sendToken = async (page, tokenName) => {
   await sendButton.click();
 
   return amount;
-};
+}
 
 describe('Send View', () => {
   let browser;
   let page;
-  const tokenNames = ['ICP', 'Cycles', 'Wrapped ICP'];
+  const defaultTokenNames = ['ICP', 'Cycles', 'Wrapped ICP'];
 
   beforeAll(async () => {
     browser = await setupChrome();
@@ -129,7 +173,6 @@ describe('Send View', () => {
     page = await utils.createNewPage(browser);
     await page.goto(chromeData.popupUrl);
     await popupPageUtils.waitForProfileButton(page);
-    await sendViewButtonClick(page);
   });
 
   afterEach(async () => {
@@ -141,6 +184,7 @@ describe('Send View', () => {
   });
 
   test('replacing currency from ICP to USD and vice versa', async () => {
+    await sendViewButtonClick(page);
     const swapButton = await page.waitForTestIdSelector('select-token-swap-button');
     await swapButton.click();
 
@@ -153,6 +197,7 @@ describe('Send View', () => {
   });
 
   test('selecting max value', async () => {
+    await sendViewButtonClick(page);
     const amount = await waitForAmount(page);
     expect(amount).toBeGreaterThan(0);
     const maxButton = await page.waitForTestIdSelector('max-button');
@@ -164,13 +209,89 @@ describe('Send View', () => {
   });
 
   test('cancelling the send operation', async () => {
+    await sendViewButtonClick(page);
     await cancelButtonClick(page);
     await sendViewButtonClick(page);
   });
 
   test('sending tokens', async () => {
     const previousAmounts = [];
-    for (const data of tokenNames) {
+    for (const name of defaultTokenNames) {
+      await sendViewButtonClick(page);
+      const previousAmount = await sendToken(page, name);
+      previousAmounts.push(previousAmount);
+      await popupPageUtils.refreshWallet(page);
+    }
+
+    await waitForBalanceChange(page);
+
+    for (const [index, name] of defaultTokenNames.entries()) {
+      const previousAmount = previousAmounts[index];
+      await tokenBalanceCheck(page, { previousAmount, name });
+    }
+  });
+});
+
+describe('Send Custom Tokens', () => {
+  let browser;
+  let page;
+  const customTokenData = [
+    { canisterId: secrets.dustCanisterId, name: 'Dust', standard: 'DIP20' },
+    { canisterId: secrets.wtcCanisterId, name: 'Wrapped Cycles', standard: 'EXT' },
+    { canisterId: secrets.betaCanisterId, name: 'Beta Token', standard: 'DIP20' },
+  ];
+
+  beforeAll(async () => {
+    browser = await setupChrome();
+
+    // Importing and unlocking the account
+    page = await utils.createNewPage(browser);
+
+    await optionsPageUtils.importAccount(page, secrets.seedphrase, secrets.password);
+    await optionsPageUtils.unlock(page, secrets.password);
+
+    await page.close();
+  });
+
+  beforeEach(async () => {
+    page = await utils.createNewPage(browser);
+    await page.goto(chromeData.popupUrl);
+    await popupPageUtils.waitForProfileButton(page);
+  });
+
+  afterEach(async () => {
+    await page.close();
+  });
+
+  afterAll(async () => {
+    await browser.close();
+  });
+
+  test('entering wrong token standard', async () => {
+    await addCustomTokenButtonClick(page);
+
+    for (const { canisterId, standard } of customTokenData) {
+      await addCustomTokenTabItemClick(page, 'Custom');
+      await fillCanisterIdInput(page, canisterId);
+      await tokenStandardItemSelection(page, standard === 'EXT' ? 'DIP20' : 'EXT');
+      await continueButtonClick(page);
+      const tokenErrorSelector = await page.waitForTestIdSelector('token-error');
+
+      console.log(tokenErrorSelector);
+      await addCustomTokenTabItemClick(page, 'Search');
+    }
+  });
+
+  test('adding custom token', async () => {
+    for (const data of customTokenData) {
+      await addCustomToken(page, data);
+    }
+  });
+
+  test('sending custom token', async () => {
+    const previousAmounts = [];
+    for (const data of customTokenData) {
+      await sendViewButtonClick(page);
       const previousAmount = await sendToken(page, data.name);
       previousAmounts.push(previousAmount);
       await popupPageUtils.refreshWallet(page);
@@ -178,9 +299,19 @@ describe('Send View', () => {
 
     await waitForBalanceChange(page);
 
-    for (const [index, name] of tokenNames.entries()) {
+    for (const [index, data] of customTokenData.entries()) {
       const previousAmount = previousAmounts[index];
-      await tokenBalanceCheck(page, { previousAmount, name });
+      await tokenBalanceCheck(page, { previousAmount, name: data.name });
     }
+  });
+
+  test('entering wrong custom token canister ID ', async () => {
+    await addCustomTokenButtonClick(page);
+    await addCustomTokenTabItemClick(page, 'Custom');
+
+    await fillCanisterIdInput(page, secrets.wrongCanisterId);
+
+    const isContinueButtonDisabled = await page.$('[data-testid="continue-button"][disabled]') !== null;
+    expect(isContinueButtonDisabled).toBe(true);
   });
 });

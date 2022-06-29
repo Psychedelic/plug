@@ -115,6 +115,7 @@ const Step1 = ({
                 value={address}
                 onChange={handleChangeAddress}
                 isValid={addressInfo.isValid && !isUserAddress}
+                data-testid="send-to-principalID-input"
               />
             )}
           />
