@@ -137,6 +137,11 @@ describe('Send View', () => {
     { canisterId: secrets.betaCanisterId, name: 'Beta Token', standard: 'DIP20' },
   ];
 
+  const wrongTokenData = [
+    { canisterId: secrets.wtcCanisterId, name: 'Wrapped Cycles', standard: 'DIP20' },
+    { canisterId: secrets.betaCanisterId, name: 'Beta Token', standard: 'EXT' },
+  ];
+
   beforeAll(async () => {
     browser = await setupChrome();
 
@@ -166,12 +171,16 @@ describe('Send View', () => {
   test('entering wrong token standard', async () => {
     await addCustomTokenButtonClick(page);
 
-    for (const { canisterId, standard } of tokenData) {
+    for (const { canisterId, standard } of wrongTokenData) {
       await addCustomTokenTabItemClick(page, 'Custom');
       await fillCanisterIdInput(page, canisterId);
-      await tokenStandardItemSelection(page, standard === 'EXT' ? 'DIP20' : 'EXT');
+      await tokenStandardItemSelection(page, standard);
       await continueButtonClick(page);
-      await page.waitForTestIdSelector('token-error');
+      const tokenIdError = await page.getByTestId('token-error', true);
+      const tokenIdErrorText = await page.evaluate((el) => el.textContent, tokenIdError);
+
+      expect(tokenIdErrorText).toBe('Invalid Canister ID. No Token Interface Detected.');
+
       await addCustomTokenTabItemClick(page, 'Search');
     }
   });
