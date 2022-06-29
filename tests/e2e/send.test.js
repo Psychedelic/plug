@@ -1,4 +1,4 @@
-const { getTokenAmount } = require('../utils/string');
+const { formatTokenAmount: getTokenAmount } = require('../utils/string');
 
 // Utilities
 
@@ -129,12 +129,7 @@ async function pressKey(page, key, numberOfPresses = 4) {
   }
 }
 
-async function sendToken(page, tokenName) {
-  await selectToken(page, tokenName);
-
-  const amount = await waitForAmount(page);
-  expect(amount).toBeGreaterThan(0);
-
+async function sendToken(page) {
   await recipientPrincipalIdEnter(page);
 
   const amountInput = await page.getByTestId('select-token-input', true);
@@ -218,7 +213,10 @@ describe('Send View', () => {
     const previousAmounts = [];
     for (const name of defaultTokenNames) {
       await sendViewButtonClick(page);
-      const previousAmount = await sendToken(page, name);
+      const amount = await waitForAmount(page);
+      expect(amount).toBeGreaterThan(0);
+      await selectToken(page, name);
+      const previousAmount = await sendToken(page);
       previousAmounts.push(previousAmount);
       await popupPageUtils.refreshWallet(page);
     }
@@ -282,7 +280,7 @@ describe('Send Custom Tokens', () => {
       const tokenIdError = await page.getByTestId('token-error', true);
       const tokenIdErrorText = await page.evaluate((el) => el.textContent, tokenIdError);
 
-      expect(tokenIdErrorText).toBe('Invalid Canister ID. No Token Interface Detected.');
+      expect(tokenIdErrorText).toBe('Wrong standard. No Token Interface Detected.');
 
       await addCustomTokenTabItemClick(page, 'Search');
     }
@@ -298,7 +296,8 @@ describe('Send Custom Tokens', () => {
     const previousAmounts = [];
     for (const data of customTokenData) {
       await sendViewButtonClick(page);
-      const previousAmount = await sendToken(page, data.name);
+      await selectToken(page, data.name);
+      const previousAmount = await sendToken(page);
       previousAmounts.push(previousAmount);
       await popupPageUtils.refreshWallet(page);
     }

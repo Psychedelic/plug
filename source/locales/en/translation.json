@@ -305,7 +305,7 @@
     "comingSoon": "COMING SOON",
     "dabTitle": "DAB Token List",
     "dabText": "Helping improve discoverability, reputation, and trust in IC tokens.",
-    "invalidInterfaceTokenError": "Invalid Canister ID. No Token Interface Detected.",
+    "invalidInterfaceTokenError": "Wrong standard. No Token Interface Detected.",
     "invalidCanisterTokenError": "Invalid Canister ID.",
     "nftTokenError": "Custom non-fungible tokens are not supported yet.",
     "standard": "Token Standard",
