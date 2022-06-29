@@ -27,7 +27,7 @@ const Step1 = ({ handleChangeSelectedToken }) => {
   ];
 
   return (
-    <Tabs tabs={tabs} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
+    <Tabs tabs={tabs} tabItemTestId="tab-item" selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
   );
 };
 

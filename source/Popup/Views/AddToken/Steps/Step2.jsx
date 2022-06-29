@@ -93,6 +93,7 @@ const Step2 = ({ selectedToken, handleClose }) => {
             loading={loading}
             disabled={loading}
             fullWidth
+            data-testid="add-button"
           />
         </Grid>
       </Grid>

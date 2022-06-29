@@ -116,7 +116,7 @@ describe('Send View', () => {
   beforeAll(async () => {
     browser = await setupChrome();
 
-    // Importing and unlocking the accoun
+    // Importing and unlocking the account
     page = await utils.createNewPage(browser);
 
     await optionsPageUtils.importAccount(page, secrets.seedphrase, secrets.password);
