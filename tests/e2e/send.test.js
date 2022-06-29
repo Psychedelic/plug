@@ -13,11 +13,13 @@ const sendViewButtonClick = async (page) => {
 // Utilities
 
 const selectToken = async (page, tokenName) => {
-  await page.waitForTestIdSelector('select-asset-dialog', { hidden: true });
   const selectTokenButton = await page.getByTestId('select-token-button', true);
   await selectTokenButton.click();
+
   const menuItem = await page.getByTestId(`select-token-button-${tokenName}`, true);
   await menuItem.click();
+
+  await page.waitForTestIdSelector('select-asset-dialog', { hidden: true });
 };
 
 const getUniversalInputValue = async (page) => {
@@ -25,9 +27,9 @@ const getUniversalInputValue = async (page) => {
   return page.evaluate((input) => input.value, universalInput);
 };
 
-const getAvailableICP = async (page) => {
-  const availableICP = await page.waitForTestIdSelector('available-amount');
-  return page.evaluate((element) => element.innerText, availableICP);
+const getAvailableAmount = async (page) => {
+  const availableAmount = await page.waitForTestIdSelector('available-amount');
+  return page.evaluate((element) => element.innerText, availableAmount);
 };
 
 const waitForAmount = async (page) => {
@@ -35,8 +37,8 @@ const waitForAmount = async (page) => {
   await cancelButtonClick(page);
   await sendViewButtonClick(page);
 
-  const availableICPString = await getAvailableICP(page);
-  const amount = getTokenAmount(availableICPString);
+  const availableAmountString = await getAvailableAmount(page);
+  const amount = getTokenAmount(availableAmountString);
 
   if (amount <= 0) {
     return waitForAmount(page);
@@ -45,9 +47,71 @@ const waitForAmount = async (page) => {
   return amount;
 };
 
+const waitForBalanceChange = async (page) => {
+  await page.waitForTimeout(30000);
+};
+
+const tokenBalanceCheck = async (page, { previousAmount, name }) => {
+  const assetAmount = await page.getByTestId(`asset-amount-${name}`, true);
+  const assetAmountString = await page.evaluate((element) => element.innerText, assetAmount);
+
+  const newAmount = getTokenAmount(assetAmountString);
+  expect(newAmount).toBeLessThan(previousAmount);
+};
+
+const recipientPrincipalIdEnter = async (page) => {
+  const addressInput = await page.getByTestId('send-to-principalID-input', true);
+  await addressInput.click();
+  await addressInput.type(secrets.subAccountId);
+};
+
+const contactSelect = async (page) => {
+  const addressBookIcon = await page.getByTestId('address-book-icon', true);
+  await addressBookIcon.click();
+
+  const contactName = await page.getByTestId('contact-name-Test', true);
+  await contactName.click();
+};
+
+async function pressKey(page, key, numberOfPresses = 4) {
+  const array = Array.from(Array(numberOfPresses).keys());
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const data of array) {
+    console.log(data);
+    // eslint-disable-next-line no-await-in-loop
+    await page.keyboard.press(key);
+  }
+}
+
+const sendToken = async (page, tokenName) => {
+  await sendViewButtonClick(page);
+  await selectToken(page, tokenName);
+
+  const amount = await waitForAmount(page);
+  expect(amount).toBeGreaterThan(0);
+
+  await recipientPrincipalIdEnter(page);
+
+  const amountInput = await page.getByTestId('select-token-input', true);
+  await amountInput.click();
+
+  await pressKey(page, 'ArrowLeft', 4);
+  await page.keyboard.type('1');
+
+  const continueButton = await page.getByTestId('continue-button', true);
+  await continueButton.click();
+
+  const sendButton = await page.getByTestId('send-button', true);
+  await sendButton.click();
+
+  return amount;
+};
+
 describe('Send View', () => {
   let browser;
   let page;
+  const tokenNames = ['ICP', 'Cycles', 'Wrapped ICP'];
 
   beforeAll(async () => {
     browser = await setupChrome();
@@ -76,13 +140,6 @@ describe('Send View', () => {
     await browser.close();
   });
 
-  test('switching between tokens', async () => {
-    // TODO: Add assertions
-    const tokenNames = ['ICP', 'Cycles', 'Wrapped ICP'];
-    const promises = tokenNames.map((name) => selectToken(page, name));
-    await Promise.all(promises);
-  });
-
   test('replacing currency from ICP to USD and vice versa', async () => {
     const swapButton = await page.waitForTestIdSelector('select-token-swap-button');
     await swapButton.click();
@@ -101,9 +158,9 @@ describe('Send View', () => {
     const maxButton = await page.waitForTestIdSelector('max-button');
     await maxButton.click();
     const inputValue = await getUniversalInputValue(page);
-    const availableICP = await getAvailableICP(page);
+    const availableAmount = await getAvailableAmount(page);
 
-    expect(inputValue).toBe(availableICP);
+    expect(inputValue).toBe(availableAmount);
   });
 
   test('cancelling the send operation', async () => {
@@ -111,32 +168,19 @@ describe('Send View', () => {
     await sendViewButtonClick(page);
   });
 
-  test('sending an ICP', async () => {
-    const amount = await waitForAmount(page);
-    expect(amount).toBeGreaterThan(0);
+  test('sending tokens', async () => {
+    const previousAmounts = [];
+    for (const data of tokenNames) {
+      const previousAmount = await sendToken(page, data.name);
+      previousAmounts.push(previousAmount);
+      await popupPageUtils.refreshWallet(page);
+    }
 
-    const amountInput = await page.getByTestId('select-token-input');
-    const addressInput = await page.getByTestId('send-to-principalID-input');
-    await addressInput.click();
-    await addressInput.type(secrets.subAccountId);
-    await amountInput.click();
-    await page.keyboard.press('ArrowLeft');
-    await page.keyboard.press('ArrowLeft');
-    await page.keyboard.press('ArrowLeft');
-    await page.keyboard.press('ArrowLeft');
-    await page.keyboard.type('1');
-    const continueButton = await page.waitForTestIdSelector('continue-button');
-    await continueButton.click();
-    const sendButton = await page.waitForTestIdSelector('send-button');
-    await sendButton.click();
+    await waitForBalanceChange(page);
 
-    await page.waitForTimeout(15000);
-    await popupPageUtils.refreshWallet(page);
-
-    const assetAmount = await page.waitForTestIdSelector('asset-amount-ICP');
-    const assetAmountString = await page.evaluate((element) => element.innerText, assetAmount);
-
-    const newAmount = getTokenAmount(assetAmountString);
-    expect(newAmount).toBeLessThan(amount);
+    for (const [index, name] of tokenNames.entries()) {
+      const previousAmount = previousAmounts[index];
+      await tokenBalanceCheck(page, { previousAmount, name });
+    }
   });
 });

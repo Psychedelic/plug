@@ -18,7 +18,7 @@ import ContactList from '../ContactList';
 import useStyles from './styles';
 
 const IDInput = ({
-  value, onChange, placeholder, isValid, loading,
+  value, onChange, placeholder, isValid, loading, ...other
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
@@ -105,7 +105,7 @@ const IDInput = ({
               type="text"
               onChange={(e) => onChange(e.target.value)}
               placeholder={placeholder || t('send.inputId')}
-              data-testId="send-to-principalID-input"
+              {...other}
             />
             <div className={classes.iconContainer}>
               {loading ? (
@@ -123,10 +123,12 @@ const IDInput = ({
                 onClose={handleCloseContacts}
                 selectedValue={selectedContact}
                 open={openContacts}
+                titleTestId="contacts-dialog"
                 component={(
                   <ContactList
                     selectable
                     onClick={handleSelectContact}
+                    contactTestId="contact-name"
                   />
                 )}
               />
