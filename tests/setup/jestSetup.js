@@ -53,13 +53,6 @@ global.setupChrome = async () => {
 
 // General utils
 
-const getXPathElements = async (page, elementType, content, wait = false) => {
-  const xPath = `//${elementType}[contains(.,"${content}")]`;
-
-  if (wait) await page.waitForXPath(xPath);
-  return page.$x(xPath);
-};
-
 const getTestIdSelector = (id) => `[data-testid="${id}"]`;
 
 const waitForTestIdSelector = (page, id, ...otherOptions) => {
