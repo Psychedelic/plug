@@ -1,5 +1,8 @@
 export const getFilteredCollections = (collection, collections, nft) => {
-  const filterNFT = (token) => token.id !== nft?.id;
+  const filterNFT = (token) => {
+    const id = token?.id ? 'id' : 'index';
+    return token?.[id] !== nft?.[id];
+  };
   const collectionIndex = collections.indexOf(collection);
   let filteredCollections = [...collections];
 

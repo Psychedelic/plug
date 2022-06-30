@@ -475,6 +475,7 @@ export class TransactionModule extends ControllerModuleBase {
                       canisterInfo,
                       requestInfo,
                       timeout: app?.timeout,
+                      host: app.host,
                     }),
                     metadataJson: JSON.stringify(metadata),
                   }, callback);
@@ -495,6 +496,7 @@ export class TransactionModule extends ControllerModuleBase {
                         portId,
                         callId,
                         callback,
+                        host: app.host,
                       });
                     });
                   });
@@ -517,7 +519,13 @@ export class TransactionModule extends ControllerModuleBase {
 
         if (status === CONNECTION_STATUS.accepted) {
           await handleCallRequest({
-            keyring: this.keyring, request, portId, callId, callback, redirected: true,
+            keyring: this.keyring,
+            request,
+            portId,
+            callId,
+            callback,
+            redirected: true,
+            host: request?.host,
           });
         } else {
           callback(ERRORS.SIGN_REJECTED, null, [{ portId, callId }]);
@@ -530,15 +538,17 @@ export class TransactionModule extends ControllerModuleBase {
   #requestReadState() {
     return {
       methodName: 'requestReadState',
-      handler: async (opts, { canisterId, paths }) => {
+      handler: async (opts, { canisterId, paths, url }) => {
         const { callback } = opts;
 
         try {
-          const response = await this.keyring.getAgent().readState(canisterId, {
-            paths: [paths.map((path) => blobFromBuffer(base64ToBuffer(path)))],
-          });
-          callback(null, {
-            certificate: bufferToBase64(blobToUint8Array(response.certificate)),
+          getApp(this.keyring?.currentWalletId.toString(), url, async (app) => {
+            const response = await this.keyring.getAgent({ host: app.host }).readState(canisterId, {
+              paths: [paths.map((path) => blobFromBuffer(base64ToBuffer(path)))],
+            });
+            callback(null, {
+              certificate: bufferToBase64(blobToUint8Array(response.certificate)),
+            });
           });
         } catch (e) {
           callback(ERRORS.SERVER_ERROR(e), null);
@@ -550,18 +560,22 @@ export class TransactionModule extends ControllerModuleBase {
   #requestQuery() {
     return {
       methodName: 'requestQuery',
-      handler: async (opts, { canisterId, methodName, arg }) => {
+      handler: async (opts, {
+        canisterId, methodName, arg, url,
+      }) => {
         const { callback } = opts;
 
         try {
-          const response = await this.keyring.getAgent()
-            .query(canisterId, { methodName, arg: blobFromBuffer(base64ToBuffer(arg)) });
+          getApp(this.keyring?.currentWalletId.toString(), url, async (app) => {
+            const response = await this.keyring.getAgent({ host: app.host })
+              .query(canisterId, { methodName, arg: blobFromBuffer(base64ToBuffer(arg)) });
 
-          if (response.reply) {
-            response.reply.arg = bufferToBase64(blobToUint8Array(response.reply.arg));
-          }
+            if (response.reply) {
+              response.reply.arg = bufferToBase64(blobToUint8Array(response.reply.arg));
+            }
 
-          callback(null, response);
+            callback(null, response);
+          });
         } catch (e) {
           callback(ERRORS.SERVER_ERROR(e), null);
         }
