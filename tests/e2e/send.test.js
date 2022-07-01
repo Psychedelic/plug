@@ -1,4 +1,4 @@
-const { formatTokenAmount: getTokenAmount } = require('../utils/string');
+const { formatTokenAmount } = require('../utils/string');
 
 // Utilities
 
@@ -7,9 +7,11 @@ const getUniversalInputValue = async (page) => {
   return page.evaluate((input) => input.value, universalInput);
 };
 
-const getAvailableAmount = async (page) => {
-  const availableAmount = await page.waitForTestIdSelector('available-amount');
-  return page.evaluate((element) => element.innerText, availableAmount);
+const getAvailableAmount = async (page, shouldFormat = true) => {
+  const availableAmountTag = await page.waitForTestIdSelector('available-amount');
+  const availableAmountString = await page.evaluate((element) => element.innerText, availableAmountTag);
+
+  return shouldFormat ? formatTokenAmount(availableAmountString) : availableAmountString;
 };
 
 const waitForBalanceChange = async (page) => {
@@ -46,7 +48,7 @@ const cancelButtonClick = async (page) => {
 };
 
 const sendViewButtonClick = async (page) => {
-  const sendViewButton = await page.waitForTestIdSelector('open-send-view-button');
+  const sendViewButton = await page.getByTestId('open-send-view-button', true);
   await sendViewButton.click();
 };
 
@@ -85,11 +87,10 @@ const selectToken = async (page, tokenName) => {
 
 const waitForAmount = async (page) => {
   await page.waitForTimeout(500);
-  await cancelButtonClick(page);
+  await popupPageUtils.refreshWallet(page);
   await sendViewButtonClick(page);
 
-  const availableAmountString = await getAvailableAmount(page);
-  const amount = getTokenAmount(availableAmountString);
+  const amount = await getAvailableAmount(page);
 
   if (amount <= 0) {
     return waitForAmount(page);
@@ -102,7 +103,7 @@ const tokenBalanceCheck = async (page, { previousAmount, name }) => {
   const assetAmount = await page.getByTestId(`asset-amount-${name}`, true);
   const assetAmountString = await page.evaluate((element) => element.innerText, assetAmount);
 
-  const newAmount = getTokenAmount(assetAmountString);
+  const newAmount = formatTokenAmount(assetAmountString);
   expect(newAmount).toBeLessThan(previousAmount);
 };
 
@@ -143,8 +144,6 @@ async function sendToken(page) {
 
   const sendButton = await page.getByTestId('send-button', true);
   await sendButton.click();
-
-  return amount;
 }
 
 describe('Send View', () => {
@@ -168,6 +167,7 @@ describe('Send View', () => {
     page = await utils.createNewPage(browser);
     await page.goto(chromeData.popupUrl);
     await popupPageUtils.waitForProfileButton(page);
+    await sendViewButtonClick(page);
   });
 
   afterEach(async () => {
@@ -179,7 +179,6 @@ describe('Send View', () => {
   });
 
   test('replacing currency from ICP to USD and vice versa', async () => {
-    await sendViewButtonClick(page);
     const swapButton = await page.waitForTestIdSelector('select-token-swap-button');
     await swapButton.click();
 
@@ -192,31 +191,29 @@ describe('Send View', () => {
   });
 
   test('selecting max value', async () => {
-    await sendViewButtonClick(page);
     const amount = await waitForAmount(page);
     expect(amount).toBeGreaterThan(0);
     const maxButton = await page.waitForTestIdSelector('max-button');
     await maxButton.click();
     const inputValue = await getUniversalInputValue(page);
-    const availableAmount = await getAvailableAmount(page);
+    const availableAmount = await getAvailableAmount(page, false);
 
     expect(inputValue).toBe(availableAmount);
   });
 
   test('cancelling the send operation', async () => {
-    await sendViewButtonClick(page);
     await cancelButtonClick(page);
     await sendViewButtonClick(page);
   });
 
   test('sending tokens', async () => {
     const previousAmounts = [];
+    await waitForAmount(page);
+
     for (const name of defaultTokenNames) {
-      await sendViewButtonClick(page);
-      const amount = await waitForAmount(page);
-      expect(amount).toBeGreaterThan(0);
       await selectToken(page, name);
-      const previousAmount = await sendToken(page);
+      const previousAmount = await getAvailableAmount(page);
+      await sendToken(page, name);
       previousAmounts.push(previousAmount);
       await popupPageUtils.refreshWallet(page);
     }
@@ -294,10 +291,13 @@ describe('Send Custom Tokens', () => {
 
   test('sending custom token', async () => {
     const previousAmounts = [];
+    await waitForAmount(page);
+
     for (const data of customTokenData) {
       await sendViewButtonClick(page);
       await selectToken(page, data.name);
-      const previousAmount = await sendToken(page);
+      const previousAmount = await getAvailableAmount(page);
+      await sendToken(page);
       previousAmounts.push(previousAmount);
       await popupPageUtils.refreshWallet(page);
     }
