@@ -64,6 +64,7 @@ global.setupChrome = async () => {
 };
 
 // General utils
+
 const getTestIdSelector = (id) => `[data-testid="${id}"]`;
 
 const waitForTestIdSelector = (page, id, ...otherOptions) => {
