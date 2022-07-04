@@ -5,7 +5,7 @@ const EXTENSION_PATH = require('path').join(__dirname, '..', '..', 'extension', 
 
 const profileButtonSelector = '[aria-label="Emoji"]';
 
-jest.setTimeout(50000); // in milliseconds
+jest.setTimeout(60000); // in milliseconds
 
 global.secrets = {
   seedphrase: process.env.SEEDPHRASE,
@@ -136,6 +136,8 @@ const refreshWallet = async (page) => {
 
   const profileButton = await page.$(profileButtonSelector);
   await profileButton.click();
+
+  await page.waitForSelector('[data-testid="drawer"][aria-hidden="true"]', { hidden: true });
 
   const refreshWalletBtn = await getByTestId(page, 'refresh-wallet-button', true);
   await refreshWalletBtn.click();

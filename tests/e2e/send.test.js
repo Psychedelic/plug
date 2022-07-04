@@ -9,11 +9,12 @@ const getUniversalInputValue = async (page) => {
   return page.evaluate((input) => input.value, universalInput);
 };
 
-const getAvailableAmount = async (page) => {
+const getAvailableAmount = async (page, shouldFormat = true) => {
   const availableAmountTag = await page.getByTestId('available-amount', true);
+
   const availableAmountString = await page.evaluate((element) => element.innerText, availableAmountTag);
 
-  return formatTokenAmount(availableAmountString);
+  return shouldFormat ? formatTokenAmount(availableAmountString) : availableAmountString;
 };
 
 const waitForBalanceChange = async (page) => {
@@ -105,7 +106,7 @@ const tokenBalanceCheck = async (page, { previousAmount, name }) => {
   const assetAmountString = await page.evaluate((element) => element.innerText, assetAmount);
 
   const newAmount = formatTokenAmount(assetAmountString);
-  const sentAmount = (previousAmount - newAmount).toFixed(4);
+  const sentAmount = Number((previousAmount - newAmount).toFixed(4));
 
   expect(sentAmount).toBe(AMOUNT_TO_SEND);
 };
@@ -200,7 +201,7 @@ describe('Send View', () => {
     const maxButton = await page.waitForTestIdSelector('max-button');
     await maxButton.click();
     const inputValue = await getUniversalInputValue(page);
-    const availableAmount = await getAvailableAmount(page);
+    const availableAmount = await getAvailableAmount(page, false);
 
     expect(inputValue).toBe(availableAmount);
   });
@@ -218,7 +219,6 @@ describe('Send View', () => {
       await selectToken(page, name);
       const previousAmount = await getAvailableAmount(page);
 
-      console.log('Token Amount: ', previousAmount);
       await sendToken(page, name);
       previousAmounts.push(previousAmount);
       await popupPageUtils.refreshWallet(page);
@@ -302,10 +302,9 @@ describe('Send Custom Tokens', () => {
     await waitForAmount(page);
 
     for (const data of customTokenData) {
-      await sendViewButtonClick(page);
       await selectToken(page, data.name);
       const previousAmount = await getAvailableAmount(page);
-      await sendToken(page);
+      await sendToken(page, data.name);
       previousAmounts.push(previousAmount);
       await popupPageUtils.refreshWallet(page);
       await sendViewButtonClick(page);

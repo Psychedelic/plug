@@ -262,6 +262,7 @@ const Profile = ({ disableProfile }) => {
               root: classes.drawer,
               paper: classes.paper,
             }}
+            data-testid="drawer"
           >
             <div className={classes.container}>
               <div className={classes.header}>
