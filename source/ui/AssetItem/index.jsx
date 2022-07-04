@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import useStyles from './styles';
 
 const AssetItem = ({
-  updateToken, image, name, amount, value, symbol, loading, failed,
+  updateToken, image, name, amount, value, symbol, loading, failed, assetNameTestId,
 }) => {
   const classes = useStyles();
   const [fetchLoading, setFetchLoading] = useState(false);
@@ -41,7 +41,7 @@ const AssetItem = ({
             )
             : (
               <>
-                <Typography variant="h5">{name}</Typography>
+                <Typography variant="h5" data-testid={`${assetNameTestId}-${name}`}>{name}</Typography>
                 <Typography variant="subtitle2" className={clsx(loading && classes.pulse)}>
                   <NumberFormat value={amount} displayType="text" decimalScale={5} fixedDecimalScale thousandSeparator="," suffix={` ${symbol}`} data-testid={`asset-amount-${name}`} />
                 </Typography>
@@ -72,6 +72,7 @@ export default AssetItem;
 
 AssetItem.defaultProps = {
   failed: true,
+  assetNameTestId: '',
 };
 
 AssetItem.propTypes = {
@@ -83,4 +84,5 @@ AssetItem.propTypes = {
   symbol: PropTypes.string.isRequired,
   loading: PropTypes.bool.isRequired,
   failed: PropTypes.bool,
+  assetNameTestId: PropTypes.string,
 };

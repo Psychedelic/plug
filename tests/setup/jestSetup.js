@@ -12,6 +12,10 @@ global.secrets = {
   subAccountId: process.env.SUB_ACCOUNT_ID,
   password: process.env.PASSWORD,
   wrongId: process.env.WRONG_ID,
+  dustCanisterId: process.env.DUST_CANISTER_ID,
+  betaCanisterId: process.env.BETA_CANISTER_ID,
+  wtcCanisterId: process.env.WTC_CANISTER_ID,
+  wrongCanisterId: process.env.WRONG_CANISTER_ID,
 };
 
 const grantRawPermissions = async (context, url, permissions) => {
