@@ -81,6 +81,7 @@ const InputStep = ({ advanceStep }) => {
                 onChange={handleAddressChange}
                 isValid={isValid}
                 placeholder={t('nfts.inputPrincipalId')}
+                data-testid="send-nft-to-principalID-input"
               />
               )}
           />
@@ -97,6 +98,7 @@ const InputStep = ({ advanceStep }) => {
                 || !isValid
               }
             onClick={handleAdvanceStep}
+            data-testid="nft-send-continue-button"
           />
         </Grid>
       </Grid>
