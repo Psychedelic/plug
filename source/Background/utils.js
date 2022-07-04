@@ -144,7 +144,7 @@ export const validateBatchTx = (savedTxInfo, canisterId, methodName, arg) => {
 };
 
 export const handleCallRequest = async ({
-  keyring, request, callId, portId, callback, redirected,
+  keyring, request, callId, portId, callback, redirected, host,
 }) => {
   const arg = blobFromBuffer(base64ToBuffer(request.arguments));
   try {
@@ -167,7 +167,7 @@ export const handleCallRequest = async ({
       }
     }
     const signed = await keyring
-      .getAgent().call(
+      .getAgent({ host }).call(
         Principal.fromText(request.canisterId),
         {
           methodName: request.methodName,
@@ -183,6 +183,7 @@ export const handleCallRequest = async ({
     if (redirected) callback(null, true);
     return true;
   } catch (e) {
+    console.log('Error when executing update transaction', e);
     callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
     if (redirected) callback(null, false);
     return false;

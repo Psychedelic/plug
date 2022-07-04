@@ -121,6 +121,7 @@ const Home = () => {
         tabs={tabs}
         selectedTab={tabIndex}
         handleChangeTab={onChangeTab}
+        tabItemTestId="tab-item"
       />
       <ConnectAccountsModal
         wallets={wallets}

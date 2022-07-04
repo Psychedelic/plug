@@ -116,6 +116,7 @@ const IDInput = ({
                   className={classes.icon}
                   src={BookIcon}
                   onClick={() => setOpenContacts(true)}
+                  data-testid="address-book-icon"
                 />
                 )}
               <Dialog

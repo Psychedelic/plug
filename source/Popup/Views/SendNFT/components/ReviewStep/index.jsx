@@ -37,10 +37,10 @@ const ReviewStep = () => {
     setErrorMessage('');
     const to = resolvedSendAddress?.address || sendAddress?.address;
     sendMessage({ type: HANDLER_TYPES.TRANSFER_NFT, params: { nft, to } },
-      ({ error }) => {
+      (response) => {
         setLoading(false);
-        if (error) {
-          setErrorMessage(error);
+        if (response.error) {
+          setErrorMessage(response.error);
         } else {
           const filteredCollections = getFilteredCollections(collection, collections, nft);
           dispatch(setCollections({
@@ -67,6 +67,7 @@ const ReviewStep = () => {
         fullWidth
         onClick={transferNFT}
         loading={loading}
+        data-testid="confirmation-button"
       />
       {errorMessage?.length > 0 && (
         <div className={classes.errorBox}>

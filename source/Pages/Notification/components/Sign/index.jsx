@@ -28,6 +28,7 @@ const AssetsWarning = ({
   const dispatch = useDispatch();
   const classes = useStyles();
   const [showModal, setShowModal] = useState(false);
+  const [accepted, setAccepted] = useState(false);
 
   const shouldWarn = args?.requestInfo?.shouldWarn;
 
@@ -91,6 +92,11 @@ const AssetsWarning = ({
       });
   }, []);
 
+  const handleAcceptRequest = () => {
+    setAccepted(true);
+    handleAccept();
+  };
+
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
@@ -117,14 +123,16 @@ const AssetsWarning = ({
                     onClick={() => window.close()}
                     fullWidth
                     style={{ width: '96%' }}
+                    disabled={accepted}
                   />
                   <Button
                     variant="rainbow"
                     value={t('common.confirm')}
-                    onClick={handleAccept}
+                    onClick={handleAcceptRequest}
                     fullWidth
                     style={continueButtonStyles}
                     wrapperStyle={{ textAlign: 'right' }}
+                    disabled={accepted}
                   />
                 </div>
               </div>
