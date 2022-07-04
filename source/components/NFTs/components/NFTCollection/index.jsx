@@ -14,7 +14,9 @@ import { NFT_COLLECTION_DEFAULT_TYPES } from '@shared/constants/nft';
 
 import useStyles from './styles';
 
-function NFTCollection({ collection, icns, defaultOpen }) {
+function NFTCollection({
+  collection, icns, defaultOpen, collectionTestID,
+}) {
   const classes = useStyles();
   const { navigator } = useRouter();
   const [expanded, setExpanded] = useState(defaultOpen);
@@ -34,7 +36,7 @@ function NFTCollection({ collection, icns, defaultOpen }) {
         transitionTime={200}
         open={expanded}
         trigger={(
-          <div className={classes.collectionHeader} onClick={toggleExpanded}>
+          <div className={classes.collectionHeader} onClick={toggleExpanded} data-testid={`${collectionTestID}-${collection?.name}`}>
             <div className={classes.collectionTitle}>
               <div className={classes.iconContainer}>
                 <img
@@ -59,6 +61,7 @@ function NFTCollection({ collection, icns, defaultOpen }) {
               <div
                 className={classes.nftContainer}
                 onClick={() => handleNftClick(nft)}
+                data-testid={`nft-id-${name}`}
               >
                 {icns ? (
                   <ICNSDisplay
@@ -93,11 +96,13 @@ function NFTCollection({ collection, icns, defaultOpen }) {
 
 NFTCollection.defaultProps = {
   defaultOpen: false,
+  collectionTestID: '',
 };
 
 NFTCollection.propTypes = {
   icns: PropTypes.bool.isRequired,
   defaultOpen: PropTypes.bool,
+  collectionTestID: PropTypes.string,
   collection: PropTypes.shape({
     standard: PropTypes.string.isRequired,
     canisterId: PropTypes.string.isRequired,

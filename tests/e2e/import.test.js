@@ -1,8 +1,12 @@
+const getErrorMessage = async (page, error) => {
+  const passwordErrorLabel = await page.getByTestId('password-error', true);
+  const errorMessage = await page.evaluate((el) => el.textContent, passwordErrorLabel);
+  expect(errorMessage).toBe(error);
+};
+
 describe('Import/Create', () => {
   let browser;
   let page;
-
-  const passwordErrorLabel = '#options-root > div > div.MuiContainer-root.MuiContainer-maxWidthSm > div > div.MuiGrid-root.makeStyles-passwordError-4.MuiGrid-item.MuiGrid-grid-xs-12 > p';
 
   const badSeedphrase = 'sadf adsf adfdfasd adfad adfafd sdfsd sdfsdf sdfds sdfd sdf sfsfs sdfadsf';
 
@@ -64,11 +68,7 @@ describe('Import/Create', () => {
       const submitPasswordButton = await page.getByTestId('password-confirmation-button');
       await submitPasswordButton.click();
 
-      await page.waitForSelector(passwordErrorLabel);
-      const labelErrorElement = await page.$(passwordErrorLabel);
-      const errorMessage = await page.evaluate((el) => el.textContent, labelErrorElement);
-
-      expect(errorMessage).toBe('The passwords gotta match, smh!');
+      await getErrorMessage(page, 'The passwords gotta match, smh!');
     });
 
     test('failing on password shorter than 12 characters', async () => {
@@ -90,11 +90,7 @@ describe('Import/Create', () => {
       const submitPasswordButton = await page.getByTestId('password-confirmation-button');
       await submitPasswordButton.click();
 
-      await page.waitForSelector(passwordErrorLabel);
-      const labelErrorElement = await page.$(passwordErrorLabel);
-      const value = await page.evaluate((el) => el.textContent, labelErrorElement);
-
-      expect(value).toBe('The minimum is 12 characters, smh!');
+      await getErrorMessage(page, 'The minimum is 12 characters, smh!');
     });
 
     test('importing wallet correctly', async () => {
@@ -150,11 +146,7 @@ describe('Import/Create', () => {
       const submitPasswordButton = await page.getByTestId('password-confirmation-button');
       await submitPasswordButton.click();
 
-      await page.waitForSelector(passwordErrorLabel);
-      const labelErrorElement = await page.$(passwordErrorLabel);
-      const value = await page.evaluate((el) => el.textContent, labelErrorElement);
-
-      expect(value).toBe('The passwords gotta match, smh!');
+      await getErrorMessage(page, 'The passwords gotta match, smh!');
     });
 
     test('fails on password shorter than 12 characters', async () => {
@@ -169,11 +161,7 @@ describe('Import/Create', () => {
       const submitPasswordButton = await page.getByTestId('password-confirmation-button');
       await submitPasswordButton.click();
 
-      await page.waitForSelector(passwordErrorLabel);
-      const labelErrorElement = await page.$(passwordErrorLabel);
-      const value = await page.evaluate((el) => el.textContent, labelErrorElement);
-
-      expect(value).toBe('The minimum is 12 characters, smh!');
+      await getErrorMessage(page, 'The minimum is 12 characters, smh!');
     });
 
     test('correctly creates', async () => {
