@@ -19,6 +19,7 @@ const Select = ({
   imageClassName,
   nft,
   className,
+  ...other
 }) => {
   const classes = useStyles();
 
@@ -27,6 +28,7 @@ const Select = ({
       <div
         className={clsx(classes.root, readonly && classes.readonly, onClick && classes.selectable)}
         onClick={onClick}
+        {...other}
       >
         {icon}
         {image && (

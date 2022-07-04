@@ -5,7 +5,9 @@ import PropTypes from 'prop-types';
 import useStyles from './styles';
 import Tab from '../Tab';
 
-const Tabs = ({ tabs, selectedTab, handleChangeTab }) => {
+const Tabs = ({
+  tabs, selectedTab, handleChangeTab, tabItemTestId,
+}) => {
   const classes = useStyles();
   const handleChange = (_event, newValue) => handleChangeTab(newValue);
   const handleChangeIndex = (index) => handleChangeTab(index);
@@ -24,7 +26,7 @@ const Tabs = ({ tabs, selectedTab, handleChangeTab }) => {
       >
         {
           tabs.map((tab) => (
-            <Tab key={tab.label} label={tab.label} loading={tab.loading} />
+            <Tab key={tab.label} label={tab.label} loading={tab.loading} data-testid={`${tabItemTestId}-${tab.label}`} />
           ))
         }
       </MuiTabs>
@@ -63,6 +65,11 @@ Tabs.propTypes = {
   })).isRequired,
   selectedTab: PropTypes.number.isRequired,
   handleChangeTab: PropTypes.func.isRequired,
+  tabItemTestId: PropTypes.string,
+};
+
+Tabs.defaultProps = {
+  tabItemTestId: '',
 };
 
 TabPanel.propTypes = {
