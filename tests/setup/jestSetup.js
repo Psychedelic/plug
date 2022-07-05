@@ -131,6 +131,11 @@ const unlock = async (page, password) => {
 
 const waitForProfileButton = (page) => page.waitForSelector(profileButtonSelector);
 
+const ProfileButtonClick = async (page) => {
+  const profileButton = await waitForProfileButton(page);
+  await profileButton.click();
+};
+
 const refreshWallet = async (page) => {
   await waitForProfileButton(page);
 

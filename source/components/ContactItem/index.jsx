@@ -9,7 +9,7 @@ import CopyButton from '../CopyButton';
 import useStyles from './styles';
 
 const ContactItem = ({
-  contact, handleClick, handleDelete, handleCancel,
+  contact, handleClick, handleDelete, handleCancel, contactTestId,
 }) => {
   const classes = useStyles();
   return (
@@ -18,6 +18,7 @@ const ContactItem = ({
         handleClick && classes.selectable,
         handleCancel ? classes.cancelable : classes.border)}
       onClick={() => handleClick(contact)}
+      data-testid={`${contactTestId}-${contact.name}`}
     >
       <UserIcon icon={contact.image} />
       <div className={classes.nameContainer}>
@@ -52,12 +53,14 @@ ContactItem.propTypes = {
   handleClick: PropTypes.func,
   handleDelete: PropTypes.func,
   handleCancel: PropTypes.func,
+  contactTestId: PropTypes.string,
 };
 
 ContactItem.defaultProps = {
   handleClick: null,
   handleDelete: null,
   handleCancel: null,
+  contactTestId: 'contact-name',
 };
 
 export default ContactItem;
