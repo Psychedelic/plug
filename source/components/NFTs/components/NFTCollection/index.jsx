@@ -30,6 +30,8 @@ function NFTCollection({
   const toggleExpanded = () => setExpanded(!expanded);
   const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[collection.canisterId];
 
+  console.log(collection);
+
   return (
     <div className={classes.collection}>
       <Collapsible
@@ -47,11 +49,15 @@ function NFTCollection({
               </div>
               <Typography variant="h5">{collection?.name}</Typography>
             </div>
-            <ChevronDown
-              className={clsx(classes.expandIcon, expanded && classes.rotate)}
-              size={20}
-
-            />
+            <div className={classes.numberArrowContainer}>
+              <p className={classes.nftQty}>
+                {collection.tokens.length}
+              </p>
+              <ChevronDown
+                className={clsx(classes.expandIcon, expanded && classes.rotate)}
+                size={20}
+              />
+            </div>
           </div>
         )}
       >
