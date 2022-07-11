@@ -34,9 +34,9 @@ const SendNFT = () => {
   return (
     <Layout>
       <Header
-        left={<LinkButton value={t('common.back')} onClick={onBack} startIcon={BackIcon} />}
+        left={<LinkButton value={t('common.back')} onClick={onBack} startIcon={BackIcon} data-testid="back-to-nft-button" />}
         center={title}
-        right={<LinkButton value={t('common.close')} onClick={navigateHome} />}
+        right={<LinkButton value={t('common.close')} onClick={navigateHome} data-testid="close-nft-send-button" />}
       />
       {component}
     </Layout>

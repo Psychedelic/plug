@@ -11,6 +11,21 @@ global.secrets = {
   seedphrase: process.env.SEEDPHRASE,
   subAccountId: process.env.SUB_ACCOUNT_ID,
   password: process.env.PASSWORD,
+  wrongId: process.env.WRONG_ID,
+  dustCanisterId: process.env.DUST_CANISTER_ID,
+  betaCanisterId: process.env.BETA_CANISTER_ID,
+  wtcCanisterId: process.env.WTC_CANISTER_ID,
+  wrongCanisterId: process.env.WRONG_CANISTER_ID,
+};
+
+const grantRawPermissions = async (context, url, permissions) => {
+  // @ts-ignore
+  await context._connection.send('Browser.grantPermissions', {
+    origin: url,
+    // @ts-ignore
+    browserContextId: context._id,
+    permissions,
+  });
 };
 
 global.setupChrome = async () => {
@@ -23,10 +38,10 @@ global.setupChrome = async () => {
       `--load-extension=${EXTENSION_PATH}`,
       '--enable-automation',
     ],
+
   });
   const targets = await browser.targets();
   const extensionTarget = targets.find(({ _targetInfo }) => _targetInfo.title === PAGE_TITLE);
-
   const partialExtensionUrl = extensionTarget._targetInfo.url || '';
   const [, , extensionID] = partialExtensionUrl.split('/');
 
@@ -35,7 +50,9 @@ global.setupChrome = async () => {
   const popupUrl = `${baseUrl}/popup.html`;
 
   const context = browser.defaultBrowserContext();
-  await context.overridePermissions(baseUrl, ['clipboard-write']);
+  // Please read https://github.com/dom111/code-sandbox/blob/fffd2aa9ae9250acaeeb03e516ca25e6fec5cafb/tests/lib/grantClipboardPermissions.ts#L18
+  // In order to understand why grantRawPermissions was used
+  await grantRawPermissions(context, baseUrl, ['clipboardReadWrite', 'clipboardSanitizedWrite']);
 
   global.chromeData = {
     baseUrl,
@@ -47,13 +64,6 @@ global.setupChrome = async () => {
 };
 
 // General utils
-
-const getXPathElements = async (page, elementType, content, wait = false) => {
-  const xPath = `//${elementType}[contains(.,"${content}")]`;
-
-  if (wait) await page.waitForXPath(xPath);
-  return page.$x(xPath);
-};
 
 const getTestIdSelector = (id) => `[data-testid="${id}"]`;
 

@@ -24,16 +24,14 @@ const Tokens = () => {
   const { onScroll, fullScroll } = useScroll();
 
   const fetchAssets = () => {
-    if (icpPrice) {
-      sendMessage({
-        type: HANDLER_TYPES.GET_ASSETS,
-        params: {},
-      }, (keyringAssets) => {
-        dispatch(setAssets({ keyringAssets, icpPrice }));
-        dispatch(setAssetsLoading(false));
-        setLoading(false);
-      });
-    }
+    sendMessage({
+      type: HANDLER_TYPES.GET_ASSETS,
+      params: {},
+    }, (keyringAssets) => {
+      dispatch(setAssets({ keyringAssets, icpPrice }));
+      dispatch(setAssetsLoading(false));
+      setLoading(false);
+    });
   };
 
   useEffect(() => {
@@ -64,13 +62,14 @@ const Tokens = () => {
         onScroll={onScroll}
       >
         {
-          assets?.map((asset) => (
+          assets?.map((asset, index) => (
             <AssetItem
               {...asset}
+              key={`${asset.name}-${index}`}
               updateToken={fetchAssets}
-              key={asset.name}
               loading={loading}
               failed={asset.amount === AMOUNT_ERROR}
+              assetNameTestId="asset-name"
             />
           ))
         }
@@ -79,6 +78,7 @@ const Tokens = () => {
       <div
         onClick={() => navigator.navigate('add-token')}
         className={classes.buttonWrapper}
+        data-testid="add-custom-token-button"
       >
         <Plus size="30" className={classes.icon} strokeWidth={2.5} />
       </div>
