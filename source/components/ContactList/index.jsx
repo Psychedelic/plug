@@ -32,6 +32,7 @@ const ContactList = ({
                   key={contact.id}
                   contact={contact}
                   handleClick={selectable ? onClick : null}
+                  contactTestId="contact-name"
                   handleDelete={selectable
                     ? null
                     : () => { setSelectedContact(contact); setOpen(true); }}

@@ -118,7 +118,7 @@ describe('Send View', () => {
     const amountInput = await page.getByTestId('select-token-input');
     const addressInput = await page.getByTestId('send-to-principalID-input');
     await addressInput.click();
-    await addressInput.type(secrets.subAccountId);
+    await addressInput.type(secrets.subPrincipalId);
     await amountInput.click();
     await page.keyboard.press('ArrowLeft');
     await page.keyboard.press('ArrowLeft');

@@ -78,6 +78,7 @@ const AddContact = ({ handleAddContact }) => {
                 onChange={handleChangeName}
                 inputProps={{ maxLength: 25 }}
                 type="text"
+                data-testid="name-input"
               />
             )}
           />
@@ -93,6 +94,7 @@ const AddContact = ({ handleAddContact }) => {
                 onChange={handleChangeId}
                 type="text"
                 error={isValidId === false}
+                data-testid="principalid-input"
               />
             )}
           />
@@ -101,7 +103,7 @@ const AddContact = ({ handleAddContact }) => {
           invalidReason
           && (
             <Grid item xs={12} className={classes.appearAnimation}>
-              <Typography variant="subtitle1" className={classes.danger}>{invalidReason}</Typography>
+              <Typography variant="subtitle1" className={classes.danger} data-testid="error">{invalidReason}</Typography>
             </Grid>
           )
         }
@@ -117,6 +119,7 @@ const AddContact = ({ handleAddContact }) => {
             }
             loading={loading}
             onClick={addContact}
+            data-testid="add-button"
           />
         </Grid>
       </Grid>

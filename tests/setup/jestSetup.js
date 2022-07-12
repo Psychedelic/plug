@@ -10,7 +10,12 @@ jest.setTimeout(50000); // in milliseconds
 global.secrets = {
   seedphrase: process.env.SEEDPHRASE,
   subAccountId: process.env.SUB_ACCOUNT_ID,
+  subPrincipalId: process.env.SUB_PRINCIPAL_ID,
+  icnsName: process.env.ICNS_NAME,
   password: process.env.PASSWORD,
+  wrongId: process.env.WRONG_ID,
+  wrongAccountId: process.env.WRONG_ACCOUNT_ID,
+  wrongICNSname: process.env.WRONG_ICNS_NAME,
 };
 
 global.setupChrome = async () => {
@@ -121,11 +126,15 @@ const unlock = async (page, password) => {
 
 const waitForProfileButton = (page) => page.waitForSelector(profileButtonSelector);
 
+const profileButtonClick = async (page) => {
+  const profileButton = await page.$(profileButtonSelector);
+  await profileButton.click();
+};
+
 const refreshWallet = async (page) => {
   await waitForProfileButton(page);
 
-  const profileButton = await page.$(profileButtonSelector);
-  await profileButton.click();
+  await profileButtonClick(page);
 
   const refreshWalletBtn = await getByTestId(page, 'refresh-wallet-button', true);
   await refreshWalletBtn.click();
@@ -155,6 +164,7 @@ const popupPageUtils = {
   createSubAccount,
   refreshWallet,
   waitForProfileButton,
+  profileButtonClick,
 };
 
 global.popupPageUtils = popupPageUtils;
