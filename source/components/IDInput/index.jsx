@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -28,6 +29,7 @@ const IDInput = ({
   const [isContactsOpened, setIsContactsOpened] = useState(false);
   const [contactName, setContactName] = useState('');
   const [openContacts, setOpenContacts] = useState(false);
+  // const [rawContacts, setRawsContacts] = useState([]);
 
   const { principalId, accountId } = useSelector((state) => state.wallet);
   const { groupedContacts: contacts } = useSelector((state) => state.contacts);
@@ -80,6 +82,17 @@ const IDInput = ({
     setContactName(e.target.value);
   };
 
+  const searchContactFromId = (e) => {
+    onChange(e.target.value);
+    contacts.forEach((contact) => {
+      contact.contacts.forEach((i) => {
+        if (e.target.value === i.id) {
+          setSelectedContact(i);
+        }
+      });
+    });
+  };
+
   return (
     <>
       <div className={classes.root}>
@@ -103,7 +116,7 @@ const IDInput = ({
               fullWidth
               value={value}
               type="text"
-              onChange={(e) => onChange(e.target.value)}
+              onChange={(e) => searchContactFromId(e)}
               placeholder={placeholder || t('send.inputId')}
               {...other}
             />
