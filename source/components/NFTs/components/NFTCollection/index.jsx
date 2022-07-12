@@ -30,8 +30,6 @@ function NFTCollection({
   const toggleExpanded = () => setExpanded(!expanded);
   const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[collection.canisterId];
 
-  console.log(collection);
-
   return (
     <div className={classes.collection}>
       <Collapsible
