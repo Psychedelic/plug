@@ -27,7 +27,7 @@ const principalIdInputFill = async (page, id) => {
 };
 
 const saveContactButtonClick = async (page) => {
-  const saveContactButton = await page.getByTestId('add-button', true);
+  const saveContactButton = await page.waitForSelector('[data-testid="add-button"]:not([disabled])');
   await saveContactButton.click();
 };
 
@@ -62,7 +62,25 @@ const addCorrectContact = async (page, { handle, name }) => {
   await saveContactButtonClick(page);
   await page.getByTestId(`contact-name-${name}`, true);
 };
-// Utilities
+
+const copyContactsAddress = async (page, { handle, name }) => {
+  const copyButton = await page.getByTestId(`copy-contact-button-${name}`, true);
+  await copyButton.click();
+
+  const copiedText = await page.evaluate(() => navigator.clipboard.readText());
+
+  expect(copiedText).toBe(handle);
+};
+
+const deleteContact = async (page, { name }) => {
+  const deleteButton = await page.getByTestId(`delete-contact-button-${name}`, true);
+  await deleteButton.click();
+
+  const confirmDeletingButton = await page.getByTestId('confirm-deleting-button', true);
+  await confirmDeletingButton.click();
+
+  await page.waitForTestIdSelector(`delete-contact-button-${name}`, { hidden: true });
+};
 
 describe('Contacts', () => {
   let browser;
@@ -117,18 +135,26 @@ describe('Contacts', () => {
   });
 
   test('adding contact', async () => {
-    // eslint-disable-next-line no-restricted-syntax
     for (const data of correctData) {
-      // eslint-disable-next-line indent
-            await addCorrectContact(page, data);
+      await addCorrectContact(page, data);
     }
   });
 
   test('adding contact: which already exist, have nonexistent principal id, account id and ICNS name', async () => {
-    // eslint-disable-next-line no-restricted-syntax
     for (const data of wrongData) {
-    // eslint-disable-next-line indent
-        await addWrongContact(page, data);
+      await addWrongContact(page, data);
+    }
+  });
+
+  test("copying contact's address", async () => {
+    for (const data of correctData) {
+      await copyContactsAddress(page, data);
+    }
+  });
+
+  test('deleting contact', async () => {
+    for (const data of correctData) {
+      await deleteContact(page, data);
     }
   });
 });

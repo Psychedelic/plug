@@ -29,11 +29,12 @@ const ContactItem = ({
         handleDelete
         && (
           <>
-            <CopyButton text={contact.id} placement="left" style={{ marginLeft: 'auto' }} />
+            <CopyButton data-testid={`copy-contact-button-${contact.name}`} text={contact.id} placement="left" style={{ marginLeft: 'auto' }} />
             <Trash2
               className={clsx(classes.icon, classes.deleteIcon)}
               onClick={() => handleDelete()}
               size="18"
+              data-testid={`delete-contact-button-${contact.name}`}
             />
           </>
         )

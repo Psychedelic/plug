@@ -18,6 +18,16 @@ global.secrets = {
   wrongICNSname: process.env.WRONG_ICNS_NAME,
 };
 
+const grantRawPermissions = async (context, url, permissions) => {
+  // @ts-ignore
+  await context._connection.send('Browser.grantPermissions', {
+    origin: url,
+    // @ts-ignore
+    browserContextId: context._id,
+    permissions,
+  });
+};
+
 global.setupChrome = async () => {
   const puppeteer = require('puppeteer');
   const browser = await puppeteer.launch({
@@ -40,7 +50,9 @@ global.setupChrome = async () => {
   const popupUrl = `${baseUrl}/popup.html`;
 
   const context = browser.defaultBrowserContext();
-  await context.overridePermissions(baseUrl, ['clipboard-write']);
+  // Please read https://github.com/dom111/code-sandbox/blob/fffd2aa9ae9250acaeeb03e516ca25e6fec5cafb/tests/lib/grantClipboardPermissions.ts#L18
+  // In order to understand why grantRawPermissions was used
+  await grantRawPermissions(context, baseUrl, ['clipboardReadWrite', 'clipboardSanitizedWrite']);
 
   global.chromeData = {
     baseUrl,
