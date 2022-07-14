@@ -383,20 +383,30 @@ export const deleteContact = (contactName) => new Promise((resolve) => {
   });
 });
 
-export const sendToken = ({ to, amount, canisterId, opts }) =>  new Promise((resolve) => {
+export const sendToken = ({ to, amount, canisterId, opts }) =>  new Promise((resolve, reject) => {
   sendMessage({
     type: HANDLER_TYPES.SEND_TOKEN,
     params: { to, amount, canisterId, opts },
   }, (res) => {
+    if (res.error) {
+      reject(res);
+      return;
+    }
+
     resolve(res);
   });
 });
 
-export const burnXTC = ({ to, amount }) => new Promise((resolve) => {
+export const burnXTC = ({ to, amount }) => new Promise((resolve, reject) => {
   sendMessage({
     type: HANDLER_TYPES.BURN_XTC,
     params: { to, amount },
   }, (res) => {
-    resolve(res);
+    if (res.error) {
+      reject(res);
+      return;
+    }
+
+   resolve(res);
   });
 });
