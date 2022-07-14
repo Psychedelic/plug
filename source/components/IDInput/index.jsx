@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import MInputBase from '@material-ui/core/InputBase';
@@ -10,7 +10,7 @@ import {
 } from '@ui';
 import { CircularProgress, Grid } from '@material-ui/core';
 import { getRandomEmoji } from '@shared/constants/emojis';
-import { addContact as addContactAction } from '@redux/contacts';
+import { addContact as addContactAction, getContacts } from '@redux/contacts';
 
 import ActionDialog from '../ActionDialog';
 import ContactItem from '../ContactItem';
@@ -18,7 +18,7 @@ import ContactList from '../ContactList';
 import useStyles from './styles';
 
 const IDInput = ({
-  value, onChange, placeholder, isValid, loading, ...other
+  value, onChange, placeholder, isValid, loadingIcns, ...other
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
@@ -31,6 +31,14 @@ const IDInput = ({
 
   const { principalId, accountId } = useSelector((state) => state.wallet);
   const { groupedContacts: contacts } = useSelector((state) => state.contacts);
+  const { contactsLoading } = useSelector((state) => state.contacts);
+
+  console.log('component ->', contactsLoading);
+
+  useEffect(() => {
+    console.log('aa');
+    dispatch(getContacts());
+  }, []);
 
   const isUserAddress = useMemo(
     () => [principalId, accountId].includes(value), [principalId, accountId, value],
@@ -42,7 +50,7 @@ const IDInput = ({
     .includes(value), [contacts, value]);
 
   const shouldDisplayAddToContacts = value !== null && value !== ''
-    && !loading && isValid && !inContacts && !isUserAddress;
+    && !loadingIcns && isValid && !inContacts && !isUserAddress;
 
   const handleSelectedContact = (contact) => setSelectedContact(contact);
 
@@ -63,7 +71,7 @@ const IDInput = ({
   };
 
   const addContact = () => {
-    if (loading) return;
+    if (loadingIcns) return;
     const contact = {
       name: contactName,
       id: value,
@@ -108,7 +116,7 @@ const IDInput = ({
               {...other}
             />
             <div className={classes.iconContainer}>
-              {loading ? (
+              {(contactsLoading || loadingIcns) ? (
                 <CircularProgress size={24} />
               )
                 : contacts.length > 0 && (
@@ -189,12 +197,12 @@ IDInput.propTypes = {
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string.isRequired,
   isValid: PropTypes.bool,
-  loading: PropTypes.bool,
+  loadingIcns: PropTypes.bool,
 };
 
 IDInput.defaultProps = {
   isValid: true,
-  loading: false,
+  loadingIcns: false,
 };
 
 export default IDInput;

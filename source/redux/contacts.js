@@ -81,6 +81,7 @@ export const contactSlice = createSlice({
   initialState: {
     contacts: [],
     groupedContacts: [],
+    contactsLoading: false,
   },
   reducers: { },
   extraReducers: (builder) => {
@@ -104,14 +105,19 @@ export const contactSlice = createSlice({
         state.groupedContacts = groupContacts(filteredContacts);
       })
       .addCase(getContacts.pending, (state, action) => {
+        state.contactsLoading = true;
+        console.log('estado', state.contactsLoading);
         if (action.meta.arg.refresh) {
           state.contacts = [];
           state.groupedContacts = [];
           setLocalDabContacts([]);
+          console.log('refresh');
         } else {
           state.contacts = action.meta.arg.localContacts;
           state.groupedContacts = groupContacts(action.meta.arg.localContacts);
+          console.log('tu javie');
         }
+        console.log('action finished');
       })
       .addCase(getContacts.fulfilled, (state, action) => {
         let newContactList = [...state?.contacts, ...action?.payload, ...action.meta.arg?.localContacts];
@@ -121,6 +127,8 @@ export const contactSlice = createSlice({
 
         state.contacts = newContactList;
         state.groupedContacts = groupContacts(newContactList);
+        state.contactsLoading = false;
+        console.log('estado', state.contactsLoading);
       })
       .addCase(removeContact.pending, (state, action) => {
         const contact = action.meta.arg;
