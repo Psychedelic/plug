@@ -13,7 +13,7 @@ import NumberFormat from 'react-number-format';
 import { ADDRESS_TYPES } from '@shared/constants/addresses';
 import { isICNSName } from '@shared/utils/ids';
 import { getAssetFee } from '@shared/constants/addresses';
-import { setSendTokenAmount, setSendTokenAddress } from '@redux/send';
+import { setSendTokenAmount, setSendTokenAddress, resetState } from '@redux/send';
 import { MAX_DECIMALS, DISPLAY_DECIMALS } from '@shared/constants/send';
 import { truncateFloatForDisplay } from '@shared/utils/send';
 
@@ -21,7 +21,6 @@ import useStyles from '../../styles';
 import { CyclesToAccountWarning } from './components';
 
 const SelectAsset = ({
-  assets,
   loadingAddress,
 
   handleChangeStep,
@@ -32,6 +31,7 @@ const SelectAsset = ({
   const dispatch = useDispatch();
   const classes = useStyles();
 
+  const { assets } = useSelector((state) => state.wallet);
   const {
     amount: rawAmount,
     address,
@@ -90,6 +90,18 @@ const SelectAsset = ({
       suffix: primaryValue.suffix,
     });
   }, [primaryValue]);
+
+  useEffect(() => {
+    dispatch(resetState());
+
+    const convertedAmount = Math.max(available * primaryValue.conversionRate, 0);
+
+    setAvailableAmount({
+      amount: convertedAmount,
+      prefix: primaryValue.prefix,
+      suffix: primaryValue.suffix,
+    });
+  }, []);
 
   return (
     <Container>
@@ -189,6 +201,5 @@ SelectAsset.propTypes = {
   handleChangeStep: PropTypes.func.isRequired,
   handleSwapValues: PropTypes.func.isRequired,
   handleChangeAsset: PropTypes.func.isRequired,
-  assets: PropTypes.arrayOf(PropTypes.object).isRequired,
   loadingAddress: PropTypes.bool.isRequired,
 };
