@@ -201,7 +201,6 @@ const useSteps = () => {
     {
       component: <SelectAssetStep
         handleSwapValues={handleSwapValues}
-        assets={assets}
         handleChangeAsset={handleChangeAsset}
         handleChangeStep={handleNextStep}
         loadingAddress={loading}
