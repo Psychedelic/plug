@@ -62,7 +62,7 @@ const Confirm = ({ handleSendClick }) => {
     addressInfo,
     amount,
     error,
-    asset: selectedAsset,
+    selectedAsset: asset,
     fulfilled: isTrxCompleted,
   } = useSelector((state) => state.send);
 
