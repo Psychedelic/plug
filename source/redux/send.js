@@ -38,8 +38,8 @@ const DEFAULT_STATE = {
 export const sendToken = createAsyncThunk(
   'sendToken/regularSend',
   async (arg, { getState }) => {
-    const state = getState();
-    const { addressInfo, address, amount: rawAmount } = state;
+    const { send: state } = getState();
+    const { addressInfo, address, amount: rawAmount, selectedAsset } = state;
 
     const to = addressInfo.resolvedAddress || address;
     const amount = rawAmount.toString();
@@ -53,7 +53,7 @@ export const sendToken = createAsyncThunk(
 export const burnXTC = createAsyncThunk(
   'sendToken/burnXTC',
   async (arg, { getState}) => {
-    const state = getState();
+    const { send: state } = getState();
     const { addressInfo, address, amount: rawAmount } = state;
 
     const to = addressInfo.resolvedAddress || address;
@@ -121,6 +121,11 @@ export const sendSlice = createSlice({
       state.primaryValue = state.secondaryValue;
       state.secondaryValue = temp;
     },
+    resetState: (state, action) => {
+      Object.keys(DEFAULT_STATE).forEach((stateKey) => {
+        state[stateKey] = DEFAULT_STATE[stateKey];
+      });
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -165,6 +170,7 @@ export const {
   setSendTokenSelectedAsset,
   setSendingXTCtoCanister,
   swapSendTokenValues,
+  resetState,
 } = sendSlice.actions;
 
 export default sendSlice.reducer;
