@@ -1,8 +1,3 @@
-const createAccountButtonClick = async (page) => {
-  const createAccountButton = await page.getByTestId('create-account-button', true);
-  await createAccountButton.click();
-};
-
 describe('Send View', () => {
   let browser;
   let page;
@@ -34,7 +29,7 @@ describe('Send View', () => {
   });
 
   test('canceling creating subaccount', async () => {
-    await createAccountButtonClick(page);
+    await popupPageUtils.createAccountButtonClick(page);
 
     await popupPageUtils.fillNameInput(page, 'Test');
 

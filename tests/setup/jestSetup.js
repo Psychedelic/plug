@@ -145,6 +145,11 @@ const fillNameInput = async (page, name) => {
   await nameInput.type(name);
 };
 
+const createAccountButtonClick = async (page) => {
+  const createAccountButton = await getByTestId(page, 'create-account-button', true);
+  await createAccountButton.click();
+};
+
 const refreshWallet = async (page) => {
   await profileButtonClick(page);
 
@@ -155,9 +160,7 @@ const refreshWallet = async (page) => {
 };
 
 const createSubAccount = async (page, name) => {
-  const createAccountButton = await getByTestId(page, 'create-account-button', true);
-  await createAccountButton.click();
-
+  await createAccountButtonClick(page);
   await fillNameInput(page, name);
 
   const createAccountSubmitButton = await getByTestId(page, 'create-account-submit-button', true);
@@ -180,6 +183,7 @@ const popupPageUtils = {
   refreshWallet,
   profileButtonClick,
   fillNameInput,
+  createAccountButtonClick,
 };
 
 global.popupPageUtils = popupPageUtils;
