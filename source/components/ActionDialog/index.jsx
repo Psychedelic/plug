@@ -11,7 +11,17 @@ import { Button } from '@ui';
 import useStyles from './styles';
 
 const ActionDialog = ({
-  title, content, button, buttonVariant, onClick, onClose, open, className,
+  title,
+  content,
+  confirmText,
+  cancelText,
+  buttonVariant,
+  onClick,
+  onClose,
+  open,
+  className,
+  cancelButtonProps,
+  submitButtonProps,
 }) => {
   const classes = useStyles();
 
@@ -33,18 +43,20 @@ const ActionDialog = ({
         <div className={classes.buttonContainer}>
           <Button
             variant="default"
-            value="Cancel"
+            value={cancelText}
             onClick={onClose}
             style={{ width: '96%' }}
             fullWidth
+            {...cancelButtonProps}
           />
           <Button
             variant={buttonVariant}
-            value={button}
+            value={confirmText}
             onClick={onClick}
             style={{ width: '96%' }}
             wrapperStyle={{ textAlign: 'right' }}
             fullWidth
+            {...submitButtonProps}
           />
         </div>
       </DialogContent>
@@ -54,17 +66,27 @@ const ActionDialog = ({
 
 export default ActionDialog;
 
+ActionDialog.defaultProps = {
+  cancelButtonProps: {},
+  submitButtonProps: {},
+};
+
 ActionDialog.propTypes = {
   title: PropTypes.string.isRequired,
   content: PropTypes.node.isRequired,
-  button: PropTypes.string.isRequired,
   buttonVariant: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
+  confirmText: PropTypes.string,
+  cancelText: PropTypes.string,
   className: PropTypes.string,
+  cancelButtonProps: PropTypes.objectOf(PropTypes.string),
+  submitButtonProps: PropTypes.objectOf(PropTypes.string),
 };
 
 ActionDialog.defaultProps = {
   className: '',
+  confirmText: 'Confirm',
+  cancelText: 'Cancel',
 };

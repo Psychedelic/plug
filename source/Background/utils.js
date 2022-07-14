@@ -144,7 +144,7 @@ export const validateBatchTx = (savedTxInfo, canisterId, methodName, arg) => {
 };
 
 export const handleCallRequest = async ({
-  keyring, request, callId, portId, callback, redirected,
+  keyring, request, callId, portId, callback, redirected, host,
 }) => {
   const arg = blobFromBuffer(base64ToBuffer(request.arguments));
   try {
@@ -167,7 +167,7 @@ export const handleCallRequest = async ({
       }
     }
     const signed = await keyring
-      .getAgent().call(
+      .getAgent({ host }).call(
         Principal.fromText(request.canisterId),
         {
           methodName: request.methodName,
@@ -183,23 +183,41 @@ export const handleCallRequest = async ({
     if (redirected) callback(null, true);
     return true;
   } catch (e) {
+    console.log('Error when executing update transaction', e);
     callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
     if (redirected) callback(null, false);
     return false;
   }
 };
 
-export const generateRequestInfo = (args) => {
+const getLeafValues = (data, values = []) => {
+  if (!data) return [...values, data];
+  if (typeof data !== 'object') {
+    return [data];
+  }
+  return [...values, ...Object.values(data).flatMap((v) => getLeafValues(v, values))];
+};
+
+const doObjectValuesMatch = (obj1 = {}, obj2 = {}) => {
+  const leafValues1 = getLeafValues(obj1) || [];
+  const leafValues2 = getLeafValues(obj2) || [];
+  return leafValues1.every((v) => leafValues2.includes(v));
+};
+
+export const generateRequestInfo = (args, preDecodedArgs) => {
   const decodedArguments = recursiveParseBigint(
     PlugController.IDLDecode(blobFromBuffer(base64ToBuffer(args.arg))),
   );
+  // TODO: Check if it's possible to decode keys in arguments
+  const shouldWarn = !doObjectValuesMatch(preDecodedArgs, decodedArguments);
   return {
     canisterId: args.canisterId,
     methodName: args.methodName,
     sender: args.sender,
     arguments: args.arg,
-    decodedArguments,
+    decodedArguments: preDecodedArgs || decodedArguments,
     type: 'call',
+    shouldWarn,
   };
 };
 

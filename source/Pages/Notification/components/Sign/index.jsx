@@ -20,7 +20,7 @@ import useStyles from './styles';
 i18n.use(initReactI18next).init(initConfig);
 
 const AssetsWarning = ({
-  args, callId, portId, metadata, setOnTimeout,
+  args, callId, portId, metadata, setOnTimeout, transactionId,
 }) => {
   const { t } = useTranslation();
   const { url, icons } = metadata;
@@ -28,15 +28,16 @@ const AssetsWarning = ({
   const dispatch = useDispatch();
   const classes = useStyles();
   const [showModal, setShowModal] = useState(false);
+  const [accepted, setAccepted] = useState(false);
 
-  const shouldWarn = !(args?.requestInfo?.decodedArguments);
+  const shouldWarn = args?.requestInfo?.shouldWarn;
 
   const {
     request,
     data,
     handleAccept,
     handleDecline,
-  } = useRequest(args, callId, portId);
+  } = useRequest(args, callId, portId, transactionId);
   const handleBackdropClick = (event) => {
     if (showModal) {
       event.preventDefault();
@@ -91,6 +92,11 @@ const AssetsWarning = ({
       });
   }, []);
 
+  const handleAcceptRequest = () => {
+    setAccepted(true);
+    handleAccept();
+  };
+
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
@@ -117,14 +123,16 @@ const AssetsWarning = ({
                     onClick={() => window.close()}
                     fullWidth
                     style={{ width: '96%' }}
+                    disabled={accepted}
                   />
                   <Button
                     variant="rainbow"
                     value={t('common.confirm')}
-                    onClick={handleAccept}
+                    onClick={handleAcceptRequest}
                     fullWidth
                     style={continueButtonStyles}
                     wrapperStyle={{ textAlign: 'right' }}
+                    disabled={accepted}
                   />
                 </div>
               </div>

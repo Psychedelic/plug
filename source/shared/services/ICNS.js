@@ -5,9 +5,12 @@ import shortAddress from '@shared/utils/short-address';
 
 import resolverIDL from '../utils/ic/icns/resolver.did';
 import registryIDL from '../utils/ic/icns/registry.did';
+import ReverseRegistrarIDL from '../utils/ic/icns/reverse_registrar.did';
+import { Principal } from '@dfinity/principal';
 
 const ICNS_REGISTRY_ID = 'e5kvl-zyaaa-aaaan-qabaq-cai';
 const ICNS_RESOLVER_ID = 'euj6x-pqaaa-aaaan-qabba-cai';
+const ICNS_REVERSE_REGISTRAR_ID = 'etiyd-ciaaa-aaaan-qabbq-cai';
 const DEFAULT_AGENT = new HttpAgent({ fetch: crossFetch, host: 'https://ic0.app' });
 export const shortICNSName = (name) => shortAddress(name, 3, 5);
 
@@ -21,6 +24,11 @@ const Resolver = Actor.createActor(resolverIDL, {
 
 const Registry = Actor.createActor(registryIDL, {
   canisterId: ICNS_REGISTRY_ID,
+  agent: DEFAULT_AGENT,
+});
+
+const ReverseRegistrar = Actor.createActor(ReverseRegistrarIDL, {
+  canisterId: ICNS_REVERSE_REGISTRAR_ID,
   agent: DEFAULT_AGENT,
 });
 
@@ -47,4 +55,23 @@ export const resolveName = async (name, isICP) => {
     return owner?.toString?.();
   }
   return Array.isArray(principal) ? principal?.[0]?.toString() : principal?.toString?.();
+};
+
+export const getReverseResolvedName = async (principal) => {
+  try {
+    const name = await ReverseRegistrar.getName(Principal.fromText(principal));
+    return name?.toString?.();
+  } catch (e) {
+    console.warn('Failed to get reverse resolved name', e); // eslint-disable-line no-console
+    return null;
+  }
+};
+
+export const getMultipleReverseResolvedNames = async (principals) => {
+  const names = {};
+  await Promise.all(principals.map(async (pid) => {
+    const name = await getReverseResolvedName(pid);
+    names[pid] = name;
+  }));
+  return names;
 };

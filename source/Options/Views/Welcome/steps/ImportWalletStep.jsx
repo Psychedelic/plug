@@ -17,9 +17,11 @@ const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
   };
 
   const handleImportMnemonic = () => {
-    const isValid = bip39.validateMnemonic(text);
+    const trimmedText = text.trim();
+
+    const isValid = bip39.validateMnemonic(trimmedText);
     if (isValid) {
-      handleSetMnemonic(text);
+      handleSetMnemonic(trimmedText);
       handleNextStep();
     } else {
       setInvalidMnemonic(true);
@@ -46,6 +48,7 @@ const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
               multiline
               rows={4}
               error={invalidMnemonic}
+              data-testid="seedphrase-input"
             />
           )}
         />
@@ -57,6 +60,7 @@ const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
           onClick={handleImportMnemonic}
           fullWidth
           disabled={handleValidateMnemonic()}
+          data-testid="confirm-seedphrase-button"
         />
       </Grid>
     </>

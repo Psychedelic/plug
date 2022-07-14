@@ -34,6 +34,8 @@ module.exports = {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'react/jsx-props-no-spreading': 'off',
     'no-nested-ternary': 'off',
+    'no-await-in-loop': 'off',
+    'no-restricted-syntax': 'off',
   },
   settings: {
     'import/resolver': {
@@ -51,4 +53,15 @@ module.exports = {
       },
     },
   },
+  overrides: [
+    {
+      files: [
+        '**/*.test.js',
+        '**/*.test.jsx',
+      ],
+      env: {
+        jest: true,
+      },
+    },
+  ],
 };

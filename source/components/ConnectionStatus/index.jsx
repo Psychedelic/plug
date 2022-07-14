@@ -65,7 +65,7 @@ const ConnectionStatus = ({ incStatus = null }) => {
   return (
     <div className={clsx(classes.root, classes[className])}>
       {icon}
-      <span>{t(label, { version: browser.runtime.getManifest().version })}</span>
+      <span data-testid="banner-text">{t(label, { version: browser.runtime.getManifest().version })}</span>
       {
         status === CONNECTION_STATUS.accepted
         && <span className={classes.web}>&nbsp;{activeTab}</span>

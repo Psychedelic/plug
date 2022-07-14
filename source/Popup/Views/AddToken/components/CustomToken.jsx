@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { useTranslation } from 'react-i18next';
 import {
-  Button, FormItem, TextInput, Container, Alert, Dialog, Select,
+  Button,
+  FormItem,
+  TextInput,
+  Container,
+  Alert,
+  Dialog,
+  Select,
 } from '@ui';
 import { validateCanisterId } from '@shared/utils/ids';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
@@ -18,14 +24,14 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
   const [canisterId, setCanisterId] = useState('');
   const [standard, setStandard] = useState(FUNGIBLE_STANDARDS.DIP20);
   const [invalidToken, setInvalidToken] = useState(null);
-  const [tokenError, setTokenError] = useState(false);
+  const [tokenError, setTokenError] = useState('');
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const classes = useStyles();
 
   const handleChangeId = (e) => {
     setCanisterId(e.target.value.trim());
-    setTokenError(false);
+    setTokenError('');
   };
 
   useEffect(() => {
@@ -36,23 +42,30 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    sendMessage({
-      type: HANDLER_TYPES.GET_TOKEN_INFO,
-      params: { canisterId, standard },
-    }, async (tokenInfo) => {
-      if (tokenInfo?.error) {
-        setTokenError(true);
-      } else {
-        handleChangeSelectedToken(tokenInfo)();
-      }
-      setLoading(false);
-    });
+    sendMessage(
+      {
+        type: HANDLER_TYPES.GET_TOKEN_INFO,
+        params: { canisterId, standard },
+      },
+      async (tokenInfo) => {
+        if (tokenInfo?.error) {
+          setTokenError(tokenInfo?.error);
+        } else {
+          handleChangeSelectedToken(tokenInfo)();
+        }
+        setLoading(false);
+      },
+    );
   };
   const handleCloseDialog = (value) => {
     setStandard(value?.name ?? standard);
     setDialogOpen(false);
-    setTokenError(false);
+    setTokenError('');
   };
+
+  const isInvalidInterfaceError = tokenError.includes('Call failed:');
+  const isInvalidCanisterError = tokenError === 'The provided canister id is invalid';
+  const isNFTNotSupportedError = tokenError === 'Non fungible tokens are not supported yet';
 
   return (
     <Container style={{ paddingTop: 24 }}>
@@ -68,6 +81,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
                 onChange={handleChangeId}
                 type="text"
                 error={invalidToken}
+                data-testid="token-canister-id-input"
               />
             )}
           />
@@ -83,6 +97,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
                 onClick={() => setDialogOpen(true)}
                 shadow
                 className={classes.select}
+                data-testid="token-standard-select"
               />
             )}
           />
@@ -94,32 +109,44 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
             onClose={handleCloseDialog}
             selectedValue={standard}
             open={dialogOpen}
+            menuItemTestId="standard-item"
           />
         )}
-        {
-          tokenError
-          && (
-            <Grid item xs={12}>
-              <div className={classes.appearAnimation}>
-                <Alert
-                  type="danger"
-                  title={(
-                    <div>
-                      <span>{t('addToken.tokenError')}</span>
-                      <br />
-                      <span
-                        className={classes.learnMore}
-                        onClick={() => extension.tabs.create({ url: customTokensUrl })}
-                      >
-                        {t('common.learnMore')}
-                      </span>
-                    </div>
-                  )}
-                />
-              </div>
-            </Grid>
-          )
-        }
+        {tokenError && (
+          <Grid item xs={12}>
+            <div className={classes.appearAnimation}>
+              <Alert
+                type="danger"
+                title={(
+                  <div>
+                    <span data-testid="token-error">
+                      {isInvalidCanisterError
+                        ? t('addToken.invalidCanisterTokenError')
+                        : isNFTNotSupportedError
+                          ? t('addToken.nftTokenError')
+                          : isInvalidInterfaceError
+                            ? t('addToken.invalidInterfaceTokenError')
+                            : tokenError}
+                    </span>
+                    {(isInvalidCanisterError
+                      || isNFTNotSupportedError
+                      || isInvalidInterfaceError) && (
+                      <>
+                        <br />
+                        <span
+                          className={classes.learnMore}
+                          onClick={() => extension.tabs.create({ url: customTokensUrl })}
+                        >
+                          {t('common.learnMore')}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                )}
+              />
+            </div>
+          </Grid>
+        )}
         <Grid item xs={12}>
           <Button
             variant="rainbow"
@@ -128,6 +155,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
             fullWidth
             disabled={!canisterId || invalidToken || loading}
             loading={loading}
+            data-testid="continue-button"
           />
         </Grid>
       </Grid>

@@ -63,6 +63,9 @@ const Step1 = ({
                 handleSwapValues={handleSwapValues}
                 availableAmount={availableAmount.amount}
                 decimalScale={5}
+                buttonTestId="select-token-button"
+                inputTestId="select-token-input"
+                swapTestId="select-token-swap-button"
               />
             )}
             subtitle={(
@@ -76,6 +79,7 @@ const Step1 = ({
                     displayType="text"
                     prefix={availableAmount.prefix}
                     suffix={availableAmount.suffix}
+                    data-testid="available-amount"
                   />
               &nbsp;
                   {t('send.available')}
@@ -84,6 +88,7 @@ const Step1 = ({
                   variant="primaryOutlined"
                   value={t('common.max')}
                   onClick={() => handleChangeAmount(Number(availableAmount.amount.toFixed(6)))}
+                  data-testid="max-button"
                 />
               </div>
             )}
@@ -95,6 +100,9 @@ const Step1 = ({
             onClose={handleCloseAssets}
             selectedValue={selectedAsset}
             open={openAssets}
+            titleTestId="select-asset"
+            menuItemTestId="select-token-button"
+            data-testid="select-asset-dialog"
           />
 
         </Grid>
@@ -107,6 +115,7 @@ const Step1 = ({
                 value={address}
                 onChange={handleChangeAddress}
                 isValid={addressInfo.isValid && !isUserAddress}
+                data-testid="send-to-principalID-input"
               />
             )}
           />
@@ -146,6 +155,7 @@ const Step1 = ({
             }
             onClick={handleChangeStep}
             loading={loadingAddress}
+            buttonTestId="continue-button"
           />
         </Grid>
       </Grid>

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 import { getApps, setApps } from '@modules/storageManager';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { getTabURL } from '@shared/utils/chrome-tabs';
+import { getMultipleReverseResolvedNames } from '@shared/services/ICNS';
 
 import ActionDialog from '../ActionDialog';
 import useStyles from './styles';
@@ -23,6 +24,17 @@ const ConnectAccountsModal = ({
   const { t } = useTranslation();
   const [walletsToUpdate, setWalletsToUpdate] = useState({});
   const [selectAllWallets, setSelectAllWallets] = useState(false);
+  const [icnsNames, setICNSNames] = useState({});
+
+  const getReverseResolvedNames = async () => {
+    const principals = wallets.map((wallet) => wallet.principal);
+    const names = await getMultipleReverseResolvedNames(principals);
+    setICNSNames(names);
+  };
+
+  useEffect(() => {
+    getReverseResolvedNames();
+  }, [wallets]);
 
   const connectAccountToTab = (wallet) => {
     getApps(wallet.walletNumber.toString(), (apps) => {
@@ -70,16 +82,17 @@ const ConnectAccountsModal = ({
     setSelectAllWallets(event.target.checked);
     setWalletsToUpdate(newWalletsToUpdate);
   };
-
+  const disabled = !Object.values(walletsToUpdate).some((value) => value);
   return (
     <ActionDialog
       open={open}
-      title={t('profile.subaccountNotConnected')}
       className={classes.modalContainer}
-      button={t('common.allow')}
+      confirmText={t('common.connect')}
+      cancelText={t('common.decline')}
       buttonVariant="rainbow"
       onClick={handleConfirm}
       onClose={onClose}
+      submitButtonProps={{ disabled }}
       content={(
         <ConnectAccountsModalLayout
           tab={tab}
@@ -90,6 +103,7 @@ const ConnectAccountsModal = ({
           onCheckWallet={onCheckWallet}
           connectedWallets={connectedWallets}
           walletsToUpdate={walletsToUpdate}
+          icnsNames={icnsNames}
         />
 )}
     />

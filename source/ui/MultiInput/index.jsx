@@ -51,13 +51,16 @@ const MultiInput = ({
   handleSwapValues,
   availableAmount,
   decimalScale,
+  buttonTestId,
+  inputTestId,
+  swapTestId,
 }) => {
   const classes = useStyles();
   const hasConversionRate = !!secondaryValue?.conversionRate
     && !Number.isNaN(secondaryValue?.conversionRate);
   return (
     <InputBase>
-      <div className={classes.leftContainer} onClick={onClick}>
+      <div className={classes.leftContainer} onClick={onClick} data-testid={buttonTestId}>
         <TokenIcon image={image} className={classes.icon} symbol={name} small />
         <Typography variant="h4">{name}</Typography>
         <img src={ChevronDown} className={classes.alignRight} />
@@ -75,6 +78,7 @@ const MultiInput = ({
               suffix: primaryValue.suffix,
               prefix: primaryValue.prefix,
               availableAmount,
+              'data-testid': inputTestId,
             },
             inputComponent: NumberFormatCustom,
             decimalScale,
@@ -97,6 +101,7 @@ const MultiInput = ({
         </span>
         {hasConversionRate && (
           <IconButton
+            data-testid={swapTestId}
             className={classes.swapIcon}
             onClick={() => handleSwapValues()}
           >
@@ -110,6 +115,13 @@ const MultiInput = ({
 
 export default MultiInput;
 
+MultiInput.defaultProps = {
+  decimalScale: 2,
+  buttonTestId: 'multi-input-button',
+  inputTestId: 'multi-input',
+  swapTestId: 'multi-input-swap',
+};
+
 MultiInput.propTypes = {
   name: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
@@ -122,10 +134,9 @@ MultiInput.propTypes = {
   handleSwapValues: PropTypes.func.isRequired,
   availableAmount: PropTypes.number.isRequired,
   decimalScale: PropTypes.number,
-};
-
-MultiInput.defaultProps = {
-  decimalScale: 2,
+  buttonTestId: PropTypes.string,
+  inputTestId: PropTypes.string,
+  swapTestId: PropTypes.string,
 };
 
 NumberFormatCustom.propTypes = {

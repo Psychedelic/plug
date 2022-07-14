@@ -27,7 +27,7 @@ const VARIANTS = {
 };
 
 const Button = ({
-  value, onClick, variant, loading, disabled, fullWidth, wrapperStyle, ...other
+  value, onClick, variant, loading, disabled, fullWidth, wrapperStyle, buttonTestId, ...other
 }) => {
   const classes = useStyles();
 
@@ -42,6 +42,7 @@ const Button = ({
         disabled={disabled || loading}
         fullWidth={fullWidth}
         {...VARIANTS[variant]}
+        data-testid={buttonTestId}
         {...other}
       >
         {
@@ -61,6 +62,7 @@ Button.defaultProps = {
   disabled: false,
   fullWidth: false,
   wrapperStyle: null,
+  buttonTestId: 'button',
 };
 
 Button.propTypes = {
@@ -71,4 +73,5 @@ Button.propTypes = {
   disabled: PropTypes.bool,
   fullWidth: PropTypes.bool,
   wrapperStyle: PropTypes.object,
+  buttonTestId: PropTypes.string,
 };

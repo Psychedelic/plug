@@ -1747,10 +1747,10 @@
     cross-fetch "^3.1.4"
     crypto-js "^4.1.1"
 
-"@psychedelic/plug-controller@0.16.14":
-  version "0.16.14"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.16.14/280f8a74e6d412705b530dc1a3ec53c727a67cc972b28d2fd12c16e0b85c592a#fd411ab7b04e2ac989e3e7111dea5300840edeb8"
-  integrity sha512-hxIQAsnDXhjhGtCvGFYcbAcNC2imwtT9Y59eXuYzUCxXg/vUqq4IVr0tWWmAVjNhDBhN9r/N5AmCyXPyYa39PQ==
+"@psychedelic/plug-controller@0.17.4":
+  version "0.17.4"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-controller/0.17.4/2727fca087c41c4da4dbae0a01fbaf9ee6fe4ab543ca9c7e47321637dd02a043#ce9f392c9bf660f5ab19f576660d5aa75ecc32d3"
+  integrity sha512-Hn35dYRn6GGkEL59pdntdb7M09+CNGZz25g6kbvBAT20+zxx4UNYXfXbVemqSlNa+Yl6GJQCUYJOQg2x1xqV4w==
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
@@ -1779,10 +1779,10 @@
     text-encoding-shim "^1.0.5"
     tweetnacl "^1.0.3"
 
-"@psychedelic/plug-inpage-provider@2.1.0":
-  version "2.1.0"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/2.1.0/27bb21c95061238dd046135c8e162c2087c8421a8c37ab96a40cf023fc8225a3#0cf43430a3767d13131017e7ac0e6aefd9535897"
-  integrity sha512-NvPSVC84Cec5oeyLiB6vWl765CEz4c+O4ZNhL7BjWR6xWOZAkMJlmsBX9mTuGeHRjO5nWftdeFHMNh4u+Bhaog==
+"@psychedelic/plug-inpage-provider@2.2.0":
+  version "2.2.0"
+  resolved "https://npm.pkg.github.com/download/@psychedelic/plug-inpage-provider/2.2.0/15c682ba8b79936472fff2060bfc2e264d84fcfd09cb6c9cdeb49217e6216904#5cfe9fd48c10c7cb1079faf1f30e486b4a5ad4a0"
+  integrity sha512-y/HxfjMD/YUiwTUMHPZHRTie2DvggBnsjiwmq758zsJTN81r94nubA1NMru4e6U9jdE0Mcoph7Z1DbZXZGEjPw==
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
@@ -12634,15 +12634,15 @@ utila@~0.4:
   resolved "https://registry.yarnpkg.com/utila/-/utila-0.4.0.tgz#8a16a05d445657a3aea5eecc5b12a4fa5379772c"
   integrity sha1-ihagXURWV6Oupe7MWxKk+lN5dyw=
 
-uuid@8.3.2, uuid@^8.3.2:
-  version "8.3.2"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
-  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
-
 uuid@^3.3.2:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
+
+uuid@^8.3.2:
+  version "8.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
+  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
 v8-compile-cache@^2.0.3:
   version "2.3.0"

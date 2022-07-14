@@ -71,6 +71,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
               value={password}
               onChange={handleChangePassword}
               type="password"
+              data-testid="new-password-input"
             />
           )}
         />
@@ -85,6 +86,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
               value={confirmPassword}
               onChange={handleChangeConfirmPassword}
               type="password"
+              data-testid="confirm-password-input"
             />
           )}
         />
@@ -95,6 +97,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
           value={t('welcome.passwordButton')}
           onClick={handleCreateAccount}
           fullWidth
+          data-testid="password-confirmation-button"
         />
       </Grid>
       <Grid item xs={12}>
@@ -103,7 +106,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
       {passwordError && (
         <Grid item xs={12} className={classes.passwordError}>
           <img alt="facepalm-emoji" src={facepalmEmoji} />
-          <p>{t(`${passwordError}`)}</p>
+          <p data-testid="password-error">{t(`${passwordError}`)}</p>
         </Grid>
       )}
     </>

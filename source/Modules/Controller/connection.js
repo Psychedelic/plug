@@ -14,14 +14,24 @@ import { ControllerModuleBase } from './controllerBase';
 
 export class ConnectionModule extends ControllerModuleBase {
   // Utils
+  #getSafeHandlerObjects() {
+    return [
+      this.#disconnect(),
+    ];
+  }
+
   #getHandlerObjects() {
     return [
-      this.#getConnectionData(),
-      this.#handleConnectionData(),
-      this.#disconnect(),
-      this.#requestConnect(),
-      this.#handleAllowAgent(),
       this.#verifyWhitelist(),
+      this.#getConnectionData(),
+      this.#requestConnect(),
+    ];
+  }
+
+  #getExecutorObjects() {
+    return [
+      this.#handleConnectionData(),
+      this.#handleAllowAgent(),
     ];
   }
 
@@ -29,7 +39,7 @@ export class ConnectionModule extends ControllerModuleBase {
   #getConnectionData() {
     return {
       methodName: 'getConnectionData',
-      handler: async (opts, url) => {
+      handler: async (opts, url, transactionId) => {
         const { message, sender, callback } = opts;
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
@@ -41,7 +51,7 @@ export class ConnectionModule extends ControllerModuleBase {
               this.displayPopUp({
                 callId,
                 portId,
-                argsJson: '{}',
+                argsJson: JSON.stringify({ transactionId }),
                 metadataJson: JSON.stringify({ url }),
                 type: 'requestConnectionData',
                 screenArgs: { fixedHeight: SIZES.loginHeight },
@@ -101,7 +111,7 @@ export class ConnectionModule extends ControllerModuleBase {
   #requestConnect() {
     return {
       methodName: 'requestConnect',
-      handler: async (opts, metadata, whitelist, timeout, host) => {
+      handler: async (opts, metadata, whitelist, timeout, host, transactionId) => {
         let canistersInfo = [];
         initializeProtectedIds();
         const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
@@ -148,22 +158,24 @@ export class ConnectionModule extends ControllerModuleBase {
             ? Math.min(422 + 37 * whitelist.length, 600)
             : SIZES.loginHeight;
 
-            this.displayPopUp(
-              {
-                callId,
-                portId,
-                argsJson: JSON.stringify({ whitelist, canistersInfo, timeout }),
-                metadataJson: JSON.stringify(newMetadata),
-                domainUrl,
-                type: 'allowAgent',
-                screenArgs: {
-                  fixedHeight: height,
-                  top: 65,
-                  left: metadata.pageWidth - SIZES.width,
-                },
+          this.displayPopUp(
+            {
+              callId,
+              portId,
+              argsJson: JSON.stringify({
+                whitelist, canistersInfo, timeout, transactionId,
+              }),
+              metadataJson: JSON.stringify(newMetadata),
+              domainUrl,
+              type: 'allowAgent',
+              screenArgs: {
+                fixedHeight: height,
+                top: 65,
+                left: metadata.pageWidth - SIZES.width,
               },
-              opts.callback
-            );
+            },
+            opts.callback,
+          );
         } else {
           const height = this.keyring?.isUnlocked
             ? SIZES.appConnectHeight
@@ -173,7 +185,7 @@ export class ConnectionModule extends ControllerModuleBase {
             callId,
             portId,
             icon: icons[0] || null,
-            argsJson: JSON.stringify({ timeout }),
+            argsJson: JSON.stringify({ timeout, transactionId }),
             type: 'connect',
             screenArgs: {
               fixedHeight: height,
@@ -240,7 +252,7 @@ export class ConnectionModule extends ControllerModuleBase {
   #verifyWhitelist() {
     return {
       methodName: 'verifyWhitelist',
-      handler: async (opts, metadata, whitelist) => {
+      handler: async (opts, metadata, whitelist, transactionId) => {
         const { message, sender, callback } = opts;
 
         const { id: callId } = message.data.data;
@@ -281,6 +293,7 @@ export class ConnectionModule extends ControllerModuleBase {
                     updateWhitelist: true,
                     showList: false,
                     timeout: app?.timeout,
+                    transactionId,
                   }),
                   domainUrl: metadata.url,
                   type: 'allowAgent',
@@ -304,6 +317,7 @@ export class ConnectionModule extends ControllerModuleBase {
                   canistersInfo,
                   updateWhitelist: true,
                   showList: true,
+                  transactionId,
                 }),
                 type: 'allowAgent',
                 screenArgs: {
@@ -323,10 +337,22 @@ export class ConnectionModule extends ControllerModuleBase {
 
   // Exposer
   exposeMethods() {
-    this.#getHandlerObjects().forEach((handlerObject) => {
+    this.#getSafeHandlerObjects().forEach((handlerObject) => {
       this.backgroundController.exposeController(
         handlerObject.methodName,
         async (...args) => this.secureWrapper({ args, handlerObject }),
+      );
+    });
+    this.#getHandlerObjects().forEach((handlerObject) => {
+      this.backgroundController.exposeController(
+        handlerObject.methodName,
+        async (...args) => this.secureHandler({ args, handlerObject }),
+      );
+    });
+    this.#getExecutorObjects().forEach((handlerObject) => {
+      this.backgroundController.exposeController(
+        handlerObject.methodName,
+        async (...args) => this.secureExecutor({ args, handlerObject }),
       );
     });
   }
