@@ -271,7 +271,6 @@ const Profile = ({ disableProfile }) => {
               <MenuList className={clsx(classes.accountContainer, classes.menu)}>
                 {
                   accounts.map((account) => {
-                    console.log(account)
                     const isHidden = hiddenAccounts.includes(account.walletNumber);
                     return (!isHidden || isEditing) && (
                       <MenuItem
