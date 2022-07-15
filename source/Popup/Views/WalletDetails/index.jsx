@@ -23,6 +23,7 @@ import {
 import { setUseICNS } from '@modules/storageManager';
 import { setICNSData, setUseICNS as setReduxUseICNS } from '@redux/icns';
 
+import { Button } from '@material-ui/core';
 import useStyles from './styles';
 import DetailItem from './components/DetailItem';
 import ICNSToggle from './components/ICNSToggle';
@@ -132,6 +133,7 @@ const WalletDetails = () => {
           <LinkButton
             value={t('common.done')}
             onClick={() => navigator.navigate('home')}
+            data-testid="done-button"
           />
         )}
       />
@@ -151,21 +153,24 @@ const WalletDetails = () => {
             onChange={handleChange}
             readOnly={!edit || hasActiveResolvedICNS}
             inputRef={textInput}
+            data-testid="account-name-input"
           />
           {edit
             ? (
-              <img
-                className={classes.icon}
-                src={BlueCheck}
-                onClick={handleEditWalletName}
-              />
+              <button type="button" style={{ all: 'unset', marginTop: '4px' }} data-testid="save-changes-icon-button" onClick={handleEditWalletName}>
+                <img
+                  className={classes.icon}
+                  src={BlueCheck}
+                />
+              </button>
             )
             : (
-              <img
-                className={classes.icon}
-                src={Pencil}
-                onClick={openEditWalletName}
-              />
+              <button type="button" style={{ all: 'unset', marginTop: '4px' }} data-testid="edit-icon-button" onClick={openEditWalletName}>
+                <img
+                  className={classes.icon}
+                  src={Pencil}
+                />
+              </button>
             )}
         </div>
         {openEmojis && edit && (
