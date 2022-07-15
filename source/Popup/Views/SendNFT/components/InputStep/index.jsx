@@ -76,7 +76,7 @@ const InputStep = ({ advanceStep }) => {
             label={t('nfts.sendTo')}
             component={(
               <IDInput
-                loadingIcns={loadingIcns}
+                loading={loadingIcns}
                 value={address}
                 onChange={handleAddressChange}
                 isValid={isValid}

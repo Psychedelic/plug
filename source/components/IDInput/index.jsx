@@ -10,18 +10,20 @@ import {
 } from '@ui';
 import { CircularProgress, Grid } from '@material-ui/core';
 import { getRandomEmoji } from '@shared/constants/emojis';
-import { addContact as addContactAction, getContacts } from '@redux/contacts';
+import { addContact as addContactAction } from '@redux/contacts';
 
+import { useContacts } from '@hooks';
 import ActionDialog from '../ActionDialog';
 import ContactItem from '../ContactItem';
 import ContactList from '../ContactList';
 import useStyles from './styles';
 
 const IDInput = ({
-  value, onChange, placeholder, isValid, loadingIcns, ...other
+  value, onChange, placeholder, isValid, loading, ...other
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const { getContacts } = useContacts();
 
   const dispatch = useDispatch();
   const [selectedContact, setSelectedContact] = useState(null);
@@ -33,11 +35,8 @@ const IDInput = ({
   const { groupedContacts: contacts } = useSelector((state) => state.contacts);
   const { contactsLoading } = useSelector((state) => state.contacts);
 
-  console.log('component ->', contactsLoading);
-
   useEffect(() => {
-    console.log('aa');
-    dispatch(getContacts());
+    getContacts();
   }, []);
 
   const isUserAddress = useMemo(
@@ -50,7 +49,7 @@ const IDInput = ({
     .includes(value), [contacts, value]);
 
   const shouldDisplayAddToContacts = value !== null && value !== ''
-    && !loadingIcns && isValid && !inContacts && !isUserAddress;
+    && !loading && isValid && !inContacts && !isUserAddress;
 
   const handleSelectedContact = (contact) => setSelectedContact(contact);
 
@@ -71,7 +70,7 @@ const IDInput = ({
   };
 
   const addContact = () => {
-    if (loadingIcns) return;
+    if (loading) return;
     const contact = {
       name: contactName,
       id: value,
@@ -116,7 +115,7 @@ const IDInput = ({
               {...other}
             />
             <div className={classes.iconContainer}>
-              {(contactsLoading || loadingIcns) ? (
+              {(contactsLoading || loading) ? (
                 <CircularProgress size={24} />
               )
                 : contacts.length > 0 && (
@@ -197,12 +196,12 @@ IDInput.propTypes = {
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string.isRequired,
   isValid: PropTypes.bool,
-  loadingIcns: PropTypes.bool,
+  loading: PropTypes.bool,
 };
 
 IDInput.defaultProps = {
   isValid: true,
-  loadingIcns: false,
+  loading: false,
 };
 
 export default IDInput;
