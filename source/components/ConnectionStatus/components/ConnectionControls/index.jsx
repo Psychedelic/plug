@@ -1,6 +1,11 @@
-import React from 'react';
-import { useICPPrice } from '@redux/icp';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { capitalize } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import clsx from 'clsx';
+
 import { useContacts } from '@hooks';
+import { useICPPrice } from '@redux/icp';
 import {
   setAssets,
   setAssetsLoading,
@@ -9,24 +14,26 @@ import {
   setCollections,
   setCollectionsLoading,
 } from '@redux/wallet';
-import { useDispatch, useSelector } from 'react-redux';
+import { getCurrentNetwork } from '@redux/network';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { TABS, useRouter } from '@components/Router';
 import RefreshAsset from '@assets/icons/refresh.svg';
 
 import useStyles from './styles';
 
-const ConnectionControls = () => {
-  const icpPrice = useICPPrice();
-  const { getContacts } = useContacts();
-  const { navigator } = useRouter();
-  const dispatch = useDispatch();
-  const { principalId } = useSelector((state) => state.wallet);
+const ConnectionControls = ({ disableNavigation }) => {
   const classes = useStyles();
+  const icpPrice = useICPPrice();
+  const dispatch = useDispatch();
+  const { getContacts } = useContacts();
+  const { navigator } = disableNavigation ? {} : useRouter();
+  const { principalId } = useSelector((state) => state.wallet);
   const { useICNS } = useSelector((state) => state.icns);
+  const { currentNetwork, networksLoading } = useSelector((state) => state.network);
 
   const refreshWallet = () => {
-    navigator.navigate('home', TABS.TOKENS);
+    if (disableNavigation) return;
+    navigator?.navigate?.('home', TABS.TOKENS);
 
     if (icpPrice) {
       // Contacts
@@ -65,17 +72,34 @@ const ConnectionControls = () => {
       });
     }
   };
+
+  useEffect(() => {
+    dispatch(getCurrentNetwork());
+  }, []);
   return (
     <div className={classes.controls}>
       <div className={classes.networkSelector}>
         <div className={classes.statusDot} />
-        <span className={classes.network}>Mainnet</span>
+        {networksLoading ? 'Loading' : (
+          <span className={classes.network}>{capitalize(currentNetwork?.name || 'Mainnet')}</span>
+        )}
       </div>
-      <div className={classes.reloadIconContainer} onClick={refreshWallet}>
+      <div
+        className={clsx(classes.reloadIconContainer, disableNavigation && classes.disabled)}
+        onClick={refreshWallet}
+      >
         <img src={RefreshAsset} alt="reload" className={classes.reloadIcon} />
       </div>
     </div>
   );
+};
+
+ConnectionControls.propTypes = {
+  disableNavigation: PropTypes.bool,
+};
+
+ConnectionControls.defaultProps = {
+  disableNavigation: false,
 };
 
 export default ConnectionControls;

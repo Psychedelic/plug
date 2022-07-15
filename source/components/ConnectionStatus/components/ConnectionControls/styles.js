@@ -33,6 +33,13 @@ export default makeStyles(() => ({
     width: 14,
     height: 20,
   },
+  network: {
+    maxWidth: 50,
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    cursor: 'pointer',
+  },
   reloadIconContainer: {
     borderRadius: '50%',
     display: 'flex',
@@ -49,5 +56,9 @@ export default makeStyles(() => ({
     background: '#08DE92',
     borderRadius: '50%',
     marginRight: 5,
+  },
+  disabled: {
+    opacity: 0.5,
+    pointer: 'arrow',
   },
 }));

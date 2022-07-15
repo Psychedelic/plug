@@ -1,32 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from '@components/Router';
+import { Typography } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Layout } from '@components';
 import {
   Header, LinkButton, TextInput, Button,
 } from '@ui';
 import BackIcon from '@assets/icons/back.svg';
+import { addNetwork } from '@redux/network';
+import { validateCanisterId } from '@shared/utils/ids';
 
-import { Typography } from '@material-ui/core';
 import useStyles from './styles';
 import { NETWORK_CREATION_DEFAULT_VALUES, NETWORK_CREATION_FIELDS } from './constants';
+
+const validateNetwork = ({
+  name,
+  host,
+  ledgerId,
+}) => name && host && ledgerId && validateCanisterId(ledgerId);
 
 const NetworkCreation = () => {
   const { t } = useTranslation();
   const { navigator } = useRouter();
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [values, setValues] = useState(NETWORK_CREATION_DEFAULT_VALUES);
+  const { networksLoading } = useSelector((state) => state.network);
 
   const handleFieldChange = (field) => (event) => {
     setValues({ ...values, [field]: event.target.value });
   };
 
   // Cleanup values on close
-  useEffect(() => setValues(NETWORK_CREATION_DEFAULT_VALUES), []);
+  useEffect(() => () => {
+    setValues(NETWORK_CREATION_DEFAULT_VALUES);
+  }, []);
 
   const handleAddNetwork = () => {
-    console.log('Values ', values);
+    dispatch(addNetwork(values));
+    navigator.navigate('network');
   };
 
   return (
@@ -43,7 +57,14 @@ const NetworkCreation = () => {
             <TextInput onChange={handleFieldChange(field)} />
           </div>
         ))}
-        <Button variant="rainbow" onClick={handleAddNetwork} value={t('network.addNetwork')} fullWidth />
+        <Button
+          variant="rainbow"
+          onClick={handleAddNetwork}
+          value={t('network.addNetwork')}
+          loading={networksLoading}
+          disabled={networksLoading || !validateNetwork(values)}
+          fullWidth
+        />
       </div>
     </Layout>
   );

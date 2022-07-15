@@ -1,23 +1,30 @@
 import { makeStyles } from '@material-ui/core';
 
-export default makeStyles(() => ({
+export default makeStyles((theme) => ({
   networkContainer: {
     height: 425,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
   },
-  noNetworksContainer: {
+  addNetwork: {
     display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    height: 280,
-    maxWidth: 200,
+    justifyContent: 'center',
     alignItems: 'center',
-    textAlign: 'center',
-    paddingTop: 80,
+    bottom: 24,
+    right: 24,
+    position: 'absolute',
+    borderRadius: 42,
+    height: 42,
+    width: 42,
+    backgroundColor: theme.palette.common.blue,
+    cursor: 'pointer',
+
+    '&:hover': {
+      opacity: 0.9,
+    },
   },
-  networkIcon: {
-    height: 50,
+  plusIcon: {
+    color: 'white',
   },
 }));

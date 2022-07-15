@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { buildContactObject, parseContactFromDab } from '@shared/utils/contacts';
 import {
@@ -7,14 +8,21 @@ import {
   getContacts as callGetContacts,
   addContact as callAddContact,
   deleteContact as callRemoveContact,
-} from '@background/Keyring';
+} from '@background/Keyring/contacts';
+import { Principal } from '@dfinity/principal';
 
 const getFirstLetterFrom = (value) => value.slice(0, 1).toUpperCase();
 
 const getIndexOfContact = (contact, contactList) => {
   let index = -1;
+  const contactItem = contact?.id?._isPrincipal
+    ? Principal.from(contact?.id)?.toText()
+    : contact;
   contactList.forEach((c, i) => {
-    if (c.id === contact.id) {
+    const listItem = c?.id?._isPrincipal
+      ? Principal.from(c?.id)?.toText()
+      : c;
+    if (contactItem.id === listItem.id) {
       index = i;
     }
   });
@@ -22,14 +30,12 @@ const getIndexOfContact = (contact, contactList) => {
   return index;
 };
 
-const filterContactsById = (contacts) => {
-  return contacts.reduce((acc, c) => {
-    if (getIndexOfContact(c, acc) === -1) {
-      return [...acc, c];
-    }
-    return acc;
-  }, []);
-};
+const filterContactsById = (contacts) => contacts.reduce((acc, c) => {
+  if (getIndexOfContact(c, acc) === -1) {
+    return [...acc, c];
+  }
+  return acc;
+}, []);
 
 const groupContacts = (contacts) => (
   contacts
@@ -115,7 +121,7 @@ export const contactSlice = createSlice({
       })
       .addCase(getContacts.fulfilled, (state, action) => {
         let newContactList = [...state?.contacts, ...action?.payload, ...action.meta.arg?.localContacts];
-
+        console.log('new contact list', newContactList);
         newContactList = filterContactsById(newContactList);
         setLocalDabContacts(newContactList);
 

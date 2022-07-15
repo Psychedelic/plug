@@ -12,7 +12,10 @@ const Layout = ({
   return (
     <>
       <div className={classes.stickyHeader}>
-        <ConnectionStatus incStatus={incStatus ? CONNECTION_STATUS.pending : null} />
+        <ConnectionStatus
+          incStatus={incStatus ? CONNECTION_STATUS.pending : null}
+          disableNavigation={disableNavigation}
+        />
         <NavBar disableProfile={disableProfile} disableNavigation={disableNavigation} />
       </div>
       <div className={classes.root}>
