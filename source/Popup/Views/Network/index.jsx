@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Plus } from 'react-feather';
 import { useTranslation } from 'react-i18next';
-import { useRouter } from '@components/Router';
+import { TABS, useRouter } from '@components/Router';
 
 import { CircularProgress, Typography } from '@material-ui/core';
 import { getNetworks } from '@redux/network';
@@ -21,7 +21,7 @@ const Network = () => {
   const dispatch = useDispatch();
   const { networks = [], networksLoading } = useSelector((state) => state.network);
 
-  const navigateTo = (screen) => () => navigator.navigate(screen);
+  const navigateTo = (screen, tab) => () => navigator.navigate(screen, tab);
 
   useEffect(() => {
     dispatch(getNetworks());
@@ -32,7 +32,7 @@ const Network = () => {
       <Header
         center={<Typography variant="h2">{t('network.network')}</Typography>}
         left={<LinkButton value={t('common.back')} onClick={navigator.goBack} startIcon={BackIcon} />}
-        right={<LinkButton value={t('common.done')} onClick={navigateTo('tokens')} />}
+        right={<LinkButton value={t('common.done')} onClick={navigateTo('home', TABS.TOKENS)} />}
       />
       {networksLoading ? <CircularProgress size={24} />
         : (
