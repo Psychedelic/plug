@@ -9,7 +9,6 @@ const CyclesToAccountWarning = () => {
   const { t } = useTranslation();
   const classes = useStyles();
 
-
   return (
     <Grid item xs={12}>
       <div className={classes.appearAnimation}>

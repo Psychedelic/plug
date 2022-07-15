@@ -2,10 +2,10 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { CURRENCIES, USD_PER_TC } from '@shared/constants/currencies';
 import {
   sendToken as callSendToken,
-  burnXTC as callBurnXTC
+  burnXTC as callBurnXTC,
 } from '@background/Keyring';
 
-const DEFAULT_ASSET = CURRENCIES.get('ICP'); 
+const DEFAULT_ASSET = CURRENCIES.get('ICP');
 const DEFAULT_ADDRESS_INFO = {
   isValid: null,
   type: null,
@@ -39,7 +39,12 @@ export const sendToken = createAsyncThunk(
   'sendToken/regularSend',
   async (arg, { getState }) => {
     const { send: state } = getState();
-    const { addressInfo, address, amount: rawAmount, selectedAsset } = state;
+    const {
+      addressInfo,
+      address,
+      amount: rawAmount,
+      selectedAsset,
+    } = state;
 
     const to = addressInfo.resolvedAddress || address;
     const amount = rawAmount.toString();
@@ -52,20 +57,20 @@ export const sendToken = createAsyncThunk(
 
 export const burnXTC = createAsyncThunk(
   'sendToken/burnXTC',
-  async (arg, { getState}) => {
+  async (arg, { getState }) => {
     const { send: state } = getState();
     const { addressInfo, address, amount: rawAmount } = state;
 
     const to = addressInfo.resolvedAddress || address;
     const amount = rawAmount.toString();
-    
     const res = await callBurnXTC({ to, amount });
+
     return res;
   },
 );
 
 export const sendSlice = createSlice({
-  name: 'sendToken', 
+  name: 'sendToken',
   initialState: DEFAULT_STATE,
   reducers: {
     setSendingXTCtoCanister: (state, action) => {
@@ -113,13 +118,13 @@ export const sendSlice = createSlice({
       state.secondaryValue = newSecondaryValue;
       state.selectedAsset = newSelectedAsset;
     },
-    swapSendTokenValues: (state, action) => {
+    swapSendTokenValues: (state) => {
       const temp = state.primaryValue;
 
       state.primaryValue = state.secondaryValue;
       state.secondaryValue = temp;
     },
-    resetState: (state, action) => {
+    resetState: (state) => {
       Object.keys(DEFAULT_STATE).forEach((stateKey) => {
         state[stateKey] = DEFAULT_STATE[stateKey];
       });
@@ -150,7 +155,7 @@ export const sendSlice = createSlice({
         // TODO: handle error
         state.pending = false;
         state.error = true;
-      })
+      });
   },
 });
 

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { IDInput } from '@components';
 import {
-  FormItem, MultiInput, Container, Button, Dialog, Alert,
+  FormItem, MultiInput, Container, Button, Dialog,
 } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
@@ -13,8 +13,6 @@ import NumberFormat from 'react-number-format';
 import { ADDRESS_TYPES } from '@shared/constants/addresses';
 import { isICNSName } from '@shared/utils/ids';
 import { setSendTokenAmount, setSendTokenAddress, resetState } from '@redux/send';
-import { MAX_DECIMALS, DISPLAY_DECIMALS } from '@shared/constants/send';
-import { truncateFloatForDisplay } from '@shared/utils/send';
 
 import useStyles from '../../styles';
 import { CyclesToAccountWarning } from './components';
@@ -43,8 +41,8 @@ const SelectAsset = ({
   const amount = Number(rawAmount);
   const { principalId, accountId } = useSelector((state) => state.wallet);
 
-  const isUserAddress = [principalId, accountId].includes(address) ||
-    [principalId, accountId].includes(resolvedAddress);
+  const isUserAddress = [principalId, accountId].includes(address)
+    || [principalId, accountId].includes(resolvedAddress);
   const conversionPrice = amount / secondaryValue.price;
 
   const [openAssets, setOpenAssets] = useState(false);
@@ -166,11 +164,11 @@ const SelectAsset = ({
   );
 };
 
-export default SelectAsset;
-
 SelectAsset.propTypes = {
   handleChangeStep: PropTypes.func.isRequired,
   handleSwapValues: PropTypes.func.isRequired,
   handleChangeAsset: PropTypes.func.isRequired,
   loadingAddress: PropTypes.bool.isRequired,
 };
+
+export default SelectAsset;

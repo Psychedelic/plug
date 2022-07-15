@@ -2,13 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { LinkButton } from '@ui';
-import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';
-import { setAssets, setTransactions } from '@redux/wallet';
+import { setAssets } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import {
-  CURRENCIES, USD_PER_TC,
-} from '@shared/constants/currencies';
+import { USD_PER_TC } from '@shared/constants/currencies';
 import {
   isICNSName, validateAddress, validateCanisterId, validatePrincipalId,
 } from '@shared/utils/ids';
@@ -29,6 +26,7 @@ import {
   DISPLAY_DECIMALS,
   XTC_OPTIONS,
 } from '@shared/constants/send';
+import { truncateFloatForDisplay } from '@shared/utils/send';
 
 import {
   SelectAssetStep,
@@ -36,7 +34,6 @@ import {
   ConfirmStep,
 } from '../steps';
 
-import { truncateFloatForDisplay } from '@shared/utils/send';
 import { CancelButton } from '../components';
 
 const getAddressType = (address) => {
@@ -45,19 +42,15 @@ const getAddressType = (address) => {
 };
 
 const useSteps = () => {
-  const { navigator } = useRouter();
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
- const { assets } = useSelector((state) => state.wallet);
-  const { useICNS: icnsActive } = useSelector((state) => state.icns);
+  const { assets } = useSelector((state) => state.wallet);
   const {
     amount,
     address,
-    addressInfo,
     selectedAsset,
     primaryValue,
-    secondaryValue,
     fulfilled,
   } = useSelector((state) => state.send);
   const icpPrice = useICPPrice();
@@ -104,7 +97,7 @@ const useSteps = () => {
     const parsedAmount = truncateFloatForDisplay(
       amount / primaryValue.conversionRate,
       MAX_DECIMALS,
-      DISPLAY_DECIMALS
+      DISPLAY_DECIMALS,
     );
 
     dispatch(setSendTokenAmount(parsedAmount));
@@ -116,13 +109,13 @@ const useSteps = () => {
     const parsedAmount = truncateFloatForDisplay(
       amount * primaryValue.conversionRate,
       MAX_DECIMALS,
-      DISPLAY_DECIMALS
+      DISPLAY_DECIMALS,
     );
 
     dispatch(setSendTokenAmount(parsedAmount));
   };
 
-  const handleSwapValues = () => disptatch(swapSendTokenValues());
+  const handleSwapValues = () => dispatch(swapSendTokenValues());
 
   const handleNextStep = () => {
     const newStep = sendingXTCtoCanister ? 1 : 2;
@@ -152,7 +145,7 @@ const useSteps = () => {
       const parsedAmount = truncateFloatForDisplay(
         maxAmount,
         MAX_DECIMALS,
-        DISPLAY_DECIMALS
+        DISPLAY_DECIMALS,
       );
 
       dispatch(setSendTokenAmount(parsedAmount));
@@ -171,7 +164,6 @@ const useSteps = () => {
   }, []);
 
   useEffect(() => {
-    const price = { ICP: icpPrice, XTC: USD_PER_TC, WTC: USD_PER_TC }[selectedAsset?.symbol] || 1;
     dispatch(setSendTokenSelectedAsset({ icpPrice }));
   }, [icpPrice]);
 
@@ -207,7 +199,7 @@ const useSteps = () => {
       onClick={() => { convertToSecondaryAsset(); setStep(0); }}
       startIcon={BackIcon}
     />,
-    right: <CancelButton />, 
+    right: <CancelButton />,
     center: `${t('send.choose')}`,
   };
 
@@ -228,7 +220,7 @@ const useSteps = () => {
         loadingAddress={loading}
       />,
       left: null,
-      right: <CancelButton />, 
+      right: <CancelButton />,
       center: t('send.title'),
     },
     {
