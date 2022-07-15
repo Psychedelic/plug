@@ -271,13 +271,14 @@ const Profile = ({ disableProfile }) => {
               <MenuList className={clsx(classes.accountContainer, classes.menu)}>
                 {
                   accounts.map((account) => {
+                    console.log(account)
                     const isHidden = hiddenAccounts.includes(account.walletNumber);
                     return (!isHidden || isEditing) && (
                       <MenuItem
                         size="small"
                         key={account.walletNumber}
                         name={account.name}
-                        icon={<UserIcon size="small" icon={account.icon} style={{ marginLeft: -6, marginRight: 12 }} />}
+                        icon={<UserIcon size="small" icon={account.icon ? account.icon : '👽'} style={{ marginLeft: -6, marginRight: 12 }} />}
                         onClick={!isHidden && handleChangeAccount(account.walletNumber)}
                         selected={account.walletNumber === walletNumber}
                         className={clsx(isHidden && classes.hiddenAccount)}

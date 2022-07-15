@@ -12,7 +12,7 @@ const UserIcon = ({
 
   const classes = useStyles();
 
-  const displayIcon = icon ?? emoji ?? '👽';
+  const displayIcon = icon ?? emoji;
 
   return (
     <div
