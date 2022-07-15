@@ -21,6 +21,7 @@ import {
   swapSendTokenValues,
   sendToken,
   burnXTC,
+  resetState,
 } from '@redux/send';
 import { useICNS } from '@hooks';
 import {
@@ -48,7 +49,7 @@ const useSteps = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const { assets } = useSelector((state) => state.wallet);
+ const { assets } = useSelector((state) => state.wallet);
   const { useICNS: icnsActive } = useSelector((state) => state.icns);
   const {
     amount,
@@ -57,6 +58,7 @@ const useSteps = () => {
     selectedAsset,
     primaryValue,
     secondaryValue,
+    fulfilled,
   } = useSelector((state) => state.send);
   const icpPrice = useICPPrice();
 
@@ -69,7 +71,6 @@ const useSteps = () => {
   } = useICNS(address, selectedAsset?.symbol);
 
   const handleChangeAsset = (value) => {
-    console.log('Should handle change asset ->', value);
     dispatch(setSendTokenAddressInfo({ isValid: null, resolvedAddress: null, type: null }));
     dispatch(setSendTokenSelectedAsset({ icpPrice, value }));
   };
@@ -90,6 +91,11 @@ const useSteps = () => {
 
   const available = getAvailableAmount((selectedAsset?.amount || 0));
   const convertedAmount = Math.max(available * primaryValue.conversionRate, 0);
+  const [availableAmount, setAvailableAmount] = useState({
+    amount: convertedAmount,
+    prefix: primaryValue.prefix,
+    suffix: primaryValue.suffix,
+  });
 
   // TODO: Refactor cleaner way
   // when seeing asset as USD,
@@ -134,6 +140,13 @@ const useSteps = () => {
 
   useEffect(() => {
     const maxAmount = convertedAmount;
+    setAvailableAmount(
+      {
+        amount: maxAmount,
+        prefix: primaryValue.prefix,
+        suffix: primaryValue.suffix,
+      },
+    );
 
     if (amount > maxAmount) {
       const parsedAmount = truncateFloatForDisplay(
@@ -176,6 +189,13 @@ const useSteps = () => {
     }
   }, [address, selectedAsset, isValidICNS, resolvedAddress]);
 
+  useEffect(() => {
+    if (fulfilled) {
+      dispatch(resetState());
+      setStep(0);
+    }
+  }, [fulfilled]);
+
   const step2c = {
     component: <XtcToCanisterStep
       handleChangeStep={() => setStep(2)}
@@ -200,6 +220,8 @@ const useSteps = () => {
   const steps = [
     {
       component: <SelectAssetStep
+        resolvedAddress={resolvedAddress}
+        availableAmount={availableAmount}
         handleSwapValues={handleSwapValues}
         handleChangeAsset={handleChangeAsset}
         handleChangeStep={handleNextStep}

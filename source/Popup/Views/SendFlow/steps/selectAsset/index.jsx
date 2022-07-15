@@ -12,7 +12,6 @@ import { Typography } from '@material-ui/core';
 import NumberFormat from 'react-number-format';
 import { ADDRESS_TYPES } from '@shared/constants/addresses';
 import { isICNSName } from '@shared/utils/ids';
-import { getAssetFee } from '@shared/constants/addresses';
 import { setSendTokenAmount, setSendTokenAddress, resetState } from '@redux/send';
 import { MAX_DECIMALS, DISPLAY_DECIMALS } from '@shared/constants/send';
 import { truncateFloatForDisplay } from '@shared/utils/send';
@@ -21,8 +20,9 @@ import useStyles from '../../styles';
 import { CyclesToAccountWarning } from './components';
 
 const SelectAsset = ({
+  resolvedAddress,
+  availableAmount,
   loadingAddress,
-
   handleChangeStep,
   handleSwapValues,
   handleChangeAsset,
@@ -43,7 +43,8 @@ const SelectAsset = ({
   const amount = Number(rawAmount);
   const { principalId, accountId } = useSelector((state) => state.wallet);
 
-  const isUserAddress = [principalId, accountId].includes(address);
+  const isUserAddress = [principalId, accountId].includes(address) ||
+    [principalId, accountId].includes(resolvedAddress);
   const conversionPrice = amount / secondaryValue.price;
 
   const [openAssets, setOpenAssets] = useState(false);
@@ -52,19 +53,6 @@ const SelectAsset = ({
     setOpenAssets(false);
     handleChangeAsset(value);
   };
-
-  const fee = getAssetFee(selectedAsset);
-  const available = truncateFloatForDisplay(
-    (selectedAsset?.amount || 0 - fee),
-    MAX_DECIMALS,
-    DISPLAY_DECIMALS
-  );
-  const convertedAmount = Math.max(available * primaryValue.conversionRate, 0);
-  const [availableAmount, setAvailableAmount] = useState({
-    amount: convertedAmount,
-    prefix: primaryValue.prefix,
-    suffix: primaryValue.suffix,
-  });
 
   const isContinueDisabled = !(parseFloat(amount) > 0)
     || !addressInfo.isValid
@@ -82,25 +70,8 @@ const SelectAsset = ({
   };
 
   useEffect(() => {
-    const convertedAmount = Math.max(available * primaryValue.conversionRate, 0);
-
-    setAvailableAmount({
-      amount: convertedAmount,
-      prefix: primaryValue.prefix,
-      suffix: primaryValue.suffix,
-    });
-  }, [primaryValue]);
-
-  useEffect(() => {
     dispatch(resetState());
-
-    const convertedAmount = Math.max(available * primaryValue.conversionRate, 0);
-
-    setAvailableAmount({
-      amount: convertedAmount,
-      prefix: primaryValue.prefix,
-      suffix: primaryValue.suffix,
-    });
+    handleChangeAsset(assets[0]);
   }, []);
 
   return (

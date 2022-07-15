@@ -109,8 +109,6 @@ export const sendSlice = createSlice({
         conversionRate: newSelectedAsset?.price,
       };
 
-      console.log('New selected asset ->', newSelectedAsset);
-
       state.primaryValue = newPrimaryValue;
       state.secondaryValue = newSecondaryValue;
       state.selectedAsset = newSelectedAsset;
@@ -133,10 +131,7 @@ export const sendSlice = createSlice({
         state.pending = true;
       })
       .addCase(sendToken.fulfilled, (state) => {
-        Object.keys(DEFAULT_STATE).forEach((stateKey) => {
-          state[stateKey] = DEFAULT_STATE[stateKey];
-        });
-
+        state.fulfilled = true;
         state.pending = false;
       })
       .addCase(sendToken.rejected, (state) => {
@@ -148,12 +143,8 @@ export const sendSlice = createSlice({
         state.pending = true;
       })
       .addCase(burnXTC.fulfilled, (state) => {
-        Object.keys(DEFAULT_STATE).forEach((stateKey) => {
-          state[stateKey] = DEFAULT_STATE[stateKey];
-        });
-
-        state.pending = false;
         state.fulfilled = true;
+        state.pending = false;
       })
       .addCase(burnXTC.rejected, (state) => {
         // TODO: handle error
