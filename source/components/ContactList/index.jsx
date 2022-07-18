@@ -54,7 +54,9 @@ const ContactList = ({
             buttonVariant="danger"
             onClick={() => { handleRemoveContact(selectedContact); setOpen(false); }}
             onClose={() => setOpen(false)}
-            confirmDeletingButtonTestId="confirm-deleting-button"
+            submitButtonProps={{
+              'data-testid': 'confirm-deleting-button',
+            }}
           />
         )
       }

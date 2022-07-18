@@ -138,7 +138,7 @@ async function sendToken(page) {
   const amountInput = await page.getByTestId('select-token-input', true);
   await amountInput.click();
 
-  await pressKey(page, 'ArrowRight', 10);
+  await pressKey(page, 'ArrowRight', 6);
   await pressKey(page, 'ArrowLeft', 2);
   await page.keyboard.type('1');
 
@@ -310,7 +310,7 @@ describe('Send Custom Tokens', () => {
       const tokenIdError = await page.getByTestId('token-error', true);
       const tokenIdErrorText = await page.evaluate((el) => el.textContent, tokenIdError);
 
-      expect(tokenIdErrorText).toBe('Invalid Canister ID.');
+      expect(tokenIdErrorText).toBe('Wrong standard. No Token Interface Detected.');
 
       await addCustomTokenTabItemClick(page, 'Search');
     }
