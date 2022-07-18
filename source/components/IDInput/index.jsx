@@ -83,14 +83,17 @@ const IDInput = ({
   };
 
   const searchContactFromId = (e) => {
-    onChange(e.target.value);
-    contacts.forEach((contact) => {
-      contact.contacts.forEach((i) => {
-        if (e.target.value === i.id) {
-          setSelectedContact(i);
-        }
-      });
-    });
+    // contacts.forEach((contact) => {
+    //   contact.contacts.forEach((i) => {
+    //     if (e.target.value === i.id) {
+    //       setSelectedContact(i);
+    //     }
+    //   });
+    // });
+    const id = e.target.value;
+    onChange(id);
+    const allContacts = contacts.flatMap((contact) => contact.contacts);
+    setSelectedContact(allContacts.find((contact) => contact.id === id));
   };
 
   return (
@@ -116,7 +119,7 @@ const IDInput = ({
               fullWidth
               value={value}
               type="text"
-              onChange={(e) => searchContactFromId(e)}
+              onChange={searchContactFromId}
               placeholder={placeholder || t('send.inputId')}
               {...other}
             />
