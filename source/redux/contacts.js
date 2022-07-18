@@ -120,8 +120,11 @@ export const contactSlice = createSlice({
         }
       })
       .addCase(getContacts.fulfilled, (state, action) => {
-        let newContactList = [...state?.contacts, ...action?.payload, ...action.meta.arg?.localContacts];
-        console.log('new contact list', newContactList);
+        let newContactList = [
+          ...state?.contacts,
+          ...action?.payload,
+          ...action.meta.arg?.localContacts,
+        ];
         newContactList = filterContactsById(newContactList);
         setLocalDabContacts(newContactList);
 

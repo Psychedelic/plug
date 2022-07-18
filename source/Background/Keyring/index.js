@@ -227,7 +227,7 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.GET_BALANCE]: async (subaccount) => {
     try {
-      const assets = await keyring.getBalances(subaccount);
+      const assets = await keyring.getBalances({ subaccount });
       const parsedAssets = parseAssetsAmount(assets);
       const icpPrice = await getICPPrice();
       return formatAssets(parsedAssets, icpPrice);
@@ -241,7 +241,7 @@ export const getKeyringHandler = (type, keyring) => ({
     to, amount, canisterId, opts,
   }) => {
     try {
-      const { token } = await keyring.getTokenInfo(canisterId);
+      const { token } = await keyring.getTokenInfo({ canisterId });
       const { decimals } = token;
       const parsedAmount = parseToBigIntString(amount, parseInt(decimals, 10));
       const { height, transactionId } = await keyring.send(to, parsedAmount, canisterId, opts);
@@ -264,7 +264,7 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.GET_TOKEN_INFO]:
     async ({ canisterId, standard }) => {
       try {
-        const tokenInfo = await keyring.getTokenInfo(canisterId, standard);
+        const tokenInfo = await keyring.getTokenInfo({ canisterId, standard });
         return { ...tokenInfo, amount: tokenInfo.amount.toString() };
       } catch (e) {
         // eslint-disable-next-line
@@ -275,9 +275,9 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.ADD_CUSTOM_TOKEN]:
     async ({ canisterId, standard, logo }) => {
       try {
-        const tokens = await keyring.registerToken(
-          canisterId, standard, keyring.currentWalletId, logo,
-        );
+        const tokens = await keyring.registerToken({
+          canisterId, standard, subaccount: keyring.currentWalletId, image: logo,
+        });
         return (tokens || []).map((token) => recursiveParseBigint(token));
       } catch (e) {
         // eslint-disable-next-line
@@ -302,7 +302,7 @@ export const getKeyringHandler = (type, keyring) => ({
     const { wallets, currentWalletId } = await keyring.getState();
     let collections = wallets?.[currentWalletId]?.collections || [];
     if (!collections.length || refresh) {
-      collections = await keyring.getNFTs(currentWalletId, refresh);
+      collections = await keyring.getNFTs({ subaccount: currentWalletId, refresh });
     }
     return (collections || [])?.map((collection) => recursiveParseBigint(collection));
   },
@@ -408,9 +408,7 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.SET_CURRENT_NETWORK]: async (networkId) => {
     try {
-      console.log('setting current network', networkId);
       const currentNetwork = await keyring.networkModule.setNetwork(networkId);
-      console.log('new network', currentNetwork);
       return currentNetwork;
     } catch (e) {
       // eslint-disable-next-line

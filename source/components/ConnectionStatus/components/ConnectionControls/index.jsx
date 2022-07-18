@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { capitalize } from '@material-ui/core';
 import PropTypes from 'prop-types';
@@ -14,12 +14,13 @@ import {
   setCollections,
   setCollectionsLoading,
 } from '@redux/wallet';
-import { getCurrentNetwork } from '@redux/network';
+import { getCurrentNetwork, getNetworks } from '@redux/network';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { TABS, useRouter } from '@components/Router';
 import RefreshAsset from '@assets/icons/refresh.svg';
 
 import useStyles from './styles';
+import NetworkSelector from '../NetworkSelector';
 
 const ConnectionControls = ({ disableNavigation }) => {
   const classes = useStyles();
@@ -30,6 +31,7 @@ const ConnectionControls = ({ disableNavigation }) => {
   const { principalId } = useSelector((state) => state.wallet);
   const { useICNS } = useSelector((state) => state.icns);
   const { currentNetwork, networksLoading } = useSelector((state) => state.network);
+  const [selectorOpen, setSelectorOpen] = useState(false);
 
   const refreshWallet = () => {
     if (disableNavigation) return;
@@ -75,10 +77,12 @@ const ConnectionControls = ({ disableNavigation }) => {
 
   useEffect(() => {
     dispatch(getCurrentNetwork());
+    dispatch(getNetworks());
   }, []);
+  console.log('selector open', selectorOpen);
   return (
     <div className={classes.controls}>
-      <div className={classes.networkSelector}>
+      <div className={classes.networkSelector} onClick={() => setSelectorOpen(true)}>
         <div className={classes.statusDot} />
         {networksLoading ? 'Loading' : (
           <span className={classes.network}>{capitalize(currentNetwork?.name || 'Mainnet')}</span>
@@ -90,6 +94,7 @@ const ConnectionControls = ({ disableNavigation }) => {
       >
         <img src={RefreshAsset} alt="reload" className={classes.reloadIcon} />
       </div>
+      {selectorOpen && (<NetworkSelector onClose={() => setSelectorOpen(false)} />)}
     </div>
   );
 };

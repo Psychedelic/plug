@@ -10,7 +10,6 @@ import {
 } from '@ui';
 import BackIcon from '@assets/icons/back.svg';
 import { addNetwork } from '@redux/network';
-import { validateCanisterId } from '@shared/utils/ids';
 
 import useStyles from './styles';
 import { NETWORK_CREATION_DEFAULT_VALUES, NETWORK_CREATION_FIELDS } from './constants';
@@ -18,8 +17,7 @@ import { NETWORK_CREATION_DEFAULT_VALUES, NETWORK_CREATION_FIELDS } from './cons
 const validateNetwork = ({
   name,
   host,
-  ledgerId,
-}) => name && host && ledgerId && validateCanisterId(ledgerId);
+}) => name && host;
 
 const NetworkCreation = () => {
   const { t } = useTranslation();
@@ -48,7 +46,7 @@ const NetworkCreation = () => {
       <Header
         center={<Typography variant="h2">{t('network.network')}</Typography>}
         left={<LinkButton value={t('common.back')} onClick={navigator.goBack} startIcon={BackIcon} />}
-        right={<LinkButton value={t('common.close')} onClick={() => navigator.navigate('tokens')} />}
+        right={<LinkButton value={t('common.close')} onClick={() => navigator.navigate('home')} />}
       />
       <div className={classes.networkCreationContainer}>
         {NETWORK_CREATION_FIELDS.map((field) => (
