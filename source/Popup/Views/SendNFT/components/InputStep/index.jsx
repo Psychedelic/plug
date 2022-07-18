@@ -22,7 +22,7 @@ const InputStep = ({ advanceStep }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [address, setAddress] = useState(null);
-  const { resolvedAddress, isValid: isValidICNS, loading } = useICNS(address, '', 500);
+  const { resolvedAddress, isValid: isValidICNS, loadingIcns } = useICNS(address, '', 500);
 
   const { selectedNft: nft } = useSelector((state) => state.nfts);
   const { collections } = useSelector((state) => state.wallet);
@@ -76,11 +76,12 @@ const InputStep = ({ advanceStep }) => {
             label={t('nfts.sendTo')}
             component={(
               <IDInput
-                loading={loading}
+                loading={loadingIcns}
                 value={address}
                 onChange={handleAddressChange}
                 isValid={isValid}
                 placeholder={t('nfts.inputPrincipalId')}
+                data-testid="send-nft-to-principalID-input"
               />
               )}
           />
@@ -97,6 +98,7 @@ const InputStep = ({ advanceStep }) => {
                 || !isValid
               }
             onClick={handleAdvanceStep}
+            data-testid="nft-send-continue-button"
           />
         </Grid>
       </Grid>

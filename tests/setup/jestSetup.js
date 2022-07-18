@@ -36,10 +36,10 @@ global.setupChrome = async () => {
       `--load-extension=${EXTENSION_PATH}`,
       '--enable-automation',
     ],
+
   });
   const targets = await browser.targets();
   const extensionTarget = targets.find(({ _targetInfo }) => _targetInfo.title === PAGE_TITLE);
-
   const partialExtensionUrl = extensionTarget._targetInfo.url || '';
   const [, , extensionID] = partialExtensionUrl.split('/');
 
@@ -62,13 +62,6 @@ global.setupChrome = async () => {
 };
 
 // General utils
-
-const getXPathElements = async (page, elementType, content, wait = false) => {
-  const xPath = `//${elementType}[contains(.,"${content}")]`;
-
-  if (wait) await page.waitForXPath(xPath);
-  return page.$x(xPath);
-};
 
 const getTestIdSelector = (id) => `[data-testid="${id}"]`;
 
