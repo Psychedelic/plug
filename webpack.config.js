@@ -64,10 +64,10 @@ module.exports = {
   entry: {
     manifest: path.join(sourcePath, 'manifest.json'),
     background: path.join(sourcePath, 'Background', 'index.js'),
-    contentScript: path.join(sourcePath, 'ContentScript', 'index.js'),
+    contentScript: path.join(sourcePath, 'scripts', 'ContentScript', 'index.js'),
     popup: path.join(sourcePath, 'Popup', 'index.jsx'),
     options: path.join(sourcePath, 'Options', 'index.jsx'),
-    inpage: path.join(sourcePath, 'Inpage', 'index.js'),
+    inpage: path.join(sourcePath, 'scripts', 'Inpage', 'index.js'),
     notification: path.join(sourcePath, 'Pages', 'Notification', 'index.jsx'),
   },
   node: {
@@ -81,7 +81,6 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.json'],
     alias: {
-      '@ui': path.join(path.resolve(__dirname, './source/ui')),
       '@components': path.join(path.resolve(__dirname, './source/components')),
       '@assets': path.join(path.resolve(__dirname, './source/assets')),
       '@shared': path.join(path.resolve(__dirname, './source/shared')),

@@ -18,7 +18,7 @@ module.exports = {
   mode: 'production',
 
   entry: {
-    inpage: path.join(sourcePath, 'Inpage', 'index.js'),
+    inpage: path.join(sourcePath, 'scripts', 'Inpage', 'index.js'),
   },
 
   output: {
@@ -29,7 +29,6 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.json'],
     alias: {
-      '@ui': path.join(path.resolve(__dirname, './source/ui')),
       '@components': path.join(path.resolve(__dirname, './source/components')),
       '@assets': path.join(path.resolve(__dirname, './source/assets')),
       '@shared': path.join(path.resolve(__dirname, './source/shared')),
