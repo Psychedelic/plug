@@ -48,6 +48,7 @@ const backButtonClick = async (page) => {
 };
 
 const addWrongContact = async (page, { handle, errorMessage }) => {
+  console.log('Wrong Contact: ', handle, errorMessage);
   await addContactButtonClick(page);
   await principalIdInputFill(page, handle);
   await isErrorMessageShown(page, errorMessage);
@@ -56,6 +57,7 @@ const addWrongContact = async (page, { handle, errorMessage }) => {
 };
 
 const addCorrectContact = async (page, { handle, name }) => {
+  console.log('Correct Contact: ', handle, name);
   await addContactButtonClick(page);
   await nameInputFill(page, name);
   await principalIdInputFill(page, handle);
@@ -97,7 +99,7 @@ describe('Contacts', () => {
     { handle: secrets.subPrincipalId, errorMessage: 'This contact already exists under "Subaccount PrincipalID".' },
     { handle: secrets.wrongId, errorMessage: errorText },
     { handle: secrets.wrongAccountId, errorMessage: errorText },
-    { handle: secrets.wrongICNSname, errorMessage: errorText },
+    { handle: secrets.wrongICNSName, errorMessage: errorText },
   ];
 
   beforeAll(async () => {
@@ -115,7 +117,6 @@ describe('Contacts', () => {
   beforeEach(async () => {
     page = await utils.createNewPage(browser);
     await page.goto(chromeData.popupUrl);
-    await popupPageUtils.waitForProfileButton(page);
     await popupPageUtils.profileButtonClick(page);
     await settingsButtonClick(page);
     await contactBookMenuButtonClick(page);

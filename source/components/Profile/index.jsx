@@ -202,6 +202,7 @@ const Profile = ({ disableProfile }) => {
             label: classes.label,
           }}
           disabled={disableProfile}
+          data-testid="profile-button"
         >
           <UserIcon />
         </Button>

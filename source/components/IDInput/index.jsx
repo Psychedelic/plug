@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import MInputBase from '@material-ui/core/InputBase';
@@ -12,6 +12,7 @@ import { CircularProgress, Grid } from '@material-ui/core';
 import { getRandomEmoji } from '@shared/constants/emojis';
 import { addContact as addContactAction } from '@redux/contacts';
 
+import { useContacts } from '@hooks';
 import ActionDialog from '../ActionDialog';
 import ContactItem from '../ContactItem';
 import ContactList from '../ContactList';
@@ -22,6 +23,7 @@ const IDInput = ({
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const { getContacts } = useContacts();
 
   const dispatch = useDispatch();
   const [selectedContact, setSelectedContact] = useState(null);
@@ -31,6 +33,11 @@ const IDInput = ({
 
   const { principalId, accountId } = useSelector((state) => state.wallet);
   const { groupedContacts: contacts } = useSelector((state) => state.contacts);
+  const { contactsLoading } = useSelector((state) => state.contacts);
+
+  useEffect(() => {
+    getContacts();
+  }, []);
 
   const isUserAddress = useMemo(
     () => [principalId, accountId].includes(value), [principalId, accountId, value],
@@ -108,7 +115,7 @@ const IDInput = ({
               {...other}
             />
             <div className={classes.iconContainer}>
-              {loading ? (
+              {(contactsLoading || loading) ? (
                 <CircularProgress size={24} />
               )
                 : contacts.length > 0 && (
@@ -116,6 +123,7 @@ const IDInput = ({
                   className={classes.icon}
                   src={BookIcon}
                   onClick={() => setOpenContacts(true)}
+                  data-testid="address-book-icon"
                 />
                 )}
               <Dialog
@@ -123,10 +131,12 @@ const IDInput = ({
                 onClose={handleCloseContacts}
                 selectedValue={selectedContact}
                 open={openContacts}
+                titleTestId="contacts-dialog"
                 component={(
                   <ContactList
                     selectable
                     onClick={handleSelectContact}
+                    contactTestId="contact-name"
                   />
                 )}
               />
