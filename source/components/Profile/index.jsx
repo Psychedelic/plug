@@ -283,6 +283,7 @@ const Profile = ({ disableProfile }) => {
                         onClick={!isHidden && handleChangeAccount(account.walletNumber)}
                         selected={account.walletNumber === walletNumber}
                         className={clsx(isHidden && classes.hiddenAccount)}
+                        accountNameTestId="account-name"
                         endIcon={account.walletNumber === walletNumber ? (
                           <img
                             src={BluePencil}

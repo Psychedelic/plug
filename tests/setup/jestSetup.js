@@ -9,12 +9,15 @@ global.secrets = {
   seedphrase: process.env.SEEDPHRASE,
   subAccountId: process.env.SUB_ACCOUNT_ID,
   subPrincipalId: process.env.SUB_PRINCIPAL_ID,
+  icnsName: process.env.ICNS_NAME,
   password: process.env.PASSWORD,
-  wrongId: process.env.WRONG_ID,
   dustCanisterId: process.env.DUST_CANISTER_ID,
   betaCanisterId: process.env.BETA_CANISTER_ID,
   wtcCanisterId: process.env.WTC_CANISTER_ID,
+  wrongAccountId: process.env.WRONG_ACCOUNT_ID,
   wrongCanisterId: process.env.WRONG_CANISTER_ID,
+  wrongId: process.env.WRONG_ID,
+  wrongICNSName: process.env.WRONG_ICNS_NAME,
 };
 
 const grantRawPermissions = async (context, url, permissions) => {

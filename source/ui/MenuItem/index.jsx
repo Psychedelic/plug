@@ -21,6 +21,7 @@ const MenuItem = ({
   endText,
   symbol,
   className,
+  accountNameTestId,
   ...other
 }) => {
   const classes = useStyles();
@@ -49,7 +50,7 @@ const MenuItem = ({
           </ListItemIcon>
         )
       }
-      <Typography variant={size === 'small' ? 'h6' : 'h5'} className={classes.text}>{name}</Typography>
+      <Typography variant={size === 'small' ? 'h6' : 'h5'} className={classes.text} data-testid={`${accountNameTestId}-${name}`}>{name}</Typography>
       {
         endIcon
         && (
@@ -85,6 +86,7 @@ MenuItem.defaultProps = {
   symbol: '',
   className: '',
   image: null,
+  accountNameTestId: '',
 };
 
 MenuItem.propTypes = {
@@ -101,4 +103,5 @@ MenuItem.propTypes = {
   selected: PropTypes.bool,
   endText: PropTypes.string,
   symbol: PropTypes.string,
+  accountNameTestId: PropTypes.string,
 };
