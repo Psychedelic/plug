@@ -74,6 +74,7 @@ const NFTDetails = () => {
           <img
             className={classes.expandIcon}
             src={ExpandIcon}
+            data-testid="expand-nft"
             onClick={() => openNFT(nft?.url?.replace('type=thumbnail', ''))}
             data-testid="expand-nft"
           />

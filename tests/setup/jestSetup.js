@@ -3,13 +3,12 @@ require('dotenv').config();
 const PAGE_TITLE = 'Plug';
 const EXTENSION_PATH = require('path').join(__dirname, '..', '..', 'extension', 'chrome');
 
-const profileButtonSelector = '[aria-label="Emoji"]';
-
 jest.setTimeout(60000); // in milliseconds
 
 global.secrets = {
   seedphrase: process.env.SEEDPHRASE,
   subAccountId: process.env.SUB_ACCOUNT_ID,
+  subPrincipalId: process.env.SUB_PRINCIPAL_ID,
   password: process.env.PASSWORD,
   wrongId: process.env.WRONG_ID,
   dustCanisterId: process.env.DUST_CANISTER_ID,
@@ -38,10 +37,10 @@ global.setupChrome = async () => {
       `--load-extension=${EXTENSION_PATH}`,
       '--enable-automation',
     ],
-
   });
   const targets = await browser.targets();
   const extensionTarget = targets.find(({ _targetInfo }) => _targetInfo.title === PAGE_TITLE);
+
   const partialExtensionUrl = extensionTarget._targetInfo.url || '';
   const [, , extensionID] = partialExtensionUrl.split('/');
 
@@ -64,6 +63,13 @@ global.setupChrome = async () => {
 };
 
 // General utils
+
+const getXPathElements = async (page, elementType, content, wait = false) => {
+  const xPath = `//${elementType}[contains(.,"${content}")]`;
+
+  if (wait) await page.waitForXPath(xPath);
+  return page.$x(xPath);
+};
 
 const getTestIdSelector = (id) => `[data-testid="${id}"]`;
 
@@ -129,18 +135,24 @@ const unlock = async (page, password) => {
 
 // Popup page utils
 
-const waitForProfileButton = (page) => page.waitForSelector(profileButtonSelector);
-
-const ProfileButtonClick = async (page) => {
-  const profileButton = await waitForProfileButton(page);
+const profileButtonClick = async (page) => {
+  const profileButton = await page.getByTestId('profile-button', true);
   await profileButton.click();
 };
 
-const refreshWallet = async (page) => {
-  await waitForProfileButton(page);
+const fillNameInput = async (page, name) => {
+  const nameInput = await page.getByTestId('create-account-name-input', true);
+  await nameInput.click();
+  await nameInput.type(name);
+};
 
-  const profileButton = await page.$(profileButtonSelector);
-  await profileButton.click();
+const createAccountButtonClick = async (page) => {
+  const createAccountButton = await getByTestId(page, 'create-account-button', true);
+  await createAccountButton.click();
+};
+
+const refreshWallet = async (page) => {
+  await profileButtonClick(page);
 
   await page.waitForSelector('[data-testid="drawer"][aria-hidden="true"]', { hidden: true });
 
@@ -148,19 +160,18 @@ const refreshWallet = async (page) => {
   await refreshWalletBtn.click();
 };
 
-const createSubAccount = async (page, subAccountName) => {
-  await waitForProfileButton(page);
-  const profileButton = await page.$(profileButtonSelector);
-  await profileButton.click();
+const createSubAccount = async (page, name) => {
+  await createAccountButtonClick(page);
+  await fillNameInput(page, name);
 
-  const createAccountButton = await getByTestId(page, 'create-account-button', true);
-  await createAccountButton.click();
-
-  const createAccountNameInput = await getByTestId(page, 'create-account-name-input');
-  await createAccountNameInput.type(subAccountName);
-
-  const createAccountSubmitButton = await getByTestId(page, 'create-account-submit-button');
+  const createAccountSubmitButton = await getByTestId(page, 'create-account-submit-button', true);
   await createAccountSubmitButton.click();
+
+  await page.waitForTestIdSelector('create-account-submit-button', { hidden: true });
+
+  await profileButtonClick(page);
+
+  await page.waitForTestIdSelector(`account-name-${name}`);
 };
 
 const optionsPageUtils = {
@@ -171,7 +182,9 @@ const optionsPageUtils = {
 const popupPageUtils = {
   createSubAccount,
   refreshWallet,
-  waitForProfileButton,
+  profileButtonClick,
+  fillNameInput,
+  createAccountButtonClick,
 };
 
 global.popupPageUtils = popupPageUtils;

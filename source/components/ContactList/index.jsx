@@ -67,7 +67,6 @@ ContactList.propTypes = {
   handleRemoveContact: PropTypes.func.isRequired,
   onClick: PropTypes.func,
   selectable: PropTypes.bool,
-
 };
 
 ContactList.defaultProps = {

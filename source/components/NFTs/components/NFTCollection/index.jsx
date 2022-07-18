@@ -47,10 +47,15 @@ function NFTCollection({
               </div>
               <Typography variant="h5">{collection?.name}</Typography>
             </div>
-            <ChevronDown
-              className={clsx(classes.expandIcon, expanded && classes.rotate)}
-              size={20}
-            />
+            <div className={classes.numberArrowContainer}>
+              <p className={classes.nftQty}>
+                {collection.tokens.length}
+              </p>
+              <ChevronDown
+                className={clsx(classes.expandIcon, expanded && classes.rotate)}
+                size={20}
+              />
+            </div>
           </div>
         )}
       >
@@ -81,6 +86,7 @@ function NFTCollection({
                   <Typography
                     className={classes.id}
                     variant="subtitle1"
+
                   >
                     {name.length > 12 ? shortICNSName(name) : name}
                   </Typography>

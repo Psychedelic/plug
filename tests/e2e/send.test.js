@@ -114,7 +114,7 @@ const tokenBalanceCheck = async (page, { previousAmount, name }) => {
 const recipientPrincipalIdEnter = async (page) => {
   const addressInput = await page.getByTestId('send-to-principalID-input', true);
   await addressInput.click();
-  await addressInput.type(secrets.subAccountId);
+  await addressInput.type(secrets.subPrincipalId);
 };
 
 const contactSelect = async (page) => {
@@ -171,7 +171,6 @@ describe('Send View', () => {
   beforeEach(async () => {
     page = await utils.createNewPage(browser);
     await page.goto(chromeData.popupUrl);
-    await popupPageUtils.waitForProfileButton(page);
     await sendViewButtonClick(page);
   });
 
@@ -290,7 +289,6 @@ describe('Send Custom Tokens', () => {
   beforeEach(async () => {
     page = await utils.createNewPage(browser);
     await page.goto(chromeData.popupUrl);
-    await popupPageUtils.waitForProfileButton(page);
   });
 
   afterEach(async () => {
@@ -312,7 +310,7 @@ describe('Send Custom Tokens', () => {
       const tokenIdError = await page.getByTestId('token-error', true);
       const tokenIdErrorText = await page.evaluate((el) => el.textContent, tokenIdError);
 
-      expect(tokenIdErrorText).toBe('Invalid Canister ID. No Token Interface Detected.');
+      expect(tokenIdErrorText).toBe('Invalid Canister ID.');
 
       await addCustomTokenTabItemClick(page, 'Search');
     }

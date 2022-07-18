@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { useTranslation } from 'react-i18next';
 import {
-  Button, FormItem, TextInput, Container, Alert, Dialog, Select,
+  Button,
+  FormItem,
+  TextInput,
+  Container,
+  Alert,
+  Dialog,
+  Select,
 } from '@ui';
 import { validateCanisterId } from '@shared/utils/ids';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
@@ -18,14 +24,14 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
   const [canisterId, setCanisterId] = useState('');
   const [standard, setStandard] = useState(FUNGIBLE_STANDARDS.DIP20);
   const [invalidToken, setInvalidToken] = useState(null);
-  const [tokenError, setTokenError] = useState(false);
+  const [tokenError, setTokenError] = useState('');
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const classes = useStyles();
 
   const handleChangeId = (e) => {
     setCanisterId(e.target.value.trim());
-    setTokenError(false);
+    setTokenError('');
   };
 
   useEffect(() => {
@@ -36,23 +42,30 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    sendMessage({
-      type: HANDLER_TYPES.GET_TOKEN_INFO,
-      params: { canisterId, standard },
-    }, async (tokenInfo) => {
-      if (tokenInfo?.error) {
-        setTokenError(true);
-      } else {
-        handleChangeSelectedToken(tokenInfo)();
-      }
-      setLoading(false);
-    });
+    sendMessage(
+      {
+        type: HANDLER_TYPES.GET_TOKEN_INFO,
+        params: { canisterId, standard },
+      },
+      async (tokenInfo) => {
+        if (tokenInfo?.error) {
+          setTokenError(tokenInfo?.error);
+        } else {
+          handleChangeSelectedToken(tokenInfo)();
+        }
+        setLoading(false);
+      },
+    );
   };
   const handleCloseDialog = (value) => {
     setStandard(value?.name ?? standard);
     setDialogOpen(false);
-    setTokenError(false);
+    setTokenError('');
   };
+
+  const isInvalidInterfaceError = tokenError.includes('Call failed:');
+  const isInvalidCanisterError = tokenError === 'The provided canister id is invalid';
+  const isNFTNotSupportedError = tokenError === 'Non fungible tokens are not supported yet';
 
   return (
     <Container style={{ paddingTop: 24 }}>
@@ -108,7 +121,7 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
                   type="danger"
                   title={(
                     <div>
-                      <span data-testid="token-error">{t('addToken.tokenError')}</span>
+                      <span data-testid="token-error">{t('addToken.invalidCanisterTokenError')}</span>
                       <br />
                       <span
                         className={classes.learnMore}
