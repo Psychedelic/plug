@@ -7,10 +7,11 @@ import { Typography } from '@material-ui/core';
 import { ChevronDown } from 'react-feather';
 
 import { shortICNSName } from '@shared/services/ICNS';
-import { useRouter } from '@components/Router';
 import { setSelectedNft } from '@redux/nfts';
-import { NFTDisplayer, ICNSDisplay } from '@ui';
 import { NFT_COLLECTION_DEFAULT_TYPES } from '@shared/constants/nft';
+import { useRouter } from '../../../Router';
+import NFTDisplayer from '../../../NFTDisplayer';
+import ICNSDisplay from '../../../ICNSDisplay';
 
 import useStyles from './styles';
 

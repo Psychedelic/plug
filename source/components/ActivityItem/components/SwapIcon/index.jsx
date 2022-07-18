@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import SwapArrowImg from '@assets/icons/swap-arrow.svg';
 import UnknownIcon from '@assets/icons/unknown-icon.svg';
 import { currencyPropTypes } from '@shared/constants/currencies';
-import { TokenIcon } from '@components';
+import TokenIcon from '../../../TokenIcon';
 
 import useStyles from './styles';
 

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { IDInput } from '@components';
 import {
+  IDInput,
   Container, FormItem, Select, Button,
-} from '@ui';
+} from '@components';
 import { Grid } from '@material-ui/core';
 
 import { validatePrincipalId } from '@shared/utils/ids';

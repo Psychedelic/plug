@@ -1,10 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
-import { Button } from '@ui';
-import { Layout } from '@components';
-import { useRouter } from '@components/Router';
+import { Button, Layout } from '@components';
 import SighEmoji from '@assets/icons/sigh-face.svg';
+import { useRouter } from '@components/Router';
 
 import useStyles from './styles';
 

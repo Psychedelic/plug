@@ -5,14 +5,16 @@ import MInputBase from '@material-ui/core/InputBase';
 import BookIcon from '@assets/icons/notebook.svg';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
-import {
-  Button, Dialog, FormItem, InputBase, TextInput,
-} from '@ui';
 import { CircularProgress, Grid } from '@material-ui/core';
 import { getRandomEmoji } from '@shared/constants/emojis';
 import { addContact as addContactAction } from '@redux/contacts';
-
 import { useContacts } from '@hooks';
+import Button from '../Button';
+import Dialog from '../Dialog';
+import FormItem from '../FormItem';
+import InputBase from '../InputBase';
+import TextInput from '../TextInput';
+
 import ActionDialog from '../ActionDialog';
 import ContactItem from '../ContactItem';
 import ContactList from '../ContactList';

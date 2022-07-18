@@ -1,7 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Layout } from '@components';
-import { Header, LinkButton, MenuItem } from '@ui';
+import {
+  Layout, Header, LinkButton, MenuItem,
+} from '@components';
 import { useRouter } from '@components/Router';
 import useHelpItems from '../../../hooks/useHelpItems';
 import useStyles from './styles';

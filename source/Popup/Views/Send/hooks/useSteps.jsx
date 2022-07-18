@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { LinkButton } from '@ui';
-import { useRouter } from '@components/Router';
+import { LinkButton } from '@components';
 import BackIcon from '@assets/icons/back.svg';
 import { setAssets, setTransactions } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
@@ -15,6 +14,7 @@ import {
 import { ADDRESS_TYPES, getAssetFee } from '@shared/constants/addresses';
 import { useICPPrice } from '@redux/icp';
 import { useICNS } from '@hooks';
+import { useRouter } from '@components/Router';
 
 import Step1 from '../Steps/Step1';
 import Step2c from '../Steps/Step2c';

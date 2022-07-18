@@ -3,9 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import BackIcon from '@assets/icons/back.svg';
-import { Layout } from '@components';
+import { Layout, Header, LinkButton } from '@components';
 import { TABS, useRouter } from '@components/Router';
-import { Header, LinkButton } from '@ui';
 
 import { setSendAddress } from '../../../redux/nfts';
 import useSteps from './useSteps';

@@ -13,8 +13,8 @@ import {
   setCollections,
   setCollectionsLoading,
 } from '@redux/wallet';
-import { useContacts } from '@hooks';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import useContacts from './useContacts';
 
 const useMenuItems = (toggleMenu) => {
   const { navigator } = useRouter();

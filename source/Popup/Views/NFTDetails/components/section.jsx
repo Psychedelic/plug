@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Title,
-} from '@ui';
+} from '@components';
 import PropTypes from 'prop-types';
 import useStyles from '../styles';
 

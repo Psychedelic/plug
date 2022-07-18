@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Container, FormInput, Button, Checkbox,
-} from '@ui';
+} from '@components';
 import { useTranslation } from 'react-i18next';
 import Grid from '@material-ui/core/Grid';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';

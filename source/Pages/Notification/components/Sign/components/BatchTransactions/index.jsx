@@ -9,10 +9,10 @@ import extension from 'extensionizer';
 
 import {
   Button, Tabs, theme,
-} from '@ui';
+  Layout,
+} from '@components';
 import { useTabs } from '@hooks';
 import store from '@redux/store';
-import { Layout } from '@components';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
 

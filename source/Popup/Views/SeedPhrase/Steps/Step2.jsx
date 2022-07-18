@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { SeedPhrase } from '@components';
-import { Container } from '@ui';
+import { SeedPhrase, Container } from '@components';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 
 const Step2 = ({ password }) => {

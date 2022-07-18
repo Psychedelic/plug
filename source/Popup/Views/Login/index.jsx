@@ -4,9 +4,9 @@ import extension from 'extensionizer';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import Typography from '@material-ui/core/Typography';
-import { Plug } from '@components';
-import { LinkButton, Button, FormInput } from '@ui';
-import { useRouter } from '@components/Router';
+import {
+  Plug, LinkButton, Button, FormInput,
+} from '@components';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
 import { isClockInSync } from '@shared/utils/time';
@@ -14,6 +14,7 @@ import { syncContactsToDab } from '@shared/utils/contacts';
 import { useContacts } from '@hooks';
 
 import PropTypes from 'prop-types';
+import { useRouter } from '@components/Router';
 import useStyles from './styles';
 
 const Login = ({ redirect }) => {

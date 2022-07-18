@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { Layout } from '@components';
-import { Header } from '@ui';
-import useSteps from './hooks/useSteps';
+import { Layout, Header } from '@components';
 import { useContacts } from '@hooks';
+import useSteps from './hooks/useSteps';
 
 const Contacts = () => {
   const {

@@ -3,15 +3,15 @@ import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { TABS } from '@components/Router';
 import {
   Button, Alert,
-} from '@ui';
-import { AddressTranslation } from '@components';
+  AddressTranslation,
+} from '@components';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { removeNFT, setCollections } from '@redux/wallet';
 import { setSelectedNft } from '@redux/nfts';
 import { ADDRESS_TYPES } from '@shared/constants/addresses';
+import { TABS } from '@components/Router';
 
 import { getFilteredCollections } from '../../utils';
 import NFTDisplay from '../NFTDisplay';

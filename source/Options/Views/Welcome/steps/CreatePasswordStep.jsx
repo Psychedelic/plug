@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import { useTranslation } from 'react-i18next';
 import {
   Alert, Button, FormItem, TextInput,
-} from '@ui';
+} from '@components';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import facepalmEmoji from '@assets/icons/facepalm.svg';
 import { getRandomEmoji } from '@shared/constants/emojis';

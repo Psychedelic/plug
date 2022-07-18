@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
   Container, Button, CodeBox, Dialog, FormItem, Select,
-} from '@ui';
+  UserIcon,
+} from '@components';
 import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
 import shortAddress from '@shared/utils/short-address';
 import { useTranslation } from 'react-i18next';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { UserIcon } from '@components';
 import download from '@shared/utils/download-text';
 
 const Step2 = () => {

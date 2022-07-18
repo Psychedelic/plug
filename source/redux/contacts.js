@@ -22,14 +22,12 @@ const getIndexOfContact = (contact, contactList) => {
   return index;
 };
 
-const filterContactsById = (contacts) => {
-  return contacts.reduce((acc, c) => {
-    if (getIndexOfContact(c, acc) === -1) {
-      return [...acc, c];
-    }
-    return acc;
-  }, []);
-};
+const filterContactsById = (contacts) => contacts.reduce((acc, c) => {
+  if (getIndexOfContact(c, acc) === -1) {
+    return [...acc, c];
+  }
+  return acc;
+}, []);
 
 const groupContacts = (contacts) => (
   contacts

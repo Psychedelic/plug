@@ -1,13 +1,12 @@
 import React, { useEffect, useMemo } from 'react';
-import { Layout } from '@components';
 import {
+  Layout,
   Header, Button, Badge, LinkButton, NFTDisplayer, ICNSDisplay,
-} from '@ui';
+} from '@components';
 import { useTranslation } from 'react-i18next';
 import BackIcon from '@assets/icons/back.svg';
 import ExpandIcon from '@assets/icons/expand.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { TABS, useRouter } from '@components/Router';
 import CollectionImg from '@assets/icons/nfts/collection.png';
 import DescriptionImg from '@assets/icons/nfts/description.png';
 import AttributesImg from '@assets/icons/nfts/attributes.png';
@@ -17,6 +16,7 @@ import { setSelectedNft } from '@redux/nfts';
 import { ArrowUpRight } from 'react-feather';
 import extension from 'extensionizer';
 import { NFT_COLLECTION_DEFAULT_TYPES } from '@shared/constants/nft';
+import { TABS, useRouter } from '@components/Router';
 
 import Section from './components/section';
 import useStyles from './styles';

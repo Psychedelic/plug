@@ -3,10 +3,10 @@ import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
-import { TokenIcon } from '@components';
 import RefreshIcon from '@assets/icons/blue-refresh.png';
 
 import { useTranslation } from 'react-i18next';
+import TokenIcon from '../TokenIcon';
 import useStyles from './styles';
 
 const AssetItem = ({

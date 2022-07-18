@@ -1,6 +1,6 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import { FullscreenContainer, LinkButton } from '@ui';
+import { FullscreenContainer, LinkButton } from '@components';
 import BackIcon from '@assets/icons/back.svg';
 import { useTranslation } from 'react-i18next';
 import Header from './components/Header';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
-import { Button } from '@ui';
+import { Button } from '@components';
 import SighEmoji from '@assets/icons/sigh-face.svg';
 
 import useStyles from './styles';

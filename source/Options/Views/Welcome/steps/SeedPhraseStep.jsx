@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { useTranslation } from 'react-i18next';
-import { Button, Checkbox } from '@ui';
-import { SeedPhrase, RevealSeedPhrase } from '@components';
+import {
+  Button, Checkbox, SeedPhrase, RevealSeedPhrase,
+} from '@components';
 import useStyles from '../styles';
 
 const SeedPhraseStep = ({ handleNextStep, mnemonic }) => {

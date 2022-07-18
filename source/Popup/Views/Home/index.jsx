@@ -10,8 +10,8 @@ import {
   useRouter,
   NFTs,
   ConnectAccountsModal,
+  Tabs,
 } from '@components';
-import { Tabs } from '@ui';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
 import { useICPPrice } from '@redux/icp';

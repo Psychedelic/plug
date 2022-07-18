@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MenuList from '@material-ui/core/MenuList';
 import Button from '@material-ui/core/Button';
-import {
-  HoverAnimation, MenuItem, FormItem, TextInput, LinkButton,
-} from '@ui';
 import PropTypes from 'prop-types';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
@@ -32,8 +29,13 @@ import { getWalletsConnectedToUrl, getApp } from '@modules/storageManager';
 import { toggleAccountHidden, useHiddenAccounts } from '@redux/profile';
 import { setICNSData } from '@redux/icns';
 import { useICPPrice } from '@redux/icp';
-import { ConnectAccountsModal } from '@components';
 import { useMenuItems, useContacts } from '@hooks';
+import ConnectAccountsModal from '../ConnectAccountsModal';
+import LinkButton from '../LinkButton';
+import TextInput from '../TextInput';
+import FormItem from '../FormItem';
+import MenuItem from '../MenuItem';
+import HoverAnimation from '../HoverAnimation';
 
 import { TABS, useRouter } from '../Router';
 import ActionDialog from '../ActionDialog';

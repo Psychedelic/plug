@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import ReactDOM from 'react-dom';
 import qs from 'query-string';
-import { theme } from '@ui';
+import { theme } from '@components';
 import extension from 'extensionizer';
 import { capitalize } from '@material-ui/core';
 

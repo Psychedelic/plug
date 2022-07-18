@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Plus } from 'react-feather';
-import { AssetItem } from '@ui';
 import { setAssets, setAssetsLoading } from '@redux/wallet';
 import clsx from 'clsx';
 
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { useRouter } from '@components/Router';
 import { AMOUNT_ERROR } from '@shared/constants/currencies';
 import { useICPPrice } from '@redux/icp';
 import { setICNSData } from '@redux/icns';
 import { useScroll } from '@hooks';
+import { useRouter } from '../Router';
+import AssetItem from '../AssetItem';
 
 import useStyles from './styles';
 

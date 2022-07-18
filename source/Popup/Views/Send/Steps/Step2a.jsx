@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Container, LinkButton, SelectButton, Button,
-} from '@ui';
+} from '@components';
 import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';

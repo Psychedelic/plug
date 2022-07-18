@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import extension from 'extensionizer';
 import clsx from 'clsx';
 
-import { FormItem } from '@ui';
+import { FormItem } from '@components';
 
 import useStyles from '../../styles';
 import SIZES from '../../constants';

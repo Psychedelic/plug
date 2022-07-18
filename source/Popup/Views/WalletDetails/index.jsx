@@ -11,17 +11,16 @@ import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { updateWalletDetails } from '@redux/wallet';
 import BlueCheck from '@assets/icons/blue-check.svg';
 import Pencil from '@assets/icons/pencil.svg';
-import { useRouter } from '@components/Router';
 import {
   Layout,
   UserIcon,
-} from '@components';
-import {
+
   Header,
   LinkButton,
-} from '@ui';
+} from '@components';
 import { setUseICNS } from '@modules/storageManager';
 import { setICNSData, setUseICNS as setReduxUseICNS } from '@redux/icns';
+import { useRouter } from '@components/Router';
 
 import useStyles from './styles';
 import DetailItem from './components/DetailItem';

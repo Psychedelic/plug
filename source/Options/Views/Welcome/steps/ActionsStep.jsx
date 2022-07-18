@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ActionCard } from '@ui';
+import { ActionCard } from '@components';
 import Grid from '@material-ui/core/Grid';
 import ImportImg from '@assets/icons/options/importwallet.svg';
 import CreateImg from '@assets/icons/options/createwallet.svg';

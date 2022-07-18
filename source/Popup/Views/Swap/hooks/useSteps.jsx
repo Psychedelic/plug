@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { LinkButton } from '@ui';
+import { LinkButton } from '@components';
 import { useTranslation } from 'react-i18next';
-import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';
+import { useRouter } from '@components/Router';
 import Step1 from '../Steps/Step1';
 import Step2 from '../Steps/Step2';
 import { CURRENCIES } from '../../../../shared/constants/currencies';

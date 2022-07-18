@@ -10,15 +10,14 @@ import {
   Button,
   AssetFormat,
   USDFormat,
-} from '@ui';
+
+  useRouter, TokenIcon, TABS, AddressTranslation,
+} from '@components';
 import { setAssets, setAssetsLoading } from '@redux/wallet';
 import { Typography } from '@material-ui/core';
 import PlugController from '@psychedelic/plug-controller';
 import { Principal } from '@dfinity/principal';
 
-import {
-  useRouter, TokenIcon, TABS, AddressTranslation,
-} from '@components';
 import { ADDRESS_TYPES, getAssetFee } from '@shared/constants/addresses';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { useICPPrice } from '@redux/icp';

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { LinkButton, Button } from '@ui';
+import { LinkButton, Button, ContactList } from '@components';
 import {
   addContact,
   removeContact,
@@ -8,7 +8,6 @@ import {
 import BackIcon from '@assets/icons/back.svg';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from '@components/Router';
-import { ContactList } from '@components';
 import AddContact from '../components/AddContact';
 import Home from '../components/Home';
 

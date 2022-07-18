@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DataDisplay } from '@ui';
+import { DataDisplay } from '@components';
 import { useTranslation } from 'react-i18next';
 import { PortRPC } from '@fleekhq/browser-rpc';
 import { v4 as uuidv4 } from 'uuid';

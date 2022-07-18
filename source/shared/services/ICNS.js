@@ -3,10 +3,10 @@ import crossFetch from 'cross-fetch';
 
 import shortAddress from '@shared/utils/short-address';
 
+import { Principal } from '@dfinity/principal';
 import resolverIDL from '../utils/ic/icns/resolver.did';
 import registryIDL from '../utils/ic/icns/registry.did';
 import ReverseRegistrarIDL from '../utils/ic/icns/reverse_registrar.did';
-import { Principal } from '@dfinity/principal';
 
 const ICNS_REGISTRY_ID = 'e5kvl-zyaaa-aaaan-qabaq-cai';
 const ICNS_RESOLVER_ID = 'euj6x-pqaaa-aaaan-qabba-cai';

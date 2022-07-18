@@ -6,9 +6,9 @@ import Grid from '@material-ui/core/Grid';
 import XTCIcon from '@assets/icons/XTC.svg';
 import {
   Button, Container, USDFormat, AssetFormat,
-} from '@ui';
+  TokenIcon,
+} from '@components';
 import { USD_PER_TC, CYCLES_PER_TC } from '@shared/constants/currencies';
-import { TokenIcon } from '@components';
 import { useICPPrice } from '@redux/icp';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAssets, setAssetsLoading } from '@redux/wallet';

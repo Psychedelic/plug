@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation, initReactI18next } from 'react-i18next';
 import { Provider, useDispatch } from 'react-redux';
-import { Button, Tabs, theme } from '@ui';
+import {
+  Button, Tabs, theme, Layout,
+} from '@components';
 import i18n from 'i18next';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/styles';
@@ -9,7 +11,6 @@ import { useTabs } from '@hooks';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
 import PropTypes from 'prop-types';
-import { Layout } from '@components';
 import store from '@redux/store';
 
 import useRequest from './hooks/useRequest';
