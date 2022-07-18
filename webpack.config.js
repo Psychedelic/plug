@@ -65,10 +65,10 @@ module.exports = {
     manifest: path.join(sourcePath, 'manifest.json'),
     background: path.join(sourcePath, 'Background', 'index.js'),
     contentScript: path.join(sourcePath, 'scripts', 'ContentScript', 'index.js'),
-    popup: path.join(sourcePath, 'Popup', 'index.jsx'),
-    options: path.join(sourcePath, 'Options', 'index.jsx'),
+    popup: path.join(sourcePath, 'views', 'Extension', 'index.jsx'),
+    options: path.join(sourcePath, 'views', 'Page', 'index.jsx'),
     inpage: path.join(sourcePath, 'scripts', 'Inpage', 'index.js'),
-    notification: path.join(sourcePath, 'Pages', 'Notification', 'index.jsx'),
+    notification: path.join(sourcePath, 'views', 'ProviderPopups', 'Notification', 'index.jsx'),
   },
   node: {
     fs: 'empty',

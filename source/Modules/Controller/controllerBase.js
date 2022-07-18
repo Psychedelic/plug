@@ -3,7 +3,7 @@ import extension from 'extensionizer';
 
 import { checkPendingTransaction, createPendingTransaction, removePendingTransaction } from '@modules/storageManager';
 import ERRORS from '@background/errors';
-import SIZES from '../../Pages/Notification/components/Transfer/constants';
+import SIZES from '../../views/ProviderPopups/Notification/components/Transfer/constants';
 
 export class ControllerModuleBase {
   constructor(backgroundController, secureController, keyring) {
