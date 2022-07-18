@@ -112,30 +112,41 @@ const CustomToken = ({ handleChangeSelectedToken }) => {
             menuItemTestId="standard-item"
           />
         )}
-        {
-          tokenError
-          && (
-            <Grid item xs={12}>
-              <div className={classes.appearAnimation}>
-                <Alert
-                  type="danger"
-                  title={(
-                    <div>
-                      <span data-testid="token-error">{t('addToken.invalidCanisterTokenError')}</span>
-                      <br />
-                      <span
-                        className={classes.learnMore}
-                        onClick={() => extension.tabs.create({ url: customTokensUrl })}
-                      >
-                        {t('common.learnMore')}
-                      </span>
-                    </div>
-                  )}
-                />
-              </div>
-            </Grid>
-          )
-        }
+        {tokenError && (
+          <Grid item xs={12}>
+            <div className={classes.appearAnimation}>
+              <Alert
+                type="danger"
+                title={(
+                  <div>
+                    <span data-testid="token-error">
+                      {isInvalidCanisterError
+                        ? t('addToken.invalidCanisterTokenError')
+                        : isNFTNotSupportedError
+                          ? t('addToken.nftTokenError')
+                          : isInvalidInterfaceError
+                            ? t('addToken.invalidInterfaceTokenError')
+                            : tokenError}
+                    </span>
+                    {(isInvalidCanisterError
+                      || isNFTNotSupportedError
+                      || isInvalidInterfaceError) && (
+                      <>
+                        <br />
+                        <span
+                          className={classes.learnMore}
+                          onClick={() => extension.tabs.create({ url: customTokensUrl })}
+                        >
+                          {t('common.learnMore')}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                )}
+              />
+            </div>
+          </Grid>
+        )}
         <Grid item xs={12}>
           <Button
             variant="rainbow"
