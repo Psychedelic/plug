@@ -8,7 +8,7 @@ import ContactItem from '../ContactItem';
 import useStyles from './styles';
 
 const ContactList = ({
-  handleRemoveContact, selectable, onClick, contactTestId,
+  handleRemoveContact, selectable, onClick,
 }) => {
   const { t } = useTranslation();
 
@@ -32,7 +32,7 @@ const ContactList = ({
                   key={contact.id}
                   contact={contact}
                   handleClick={selectable ? onClick : null}
-                  data-testid={`${contactTestId}-${contact.name}`}
+                  contactTestId="contact-name"
                   handleDelete={selectable
                     ? null
                     : () => { setSelectedContact(contact); setOpen(true); }}
@@ -54,6 +54,7 @@ const ContactList = ({
             buttonVariant="danger"
             onClick={() => { handleRemoveContact(selectedContact); setOpen(false); }}
             onClose={() => setOpen(false)}
+            confirmDeletingButtonTestId="confirm-deleting-button"
           />
         )
       }
@@ -67,11 +68,9 @@ ContactList.propTypes = {
   handleRemoveContact: PropTypes.func.isRequired,
   onClick: PropTypes.func,
   selectable: PropTypes.bool,
-  contactTestId: PropTypes.string,
 };
 
 ContactList.defaultProps = {
   onClick: null,
   selectable: false,
-  contactTestId: 'contact-name',
 };

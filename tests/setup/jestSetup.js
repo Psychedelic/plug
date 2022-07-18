@@ -8,12 +8,16 @@ jest.setTimeout(60000); // in milliseconds
 global.secrets = {
   seedphrase: process.env.SEEDPHRASE,
   subAccountId: process.env.SUB_ACCOUNT_ID,
+  subPrincipalId: process.env.SUB_PRINCIPAL_ID,
+  icnsName: process.env.ICNS_NAME,
   password: process.env.PASSWORD,
-  wrongId: process.env.WRONG_ID,
   dustCanisterId: process.env.DUST_CANISTER_ID,
   betaCanisterId: process.env.BETA_CANISTER_ID,
   wtcCanisterId: process.env.WTC_CANISTER_ID,
+  wrongAccountId: process.env.WRONG_ACCOUNT_ID,
   wrongCanisterId: process.env.WRONG_CANISTER_ID,
+  wrongId: process.env.WRONG_ID,
+  wrongICNSName: process.env.WRONG_ICNS_NAME,
 };
 
 const grantRawPermissions = async (context, url, permissions) => {
@@ -36,10 +40,10 @@ global.setupChrome = async () => {
       `--load-extension=${EXTENSION_PATH}`,
       '--enable-automation',
     ],
-
   });
   const targets = await browser.targets();
   const extensionTarget = targets.find(({ _targetInfo }) => _targetInfo.title === PAGE_TITLE);
+
   const partialExtensionUrl = extensionTarget._targetInfo.url || '';
   const [, , extensionID] = partialExtensionUrl.split('/');
 
@@ -62,6 +66,13 @@ global.setupChrome = async () => {
 };
 
 // General utils
+
+const getXPathElements = async (page, elementType, content, wait = false) => {
+  const xPath = `//${elementType}[contains(.,"${content}")]`;
+
+  if (wait) await page.waitForXPath(xPath);
+  return page.$x(xPath);
+};
 
 const getTestIdSelector = (id) => `[data-testid="${id}"]`;
 
