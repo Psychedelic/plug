@@ -41,7 +41,7 @@ const AssetItem = ({
             )
             : (
               <>
-                <Typography variant="h5" data-testid={`${assetNameTestId}-${name}`}>{name}</Typography>
+                <Typography data-testid={`${assetNameTestId}-${name}`} variant="h5">{name}</Typography>
                 <Typography variant="subtitle2" className={clsx(loading && classes.pulse)}>
                   <NumberFormat value={amount} displayType="text" decimalScale={5} fixedDecimalScale thousandSeparator="," suffix={` ${symbol}`} data-testid={`asset-amount-${name}`} />
                 </Typography>

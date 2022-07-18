@@ -154,6 +154,7 @@ const IDInput = ({
               variant="primary"
               value={t('contacts.addContact')}
               onClick={() => setIsContactsOpened(true)}
+              data-testid="add-contact-button"
               style={{
                 minWidth: 118,
                 height: 27,
@@ -174,6 +175,7 @@ const IDInput = ({
                         value={contactName}
                         onChange={handleChangeContactName}
                         type="text"
+                        data-testid="contact-name-input"
                       />
                     )}
                   />
@@ -181,6 +183,7 @@ const IDInput = ({
                 confirmText={t('common.add')}
                 buttonVariant="rainbow"
                 onClick={addContact}
+                submitButtonProps={{ 'data-testid': 'confirm-adding-contact-button' }}
                 onClose={() => setIsContactsOpened(false)}
               />
             )}

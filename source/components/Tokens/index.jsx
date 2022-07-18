@@ -65,8 +65,8 @@ const Tokens = () => {
           assets?.map((asset, index) => (
             <AssetItem
               {...asset}
-              key={`${asset.name}-${index}`}
               updateToken={fetchAssets}
+              key={`${asset.name}-${index}`}
               loading={loading}
               failed={asset.amount === AMOUNT_ERROR}
               assetNameTestId="asset-name"
