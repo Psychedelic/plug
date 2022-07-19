@@ -48,6 +48,7 @@ export class TransactionModule extends ControllerModuleBase {
       this.#requestBurnXTC(),
       this.#batchTransactions(),
       this.#requestCall(),
+      this.#requestImportToken(),
     ];
   }
 
@@ -58,6 +59,7 @@ export class TransactionModule extends ControllerModuleBase {
       this.#handleRequestBurnXTC(),
       TransactionModule.#handleBatchTransactions(),
       this.#handleCall(),
+      this.#handleRequestImportToken(),
     ];
   }
 
@@ -578,6 +580,89 @@ export class TransactionModule extends ControllerModuleBase {
           });
         } catch (e) {
           callback(ERRORS.SERVER_ERROR(e), null);
+        }
+      },
+    };
+  }
+
+  #requestImportToken() {
+    return {
+      methodName: 'requestImportToken',
+      handler: async (opts, metadata, args, transactionId) => {
+        const { message, sender, callback } = opts;
+
+        const { id: callId } = message.data.data;
+        const { id: portId } = sender;
+
+        getApp(this.keyring?.currentWalletId.toString(), metadata.url, async (app = {}) => {
+          if (app?.status === CONNECTION_STATUS.accepted) {
+
+            const getTokenInfo = getKeyringHandler(
+              HANDLER_TYPES.GET_TOKEN_INFO,
+              this.keyring,
+            );
+
+            const tokenInfo = getTokenInfo(args);
+
+            console.log('args', args);
+            console.log('tokenInfo', tokenInfo);
+
+            if (tokenInfo?.error) {
+              callback(tokenInfo?.error, null);
+              return;
+            };
+
+            const height = this.keyring?.isUnlocked
+              ? SIZES.detailHeightSmall
+              : SIZES.loginHeight;
+
+            this.displayPopUp({
+              callId,
+              portId,
+              metadataJson: JSON.stringify(metadata),
+              argsJson: JSON.stringify({ ...args, timeout: app?.timeout, transactionId }),
+              type: 'importToken',
+              screenArgs: {
+                fixedHeight: height,
+                top: 65,
+                left: metadata.pageWidth - SIZES.width,
+              },
+            }, callback);
+          } else {
+            callback(ERRORS.CONNECTION_ERROR, null);
+          }
+        });
+      },
+    };
+  }
+
+  #handleRequestImportToken() {
+    return {
+      methodName: 'handleRequestImportToken',
+      handler: async (opts, response, callId, portId) => {
+        const { callback } = opts;
+
+        if (response.status === 'declined') {
+          callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
+        } else {
+          const addCustomToken = getKeyringHandler(
+            HANDLER_TYPES.ADD_CUSTOM_TOKEN,
+            this.keyring,
+          );
+
+          const response = await addCustomToken(response.token);
+
+          if (response.error) {
+            callback(null, false);
+            callback(ERRORS.SERVER_ERROR(response.error), null, [
+              { portId, callId },
+            ]);
+          } else {
+            const transactionId = response?.Ok;
+
+            callback(null, true);
+            callback(null, transactionId, [{ portId, callId }]);
+          }
         }
       },
     };
