@@ -2,13 +2,13 @@ import extension from 'extensionizer';
 import PlugController from '@psychedelic/plug-controller';
 import { BackgroundController } from '@fleekhq/browser-rpc';
 
+import NotificationManager from '@modules/NotificationManager';
 import {
   ConnectionModule,
   TransactionModule,
   InformationModule,
 } from './ControllerModules';
 
-import NotificationManager from '../lib/NotificationManager';
 import {
   getKeyringHandler,
   HANDLER_TYPES,
