@@ -7,7 +7,7 @@ import {
 } from '@components';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import facepalmEmoji from '@assets/icons/facepalm.svg';
-import { getRandomEmoji } from '@shared/constants/emojis';
+import { getRandomEmoji } from '@constants/emojis';
 import { clearStorage } from '@modules/storageManager';
 import useStyles from '../styles';
 

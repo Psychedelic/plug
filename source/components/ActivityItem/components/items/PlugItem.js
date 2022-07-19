@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
-import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import { CONNECTION_STATUS } from '@constants/connectionStatus';
 import moment from 'moment';
 
 import useStyles from './styles';

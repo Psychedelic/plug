@@ -1,7 +1,7 @@
 import ERRORS from '@background/errors';
-import { validatePrincipalId } from '@shared/utils/ids';
-import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
-import { areAllElementsIn } from '@shared/utils/array';
+import { validatePrincipalId } from '@utils/ids';
+import { CONNECTION_STATUS } from '@constants/connectionStatus';
+import { areAllElementsIn } from '@utils/array';
 import { fetchCanistersInfo, initializeProtectedIds } from '@background/utils';
 import {
   getApps,

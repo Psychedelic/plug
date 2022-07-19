@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import NumberFormat from 'react-number-format';
 
-import { formatAssetBySymbol, parseToFloatAmount, TOKENS } from '@shared/constants/currencies';
+import { formatAssetBySymbol, parseToFloatAmount, TOKENS } from '@constants/currencies';
 import { useICPPrice } from '@redux/icp';
 
 import SwapIcon from '../SwapIcon';

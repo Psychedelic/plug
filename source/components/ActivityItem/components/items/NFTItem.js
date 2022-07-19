@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { capitalize } from '@material-ui/core';
 import UnknownIcon from '@assets/icons/unknown-icon.svg';
-import shortAddress from '@shared/utils/short-address';
+import shortAddress from '@utils/short-address';
 
 import GenericIcon from '../../../GenericIcon';
 

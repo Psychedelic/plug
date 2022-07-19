@@ -1,5 +1,5 @@
-import { capitalize } from '@shared/utils/string';
-import { TOKENS } from '@shared/constants/currencies';
+import { capitalize } from '@utils/string';
+import { TOKENS } from '@constants/currencies';
 import { TRANSFER_METHOD_NAMES } from './constants';
 
 const CYCLE_DECIMALS = 12;

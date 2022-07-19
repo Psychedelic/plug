@@ -5,7 +5,7 @@ import { setAssets, setAssetsLoading } from '@redux/wallet';
 import clsx from 'clsx';
 
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { AMOUNT_ERROR } from '@shared/constants/currencies';
+import { AMOUNT_ERROR } from '@constants/currencies';
 import { useICPPrice } from '@redux/icp';
 import { setICNSData } from '@redux/icns';
 import { useScroll } from '@hooks';

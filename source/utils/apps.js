@@ -1,4 +1,4 @@
-import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import { CONNECTION_STATUS } from '@constants/connectionStatus';
 
 // eslint-disable-next-line
 export const removeAppByURL = ({ apps, url }) => {

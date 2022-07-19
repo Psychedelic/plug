@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import extension from 'extensionizer';
 import { useTranslation } from 'react-i18next';
 
-import { decodeTokenId } from '@shared/utils/ext';
+import { decodeTokenId } from '@utils/ext';
 
 import DisplayBox from './DisplayBox';
 import SIZES from '../../../constants';

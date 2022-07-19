@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { buildContactObject, parseContactFromDab } from '@shared/utils/contacts';
+import { buildContactObject, parseContactFromDab } from '@utils/contacts';
 import {
   setDabContacts as setLocalDabContacts,
 } from '@modules/storageManager';

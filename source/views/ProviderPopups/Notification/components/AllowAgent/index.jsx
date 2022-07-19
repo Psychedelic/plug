@@ -18,7 +18,7 @@ import store from '@redux/store';
 import extension from 'extensionizer';
 import PropTypes from 'prop-types';
 import { ChevronDown } from 'react-feather';
-import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import { CONNECTION_STATUS } from '@constants/connectionStatus';
 import { setAccountInfo } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import clsx from 'clsx';

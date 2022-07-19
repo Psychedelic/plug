@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
-import { addDisconnectedEntry } from '@shared/utils/apps';
+import { CONNECTION_STATUS } from '@constants/connectionStatus';
+import { addDisconnectedEntry } from '@utils/apps';
 import { getApps, setApps as setStorageApps } from '@modules';
 import extensionizer from 'extensionizer';
 

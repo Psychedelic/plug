@@ -3,9 +3,9 @@ import { DataDisplay, AssetFormat } from '@components';
 import { useTranslation } from 'react-i18next';
 import { PortRPC } from '@fleekhq/browser-rpc';
 import { v4 as uuidv4 } from 'uuid';
-import { CURRENCIES } from '@shared/constants/currencies';
-import { validateCanisterId } from '@shared/utils/ids';
-import { XTC_FEE } from '@shared/constants/addresses';
+import { CURRENCIES } from '@constants/currencies';
+import { validateCanisterId } from '@utils/ids';
+import { XTC_FEE } from '@constants/addresses';
 import { reviewPendingTransaction } from '@modules/storageManager';
 
 const portRPC = new PortRPC({

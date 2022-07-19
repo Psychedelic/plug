@@ -1,8 +1,8 @@
 import extension from 'extensionizer';
 import { v4 as uuidv4 } from 'uuid';
 
-import { addDisconnectedEntry } from '@shared/utils/apps';
-import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import { addDisconnectedEntry } from '@utils/apps';
+import { CONNECTION_STATUS } from '@constants/connectionStatus';
 
 const storage = extension.storage.local;
 

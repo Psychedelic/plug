@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography';
-import shortAddress from '@shared/utils/short-address';
+import shortAddress from '@utils/short-address';
 import { useSelector } from 'react-redux';
 import useStyles from './styles';
 

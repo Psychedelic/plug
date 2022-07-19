@@ -1,5 +1,5 @@
 import React from 'react';
-import { fleekUrl } from '@shared/constants/urls';
+import { fleekUrl } from '@constants/urls';
 import ThunderImg from '@assets/icons/options/thunder.svg';
 import useStyles from './styles';
 

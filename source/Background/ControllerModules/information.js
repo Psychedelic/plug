@@ -1,5 +1,5 @@
 import ERRORS from '@background/errors';
-import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import { CONNECTION_STATUS } from '@constants/connectionStatus';
 import { getKeyringHandler, HANDLER_TYPES } from '@background/Keyring';
 import { getApps } from '@modules/storageManager';
 import { ControllerModuleBase } from './controllerBase';

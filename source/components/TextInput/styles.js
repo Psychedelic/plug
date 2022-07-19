@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-import RAINBOW_GRADIENT from '@shared/styles/gradients';
+import RAINBOW_GRADIENT from '@styles/gradients';
 
 export default makeStyles((theme) => ({
   root: {

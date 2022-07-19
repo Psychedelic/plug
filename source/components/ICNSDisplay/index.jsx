@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
 
-import { ICNS_LOGO, shortICNSName } from '@shared/services/ICNS';
+import { ICNS_LOGO, shortICNSName } from '@services/ICNS';
 
 import useStyles from './styles';
 

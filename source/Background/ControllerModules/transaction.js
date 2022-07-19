@@ -11,10 +11,10 @@ import {
   handleCallRequest,
   generateRequestInfo,
 } from '@background/utils';
-import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
-import { ICP_CANISTER_ID } from '@shared/constants/canisters';
-import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
-import { XTC_FEE } from '@shared/constants/addresses';
+import { CONNECTION_STATUS } from '@constants/connectionStatus';
+import { ICP_CANISTER_ID } from '@constants/canisters';
+import { E8S_PER_ICP, CYCLES_PER_TC } from '@constants/currencies';
+import { XTC_FEE } from '@constants/addresses';
 import { getKeyringHandler, HANDLER_TYPES } from '@background/Keyring';
 import { blobFromBuffer, blobToUint8Array } from '@dfinity/candid';
 import {

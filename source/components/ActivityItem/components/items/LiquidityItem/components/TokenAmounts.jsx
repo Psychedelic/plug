@@ -2,7 +2,7 @@ import React from 'react';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
 
-import { parseToFloatAmount, TOKENS } from '@shared/constants/currencies';
+import { parseToFloatAmount, TOKENS } from '@constants/currencies';
 
 const TokenAmounts = ({ token0, token1 }) => {
   const parseTokenAmount = (token) => parseToFloatAmount(

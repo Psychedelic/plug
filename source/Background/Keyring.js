@@ -1,12 +1,12 @@
 import extension from 'extensionizer';
-import getICPPrice from '@shared/services/ICPPrice';
+import getICPPrice from '@services/ICPPrice';
 import {
   formatAssets,
   parseAssetsAmount,
   parseToBigIntString,
   parseToFloatAmount,
   TOKENS,
-} from '@shared/constants/currencies';
+} from '@constants/currencies';
 import { setRouter } from '@modules/storageManager';
 
 export const NANOS_PER_SECOND = 1_000_000;

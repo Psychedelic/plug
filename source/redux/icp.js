@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import getICPPrice from '@shared/services/ICPPrice';
+import getICPPrice from '@services/ICPPrice';
 import { createSlice } from '@reduxjs/toolkit';
 
 /* eslint-disable no-param-reassign */

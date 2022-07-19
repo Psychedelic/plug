@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import SHADOW_1 from '@shared/styles/shadows';
+import SHADOW_1 from '@styles/shadows';
 
 export default makeStyles(() => ({
   image: {

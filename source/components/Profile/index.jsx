@@ -23,8 +23,8 @@ import {
 import BluePencil from '@assets/icons/blue-pencil.svg';
 import VisibleIcon from '@assets/icons/visible.svg';
 import InvisibleIcon from '@assets/icons/invisible.svg';
-import { getRandomEmoji } from '@shared/constants/emojis';
-import { getTabURL } from '@shared/utils/chrome-tabs';
+import { getRandomEmoji } from '@constants/emojis';
+import { getTabURL } from '@utils/chrome-tabs';
 import { getWalletsConnectedToUrl, getApp } from '@modules/storageManager';
 import { toggleAccountHidden, useHiddenAccounts } from '@redux/profile';
 import { setICNSData } from '@redux/icns';

@@ -3,12 +3,12 @@ import { DataDisplay, AssetFormat } from '@components';
 import { useTranslation } from 'react-i18next';
 import { PortRPC } from '@fleekhq/browser-rpc';
 import { v4 as uuidv4 } from 'uuid';
-import { CURRENCIES } from '@shared/constants/currencies';
-import shortAddress from '@shared/utils/short-address';
+import { CURRENCIES } from '@constants/currencies';
+import shortAddress from '@utils/short-address';
 import PlugController from '@psychedelic/plug-controller';
 import { Principal } from '@dfinity/principal';
-import { validatePrincipalId } from '@shared/utils/ids';
-import { DEFAULT_ICP_FEE } from '@shared/constants/addresses';
+import { validatePrincipalId } from '@utils/ids';
+import { DEFAULT_ICP_FEE } from '@constants/addresses';
 import { reviewPendingTransaction } from '@modules/storageManager';
 
 const portRPC = new PortRPC({

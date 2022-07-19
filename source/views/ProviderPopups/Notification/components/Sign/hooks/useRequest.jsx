@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { PortRPC } from '@fleekhq/browser-rpc';
 import ReactJson from 'react-json-view';
 // import { v4 as uuidv4 } from 'uuid';
-import { validateCanisterId } from '@shared/utils/ids';
-import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import { validateCanisterId } from '@utils/ids';
+import { CONNECTION_STATUS } from '@constants/connectionStatus';
 import { reviewPendingTransaction } from '@modules/storageManager';
 
 const portRPC = new PortRPC({

@@ -1,7 +1,7 @@
 import { Actor, HttpAgent } from '@dfinity/agent';
 import crossFetch from 'cross-fetch';
 
-import shortAddress from '@shared/utils/short-address';
+import shortAddress from '@utils/short-address';
 
 import { Principal } from '@dfinity/principal';
 import resolverIDL from '../utils/ic/icns/resolver.did';

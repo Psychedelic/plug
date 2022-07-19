@@ -3,7 +3,7 @@ import { DataDisplay } from '@components';
 import { useTranslation } from 'react-i18next';
 import { PortRPC } from '@fleekhq/browser-rpc';
 import { v4 as uuidv4 } from 'uuid';
-import { validateCanisterId } from '@shared/utils/ids';
+import { validateCanisterId } from '@utils/ids';
 import { reviewPendingTransaction } from '@modules/storageManager';
 
 const portRPC = new PortRPC({

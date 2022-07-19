@@ -6,7 +6,7 @@ import ArrowUpRight from '@assets/icons/arrow-up-right.png';
 import extension from 'extensionizer';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { getPrincipalDashboardURL } from '@shared/constants/urls';
+import { getPrincipalDashboardURL } from '@constants/urls';
 import useStyles from './styles';
 
 const CanisterInfoItem = ({

@@ -6,7 +6,7 @@ import NumberFormat from 'react-number-format';
 
 import JellyIcon from '@assets/icons/jelly-icon.svg';
 import { useICPPrice } from '@redux/icp';
-import { E8S_PER_ICP } from '@shared/constants/currencies';
+import { E8S_PER_ICP } from '@constants/currencies';
 
 import ActivityItemDisplay from '../ActivityItemDisplay';
 import ActivityItemDetails from '../ActivityItemDetails';

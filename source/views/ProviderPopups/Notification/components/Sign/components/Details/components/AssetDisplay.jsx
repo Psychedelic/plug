@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import extension from 'extensionizer';
 import { useTranslation } from 'react-i18next';
 
-import { formatAssetBySymbol } from '@shared/constants/currencies';
+import { formatAssetBySymbol } from '@constants/currencies';
 import { useICPPrice } from '@redux/icp';
 
-import { getDabTokens } from '@shared/services/DAB';
+import { getDabTokens } from '@services/DAB';
 import DisplayBox from './DisplayBox';
 
 import SIZES from '../../../constants';

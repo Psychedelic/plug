@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { IncomingAction, USDFormat } from '@components';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
-import { CURRENCIES, E8S_PER_ICP } from '@shared/constants/currencies';
+import { CURRENCIES, E8S_PER_ICP } from '@constants/currencies';
 import NumberFormat from 'react-number-format';
 import extension from 'extensionizer';
 import { useICPPrice } from '@redux/icp';

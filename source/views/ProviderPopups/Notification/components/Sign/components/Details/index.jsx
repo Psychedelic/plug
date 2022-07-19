@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { IncomingAction } from '@components';
 import { ArrowDown } from 'react-feather';
 
-import { getDabNfts } from '@shared/services/DAB';
+import { getDabNfts } from '@services/DAB';
 
 import WarningBox from './components/WarningBox';
 import NFTDisplay from './components/NFTDisplay';

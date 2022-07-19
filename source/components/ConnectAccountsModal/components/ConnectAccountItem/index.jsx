@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 import { Typography } from '@material-ui/core';
-import shortAddress from '@shared/utils/short-address';
+import shortAddress from '@utils/short-address';
 import Checkbox from '../../../Checkbox';
 
 import useStyles from './styles';

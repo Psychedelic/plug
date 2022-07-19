@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import ReactJson from 'react-json-view';
 
-import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import { CONNECTION_STATUS } from '@constants/connectionStatus';
 
 import Dialog from '../Dialog';
 import PlugItem from './components/items/PlugItem';

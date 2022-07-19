@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 import { getApps, setApps } from '@modules/storageManager';
-import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
-import { getTabURL } from '@shared/utils/chrome-tabs';
-import { getMultipleReverseResolvedNames } from '@shared/services/ICNS';
+import { CONNECTION_STATUS } from '@constants/connectionStatus';
+import { getTabURL } from '@utils/chrome-tabs';
+import { getMultipleReverseResolvedNames } from '@services/ICNS';
 
 import ActionDialog from '../ActionDialog';
 import useStyles from './styles';

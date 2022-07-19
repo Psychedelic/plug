@@ -12,7 +12,7 @@ import {
   Button, Container, IncomingAction, theme,
   Layout,
 } from '@components';
-import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import { CONNECTION_STATUS } from '@constants/connectionStatus';
 import store from '@redux/store';
 import extension from 'extensionizer';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';

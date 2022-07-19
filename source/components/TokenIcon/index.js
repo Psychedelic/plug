@@ -4,8 +4,8 @@ import { makeStyles } from '@material-ui/core';
 import randomColor from 'random-color';
 import clsx from 'clsx';
 
-import { NFT_COLLECTION_DEFAULT_TYPES } from '@shared/constants/nft';
-import SHADOW_1 from '@shared/styles/shadows';
+import { NFT_COLLECTION_DEFAULT_TYPES } from '@constants/nft';
+import SHADOW_1 from '@styles/shadows';
 import NFTDisplayer from '../NFTDisplayer';
 
 const useStyles = makeStyles((theme) => ({

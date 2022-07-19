@@ -6,9 +6,9 @@ import clsx from 'clsx';
 import { Typography } from '@material-ui/core';
 import { ChevronDown } from 'react-feather';
 
-import { shortICNSName } from '@shared/services/ICNS';
+import { shortICNSName } from '@services/ICNS';
 import { setSelectedNft } from '@redux/nfts';
-import { NFT_COLLECTION_DEFAULT_TYPES } from '@shared/constants/nft';
+import { NFT_COLLECTION_DEFAULT_TYPES } from '@constants/nft';
 import { useRouter } from '../../../Router';
 import NFTDisplayer from '../../../NFTDisplayer';
 import ICNSDisplay from '../../../ICNSDisplay';

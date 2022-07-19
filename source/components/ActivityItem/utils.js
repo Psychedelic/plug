@@ -1,7 +1,7 @@
 import extensionizer from 'extensionizer';
 
-import { getDashboardTransactionURL } from '@shared/constants/urls';
-import shortAddress from '@shared/utils/short-address';
+import { getDashboardTransactionURL } from '@constants/urls';
+import shortAddress from '@utils/short-address';
 
 export const getSubtitle = (type, to, from, t) => (({
   SEND: ` · ${t('activity.subtitle.to')}: ${shortAddress(to)}`,

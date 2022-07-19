@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ACTIVITY_STATUS } from '@shared/constants/activity';
+import { ACTIVITY_STATUS } from '@constants/activity';
 import {
   formatAssetBySymbol,
   formatAssets,
   TOKENS,
   TOKEN_IMAGES,
-} from '@shared/constants/currencies';
+} from '@constants/currencies';
 
 const sortCollections = (collections = []) => {
   const icns = collections.find((col) => col.name === 'ICNS');

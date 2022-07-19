@@ -6,7 +6,7 @@ import BookIcon from '@assets/icons/notebook.svg';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { CircularProgress, Grid } from '@material-ui/core';
-import { getRandomEmoji } from '@shared/constants/emojis';
+import { getRandomEmoji } from '@constants/emojis';
 import { addContact as addContactAction } from '@redux/contacts';
 import { useContacts } from '@hooks';
 import Button from '../Button';

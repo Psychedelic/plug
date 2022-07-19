@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import UnknownIcon from '@assets/icons/unknown-icon.svg';
-import { currencyPropTypes } from '@shared/constants/currencies';
+import { currencyPropTypes } from '@constants/currencies';
 import TokenIcon from '../../../../../../TokenIcon';
 
 import useStyles from './styles';
