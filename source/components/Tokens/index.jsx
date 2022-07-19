@@ -62,13 +62,14 @@ const Tokens = () => {
         onScroll={onScroll}
       >
         {
-          assets?.map((asset) => (
+          assets?.map((asset, index) => (
             <AssetItem
               {...asset}
               updateToken={fetchAssets}
-              key={asset.name}
+              key={`${asset.name}-${index}`}
               loading={loading}
               failed={asset.amount === AMOUNT_ERROR}
+              assetNameTestId="asset-name"
             />
           ))
         }
@@ -77,6 +78,7 @@ const Tokens = () => {
       <div
         onClick={() => navigator.navigate('add-token')}
         className={classes.buttonWrapper}
+        data-testid="add-custom-token-button"
       >
         <Plus size="30" className={classes.icon} strokeWidth={2.5} />
       </div>

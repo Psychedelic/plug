@@ -263,6 +263,7 @@ const Profile = ({ disableProfile }) => {
               root: classes.drawer,
               paper: classes.paper,
             }}
+            data-testid="drawer"
           >
             <div className={classes.container}>
               <div className={classes.header}>
@@ -279,7 +280,7 @@ const Profile = ({ disableProfile }) => {
                         size="small"
                         key={account.walletNumber}
                         name={account.name}
-                        icon={<UserIcon size="small" icon={account.icon} style={{ marginLeft: -6, marginRight: 12 }} />}
+                        icon={<UserIcon size="small" icon={account.icon ? account.icon : '👽'} style={{ marginLeft: -6, marginRight: 12 }} />}
                         onClick={!isHidden && handleChangeAccount(account.walletNumber)}
                         selected={isExactWalletNumber}
                         className={clsx(isHidden && classes.hiddenAccount)}

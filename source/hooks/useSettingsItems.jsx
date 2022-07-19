@@ -14,6 +14,7 @@ const useSettingsItems = () => {
       image: NotebookIcon,
       name: t('settings.contacts'),
       description: t('settings.contactsDescription'),
+      'data-testid': 'contact-book',
       onClick: (() => navigator.navigate('contacts')),
     },
     {

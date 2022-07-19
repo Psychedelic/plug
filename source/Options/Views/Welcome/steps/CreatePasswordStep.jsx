@@ -106,7 +106,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
       {passwordError && (
         <Grid item xs={12} className={classes.passwordError}>
           <img alt="facepalm-emoji" src={facepalmEmoji} />
-          <p>{t(`${passwordError}`)}</p>
+          <p data-testid="password-error">{t(`${passwordError}`)}</p>
         </Grid>
       )}
     </>

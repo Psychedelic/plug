@@ -74,7 +74,9 @@ const NFTDetails = () => {
           <img
             className={classes.expandIcon}
             src={ExpandIcon}
+            data-testid="expand-nft"
             onClick={() => openNFT(nft?.url?.replace('type=thumbnail', ''))}
+            data-testid="expand-nft"
           />
         )}
       />
@@ -91,6 +93,7 @@ const NFTDetails = () => {
             style={{ width: '96%' }}
             fullWidth
             onClick={() => handleButtonClick(nft?.url?.replace('type=thumbnail', ''))}
+            buttonTestId="copy-link-button"
             endIcon={isICNS && (
               <ArrowUpRight
                 size="20"
@@ -105,6 +108,7 @@ const NFTDetails = () => {
             fullWidth
             onClick={() => routerNavigator.navigate('send-nft')}
             disabled={isICNS}
+            data-testid="send-nft-button"
           />
         </div>
         <Section icon={CollectionImg} title={t('nfts.collection')}>
