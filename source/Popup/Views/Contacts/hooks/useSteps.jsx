@@ -32,7 +32,7 @@ const useSteps = () => {
     handleChangeView(0);
   };
 
-  const leftButton = (onClick) => <LinkButton value={t('common.back')} onClick={onClick} startIcon={BackIcon} />;
+  const leftButton = (onClick) => <LinkButton value={t('common.back')} onClick={onClick} startIcon={BackIcon} data-testid="back-button" />;
 
   const firstView = contacts.length > 0
     ? {
@@ -47,6 +47,7 @@ const useSteps = () => {
           height: 27,
           borderRadius: 6,
         }}
+        data-testid="add-contact-button"
       />,
       center: t('contacts.title'),
     }
