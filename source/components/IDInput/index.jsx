@@ -31,7 +31,6 @@ const IDInput = ({
   const [isContactsOpened, setIsContactsOpened] = useState(false);
   const [contactName, setContactName] = useState('');
   const [openContacts, setOpenContacts] = useState(false);
-  // const [rawContacts, setRawsContacts] = useState([]);
 
   const { principalId, accountId } = useSelector((state) => state.wallet);
   const { groupedContacts: contacts } = useSelector((state) => state.contacts);
@@ -90,13 +89,6 @@ const IDInput = ({
   };
 
   const searchContactFromId = (e) => {
-    // contacts.forEach((contact) => {
-    //   contact.contacts.forEach((i) => {
-    //     if (e.target.value === i.id) {
-    //       setSelectedContact(i);
-    //     }
-    //   });
-    // });
     const id = e.target.value;
     onChange(id);
     const allContacts = contacts.flatMap((contact) => contact.contacts);
