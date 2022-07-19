@@ -48,7 +48,6 @@ const backButtonClick = async (page) => {
 };
 
 const addWrongContact = async (page, { handle, errorMessage }) => {
-  console.log('Wrong Contact: ', handle, errorMessage);
   await addContactButtonClick(page);
   await principalIdInputFill(page, handle);
   await isErrorMessageShown(page, errorMessage);
@@ -57,7 +56,6 @@ const addWrongContact = async (page, { handle, errorMessage }) => {
 };
 
 const addCorrectContact = async (page, { handle, name }) => {
-  console.log('Correct Contact: ', handle, name);
   await addContactButtonClick(page);
   await nameInputFill(page, name);
   await principalIdInputFill(page, handle);

@@ -22,7 +22,6 @@ const ActionDialog = ({
   className,
   cancelButtonProps,
   submitButtonProps,
-  confirmDeletingButtonTestId,
 }) => {
   const classes = useStyles();
 
@@ -58,7 +57,6 @@ const ActionDialog = ({
             wrapperStyle={{ textAlign: 'right' }}
             fullWidth
             {...submitButtonProps}
-            data-testid={confirmDeletingButtonTestId}
           />
         </div>
       </DialogContent>
@@ -85,12 +83,10 @@ ActionDialog.propTypes = {
   className: PropTypes.string,
   cancelButtonProps: PropTypes.objectOf(PropTypes.string),
   submitButtonProps: PropTypes.objectOf(PropTypes.string),
-  confirmDeletingButtonTestId: PropTypes.string,
 };
 
 ActionDialog.defaultProps = {
   className: '',
   confirmText: 'Confirm',
   cancelText: 'Cancel',
-  confirmDeletingButtonTestId: '',
 };
