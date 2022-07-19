@@ -14,7 +14,7 @@ import PropTypes from 'prop-types';
 import store from '@redux/store';
 
 import useRequest from './hooks/useRequest';
-import initConfig from '../../../../locales';
+import initConfig from '../../../../../locales';
 import { Details, Data, WarningModal } from './components';
 import useStyles from './styles';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 
+import gifKidDance from '@assets/kid-dance.gif';
 import useStyles from '../styles';
-import gifKidDance from '../../../../assets/kid-dance.gif';
 
 const MemeStep = () => {
   const styles = useStyles();

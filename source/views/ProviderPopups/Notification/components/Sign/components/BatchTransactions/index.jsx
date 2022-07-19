@@ -16,7 +16,7 @@ import store from '@redux/store';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
 
-import initConfig from '../../../../../../locales';
+import initConfig from '../../../../../../../locales';
 import useStyles from './styles';
 import useRPCTransactions from './hooks/useRPCTransactions';
 import Details from '../Details';

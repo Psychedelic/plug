@@ -6,7 +6,7 @@ import {
   ConnectionModule,
   TransactionModule,
   InformationModule,
-} from '@modules';
+} from './ControllerModules';
 
 import NotificationManager from '../lib/NotificationManager';
 import {

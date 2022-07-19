@@ -8,7 +8,7 @@ import {
   setApps,
   getApp,
   removeApp,
-} from '../storageManager';
+} from '@modules/storageManager';
 import SIZES from '../../views/ProviderPopups/Notification/components/Transfer/constants';
 import { ControllerModuleBase } from './controllerBase';
 

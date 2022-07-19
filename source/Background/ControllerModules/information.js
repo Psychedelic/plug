@@ -1,7 +1,7 @@
 import ERRORS from '@background/errors';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { getKeyringHandler, HANDLER_TYPES } from '@background/Keyring';
-import { getApps } from '../storageManager';
+import { getApps } from '@modules/storageManager';
 import { ControllerModuleBase } from './controllerBase';
 
 export class InformationModule extends ControllerModuleBase {

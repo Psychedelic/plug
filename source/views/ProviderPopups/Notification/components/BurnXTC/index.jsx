@@ -10,7 +10,7 @@ import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import initConfig from '../../../../locales';
+import initConfig from '../../../../../locales';
 import ErrorScreen from '../NotificationError';
 import useStyles from './styles';
 import RequestHandler from './components/RequestHandler';

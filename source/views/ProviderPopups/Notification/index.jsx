@@ -6,8 +6,8 @@ import { theme } from '@components';
 import extension from 'extensionizer';
 import { capitalize } from '@material-ui/core';
 
-import store from '../../redux/store';
-import ProviderWrapper from '../../shared/ProviderWrapper';
+import store from '@redux/store';
+import ProviderWrapper from '@shared/ProviderWrapper';
 import Login from '../../Extension/Views/Login';
 import AppConnection from './components/AppConnection';
 import BatchTransactions from './components/Sign/components/BatchTransactions';

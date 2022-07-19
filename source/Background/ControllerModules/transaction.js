@@ -17,11 +17,11 @@ import { E8S_PER_ICP, CYCLES_PER_TC } from '@shared/constants/currencies';
 import { XTC_FEE } from '@shared/constants/addresses';
 import { getKeyringHandler, HANDLER_TYPES } from '@background/Keyring';
 import { blobFromBuffer, blobToUint8Array } from '@dfinity/candid';
-
-import SIZES from '../../views/ProviderPopups/Notification/components/Transfer/constants';
 import {
   getBatchTransactions, getProtectedIds, setBatchTransactions, getApp,
-} from '../storageManager';
+} from '@modules/storageManager';
+
+import SIZES from '../../views/ProviderPopups/Notification/components/Transfer/constants';
 import { ControllerModuleBase } from './controllerBase';
 
 export class TransactionModule extends ControllerModuleBase {

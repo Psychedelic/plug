@@ -18,7 +18,7 @@ import extension from 'extensionizer';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
 import { reviewPendingTransaction } from '@modules/storageManager';
-import initConfig from '../../../../locales';
+import initConfig from '../../../../../locales';
 import SIZES from '../Transfer/constants';
 import ErrorScreen from '../NotificationError';
 import useStyles from './styles';

@@ -24,7 +24,7 @@ import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import clsx from 'clsx';
 import { reviewPendingTransaction } from '@modules/storageManager';
 import ErrorScreen from '../NotificationError';
-import initConfig from '../../../../locales';
+import initConfig from '../../../../../locales';
 import useStyles from './styles';
 
 i18n.use(initReactI18next).init(initConfig);
