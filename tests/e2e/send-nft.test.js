@@ -51,7 +51,6 @@ describe('NFTs Send View', () => {
   beforeEach(async () => {
     page = await utils.createNewPage(browser);
     await page.goto(chromeData.popupUrl);
-    await popupPageUtils.waitForProfileButton(page);
     await nftsTabButtonClick(page);
     await nftCollectionDropdownClick(page);
     await page.waitForTimeout(500);
@@ -122,7 +121,7 @@ describe('NFTs Send View', () => {
 
   test('sending nft to subaccount', async () => {
     await sendNFTButtonClick(page);
-    await fillPrincipalIdInput(page, secrets.subAccountId);
+    await fillPrincipalIdInput(page, secrets.subPrincipalId);
 
     const sendNftContinueButton = await page.getByTestId('nft-send-continue-button', true);
     await sendNftContinueButton.click();

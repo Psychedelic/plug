@@ -60,4 +60,12 @@ export default makeStyles(() => ({
   rotate: {
     transform: 'rotate(180deg)',
   },
+  numberArrowContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+  },
+  nftQty: {
+    fontWeight: 500,
+  },
 }));

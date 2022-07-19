@@ -6,7 +6,7 @@ import ChevronRight from '@assets/icons/chevron-right.svg';
 import useStyles from './styles';
 
 const MenuItemDetailed = ({
-  name, description, image, onClick,
+  name, description, image, onClick, ...other
 }) => {
   const classes = useStyles();
 
@@ -15,6 +15,7 @@ const MenuItemDetailed = ({
       key={name}
       onClick={onClick}
       className={classes.root}
+      {...other}
     >
 
       <img src={image} className={classes.icon} />
