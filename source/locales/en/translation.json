@@ -310,7 +310,8 @@
     "nftTokenError": "Custom non-fungible tokens are not supported yet.",
     "standard": "Token Standard",
     "searchResults": "Search results",
-    "selectStandard": "Select the token's interface standard"
+    "selectStandard": "Select the token's interface standard",
+    "importTitle": "wants to add the following token to your wallet"
   },
   "error": {
     "errorTitle": "Something went wrong",
