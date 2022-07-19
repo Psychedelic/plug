@@ -31,7 +31,6 @@ const Step1 = ({
   handleChangeAddress,
   addressInfo,
   loadingAddress,
-  icns,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -45,7 +44,7 @@ const Step1 = ({
 
   const isUserAddress = [principalId, accountId].includes(address);
 
-  const isUserIcns = [resolved].includes(icns);
+  const isUserIcns = [resolved].includes(address);
 
   const handleCloseAssets = (value) => {
     setOpenAssets(false);
