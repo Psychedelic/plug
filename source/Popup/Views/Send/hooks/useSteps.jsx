@@ -41,6 +41,7 @@ const useSteps = () => {
   const [selectedAsset, setSelectedAsset] = useState(assets?.[0] || CURRENCIES.get('ICP'));
   const [amount, setAmount] = useState(0);
   const [address, setAddress] = useState(null);
+  const [icns, setIcns] = useState(null);
   const [addressInfo, setAddressInfo] = useState({
     isValid: null,
     type: null,
@@ -62,6 +63,7 @@ const useSteps = () => {
     if (value !== address) {
       setAddressInfo({ isValid: null, resolvedAddress: null, type: null });
       setAddress(value.trim());
+      setIcns(value.trim());
     }
   };
   const handleChangeAddressInfo = (value) => setAddressInfo(value);
@@ -287,6 +289,7 @@ const useSteps = () => {
         handleChangeAddressInfo={handleChangeAddressInfo}
         handleChangeStep={handleNextStep}
         loadingAddress={loading}
+        icns={icns}
       />,
       left: null,
       right: rightButton,

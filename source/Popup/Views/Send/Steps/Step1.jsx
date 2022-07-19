@@ -31,6 +31,7 @@ const Step1 = ({
   handleChangeAddress,
   addressInfo,
   loadingAddress,
+  icns,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -38,7 +39,13 @@ const Step1 = ({
 
   const { principalId, accountId } = useSelector((state) => state.wallet);
 
+  const {
+    resolved,
+  } = useSelector((state) => state.icns);
+
   const isUserAddress = [principalId, accountId].includes(address);
+
+  const isUserIcns = [resolved].includes(icns);
 
   const handleCloseAssets = (value) => {
     setOpenAssets(false);
@@ -114,7 +121,7 @@ const Step1 = ({
                 loading={loadingAddress}
                 value={address}
                 onChange={handleChangeAddress}
-                isValid={addressInfo.isValid && !isUserAddress}
+                isValid={addressInfo.isValid && !isUserAddress && !isUserIcns}
                 data-testid="send-to-principalID-input"
               />
             )}
@@ -140,6 +147,7 @@ const Step1 = ({
           </span>
         )}
         {isUserAddress && <span className={classes.errorMessage}>{t('deposit.sameAddressFromTo')}</span>}
+        {isUserIcns && <span className={classes.errorMessage}>{t('deposit.sameAddressFromTo')}</span>}
         <Grid item xs={12} style={{ paddingTop: '18px' }}>
           <Button
             variant="rainbow"
@@ -152,6 +160,7 @@ const Step1 = ({
               || address === null
               || address === ''
               || isUserAddress
+              || isUserIcns
             }
             onClick={handleChangeStep}
             loading={loadingAddress}
@@ -178,6 +187,7 @@ Step1.propTypes = {
   handleChangeAsset: PropTypes.func.isRequired,
   assets: PropTypes.arrayOf(PropTypes.object).isRequired,
   address: PropTypes.objectOf(PropTypes.object).isRequired,
+  icns: PropTypes.string.isRequired,
   handleChangeAddress: PropTypes.func.isRequired,
   addressInfo: PropTypes.objectOf(PropTypes.object).isRequired,
   loadingAddress: PropTypes.bool.isRequired,
