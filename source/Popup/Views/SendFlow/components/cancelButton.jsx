@@ -10,6 +10,7 @@ const CancelButton = () => {
   return (
     <LinkButton
       value={t('common.cancel')}
+      spanTestId="cancel-button"
       onClick={() => navigator.navigate('home')}
     />
   );

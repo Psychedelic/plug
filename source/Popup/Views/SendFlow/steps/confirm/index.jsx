@@ -155,6 +155,7 @@ const Confirm = ({ handleSendClick }) => {
             onClick={onClick}
             fullWidth
             loading={loading}
+            data-testid="send-button"
           />
         </Grid>
       </Grid>

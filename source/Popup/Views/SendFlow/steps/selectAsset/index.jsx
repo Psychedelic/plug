@@ -91,6 +91,9 @@ const SelectAsset = ({
                 handleSwapValues={handleSwapValues}
                 availableAmount={availableAmount.amount}
                 decimalScale={5}
+                buttonTestId="select-token-button"
+                inputTestId="select-token-input"
+                swapTestId="select-token-swap-button"
               />
             )}
             subtitle={(
@@ -104,6 +107,7 @@ const SelectAsset = ({
                     displayType="text"
                     prefix={availableAmount.prefix}
                     suffix={availableAmount.suffix}
+                    data-testid="available-amount"
                   />
               &nbsp;
                   {t('send.available')}
@@ -111,6 +115,7 @@ const SelectAsset = ({
                 <Button
                   variant="primaryOutlined"
                   value={t('common.max')}
+                  data-testid="max-button"
                   onClick={() => handleChangeAmount(Number(availableAmount.amount.toFixed(6)))}
                 />
               </div>
@@ -122,6 +127,9 @@ const SelectAsset = ({
             onClose={handleCloseAssets}
             selectedValue={selectedAsset}
             open={openAssets}
+            titleTestId="select-asset"
+            menuItemTestId="select-token-button"
+            data-testid="select-asset-dialog"
           />
         </Grid>
         <Grid item xs={12}>
@@ -133,6 +141,7 @@ const SelectAsset = ({
                 value={address}
                 onChange={handleChangeAddress}
                 isValid={addressInfo.isValid && !isUserAddress}
+                data-testid="send-to-principalID-input"
               />
             )}
           />
@@ -157,6 +166,7 @@ const SelectAsset = ({
             disabled={isContinueDisabled}
             onClick={handleChangeStep}
             loading={loadingAddress}
+            buttonTestId="continue-button"
           />
         </Grid>
       </Grid>

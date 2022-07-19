@@ -40,6 +40,7 @@ global.setupChrome = async () => {
       `--load-extension=${EXTENSION_PATH}`,
       '--enable-automation',
     ],
+    slowMo: 50,
   });
   const targets = await browser.targets();
   const extensionTarget = targets.find(({ _targetInfo }) => _targetInfo.title === PAGE_TITLE);
