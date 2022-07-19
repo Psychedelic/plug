@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { resolveName } from '@shared/services/ICNS';
-import { isICNSName } from '@shared/utils/ids';
+import { resolveName } from '@services/ICNS';
+import { isICNSName } from '@utils/ids';
 
 import useDebounce from './useDebounce';
 

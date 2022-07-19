@@ -1,6 +1,6 @@
 import React from 'react';
 import DabIcon from '@assets/icons/dab.svg';
-import { dabUrl } from '@shared/constants/urls';
+import { dabUrl } from '@constants/urls';
 import extension from 'extensionizer';
 import { useTranslation } from 'react-i18next';
 import useStyles from './styles';

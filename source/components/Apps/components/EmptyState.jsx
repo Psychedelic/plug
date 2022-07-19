@@ -2,7 +2,7 @@ import { Typography } from '@material-ui/core';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import CryingEmoji from '@assets/icons/crying.png';
-import { plugDocs } from '@shared/constants/urls';
+import { plugDocs } from '@constants/urls';
 import useStyles from '../styles';
 
 const EmptyState = () => {

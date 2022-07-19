@@ -29,10 +29,12 @@ module.exports = {
     ];
 
     config.resolve.alias = {
-      "@ui": path.join(path.resolve(__dirname, "../source/ui")),
       "@components": path.join(path.resolve(__dirname, "../source/components")),
       "@assets": path.join(path.resolve(__dirname, "../source/assets")),
-      "@shared": path.join(path.resolve(__dirname, "../source/shared")),
+      "@utils": path.join(path.resolve(__dirname, "../source/utils")),
+      "@services": path.join(path.resolve(__dirname, "../source/services")),
+      "@constants": path.join(path.resolve(__dirname, "../source/constants")),
+      "@styles": path.join(path.resolve(__dirname, "../source/styles")),
       "@hooks": path.join(path.resolve(__dirname, "../source/hooks")),
       "@redux": path.join(path.resolve(__dirname, "../source/redux")),
       "@background": path.join(path.resolve(__dirname, "../source/Background")),

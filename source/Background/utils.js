@@ -1,10 +1,10 @@
 import PlugController from '@psychedelic/plug-controller';
 
-import { validateCanisterId, validatePrincipalId, validateAccountId } from '@shared/utils/ids';
-import { getDabNfts, getDabTokens } from '@shared/services/DAB';
-import { ASSET_CANISTER_IDS, ICP_CANISTER_ID } from '@shared/constants/canisters';
-import { CYCLES_PER_TC } from '@shared/constants/currencies';
-import { XTC_FEE } from '@shared/constants/addresses';
+import { validateCanisterId, validatePrincipalId, validateAccountId } from '@utils/ids';
+import { getDabNfts, getDabTokens } from '@services/DAB';
+import { ASSET_CANISTER_IDS, ICP_CANISTER_ID } from '@constants/canisters';
+import { CYCLES_PER_TC } from '@constants/currencies';
+import { XTC_FEE } from '@constants/addresses';
 import { setProtectedIds } from '@modules/storageManager';
 import { Principal } from '@dfinity/principal';
 import { blobFromBuffer, blobToUint8Array } from '@dfinity/candid';

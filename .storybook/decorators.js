@@ -1,4 +1,4 @@
-import ProviderWrapper from '../source/shared/ProviderWrapper';
+import ProviderWrapper from '../source/views/shared/ProviderWrapper';
 import { theme } from '../source/ui';
 // import { configureStore } from '@reduxjs/toolkit';
 // TODO: Mock store

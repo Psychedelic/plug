@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import shortAddress from '@shared/utils/short-address';
+import shortAddress from '@utils/short-address';
 import { Typography } from '@material-ui/core';
 import { Trash2, X } from 'react-feather';
 import UserIcon from '../UserIcon';

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import { CONNECTION_STATUS } from '@constants/connectionStatus';
 import ConnectionStatus from '../ConnectionStatus';
 import NavBar from '../NavBar';
 import useStyles from './styles';

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DoubleArrowImg from '@assets/icons/double-arrow-right.svg';
-import { currencyPropTypes } from '@shared/constants/currencies';
+import { currencyPropTypes } from '@constants/currencies';
 
 import useStyles from './styles';
 import AssetInfo from './components/AssetInfo';

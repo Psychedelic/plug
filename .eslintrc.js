@@ -41,11 +41,13 @@ module.exports = {
     'import/resolver': {
       alias: {
         map: [
-          ['@ui', './source/ui'],
           ['@components', './source/components'],
           ['@modules', './source/Modules'],
           ['@assets', './source/assets'],
-          ['@shared', './source/shared'],
+          ['@constants', './source/constants'],
+          ['@services', './source/services'],
+          ['@utils', './source/utils'],
+          ['@styles', './source/styles'],
           ['@hooks', './source/hooks'],
           ['@redux', './source/redux'],
           ['@background', './source/Background'],

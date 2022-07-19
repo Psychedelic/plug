@@ -4,9 +4,9 @@ import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
 
-import { getTabURL } from '@shared/utils/chrome-tabs';
+import { getTabURL } from '@utils/chrome-tabs';
 import { useScroll } from '@hooks';
-import { Checkbox } from '@ui';
+import Checkbox from '../Checkbox';
 
 import ConnectAccountItem from './components/ConnectAccountItem';
 import useStyles from './styles';

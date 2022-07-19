@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import { Typography } from '@material-ui/core';
 
-import { currencyPropTypes } from '@shared/constants/currencies';
-import TokenIcon from '@components/TokenIcon';
+import { currencyPropTypes } from '@constants/currencies';
+import TokenIcon from '../../../TokenIcon';
 
 const AssetInfo = ({ asset, amount, classes }) => (
   <div className={classes.assetInfo}>
