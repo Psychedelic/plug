@@ -5,6 +5,7 @@ export default makeStyles((theme) => ({
     width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
+    marginTop: 30,
   },
   padTop: {
     paddingTop: 35,
@@ -18,23 +19,5 @@ export default makeStyles((theme) => ({
     height: 41,
     width: 41,
     marginRight: theme.spacing(1),
-  },
-  confirmToken: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    padding: `${theme.spacing(1)}px 0`,
-  },
-  leftContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
-  },
-  rightContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
-    marginLeft: 'auto',
-    textAlign: 'end',
-  },
+  }
 }));

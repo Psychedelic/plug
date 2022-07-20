@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation, initReactI18next } from 'react-i18next';
-import { PortRPC } from '@fleekhq/browser-rpc';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { ThemeProvider } from '@material-ui/core/styles';
+import { PortRPC } from '@psychedelic/browser-rpc';
 import i18n from 'i18next';
-import { Provider, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
   Button,
   Container,
   IncomingAction,
-  theme,
-  FormItem,
 } from '@ui';
-import store from '@redux/store';
-import { Layout } from '@components';
+import { Layout, TokenIcon } from '@components';
 import PropTypes from 'prop-types';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { setAccountInfo } from '@redux/wallet';
@@ -21,6 +16,7 @@ import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import initConfig from '../../../../locales';
 import useStyles from './styles';
 import { reviewPendingTransaction } from '@modules/storageManager';
+import DisplayBox from '../Sign/components/Details/components/DisplayBox';
 
 i18n.use(initReactI18next).init(initConfig);
 
@@ -32,24 +28,21 @@ const portRPC = new PortRPC({
 
 portRPC.start();
 
-const ImportToken = ({
-  args, metadata, callId, portId, setOnTimeout, transactionId,
-}) => {
+const ImportToken = ({ args, metadata, callId, portId, setOnTimeout, transactionId, }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-
+  const [loading, setLoading] = useState('');
   const [handled, setHandled] = useState(false);
 
   const { url, icons } = metadata || {};
-  const { canisterId, symbol, standard, logo, name } = args || {};
+  const { canisterId, symbol, standard, logo } = args || {};
 
   const handleImportToken = async (status) => {
+    setLoading(status);
     reviewPendingTransaction(transactionId, () => { });
-    const success = await portRPC.call('handleImportToken', [
+    const success = await portRPC.call('handleRequestImportToken', [
       { status, token: { canisterId, standard, logo } },
       callId,
       portId,
@@ -59,15 +52,12 @@ const ImportToken = ({
     if (success) {
       window.close();
     }
-    setError(!success);
+    setLoading('');
   };
 
   useEffect(() => {
     setOnTimeout(() => () => {
-      handleImportToken(CONNECTION_STATUS.refused).then(() => {
-        setHandled(true);
-        window?.close?.();
-      });
+      handleImportToken(CONNECTION_STATUS.refused);
     });
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
       if (state?.wallets?.length) {
@@ -83,81 +73,55 @@ const ImportToken = ({
   };
 
   return (
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Layout disableProfile disableNavigation incStatus>
+    <Layout disableProfile disableNavigation incStatus>
+      <div className={classes.padTop}>
+        <Container className={classes.container}>
+          <IncomingAction url={url} image={icons[0] || null} action={t('addToken.importTitle')} />
 
-          <div className={classes.padTop}>
-            <Container className={classes.container}>
-              <IncomingAction url={url} image={icons[0] || null} action={t('addToken.importTitle')} />
+          <DisplayBox
+            title={symbol}
+            subtitle={canisterId}
+            img={<TokenIcon
+              image={logo}
+              className={classes.tokenImage}
+              symbol={symbol}
+            />}
+          />
 
-              <div className={classes.confirmToken}>
-                <TokenIcon
-                  image={logo}
-                  className={classes.tokenImage}
-                  symbol={symbol}
-                />
-                <div className={classes.leftContainer}>
-                  <Typography variant="h4">{name ?? symbol}</Typography>
-
-                  {amount && <Typography variant="subtitle1">
-                    <AssetFormat value={amount} asset={symbol} />
-                  </Typography>
-                  }
-                </div>
-              </div>
-
-              <div>
-                <FormItem
-                  key='canisterId'
-                  label='Canister ID'
-                  component={<DataDisplay value={canisterId} />}
-                  style={{ marginBottom: 24 }}
-                  smallLabel
-                />
-
-                <FormItem
-                  key='standard'
-                  label='Standard'
-                  component={<DataDisplay value={standard} />}
-                  style={{ marginBottom: 24 }}
-                  smallLabel
-                />
-              </div>
-
-              <div className={classes.buttonContainer}>
-                <Button
-                  variant="default"
-                  value={t('common.decline')}
-                  onClick={() => handleImportToken(CONNECTION_STATUS.refused)}
-                  style={{ width: '96%' }}
-                  fullWidth
-                />
-                <Button
-                  variant="rainbow"
-                  value={t('common.allow')}
-                  onClick={() => handleImportToken(CONNECTION_STATUS.accepted)}
-                  fullWidth
-                  style={{ width: '96%' }}
-                  wrapperStyle={{ textAlign: 'right' }}
-                />
-              </div>
-            </Container>
+          <div className={classes.buttonContainer}>
+            <Button
+              variant="default"
+              value={t('common.decline')}
+              onClick={() => handleImportToken(CONNECTION_STATUS.refused)}
+              style={{ width: '96%' }}
+              loading={loading === CONNECTION_STATUS.refused}
+              disabled={loading === CONNECTION_STATUS.accepted}
+              fullWidth
+            />
+            <Button
+              variant="rainbow"
+              value={t('common.allow')}
+              onClick={() => handleImportToken(CONNECTION_STATUS.accepted)}
+              fullWidth
+              style={{ width: '96%' }}
+              loading={loading === CONNECTION_STATUS.accepted}
+              disabled={loading === CONNECTION_STATUS.refused}
+              wrapperStyle={{ textAlign: 'right' }}
+            />
           </div>
-
-        </Layout>
-      </ThemeProvider>
-    </Provider>
+        </Container>
+      </div>
+    </Layout>
   )
 };
 
 export default ImportToken;
 
-AllowAgent.propTypes = {
+ImportToken.propTypes = {
   args: PropTypes.string.isRequired,
   callId: PropTypes.string.isRequired,
   portId: PropTypes.string.isRequired,
   metadata: PropTypes.objectOf(PropTypes.string).isRequired,
   setOnTimeout: PropTypes.func.isRequired,
+  transactionId: PropTypes.string.isRequired,
 };

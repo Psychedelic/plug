@@ -1,4 +1,4 @@
-import { ProxyRPC } from '@fleekhq/browser-rpc';
+import { ProxyRPC } from '@psychedelic/browser-rpc';
 import extensionizer from 'extensionizer';
 
 import { injectScript } from './utils';

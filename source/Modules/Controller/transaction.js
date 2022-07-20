@@ -595,42 +595,40 @@ export class TransactionModule extends ControllerModuleBase {
         const { id: portId } = sender;
 
         getApp(this.keyring?.currentWalletId.toString(), metadata.url, async (app = {}) => {
-          if (app?.status === CONNECTION_STATUS.accepted) {
 
-            const getTokenInfo = getKeyringHandler(
-              HANDLER_TYPES.GET_TOKEN_INFO,
-              this.keyring,
-            );
-
-            const tokenInfo = getTokenInfo(args);
-
-            console.log('args', args);
-            console.log('tokenInfo', tokenInfo);
-
-            if (tokenInfo?.error) {
-              callback(tokenInfo?.error, null);
-              return;
-            };
-
-            const height = this.keyring?.isUnlocked
-              ? SIZES.detailHeightSmall
-              : SIZES.loginHeight;
-
-            this.displayPopUp({
-              callId,
-              portId,
-              metadataJson: JSON.stringify(metadata),
-              argsJson: JSON.stringify({ ...args, timeout: app?.timeout, transactionId }),
-              type: 'importToken',
-              screenArgs: {
-                fixedHeight: height,
-                top: 65,
-                left: metadata.pageWidth - SIZES.width,
-              },
-            }, callback);
-          } else {
+          if (app.status !== CONNECTION_STATUS.accepted) {
             callback(ERRORS.CONNECTION_ERROR, null);
+            return;
           }
+
+          const getTokenInfo = getKeyringHandler(
+            HANDLER_TYPES.GET_TOKEN_INFO,
+            this.keyring,
+          );
+
+          const tokenInfo = await getTokenInfo(args);
+
+          if (tokenInfo?.error) {
+            callback(tokenInfo?.error, null);
+            return;
+          };
+
+          const height = this.keyring?.isUnlocked
+            ? SIZES.detailHeightSmall
+            : SIZES.loginHeight;
+
+          this.displayPopUp({
+            callId,
+            portId,
+            metadataJson: JSON.stringify(metadata),
+            argsJson: JSON.stringify({ ...tokenInfo.token, amount: tokenInfo.amount, timeout: app?.timeout, transactionId }),
+            type: 'importToken',
+            screenArgs: {
+              fixedHeight: height,
+              top: 65,
+              left: metadata.pageWidth - SIZES.width,
+            },
+          }, callback);
         });
       },
     };
@@ -642,30 +640,30 @@ export class TransactionModule extends ControllerModuleBase {
       handler: async (opts, response, callId, portId) => {
         const { callback } = opts;
 
-        if (response.status === 'declined') {
+        if (response.status !== CONNECTION_STATUS.accepted) {
+          callback(null, true);
           callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
-        } else {
-          const addCustomToken = getKeyringHandler(
-            HANDLER_TYPES.ADD_CUSTOM_TOKEN,
-            this.keyring,
-          );
-
-          const response = await addCustomToken(response.token);
-
-          if (response.error) {
-            callback(null, false);
-            callback(ERRORS.SERVER_ERROR(response.error), null, [
-              { portId, callId },
-            ]);
-          } else {
-            const transactionId = response?.Ok;
-
-            callback(null, true);
-            callback(null, transactionId, [{ portId, callId }]);
-          }
+          return;
         }
-      },
-    };
+
+        const addCustomToken = getKeyringHandler(
+          HANDLER_TYPES.ADD_CUSTOM_TOKEN,
+          this.keyring,
+        );
+
+        const tokens = await addCustomToken(response.token);
+
+        if (tokens.error) {
+          callback(null, true);
+          callback(ERRORS.SERVER_ERROR(tokens.error), null, [
+            { portId, callId },
+          ]);
+        } else {
+          callback(null, true);
+          callback(null, true, [{ portId, callId }]);
+        }
+      }
+    }
   }
 
   // Exposer
