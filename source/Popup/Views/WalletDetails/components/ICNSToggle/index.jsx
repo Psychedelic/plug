@@ -37,11 +37,13 @@ const ICNSToggle = ({ active, handleToggle }) => {
               className={classes.info}
               size={20}
               onClick={() => setInfoOpen(true)}
+              data-testid="info-icns-icon-button"
             />
           </div>
           <Switch
             checked={active}
             onChange={handleToggle}
+            data-testid="icns-switch"
           />
         </div>
         {active && (
@@ -65,6 +67,8 @@ const ICNSToggle = ({ active, handleToggle }) => {
         isOpen={infoOpen}
         content={t('walletDetails.icnsDescription')}
         buttonText={t('walletDetails.icnsLearnMore')}
+        understandButtonTestId="understand-icns-button"
+        learnMoreButtonTestId="learn-more-button"
       />
     </>
   );

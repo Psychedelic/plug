@@ -51,7 +51,7 @@ const WalletInfo = () => {
         onMouseOver={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
       >
-        <Typography variant="h5">{renderedName || name}</Typography>
+        <Typography variant="h5" data-testid="wallet-name">{renderedName || name}</Typography>
         <Typography variant="subtitle2">{shortAddress(principalId)}</Typography>
       </div>
     </Tooltip>

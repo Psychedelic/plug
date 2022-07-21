@@ -198,6 +198,7 @@ const WalletDetails = () => {
           className={classes.viewMore}
           onClick={toggleExpand}
           variant="subtitle1"
+          data-testid="view-more-button"
         >
           <span>{t('walletDetails.viewMore')}</span>
           <ChevronDown
@@ -212,12 +213,16 @@ const WalletDetails = () => {
               value={principalId}
               setInfoOpen={setOpenPrincipal}
               isOpen={openPrincipal}
+              copyButtonTestId="copy-principalId-button"
+              infoIconButtonTestId="info-principalId-icon-button"
             />
             <DetailItem
               name="accountId"
               value={accountId}
               setInfoOpen={setOpenAccount}
               isOpen={openAccount}
+              copyButtonTestId="copy-accountId-button"
+              infoIconButtonTestId="info-accountId-icon-button"
             />
           </div>
         )}

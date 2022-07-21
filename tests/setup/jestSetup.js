@@ -7,6 +7,8 @@ jest.setTimeout(60000); // in milliseconds
 
 global.secrets = {
   seedphrase: process.env.SEEDPHRASE,
+  mainAccountId: process.env.MAIN_ACCOUNT_ID,
+  mainPrincipalId: process.env.MAIN_PRINCIPAL_ID,
   subAccountId: process.env.SUB_ACCOUNT_ID,
   subPrincipalId: process.env.SUB_PRINCIPAL_ID,
   icnsName: process.env.ICNS_NAME,
@@ -40,6 +42,7 @@ global.setupChrome = async () => {
       `--load-extension=${EXTENSION_PATH}`,
       '--enable-automation',
     ],
+    slowMo: 40,
   });
   const targets = await browser.targets();
   const extensionTarget = targets.find(({ _targetInfo }) => _targetInfo.title === PAGE_TITLE);
