@@ -7,7 +7,9 @@ import PropTypes from 'prop-types';
 import browser from 'webextension-polyfill';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { getAppsKey } from '@modules/storageManager';
+
 import useStyles from './styles';
+import ConnectionControls from './components/ConnectionControls';
 
 const CONNECTION_CONFIG = {
   [CONNECTION_STATUS.accepted]: {
@@ -31,7 +33,7 @@ const beautifyUrl = (url) => (
   url.replace(/^(?:https?:\/\/)?(?:www\.)?/i, '').split('/')[0]
 );
 
-const ConnectionStatus = ({ incStatus = null }) => {
+const ConnectionStatus = ({ incStatus = null, disableNavigation }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const [status, setStatus] = useState(incStatus);
@@ -70,6 +72,7 @@ const ConnectionStatus = ({ incStatus = null }) => {
         status === CONNECTION_STATUS.accepted
         && <span className={classes.web}>&nbsp;{activeTab}</span>
       }
+      <ConnectionControls disableNavigation={disableNavigation} />
     </div>
   );
 };
@@ -78,8 +81,10 @@ export default ConnectionStatus;
 
 ConnectionStatus.defaultProps = {
   incStatus: null,
+  disableNavigation: false,
 };
 
 ConnectionStatus.propTypes = {
   incStatus: PropTypes.string,
+  disableNavigation: PropTypes.bool,
 };
