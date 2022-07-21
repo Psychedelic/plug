@@ -218,6 +218,8 @@ describe('Send View', () => {
       await selectToken(page, name);
       const previousAmount = await getAvailableAmount(page);
 
+      console.log(defaultTokenNames);
+
       await recipientPrincipalIdEnter(page);
       await sendToken(page);
       previousAmounts.push(previousAmount);
@@ -329,6 +331,7 @@ describe('Send Custom Tokens', () => {
     for (const data of customTokenData) {
       await selectToken(page, data.name);
       const previousAmount = await getAvailableAmount(page);
+      console.log(customTokenData);
       await recipientPrincipalIdEnter(page);
       await sendToken(page, data.name);
       previousAmounts.push(previousAmount);

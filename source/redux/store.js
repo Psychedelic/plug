@@ -6,6 +6,7 @@ import profileReducer from './profile';
 import clockReducer from './clock';
 import icnsReducer from './icns';
 import contactsReducer from './contacts';
+import sendReducer from './send';
 
 const reducer = {
   wallet: walletReducer,
@@ -15,6 +16,7 @@ const reducer = {
   clock: clockReducer,
   icns: icnsReducer,
   contacts: contactsReducer,
+  send: sendReducer,
 };
 
 const store = configureStore({
