@@ -14,10 +14,20 @@ const saveChangesIconButtonClick = async (page) => {
   await saveChangesIconButton.click();
 };
 
-const fillNameInput = async (page, symbols) => {
+const clickAccountNameInput = async (page) => {
   const nameInput = await page.getByTestId('account-name-input', true);
   await nameInput.click();
+  return nameInput;
+};
+
+const fillNameInput = async (page, symbols) => {
+  const nameInput = await clickAccountNameInput(page);
   await nameInput.type(symbols);
+};
+
+const deleteSymbolsFromInput = async (page) => {
+  await clickAccountNameInput(page);
+  await page.keyboard.press('Backspace');
 };
 
 const getWalletName = async (page) => {
@@ -42,6 +52,7 @@ const understandButtonClick = async (page, name) => {
 };
 
 const openSelectionModalButtonClick = async (page) => {
+  await page.waitForTimeout(3000);
   const openSelectionModalButton = await page.getByTestId('open-selection-modal-button', true);
   await openSelectionModalButton.click();
 };
@@ -80,18 +91,16 @@ const learnMoreButtonClick = async (browser, page) => {
   expect(url).toBe('https://medium.com/plugwallet/internet-computer-ids-101-669b192a2ace');
 };
 
-const waitForWalletName = async (page) => {
-  await page.waitForTimeout(500);
+const waitForWalletName = async (page, walletName, timeout = 1000) => {
+  await page.waitForTimeout(timeout);
   await popupPageUtils.refreshWallet(page);
 
-  const name = await getWalletName(page);
-  const icnsName = 'bananas.icp';
+  const currentWalletName = await getWalletName(page);
 
-  if (name !== icnsName) {
-    return waitForWalletName(page);
+  if (currentWalletName !== walletName) {
+    return waitForWalletName(page, walletName, timeout);
   }
-
-  return name;
+  return currentWalletName;
 };
 
 // Utilities
@@ -103,8 +112,9 @@ describe('Account Details View', () => {
   const accountId = 'accountId';
   const icns = 'icns';
 
-  const icnsName = 'bananas.icp';
-  const AccountName = 'Account 122';
+  const accountName = 'Account 1';
+  const icnsName1 = 'bananas.icp';
+  const icnsName2 = 'plugtest.icp';
 
   beforeAll(async () => {
     browser = await setupChrome();
@@ -122,6 +132,7 @@ describe('Account Details View', () => {
     page = await utils.createNewPage(browser);
     await page.goto(chromeData.popupUrl);
     await popupPageUtils.profileButtonClick(page);
+    await editAccountButtonClick(page, accountName);
   });
 
   afterEach(async () => {
@@ -133,19 +144,26 @@ describe('Account Details View', () => {
   });
 
   test('editing account name', async () => {
-    await editAccountButtonClick(page, 'Account 1');
     await editAccountIconButtonClick(page);
-    await fillNameInput(page, '22');
+    await fillNameInput(page, '2');
     await saveChangesIconButtonClick(page);
-    await getWalletName(page, AccountName);
+    const changedName = await waitForWalletName(page, 'Account 12');
+    expect(changedName).toBe('Account 12');
+
+    await popupPageUtils.profileButtonClick(page);
+    await editAccountButtonClick(page, 'Account 12');
+
+    await editAccountIconButtonClick(page);
+    await deleteSymbolsFromInput(page);
+    await saveChangesIconButtonClick(page);
+    const standardName = await waitForWalletName(page, accountName);
+    expect(standardName).toBe(accountName);
   });
-  test('testing icns modal switch', async () => {
-    await editAccountButtonClick(page, AccountName);
+  test('testing the existence or visibility of the icns modal switch', async () => {
     await ICNSSwitchClick(page);
     await isICNSSelectorHidden(page);
   });
   test('testing icns modal info icon', async () => {
-    await editAccountButtonClick(page, AccountName);
     await ICNSSwitchClick(page);
     await infoIconButtonClick(page, icns);
     await understandButtonClick(page, icns);
@@ -154,23 +172,29 @@ describe('Account Details View', () => {
   });
 
   test('selecting icns name', async () => {
-    await editAccountButtonClick(page, AccountName);
     await openSelectionModalButtonClick(page);
-    await selectICNSNameClick(page, icnsName);
-    const name = await waitForWalletName(page);
-    expect(name).toBe(icnsName);
+    await selectICNSNameClick(page, icnsName1);
+    const name1 = await waitForWalletName(page, icnsName1);
+    expect(name1).toBe(icnsName1);
+
+    await popupPageUtils.profileButtonClick(page);
+    await editAccountButtonClick(page, accountName);
+
+    await openSelectionModalButtonClick(page);
+    await selectICNSNameClick(page, icnsName2);
+    const name2 = await waitForWalletName(page, icnsName2);
+    expect(name2).toBe(icnsName2);
   });
 
   test('disconnecting icns name', async () => {
-    await editAccountButtonClick(page, AccountName);
     await ICNSSwitchClick(page);
     await isICNSSelectorHidden(page);
     await popupPageUtils.refreshWallet(page);
-    await getWalletName(page, AccountName);
+    const name = await waitForWalletName(page, accountName);
+    expect(name).toBe(accountName);
   });
 
   test('viewing additional wallet details Principal Id', async () => {
-    await editAccountButtonClick(page, AccountName);
     await viewAdditionalInfoButtonClick(page);
     await copyIdButtonClick(page, principalId, secrets.mainPrincipalId);
     await infoIconButtonClick(page, principalId);
@@ -180,7 +204,6 @@ describe('Account Details View', () => {
   });
 
   test('viewing additional wallet details Account Id', async () => {
-    await editAccountButtonClick(page, AccountName);
     await viewAdditionalInfoButtonClick(page);
     await copyIdButtonClick(page, accountId, secrets.mainAccountId);
     await infoIconButtonClick(page, accountId);
