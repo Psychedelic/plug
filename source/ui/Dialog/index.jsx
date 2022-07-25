@@ -18,6 +18,7 @@ const Dialog = ({
   closeable,
   titleTestId,
   menuItemTestId,
+  closeIconButtonTestId,
   ...rest
 }) => {
   const classes = useStyles();
@@ -48,7 +49,7 @@ const Dialog = ({
             {title}
           </span>
           <IconButton className={classes.closeButton} onClick={handleClose}>
-            <CloseIcon />
+            <CloseIcon data-testid={closeIconButtonTestId} />
           </IconButton>
         </DialogTitle>
       )}
@@ -78,6 +79,7 @@ Dialog.defaultProps = {
   closeable: true,
   titleTestId: 'dialog-title',
   menuItemTestId: 'dialog-menu-item',
+  closeIconButtonTestId: 'close-icon-button',
 };
 
 Dialog.propTypes = {
@@ -95,4 +97,5 @@ Dialog.propTypes = {
   closeable: PropTypes.bool,
   titleTestId: PropTypes.string,
   menuItemTestId: PropTypes.string,
+  closeIconButtonTestId: PropTypes.string,
 };

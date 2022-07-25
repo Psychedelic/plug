@@ -37,7 +37,7 @@ const Deposit = () => {
             <Typography variant="h5">{t('deposit.depositIcpTitle1')}</Typography>
           </Grid>
           <Grid item xs={12}>
-            <Typography variant="subtitle2">{t('deposit.depositIcpSubtitle1')}</Typography>
+            <Typography variant="subtitle2" data-testid="deposit-principalId-subtitle">{t('deposit.depositIcpSubtitle1')}</Typography>
           </Grid>
           <Grid item xs={12}>
             <InputBase>
@@ -49,8 +49,9 @@ const Deposit = () => {
                 <IconQrCode
                   onClick={() => setOpenQr(true)}
                   classes={classes}
+                  data-testid="qr-code-icon-button"
                 />
-                <CopyButton text={principalId} placement="top" />
+                <CopyButton text={principalId} placement="top" data-testid="copy-principalId-button" />
               </div>
             </InputBase>
 
@@ -58,6 +59,7 @@ const Deposit = () => {
               title={t('deposit.scanQrCode')}
               onClose={() => setOpenQr(false)}
               open={openQr}
+              closeIconButtonTestId="close-qr-code-modal-button"
               component={(
                 <QRCode value={principalId} style={{ marginBottom: 36 }} />
               )}
@@ -75,7 +77,7 @@ const Deposit = () => {
             <Typography variant="h5">{t('deposit.depositIcpTitle2')}</Typography>
           </Grid>
           <Grid item xs={12}>
-            <Typography variant="subtitle2">{t('deposit.depositIcpSubtitle2')}</Typography>
+            <Typography variant="subtitle2" data-testid="deposit-accountId-subtitle">{t('deposit.depositIcpSubtitle2')}</Typography>
           </Grid>
           <Grid item xs={12}>
             <InputBase>
@@ -84,7 +86,7 @@ const Deposit = () => {
                 <div className={clsx(classes.badge, classes.accountBadge)}>
                   {t('common.accountId')}
                 </div>
-                <CopyButton text={accountId} placement="top" />
+                <CopyButton text={accountId} placement="top" data-testid="copy-accountId-button" />
               </div>
             </InputBase>
           </Grid>
