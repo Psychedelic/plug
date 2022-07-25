@@ -9,15 +9,16 @@ import { setCurrentNetwork } from '@redux/network';
 
 import useStyles from './styles';
 
-const NetworkCard = ({ network, withDivider }) => {
+const NetworkCard = ({ network, withDivider, onClick }) => {
   const classes = useStyles();
   const { currentNetwork } = useSelector((state) => state.network);
   const dispatch = useDispatch();
   const selectNetwork = (id) => () => {
     dispatch(setCurrentNetwork(id));
+    onClick?.();
   };
 
-  const active = (currentNetwork?.id || null) === network.id;
+  const active = (currentNetwork?.id) === network.id;
   return (
     <>
       <div
@@ -47,6 +48,7 @@ NetworkCard.propTypes = {
     name: PropTypes.string.isRequired,
   }).isRequired,
   withDivider: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default NetworkCard;

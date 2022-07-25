@@ -14,10 +14,10 @@ import { addNetwork } from '@redux/network';
 import useStyles from './styles';
 import { NETWORK_CREATION_DEFAULT_VALUES, NETWORK_CREATION_FIELDS } from './constants';
 
-const validateNetwork = ({
-  name,
-  host,
-}) => name && host;
+// TODO: Modify this to return corresponding error strings and field name for each error
+const validateNetwork = (network, networks) => network.name
+  && network.host
+  && !networks.find((net) => net.host === network.host);
 
 const NetworkCreation = () => {
   const { t } = useTranslation();
@@ -25,7 +25,7 @@ const NetworkCreation = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [values, setValues] = useState(NETWORK_CREATION_DEFAULT_VALUES);
-  const { networksLoading } = useSelector((state) => state.network);
+  const { networksLoading, networks } = useSelector((state) => state.network);
 
   const handleFieldChange = (field) => (event) => {
     setValues({ ...values, [field]: event.target.value });
@@ -49,10 +49,10 @@ const NetworkCreation = () => {
         right={<LinkButton value={t('common.close')} onClick={() => navigator.navigate('home')} />}
       />
       <div className={classes.networkCreationContainer}>
-        {NETWORK_CREATION_FIELDS.map((field) => (
+        {Object.values(NETWORK_CREATION_FIELDS).map((field) => (
           <div className={classes.fieldContainer}>
-            <Typography variant="h5">{t(`network.${field}`)}</Typography>
-            <TextInput onChange={handleFieldChange(field)} />
+            <Typography variant="h5">{`${t(`network.${field.name}`)}${field.required ? '*' : ''}`}</Typography>
+            <TextInput onChange={handleFieldChange(field.name)} placeholder={field.placeholder} />
           </div>
         ))}
         <Button
@@ -60,7 +60,7 @@ const NetworkCreation = () => {
           onClick={handleAddNetwork}
           value={t('network.addNetwork')}
           loading={networksLoading}
-          disabled={networksLoading || !validateNetwork(values)}
+          disabled={networksLoading || !validateNetwork(values, networks)}
           fullWidth
         />
       </div>

@@ -56,13 +56,11 @@ const ConnectionStatus = ({ incStatus = null, disableNavigation }) => {
     }
   }, [activeTab]);
 
-  if (!status) return null;
-
   const {
     icon,
     label,
     className,
-  } = CONNECTION_CONFIG[status];
+  } = CONNECTION_CONFIG[status || CONNECTION_STATUS.rejected];
 
   return (
     <div className={clsx(classes.root, classes[className])}>

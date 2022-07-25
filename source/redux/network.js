@@ -41,6 +41,7 @@ const updateNetworks = (state, action) => {
 };
 const updateNetwork = (state, action) => {
   state.currentNetwork = action.payload;
+  state.usingMainnet = action.payload.id === 'mainnet';
   state.networksLoading = false;
 };
 
@@ -50,6 +51,7 @@ export const networkSlice = createSlice({
     currentNetwork: null,
     networks: [],
     networksLoading: false,
+    usingMainnet: true,
   },
   extraReducers: (builder) => {
     builder

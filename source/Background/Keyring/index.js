@@ -211,7 +211,6 @@ export const getKeyringHandler = (type, keyring) => ({
       const shouldUpdate = Object.values(assets)?.every((asset) => !Number(asset.amount))
         || Object.values(assets)?.some((asset) => asset.amount === 'Error')
         || refresh;
-
       if (shouldUpdate) {
         assets = await keyring.getBalances();
       } else {
@@ -264,7 +263,11 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.GET_TOKEN_INFO]:
     async ({ canisterId, standard }) => {
       try {
-        const tokenInfo = await keyring.getTokenInfo({ canisterId, standard });
+        const tokenInfo = await keyring.getTokenInfo({
+          subaccount: keyring.currentWalletId,
+          canisterId,
+          standard,
+        });
         return { ...tokenInfo, amount: tokenInfo.amount.toString() };
       } catch (e) {
         // eslint-disable-next-line
@@ -275,6 +278,7 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.ADD_CUSTOM_TOKEN]:
     async ({ canisterId, standard, logo }) => {
       try {
+        // Cambiar esto por un metodo que llame al network module para registrar el token
         const tokens = await keyring.registerToken({
           canisterId, standard, subaccount: keyring.currentWalletId, image: logo,
         });

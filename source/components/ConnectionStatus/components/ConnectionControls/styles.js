@@ -1,5 +1,10 @@
 import { makeStyles } from '@material-ui/core';
 
+const flex = {
+  display: 'flex',
+  alignItems: 'center',
+};
+
 export default makeStyles(() => ({
   root: {
     height: 40,
@@ -13,20 +18,20 @@ export default makeStyles(() => ({
     padding: '0 25px',
     fontWeight: 500,
   },
+  flex,
   networkSelector: {
-    width: 90,
+    ...flex,
+    maxWidth: 100,
     height: 30,
     borderRadius: 1000,
     background: 'white',
     color: '#6B7280',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     marginRight: 5,
+    padding: '0 10px',
   },
   controls: {
-    display: 'flex',
-    alignItems: 'center',
+    ...flex,
     justifyContent: 'space-between',
   },
   reloadIcon: {
@@ -34,16 +39,15 @@ export default makeStyles(() => ({
     height: 20,
   },
   network: {
-    maxWidth: 50,
+    maxWidth: 100,
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     cursor: 'pointer',
   },
   reloadIconContainer: {
+    ...flex,
     borderRadius: '50%',
-    display: 'flex',
-    alignItems: 'center',
     justifyContent: 'center',
     width: 30,
     height: 30,

@@ -10,7 +10,7 @@ import { useRouter } from '@components/Router';
 import NetworkCard from '../NetworkCard';
 import useStyles from './styles';
 
-const NetworkSelector = ({ onClose }) => {
+const NetworkSelector = ({ onClose, refreshWallet }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { networks } = useSelector((state) => state.network);
@@ -28,9 +28,12 @@ const NetworkSelector = ({ onClose }) => {
           />
         </div>
         <div className={classes.networksContainer}>
-          <NetworkCard network={{ id: null, name: 'Mainnet' }} withDivider />
           {networks?.map((network, index) => (
-            <NetworkCard network={network} withDivider={index < networks.length - 1} />
+            <NetworkCard
+              network={network}
+              withDivider={index < networks.length - 1}
+              onClick={refreshWallet}
+            />
           ))}
         </div>
       </div>
@@ -41,6 +44,7 @@ const NetworkSelector = ({ onClose }) => {
 
 NetworkSelector.propTypes = {
   onClose: PropTypes.func.isRequired,
+  refreshWallet: PropTypes.func.isRequired,
 };
 
 export default NetworkSelector;

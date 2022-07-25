@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { capitalize } from '@material-ui/core';
+import { capitalize, CircularProgress } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
@@ -79,14 +79,15 @@ const ConnectionControls = ({ disableNavigation }) => {
     dispatch(getCurrentNetwork());
     dispatch(getNetworks());
   }, []);
-  console.log('selector open', selectorOpen);
+
   return (
     <div className={classes.controls}>
       <div className={classes.networkSelector} onClick={() => setSelectorOpen(true)}>
-        <div className={classes.statusDot} />
-        {networksLoading ? 'Loading' : (
+        <div className={classes.flex}>
+          <div className={classes.statusDot} />
           <span className={classes.network}>{capitalize(currentNetwork?.name || 'Mainnet')}</span>
-        )}
+        </div>
+        {networksLoading && (<CircularProgress size={10} />)}
       </div>
       <div
         className={clsx(classes.reloadIconContainer, disableNavigation && classes.disabled)}
@@ -94,7 +95,9 @@ const ConnectionControls = ({ disableNavigation }) => {
       >
         <img src={RefreshAsset} alt="reload" className={classes.reloadIcon} />
       </div>
-      {selectorOpen && (<NetworkSelector onClose={() => setSelectorOpen(false)} />)}
+      {selectorOpen && (
+      <NetworkSelector onClose={() => setSelectorOpen(false)} refreshWallet={refreshWallet} />
+      )}
     </div>
   );
 };

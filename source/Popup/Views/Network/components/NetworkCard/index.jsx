@@ -22,6 +22,7 @@ const NetworkCard = ({
     dispatch(removeNetwork(id));
   };
 
+  const isMainnet = id === 'mainnet';
   return (
     <div onClick={selectNetwork} className={classes.networkCard}>
       <div className={classes.networkData}>
@@ -29,11 +30,13 @@ const NetworkCard = ({
         <Typography variant="subtitle2">{host}</Typography>
         <Typography variant="subtitle2">{ledgerId}</Typography>
       </div>
-      <Trash2
-        className={classes.removeIcon}
-        onClick={handleRemoveNetwork}
-        size="18"
-      />
+      {!isMainnet && (
+        <Trash2
+          className={classes.removeIcon}
+          onClick={handleRemoveNetwork}
+          size="18"
+        />
+      )}
     </div>
   );
 };
