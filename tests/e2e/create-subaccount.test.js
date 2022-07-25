@@ -1,4 +1,4 @@
-describe('Send View', () => {
+describe('Create subaccount', () => {
   let browser;
   let page;
 

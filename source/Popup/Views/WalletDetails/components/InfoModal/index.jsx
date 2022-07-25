@@ -10,7 +10,7 @@ import { Button, Dialog, LinkButton } from '@ui';
 import useStyles from './styles';
 
 const InfoModal = ({
-  title, isOpen, content, onClose, buttonText,
+  title, isOpen, content, onClose, buttonText, understandButtonTestId, learnMoreButtonTestId,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -27,11 +27,12 @@ const InfoModal = ({
             value={t('common.okIUnderstand')}
             onClick={onClose}
             fullWidth
-            z
+            data-testid={understandButtonTestId}
           />
           <LinkButton
             value={buttonText}
             onClick={() => extension.tabs.create({ url: icIdsUrl })}
+            data-testid={learnMoreButtonTestId}
           />
         </div>
       )}
@@ -45,6 +46,13 @@ InfoModal.propTypes = {
   content: PropTypes.string.isRequired,
   isOpen: PropTypes.bool.isRequired,
   buttonText: PropTypes.string.isRequired,
+  learnMoreButtonTestId: PropTypes.string,
+  understandButtonTestId: PropTypes.string,
+};
+
+InfoModal.defaultProps = {
+  learnMoreButtonTestId: '',
+  understandButtonTestId: '',
 };
 
 export default InfoModal;
