@@ -1,4 +1,4 @@
-import { BrowserRPC } from '@fleekhq/browser-rpc';
+import { BrowserRPC } from '@psychedelic/browser-rpc';
 import { Provider } from '@psychedelic/plug-inpage-provider';
 
 const clientRPC = new BrowserRPC(window, {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DataDisplay, AssetFormat } from '@ui';
 import { useTranslation } from 'react-i18next';
-import { PortRPC } from '@fleekhq/browser-rpc';
+import { PortRPC } from '@psychedelic/browser-rpc';
 import { v4 as uuidv4 } from 'uuid';
 import { CURRENCIES } from '@shared/constants/currencies';
 import shortAddress from '@shared/utils/short-address';

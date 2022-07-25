@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { PortRPC } from '@fleekhq/browser-rpc';
+import { PortRPC } from '@psychedelic/browser-rpc';
 import { reviewPendingTransaction } from '@modules/storageManager';
 
 const portRPC = new PortRPC({

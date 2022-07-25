@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DataDisplay } from '@ui';
 import { useTranslation } from 'react-i18next';
-import { PortRPC } from '@fleekhq/browser-rpc';
+import { PortRPC } from '@psychedelic/browser-rpc';
 import ReactJson from 'react-json-view';
 // import { v4 as uuidv4 } from 'uuid';
 import { validateCanisterId } from '@shared/utils/ids';
