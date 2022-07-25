@@ -120,10 +120,11 @@ export const parseToBigIntString = (amount, decimalPlaces) => {
 
 export const parseAssetsAmount = (assets = []) => (
   assets.map((currentAsset) => {
-    const { amount, token } = currentAsset;
+    const { amount, token, error } = currentAsset;
     const { decimals } = token;
-
-    const parsedAmount = parseToFloatAmount(amount, parseInt(decimals.toString(), 10));
+    const parsedAmount = error
+      ? 0
+      : parseToFloatAmount(amount, parseInt(decimals.toString(), 10));
 
     return {
       ...currentAsset,
@@ -133,7 +134,7 @@ export const parseAssetsAmount = (assets = []) => (
 );
 
 export const formatAssets = (assets = [], icpPrice) => {
-  const mappedAssets = assets.map(({ amount, token }) => {
+  const mappedAssets = assets.map(({ amount, token, error }) => {
     const {
       name, symbol, canisterId, image,
     } = token;
@@ -144,6 +145,7 @@ export const formatAssets = (assets = [], icpPrice) => {
       name,
       symbol,
       canisterId,
+      error,
     };
   });
   return mappedAssets;

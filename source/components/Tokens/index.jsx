@@ -7,7 +7,7 @@ import clsx from 'clsx';
 
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { useRouter } from '@components/Router';
-import { AMOUNT_ERROR } from '@shared/constants/currencies';
+
 import { useICPPrice } from '@redux/icp';
 import { setICNSData } from '@redux/icns';
 import { useScroll } from '@hooks';
@@ -62,13 +62,13 @@ const Tokens = () => {
         onScroll={onScroll}
       >
         {
-          assets?.map((asset, index) => (
+          assets?.map((asset) => (
             <AssetItem
               {...asset}
-              key={`${asset.name}-${index}`}
+              key={`${asset.symbol}-${asset.canisterId}`}
               updateToken={fetchAssets}
               loading={loading}
-              failed={asset.amount === AMOUNT_ERROR}
+              failed={!!asset?.error}
               assetNameTestId="asset-name"
             />
           ))
