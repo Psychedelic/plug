@@ -67,6 +67,8 @@ class BackgroundScript {
   }
 
   #hookListener() {
+    if (this.hooksExposed) return;
+    this.hooksExposed = true;
     extension.runtime.onMessage.addListener((message, _, sendResponse) => {
       // Wait for some one connect to it
       const { params, type } = message;

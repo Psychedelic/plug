@@ -237,13 +237,18 @@ export const getKeyringHandler = (type, keyring) => ({
     }
   },
   [HANDLER_TYPES.SEND_TOKEN]: async ({
-    to, amount, canisterId, opts,
+    to, amount, canisterId, opts, decimals, standard,
   }) => {
     try {
-      const { token } = await keyring.getTokenInfo({ canisterId });
-      const { decimals } = token;
-      const parsedAmount = parseToBigIntString(amount, parseInt(decimals, 10));
-      const { height, transactionId } = await keyring.send(to, parsedAmount, canisterId, opts);
+      let tokenInfo;
+      if (!decimals) {
+        tokenInfo = await keyring.getTokenInfo({ canisterId, standard });
+      }
+      const _decimals = decimals || tokenInfo?.token?.decimals; // eslint-disable-line
+      const parsedAmount = parseToBigIntString(amount, parseInt(_decimals, 10));
+      const { height, transactionId } = await keyring.send({
+        to, amount: parsedAmount, canisterId, opts,
+      });
       return {
         height: height ? parseInt(height, 10) : undefined,
         transactionId: transactionId ? parseInt(transactionId, 10) : undefined,

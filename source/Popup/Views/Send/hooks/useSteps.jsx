@@ -97,9 +97,12 @@ const useSteps = () => {
         params: { to, amount: amount.toString() },
       }, parseSendResponse);
     } else {
+      const { canisterId, standard } = selectedAsset || {};
       sendMessage({
         type: HANDLER_TYPES.SEND_TOKEN,
-        params: { to, amount: amount.toString(), canisterId: selectedAsset?.canisterId },
+        params: {
+          to, amount: amount.toString(), canisterId, standard,
+        },
       }, (response) => {
         parseSendResponse(response);
         if (!selectedAsset) {

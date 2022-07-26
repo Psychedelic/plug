@@ -142,6 +142,7 @@ const Step3 = ({
             fullWidth
             loading={loading}
             data-testid="send-button"
+            disabled={loading}
           />
         </Grid>
       </Grid>
