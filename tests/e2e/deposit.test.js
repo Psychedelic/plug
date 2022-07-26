@@ -44,18 +44,7 @@ describe('Deposit View', () => {
 
     await optionsPageUtils.importAccount(page, secrets.seedphrase, secrets.password);
     await optionsPageUtils.unlock(page, secrets.password);
-
-    await page.close();
-  });
-
-  beforeEach(async () => {
-    page = await utils.createNewPage(browser);
-    await page.goto(chromeData.popupUrl);
     await depositViewButtonClick(page);
-  });
-
-  afterEach(async () => {
-    await page.close();
   });
 
   afterAll(async () => {
