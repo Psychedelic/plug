@@ -7,6 +7,8 @@ jest.setTimeout(600000); // in milliseconds
 
 global.secrets = {
   seedphrase: process.env.SEEDPHRASE,
+  mainAccountId: process.env.MAIN_ACCOUNT_ID,
+  mainPrincipalId: process.env.MAIN_PRINCIPAL_ID,
   subAccountId: process.env.SUB_ACCOUNT_ID,
   subPrincipalId: process.env.SUB_PRINCIPAL_ID,
   icnsName: process.env.ICNS_NAME,

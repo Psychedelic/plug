@@ -69,7 +69,7 @@ const ICNSSelector = () => {
     }
     return (
       <>
-        <Typography variant="subtitle2">
+        <Typography variant="subtitle2" data-testid="icns-selector-text">
           {resolved ?? 'Select an ICNS name' }
         </Typography>
         {resolved ? (
@@ -85,7 +85,7 @@ const ICNSSelector = () => {
 
   return (
     <>
-      <InputBase className={classes.icnsSelectContainer} onClick={openSelectDialog}>
+      <InputBase className={classes.icnsSelectContainer} onClick={openSelectDialog} data-testid="open-selection-modal-button">
         { getInputContent() }
       </InputBase>
       <Dialog
@@ -103,6 +103,7 @@ const ICNSSelector = () => {
                       names?.length > 1 && index < names.length - 1 && classes.borderBottom,
                     )
                   }
+                  data-testid={`icns-name-${name}`}
                 >
                   {name}
                 </Typography>

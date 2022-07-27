@@ -38,7 +38,11 @@ const Step1 = ({
 
   const { principalId, accountId } = useSelector((state) => state.wallet);
 
-  const isUserAddress = [principalId, accountId].includes(address);
+  const {
+    resolved,
+  } = useSelector((state) => state.icns);
+
+  const isUserAddress = [principalId, accountId, resolved].includes(address);
 
   const handleCloseAssets = (value) => {
     setOpenAssets(false);

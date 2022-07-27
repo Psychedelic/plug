@@ -287,6 +287,7 @@ const useSteps = () => {
         handleChangeAddressInfo={handleChangeAddressInfo}
         handleChangeStep={handleNextStep}
         loadingAddress={loading}
+
       />,
       left: null,
       right: rightButton,

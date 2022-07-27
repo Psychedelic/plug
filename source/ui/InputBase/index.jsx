@@ -4,10 +4,12 @@ import clsx from 'clsx';
 
 import useStyles from './styles';
 
-const InputBase = ({ children, className, onClick }) => {
+const InputBase = ({
+  children, className, onClick, ...other
+}) => {
   const classes = useStyles();
   return (
-    <div className={clsx(classes.root, className)} onClick={onClick}>
+    <div className={clsx(classes.root, className)} onClick={onClick} {...other}>
       {children}
     </div>
   );

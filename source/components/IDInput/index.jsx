@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import MInputBase from '@material-ui/core/InputBase';
@@ -87,6 +87,13 @@ const IDInput = ({
     setContactName(e.target.value);
   };
 
+  const searchContactFromId = (e) => {
+    const id = e.target.value;
+    onChange(id);
+    const allContacts = contacts.flatMap((contact) => contact.contacts);
+    setSelectedContact(allContacts.find((contact) => contact.id === id));
+  };
+
   return (
     <>
       <div className={classes.root}>
@@ -110,7 +117,7 @@ const IDInput = ({
               fullWidth
               value={value}
               type="text"
-              onChange={(e) => onChange(e.target.value)}
+              onChange={searchContactFromId}
               placeholder={placeholder || t('send.inputId')}
               {...other}
             />

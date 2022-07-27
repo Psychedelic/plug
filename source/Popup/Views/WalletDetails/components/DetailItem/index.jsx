@@ -11,7 +11,7 @@ import useStyles from './styles';
 import InfoModal from '../InfoModal';
 
 const DetailItem = ({
-  value, name, setInfoOpen, isOpen,
+  value, name, setInfoOpen, isOpen, copyButtonTestId, infoIconButtonTestId,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
@@ -20,7 +20,7 @@ const DetailItem = ({
       <FormItem
         label={t(`common.${name}`)}
         smallLabel
-        endIcon={<CopyButton color="black" label="Copy" text={value} placement="left" />}
+        endIcon={<CopyButton color="black" label="Copy" text={value} placement="left" data-testid={copyButtonTestId} />}
         component={(
           <div className={classes.ids}>
             <Typography variant="subtitle2" className={classes.id}>{value}</Typography>
@@ -28,6 +28,7 @@ const DetailItem = ({
               className={classes.idInfoIcon}
               size={20}
               onClick={() => setInfoOpen(true)}
+              data-testid={infoIconButtonTestId}
             />
           </div>
         )}
@@ -38,6 +39,8 @@ const DetailItem = ({
         isOpen={isOpen}
         content={t(`walletDetails.${name}Description`)}
         buttonText={t(`walletDetails.${name}LearnMore`)}
+        understandButtonTestId={`understand-${name}-button`}
+        learnMoreButtonTestId="learn-more-button"
       />
     </>
   );
@@ -48,6 +51,13 @@ DetailItem.propTypes = {
   name: PropTypes.string.isRequired,
   setInfoOpen: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
+  copyButtonTestId: PropTypes.string,
+  infoIconButtonTestId: PropTypes.string,
+};
+
+DetailItem.defaultProps = {
+  copyButtonTestId: '',
+  infoIconButtonTestId: '',
 };
 
 export default DetailItem;
