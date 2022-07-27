@@ -30,6 +30,13 @@ export default makeStyles(() => ({
     marginRight: 5,
     padding: '0 10px',
   },
+  controlsInfo: {
+    ...flex,
+    opacity: 0.5,
+  },
+  connectedControls: {
+    opacity: 1,
+  },
   controls: {
     ...flex,
     justifyContent: 'space-between',
@@ -57,9 +64,12 @@ export default makeStyles(() => ({
   statusDot: {
     width: 8,
     height: 8,
-    background: '#08DE92',
     borderRadius: '50%',
     marginRight: 5,
+    background: '#6B7280',
+  },
+  connectedDot: {
+    background: '#08DE92',
   },
   disabled: {
     opacity: 0.5,

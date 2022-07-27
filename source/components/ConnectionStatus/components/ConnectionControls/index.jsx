@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { capitalize, CircularProgress } from '@material-ui/core';
+import { getTabURL } from '@shared/utils/chrome-tabs';
+import extensionizer from 'extensionizer';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
@@ -14,6 +16,7 @@ import {
   setCollections,
   setCollectionsLoading,
 } from '@redux/wallet';
+import { getApps } from '@modules/storageManager';
 import { getCurrentNetwork, getNetworks } from '@redux/network';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { TABS, useRouter } from '@components/Router';
@@ -28,10 +31,20 @@ const ConnectionControls = ({ disableNavigation }) => {
   const dispatch = useDispatch();
   const { getContacts } = useContacts();
   const { navigator } = disableNavigation ? {} : useRouter();
-  const { principalId } = useSelector((state) => state.wallet);
+  const { principalId, walletNumber } = useSelector((state) => state.wallet);
   const { useICNS } = useSelector((state) => state.icns);
   const { currentNetwork, networksLoading } = useSelector((state) => state.network);
   const [selectorOpen, setSelectorOpen] = useState(false);
+  const [connected, setConnected] = useState(false);
+
+  extensionizer.tabs.query({ active: true }, (tabs) => {
+    const url = getTabURL(tabs?.[0]);
+    // Check if new wallet is connected to the current page
+    getApps(walletNumber.toString(), (apps) => {
+      const isSiteConnected = !!apps?.[url];
+      setConnected(isSiteConnected);
+    });
+  });
 
   const refreshWallet = () => {
     if (disableNavigation) return;
@@ -83,8 +96,8 @@ const ConnectionControls = ({ disableNavigation }) => {
   return (
     <div className={classes.controls}>
       <div className={classes.networkSelector} onClick={() => setSelectorOpen(true)}>
-        <div className={classes.flex}>
-          <div className={classes.statusDot} />
+        <div className={clsx(classes.controlsInfo, connected && classes.connectedControls)}>
+          <div className={clsx(classes.statusDot, connected && classes.connectedDot)} />
           <span className={classes.network}>{capitalize(currentNetwork?.name || 'Mainnet')}</span>
         </div>
         {networksLoading && (<CircularProgress size={10} />)}
