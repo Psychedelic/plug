@@ -43,18 +43,23 @@ const ReverseRegistrar = Actor.createActor(ReverseRegistrarIDL, {
  *    - If not, fetch the record from the Registry and return the owner's pid.
  */
 export const resolveName = async (name, isICP) => {
-  let record = await Resolver.getUserDefaultInfo(name);
-  const { icp, pid: principal } = record?.[0] || {};
-  const accountId = icp?.[0];
-  if (isICP && accountId) {
-    return accountId;
+  try {
+    let record = await Resolver.getUserDefaultInfo(name);
+    const { icp, pid: principal } = record?.[0] || {};
+    const accountId = icp?.[0];
+    if (isICP && accountId) {
+      return accountId;
+    }
+    if (!principal || !principal.length) {
+      record = await Registry.getRecord(name);
+      const { owner } = record?.[0] || {};
+      return owner?.toString?.();
+    }
+    return Array.isArray(principal) ? principal?.[0]?.toString() : principal?.toString?.();
+  } catch (e) {
+    console.log('Error resolving the ICNS', e);
+    return null;
   }
-  if (!principal || !principal.length) {
-    record = await Registry.getRecord(name);
-    const { owner } = record?.[0] || {};
-    return owner?.toString?.();
-  }
-  return Array.isArray(principal) ? principal?.[0]?.toString() : principal?.toString?.();
 };
 
 export const getReverseResolvedName = async (principal) => {

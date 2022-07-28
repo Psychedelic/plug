@@ -9,7 +9,7 @@ import { setCurrentNetwork, removeNetwork } from '@redux/network';
 import useStyles from './styles';
 
 const NetworkCard = ({
-  name, ledgerId, host, id,
+  name, ledgerCanisterId, host, id,
 }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -28,7 +28,7 @@ const NetworkCard = ({
       <div className={classes.networkData}>
         <Typography variant="h4">{capitalize(name)}</Typography>
         <Typography variant="subtitle2">{host}</Typography>
-        <Typography variant="subtitle2">{ledgerId}</Typography>
+        <Typography variant="subtitle2">{ledgerCanisterId}</Typography>
       </div>
       {!isMainnet && (
         <Trash2
@@ -45,7 +45,7 @@ NetworkCard.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   host: PropTypes.string.isRequired,
-  ledgerId: PropTypes.string.isRequired,
+  ledgerCanisterId: PropTypes.string.isRequired,
 };
 
 export default NetworkCard;

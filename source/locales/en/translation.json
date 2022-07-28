@@ -3,7 +3,7 @@
     "network": "Network",
     "name": "Network Name",
     "host": "Host URL",
-    "ledgerId": "Ledger canister Id",
+    "ledgerCanisterId": "Ledger canister Id",
     "addNetwork": "Add Network",
     "addNetworkDescription": "Add a custom network to use Plug on test networks."
   },

@@ -388,7 +388,7 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.GET_NETWORKS]: async () => {
     try {
       const { networks } = keyring.networkModule;
-      return networks;
+      return Object.values(networks);
     } catch (e) {
       // eslint-disable-next-line
       console.log('Error getting networks', e);
@@ -398,7 +398,7 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.ADD_NETWORK]: async (network) => {
     try {
       const networks = await keyring.networkModule.addNetwork(network);
-      return networks;
+      return Object.values(networks);
     } catch (e) {
       // eslint-disable-next-line
       console.log('Error adding the network', e);
@@ -408,7 +408,7 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.REMOVE_NETWORK]: async (networkId) => {
     try {
       const networks = await keyring.networkModule.removeNetwork(networkId);
-      return networks;
+      return Object.values(networks);
     } catch (e) {
       // eslint-disable-next-line
       console.log('Error removing the network', e);

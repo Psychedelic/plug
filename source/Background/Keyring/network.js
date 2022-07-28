@@ -17,7 +17,6 @@ export const addNetwork = (network) => new Promise((resolve, reject) => {
     type: HANDLER_TYPES.ADD_NETWORK,
     params: network,
   }, (response) => {
-    console.log('setCurrentNetwork', response);
     if (response.error) {
       return reject(response.error);
     }
