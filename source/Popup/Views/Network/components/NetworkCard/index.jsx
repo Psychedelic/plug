@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { Trash2 } from 'react-feather';
 
 import { setCurrentNetwork, removeNetwork } from '@redux/network';
+import { setUseICNS } from '@redux/icns';
 
 import useStyles from './styles';
 
@@ -16,6 +17,7 @@ const NetworkCard = ({
 
   const selectNetwork = () => {
     dispatch(setCurrentNetwork(id));
+    dispatch(setUseICNS(false));
   };
 
   const handleRemoveNetwork = () => {

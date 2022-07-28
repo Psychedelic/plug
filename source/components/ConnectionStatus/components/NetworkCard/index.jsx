@@ -6,6 +6,7 @@ import clsx from 'clsx';
 
 import BlueCheck from '@assets/icons/blue-check.svg';
 import { setCurrentNetwork } from '@redux/network';
+import { setUseICNS } from '@redux/icns';
 
 import useStyles from './styles';
 
@@ -15,6 +16,7 @@ const NetworkCard = ({ network, withDivider, onClick }) => {
   const dispatch = useDispatch();
   const selectNetwork = (id) => () => {
     dispatch(setCurrentNetwork(id));
+    dispatch(setUseICNS(false));
     onClick?.();
   };
 
