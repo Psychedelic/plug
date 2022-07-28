@@ -35,6 +35,7 @@ export const setCurrentNetwork = createAsyncThunk(
 
 /* eslint-disable no-param-reassign */
 const setLoading = (state) => { state.networksLoading = true; };
+const setError = (state, action) => { state.error = action.payload; };
 const updateNetworks = (state, action) => {
   state.networks = [...action.payload];
   state.networksLoading = false;
@@ -52,6 +53,7 @@ export const networkSlice = createSlice({
     networks: [],
     networksLoading: false,
     usingMainnet: true,
+    error: null,
   },
   extraReducers: (builder) => {
     builder
@@ -63,6 +65,7 @@ export const networkSlice = createSlice({
       .addCase(removeNetwork.fulfilled, updateNetworks)
       .addCase(setCurrentNetwork.pending, setLoading)
       .addCase(setCurrentNetwork.fulfilled, updateNetwork)
+      .addCase(setCurrentNetwork.rejected, setError)
       .addCase(getCurrentNetwork.pending, setLoading)
       .addCase(getCurrentNetwork.fulfilled, updateNetwork);
   },

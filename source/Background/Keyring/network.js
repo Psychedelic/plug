@@ -12,11 +12,17 @@ export const getCurrentNetwork = () => new Promise((resolve) => {
   }, resolve);
 });
 
-export const addNetwork = (network) => new Promise((resolve) => {
+export const addNetwork = (network) => new Promise((resolve, reject) => {
   sendMessage({
     type: HANDLER_TYPES.ADD_NETWORK,
     params: network,
-  }, resolve);
+  }, (response) => {
+    console.log('setCurrentNetwork', response);
+    if (response.error) {
+      return reject(response.error);
+    }
+    return resolve(response);
+  });
 });
 
 export const deleteNetwork = (networkId) => new Promise((resolve) => {

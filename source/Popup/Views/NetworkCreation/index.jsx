@@ -15,9 +15,15 @@ import useStyles from './styles';
 import { NETWORK_CREATION_DEFAULT_VALUES, NETWORK_CREATION_FIELDS } from './constants';
 
 // TODO: Modify this to return corresponding error strings and field name for each error
-const validateNetwork = (network, networks) => network.name
-  && network.host
-  && !networks.find((net) => net.host === network.host);
+const validateNetwork = (network, networks) => {
+  const errors = {};
+  Object.values(NETWORK_CREATION_FIELDS).forEach((field) => {
+    const value = network[field.name];
+    const error = field?.validate(value, networks);
+    errors[field.name] = error;
+  });
+  return errors;
+};
 
 const NetworkCreation = () => {
   const { t } = useTranslation();
@@ -25,9 +31,14 @@ const NetworkCreation = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [values, setValues] = useState(NETWORK_CREATION_DEFAULT_VALUES);
+  const [errors, setErrors] = useState({});
   const { networksLoading, networks } = useSelector((state) => state.network);
 
   const handleFieldChange = (field) => (event) => {
+    const error = NETWORK_CREATION_FIELDS[field].validate(event.target.value, networks);
+    if (!error) {
+      setErrors({ ...errors, [field]: null });
+    }
     setValues({ ...values, [field]: event.target.value });
   };
 
@@ -37,10 +48,14 @@ const NetworkCreation = () => {
   }, []);
 
   const handleAddNetwork = () => {
-    dispatch(addNetwork(values));
-    navigator.navigate('network');
+    const newErrors = validateNetwork(values, networks);
+    if (Object.values(newErrors).some((error) => error)) {
+      setErrors(newErrors);
+    } else {
+      dispatch(addNetwork(values));
+      navigator.navigate('network');
+    }
   };
-
   return (
     <Layout>
       <Header
@@ -52,7 +67,12 @@ const NetworkCreation = () => {
         {Object.values(NETWORK_CREATION_FIELDS).map((field) => (
           <div className={classes.fieldContainer}>
             <Typography variant="h5">{`${t(`network.${field.name}`)}${field.required ? '*' : ''}`}</Typography>
-            <TextInput onChange={handleFieldChange(field.name)} placeholder={field.placeholder} />
+            <TextInput
+              onChange={handleFieldChange(field.name)}
+              placeholder={field.placeholder}
+              error={errors[field.name]}
+            />
+            {errors[field.name] && <Typography variant="body2" color="error">{errors[field.name]}</Typography>}
           </div>
         ))}
         <Button
