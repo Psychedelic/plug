@@ -97,11 +97,11 @@ const useSteps = () => {
         params: { to, amount: amount.toString() },
       }, parseSendResponse);
     } else {
-      const { canisterId, standard } = selectedAsset || {};
+      const { canisterId, standard, decimals } = selectedAsset || {};
       sendMessage({
         type: HANDLER_TYPES.SEND_TOKEN,
         params: {
-          to, amount: amount.toString(), canisterId, standard,
+          to, amount: amount.toString(), canisterId, standard, decimals,
         },
       }, (response) => {
         parseSendResponse(response);
