@@ -14,22 +14,13 @@ const canisterIdValidation = (value) => {
 // Validates that the string is a valid https url
 const httpsHostValidation = (value) => {
   const url = new URL(value);
-  return (url.protocol === 'http:') ? null : 'The host must be a valid https url';
+  return (url.protocol === 'https:') ? null : 'The host must be a valid https url';
 };
 
 export const NETWORK_CREATION_DEFAULT_VALUES = {
-  name: {
-    value: '',
-    error: null,
-  },
-  host: {
-    value: '',
-    error: null,
-  },
-  ledgerCanisterId: {
-    value: '',
-    error: null,
-  },
+  name: '',
+  host: '',
+  ledgerCanisterId: '',
 };
 export const NETWORK_CREATION_FIELDS = {
   name: {
@@ -44,8 +35,8 @@ export const NETWORK_CREATION_FIELDS = {
     placeholder: 'Enter the host of the network',
     required: true,
     validate: (value, networks) => requiredValidation(value)
-    || uniqueValidation(value, networks, 'host')
-    || httpsHostValidation(value),
+    || uniqueValidation(value, networks, 'host'),
+    // || httpsHostValidation(value),
   },
   ledgerCanisterId: {
     name: 'ledgerCanisterId',

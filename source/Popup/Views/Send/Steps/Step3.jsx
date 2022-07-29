@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import extension from 'extensionizer';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import {
   Container,
@@ -64,6 +64,7 @@ const Step3 = ({
   const { navigator } = useRouter();
   const dispatch = useDispatch();
   const icpPrice = useICPPrice();
+  const { usingMainnet } = useSelector((state) => state.network);
   const subtotal = amount * asset?.price;
   const fee = getAssetFee(asset);
   const usdFee = (fee * asset?.price)?.toFixed(5);
@@ -90,9 +91,9 @@ const Step3 = ({
       });
 
       setLoading(false);
-      navigator.navigate('home', TABS.ACTIVITY);
+      navigator.navigate('home', usingMainnet ? TABS.ACTIVITY : TABS.TOKENS);
     }
-  }, [isTrxCompleted]);
+  }, [isTrxCompleted, usingMainnet]);
   const addresses = getAddressTranslations(address, addressInfo, asset?.symbol);
   return (
     <Container>
