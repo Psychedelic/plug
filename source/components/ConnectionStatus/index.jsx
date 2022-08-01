@@ -33,7 +33,7 @@ const beautifyUrl = (url) => (
   url.replace(/^(?:https?:\/\/)?(?:www\.)?/i, '').split('/')[0]
 );
 
-const ConnectionStatus = ({ incStatus = null, disableNavigation }) => {
+const ConnectionStatus = ({ incStatus = null, disableNavigation, hideNetwork }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const [status, setStatus] = useState(incStatus);
@@ -65,12 +65,16 @@ const ConnectionStatus = ({ incStatus = null, disableNavigation }) => {
   return (
     <div className={clsx(classes.root, classes[className])}>
       {icon}
-      <span data-testid="banner-text">{t(label, { version: browser.runtime.getManifest().version })}</span>
+      <span
+        data-testid="banner-text"
+        className={clsx(hideNetwork && classes.fullWidth)}>
+        {t(label, { version: browser.runtime.getManifest().version })}
+      </span>
       {
         status === CONNECTION_STATUS.accepted
         && <span className={classes.web}>&nbsp;{activeTab}</span>
       }
-      <ConnectionControls disableNavigation={disableNavigation} />
+      <ConnectionControls hidden={hideNetwork} disableNavigation={disableNavigation} />
     </div>
   );
 };
@@ -80,9 +84,11 @@ export default ConnectionStatus;
 ConnectionStatus.defaultProps = {
   incStatus: null,
   disableNavigation: false,
+  hideNetwork: false,
 };
 
 ConnectionStatus.propTypes = {
   incStatus: PropTypes.string,
   disableNavigation: PropTypes.bool,
+  hideNetwork: PropTypes.bool,
 };

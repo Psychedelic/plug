@@ -1,9 +1,13 @@
 import { makeStyles } from '@material-ui/core/styles';
 
+const fullWidth = {
+  width: '100%',
+};
+
 export default makeStyles((theme) => ({
   root: {
+    ...fullWidth,
     height: 40,
-    width: '100%',
     color: '#FFFFFF',
     fontSize: 14,
     lineHeight: '14px',
@@ -12,7 +16,9 @@ export default makeStyles((theme) => ({
     justifyContent: 'space-between',
     padding: '0 25px',
     fontWeight: 500,
+    textAlign: 'center',
   },
+  fullWidth,
   active: {
     background: theme.palette.success.main,
   },

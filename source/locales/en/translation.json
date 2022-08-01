@@ -391,7 +391,8 @@
     "poweredByDab": "POWERED BY DAB"
   },
   "tokens": {
-    "failedToFetchBalance": "Failed to fetch balance"
+    "failedToFetchBalance": "Failed to fetch balance",
+    "ledgerNotSpecified": "Ledger not specified for network"
   },
   "clock": {
     "title": "Your device clock is set incorrectly",

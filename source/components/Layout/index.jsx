@@ -15,6 +15,8 @@ const Layout = ({
         <ConnectionStatus
           incStatus={incStatus ? CONNECTION_STATUS.pending : null}
           disableNavigation={disableNavigation}
+          // TODO: remove this once we hook up provider to custom networks
+          hideNetwork={disableProfile && disableNavigation}
         />
         <NavBar disableProfile={disableProfile} disableNavigation={disableNavigation} />
       </div>

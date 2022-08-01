@@ -46,7 +46,7 @@ export default makeStyles(() => ({
     height: 20,
   },
   network: {
-    maxWidth: 100,
+    maxWidth: 70,
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',

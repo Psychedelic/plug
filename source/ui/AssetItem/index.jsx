@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import clsx from 'clsx';
+
 import { TokenIcon } from '@components';
 import RefreshIcon from '@assets/icons/blue-refresh.png';
 
-import { useTranslation } from 'react-i18next';
 import useStyles from './styles';
 
 const AssetItem = ({
@@ -15,6 +17,7 @@ const AssetItem = ({
   const classes = useStyles();
   const [fetchLoading, setFetchLoading] = useState(false);
   const { t } = useTranslation();
+  const { currentNetwork, usingMainnet } = useSelector((state) => state.network);
 
   const handleFetchAssets = async () => {
     // Avoid calling multiple times
@@ -24,7 +27,7 @@ const AssetItem = ({
     await updateToken();
     setFetchLoading(false);
   };
-
+  const ledgerNotSpecified = !usingMainnet && !currentNetwork?.ledgerCanisterId;
   return (
     <div className={clsx(classes.root, failed && classes.failedContainer)}>
       <TokenIcon className={classes.image} image={image} alt={name} symbol={symbol} />
@@ -35,7 +38,7 @@ const AssetItem = ({
               <>
                 <Typography variant="h5" className={classes.failedTitle}>{name}</Typography>
                 <Typography variant="subtitle2" className={classes.failedDescription}>
-                  {t('tokens.failedToFetchBalance')}
+                  {t(`tokens.${ledgerNotSpecified ? 'ledgerNotSpecified' : 'failedToFetchBalance'}`)}
                 </Typography>
               </>
             )
@@ -51,7 +54,7 @@ const AssetItem = ({
       </div>
       {
         failed
-          ? (
+          ? !ledgerNotSpecified && (
             <img
               className={clsx(classes.value, classes.refresh)}
               src={RefreshIcon}

@@ -33,16 +33,21 @@ export const setCurrentNetwork = createAsyncThunk(
   async (networkId) => callSetCurrentNetwork(networkId),
 );
 
+const isMainnet = (network) => network.id === 'mainnet';
+
 /* eslint-disable no-param-reassign */
 const setLoading = (state) => { state.networksLoading = true; };
 const setError = (state, action) => { state.error = action.payload; };
 const updateNetworks = (state, action) => {
-  state.networks = [...action.payload];
+  const mainnet = action.payload?.find(isMainnet);
+  const otherNetworks = action.payload.filter((network) => !isMainnet(network)) || [];
+  const sortedNetworks = otherNetworks?.sort((a, b) => ((a.name > b.name) ? 1 : -1));
+  state.networks = [mainnet, ...sortedNetworks];
   state.networksLoading = false;
 };
 const updateNetwork = (state, action) => {
   state.currentNetwork = action.payload;
-  state.usingMainnet = action.payload.id === 'mainnet';
+  state.usingMainnet = isMainnet(action.payload);
   state.networksLoading = false;
 };
 
