@@ -17,6 +17,7 @@ import useStyles from './styles';
 const Tokens = () => {
   const classes = useStyles();
   const { assets, assetsLoading } = useSelector((state) => state.wallet);
+  const { currentNetwork } = useSelector((state) => state.network);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const icpPrice = useICPPrice();
@@ -65,7 +66,7 @@ const Tokens = () => {
           assets?.map((asset) => (
             <AssetItem
               {...asset}
-              key={`${asset.symbol}-${asset.canisterId}`}
+              key={`${asset.symbol}-${asset.canisterId}-${currentNetwork?.id}`}
               updateToken={fetchAssets}
               loading={loading}
               failed={!!asset?.error}

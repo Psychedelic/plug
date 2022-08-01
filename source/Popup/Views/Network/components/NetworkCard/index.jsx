@@ -4,8 +4,11 @@ import { capitalize, Typography } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { Trash2 } from 'react-feather';
 
-import { setCurrentNetwork, removeNetwork } from '@redux/network';
 import { setUseICNS } from '@redux/icns';
+import { useICPPrice } from '@redux/icp';
+import { setAssets, setAssetsLoading } from '@redux/wallet';
+import { setCurrentNetwork, removeNetwork } from '@redux/network';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 
 import useStyles from './styles';
 
@@ -14,10 +17,19 @@ const NetworkCard = ({
 }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
+  const icpPrice = useICPPrice();
 
   const selectNetwork = () => {
     dispatch(setCurrentNetwork(id));
     dispatch(setUseICNS(false));
+    dispatch(setAssetsLoading(true));
+    sendMessage({
+      type: HANDLER_TYPES.GET_ASSETS,
+      params: { refresh: true },
+    }, (keyringAssets) => {
+      dispatch(setAssets({ keyringAssets, icpPrice }));
+      dispatch(setAssetsLoading(false));
+    });
   };
 
   const handleRemoveNetwork = () => {

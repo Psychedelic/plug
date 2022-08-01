@@ -5,6 +5,8 @@ import Typography from '@material-ui/core/Typography';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import clsx from 'clsx';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 import { TokenIcon } from '@components';
 import RefreshIcon from '@assets/icons/blue-refresh.png';
@@ -32,42 +34,54 @@ const AssetItem = ({
     <div className={clsx(classes.root, failed && classes.failedContainer)}>
       <TokenIcon className={classes.image} image={image} alt={name} symbol={symbol} />
       <div className={classes.leftContainer}>
-        {
-          failed
-            ? (
-              <>
-                <Typography variant="h5" className={classes.failedTitle}>{name}</Typography>
-                <Typography variant="subtitle2" className={classes.failedDescription}>
-                  {t(`tokens.${ledgerNotSpecified ? 'ledgerNotSpecified' : 'failedToFetchBalance'}`)}
-                </Typography>
-              </>
-            )
-            : (
-              <>
-                <Typography variant="h5" data-testid={`${assetNameTestId}-${name}`}>{name}</Typography>
-                <Typography variant="subtitle2" className={clsx(loading && classes.pulse)}>
-                  <NumberFormat value={amount} displayType="text" decimalScale={5} fixedDecimalScale thousandSeparator="," suffix={` ${symbol}`} data-testid={`asset-amount-${name}`} />
-                </Typography>
-              </>
-            )
-}
+        {failed && !loading
+          ? (
+            <>
+              <Typography variant="h5" className={classes.failedTitle}>{name}</Typography>
+              <Typography variant="subtitle2" className={classes.failedDescription}>
+                {t(`tokens.${ledgerNotSpecified ? 'ledgerNotSpecified' : 'failedToFetchBalance'}`)}
+              </Typography>
+            </>
+          )
+          : (
+            <>
+              <Typography variant="h5" data-testid={`${assetNameTestId}-${name}`}>{name || <Skeleton />}</Typography>
+              <Typography variant="subtitle2" className={clsx(loading && classes.pulse)}>
+                {loading
+                  ? <Skeleton />
+                  : (
+                    <NumberFormat
+                      value={amount}
+                      displayType="text"
+                      decimalScale={5}
+                      fixedDecimalScale
+                      thousandSeparator=","
+                      suffix={` ${symbol}`}
+                      data-testid={`asset-amount-${name}`}
+                    />
+                  )}
+              </Typography>
+            </>
+          )}
       </div>
-      {
-        failed
-          ? !ledgerNotSpecified && (
-            <img
-              className={clsx(classes.value, classes.refresh)}
-              src={RefreshIcon}
-              onClick={handleFetchAssets}
-            />
-          )
-          : !!value && (
-            <Typography variant="h5" className={clsx(classes.value, (loading) && classes.pulse)}>
-              <NumberFormat value={value} displayType="text" decimalScale={2} fixedDecimalScale thousandSeparator="," prefix="$" />
-            </Typography>
-          )
-      }
+      {failed && !loading
+        ? !ledgerNotSpecified && (
+        <img
+          className={clsx(classes.value, classes.refresh)}
+          src={RefreshIcon}
+          onClick={handleFetchAssets}
+        />
+        )
+        : !!value && (
+        <Typography variant="h5" className={clsx(classes.value, (loading) && classes.pulse)}>
+          {loading
+            ? <Skeleton className={classes.valueSkeleton} />
+            : (<NumberFormat value={value} displayType="text" decimalScale={2} fixedDecimalScale thousandSeparator="," prefix="$" />)}
+        </Typography>
+        )}
+
     </div>
+
   );
 };
 
