@@ -597,7 +597,7 @@ export class TransactionModule extends ControllerModuleBase {
         getApp(this.keyring?.currentWalletId.toString(), metadata.url, async (app = {}) => {
 
           if (app.status !== CONNECTION_STATUS.accepted) {
-            callback(ERRORS.CONNECTION_ERROR, null);
+            callback(ERRORS.CONNECTION_ERROR, false);
             return;
           }
 
@@ -609,7 +609,7 @@ export class TransactionModule extends ControllerModuleBase {
           const tokenInfo = await getTokenInfo(args);
 
           if (tokenInfo?.error) {
-            callback(tokenInfo?.error, null);
+            callback(tokenInfo?.error, false);
             return;
           };
 
@@ -641,8 +641,8 @@ export class TransactionModule extends ControllerModuleBase {
         const { callback } = opts;
 
         if (response.status !== CONNECTION_STATUS.accepted) {
+          callback(ERRORS.TRANSACTION_REJECTED, false, [{ portId, callId }]);
           callback(null, true);
-          callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
           return;
         }
 
@@ -654,13 +654,13 @@ export class TransactionModule extends ControllerModuleBase {
         const tokens = await addCustomToken(response.token);
 
         if (tokens.error) {
-          callback(null, true);
-          callback(ERRORS.SERVER_ERROR(tokens.error), null, [
+          callback(ERRORS.SERVER_ERROR(tokens.error), false, [
             { portId, callId },
           ]);
-        } else {
           callback(null, true);
+        } else {
           callback(null, true, [{ portId, callId }]);
+          callback(null, true);
         }
       }
     }
