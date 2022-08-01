@@ -66,7 +66,12 @@ const NetworkCreation = () => {
       <div className={classes.networkCreationContainer}>
         {Object.values(NETWORK_CREATION_FIELDS).map((field) => (
           <div className={classes.fieldContainer}>
-            <Typography variant="h5">{`${t(`network.${field.name}`)}${field.required ? '*' : ''}`}</Typography>
+            <Typography
+              variant="h5"
+              className={classes.label}
+            >
+              {`${t(`network.${field.name}`)}${field.required ? '*' : ''}`}
+            </Typography>
             <TextInput
               onChange={handleFieldChange(field.name)}
               placeholder={field.placeholder}

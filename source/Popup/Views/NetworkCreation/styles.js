@@ -7,4 +7,7 @@ export default makeStyles((theme) => ({
   fieldContainer: {
     marginBottom: theme.spacing(2),
   },
+  label: {
+    marginBottom: theme.spacing(0.5),
+  },
 }));
