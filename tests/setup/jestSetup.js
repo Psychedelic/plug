@@ -3,7 +3,7 @@ require('dotenv').config();
 const PAGE_TITLE = 'Plug';
 const EXTENSION_PATH = require('path').join(__dirname, '..', '..', 'extension', 'chrome');
 
-jest.setTimeout(60000); // in milliseconds
+jest.setTimeout(600000); // in milliseconds
 
 global.secrets = {
   seedphrase: process.env.SEEDPHRASE,
@@ -42,6 +42,7 @@ global.setupChrome = async () => {
       `--load-extension=${EXTENSION_PATH}`,
       '--enable-automation',
     ],
+    slowMo: 50,
   });
   const targets = await browser.targets();
   const extensionTarget = targets.find(({ _targetInfo }) => _targetInfo.title === PAGE_TITLE);

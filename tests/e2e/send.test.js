@@ -18,7 +18,7 @@ const getAvailableAmount = async (page, shouldFormat = true) => {
 };
 
 const waitForBalanceChange = async (page) => {
-  await page.waitForTimeout(30000);
+  await page.waitForTimeout(40000);
 };
 
 const addCustomTokenButtonClick = async (page) => {
@@ -121,7 +121,7 @@ const contactSelect = async (page) => {
   const addressBookIcon = await page.getByTestId('address-book-icon', true);
   await addressBookIcon.click();
 
-  const contactName = await page.getByTestId('contact-name-Test', true);
+  const contactName = await page.getByTestId('contact-name-Subaccount', true);
   await contactName.click();
 };
 
@@ -149,6 +149,7 @@ async function sendToken(page) {
 
   const sendButton = await page.getByTestId('send-button', true);
   await sendButton.click();
+  await page.waitForTimeout(15000);
 }
 
 describe('Send View', () => {
@@ -215,6 +216,7 @@ describe('Send View', () => {
     await waitForAmount(page);
 
     for (const name of defaultTokenNames) {
+      console.log('Selecting token ->', name); 
       await selectToken(page, name);
       const previousAmount = await getAvailableAmount(page);
 
@@ -234,17 +236,6 @@ describe('Send View', () => {
     }
   });
 
-  test('choosing contact with icns name from address book and sending icp', async () => {
-    await waitForAmount(page);
-    const previousAmount = await getAvailableAmount(page);
-    await contactSelect(page);
-    await page.waitForTimeout(100);
-    await sendToken(page);
-    await cancelButtonClick(page);
-    await waitForBalanceChange(page);
-    await tokenBalanceCheck(page, { previousAmount, name: defaultTokenNames[0] });
-  });
-
   test('adding contact to address book', async () => {
     await recipientPrincipalIdEnter(page);
     const addContactButton = await page.getByTestId('add-contact-button', true);
@@ -258,6 +249,17 @@ describe('Send View', () => {
     await addContactConfirmButton.click();
 
     await page.waitForTestIdSelector('contact-name-Subaccount');
+  });
+
+  test('choosing contact with icns name from address book and sending icp', async () => {
+    await waitForAmount(page);
+    const previousAmount = await getAvailableAmount(page);
+    await contactSelect(page);
+    await page.waitForTimeout(100);
+    await sendToken(page);
+    await popupPageUtils.refreshWallet(page);
+    await waitForBalanceChange(page);
+    await tokenBalanceCheck(page, { previousAmount, name: defaultTokenNames[0] });
   });
 });
 
@@ -329,6 +331,7 @@ describe('Send Custom Tokens', () => {
     for (const data of customTokenData) {
       await selectToken(page, data.name);
       const previousAmount = await getAvailableAmount(page);
+      console.log(customTokenData);
       await recipientPrincipalIdEnter(page);
       await sendToken(page, data.name);
       previousAmounts.push(previousAmount);

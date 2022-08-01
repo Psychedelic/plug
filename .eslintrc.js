@@ -36,6 +36,12 @@ module.exports = {
     'no-nested-ternary': 'off',
     'no-await-in-loop': 'off',
     'no-restricted-syntax': 'off',
+    'no-param-reassign': ['error', {
+      props: true,
+      ignorePropertyModificationsFor: [
+        'state',
+      ]
+    }],
   },
   settings: {
     'import/resolver': {

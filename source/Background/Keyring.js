@@ -394,3 +394,31 @@ export const deleteContact = (contactName) => new Promise((resolve) => {
     resolve(res);
   });
 });
+
+export const sendToken = ({ to, amount, canisterId, opts }) =>  new Promise((resolve, reject) => {
+  sendMessage({
+    type: HANDLER_TYPES.SEND_TOKEN,
+    params: { to, amount, canisterId, opts },
+  }, (res) => {
+    if (res.error) {
+      reject(res);
+      return;
+    }
+
+    resolve(res);
+  });
+});
+
+export const burnXTC = ({ to, amount }) => new Promise((resolve, reject) => {
+  sendMessage({
+    type: HANDLER_TYPES.BURN_XTC,
+    params: { to, amount },
+  }, (res) => {
+    if (res.error) {
+      reject(res);
+      return;
+    }
+
+   resolve(res);
+  });
+});
