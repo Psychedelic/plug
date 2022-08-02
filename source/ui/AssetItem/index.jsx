@@ -14,7 +14,7 @@ import RefreshIcon from '@assets/icons/blue-refresh.png';
 import useStyles from './styles';
 
 const AssetItem = ({
-  updateToken, image, name, amount, value, symbol, loading, failed, assetNameTestId,
+  updateToken, logo, name, amount, value, symbol, loading, failed, assetNameTestId,
 }) => {
   const classes = useStyles();
   const [fetchLoading, setFetchLoading] = useState(false);
@@ -32,7 +32,7 @@ const AssetItem = ({
   const ledgerNotSpecified = !usingMainnet && !currentNetwork?.ledgerCanisterId;
   return (
     <div className={clsx(classes.root, failed && classes.failedContainer)}>
-      <TokenIcon className={classes.image} image={image} alt={name} symbol={symbol} />
+      <TokenIcon className={classes.image} image={logo} alt={name} symbol={symbol} />
       <div className={classes.leftContainer}>
         {failed && !loading
           ? (
@@ -94,7 +94,7 @@ AssetItem.defaultProps = {
 
 AssetItem.propTypes = {
   updateToken: PropTypes.func.isRequired,
-  image: PropTypes.string.isRequired,
+  logo: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   amount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,

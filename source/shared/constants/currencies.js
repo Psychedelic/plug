@@ -14,7 +14,7 @@ export const CURRENCIES = new Map([
       name: 'ICP',
       value: 'ICP',
       symbol: 'ICP',
-      image: DfinityImg,
+      logo: DfinityImg,
     },
   ],
   [
@@ -23,7 +23,7 @@ export const CURRENCIES = new Map([
       id: 'XTC',
       name: 'Cycles',
       value: 'XTC',
-      image: XTCImg,
+      logo: XTCImg,
       symbol: 'XTC',
       price: USD_PER_TC,
     },
@@ -40,7 +40,7 @@ export const currencyPropTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
-  image: PropTypes.string.isRequired,
+  logo: PropTypes.string.isRequired,
 };
 export const CYCLES_PER_TC = 1_000_000_000_000;
 
@@ -54,14 +54,14 @@ export const formatAssetBySymbol = (_amount, symbol, icpPrice) => {
       ICP: {
         amount,
         value: icpValue,
-        image: TOKEN_IMAGES.ICP,
+        logo: TOKEN_IMAGES.ICP,
         symbol: 'ICP',
         decimals: 8,
       },
       XTC: {
         amount,
         value: tcValue,
-        image: TOKEN_IMAGES.XTC,
+        logo: TOKEN_IMAGES.XTC,
         symbol: 'XTC',
         decimals: 12,
       },
@@ -74,7 +74,7 @@ export const formatAssetBySymbol = (_amount, symbol, icpPrice) => {
       WICP: {
         amount,
         value: icpValue,
-        image: TOKEN_IMAGES.WICP,
+        logo: TOKEN_IMAGES.WICP,
         symbol: 'WICP',
         decimals: 8,
       },
@@ -124,7 +124,7 @@ export const parseAssetsAmount = (assets = []) => (
     const { decimals } = token;
     const parsedAmount = error
       ? 0
-      : parseToFloatAmount(amount, parseInt(decimals.toString(), 10));
+      : parseToFloatAmount(amount, parseInt(decimals?.toString(), 10));
 
     return {
       ...currentAsset,
@@ -136,11 +136,12 @@ export const parseAssetsAmount = (assets = []) => (
 export const formatAssets = (assets = [], icpPrice) => {
   const mappedAssets = assets.map(({ amount, token, error }) => {
     const {
-      name, symbol, canisterId, image, standard,
+      name, symbol, canisterId, logo, standard,
     } = token;
     const asset = formatAssetBySymbol(amount, symbol, icpPrice);
+    console.log('formatAssets', token, asset);
     return {
-      image,
+      logo,
       ...asset,
       name,
       symbol,
@@ -160,7 +161,7 @@ export const TOKENS = {
     decimals: 8,
     amount: 0,
     value: 0,
-    image: TOKEN_IMAGES.ICP,
+    logo: TOKEN_IMAGES.ICP,
   },
   XTC: {
     symbol: 'XTC',
@@ -169,7 +170,7 @@ export const TOKENS = {
     decimals: 12,
     amount: 0,
     value: 0,
-    image: TOKEN_IMAGES.XTC,
+    logo: TOKEN_IMAGES.XTC,
   },
   WICP: {
     symbol: 'WICP',
@@ -178,6 +179,6 @@ export const TOKENS = {
     decimals: 8,
     amount: 0,
     value: 0,
-    image: TOKEN_IMAGES.WICP,
+    logo: TOKEN_IMAGES.WICP,
   },
 };

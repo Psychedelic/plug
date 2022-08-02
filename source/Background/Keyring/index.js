@@ -216,7 +216,9 @@ export const getKeyringHandler = (type, keyring) => ({
       } else {
         keyring.getBalances();
       }
+      console.log('background script.balance', assets);
       assets = parseAssetsAmount(assets);
+      console.log('parsed balances?', assets);
       return (assets || []).map((asset) => recursiveParseBigint(asset));
     } catch (e) {
       // eslint-disable-next-line
@@ -283,9 +285,10 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.ADD_CUSTOM_TOKEN]:
     async ({ canisterId, standard, logo }) => {
       try {
+        console.log('Am i getting any logo or scam???', logo);
         // Cambiar esto por un metodo que llame al network module para registrar el token
         const tokens = await keyring.registerToken({
-          canisterId, standard, subaccount: keyring.currentWalletId, image: logo,
+          canisterId, standard, subaccount: keyring.currentWalletId, logo,
         });
         return (tokens || []).map((token) => recursiveParseBigint(token));
       } catch (e) {
