@@ -65,7 +65,7 @@ const Confirm = ({ handleSendClick }) => {
     selectedAsset: asset,
     fulfilled: isTrxCompleted,
   } = useSelector((state) => state.send);
-
+  const { usingMainnet } = useSelector((state) => state.network);
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const { navigator } = useRouter();
@@ -97,7 +97,7 @@ const Confirm = ({ handleSendClick }) => {
       });
 
       setLoading(false);
-      navigator.navigate('home', TABS.ACTIVITY);
+      navigator.navigate('home', usingMainnet ? TABS.ACTIVITY : TABS.TOKENS);
     }
   }, [isTrxCompleted]);
   const addresses = getAddressTranslations(address, addressInfo, asset?.symbol);

@@ -9,7 +9,7 @@ import useStyles from './styles';
 
 const MenuItem = ({
   name,
-  image,
+  logo,
   onClick,
   size,
   border,
@@ -40,10 +40,10 @@ const MenuItem = ({
         icon
       }
       {
-        !icon && image && (
+        !icon && logo && (
           <ListItemIcon className={classes.icon}>
             <TokenIcon
-              logo={image}
+              logo={logo}
               symbol={symbol}
               className={clsx(size === 'large' ? classes.bigImage : classes.smallImage, alignLeft && classes.alignLeft)}
             />
@@ -85,13 +85,13 @@ MenuItem.defaultProps = {
   endText: null,
   symbol: '',
   className: '',
-  image: null,
+  logo: null,
   accountNameTestId: '',
 };
 
 MenuItem.propTypes = {
   name: PropTypes.string.isRequired,
-  image: PropTypes.string,
+  logo: PropTypes.string,
   onClick: PropTypes.func.isRequired,
   className: PropTypes.string,
   size: PropTypes.oneOf(['small', 'medium', 'large']),
