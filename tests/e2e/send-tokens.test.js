@@ -216,7 +216,7 @@ describe('Send View', () => {
     await waitForAmount(page);
 
     for (const name of defaultTokenNames) {
-      console.log('Selecting token ->', name); 
+      console.log('Selecting token ->', name);
       await selectToken(page, name);
       const previousAmount = await getAvailableAmount(page);
 
