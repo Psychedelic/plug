@@ -11,12 +11,6 @@ const canisterIdValidation = (value) => {
   return 'Invalid canister ID';
 };
 
-// Validates that the string is a valid https url
-const httpsHostValidation = (value) => {
-  const url = new URL(value);
-  return (url.protocol === 'https:') ? null : 'The host must be a valid https url';
-};
-
 export const NETWORK_CREATION_DEFAULT_VALUES = {
   name: '',
   host: '',
@@ -36,7 +30,6 @@ export const NETWORK_CREATION_FIELDS = {
     required: true,
     validate: (value, networks) => requiredValidation(value)
     || uniqueValidation(value, networks, 'host'),
-    // || httpsHostValidation(value),
   },
   ledgerCanisterId: {
     name: 'ledgerCanisterId',
