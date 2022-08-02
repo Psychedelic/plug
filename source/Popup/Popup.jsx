@@ -11,7 +11,7 @@ import WalletDetails from './Views/WalletDetails';
 import SeedPhrase from './Views/SeedPhrase';
 import Deposit from './Views/Deposit';
 // import Swap from './Views/Swap';
-import Send from './Views/Send';
+import Send from './Views/SendFlow';
 import Contacts from './Views/Contacts';
 import AddToken from './Views/AddToken';
 import ExportIdentity from './Views/ExportIdentity';

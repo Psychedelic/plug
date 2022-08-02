@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import MInputBase from '@material-ui/core/InputBase';
@@ -12,6 +12,7 @@ import { CircularProgress, Grid } from '@material-ui/core';
 import { getRandomEmoji } from '@shared/constants/emojis';
 import { addContact as addContactAction } from '@redux/contacts';
 
+import { useContacts } from '@hooks';
 import ActionDialog from '../ActionDialog';
 import ContactItem from '../ContactItem';
 import ContactList from '../ContactList';
@@ -22,6 +23,7 @@ const IDInput = ({
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const { getContacts } = useContacts();
 
   const dispatch = useDispatch();
   const [selectedContact, setSelectedContact] = useState(null);
@@ -31,6 +33,11 @@ const IDInput = ({
 
   const { principalId, accountId } = useSelector((state) => state.wallet);
   const { groupedContacts: contacts } = useSelector((state) => state.contacts);
+  const { contactsLoading } = useSelector((state) => state.contacts);
+
+  useEffect(() => {
+    getContacts();
+  }, []);
 
   const isUserAddress = useMemo(
     () => [principalId, accountId].includes(value), [principalId, accountId, value],
@@ -80,6 +87,13 @@ const IDInput = ({
     setContactName(e.target.value);
   };
 
+  const searchContactFromId = (e) => {
+    const id = e.target.value;
+    onChange(id);
+    const allContacts = contacts.flatMap((contact) => contact.contacts);
+    setSelectedContact(allContacts.find((contact) => contact.id === id));
+  };
+
   return (
     <>
       <div className={classes.root}>
@@ -103,12 +117,12 @@ const IDInput = ({
               fullWidth
               value={value}
               type="text"
-              onChange={(e) => onChange(e.target.value)}
+              onChange={searchContactFromId}
               placeholder={placeholder || t('send.inputId')}
               {...other}
             />
             <div className={classes.iconContainer}>
-              {loading ? (
+              {(contactsLoading || loading) ? (
                 <CircularProgress size={24} />
               )
                 : contacts.length > 0 && (
@@ -147,6 +161,7 @@ const IDInput = ({
               variant="primary"
               value={t('contacts.addContact')}
               onClick={() => setIsContactsOpened(true)}
+              data-testid="add-contact-button"
               style={{
                 minWidth: 118,
                 height: 27,
@@ -167,6 +182,7 @@ const IDInput = ({
                         value={contactName}
                         onChange={handleChangeContactName}
                         type="text"
+                        data-testid="contact-name-input"
                       />
                     )}
                   />
@@ -174,6 +190,7 @@ const IDInput = ({
                 confirmText={t('common.add')}
                 buttonVariant="rainbow"
                 onClick={addContact}
+                submitButtonProps={{ 'data-testid': 'confirm-adding-contact-button' }}
                 onClose={() => setIsContactsOpened(false)}
               />
             )}

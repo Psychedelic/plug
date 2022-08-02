@@ -6,6 +6,7 @@ import profileReducer from './profile';
 import clockReducer from './clock';
 import icnsReducer from './icns';
 import contactsReducer from './contacts';
+import sendReducer from './send';
 import networkReducer from './network';
 
 const reducer = {
@@ -16,6 +17,7 @@ const reducer = {
   clock: clockReducer,
   icns: icnsReducer,
   contacts: contactsReducer,
+  send: sendReducer,
   network: networkReducer,
 };
 

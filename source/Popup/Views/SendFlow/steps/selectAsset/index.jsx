@@ -1,53 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { IDInput } from '@components';
 import {
-  FormItem, MultiInput, Container, Button, Dialog, Alert,
+  FormItem, MultiInput, Container, Button, Dialog,
 } from '@ui';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
 import NumberFormat from 'react-number-format';
 import { ADDRESS_TYPES } from '@shared/constants/addresses';
 import { isICNSName } from '@shared/utils/ids';
+import { setSendTokenAmount, setSendTokenAddress, resetState } from '@redux/send';
 
-import useStyles from '../styles';
+import useStyles from '../../styles';
+import { CyclesToAccountWarning } from './components';
 
-const Step1 = ({
-  amount,
-  handleChangeAmount,
-  handleChangeStep,
-  assets,
-  selectedAsset,
+const SelectAsset = ({
+  resolvedAddress,
   availableAmount,
-  primaryValue,
-  secondaryValue,
-  conversionPrice,
+  loadingAddress,
+  handleChangeStep,
   handleSwapValues,
   handleChangeAsset,
-  address,
-  handleChangeAddress,
-  addressInfo,
-  loadingAddress,
 }) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const classes = useStyles();
-  const [openAssets, setOpenAssets] = useState(false);
 
+  const { assets } = useSelector((state) => state.wallet);
+  const {
+    amount: rawAmount,
+    address,
+    addressInfo,
+    selectedAsset,
+    primaryValue,
+    secondaryValue,
+  } = useSelector((state) => state.send);
+  const amount = Number(rawAmount);
   const { principalId, accountId } = useSelector((state) => state.wallet);
 
-  const {
-    resolved,
-  } = useSelector((state) => state.icns);
+  const isUserAddress = [principalId, accountId].includes(address)
+    || [principalId, accountId].includes(resolvedAddress);
+  const conversionPrice = amount / secondaryValue.price;
 
-  const isUserAddress = [principalId, accountId, resolved].includes(address);
+  const [openAssets, setOpenAssets] = useState(false);
 
   const handleCloseAssets = (value) => {
     setOpenAssets(false);
     handleChangeAsset(value);
   };
+
+  const isContinueDisabled = !(parseFloat(amount) > 0)
+    || !addressInfo.isValid
+    || loadingAddress
+    || address === null
+    || address === ''
+    || isUserAddress;
+
+  const handleChangeAmount = (newAmount) => {
+    dispatch(setSendTokenAmount(newAmount));
+  };
+
+  const handleChangeAddress = (newAddress) => {
+    dispatch(setSendTokenAddress(newAddress));
+  };
+
+  useEffect(() => {
+    dispatch(resetState());
+    handleChangeAsset(assets[0]);
+  }, []);
+
   return (
     <Container>
       <Grid container spacing={2}>
@@ -91,13 +115,12 @@ const Step1 = ({
                 <Button
                   variant="primaryOutlined"
                   value={t('common.max')}
-                  onClick={() => handleChangeAmount(Number(availableAmount.amount.toFixed(6)))}
                   data-testid="max-button"
+                  onClick={() => handleChangeAmount(Number(availableAmount.amount.toFixed(6)))}
                 />
               </div>
             )}
           />
-
           <Dialog
             title={t('send.selectAsset')}
             items={assets}
@@ -108,7 +131,6 @@ const Step1 = ({
             menuItemTestId="select-token-button"
             data-testid="select-asset-dialog"
           />
-
         </Grid>
         <Grid item xs={12}>
           <FormItem
@@ -127,15 +149,7 @@ const Step1 = ({
         {
           addressInfo.type === ADDRESS_TYPES.ACCOUNT && selectedAsset.id === 'CYCLES'
           && (
-            <Grid item xs={12}>
-              <div className={classes.appearAnimation}>
-                <Alert
-                  type="danger"
-                  endIcon
-                  title={t('send.accountWarning')}
-                />
-              </div>
-            </Grid>
+            <CyclesToAccountWarning />
           )
         }
         {!!address && !addressInfo?.isValid && !loadingAddress && (
@@ -149,14 +163,7 @@ const Step1 = ({
             variant="rainbow"
             value={t('common.continue')}
             fullWidth
-            disabled={
-              !(parseFloat(amount) > 0)
-              || !addressInfo.isValid
-              || loadingAddress
-              || address === null
-              || address === ''
-              || isUserAddress
-            }
+            disabled={isContinueDisabled}
             onClick={handleChangeStep}
             loading={loadingAddress}
             buttonTestId="continue-button"
@@ -167,22 +174,11 @@ const Step1 = ({
   );
 };
 
-export default Step1;
-
-Step1.propTypes = {
-  amount: PropTypes.string.isRequired,
-  handleChangeAmount: PropTypes.func.isRequired,
+SelectAsset.propTypes = {
   handleChangeStep: PropTypes.func.isRequired,
-  selectedAsset: PropTypes.object.isRequired,
-  availableAmount: PropTypes.object.isRequired,
-  primaryValue: PropTypes.object.isRequired,
-  secondaryValue: PropTypes.object.isRequired,
-  conversionPrice: PropTypes.number.isRequired,
   handleSwapValues: PropTypes.func.isRequired,
   handleChangeAsset: PropTypes.func.isRequired,
-  assets: PropTypes.arrayOf(PropTypes.object).isRequired,
-  address: PropTypes.objectOf(PropTypes.object).isRequired,
-  handleChangeAddress: PropTypes.func.isRequired,
-  addressInfo: PropTypes.objectOf(PropTypes.object).isRequired,
   loadingAddress: PropTypes.bool.isRequired,
 };
+
+export default SelectAsset;

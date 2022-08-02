@@ -23,6 +23,7 @@ export default makeStyles({
     overflow: 'hidden',
     textAlign: 'center',
     marginBottom: 10,
+    maxWidth: 320,
   },
   scrollShadow: {
     boxShadow: 'inset 0 -10px 10px -10px rgb(0 0 0 / 0.4)',

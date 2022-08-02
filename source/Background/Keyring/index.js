@@ -62,10 +62,9 @@ export const recursiveParseBigint = (obj) => {
     return obj.map(recursiveParseBigint);
   }
   if (obj && typeof obj === 'object') {
-    return Object.keys(obj).reduce((acc, key) => {
-      acc[key] = recursiveParseBigint(obj[key]);
-      return acc;
-    }, {});
+    return Object.keys(obj).reduce(
+      (acc, key) => ({ ...acc, [key]: recursiveParseBigint(obj[key]) }), {},
+    );
   }
   if (typeof obj === 'bigint') {
     return parseInt(obj.toString(), 10);
@@ -439,3 +438,61 @@ export const getKeyringHandler = (type, keyring) => ({
     }
   },
 }[type]);
+
+export const getContacts = () => new Promise((resolve, reject) => {
+  sendMessage({
+    type: HANDLER_TYPES.GET_CONTACTS,
+  }, (contactList) => {
+    if (contactList) return resolve(contactList);
+    return reject(contactList);
+  });
+});
+
+export const addContact = (contact) => new Promise((resolve) => {
+  sendMessage({
+    type: HANDLER_TYPES.ADD_CONTACT,
+    params: contact,
+  }, (res) => {
+    resolve(res);
+  });
+});
+
+export const deleteContact = (contactName) => new Promise((resolve) => {
+  sendMessage({
+    type: HANDLER_TYPES.REMOVE_CONTACT,
+    params: contactName,
+  }, (res) => {
+    resolve(res);
+  });
+});
+
+export const sendToken = ({
+  to, amount, canisterId, opts,
+}) => new Promise((resolve, reject) => {
+  sendMessage({
+    type: HANDLER_TYPES.SEND_TOKEN,
+    params: {
+      to, amount, canisterId, opts,
+    },
+  }, (res) => {
+    if (res.error) {
+      reject(res);
+      return;
+    }
+
+    resolve(res);
+  });
+});
+
+export const burnXTC = ({ to, amount }) => new Promise((resolve, reject) => {
+  sendMessage({
+    type: HANDLER_TYPES.BURN_XTC,
+    params: { to, amount },
+  }, (res) => {
+    if (res.error) {
+      reject(res);
+      return;
+    }
+    resolve(res);
+  });
+});

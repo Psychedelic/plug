@@ -87,6 +87,7 @@ export const contactSlice = createSlice({
   initialState: {
     contacts: [],
     groupedContacts: [],
+    contactsLoading: false,
   },
   reducers: { },
   extraReducers: (builder) => {
@@ -110,6 +111,7 @@ export const contactSlice = createSlice({
         state.groupedContacts = groupContacts(filteredContacts);
       })
       .addCase(getContacts.pending, (state, action) => {
+        state.contactsLoading = true;
         if (action.meta.arg.refresh) {
           state.contacts = [];
           state.groupedContacts = [];
@@ -130,6 +132,7 @@ export const contactSlice = createSlice({
 
         state.contacts = newContactList;
         state.groupedContacts = groupContacts(newContactList);
+        state.contactsLoading = false;
       })
       .addCase(removeContact.pending, (state, action) => {
         const contact = action.meta.arg;
