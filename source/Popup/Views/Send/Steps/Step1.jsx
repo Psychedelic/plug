@@ -57,7 +57,7 @@ const Step1 = ({
             component={(
               <MultiInput
                 name={selectedAsset?.symbol}
-                image={selectedAsset?.image}
+                image={selectedAsset?.logo}
                 onClick={() => setOpenAssets(true)}
                 value={amount.toFixed(6).slice(0, -1)}
                 onChange={handleChangeAmount}

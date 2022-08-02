@@ -32,7 +32,7 @@ const AssetItem = ({
   const ledgerNotSpecified = !usingMainnet && !currentNetwork?.ledgerCanisterId;
   return (
     <div className={clsx(classes.root, failed && classes.failedContainer)}>
-      <TokenIcon className={classes.image} image={logo} alt={name} symbol={symbol} />
+      <TokenIcon className={classes.image} logo={logo} alt={name} symbol={symbol} />
       <div className={classes.leftContainer}>
         {failed && !loading
           ? (

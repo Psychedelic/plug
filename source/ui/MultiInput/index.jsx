@@ -61,7 +61,7 @@ const MultiInput = ({
   return (
     <InputBase>
       <div className={classes.leftContainer} onClick={onClick} data-testid={buttonTestId}>
-        <TokenIcon image={image} className={classes.icon} symbol={name} small />
+        <TokenIcon logo={image} className={classes.icon} symbol={name} small />
         <Typography variant="h4">{name}</Typography>
         <img src={ChevronDown} className={classes.alignRight} />
       </div>

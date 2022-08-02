@@ -139,7 +139,6 @@ export const formatAssets = (assets = [], icpPrice) => {
       name, symbol, canisterId, logo, standard,
     } = token;
     const asset = formatAssetBySymbol(amount, symbol, icpPrice);
-    console.log('formatAssets', token, asset);
     return {
       logo,
       ...asset,

@@ -34,7 +34,7 @@ const Select = ({
         {image && (
           <TokenIcon
             alt={name}
-            image={image}
+            logo={image}
             nft={nft}
             className={clsx(
               classes.icon,

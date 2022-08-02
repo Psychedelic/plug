@@ -43,7 +43,7 @@ const MenuItem = ({
         !icon && image && (
           <ListItemIcon className={classes.icon}>
             <TokenIcon
-              image={image}
+              logo={image}
               symbol={symbol}
               className={clsx(size === 'large' ? classes.bigImage : classes.smallImage, alignLeft && classes.alignLeft)}
             />

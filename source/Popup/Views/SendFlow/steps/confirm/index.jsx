@@ -106,7 +106,7 @@ const Confirm = ({ handleSendClick }) => {
       <Grid container spacing={2} className={classes.container}>
         <Grid item xs={12} style={{ textAlign: 'center' }}>
           <div className={classes.asset}>
-            <TokenIcon image={asset.image} className={classes.image} symbol={asset.symbol} />
+            <TokenIcon logo={asset.logo} className={classes.image} symbol={asset.symbol} />
             <Typography variant="h1">
               <AssetFormat value={amount} asset={asset?.symbol} />
             </Typography>
