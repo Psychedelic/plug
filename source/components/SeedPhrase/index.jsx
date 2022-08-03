@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Tooltip from '@material-ui/core/Tooltip';
 import useStyles from './styles';
 
-const SeedPhrase = ({ words }) => {
+const SeedPhrase = ({ words, seedPhraseBoxTestId }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -42,6 +42,7 @@ const SeedPhrase = ({ words }) => {
       <div
         className={classes.root}
         onClick={() => handleClick()}
+        data-testid={seedPhraseBoxTestId}
         onMouseOver={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
       >
@@ -63,6 +64,11 @@ const SeedPhrase = ({ words }) => {
 
 export default SeedPhrase;
 
+SeedPhrase.defaultProps = {
+  seedPhraseBoxTestId: 'seed-phrase-box',
+};
+
 SeedPhrase.propTypes = {
   words: PropTypes.arrayOf(PropTypes.string).isRequired,
+  seedPhraseBoxTestId: PropTypes.string,
 };

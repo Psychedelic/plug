@@ -21,18 +21,21 @@ const useSettingsItems = () => {
       image: KeyIcon,
       name: t('settings.seedPhrase'),
       description: t('settings.seedPhraseDescription'),
+      'data-testid': 'secret-recovery-phrase',
       onClick: (() => navigator.navigate('seed-phrase')),
     },
     {
       image: ArrowUpIcon,
       name: t('settings.exportIdentity'),
       description: t('settings.exportIdentityDescription'),
+      'data-testid': 'export-dfx-identity',
       onClick: (() => navigator.navigate('export-identity')),
     },
     {
       image: HelpIcon,
       name: t('profile.help'),
       description: t('settings.helpDescription'),
+      'data-testid': 'help',
       onClick: () => navigator.navigate('help'),
     },
   ];

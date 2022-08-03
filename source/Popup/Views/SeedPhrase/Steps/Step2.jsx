@@ -18,7 +18,7 @@ const Step2 = ({ password }) => {
     && (
     <Container>
       <div style={{ height: 176 }}>
-        <SeedPhrase words={words} />
+        <SeedPhrase words={words} seedPhraseBoxTestId="seed-phrase-box" />
       </div>
     </Container>
     )
