@@ -54,6 +54,8 @@ const Step2 = () => {
                 icon={<UserIcon size="medium" icon={selectedAccount?.icon} style={{ marginRight: 12 }} />}
                 name={selectedAccount?.name || ''}
                 text={shortAddress(selectedAccount?.principal) || ''}
+                data-testid="account-select"
+                accountNameTestId="account-name"
                 onClick={() => setOpenAccounts(true)}
                 shadow
               />
@@ -66,6 +68,7 @@ const Step2 = () => {
               icon: <UserIcon size="small" icon={a.icon} style={{ marginLeft: -6, marginRight: 12 }} />,
               endText: shortAddress(a.principal),
             }))}
+            menuItemTestId="select-item"
             onClose={handleCloseAccounts}
             selectedValue={selectedAccount}
             open={openAccounts}
@@ -73,16 +76,16 @@ const Step2 = () => {
         </Grid>
 
         <Grid item xs={12}>
-          <Button variant="rainbow" value={t('exportIdentity.download')} onClick={handleDownloadPemFile} fullWidth />
+          <Button variant="rainbow" value={t('exportIdentity.download')} onClick={handleDownloadPemFile} fullWidth data-testid="download-button" />
         </Grid>
 
         <Grid item xs={12}>
           <Typography variant="h5" style={{ marginBottom: 6 }}>{t('exportIdentity.runCommand')}</Typography>
-          <Typography variant="subtitle2">{t('exportIdentity.runCommandDescription')}</Typography>
+          <Typography variant="subtitle2" data-testid="subtitle">{t('exportIdentity.runCommandDescription')}</Typography>
         </Grid>
 
         <Grid item xs={12}>
-          <CodeBox prefix="" code={`${t('exportIdentity.dfxImport')}\n${t('exportIdentity.dfxUse')}`} />
+          <CodeBox prefix="" code={`${t('exportIdentity.dfxImport')}\n${t('exportIdentity.dfxUse')}`} copyIconButtonTestId="copy-button" />
         </Grid>
 
       </Grid>
