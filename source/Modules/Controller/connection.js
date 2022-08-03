@@ -219,7 +219,7 @@ export class ConnectionModule extends ControllerModuleBase {
               ...apps[url],
               status: status || CONNECTION_STATUS.rejected,
               date,
-              whitelist,
+              whitelist: { ...apps[url]?.whitelist, ...whitelist },
               events: [
                 ...apps[url]?.events || [],
                 {
