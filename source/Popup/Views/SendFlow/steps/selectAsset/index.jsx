@@ -30,6 +30,7 @@ const SelectAsset = ({
   const classes = useStyles();
 
   const { assets } = useSelector((state) => state.wallet);
+
   const {
     amount: rawAmount,
     address,
@@ -70,6 +71,7 @@ const SelectAsset = ({
   useEffect(() => {
     dispatch(resetState());
     handleChangeAsset(assets[0]);
+    handleChangeAddress('');
   }, []);
 
   return (
