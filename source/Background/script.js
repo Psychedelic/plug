@@ -1,6 +1,6 @@
 import extension from 'extensionizer';
 import PlugController from '@psychedelic/plug-controller';
-import { BackgroundController } from '@fleekhq/browser-rpc';
+import { BackgroundController } from '@psychedelic/browser-rpc';
 
 import {
   ConnectionModule,
