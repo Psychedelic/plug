@@ -8,7 +8,7 @@ import {
   Container,
   IncomingAction,
 } from '@ui';
-import { Layout, TokenIcon } from '@components';
+import { Layout, TokenIcon, DisplayBox } from '@components';
 import PropTypes from 'prop-types';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { setAccountInfo } from '@redux/wallet';
@@ -16,7 +16,6 @@ import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import initConfig from '../../../../locales';
 import useStyles from './styles';
 import { reviewPendingTransaction } from '@modules/storageManager';
-import DisplayBox from '../Sign/components/Details/components/DisplayBox';
 
 i18n.use(initReactI18next).init(initConfig);
 
@@ -72,6 +71,9 @@ const ImportToken = ({ args, metadata, callId, portId, setOnTimeout, transaction
     }
   };
 
+  const isAccepting = loading === CONNECTION_STATUS.accepted;
+  const isRefusing = loading === CONNECTION_STATUS.refused;
+
   return (
     <Layout disableProfile disableNavigation incStatus>
       <div className={classes.padTop}>
@@ -94,8 +96,8 @@ const ImportToken = ({ args, metadata, callId, portId, setOnTimeout, transaction
               value={t('common.decline')}
               onClick={() => handleImportToken(CONNECTION_STATUS.refused)}
               style={{ width: '96%' }}
-              loading={loading === CONNECTION_STATUS.refused}
-              disabled={loading === CONNECTION_STATUS.accepted}
+              loading={isRefusing}
+              disabled={isAccepting}
               fullWidth
             />
             <Button
@@ -104,8 +106,8 @@ const ImportToken = ({ args, metadata, callId, portId, setOnTimeout, transaction
               onClick={() => handleImportToken(CONNECTION_STATUS.accepted)}
               fullWidth
               style={{ width: '96%' }}
-              loading={loading === CONNECTION_STATUS.accepted}
-              disabled={loading === CONNECTION_STATUS.refused}
+              loading={isAccepting}
+              disabled={isRefusing}
               wrapperStyle={{ textAlign: 'right' }}
             />
           </div>
