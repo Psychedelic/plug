@@ -137,7 +137,11 @@ describe('Settings: Export DFX Identity', () => {
 
   test('checking that password asking for the second time, when enter password view was leaved', async () => {
     await backButtonClick(page);
+    const settingsTitle = await page.getByTestId('settings-title', true);
+    const settingsTitleText = await page.evaluate((el) => el.textContent, settingsTitle);
+    expect(settingsTitleText).toBe('Settings');
     await exportDFXIdentityButtonClick(page);
+
     await isContinueButtonDisabled(page);
   });
 
@@ -146,7 +150,7 @@ describe('Settings: Export DFX Identity', () => {
     await page.waitForSelector('[data-testid="open-send-view-button"]');
   });
 
-  test('entering wrong password', async () => {
+  test('checking user cannot see the DFX identity when password is incorrect', async () => {
     await passwordInputFill(page, wrongPassword);
     await safeCheckboxClick(page);
     await continueButtonClick(page);
