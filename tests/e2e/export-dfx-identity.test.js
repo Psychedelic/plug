@@ -88,6 +88,7 @@ const accountSelectClick = async (page) => {
 const accountItemClick = async (page) => {
   const accountItem = await page.getByTestId('select-item-Subaccount', true);
   await accountItem.click();
+  await page.waitForTestIdSelector('select-item-Subaccount', { hidden: true });
 };
 
 const checkIsAccountNameMatch = async (page) => {
@@ -153,22 +154,7 @@ describe('Settings: Export DFX Identity', () => {
     await isContinueButtonDisabled(page);
   });
 
-  test('entering correct password, downloading .pem file for main account and copying command to clipboard', async () => {
-    await passwordInputFill(page, secrets.password);
-    await safeCheckboxClick(page);
-    await continueButtonClick(page);
-
-    await checkIsSubtitleTextMatch(page);
-
-    await verifyPEMFile(page, PEM_LOCATION);
-
-    await copyCommandIconButtonClick(page);
-    const copiedText = await page.evaluate(() => navigator.clipboard.readText());
-    expect(copiedText).toBe(`dfx identity import <identity name> <route to pem>
-dfx identity use <identity name>`);
-  });
-
-  test('entering correct password, downloading .pem file for subaccount and copying command to clipboard', async () => {
+  test('entering correct password, downloading .pem file for main account/subaccount and copying command to clipboard', async () => {
     await closeButtonClick(page);
     await popupPageUtils.profileButtonClick(page);
     await popupPageUtils.createSubAccount(page, 'Subaccount');
@@ -181,14 +167,18 @@ dfx identity use <identity name>`);
     await continueButtonClick(page);
 
     await checkIsSubtitleTextMatch(page);
+
+    await verifyPEMFile(page, PEM_LOCATION);
+
     await accountSelectClick(page);
     await accountItemClick(page);
     await checkIsAccountNameMatch(page);
 
+    await page.waitForTimeout(2000);
+
     await verifyPEMFile(page, PEM_LOCATION);
 
     await copyCommandIconButtonClick(page);
-    await page.waitForTimeout(3000);
     const copiedText = await page.evaluate(() => navigator.clipboard.readText());
     expect(copiedText).toBe(`dfx identity import <identity name> <route to pem>
 dfx identity use <identity name>`);
