@@ -22,6 +22,7 @@ const MenuItem = ({
   symbol,
   className,
   accountNameTestId,
+  itemNameTestId,
   ...other
 }) => {
   const classes = useStyles();
@@ -30,6 +31,7 @@ const MenuItem = ({
       key={name}
       onClick={onClick}
       disabled={disabled}
+      data-testid={`${itemNameTestId}-${name}`}
       className={clsx(size !== 'small' ? classes.big : classes.small, border && classes.border, className)}
       classes={{
         root: selected ? classes.selected : null,
@@ -87,6 +89,7 @@ MenuItem.defaultProps = {
   className: '',
   image: null,
   accountNameTestId: '',
+  itemNameTestId: '',
 };
 
 MenuItem.propTypes = {
@@ -104,4 +107,5 @@ MenuItem.propTypes = {
   endText: PropTypes.string,
   symbol: PropTypes.string,
   accountNameTestId: PropTypes.string,
+  itemNameTestId: PropTypes.string,
 };

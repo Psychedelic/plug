@@ -107,17 +107,14 @@ describe('NFTs Send View', () => {
     await closeNftViewButton.click();
   });
 
-  // ----- Temporary commented because of bug in Plug version 0.5.2 with a disappearing
-  // contact book icon in the To input ----
-  // test('choosing contact from address book and sending nft', async () => {
-  //   await sendNFTButtonClick(page);
-  //   const addressBookIcon = await page.getByTestId('address-book-icon', true);
-  //   await addressBookIcon.click();
+  test('choosing contact from address book and sending nft', async () => {
+    await sendNFTButtonClick(page);
+    const addressBookIcon = await page.getByTestId('address-book-icon', true);
+    await addressBookIcon.click();
 
-  //   await page.waitForSelector('contacts-dialog');
-  //   const contactName = await page.getByTestId('contact-name-sub', true);
-  //   await contactName.click();
-  // });
+    const contactName = await page.getByTestId('contact-name-Sub2', true);
+    await contactName.click();
+  });
 
   test('sending nft to subaccount', async () => {
     await sendNFTButtonClick(page);
