@@ -7,7 +7,9 @@ import PropTypes from 'prop-types';
 import browser from 'webextension-polyfill';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { getAppsKey } from '@modules/storageManager';
+
 import useStyles from './styles';
+import ConnectionControls from './components/ConnectionControls';
 
 const CONNECTION_CONFIG = {
   [CONNECTION_STATUS.accepted]: {
@@ -31,7 +33,7 @@ const beautifyUrl = (url) => (
   url.replace(/^(?:https?:\/\/)?(?:www\.)?/i, '').split('/')[0]
 );
 
-const ConnectionStatus = ({ incStatus = null }) => {
+const ConnectionStatus = ({ incStatus = null, disableNavigation, hideNetwork }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const [status, setStatus] = useState(incStatus);
@@ -54,22 +56,25 @@ const ConnectionStatus = ({ incStatus = null }) => {
     }
   }, [activeTab]);
 
-  if (!status) return null;
-
   const {
     icon,
     label,
     className,
-  } = CONNECTION_CONFIG[status];
+  } = CONNECTION_CONFIG[status || CONNECTION_STATUS.rejected];
 
   return (
     <div className={clsx(classes.root, classes[className])}>
       {icon}
-      <span data-testid="banner-text">{t(label, { version: browser.runtime.getManifest().version })}</span>
+      <span
+        data-testid="banner-text"
+        className={clsx(hideNetwork && classes.fullWidth)}>
+        {t(label, { version: browser.runtime.getManifest().version })}
+      </span>
       {
         status === CONNECTION_STATUS.accepted
         && <span className={classes.web}>&nbsp;{activeTab}</span>
       }
+      <ConnectionControls hidden={hideNetwork} disableNavigation={disableNavigation} />
     </div>
   );
 };
@@ -78,8 +83,12 @@ export default ConnectionStatus;
 
 ConnectionStatus.defaultProps = {
   incStatus: null,
+  disableNavigation: false,
+  hideNetwork: false,
 };
 
 ConnectionStatus.propTypes = {
   incStatus: PropTypes.string,
+  disableNavigation: PropTypes.bool,
+  hideNetwork: PropTypes.bool,
 };

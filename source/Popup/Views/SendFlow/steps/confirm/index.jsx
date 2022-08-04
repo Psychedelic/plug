@@ -65,7 +65,7 @@ const Confirm = ({ handleSendClick }) => {
     selectedAsset: asset,
     fulfilled: isTrxCompleted,
   } = useSelector((state) => state.send);
-
+  const { usingMainnet } = useSelector((state) => state.network);
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const { navigator } = useRouter();
@@ -97,7 +97,7 @@ const Confirm = ({ handleSendClick }) => {
       });
 
       setLoading(false);
-      navigator.navigate('home', TABS.ACTIVITY);
+      navigator.navigate('home', usingMainnet ? TABS.ACTIVITY : TABS.TOKENS);
     }
   }, [isTrxCompleted]);
   const addresses = getAddressTranslations(address, addressInfo, asset?.symbol);
@@ -106,7 +106,7 @@ const Confirm = ({ handleSendClick }) => {
       <Grid container spacing={2} className={classes.container}>
         <Grid item xs={12} style={{ textAlign: 'center' }}>
           <div className={classes.asset}>
-            <TokenIcon image={asset.image} className={classes.image} symbol={asset.symbol} />
+            <TokenIcon logo={asset.logo} className={classes.image} symbol={asset.symbol} />
             <Typography variant="h1">
               <AssetFormat value={amount} asset={asset?.symbol} />
             </Typography>

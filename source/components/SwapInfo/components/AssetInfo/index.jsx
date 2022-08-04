@@ -8,7 +8,7 @@ import TokenIcon from '@components/TokenIcon';
 
 const AssetInfo = ({ asset, amount, classes }) => (
   <div className={classes.assetInfo}>
-    <TokenIcon image={asset.image} className={classes.icon} symbol={asset?.symbol} />
+    <TokenIcon logo={asset.logo} className={classes.icon} symbol={asset?.symbol} />
     <Typography variant="h3" className={classes.asset}>
       <NumberFormat value={amount} displayType="text" thousandSeparator="," suffix={` ${asset.value}`} />
     </Typography>

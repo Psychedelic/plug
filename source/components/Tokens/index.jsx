@@ -7,7 +7,7 @@ import clsx from 'clsx';
 
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { useRouter } from '@components/Router';
-import { AMOUNT_ERROR } from '@shared/constants/currencies';
+
 import { useICPPrice } from '@redux/icp';
 import { setICNSData } from '@redux/icns';
 import { useScroll } from '@hooks';
@@ -17,6 +17,7 @@ import useStyles from './styles';
 const Tokens = () => {
   const classes = useStyles();
   const { assets, assetsLoading } = useSelector((state) => state.wallet);
+  const { currentNetwork } = useSelector((state) => state.network);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const icpPrice = useICPPrice();
@@ -62,13 +63,13 @@ const Tokens = () => {
         onScroll={onScroll}
       >
         {
-          assets?.map((asset, index) => (
+          assets?.map((asset) => (
             <AssetItem
               {...asset}
+              key={`${asset.symbol}-${asset.canisterId}-${currentNetwork?.id}`}
               updateToken={fetchAssets}
-              key={`${asset.name}-${index}`}
               loading={loading}
-              failed={asset.amount === AMOUNT_ERROR}
+              failed={!!asset?.error}
               assetNameTestId="asset-name"
             />
           ))

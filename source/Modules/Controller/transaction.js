@@ -136,6 +136,7 @@ export class TransactionModule extends ControllerModuleBase {
               ...transfer,
               amount: parsedAmount,
               canisterId: ICP_CANISTER_ID,
+              standard: 'icp',
             });
 
             if (response.error) {

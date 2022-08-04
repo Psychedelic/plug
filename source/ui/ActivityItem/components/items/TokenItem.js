@@ -22,7 +22,7 @@ const TokenItem = (props) => {
     value,
     date,
     symbol,
-    image,
+    logo,
     canisterId,
     details,
     setOpenDetail,
@@ -39,7 +39,7 @@ const TokenItem = (props) => {
       <ActivityItemDisplay
         image={(
           <GenericIcon
-            image={image || UnknownIcon}
+            image={logo || UnknownIcon}
             type={type}
           />
           )}
@@ -78,7 +78,7 @@ TokenItem.defaultProps = {
 TokenItem.propTypes = {
   type: PropTypes.number,
   canisterId: PropTypes.string,
-  details: PropTypes.objectOf(PropTypes.any),
+  details: PropTypes.objectOf(PropTypes.string),
   to: PropTypes.string,
   from: PropTypes.string,
   amount: PropTypes.oneOfType([
@@ -87,7 +87,7 @@ TokenItem.propTypes = {
   ]),
   value: PropTypes.number,
   symbol: PropTypes.string.isRequired,
-  image: PropTypes.string.isRequired,
+  logo: PropTypes.string.isRequired,
   date: PropTypes.oneOfType([
     PropTypes.instanceOf(Date),
     PropTypes.string,

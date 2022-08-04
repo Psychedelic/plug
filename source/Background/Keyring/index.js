@@ -62,10 +62,9 @@ export const recursiveParseBigint = (obj) => {
     return obj.map(recursiveParseBigint);
   }
   if (obj && typeof obj === 'object') {
-    return Object.keys(obj).reduce((acc, key) => {
-      acc[key] = recursiveParseBigint(obj[key]);
-      return acc;
-    }, {});
+    return Object.keys(obj).reduce(
+      (acc, key) => ({ ...acc, [key]: recursiveParseBigint(obj[key]) }), {},
+    );
   }
   if (typeof obj === 'bigint') {
     return parseInt(obj.toString(), 10);
@@ -101,6 +100,11 @@ export const HANDLER_TYPES = {
   ADD_CONTACT: 'add-contact',
   REMOVE_CONTACT: 'remove-contact',
   GET_MNEMONIC: 'get-mnemonic',
+  GET_NETWORKS: 'get-networks',
+  ADD_NETWORK: 'add-network',
+  REMOVE_NETWORK: 'remove-network',
+  SET_CURRENT_NETWORK: 'set-current-network',
+  GET_CURRENT_NETWORK: 'get-current-network',
 };
 
 export const getKeyringErrorMessage = (type) => ({
@@ -127,6 +131,11 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.GET_ICNS_DATA]: 'getting your ICNS data.',
   [HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME]: 'setting your reverse resolved name.',
   [HANDLER_TYPES.GET_MNEMONIC]: 'getting your mnemonic.',
+  [HANDLER_TYPES.GET_NETWORKS]: 'getting the registered networks',
+  [HANDLER_TYPES.ADD_NETWORK]: 'adding the network',
+  [HANDLER_TYPES.REMOVE_NETWORK]: 'removing the network',
+  [HANDLER_TYPES.SET_CURRENT_NETWORK]: 'setting the current network',
+  [HANDLER_TYPES.GET_CURRENT_NETWORK]: 'getting the current network',
 }[type]);
 
 export const sendMessage = (args, callback) => {
@@ -201,7 +210,6 @@ export const getKeyringHandler = (type, keyring) => ({
       const shouldUpdate = Object.values(assets)?.every((asset) => !Number(asset.amount))
         || Object.values(assets)?.some((asset) => asset.amount === 'Error')
         || refresh;
-
       if (shouldUpdate) {
         assets = await keyring.getBalances();
       } else {
@@ -217,7 +225,7 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.GET_BALANCE]: async (subaccount) => {
     try {
-      const assets = await keyring.getBalances(subaccount);
+      const assets = await keyring.getBalances({ subaccount });
       const parsedAssets = parseAssetsAmount(assets);
       const icpPrice = await getICPPrice();
       return formatAssets(parsedAssets, icpPrice);
@@ -228,13 +236,18 @@ export const getKeyringHandler = (type, keyring) => ({
     }
   },
   [HANDLER_TYPES.SEND_TOKEN]: async ({
-    to, amount, canisterId, opts,
+    to, amount, canisterId, opts, decimals, standard,
   }) => {
     try {
-      const { token } = await keyring.getTokenInfo(canisterId);
-      const { decimals } = token;
-      const parsedAmount = parseToBigIntString(amount, parseInt(decimals, 10));
-      const { height, transactionId } = await keyring.send(to, parsedAmount, canisterId, opts);
+      let tokenInfo;
+      if (!decimals) {
+        tokenInfo = await keyring.getTokenInfo({ canisterId, standard });
+      }
+      const _decimals = decimals || tokenInfo?.token?.decimals; // eslint-disable-line
+      const parsedAmount = parseToBigIntString(amount, parseInt(_decimals, 10));
+      const { height, transactionId } = await keyring.send({
+        to, amount: parsedAmount, canisterId, opts,
+      });
       return {
         height: height ? parseInt(height, 10) : undefined,
         transactionId: transactionId ? parseInt(transactionId, 10) : undefined,
@@ -254,7 +267,11 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.GET_TOKEN_INFO]:
     async ({ canisterId, standard }) => {
       try {
-        const tokenInfo = await keyring.getTokenInfo(canisterId, standard);
+        const tokenInfo = await keyring.getTokenInfo({
+          subaccount: keyring.currentWalletId,
+          canisterId,
+          standard,
+        });
         return { ...tokenInfo, amount: tokenInfo.amount.toString() };
       } catch (e) {
         // eslint-disable-next-line
@@ -265,9 +282,10 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.ADD_CUSTOM_TOKEN]:
     async ({ canisterId, standard, logo }) => {
       try {
-        const tokens = await keyring.registerToken(
-          canisterId, standard, keyring.currentWalletId, logo,
-        );
+        // Cambiar esto por un metodo que llame al network module para registrar el token
+        const tokens = await keyring.registerToken({
+          canisterId, standard, subaccount: keyring.currentWalletId, logo,
+        });
         return (tokens || []).map((token) => recursiveParseBigint(token));
       } catch (e) {
         // eslint-disable-next-line
@@ -292,7 +310,7 @@ export const getKeyringHandler = (type, keyring) => ({
     const { wallets, currentWalletId } = await keyring.getState();
     let collections = wallets?.[currentWalletId]?.collections || [];
     if (!collections.length || refresh) {
-      collections = await keyring.getNFTs(currentWalletId, refresh);
+      collections = await keyring.getNFTs({ subaccount: currentWalletId, refresh });
     }
     return (collections || [])?.map((collection) => recursiveParseBigint(collection));
   },
@@ -366,6 +384,56 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: e.message };
     }
   },
+  [HANDLER_TYPES.GET_NETWORKS]: async () => {
+    try {
+      const { networks } = keyring.networkModule;
+      return Object.values(networks);
+    } catch (e) {
+      // eslint-disable-next-line
+      console.log('Error getting networks', e);
+      return { error: e.message };
+    }
+  },
+  [HANDLER_TYPES.ADD_NETWORK]: async (network) => {
+    try {
+      const networks = await keyring.networkModule.addNetwork(network);
+      return Object.values(networks);
+    } catch (e) {
+      // eslint-disable-next-line
+      console.log('Error adding the network', e);
+      return { error: e.message };
+    }
+  },
+  [HANDLER_TYPES.REMOVE_NETWORK]: async (networkId) => {
+    try {
+      const networks = await keyring.networkModule.removeNetwork(networkId);
+      return Object.values(networks);
+    } catch (e) {
+      // eslint-disable-next-line
+      console.log('Error removing the network', e);
+      return { error: e.message };
+    }
+  },
+  [HANDLER_TYPES.SET_CURRENT_NETWORK]: async (networkId) => {
+    try {
+      const currentNetwork = await keyring.networkModule.setNetwork(networkId);
+      return currentNetwork;
+    } catch (e) {
+      // eslint-disable-next-line
+      console.log('Error setting the current network', e);
+      return { error: e.message };
+    }
+  },
+  [HANDLER_TYPES.GET_CURRENT_NETWORK]: async () => {
+    try {
+      const currentNetwork = keyring.networkModule.network;
+      return currentNetwork;
+    } catch (e) {
+      // eslint-disable-next-line
+      console.log('Error getting the current network', e);
+      return { error: e.message };
+    }
+  },
 }[type]);
 
 export const getContacts = () => new Promise((resolve, reject) => {
@@ -395,10 +463,14 @@ export const deleteContact = (contactName) => new Promise((resolve) => {
   });
 });
 
-export const sendToken = ({ to, amount, canisterId, opts }) =>  new Promise((resolve, reject) => {
+export const sendToken = ({
+  to, amount, canisterId, opts, standard, decimals,
+}) => new Promise((resolve, reject) => {
   sendMessage({
     type: HANDLER_TYPES.SEND_TOKEN,
-    params: { to, amount, canisterId, opts },
+    params: {
+      to, amount, canisterId, opts, standard, decimals,
+    },
   }, (res) => {
     if (res.error) {
       reject(res);
@@ -418,7 +490,6 @@ export const burnXTC = ({ to, amount }) => new Promise((resolve, reject) => {
       reject(res);
       return;
     }
-
-   resolve(res);
+    resolve(res);
   });
 });

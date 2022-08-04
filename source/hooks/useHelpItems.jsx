@@ -9,22 +9,22 @@ const useHelpItems = () => {
 
   return [
     {
-      image: BookIcon,
+      logo: BookIcon,
       name: t('help.documentation'),
       onClick: (() => window.open('https://docs.plugwallet.ooo', '_blank')),
     },
     {
-      image: NewspaperIcon,
+      logo: NewspaperIcon,
       name: t('help.blog'),
       onClick: (() => window.open('https://medium.com/plugwallet', '_blank')),
     },
     {
-      image: BirdIcon,
+      logo: BirdIcon,
       name: t('help.followUs'),
       onClick: (() => window.open('https://twitter.com/plug_wallet', '_blank')),
     },
     {
-      image: DiscordIcon,
+      logo: DiscordIcon,
       name: t('help.discord'),
       onClick: (() => window.open('https://discord.plugwallet.ooo/', '_blank')),
     },
