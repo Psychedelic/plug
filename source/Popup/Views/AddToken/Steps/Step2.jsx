@@ -22,7 +22,7 @@ const parseTokenBySymbol = (token) => ({
   XTC: {
     ...token?.token,
     amount: cyclesToTC(token.amount),
-    image: XTCIcon,
+    logo: XTCIcon,
     price: cyclesToTC(token.amount) * USD_PER_TC,
   },
   WTC: {

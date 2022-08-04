@@ -10,14 +10,14 @@ const useMenuItems = () => {
 
   return [
     {
-      image: SettingsIcon,
+      logo: SettingsIcon,
       name: t('profile.settings'),
       alignLeft: true,
       onClick: () => navigator.navigate('settings'),
       'data-testid': 'settings-button',
     },
     {
-      image: LockIcon,
+      logo: LockIcon,
       name: t('profile.lock'),
       alignLeft: true,
       onClick: (() => {

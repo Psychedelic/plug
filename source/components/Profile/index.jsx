@@ -306,7 +306,7 @@ const Profile = ({ disableProfile }) => {
                   key="createAccount"
                   name={t('profile.createAccount')}
                   alignLeft
-                  image={Plus}
+                  logo={Plus}
                   onClick={handleOpenCreateAccount}
                   data-testid="create-account-button"
                 />

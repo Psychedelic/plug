@@ -12,32 +12,32 @@ const useSettingsItems = () => {
 
   return [
     {
-      image: NotebookIcon,
+      logo: NotebookIcon,
       name: t('settings.contacts'),
       description: t('settings.contactsDescription'),
       'data-testid': 'contact-book',
       onClick: (() => navigator.navigate('contacts')),
     },
     {
-      image: KeyIcon,
+      logo: KeyIcon,
       name: t('settings.seedPhrase'),
       description: t('settings.seedPhraseDescription'),
       onClick: (() => navigator.navigate('seed-phrase')),
     },
     {
-      image: AntennaIcon,
+      logo: AntennaIcon,
       name: t('settings.network'),
       description: t('settings.networkDescription'),
       onClick: (() => navigator.navigate('network')),
     },
     {
-      image: ArrowUpIcon,
+      logo: ArrowUpIcon,
       name: t('settings.exportIdentity'),
       description: t('settings.exportIdentityDescription'),
       onClick: (() => navigator.navigate('export-identity')),
     },
     {
-      image: HelpIcon,
+      logo: HelpIcon,
       name: t('profile.help'),
       description: t('settings.helpDescription'),
       onClick: () => navigator.navigate('help'),
