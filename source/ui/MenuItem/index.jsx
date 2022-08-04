@@ -10,6 +10,7 @@ import useStyles from './styles';
 const MenuItem = ({
   name,
   logo,
+  image,
   onClick,
   size,
   border,
@@ -43,7 +44,7 @@ const MenuItem = ({
         !icon && logo && (
           <ListItemIcon className={classes.icon}>
             <TokenIcon
-              logo={logo}
+              logo={logo || image}
               symbol={symbol}
               className={clsx(size === 'large' ? classes.bigImage : classes.smallImage, alignLeft && classes.alignLeft)}
             />
