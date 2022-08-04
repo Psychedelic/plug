@@ -158,10 +158,6 @@ const createAccountButtonClick = async (page) => {
 };
 
 const refreshWallet = async (page) => {
-  await profileButtonClick(page);
-
-  await page.waitForSelector('[data-testid="drawer"][aria-hidden="true"]', { hidden: true });
-
   const refreshWalletBtn = await getByTestId(page, 'refresh-wallet-button', true);
   await refreshWalletBtn.click();
 };

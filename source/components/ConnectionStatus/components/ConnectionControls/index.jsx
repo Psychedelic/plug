@@ -103,6 +103,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
           </div>
         </div>
         <div
+          data-testid="refresh-wallet-button"
           className={clsx(classes.reloadIconContainer, disableNavigation && classes.disabled)}
           onClick={refreshWallet}
         >
