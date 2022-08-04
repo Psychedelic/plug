@@ -38,15 +38,17 @@ const Step1 = ({ handleChangeStep, password, setPassword }) => {
             type="password"
             value={password}
             onChange={handleChangePassword}
+            data-testid="password-input"
           />
         </Grid>
         <Grid item xs={12}>
-          <Checkbox checked={checked} handleChange={handleChangeCheckbox} label={t('seedPhrase.checkbox')} />
+          <Checkbox checked={checked} handleChange={handleChangeCheckbox} label={t('seedPhrase.checkbox')} data-testid="safe-checkbox" />
         </Grid>
         <Grid item xs={12}>
           <Button
             value="Continue"
             onClick={handleLogin}
+            data-testid="continue-button"
             variant="rainbow"
             fullWidth
             disabled={

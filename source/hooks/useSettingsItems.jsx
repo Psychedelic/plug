@@ -22,6 +22,7 @@ const useSettingsItems = () => {
       logo: KeyIcon,
       name: t('settings.seedPhrase'),
       description: t('settings.seedPhraseDescription'),
+      'data-testid': 'secret-recovery-phrase',
       onClick: (() => navigator.navigate('seed-phrase')),
     },
     {
@@ -34,12 +35,14 @@ const useSettingsItems = () => {
       logo: ArrowUpIcon,
       name: t('settings.exportIdentity'),
       description: t('settings.exportIdentityDescription'),
+      'data-testid': 'export-dfx-identity',
       onClick: (() => navigator.navigate('export-identity')),
     },
     {
       logo: HelpIcon,
       name: t('profile.help'),
       description: t('settings.helpDescription'),
+      'data-testid': 'help',
       onClick: () => navigator.navigate('help'),
     },
   ];

@@ -267,7 +267,7 @@
     "passwordTitle": "Create Password for Plug",
     "passwordSubtitle": "Please create a password to access your Plug extension.",
     "passwordMessage": "Make that pw secure frfr",
-    "passwordLabel": "New Password (min. 12 characters)",
+    "passwordLabel": "New Password (min. 8 characters)",
     "passwordConfirmLabel": "Confirm Password",
     "passwordButton": "I made a secure password",
     "passwordWarning": "Don't forget your password, otherwise you'll need to reimport your wallet using your Secret Recovery Phrase.",
@@ -282,7 +282,7 @@
     "seedSubtitle": "Below is the Secret Recovery Phrase for your new wallet, write it down.",
     "seedMessage": "Keep this sh*t safe, forreal.",
     "seedCheckbox": "I wrote down the Secret Recovery Phrase and put it somewhere safe.",
-    "passwordShortError": "The minimum is 12 characters, smh!",
+    "passwordShortError": "The minimum is 8 characters, smh!",
     "passwordMatchError": "The passwords gotta match, smh!"
   },
   "contacts": {
@@ -320,7 +320,8 @@
     "nftTokenError": "Custom non-fungible tokens are not supported yet.",
     "standard": "Token Standard",
     "searchResults": "Search results",
-    "selectStandard": "Select the token's interface standard"
+    "selectStandard": "Select the token's interface standard",
+    "importTitle": "wants to add a token to your wallet"
   },
   "error": {
     "errorTitle": "Something went wrong",
