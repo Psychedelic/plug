@@ -126,9 +126,6 @@ describe('NFTs Send View', () => {
     const confirmSendingButton = await page.getByTestId('confirmation-button', true);
     await confirmSendingButton.click();
 
-    const noNftsTitle = await page.getByTestId('no-nft-title', true);
-    const content = await page.evaluate((el) => el.textContent, noNftsTitle);
-
-    expect(content).toBe("You don't own any NFTs yet");
+    await page.waitForSelector('nft-collection-dropdown-Cronic Wearables', { hidden: true });
   });
 });
