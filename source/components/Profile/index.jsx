@@ -284,7 +284,7 @@ const Profile = ({ disableProfile }) => {
                         onClick={!isHidden && handleChangeAccount(account.walletNumber)}
                         selected={isExactWalletNumber}
                         className={clsx(isHidden && classes.hiddenAccount)}
-                        accountNameTestId="account-name"
+                        itemNameTestId="account-name"
                         endIcon={isExactWalletNumber ? (
                           <IconButton data-testid={`edit-button-${account.name}`} onClick={handleEditAccount}>
                             <img src={BluePencil} />
