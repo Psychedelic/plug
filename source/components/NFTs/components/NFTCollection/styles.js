@@ -51,9 +51,6 @@ export default makeStyles(() => ({
     paddingTop: 6,
     paddingBottom: 6,
   },
-  collection: {
-    marginBottom: 20,
-  },
   expandIcon: {
     transition: 'transform .2s ease-in-out',
   },
