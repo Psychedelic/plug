@@ -98,7 +98,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
       <div className={classes.controls}>
         <div className={classes.networkSelector} onClick={() => setSelectorOpen(true)}>
           <div className={clsx(classes.controlsInfo, connected && classes.connectedControls)}>
-            <div className={clsx(classes.statusDot, connected && classes.connectedDot)} />
+            <div className={clsx(classes.statusDot)} />
             <span className={classes.network}>{capitalize(currentNetwork?.name || 'Mainnet')}</span>
           </div>
         </div>

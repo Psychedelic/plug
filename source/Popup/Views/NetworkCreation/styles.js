@@ -1,13 +1,16 @@
 import { makeStyles } from '@material-ui/core';
 
-export default makeStyles((theme) => ({
+export default makeStyles(() => ({
   networkCreationContainer: {
-    padding: '0px 25px 25px',
+    padding: '5px 25px 30px',
+  },
+  networksContainer: {
+    marginBottom: 30,
   },
   fieldContainer: {
-    marginBottom: theme.spacing(2),
+    marginBottom: 20,
   },
   label: {
-    marginBottom: theme.spacing(0.5),
+    marginBottom: 10,
   },
 }));

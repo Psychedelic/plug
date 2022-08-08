@@ -32,10 +32,6 @@ export default makeStyles(() => ({
   },
   controlsInfo: {
     ...flex,
-    opacity: 0.5,
-  },
-  connectedControls: {
-    opacity: 1,
   },
   controls: {
     ...flex,
@@ -66,9 +62,6 @@ export default makeStyles(() => ({
     height: 8,
     borderRadius: '50%',
     marginRight: 5,
-    background: '#6B7280',
-  },
-  connectedDot: {
     background: '#08DE92',
   },
   disabled: {

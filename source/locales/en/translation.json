@@ -2,8 +2,11 @@
   "network": {
     "network": "Network",
     "name": "Network Name",
+    "namePlaceholder": "My Network",
     "host": "Host URL",
+    "hostPlaceholder": "http://localhost:8000/",
     "ledgerCanisterId": "Ledger canister Id",
+    "ledgerCanisterIdPlaceholder": "My Ledger Canister Id",
     "addNetwork": "Add Network",
     "addNetworkDescription": "Add a custom network to use Plug on test networks."
   },

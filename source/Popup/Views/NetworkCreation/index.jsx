@@ -53,33 +53,35 @@ const NetworkCreation = () => {
       setErrors(newErrors);
     } else {
       dispatch(addNetwork(values));
-      navigator.navigate('network');
+      navigator.navigate('home');
     }
   };
   return (
     <Layout>
       <Header
-        center={<Typography variant="h2">{t('network.network')}</Typography>}
+        center={<Typography variant="h2">{t('network.addNetwork')}</Typography>}
         left={<LinkButton value={t('common.back')} onClick={navigator.goBack} startIcon={BackIcon} />}
         right={<LinkButton value={t('common.close')} onClick={() => navigator.navigate('home')} />}
       />
       <div className={classes.networkCreationContainer}>
-        {Object.values(NETWORK_CREATION_FIELDS).map((field) => (
-          <div className={classes.fieldContainer}>
-            <Typography
-              variant="h5"
-              className={classes.label}
-            >
-              {`${t(`network.${field.name}`)}${field.required ? '*' : ''}`}
-            </Typography>
-            <TextInput
-              onChange={handleFieldChange(field.name)}
-              placeholder={field.placeholder}
-              error={errors[field.name]}
-            />
-            {errors[field.name] && <Typography variant="body2" color="error">{errors[field.name]}</Typography>}
-          </div>
-        ))}
+        <div className={classes.networksContainer}>
+          {Object.values(NETWORK_CREATION_FIELDS).map((field) => (
+            <div className={classes.fieldContainer}>
+              <Typography
+                variant="h5"
+                className={classes.label}
+              >
+                {`${t(`network.${field.name}`)}${field.required ? '*' : ''}`}
+              </Typography>
+              <TextInput
+                onChange={handleFieldChange(field.name)}
+                placeholder={t(`network.${field.name}Placeholder`)}
+                error={errors[field.name]}
+              />
+              {errors[field.name] && <Typography variant="body2" color="error">{errors[field.name]}</Typography>}
+            </div>
+          ))}
+        </div>
         <Button
           variant="rainbow"
           onClick={handleAddNetwork}
