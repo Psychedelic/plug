@@ -150,14 +150,6 @@ describe('Settings: Export DFX Identity', () => {
     await page.waitForSelector('[data-testid="open-send-view-button"]');
   });
 
-  test('checking user cannot see the DFX identity when password is incorrect', async () => {
-    await passwordInputFill(page, wrongPassword);
-    await safeCheckboxClick(page);
-    await continueButtonClick(page);
-    await page.waitForSelector('[data-testid="continue-button"][disabled]');
-    await isContinueButtonDisabled(page);
-  });
-
   test('entering correct password, downloading .pem file for main account/subaccount and copying command to clipboard', async () => {
     await closeButtonClick(page);
     await popupPageUtils.profileButtonClick(page);
@@ -186,5 +178,13 @@ describe('Settings: Export DFX Identity', () => {
     const copiedText = await page.evaluate(() => navigator.clipboard.readText());
     expect(copiedText).toBe(`dfx identity import <identity name> <route to pem>
 dfx identity use <identity name>`);
+  });
+
+  test('checking user cannot see the DFX identity when password is incorrect', async () => {
+    await passwordInputFill(page, wrongPassword);
+    await safeCheckboxClick(page);
+    await continueButtonClick(page);
+    await page.waitForSelector('[data-testid="continue-button"][disabled]');
+    await isContinueButtonDisabled(page);
   });
 });

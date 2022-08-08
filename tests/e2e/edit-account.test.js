@@ -60,6 +60,7 @@ const openSelectionModalButtonClick = async (page) => {
 const selectICNSNameClick = async (page, icnsName) => {
   const selectICNSName = await page.getByTestId(`icns-name-${icnsName}`, true);
   await selectICNSName.click();
+  await page.waitForTimeout(3000);
 };
 
 const viewAdditionalInfoButtonClick = async (page) => {

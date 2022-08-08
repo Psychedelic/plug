@@ -90,7 +90,7 @@ describe('Import/Create', () => {
       const submitPasswordButton = await page.getByTestId('password-confirmation-button');
       await submitPasswordButton.click();
 
-      await getErrorMessage(page, 'The minimum is 12 characters, smh!');
+      await getErrorMessage(page, 'The minimum is 8 characters, smh!');
     });
 
     test('importing wallet correctly', async () => {
@@ -124,7 +124,7 @@ describe('Import/Create', () => {
 
       const value = await page.evaluate((el) => el.textContent, plugBanner);
 
-      expect(value).toMatch(/Plug/i);
+      expect(value).toMatch('Alpha - 0.5.3');
     });
   });
 
@@ -161,7 +161,7 @@ describe('Import/Create', () => {
       const submitPasswordButton = await page.getByTestId('password-confirmation-button');
       await submitPasswordButton.click();
 
-      await getErrorMessage(page, 'The minimum is 12 characters, smh!');
+      await getErrorMessage(page, 'The minimum is 8 characters, smh!');
     });
 
     test('correctly creates', async () => {
@@ -186,17 +186,13 @@ describe('Import/Create', () => {
       await seedphraseContinueButton.click();
 
       await page.goto(chromeData.popupUrl);
-      const popupPasswordInput = await page.getByTestId('enter-password-input', true);
-      await popupPasswordInput.click();
-      await popupPasswordInput.type(secrets.password);
 
-      const unlockPlugButton = await page.getByTestId('unlock-wallet-button');
-      await unlockPlugButton.click();
+      await popupPageUtils.profileButtonClick(page);
 
-      const plugBanner = await page.getByTestId('banner-text', true);
-      const value = await page.evaluate((el) => el.textContent, plugBanner);
+      const lockWalletButton = await page.getByTestId('lock-button');
+      await lockWalletButton.click();
 
-      expect(value).toMatch(/Plug/i);
+      await optionsPageUtils.unlock(page, secrets.password);
     });
   });
 });

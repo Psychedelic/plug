@@ -93,14 +93,6 @@ describe('Settings: Secret Recovery Phrase', () => {
     await page.waitForSelector('[data-testid="open-send-view-button"]');
   });
 
-  test('entering wrong password', async () => {
-    await passwordInputFill(page, wrongPassword);
-    await safeCheckboxClick(page);
-    await continueButtonClick(page);
-    await page.waitForSelector('[data-testid="continue-button"][disabled]');
-    await isContinueButtonDisabled(page);
-  });
-
   test('entering correct password and copying seed phrase to clipboard', async () => {
     await passwordInputFill(page, secrets.password);
     await safeCheckboxClick(page);
@@ -108,5 +100,13 @@ describe('Settings: Secret Recovery Phrase', () => {
     await copySeedPhraseBoxClick(page);
     const copiedText = await page.evaluate(() => navigator.clipboard.readText());
     expect(copiedText).toBe(secrets.seedphrase);
+  });
+
+  test('entering wrong password', async () => {
+    await passwordInputFill(page, wrongPassword);
+    await safeCheckboxClick(page);
+    await continueButtonClick(page);
+    await page.waitForSelector('[data-testid="continue-button"][disabled]');
+    await isContinueButtonDisabled(page);
   });
 });
