@@ -82,7 +82,7 @@ export const walletSlice = createSlice({
           from: (useICNS ? details?.from?.icns : details?.from?.principal) || caller,
           date: new Date(timestamp),
           status: ACTIVITY_STATUS[details?.status],
-          image: details?.canisterInfo?.icon || TOKEN_IMAGES[getSymbol()] || '',
+          logo: details?.sonicData?.token?.logo || details?.canisterInfo?.icon || TOKEN_IMAGES[getSymbol()] || '',
           symbol: getSymbol(),
           canisterId: details?.canisterInfo?.canisterId,
           canisterInfo,
