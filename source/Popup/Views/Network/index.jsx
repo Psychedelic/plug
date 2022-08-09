@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Plus } from 'react-feather';
 import { useTranslation } from 'react-i18next';
-import { TABS, useRouter } from '@components/Router';
+import { useRouter } from '@components/Router';
 
 import { Typography } from '@material-ui/core';
 import { getNetworks } from '@redux/network';
 import BackIcon from '@assets/icons/back.svg';
-import { Header, LinkButton } from '@ui';
+import { Button, Header, LinkButton } from '@ui';
 import { Layout } from '@components';
 
 import useStyles from './styles';
@@ -48,7 +47,14 @@ const Network = () => {
       <Header
         center={<Typography variant="h2">{t('network.network')}</Typography>}
         left={<LinkButton value={t('common.back')} onClick={navigator.goBack} startIcon={BackIcon} />}
-        right={<LinkButton value={t('common.done')} onClick={navigateTo('home', TABS.TOKENS)} />}
+        right={(
+          <Button
+            variant="rainbowOutlined"
+            value={t('common.add')}
+            style={{ height: 27, minWidth: 75 }}
+            onClick={navigateTo('create-network')}
+          />
+)}
       />
       {networks?.length ? (
         <div className={classes.networkContainer}>
@@ -71,12 +77,6 @@ const Network = () => {
           )}
         </div>
       ) : <NoNetworks />}
-      <div
-        onClick={navigateTo('create-network')}
-        className={classes.addNetwork}
-      >
-        <Plus size="30" className={classes.plusIcon} strokeWidth={2.5} />
-      </div>
     </Layout>
   );
 };
