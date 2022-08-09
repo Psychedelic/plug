@@ -401,7 +401,7 @@ export const sendToken = ({ to, amount, canisterId, opts }) =>  new Promise((res
     params: { to, amount, canisterId, opts },
   }, (res) => {
     if (res.error) {
-      reject(res);
+      reject(res); // #1 esto me va a devolver un error
       return;
     }
 

@@ -319,6 +319,9 @@
     "returnHome": "Return Home",
     "notificationError": "We’re sorry, something weird happened. Please close the pop up and try again"
   },
+  "sendErrors": {
+    "errorTitle": "ups algo malo paso ;( lol"
+  },
   "whitelist": {
     "title": "wants permission to use these canisters:"
   },

@@ -53,6 +53,7 @@ const useSteps = () => {
     primaryValue,
     fulfilled,
   } = useSelector((state) => state.send);
+
   const icpPrice = useICPPrice();
 
   const [step, setStep] = useState(0);
@@ -81,6 +82,8 @@ const useSteps = () => {
       dispatch(sendToken());
     }
   };
+
+  // check here if the redux state change for redirect to another page when a transaction failed
 
   const available = getAvailableAmount((selectedAsset?.amount || 0));
   const convertedAmount = Math.max(available * primaryValue.conversionRate, 0);

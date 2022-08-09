@@ -81,7 +81,7 @@ const Confirm = ({ handleSendClick }) => {
 
   useEffect(() => {
     if (error) {
-      navigator.navigate('error');
+      navigator.navigate('send-error');
     }
   }, [error]);
 
