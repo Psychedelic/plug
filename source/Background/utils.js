@@ -166,14 +166,14 @@ export const handleCallRequest = async ({
         return false;
       }
     }
-    const signed = await keyring
-      .getAgent({ host }).call(
-        Principal.fromText(request.canisterId),
-        {
-          methodName: request.methodName,
-          arg,
-        },
-      );
+    const agent = await keyring.getAgent({ host });
+    const signed = await agent.call(
+      Principal.fromText(request.canisterId),
+      {
+        methodName: request.methodName,
+        arg,
+      },
+    );
     callback(null, {
       ...signed,
       requestId: bufferToBase64(blobToUint8Array(signed.requestId)),

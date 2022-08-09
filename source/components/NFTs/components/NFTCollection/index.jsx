@@ -31,72 +31,69 @@ function NFTCollection({
   const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[collection.canisterId];
 
   return (
-    <div className={classes.collection}>
-      <Collapsible
-        transitionTime={200}
-        open={expanded}
-        trigger={(
-          <div className={classes.collectionHeader} onClick={toggleExpanded} data-testid={`${collectionTestID}-${collection?.name}`}>
-            <div className={classes.collectionTitle}>
-              <div className={classes.iconContainer}>
-                <img
-                  loading="lazy"
-                  src={collection?.icon}
-                  className={clsx(classes.collectionIcon, icns && classes.icnsIcon)}
-                />
-              </div>
-              <Typography variant="h5">{collection?.name}</Typography>
-            </div>
-            <div className={classes.numberArrowContainer}>
-              <p className={classes.nftQty}>
-                {collection.tokens.length}
-              </p>
-              <ChevronDown
-                className={clsx(classes.expandIcon, expanded && classes.rotate)}
-                size={20}
+    <Collapsible
+      transitionTime={200}
+      open={expanded}
+      trigger={(
+        <div className={classes.collectionHeader} onClick={toggleExpanded} data-testid={`${collectionTestID}-${collection?.name}`}>
+          <div className={classes.collectionTitle}>
+            <div className={classes.iconContainer}>
+              <img
+                loading="lazy"
+                src={collection?.icon}
+                className={clsx(classes.collectionIcon, icns && classes.icnsIcon)}
               />
             </div>
+            <Typography variant="h5">{collection?.name}</Typography>
           </div>
-        )}
-      >
-        <div className={clsx(classes.grid, expanded && classes.expanded)}>
-          {collection?.tokens?.map((nft) => {
-            const name = nft.name || `#${nft.index}`;
-            return (
-              <div
-                className={classes.nftContainer}
-                onClick={() => handleNftClick(nft)}
-                data-testid={`nft-id-${name}`}
-              >
-                {icns ? (
-                  <ICNSDisplay
-                    icns={nft}
-                    className={classes.nft}
-                    onClick={() => handleNftClick(nft)}
-                  />
-                ) : (
-                  <NFTDisplayer
-                    url={nft.url}
-                    className={classes.nft}
-                    defaultTag={nftDefaultTag}
-                    onClick={() => handleNftClick(nft)}
-                  />
-                )}
-                {!icns && (
-                  <Typography
-                    className={classes.id}
-                    variant="subtitle1"
-
-                  >
-                    {name.length > 12 ? shortICNSName(name) : name}
-                  </Typography>
-                )}
-              </div>
-            );
-          })}
+          <div className={classes.numberArrowContainer}>
+            <p className={classes.nftQty}>
+              {collection.tokens.length}
+            </p>
+            <ChevronDown
+              className={clsx(classes.expandIcon, expanded && classes.rotate)}
+              size={20}
+            />
+          </div>
         </div>
-      </Collapsible>
-    </div>
+        )}
+    >
+      <div className={clsx(classes.grid, expanded && classes.expanded)}>
+        {collection?.tokens?.map((nft) => {
+          const name = nft.name || `#${nft.index}`;
+          return (
+            <div
+              className={classes.nftContainer}
+              onClick={() => handleNftClick(nft)}
+              data-testid={`nft-id-${name}`}
+            >
+              {icns ? (
+                <ICNSDisplay
+                  icns={nft}
+                  className={classes.nft}
+                  onClick={() => handleNftClick(nft)}
+                />
+              ) : (
+                <NFTDisplayer
+                  url={nft.url}
+                  className={classes.nft}
+                  defaultTag={nftDefaultTag}
+                  onClick={() => handleNftClick(nft)}
+                />
+              )}
+              {!icns && (
+              <Typography
+                className={classes.id}
+                variant="subtitle1"
+              >
+                {name.length > 12 ? shortICNSName(name) : name}
+              </Typography>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </Collapsible>
   );
 }
 

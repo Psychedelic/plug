@@ -2,7 +2,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles(() => ({
   collectionHeader: {
-    marginBottom: 12,
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -50,9 +49,6 @@ export default makeStyles(() => ({
   nftContainer: {
     paddingTop: 6,
     paddingBottom: 6,
-  },
-  collection: {
-    marginBottom: 20,
   },
   expandIcon: {
     transition: 'transform .2s ease-in-out',
