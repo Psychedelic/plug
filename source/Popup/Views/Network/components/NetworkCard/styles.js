@@ -5,6 +5,7 @@ export default makeStyles(() => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    height: 80,
     width: '100%',
     padding: '16px 24px',
     cursor: 'pointer',
