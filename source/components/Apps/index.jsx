@@ -54,7 +54,7 @@ const Apps = () => {
             ? (
               <>
                 <div className={classes.textContainer}>
-                  <Typography variant="h5">{t('apps.title')}</Typography>
+                  <Typography variant="h5" data-testid="app-tab-title">{t('apps.title')}</Typography>
                 </div>
                 {apps.map((app, index) => (
                   <AppItem
