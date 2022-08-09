@@ -17,6 +17,10 @@ export default makeStyles((theme) => ({
     marginBottom: 20,
   },
   text: {
+    marginBottom: 15,
+  },
+  errorCode: {
+    fontWeight: 400,
     marginBottom: 20,
   },
   button: {
