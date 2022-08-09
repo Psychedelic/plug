@@ -35,7 +35,7 @@ const checkHelpMenuItemLinkMatch = async (browser, page, name, link) => {
   }
 };
 
-describe('Settings: Secret Recovery Phrase', () => {
+describe('Settings: Help', () => {
   let browser;
   let page;
 

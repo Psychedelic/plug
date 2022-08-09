@@ -10,7 +10,7 @@ import GenericIcon from '../GenericIcon';
 import useStyles from './styles';
 
 const AppItem = ({
-  name, icon, onDelete, onDetail,
+  name, icon, onDelete, onDetail, appItemTestId,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
@@ -23,7 +23,7 @@ const AppItem = ({
       onMouseLeave={() => setHover(false)}
     >
       <GenericIcon image={icon} style={{ borderRadius: 10 }} />
-      <Typography variant="h5" className={classes.title} data-testid={`${}`}>{name}</Typography>
+      <Typography variant="h5" className={classes.title} data-testid={`${appItemTestId}-${name}`}>{name}</Typography>
       <IconButton className={clsx(classes.icon, classes.firstIcon, hover && classes.visible)} size="medium" onClick={onDetail}>
         <ListIcon />
       </IconButton>
@@ -36,9 +36,14 @@ const AppItem = ({
 
 export default AppItem;
 
+AppItem.defaultProps = {
+  appItemTestId: '',
+};
+
 AppItem.propTypes = {
   name: PropTypes.string.isRequired,
   icon: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
   onDetail: PropTypes.func.isRequired,
+  appItemTestId: PropTypes.string,
 };

@@ -69,7 +69,7 @@ global.setupChrome = async () => {
 
 // General utils
 
-const getXPathElements = async (page, elementType, content, wait = false) => {
+const getXPathElements = async (page, elementType, content, wait = true) => {
   const xPath = `//${elementType}[contains(.,"${content}")]`;
 
   if (wait) await page.waitForXPath(xPath);
@@ -194,4 +194,5 @@ global.optionsPageUtils = optionsPageUtils;
 global.utils = {
   createNewPage,
   getTestIdSelector,
+  getXPathElements,
 };

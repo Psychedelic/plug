@@ -34,7 +34,7 @@ const Activity = () => {
         {
           activity && activity?.length > 0
             ? activity.map((item, index) => (
-              <ActivityItem key={`${index.toString()}-${item.type}`} {...item} />
+              <ActivityItem data-testid='activity-item' key={`${index.toString()}-${item.type}`} {...item} />
             ))
             : <EmptyState />
         }

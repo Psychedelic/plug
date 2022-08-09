@@ -40,7 +40,7 @@ const Apps = () => {
     return (
       <div className={classes.emptyState}>
         <img src={ThinkingEmoji} className={classes.image} />
-        <Typography className={classes.emptyTitle} variant="h4">{t('apps.emptyTitle')}</Typography>
+        <Typography className={classes.emptyTitle} data-testid="app-tab-empty-title" variant="h4">{t('apps.emptyTitle')}</Typography>
         <Typography className={classes.emptyText} variant="subtitle2">{t('apps.emptyText')}</Typography>
       </div>
     );
@@ -62,6 +62,7 @@ const Apps = () => {
                     onDelete={handleOpenDelete(app)}
                     onDetail={handleOpenDetail(app)}
                     {...app}
+                    appItemTestId="app-item"
                   />
                 ))}
               </>
