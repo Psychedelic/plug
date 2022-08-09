@@ -1761,10 +1761,10 @@
     axios "^0.24.0"
     cross-fetch "^3.1.4"
 
-"@psychedelic/dab-js@1.4.3":
-  version "1.4.3"
-  resolved "https://npm.pkg.github.com/download/@psychedelic/dab-js/1.4.3/9265ba76868a9e51b1903c8adb3d1c64142b52afaa9899e994f6328638d27d93#4a233113ba319e1bd27e459ca198ccca1143b3f8"
-  integrity sha512-UEwLg21h9yiXupoXn1j8MT3D0VKgJ4bIBG7/ENeqIeDxehXvhoGdMsSuslPa5W9FYKQHT8Ta6b9nBopRS6v7Nw==
+"@psychedelic/dab-js@1.4.5":
+  version "1.4.5"
+  resolved "https://npm.pkg.github.com/download/@Psychedelic/dab-js/1.4.5/eccee7c10979dcf0c55ab0bc7f02e863a4a8b54f#eccee7c10979dcf0c55ab0bc7f02e863a4a8b54f"
+  integrity sha512-UQ2SGF+1YOGjZPWp0BeA+hR90PyVBHlRoJMVhERu9w49PcNEYR+Sf+Toa0MwGpZfwAT5rSQYbSkKBqQnWjHzHA==
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
@@ -1775,17 +1775,17 @@
     cross-fetch "^3.1.4"
     crypto-js "^4.1.1"
 
-"@psychedelic/plug-controller@0.19.3":
-  version "0.19.3"
-  resolved "https://npm.pkg.github.com/download/@Psychedelic/plug-controller/0.19.3/cf7289aa5d77e96b2ce4a70604c98a9b630a7bdc#cf7289aa5d77e96b2ce4a70604c98a9b630a7bdc"
-  integrity sha512-DC020LnIZe1FtET1Pww+c4J9quwFxJRPNW0awhqg8uFJ3UKYKwQRcUD1a9tLcMahU3h2STDLKSVhkprkf5tDzg==
+"@psychedelic/plug-controller@0.19.6":
+  version "0.19.6"
+  resolved "https://npm.pkg.github.com/download/@Psychedelic/plug-controller/0.19.6/2a89750df16a93f68ec0694718e9b189b88f0a6f#2a89750df16a93f68ec0694718e9b189b88f0a6f"
+  integrity sha512-vz38BgeufdTZwnlAh+8SeRU3kLaRVa664iD8MWthBajtlJrm3nRTV3wfQeaB4FbCAMytVlQiMO8vQc11OwP5OQ==
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
     "@dfinity/identity" "0.9.3"
     "@dfinity/principal" "0.9.3"
     "@psychedelic/cap-js" "0.0.7"
-    "@psychedelic/dab-js" "1.4.3"
+    "@psychedelic/dab-js" "1.4.5"
     "@types/secp256k1" "^4.0.3"
     axios "^0.21.1"
     babel-jest "^25.5.1"
