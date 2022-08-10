@@ -35,6 +35,31 @@ const DEFAULT_STATE = {
   secondaryValue: DEFAULT_SECONDARY,
 };
 
+const errorsInfo = [
+  {
+    errorNames: ['InsufficientBalance', 'InsufficientFunds'],
+    errorCode: 100,
+  },
+  {
+    errorNames: ['DestinationInvalid'],
+    errorCode: 300,
+  },
+  {
+    errorNames: ['is out of cycles'],
+    errorCode: 301,
+  },
+];
+
+const matchErrors = (err) => {
+  for (const errors of errorsInfo) {
+    const isCurrentError = errors.errorNames.some((errorName) => err.includes(errorName));
+    if (isCurrentError) {
+      return errors.errorCode;
+    }
+  }
+  return 600;
+};
+
 export const sendToken = createAsyncThunk(
   'sendToken/regularSend',
   async (arg, { getState, rejectWithValue }) => {
@@ -54,10 +79,7 @@ export const sendToken = createAsyncThunk(
       const res = await callSendToken({ to, amount: 1000000000, canisterId }); // #2  tomar la respuesta de callSendToken
       return res;
     } catch ({ error }) { // aca deberiamos anadirle el codigo de error
-      return rejectWithValue({
-        errorCode: 100,
-        errorName: error,
-      }); // #3 hace reject en caso de que haya un error
+      return rejectWithValue(error); // #3 hace reject en caso de que haya un error
     }
   },
 );
@@ -148,7 +170,8 @@ export const sendSlice = createSlice({
       })
       .addCase(sendToken.rejected, (state, action) => { // #4 esto handlea el error
         state.pending = false;
-        state.error = action.payload;
+        console.log(action.payload);
+        state.error = matchErrors(action.payload);
       })
       .addCase(burnXTC.pending, (state) => {
         state.pending = true;
