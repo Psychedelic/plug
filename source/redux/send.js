@@ -76,10 +76,10 @@ export const sendToken = createAsyncThunk(
     const canisterId = selectedAsset?.canisterId;
 
     try {
-      const res = await callSendToken({ to, amount: 1000000000, canisterId }); // #2  tomar la respuesta de callSendToken
+      const res = await callSendToken({ to, amount, canisterId }); 
       return res;
-    } catch ({ error }) { // aca deberiamos anadirle el codigo de error
-      return rejectWithValue(error); // #3 hace reject en caso de que haya un error
+    } catch ({ error }) {
+      return rejectWithValue(error);
     }
   },
 );
@@ -168,9 +168,8 @@ export const sendSlice = createSlice({
         state.fulfilled = true;
         state.pending = false;
       })
-      .addCase(sendToken.rejected, (state, action) => { // #4 esto handlea el error
+      .addCase(sendToken.rejected, (state, action) => {
         state.pending = false;
-        console.log(action.payload);
         state.error = matchErrors(action.payload);
       })
       .addCase(burnXTC.pending, (state) => {

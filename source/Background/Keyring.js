@@ -395,13 +395,13 @@ export const deleteContact = (contactName) => new Promise((resolve) => {
   });
 });
 
-export const sendToken = ({ to, amount, canisterId, opts }) =>  new Promise((resolve, reject) => {
+export const sendToken = ({ to, amount, canisterId, opts }) => new Promise((resolve, reject) => {
   sendMessage({
     type: HANDLER_TYPES.SEND_TOKEN,
     params: { to, amount, canisterId, opts },
   }, (res) => {
     if (res.error) {
-      reject(res); // #1 esto me va a devolver un error
+      reject(res);
       return;
     }
 
