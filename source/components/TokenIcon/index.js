@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const TokenIcon = ({
-  image,
+  logo,
   symbol,
   className,
   color,
@@ -47,11 +47,11 @@ const TokenIcon = ({
 
   const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[nft.canisterId];
 
-  if (image) {
+  if (logo) {
     return nft ? (
-      <NFTDisplayer url={image} className={className} defaultTag={nftDefaultTag} {...props} />
+      <NFTDisplayer url={logo} className={className} defaultTag={nftDefaultTag} {...props} />
     ) : (
-      <img src={image} className={clsx(classes.icon, className)} {...props} />
+      <img src={logo} className={clsx(classes.icon, className)} {...props} />
     );
   }
 
@@ -67,7 +67,7 @@ const TokenIcon = ({
 
 TokenIcon.propTypes = {
   symbol: PropTypes.string.isRequired,
-  image: PropTypes.string,
+  logo: PropTypes.string,
   className: PropTypes.string,
   nft: PropTypes.bool,
   color: PropTypes.shape({
@@ -79,7 +79,7 @@ TokenIcon.propTypes = {
 };
 
 TokenIcon.defaultProps = {
-  image: null,
+  logo: null,
   nft: false,
   className: '',
   color: randomColor({ luminosity: 'light' }),

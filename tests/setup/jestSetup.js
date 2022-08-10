@@ -42,7 +42,6 @@ global.setupChrome = async () => {
       `--load-extension=${EXTENSION_PATH}`,
       '--enable-automation',
     ],
-    slowMo: 50,
   });
   const targets = await browser.targets();
   const extensionTarget = targets.find(({ _targetInfo }) => _targetInfo.title === PAGE_TITLE);
@@ -158,10 +157,6 @@ const createAccountButtonClick = async (page) => {
 };
 
 const refreshWallet = async (page) => {
-  await profileButtonClick(page);
-
-  await page.waitForSelector('[data-testid="drawer"][aria-hidden="true"]', { hidden: true });
-
   const refreshWalletBtn = await getByTestId(page, 'refresh-wallet-button', true);
   await refreshWalletBtn.click();
 };

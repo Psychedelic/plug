@@ -21,6 +21,8 @@ import SendErrorScreen from './Views/SendError';
 import NFTDetails from './Views/NFTDetails';
 import SendNFT from './Views/SendNFT';
 import ClockError from './Views/ClockError';
+import Network from './Views/Network';
+import NetworkCreation from './Views/NetworkCreation';
 
 const Popup = ({ initialRoute }) => (
   <Router initialRouteName={initialRoute}>
@@ -41,6 +43,8 @@ const Popup = ({ initialRoute }) => (
     <Route name="export-identity" component={ExportIdentity} />
     <Route name="nft-details" component={NFTDetails} />
     <Route name="send-nft" component={SendNFT} />
+    <Route name="network" component={Network} />
+    <Route name="create-network" component={NetworkCreation} />
   </Router>
 );
 

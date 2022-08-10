@@ -34,9 +34,9 @@ export const getApps = (currentWalletId, cb) => {
 export const getApp = (currentWalletId, appUrl, cb) => {
   const defaultValue = {};
 
-  secureGetWrapper(currentWalletId, defaultValue, (state) => (
-    cb(state?.[parseInt(currentWalletId, 10)]?.apps?.[appUrl] || defaultValue)
-  ));
+  secureGetWrapper(currentWalletId, defaultValue, (state) => {
+    cb(state?.[parseInt(currentWalletId, 10)]?.apps?.[appUrl] || defaultValue);
+  });
 };
 
 export const setApps = (currentWalletId, apps, cb = () => { }) => {

@@ -23,7 +23,7 @@ const SwapIcon = ({
     >
       <TokenIcon
         className={clsx(classes.image, classes.fromImage, hovering && classes.hovered)}
-        image={fromCurrency?.thumbnail || UnknownIcon}
+        logo={fromCurrency?.thumbnail || UnknownIcon}
         alt={fromCurrency?.name}
       />
       <img
@@ -33,7 +33,7 @@ const SwapIcon = ({
       />
       <TokenIcon
         className={clsx(classes.image, classes.toImage)}
-        image={toCurrency?.thumbnail || UnknownIcon}
+        logo={toCurrency?.thumbnail || UnknownIcon}
         alt={toCurrency?.name}
       />
     </div>

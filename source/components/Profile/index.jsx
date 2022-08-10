@@ -140,7 +140,7 @@ const Profile = ({ disableProfile }) => {
           });
           sendMessage({
             type: HANDLER_TYPES.GET_ASSETS,
-            params: {},
+            params: { refresh: true },
           }, (keyringAssets) => {
             dispatch(setAssets({ keyringAssets, icpPrice }));
             dispatch(setAssetsLoading(false));
@@ -284,7 +284,7 @@ const Profile = ({ disableProfile }) => {
                         onClick={!isHidden && handleChangeAccount(account.walletNumber)}
                         selected={isExactWalletNumber}
                         className={clsx(isHidden && classes.hiddenAccount)}
-                        accountNameTestId="account-name"
+                        itemNameTestId="account-name"
                         endIcon={isExactWalletNumber ? (
                           <IconButton data-testid={`edit-button-${account.name}`} onClick={handleEditAccount}>
                             <img src={BluePencil} />
@@ -306,7 +306,7 @@ const Profile = ({ disableProfile }) => {
                   key="createAccount"
                   name={t('profile.createAccount')}
                   alignLeft
-                  image={Plus}
+                  logo={Plus}
                   onClick={handleOpenCreateAccount}
                   data-testid="create-account-button"
                 />

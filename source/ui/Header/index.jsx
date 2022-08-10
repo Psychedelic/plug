@@ -7,6 +7,7 @@ const Header = ({
   center,
   left,
   right,
+  ...other
 }) => {
   const classes = useStyles();
 
@@ -16,7 +17,7 @@ const Header = ({
         left
         && <div className={classes.left}>{left}</div>
       }
-      <Typography variant="h3" className={classes.center}>{center}</Typography>
+      <Typography variant="h3" {...other} className={classes.center}>{center}</Typography>
       {
         right
         && <div className={classes.right}>{right}</div>

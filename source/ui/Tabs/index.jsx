@@ -26,7 +26,13 @@ const Tabs = ({
       >
         {
           tabs.map((tab) => (
-            <Tab key={tab.label} label={tab.label} loading={tab.loading} data-testid={`${tabItemTestId}-${tab.label}`} />
+            <Tab
+              key={tab.label}
+              label={tab.label}
+              loading={tab.loading}
+              data-testid={`${tabItemTestId}-${tab.label}`}
+              disabled={tab.disabled}
+            />
           ))
         }
       </MuiTabs>

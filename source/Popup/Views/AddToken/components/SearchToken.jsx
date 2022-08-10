@@ -88,7 +88,7 @@ const SearchToken = ({ handleChangeSelectedToken, handleChangeTab }) => {
                         onClick={() => handleSelectToken(ft)}
                       >
                         <div className={classes.tokenImage}>
-                          <TokenIcon image={ft.logo} symbol={ft.symbol} />
+                          <TokenIcon logo={ft.logo} symbol={ft.symbol} />
                           {
                             ft.verified
                             && <img src={VerifiedImg} className={classes.verified} />

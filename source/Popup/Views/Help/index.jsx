@@ -14,7 +14,7 @@ const Help = () => {
 
   return (
     <Layout>
-      <Header center={t('help.title')} right={<LinkButton value={t('common.close')} onClick={() => navigator.navigate('home')} />} />
+      <Header center={t('help.title')} right={<LinkButton data-testid="close-button" value={t('common.close')} onClick={() => navigator.navigate('home')} />} />
       <div className={classes.menuContainer}>
         {
           helpItems.map((item) => (
@@ -22,6 +22,7 @@ const Help = () => {
               key={item.name}
               {...item}
               size="medium"
+              itemNameTestId="help"
             />
           ))
         }
