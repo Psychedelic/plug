@@ -75,8 +75,12 @@ export const sendToken = createAsyncThunk(
     const amount = rawAmount.toString();
     const { canisterId, standard, decimals } = selectedAsset || {};
 
-    const res = await callSendToken({ to, amount, canisterId, standard, decimals });
-    return res;
+    try {
+      const res = await callSendToken({ to, amount, canisterId, standard, decimals });
+      return res;
+    } catch ({ error }) {
+      return rejectWithValue(error);
+    }
   },
 );
 
@@ -88,9 +92,13 @@ export const burnXTC = createAsyncThunk(
 
     const to = addressInfo.resolvedAddress || address;
     const amount = rawAmount.toString();
-    const res = await callBurnXTC({ to, amount });
 
-    return res;
+    try {
+      const res = await callBurnXTC({ to, amount });
+      return res;
+    } catch ({ error }) {
+      return rejectWithValue(error);
+    }
   },
 );
 
