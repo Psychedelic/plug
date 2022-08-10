@@ -1,4 +1,5 @@
 import { validateCanisterId } from '@shared/utils/ids';
+import { isValidUrl } from '@shared/utils/string';
 
 const requiredValidation = (value) => (!value?.length && 'Required') || null;
 const uniqueValidation = (value, networks, field) => (networks?.find((net) => net[field] === value)
@@ -10,6 +11,8 @@ const canisterIdValidation = (value) => {
   }
   return 'Invalid canister ID';
 };
+
+const urlValidation = (value) => !isValidUrl(value) && 'Invalid URL';
 
 export const NETWORK_CREATION_DEFAULT_VALUES = {
   name: '',
@@ -27,7 +30,8 @@ export const NETWORK_CREATION_FIELDS = {
     name: 'host',
     required: true,
     validate: (value, networks) => requiredValidation(value)
-    || uniqueValidation(value, networks, 'host'),
+    || uniqueValidation(value, networks, 'host')
+    || urlValidation(value),
   },
   ledgerCanisterId: {
     name: 'ledgerCanisterId',
