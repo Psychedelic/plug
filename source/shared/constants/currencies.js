@@ -135,18 +135,11 @@ export const parseAssetsAmount = (assets = []) => (
 
 export const formatAssets = (assets = [], icpPrice) => {
   const mappedAssets = assets.map(({ amount, token, error }) => {
-    const {
-      name, symbol, canisterId, logo, standard,
-    } = token;
-    const asset = formatAssetBySymbol(amount, symbol, icpPrice);
+    const asset = formatAssetBySymbol(amount, token.symbol, icpPrice);
     return {
-      logo,
+      ...token,
       ...asset,
-      name,
-      symbol,
-      canisterId,
       error,
-      standard,
     };
   });
   return mappedAssets;

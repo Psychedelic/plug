@@ -1,13 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Plus } from 'react-feather';
 import { useTranslation } from 'react-i18next';
-import { TABS, useRouter } from '@components/Router';
+import { useRouter } from '@components/Router';
 
-import { CircularProgress, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { getNetworks } from '@redux/network';
 import BackIcon from '@assets/icons/back.svg';
-import { Header, LinkButton } from '@ui';
+import { Button, Header, LinkButton } from '@ui';
 import { Layout } from '@components';
 
 import useStyles from './styles';
@@ -19,7 +18,8 @@ const Network = () => {
   const { navigator } = useRouter();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { networks = [], networksLoading } = useSelector((state) => state.network);
+  const { networks = [] } = useSelector((state) => state.network);
+  const [groupedNetworks, setGroupedNetworks] = useState({});
 
   const navigateTo = (screen, tab) => () => navigator.navigate(screen, tab);
 
@@ -27,27 +27,56 @@ const Network = () => {
     dispatch(getNetworks());
   }, []);
 
+  useEffect(() => {
+    // Group networks by first letter of name
+    const networksByName = networks.reduce((acc, network) => {
+      const letter = network.name?.[0]?.toUpperCase?.();
+      const letterNetworks = acc[letter] || [];
+      return {
+        ...acc,
+        [letter]: [...letterNetworks, network].sort(
+          (a, b) => a.name.toUpperCase() > b.name.toUpperCase(),
+        ),
+      };
+    }, {});
+    setGroupedNetworks(networksByName);
+  }, [networks]);
+
   return (
     <Layout>
       <Header
         center={<Typography variant="h2">{t('network.network')}</Typography>}
         left={<LinkButton value={t('common.back')} onClick={navigator.goBack} startIcon={BackIcon} />}
-        right={<LinkButton value={t('common.done')} onClick={navigateTo('home', TABS.TOKENS)} />}
+        right={(
+          <Button
+            variant="rainbowOutlined"
+            value={t('common.add')}
+            style={{ height: 27, minWidth: 75 }}
+            onClick={navigateTo('create-network')}
+          />
+)}
       />
-      {networksLoading ? <CircularProgress size={24} />
-        : (
-          <div className={classes.networkContainer}>
-            {networks?.length
-              ? networks.map((network) => (<NetworkCard {...network} />))
-              : (<NoNetworks />)}
-          </div>
-        )}
-      <div
-        onClick={navigateTo('create-network')}
-        className={classes.addNetwork}
-      >
-        <Plus size="30" className={classes.plusIcon} strokeWidth={2.5} />
-      </div>
+      {networks?.length ? (
+        <div className={classes.networkContainer}>
+          {Object.keys(groupedNetworks).sort().map(
+            (letter) => (
+              <>
+                <div className={classes.letterHeader}>
+                  {letter}
+                </div>
+                {groupedNetworks[letter].map((network, index) => (
+                  <>
+                    <NetworkCard {...network} />
+                    {index < groupedNetworks[letter].length - 1 && (
+                      <div className={classes.divider} />
+                    )}
+                  </>
+                ))}
+              </>
+            ),
+          )}
+        </div>
+      ) : <NoNetworks />}
     </Layout>
   );
 };

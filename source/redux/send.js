@@ -48,10 +48,10 @@ export const sendToken = createAsyncThunk(
 
     const to = addressInfo.resolvedAddress || address;
     const amount = rawAmount.toString();
-    const { canisterId, decimals } = selectedAsset || {};
+    const { canisterId, decimals, standard } = selectedAsset || {};
 
     const res = await callSendToken({
-      to, amount, canisterId, decimals,
+      to, amount, canisterId, decimals, standard,
     });
     return res;
   },

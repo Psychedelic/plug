@@ -336,7 +336,7 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME]: async (name) => {
     try {
-      const res = await keyring.setICNSResolvedName(name);
+      const res = await keyring.setReverseResolvedName({ name });
       return res;
     } catch (e) {
       // eslint-disable-next-line
@@ -354,9 +354,9 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: e.message };
     }
   },
-  [HANDLER_TYPES.ADD_CONTACT]: async (contact, walletNumber = 0) => {
+  [HANDLER_TYPES.ADD_CONTACT]: async (contact, subaccount = 0) => {
     try {
-      const res = await keyring.addContact(contact, walletNumber);
+      const res = await keyring.addContact({ contact, subaccount });
       return res;
     } catch (e) {
       // eslint-disable-next-line
@@ -364,9 +364,9 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: e.message };
     }
   },
-  [HANDLER_TYPES.REMOVE_CONTACT]: async (contactName, walletNumber = 0) => {
+  [HANDLER_TYPES.REMOVE_CONTACT]: async (addressName, subaccount = 0) => {
     try {
-      const res = await keyring.deleteContact(contactName, walletNumber);
+      const res = await keyring.deleteContact({ addressName, subaccount });
       return res;
     } catch (e) {
       // eslint-disable-next-line

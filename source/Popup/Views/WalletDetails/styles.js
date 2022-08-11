@@ -32,15 +32,14 @@ export default makeStyles((theme) => ({
     width: 231,
     height: 41,
     padding: '0 12px',
-    border: '1px solid #FFFFFF',
     borderRadius: 6,
     color: '#111827',
     fontWeight: 600,
     fontSize: 20,
+    marginRight: 10,
   },
   nameEdit: {
     background: '#FFFFFF',
-    border: '1px solid #D1D5DB',
     boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
   },
   icon: {
