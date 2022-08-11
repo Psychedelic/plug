@@ -68,4 +68,15 @@ export default makeStyles(() => ({
     opacity: 0.5,
     pointer: 'arrow',
   },
+  '@keyframes rotate': {
+    '0%': {
+      transform: 'rotate(0deg)',
+    },
+    '100%': {
+      transform: 'rotate(360deg)',
+    },
+  },
+  loading: {
+    animation: '$rotate 1s infinite linear',
+  },
 }));

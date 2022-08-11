@@ -15,6 +15,10 @@ const NetworkSelector = ({ onClose, refreshWallet }) => {
   const { t } = useTranslation();
   const { networks } = useSelector((state) => state.network);
   const { navigator } = useRouter();
+  const handleNetworkClick = () => {
+    refreshWallet();
+    onClose?.();
+  };
   return (
     <>
       <div className={classes.selectorContainer}>
@@ -32,7 +36,7 @@ const NetworkSelector = ({ onClose, refreshWallet }) => {
             <NetworkCard
               network={network}
               withDivider={index < networks.length - 1}
-              onClick={refreshWallet}
+              onClick={handleNetworkClick}
             />
           ))}
         </div>
