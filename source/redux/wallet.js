@@ -29,7 +29,7 @@ export const walletSlice = createSlice({
     assetsLoading: true,
     collections: [],
     collectionsLoading: false,
-    transactionsLoading: true,
+    transactionsLoading: false,
   },
   reducers: {
     updateWalletDetails: (state, action) => {
