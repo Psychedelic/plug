@@ -39,7 +39,7 @@ const AssetItem = ({
             <>
               <Typography variant="h5" className={classes.failedTitle}>{name}</Typography>
               <Typography variant="subtitle2" className={classes.failedDescription}>
-                {t(`tokens.${ledgerNotSpecified ? 'ledgerNotSpecified' : 'failedToFetchBalance'}`)}
+                {t(`tokens.${ledgerNotSpecified && name === 'ICP' ? 'ledgerNotSpecified' : 'failedToFetchBalance'}`)}
               </Typography>
             </>
           )
