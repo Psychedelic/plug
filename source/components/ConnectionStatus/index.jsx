@@ -67,7 +67,8 @@ const ConnectionStatus = ({ incStatus = null, disableNavigation, hideNetwork }) 
       {icon}
       <span
         data-testid="banner-text"
-        className={clsx(hideNetwork && classes.fullWidth)}>
+        className={clsx(hideNetwork && classes.fullWidth, classes.bannerText)}
+      >
         {t(label, { version: browser.runtime.getManifest().version })}
       </span>
       {

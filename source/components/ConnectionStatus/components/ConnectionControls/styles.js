@@ -6,6 +6,14 @@ const flex = {
 };
 
 export default makeStyles(() => ({
+  '@keyframes spin': {
+    '0%': {
+      transform: 'rotate(0deg)',
+    },
+    '100%': {
+      transform: 'rotate(360deg)',
+    },
+  },
   root: {
     height: 40,
     width: '100%',
@@ -41,6 +49,9 @@ export default makeStyles(() => ({
     width: 14,
     height: 20,
   },
+  reloadIconLoading: {
+    animation: '$spin 1s linear infinite',
+  },
   network: {
     maxWidth: 70,
     whiteSpace: 'nowrap',
@@ -49,6 +60,7 @@ export default makeStyles(() => ({
     cursor: 'pointer',
   },
   reloadIconContainer: {
+    all: 'unset',
     ...flex,
     borderRadius: '50%',
     justifyContent: 'center',
@@ -56,6 +68,10 @@ export default makeStyles(() => ({
     height: 30,
     background: 'white',
     cursor: 'pointer',
+    '&:disabled': {
+      opacity: 0.5,
+      cursor: 'not-allowed',
+    },
   },
   statusDot: {
     width: 8,
@@ -68,14 +84,7 @@ export default makeStyles(() => ({
     opacity: 0.5,
     pointer: 'arrow',
   },
-  '@keyframes rotate': {
-    '0%': {
-      transform: 'rotate(0deg)',
-    },
-    '100%': {
-      transform: 'rotate(360deg)',
-    },
-  },
+
   loading: {
     animation: '$rotate 1s infinite linear',
   },

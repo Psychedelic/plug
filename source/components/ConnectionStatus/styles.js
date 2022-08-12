@@ -19,6 +19,9 @@ export default makeStyles((theme) => ({
     textAlign: 'center',
   },
   fullWidth,
+  bannerText: {
+    fontWeight: 'bold',
+  },
   active: {
     background: theme.palette.success.main,
   },
