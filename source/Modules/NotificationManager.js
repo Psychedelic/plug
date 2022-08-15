@@ -1,6 +1,6 @@
 import extension from 'extensionizer';
 
-class NotificationManager {
+export class NotificationManager {
   constructor(image) {
     this.iconUrl = image;
   }
@@ -34,5 +34,3 @@ class NotificationManager {
     });
   }
 }
-
-export default NotificationManager;
