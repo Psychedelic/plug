@@ -6,8 +6,9 @@ import { useRouter } from '@components/Router';
 import { Typography } from '@material-ui/core';
 import { getNetworks } from '@redux/network';
 import BackIcon from '@assets/icons/back.svg';
-import { Button, Header, LinkButton } from '@ui';
-import { Layout } from '@components';
+import {
+  Button, Header, LinkButton, Layout,
+} from '@components';
 
 import useStyles from './styles';
 import NoNetworks from './components/NoNetworks';

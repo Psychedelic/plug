@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { IncomingAction, USDFormat } from '@ui';
+import { IncomingAction, USDFormat } from '@components';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
 import { CURRENCIES, E8S_PER_ICP } from '@shared/constants/currencies';

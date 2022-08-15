@@ -4,10 +4,10 @@ import { useRouter } from '@components/Router';
 import { Typography } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Layout } from '@components';
 import {
+  Layout,
   Header, LinkButton, TextInput, Button,
-} from '@ui';
+} from '@components';
 import BackIcon from '@assets/icons/back.svg';
 import { addNetwork } from '@redux/network';
 

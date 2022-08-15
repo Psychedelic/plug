@@ -8,11 +8,10 @@ import { useSelector } from 'react-redux';
 import { useRouter } from '@components/Router';
 import {
   QRCode, CopyButton, IconQrCode, Layout,
+
+  Header, LinkButton, InputBase, Dialog, Container,
 } from '@components';
 import shortAddress from '@shared/utils/short-address';
-import {
-  Header, LinkButton, InputBase, Dialog, Container,
-} from '@ui';
 import useStyles from './styles';
 
 const Deposit = () => {

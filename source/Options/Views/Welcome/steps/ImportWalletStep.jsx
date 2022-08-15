@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { useTranslation } from 'react-i18next';
-import { Button, FormItem, TextInput } from '@ui';
+import { Button, FormItem, TextInput } from '@components';
 import * as bip39 from 'bip39';
 
 const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {

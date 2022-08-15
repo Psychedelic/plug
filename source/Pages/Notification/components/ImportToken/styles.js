@@ -19,5 +19,5 @@ export default makeStyles((theme) => ({
     height: 41,
     width: 41,
     marginRight: theme.spacing(1),
-  }
+  },
 }));

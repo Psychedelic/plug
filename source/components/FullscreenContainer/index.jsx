@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
-import { MadeBy } from '@components';
+import MadeBy from '../MadeBy';
 import useStyles from './styles';
 
 const FullscreenContainer = ({ children, maxWidth }) => {

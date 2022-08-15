@@ -3,10 +3,10 @@ import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { IDInput } from '@components';
 import {
+  IDInput,
   FormItem, MultiInput, Container, Button, Dialog,
-} from '@ui';
+} from '@components';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
 import NumberFormat from 'react-number-format';

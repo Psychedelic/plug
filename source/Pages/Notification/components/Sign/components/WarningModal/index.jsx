@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@ui';
+import { Button } from '@components';
 
 import useStyles from './styles';
 import { WARNING_LINKS } from '../../constants';

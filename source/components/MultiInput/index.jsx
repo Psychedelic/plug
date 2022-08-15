@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import ExchangeIcon from '@assets/icons/exchange-arrows.svg';
-import { TokenIcon } from '@components';
+import TokenIcon from '../TokenIcon';
 
 import InputBase from '../InputBase';
 import useStyles from './styles';

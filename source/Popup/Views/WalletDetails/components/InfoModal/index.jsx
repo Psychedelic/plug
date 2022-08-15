@@ -5,7 +5,7 @@ import { Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 
 import { icIdsUrl } from '@shared/constants/urls';
-import { Button, Dialog, LinkButton } from '@ui';
+import { Button, Dialog, LinkButton } from '@components';
 
 import useStyles from './styles';
 

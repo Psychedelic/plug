@@ -4,8 +4,9 @@ import extension from 'extensionizer';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import Typography from '@material-ui/core/Typography';
-import { Plug } from '@components';
-import { LinkButton, Button, FormInput } from '@ui';
+import {
+  Plug, LinkButton, Button, FormInput,
+} from '@components';
 import { useRouter } from '@components/Router';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';

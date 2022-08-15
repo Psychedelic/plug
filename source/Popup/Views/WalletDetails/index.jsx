@@ -15,11 +15,10 @@ import { useRouter } from '@components/Router';
 import {
   Layout,
   UserIcon,
-} from '@components';
-import {
+
   Header,
   LinkButton,
-} from '@ui';
+} from '@components';
 import { setUseICNS } from '@modules/storageManager';
 import { setICNSData, setUseICNS as setReduxUseICNS } from '@redux/icns';
 

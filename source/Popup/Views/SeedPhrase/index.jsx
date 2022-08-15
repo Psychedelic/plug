@@ -1,6 +1,5 @@
 import React from 'react';
-import { Layout } from '@components';
-import { Header } from '@ui';
+import { Layout, Header } from '@components';
 import { useTranslation } from 'react-i18next';
 import useSteps from './hooks/useSteps';
 

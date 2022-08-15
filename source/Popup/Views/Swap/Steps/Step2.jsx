@@ -1,7 +1,8 @@
 import React from 'react';
-import { SwapInfo } from '@components';
+import {
+  SwapInfo, Container, Button, InfoRow,
+} from '@components';
 import Grid from '@material-ui/core/Grid';
-import { Container, Button, InfoRow } from '@ui';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { useRouter } from '@components/Router';

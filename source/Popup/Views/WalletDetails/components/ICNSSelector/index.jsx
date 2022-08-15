@@ -6,7 +6,7 @@ import { ChevronDown } from 'react-feather';
 
 import { sendMessage, HANDLER_TYPES } from '@background/Keyring';
 import { setICNSData } from '@redux/icns';
-import { InputBase, Dialog } from '@ui';
+import { InputBase, Dialog } from '@components';
 
 import useStyles from './styles';
 

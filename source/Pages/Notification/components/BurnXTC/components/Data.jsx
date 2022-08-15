@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormItem } from '@ui';
+import { FormItem } from '@components';
 import extension from 'extensionizer';
 import useStyles from '../styles';
 import SIZES from '../constants';

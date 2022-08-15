@@ -1,5 +1,5 @@
 import { Typography } from '@material-ui/core';
-import { Button, Container } from '@ui';
+import { Button, Container } from '@components';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import ContactIcon from '@assets/icons/contacts.svg';

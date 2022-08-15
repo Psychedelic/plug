@@ -4,8 +4,7 @@ import { Typography } from '@material-ui/core';
 import { Info } from 'react-feather';
 import { useTranslation } from 'react-i18next';
 
-import { CopyButton } from '@components';
-import { FormItem } from '@ui';
+import { CopyButton, FormItem } from '@components';
 
 import useStyles from './styles';
 import InfoModal from '../InfoModal';

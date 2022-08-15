@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { useTranslation, initReactI18next } from 'react-i18next';
-import { Button, Tabs, LinkButton } from '@ui';
+import {
+  Button, Tabs, LinkButton, Layout,
+} from '@components';
 import i18n from 'i18next';
 import { useTabs } from '@hooks';
 import PropTypes from 'prop-types';
-import { Layout } from '@components';
 import { useDispatch } from 'react-redux';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';

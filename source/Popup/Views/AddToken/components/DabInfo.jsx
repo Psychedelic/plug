@@ -1,5 +1,5 @@
 import React from 'react';
-import { LinkButton } from '@ui';
+import { LinkButton } from '@components';
 import { Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import DabIcon from '@assets/icons/dab.svg';

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { Tabs } from '@ui';
+import { Tabs } from '@components';
 import { useTabs } from '@hooks';
 
 import SearchToken from '../components/SearchToken';

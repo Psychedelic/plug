@@ -2,8 +2,6 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@ui": ["source/ui"],
-      "@ui/*": ["source/ui/*"],
       "@components": ["source/components"],
       "@components/*": ["source/components/*"],
       "@assets": ["source/assets"],

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DataDisplay, AssetFormat } from '@ui';
+import { DataDisplay, AssetFormat } from '@components';
 import { useTranslation } from 'react-i18next';
 import { PortRPC } from '@psychedelic/browser-rpc';
 import { v4 as uuidv4 } from 'uuid';

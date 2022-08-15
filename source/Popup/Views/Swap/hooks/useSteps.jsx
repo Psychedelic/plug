@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { LinkButton } from '@ui';
+import { LinkButton } from '@components';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';

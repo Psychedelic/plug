@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Grid from '@material-ui/core/Grid';
 
-import { Alert } from '@ui';
+import { Alert } from '@components';
 import useStyles from '../../../styles';
 
 const CyclesToAccountWarning = () => {

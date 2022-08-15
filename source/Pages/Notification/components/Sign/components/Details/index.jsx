@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { IncomingAction } from '@ui';
+import { IncomingAction } from '@components';
 import { ArrowDown } from 'react-feather';
 
 import { getDabNfts } from '@shared/services/DAB';

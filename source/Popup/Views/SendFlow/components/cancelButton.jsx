@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { LinkButton } from '@ui';
+import { LinkButton } from '@components';
 import { useRouter } from '@components/Router';
 
 const CancelButton = () => {

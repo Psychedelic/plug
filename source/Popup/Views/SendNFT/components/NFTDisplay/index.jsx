@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Typography } from '@material-ui/core';
 import { NFT_COLLECTION_DEFAULT_TYPES } from '@shared/constants/nft';
-import { NFTDisplayer } from '@ui';
+import { NFTDisplayer } from '@components';
 
 import useStyles from './styles';
 

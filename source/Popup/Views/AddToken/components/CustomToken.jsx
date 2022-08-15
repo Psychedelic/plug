@@ -10,7 +10,7 @@ import {
   Alert,
   Dialog,
   Select,
-} from '@ui';
+} from '@components';
 import { validateCanisterId } from '@shared/utils/ids';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import extension from 'extensionizer';

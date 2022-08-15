@@ -7,15 +7,15 @@ import {
   Button,
   Container,
   IncomingAction,
-} from '@ui';
-import { Layout, TokenIcon, DisplayBox } from '@components';
+  Layout, TokenIcon, DisplayBox,
+} from '@components';
 import PropTypes from 'prop-types';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { setAccountInfo } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import { reviewPendingTransaction } from '@modules/storageManager';
 import initConfig from '../../../../locales';
 import useStyles from './styles';
-import { reviewPendingTransaction } from '@modules/storageManager';
 
 i18n.use(initReactI18next).init(initConfig);
 
@@ -27,7 +27,9 @@ const portRPC = new PortRPC({
 
 portRPC.start();
 
-const ImportToken = ({ args, metadata, callId, portId, setOnTimeout, transactionId, }) => {
+const ImportToken = ({
+  args, metadata, callId, portId, setOnTimeout, transactionId,
+}) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -36,7 +38,9 @@ const ImportToken = ({ args, metadata, callId, portId, setOnTimeout, transaction
   const [handled, setHandled] = useState(false);
 
   const { url, icons } = metadata || {};
-  const { canisterId, symbol, standard, logo } = args || {};
+  const {
+    canisterId, symbol, standard, logo,
+  } = args || {};
 
   const handleImportToken = async (status) => {
     setLoading(status);
@@ -83,11 +87,13 @@ const ImportToken = ({ args, metadata, callId, portId, setOnTimeout, transaction
           <DisplayBox
             title={symbol}
             subtitle={canisterId}
-            img={<TokenIcon
-              image={logo}
-              className={classes.tokenImage}
-              symbol={symbol}
-            />}
+            img={(
+              <TokenIcon
+                image={logo}
+                className={classes.tokenImage}
+                symbol={symbol}
+              />
+)}
           />
 
           <div className={classes.buttonContainer}>
@@ -114,7 +120,7 @@ const ImportToken = ({ args, metadata, callId, portId, setOnTimeout, transaction
         </Container>
       </div>
     </Layout>
-  )
+  );
 };
 
 export default ImportToken;

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import AntennaIcon from '@assets/icons/antenna.svg';
 import { Typography } from '@material-ui/core';
 import { useRouter } from '@components/Router';
-import { Button } from '@ui';
+import { Button } from '@components';
 
 import useStyles from './styles';
 

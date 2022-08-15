@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { DataDisplay } from '@ui';
+import { DataDisplay } from '@components';
 import { useTranslation } from 'react-i18next';
 import { PortRPC } from '@psychedelic/browser-rpc';
 import ReactJson from 'react-json-view';

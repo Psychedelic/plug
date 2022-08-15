@@ -10,10 +10,10 @@ import PropTypes from 'prop-types';
 
 import {
   Button, Container, IncomingAction, theme,
-} from '@ui';
+  Layout,
+} from '@components';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import store from '@redux/store';
-import { Layout } from '@components';
 import extension from 'extensionizer';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { reviewPendingTransaction } from '@modules/storageManager';

@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo } from 'react';
-import { Layout } from '@components';
 import {
+  Layout,
   Header, Button, Badge, LinkButton, NFTDisplayer, ICNSDisplay,
-} from '@ui';
+} from '@components';
 import { useTranslation } from 'react-i18next';
 import BackIcon from '@assets/icons/back.svg';
 import ExpandIcon from '@assets/icons/expand.svg';

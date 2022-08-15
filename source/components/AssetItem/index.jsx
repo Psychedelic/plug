@@ -8,8 +8,8 @@ import clsx from 'clsx';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
-import { TokenIcon } from '@components';
 import RefreshIcon from '@assets/icons/blue-refresh.png';
+import TokenIcon from '../TokenIcon';
 
 import useStyles from './styles';
 

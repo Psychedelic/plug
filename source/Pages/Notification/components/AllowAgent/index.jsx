@@ -12,9 +12,9 @@ import {
   theme,
   CanisterInfoContainer,
   CanisterInfoItem,
-} from '@ui';
+  Layout,
+} from '@components';
 import store from '@redux/store';
-import { Layout } from '@components';
 import extension from 'extensionizer';
 import PropTypes from 'prop-types';
 import { ChevronDown } from 'react-feather';
@@ -22,10 +22,10 @@ import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { setAccountInfo } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import clsx from 'clsx';
+import { reviewPendingTransaction } from '@modules/storageManager';
 import ErrorScreen from '../NotificationError';
 import initConfig from '../../../../locales';
 import useStyles from './styles';
-import { reviewPendingTransaction } from '@modules/storageManager';
 
 i18n.use(initReactI18next).init(initConfig);
 

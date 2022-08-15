@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { LinkButton } from '@ui';
+import { LinkButton } from '@components';
 import BackIcon from '@assets/icons/back.svg';
 import { setAssets } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
