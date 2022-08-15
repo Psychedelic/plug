@@ -18,7 +18,7 @@ module.exports = {
   mode: 'production',
 
   entry: {
-    inpage: path.join(sourcePath, 'Inpage', 'index.js'),
+    inpage: path.join(sourcePath, 'scripts', 'Inpage', 'index.js'),
   },
 
   output: {
