@@ -1,3 +1,4 @@
+import { Principal } from '@dfinity/principal';
 import { getContacts, setContacts } from '@modules/storageManager';
 import { addContact } from '@background/Keyring';
 import { validatePrincipalId, validateAccountId } from './ids';
@@ -41,9 +42,18 @@ export const parseContactFromDab = (contact) => {
   } = contact;
 
   const [id] = Object.values(unparsedValue);
+  let parsedId = id;
+
+  if (id._isPrincipal) {
+    // Converts principal from arr to string
+    parsedId = Principal.fromUint8Array(
+      new Uint8Array(Object.values(id._arr))
+    ).toString();
+  }
+
 
   return {
-    id,
+    id: parsedId,
     image,
     name,
   };

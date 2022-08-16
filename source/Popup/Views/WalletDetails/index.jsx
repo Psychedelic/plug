@@ -23,7 +23,6 @@ import {
 import { setUseICNS } from '@modules/storageManager';
 import { setICNSData, setUseICNS as setReduxUseICNS } from '@redux/icns';
 
-import { Button } from '@material-ui/core';
 import useStyles from './styles';
 import DetailItem from './components/DetailItem';
 import ICNSToggle from './components/ICNSToggle';
@@ -147,7 +146,10 @@ const WalletDetails = () => {
             edit={edit}
           />
           <InputBase
-            classes={{ root: clsx(classes.name, edit && classes.nameEdit) }}
+            classes={{
+              root:
+              clsx(classes.name, edit && !hasActiveResolvedICNS && classes.nameEdit),
+            }}
             value={hasActiveResolvedICNS ? resolved : walletName}
             type="text"
             onChange={handleChange}
@@ -157,7 +159,12 @@ const WalletDetails = () => {
           />
           {edit
             ? (
-              <button type="button" style={{ all: 'unset', marginTop: '4px' }} data-testid="save-changes-icon-button" onClick={handleEditWalletName}>
+              <button
+                type="button"
+                style={{ all: 'unset', marginTop: '4px' }}
+                data-testid="save-changes-icon-button"
+                onClick={handleEditWalletName}
+              >
                 <img
                   className={classes.icon}
                   src={BlueCheck}
@@ -165,7 +172,12 @@ const WalletDetails = () => {
               </button>
             )
             : (
-              <button type="button" style={{ all: 'unset', marginTop: '4px' }} data-testid="edit-icon-button" onClick={openEditWalletName}>
+              <button
+                type="button"
+                style={{ all: 'unset', marginTop: '4px' }}
+                data-testid="edit-icon-button"
+                onClick={openEditWalletName}
+              >
                 <img
                   className={classes.icon}
                   src={Pencil}

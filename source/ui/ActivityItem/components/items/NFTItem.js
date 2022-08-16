@@ -18,7 +18,7 @@ const NFTItem = ({
   to,
   from,
   date,
-  image,
+  logo,
   canisterId,
   details,
   setOpenDetail,
@@ -34,7 +34,7 @@ const NFTItem = ({
       <ActivityItemDisplay
         image={(
           <GenericIcon
-            image={image || UnknownIcon}
+            image={logo || UnknownIcon}
             type={type}
           />
         )}
@@ -74,7 +74,7 @@ NFTItem.propTypes = {
   details: PropTypes.objectOf(PropTypes.any),
   to: PropTypes.string,
   from: PropTypes.string,
-  image: PropTypes.string.isRequired,
+  logo: PropTypes.string.isRequired,
   date: PropTypes.oneOfType([
     PropTypes.instanceOf(Date),
     PropTypes.string,

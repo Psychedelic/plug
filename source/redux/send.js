@@ -73,6 +73,7 @@ export const sendToken = createAsyncThunk(
 
     const to = addressInfo.resolvedAddress || address;
     const amount = rawAmount.toString();
+
     const { canisterId, standard, decimals } = selectedAsset || {};
 
     try {

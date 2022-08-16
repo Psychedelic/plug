@@ -31,11 +31,19 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
   const dispatch = useDispatch();
   const { getContacts } = useContacts();
   const { navigator } = disableNavigation ? {} : useRouter();
-  const { principalId, walletNumber } = useSelector((state) => state.wallet);
+  const {
+    principalId,
+    walletNumber,
+    assetsLoading,
+    transactionsLoading,
+    collectionsLoading,
+  } = useSelector((state) => state.wallet);
   const { useICNS } = useSelector((state) => state.icns);
   const { currentNetwork } = useSelector((state) => state.network);
   const [selectorOpen, setSelectorOpen] = useState(false);
   const [connected, setConnected] = useState(false);
+
+  const loading = assetsLoading || transactionsLoading || collectionsLoading;
 
   extensionizer.tabs.query({ active: true }, (tabs) => {
     const url = getTabURL(tabs?.[0]);
@@ -47,7 +55,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
   });
 
   const refreshWallet = () => {
-    if (disableNavigation) return;
+    if (disableNavigation || loading) return;
     navigator?.navigate?.('home', TABS.TOKENS);
 
     if (icpPrice) {
@@ -98,13 +106,17 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
       <div className={classes.controls}>
         <div className={classes.networkSelector} onClick={() => setSelectorOpen(true)}>
           <div className={clsx(classes.controlsInfo, connected && classes.connectedControls)}>
-            <div className={clsx(classes.statusDot, connected && classes.connectedDot)} />
+            <div className={clsx(classes.statusDot)} />
             <span className={classes.network}>{capitalize(currentNetwork?.name || 'Mainnet')}</span>
           </div>
         </div>
         <div
           data-testid="refresh-wallet-button"
-          className={clsx(classes.reloadIconContainer, disableNavigation && classes.disabled)}
+          className={clsx(
+            classes.reloadIconContainer,
+            disableNavigation && classes.disabled,
+            // loading && classes.loading, disabled for now, need to check with design
+          )}
           onClick={refreshWallet}
         >
           <img src={RefreshAsset} alt="reload" className={classes.reloadIcon} />

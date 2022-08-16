@@ -21,7 +21,6 @@ import {
   setAssetsLoading,
   setCollections,
   setTransactions,
-  setTransactionsLoading,
 } from '@redux/wallet';
 import BluePencil from '@assets/icons/blue-pencil.svg';
 import VisibleIcon from '@assets/icons/visible.svg';
@@ -131,7 +130,6 @@ const Profile = ({ disableProfile }) => {
           dispatch(setICNSData(newWallet.icnsData));
           dispatch(setAssetsLoading(true));
           dispatch(setTransactions([]));
-          dispatch(setTransactionsLoading(true));
           sendMessage({
             type: HANDLER_TYPES.GET_ICNS_DATA,
             params: { refresh: true },
