@@ -1,10 +1,10 @@
 import React from 'react';
+import { Card } from '@ui';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
 
 import ArrowImg from '@assets/icons/send-arrow.svg';
-import Card from '../Card';
 
 import useStyles from './styles';
 import AddressRow from './components/AddressRow';

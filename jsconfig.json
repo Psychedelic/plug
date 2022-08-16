@@ -2,6 +2,8 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
+      "@ui": ["source/ui"],
+      "@ui/*": ["source/ui/*"],
       "@components": ["source/components"],
       "@components/*": ["source/components/*"],
       "@assets": ["source/assets"],
@@ -12,8 +14,8 @@
       "@hooks/*": ["source/hooks/*"],
       "@redux": ["source/redux"],
       "@redux/*": ["source/redux/*"],
-      "@background": ["source/background"],
-      "@background/*": ["source/background/*"],
+      "@background": ["source/Background"],
+      "@background/*": ["source/Background/*"],
       "@modules/*": ["source/Modules/*"]
     }
   },

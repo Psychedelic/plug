@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ActivityItem } from '@ui';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 
+import LoadingWrapper from '@components/LoadingWrapper';
 import { useActivity } from '@hooks';
 import { setTransactions, setTransactionsLoading } from '@redux/wallet';
 import { useICPPrice } from '@redux/icp';
-import LoadingWrapper from '../LoadingWrapper';
-import ActivityItem from '../ActivityItem';
 import useStyles from './styles';
 import EmptyState from './components/EmptyState';
 
