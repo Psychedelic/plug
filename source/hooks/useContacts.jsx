@@ -16,7 +16,7 @@ const useContacts = () => {
 
   return {
     getContacts,
-  }
+  };
 };
 
 export default useContacts;
