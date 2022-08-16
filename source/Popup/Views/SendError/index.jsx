@@ -33,7 +33,7 @@ const SendErrorScreen = () => {
         <img src={ERROR_EMOJI[errorCode] || NoMouthFace} className={styles.image} />
         <Typography variant="h4" className={styles.text}>{t(`sendError.${errorCode}.title`) || t('sendError.default.title') }</Typography>
         <Typography variant="subtitle2" className={styles.text}>{t(`sendError.${errorCode}.description`) || t('sendError.default.title')}</Typography>
-        <Typography variant="subtitle2" className={styles.errorCode}>{`Error code: #${errorCode}`}</Typography>
+        <Typography variant="subtitle2" className={styles.errorCode}>{t(`sendError.errorCode ${errorCode}`)}</Typography>
         <Button
           variant="rainbow"
           value={t('error.returnHome')}
