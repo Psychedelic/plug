@@ -101,7 +101,7 @@ public/
 *.scss.map
 
 ## Build directory
-extension/
+./extension/
 dist/
 .awcache
 
