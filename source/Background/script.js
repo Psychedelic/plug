@@ -6,7 +6,7 @@ import {
   ConnectionModule,
   TransactionModule,
   InformationModule,
-  NotificationManager
+  NotificationManager,
 } from '@modules';
 
 import {
