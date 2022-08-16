@@ -35,5 +35,5 @@ export const NFT_DESCRIPTIONS = {
 };
 
 export const NFT_COLLECTION_DEFAULT_TYPES = {
-  "pk6rk-6aaaa-aaaae-qaazq-cai": "iframe",
+  'pk6rk-6aaaa-aaaae-qaazq-cai': 'iframe',
 };

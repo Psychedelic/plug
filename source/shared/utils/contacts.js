@@ -47,10 +47,9 @@ export const parseContactFromDab = (contact) => {
   if (id._isPrincipal) {
     // Converts principal from arr to string
     parsedId = Principal.fromUint8Array(
-      new Uint8Array(Object.values(id._arr))
+      new Uint8Array(Object.values(id._arr)),
     ).toString();
   }
-
 
   return {
     id: parsedId,

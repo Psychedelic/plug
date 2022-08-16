@@ -6,11 +6,11 @@ import extension from 'extensionizer';
 import { Info } from 'react-feather';
 import clsx from 'clsx';
 
-import { Dialog } from '@ui';
 import { ADDRESS_TYPES } from '@shared/constants/addresses';
 import { getAccountDashboardURL } from '@shared/constants/urls';
 import ArrowUpRight from '@assets/icons/arrow-up-right.png';
 import shortAddress from '@shared/utils/short-address';
+import Dialog from '../../../Dialog';
 
 import useStyles from './styles';
 import TranslationModal from '../TranslationModal';
