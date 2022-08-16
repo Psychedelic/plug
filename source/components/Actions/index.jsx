@@ -1,8 +1,8 @@
 import React from 'react';
 import { useRouter } from '@components/Router';
+import { ActionButton } from '@ui';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import ActionButton from '../ActionButton';
 import useStyles from './styles';
 
 const ACTIONS = ['deposit', 'send', 'swap'];

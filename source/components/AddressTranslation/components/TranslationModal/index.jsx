@@ -5,9 +5,8 @@ import { useTranslation } from 'react-i18next';
 import extension from 'extensionizer';
 
 import clsx from 'clsx';
+import { Button, LinkButton } from '@ui';
 import { icnsUrl } from '@shared/constants/urls';
-import Button from '../../../Button';
-import LinkButton from '../../../LinkButton';
 
 import useStyles from './styles';
 

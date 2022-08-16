@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
 
+import { Button } from '@ui';
 import { useRouter } from '@components/Router';
-import Button from '../../../Button';
 
 import NetworkCard from '../NetworkCard';
 import useStyles from './styles';

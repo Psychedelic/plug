@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
+import { ListItem } from '@ui';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import Tooltip from '@material-ui/core/Tooltip';
-import ListItem from '../ListItem';
 import useStyles from './styles';
 
 const SeedPhrase = ({ words, seedPhraseBoxTestId }) => {

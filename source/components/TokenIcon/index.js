@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
+import { NFTDisplayer } from '@ui';
 import randomColor from 'random-color';
 import clsx from 'clsx';
 
 import { NFT_COLLECTION_DEFAULT_TYPES } from '@shared/constants/nft';
 import SHADOW_1 from '@shared/styles/shadows';
-import NFTDisplayer from '../NFTDisplayer';
 
 const useStyles = makeStyles((theme) => ({
   genericToken: {

@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography';
+import {
+  AppItem, Dialog, CanisterInfoContainer, CanisterInfoItem,
+} from '@ui';
 
 import ThinkingEmoji from '@assets/icons/thinking-emoji.svg';
 import { useApps } from '@hooks';
 import ActionDialog from '../ActionDialog';
-import AppItem from '../AppItem';
-import Dialog from '../Dialog';
-import CanisterInfoContainer from '../CanisterInfo/components/Container';
-import CanisterInfoItem from '../CanisterInfo/components/Item';
 import useStyles from './styles';
 import EmptyState from './components/EmptyState';
 

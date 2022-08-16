@@ -29,6 +29,7 @@ module.exports = {
     ];
 
     config.resolve.alias = {
+      "@ui": path.join(path.resolve(__dirname, "../source/ui")),
       "@components": path.join(path.resolve(__dirname, "../source/components")),
       "@assets": path.join(path.resolve(__dirname, "../source/assets")),
       "@shared": path.join(path.resolve(__dirname, "../source/shared")),
