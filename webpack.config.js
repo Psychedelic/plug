@@ -64,11 +64,11 @@ module.exports = {
   entry: {
     manifest: path.join(sourcePath, 'manifest.json'),
     background: path.join(sourcePath, 'Background', 'index.js'),
-    contentScript: path.join(sourcePath, 'ContentScript', 'index.js'),
-    popup: path.join(sourcePath, 'Popup', 'index.jsx'),
-    options: path.join(sourcePath, 'Options', 'index.jsx'),
-    inpage: path.join(sourcePath, 'Inpage', 'index.js'),
-    notification: path.join(sourcePath, 'Pages', 'Notification', 'index.jsx'),
+    contentScript: path.join(sourcePath, 'scripts', 'ContentScript', 'index.js'),
+    popup: path.join(sourcePath, 'views', 'Extension', 'index.jsx'),
+    options: path.join(sourcePath, 'views', 'Options', 'index.jsx'),
+    inpage: path.join(sourcePath, 'scripts', 'Inpage', 'index.js'),
+    notification: path.join(sourcePath, 'views', 'Popup', 'index.jsx'),
   },
   node: {
     fs: 'empty',
@@ -81,13 +81,12 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.json'],
     alias: {
-      '@ui': path.join(path.resolve(__dirname, './source/ui')),
       '@components': path.join(path.resolve(__dirname, './source/components')),
       '@assets': path.join(path.resolve(__dirname, './source/assets')),
       '@shared': path.join(path.resolve(__dirname, './source/shared')),
       '@hooks': path.join(path.resolve(__dirname, './source/hooks')),
       '@redux': path.join(path.resolve(__dirname, './source/redux')),
-      '@background': path.join(path.resolve(__dirname, './source/Background')),
+      '@background': path.join(path.resolve(__dirname, './source/background')),
       '@modules': path.join(path.resolve(__dirname, './source/Modules')),
     },
   },
