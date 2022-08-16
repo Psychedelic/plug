@@ -51,13 +51,8 @@ const errorsInfo = [
 ];
 
 const matchErrors = (err) => {
-  for (const errors of errorsInfo) {
-    const isCurrentError = errors.errorNames.some((errorName) => err.includes(errorName));
-    if (isCurrentError) {
-      return errors.errorCode;
-    }
-  }
-  return 600;
+  const error = errorsInfo.find((info) => info?.errorNames?.includes(err));
+  return error?.errorCode || 600;
 };
 
 export const sendToken = createAsyncThunk(

@@ -83,8 +83,6 @@ const useSteps = () => {
     }
   };
 
-  // check here if the redux state change for redirect to another page when a transaction failed
-
   const available = getAvailableAmount((selectedAsset?.amount || 0));
   const convertedAmount = Math.max(available * primaryValue.conversionRate, 0);
   const [availableAmount, setAvailableAmount] = useState({
