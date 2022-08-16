@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Plus } from 'react-feather';
-import { AssetItem } from '@ui';
 import { setAssets, setAssetsLoading } from '@redux/wallet';
 import clsx from 'clsx';
 
@@ -11,7 +10,7 @@ import { useRouter } from '@components/Router';
 import { useICPPrice } from '@redux/icp';
 import { setICNSData } from '@redux/icns';
 import { useScroll } from '@hooks';
-
+import AssetItem from '../AssetItem';
 import useStyles from './styles';
 
 const Tokens = () => {

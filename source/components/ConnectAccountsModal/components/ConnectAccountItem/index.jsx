@@ -2,9 +2,9 @@ import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import { Checkbox } from '@ui';
 import { Typography } from '@material-ui/core';
 import shortAddress from '@shared/utils/short-address';
+import Checkbox from '../../../Checkbox';
 
 import useStyles from './styles';
 import UserIcon from '../../../UserIcon';
