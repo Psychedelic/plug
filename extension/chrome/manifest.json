@@ -1,0 +1,65 @@
+{
+  "manifest_version": 2,
+  "name": "Plug",
+  "version": "0.5.3",
+  "icons": {
+    "16": "assets/icons/favicon-16.png",
+    "32": "assets/icons/favicon-32.png",
+    "48": "assets/icons/favicon-48.png",
+    "128": "assets/icons/favicon-128.png"
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmlBGJ4YWJI2F8OQapeRUv9yOnPUbBehNY/VJ5DcVcr5yY0Sk1FX/ZCPwvBkYo4jhfP6xidPLw7wQ7wUH16YSnJLbXap3gjSqtlfEpoC6HRALu168E8MFJN1Ev9uj9tUwcx2xAOhDeBXlPo7OV+0QrFWq+7FULz9fCJvaRIU40/iUK8rMeDOHlNZCd59o9TlEH/40t9jtFRBW75XDocyoEFgP9guzud63pO4GTZ2cD4j2GwEJh6Ny5OT9YI98pfwHGpnh0DSI1hfiSeg27ESH5FecdGYYVw7rS96GoqYHgbwYEcP+/OjpiNvnkAfL4h5D8uNk2i9Ww4W9bJ9S3I+6uQIDAQAB",
+  "description": "Your plug into the Internet Computer",
+  "homepage_url": "https://github.com/psychedelic/plug",
+  "short_name": "Plug",
+  "permissions": [
+    "storage",
+    "tabs",
+    "notifications",
+    "https://kyasshu.fleek.co/*",
+    "https://www.timeapi.io/api/Time/current/zone?timeZone=Etc/UTC",
+    "https://mainnet.plugwallet.ooo/*"
+  ],
+  "content_security_policy": "script-src 'self' 'wasm-eval'; object-src 'self'",
+  "author": "FleekHQ",
+  "minimum_chrome_version": "49",
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "assets/icons/favicon-16.png",
+      "32": "assets/icons/favicon-32.png",
+      "48": "assets/icons/favicon-48.png",
+      "128": "assets/icons/favicon-128.png"
+    },
+    "default_title": "Plug",
+    "chrome_style": false
+  },
+  "options_page": "options.html",
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true,
+    "chrome_style": false
+  },
+  "background": {
+    "scripts": [
+      "js/background.bundle.js"
+    ],
+    "persistent": true
+  },
+  "content_scripts": [
+    {
+      "run_at": "document_start",
+      "all_frames": true,
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "js/contentScript.bundle.js"
+      ]
+    }
+  ],
+  "web_accessible_resources": [
+    "js/inpage.bundle.js"
+  ]
+}
