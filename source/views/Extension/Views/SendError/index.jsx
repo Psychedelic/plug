@@ -1,8 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
-import { Button } from '@ui';
-import { Layout } from '@components';
+import { Button, Layout } from '@components';
 import { useRouter } from '@components/Router';
 import NoMouthFace from '@assets/icons/nomouth-face.svg';
 import RedFlag from '@assets/icons/red-flag.svg';
