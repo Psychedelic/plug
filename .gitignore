@@ -102,6 +102,9 @@ public/
 
 ## Build directory
 extension/
+!source/views/Extension
+!source/views/Extension/*
+!source/views/Extension/**
 dist/
 .awcache
 
