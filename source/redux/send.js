@@ -35,7 +35,7 @@ const DEFAULT_STATE = {
   secondaryValue: DEFAULT_SECONDARY,
 };
 
-const errorsInfo = [
+const ERRORS_INFO = [
   {
     errorNames: ['InsufficientBalance', 'InsufficientFunds'],
     errorCode: 100,
@@ -51,8 +51,17 @@ const errorsInfo = [
 ];
 
 const matchErrors = (err) => {
-  const error = errorsInfo.find((info) => info?.errorNames?.includes(err));
-  return error?.errorCode || 600;
+  for (const errorInfo of ERRORS_INFO) {
+    const currentError = errorInfo?.errorNames?.some(
+      (errorKeyword) => err.includes(errorKeyword)
+    );
+
+    if (currentError) {
+      return errorInfo?.errorCode;
+    }
+  };
+
+  return 600;
 };
 
 export const sendToken = createAsyncThunk(
