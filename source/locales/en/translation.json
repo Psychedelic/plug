@@ -332,6 +332,29 @@
     "returnHome": "Return Home",
     "notificationError": "We’re sorry, something weird happened. Please close the pop up and try again"
   },
+  "sendError": {
+    "errorCode": "Error code #",
+    "600": {
+      "title": "Something went wrong",
+      "description": "We’re sorry, something weird happened. Return home and retry the action.",
+      "button": "Return Home"
+    },
+    "100": {
+      "title": "Insufficient Balance",
+      "description": "This transaction couldn’t be completed because there are insufficient funds available.",
+      "button": "Deposit Tokens"
+    },
+    "300": {
+      "title": "Register token don’t respect the interface",
+      "description": "We’re sorry, something weird happened. Return home and retry the action.",
+      "button": "Return Home"
+    },
+    "301": {
+      "title": "Canister out of cycles",
+      "description": "We’re sorry, something weird happened. Return home and retry the action.",
+      "button": "Return Home"
+    }
+  },
   "whitelist": {
     "title": "wants permission to use these canisters:"
   },

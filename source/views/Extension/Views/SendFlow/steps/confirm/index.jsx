@@ -4,20 +4,22 @@ import extension from 'extensionizer';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
+import { setAssets, setAssetsLoading } from '@redux/wallet';
+import { Typography } from '@material-ui/core';
+import PlugController from '@psychedelic/plug-controller';
+import { Principal } from '@dfinity/principal';
+
 import {
   Container,
   InfoRow,
   Button,
   AssetFormat,
   USDFormat,
-
-  useRouter, TokenIcon, TABS, AddressTranslation,
+  useRouter,
+  TokenIcon,
+  TABS,
+  AddressTranslation,
 } from '@components';
-import { setAssets, setAssetsLoading } from '@redux/wallet';
-import { Typography } from '@material-ui/core';
-import PlugController from '@psychedelic/plug-controller';
-import { Principal } from '@dfinity/principal';
-
 import { ADDRESS_TYPES, getAssetFee } from '@shared/constants/addresses';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { useICPPrice } from '@redux/icp';
@@ -80,7 +82,7 @@ const Confirm = ({ handleSendClick }) => {
 
   useEffect(() => {
     if (error) {
-      navigator.navigate('error');
+      navigator.navigate('send-error');
     }
   }, [error]);
 

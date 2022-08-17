@@ -5,7 +5,6 @@ import { LinkButton } from '@components';
 import BackIcon from '@assets/icons/back.svg';
 import { setAssets } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { USD_PER_TC } from '@shared/constants/currencies';
 import {
   isICNSName, validateAddress, validateCanisterId, validatePrincipalId,
 } from '@shared/utils/ids';
@@ -53,6 +52,7 @@ const useSteps = () => {
     primaryValue,
     fulfilled,
   } = useSelector((state) => state.send);
+
   const icpPrice = useICPPrice();
 
   const [step, setStep] = useState(0);
