@@ -9,7 +9,8 @@ import {
   getApp,
   removeApp,
 } from '../storageManager';
-import SIZES from '../../Pages/Notification/components/Transfer/constants';
+import SIZES from '../../views/Popup/components/Transfer/constants';
+
 import { ControllerModuleBase } from './controllerBase';
 
 export class ConnectionModule extends ControllerModuleBase {
@@ -219,7 +220,7 @@ export class ConnectionModule extends ControllerModuleBase {
               ...apps[url],
               status: status || CONNECTION_STATUS.rejected,
               date,
-              whitelist,
+              whitelist: { ...apps[url]?.whitelist, ...whitelist },
               events: [
                 ...apps[url]?.events || [],
                 {
