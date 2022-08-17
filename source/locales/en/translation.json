@@ -333,7 +333,7 @@
     "notificationError": "We’re sorry, something weird happened. Please close the pop up and try again"
   },
   "sendError": {
-    "errorCode": "Error code: #",
+    "errorCode": "Error code #",
     "600": {
       "title": "Something went wrong",
       "description": "We’re sorry, something weird happened. Return home and retry the action.",
