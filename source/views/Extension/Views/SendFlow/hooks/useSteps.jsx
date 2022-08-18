@@ -103,12 +103,6 @@ const useSteps = () => {
     [convertedAvailableAmount, primaryValue]
   );
 
-  // console.log('Available amount: ', availableAmount)
-  // console.log('Converted: ',convertedAvailableAmount)
-  // console.log('Data: ', availableAmountData)
-  // console.log('Asset: ',  selectedAsset)
-  // console.log('Assets: ', assets)
-
   // TODO: Refactor cleaner way
   // when seeing asset as USD,
   // we need to convert back the amount to the correct rate when going to review
