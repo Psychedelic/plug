@@ -13,10 +13,7 @@ const DIP20_AMOUNT_MAP = {
   transferErc20: (args) => args?.[1] / (10 ** CYCLE_DECIMALS),
 };
 
-const ICP_AMOUNT_MAP = {
-  transfer: (args) => args?.[0]?.amount?.e8s / (10 ** ICP_DECIMALS),
-  send_dfx: (args) => args?.[0]?.amount?.e8s / (10 ** ICP_DECIMALS),
-};
+const ICP_AMOUNT_MAP = (args) => args?.[0]?.amount?.e8s / (10 ** ICP_DECIMALS);
 
 // Get the amount of the token being transferred according to the standard
 export const getAssetAmount = (request, standard) => {
@@ -25,8 +22,8 @@ export const getAssetAmount = (request, standard) => {
     DIP20: DIP20_AMOUNT_MAP[methodName],
     XTC: DIP20_AMOUNT_MAP[methodName],
     WICP: DIP20_AMOUNT_MAP[methodName],
-    ICP: ICP_AMOUNT_MAP[methodName],
-    ROSETTA: ICP_AMOUNT_MAP[methodName],
+    ICP: ICP_AMOUNT_MAP,
+    ROSETTA: ICP_AMOUNT_MAP,
   }[standard?.toUpperCase?.()];
   return amountInArgs(request?.decodedArguments);
 };
