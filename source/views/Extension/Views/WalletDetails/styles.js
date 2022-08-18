@@ -29,7 +29,7 @@ export default makeStyles((theme) => ({
     border: '1px solid #F3F4F6',
   },
   name: {
-    width: 231,
+    width: 162,
     height: 41,
     padding: '0 12px',
     borderRadius: 6,
@@ -39,6 +39,7 @@ export default makeStyles((theme) => ({
     marginRight: 10,
   },
   nameEdit: {
+    width: 231,
     background: '#FFFFFF',
     boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
   },
@@ -127,5 +128,38 @@ export default makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+  },
+  buttonsContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingRight: '16px',
+
+    '& > button': {
+      width: '40px',
+      height: '40px',
+      background: 'rgba(53, 116, 244, 0.08)',
+      border: 'none',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      margin: '0px 4px',
+      borderRadius: '6px',
+      cursor: 'pointer',
+      transition: 'all 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+
+      '& > img': {
+        transition: 'all 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+      },
+
+      '&:hover': {
+        background: '#3574F4',
+
+        '& > img': {
+          filter: 'brightness(0) saturate(100) invert(1)',
+        },
+      },
+    }
   },
 }));
