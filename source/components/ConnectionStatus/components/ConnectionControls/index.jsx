@@ -1,13 +1,13 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { capitalize } from "@material-ui/core";
-import { getTabURL } from "@shared/utils/chrome-tabs";
-import extensionizer from "extensionizer";
-import PropTypes from "prop-types";
-import clsx from "clsx";
+import React, { useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { capitalize } from '@material-ui/core';
+import { getTabURL } from '@shared/utils/chrome-tabs';
+import extensionizer from 'extensionizer';
+import PropTypes from 'prop-types';
+import clsx from 'clsx';
 
-import { useContacts } from "@hooks";
-import { useICPPrice } from "@redux/icp";
+import { useContacts } from '@hooks';
+import { useICPPrice } from '@redux/icp';
 import {
   setAssets,
   setAssetsLoading,
@@ -15,16 +15,15 @@ import {
   setTransactionsLoading,
   setCollections,
   setCollectionsLoading,
-} from "@redux/wallet";
-import { getApps } from "@modules/storageManager";
-import { getCurrentNetwork, getNetworks } from "@redux/network";
-import { HANDLER_TYPES, sendMessage } from "@background/Keyring";
-import { TABS, useRouter } from "@components/Router";
-import RefreshAsset from "@assets/icons/refresh.svg";
+} from '@redux/wallet';
+import { getApps } from '@modules/storageManager';
+import { getCurrentNetwork, getNetworks } from '@redux/network';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import { TABS, useRouter } from '@components/Router';
+import RefreshAsset from '@assets/icons/refresh.svg';
 
-import useStyles from "./styles";
-import NetworkSelector from "../NetworkSelector";
-import { setICPPrice, setICPPriceLoading } from "../../../../redux/icp";
+import useStyles from './styles';
+import NetworkSelector from '../NetworkSelector';
 
 const ConnectionControls = ({ disableNavigation, hidden }) => {
   const classes = useStyles();
@@ -78,7 +77,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
       (keyringAssets) => {
         dispatch(setAssets({ keyringAssets, icpPrice }));
         dispatch(setAssetsLoading(false));
-      }
+      },
     );
   };
 
@@ -92,7 +91,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
       (trxs) => {
         dispatch(setTransactions({ ...trxs, icpPrice, useICNS }));
         dispatch(setTransactionsLoading(false));
-      }
+      },
     );
   };
 
@@ -106,11 +105,11 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
       (nftCollections) => {
         if (nftCollections?.length) {
           dispatch(
-            setCollections({ collections: nftCollections, principalId })
+            setCollections({ collections: nftCollections, principalId }),
           );
         }
         dispatch(setCollectionsLoading(false));
-      }
+      },
     );
   };
 
@@ -142,12 +141,12 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
           <div
             className={clsx(
               classes.controlsInfo,
-              connected && classes.connectedControls
+              connected && classes.connectedControls,
             )}
           >
             <div className={clsx(classes.statusDot)} />
             <span className={classes.network}>
-              {capitalize(currentNetwork?.name || "Mainnet")}
+              {capitalize(currentNetwork?.name || 'Mainnet')}
             </span>
           </div>
         </div>
@@ -163,7 +162,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
             alt="reload"
             className={clsx(
               classes.reloadIcon,
-              isTabInfoLoading && classes.reloadIconLoading
+              isTabInfoLoading && classes.reloadIconLoading,
             )}
           />
         </button>
