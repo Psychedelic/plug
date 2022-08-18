@@ -11,7 +11,7 @@ import WalletDetails from './Views/WalletDetails';
 import SeedPhrase from './Views/SeedPhrase';
 import Deposit from './Views/Deposit';
 // import Swap from './Views/Swap';
-import Send from './Views/Send';
+import Send from './Views/SendFlow';
 import Contacts from './Views/Contacts';
 import AddToken from './Views/AddToken';
 import ExportIdentity from './Views/ExportIdentity';
@@ -20,6 +20,8 @@ import ErrorScreen from './Views/Error';
 import NFTDetails from './Views/NFTDetails';
 import SendNFT from './Views/SendNFT';
 import ClockError from './Views/ClockError';
+import Network from './Views/Network';
+import NetworkCreation from './Views/NetworkCreation';
 
 const Popup = ({ initialRoute }) => (
   <Router initialRouteName={initialRoute}>
@@ -39,6 +41,8 @@ const Popup = ({ initialRoute }) => (
     <Route name="export-identity" component={ExportIdentity} />
     <Route name="nft-details" component={NFTDetails} />
     <Route name="send-nft" component={SendNFT} />
+    <Route name="network" component={Network} />
+    <Route name="create-network" component={NetworkCreation} />
   </Router>
 );
 

@@ -24,6 +24,10 @@ export default makeStyles((theme) => ({
     marginLeft: 'auto',
     alignSelf: 'flex-start',
   },
+  valueSkeleton: {
+    width: 50,
+    height: 15,
+  },
   '@keyframes pulse': {
     '0%': {
       opacity: 0.6,

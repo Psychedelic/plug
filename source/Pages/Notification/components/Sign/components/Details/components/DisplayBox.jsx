@@ -29,7 +29,11 @@ const DisplayBox = ({
           <span>{subtitle || '???'}&nbsp;</span>
         </p>
       </div>
-      <img src={img || request?.canisterIcon} className={classes.assetImg} alt="asset" />
+      {
+        React.isValidElement(img)
+          ? img
+          : <img src={img || request?.canisterIcon} className={classes.assetImg} alt="asset" />
+      }
     </div>
   );
 };
@@ -39,7 +43,7 @@ DisplayBox.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string.isRequired,
   shouldWarn: PropTypes.bool.isRequired,
-  img: PropTypes.string,
+  img: PropTypes.string | PropTypes.node,
   request: PropTypes.shape({
     canisterDescription: PropTypes.string,
     canisterIcon: PropTypes.string,

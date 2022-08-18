@@ -16,15 +16,25 @@ const Router = (props) => {
   const { children, initialRouteName } = props;
 
   const [route, setRoute] = useState(initialRouteName);
+  const [previousRoute, setPreviousRoute] = useState(null);
   const [tabIndex, setTabIndex] = useState(TABS.TOKENS);
 
   const navigate = (routeName, tab = TABS.TOKENS) => {
+    setPreviousRoute(route);
     setRoute(routeName);
     setTabIndex(tab);
   };
 
+  // We go back between the two available routes. No history is collected.
+  const goBack = () => {
+    const currentRoute = route;
+    setRoute(previousRoute);
+    setPreviousRoute(currentRoute);
+  };
+
   const navigationObject = {
     navigate,
+    goBack,
   };
 
   useEffect(() => {

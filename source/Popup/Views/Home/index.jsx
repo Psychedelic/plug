@@ -28,6 +28,7 @@ const Home = () => {
   const {
     assetsLoading, collectionsLoading, transactionsLoading, walletNumber,
   } = useSelector((state) => state.wallet);
+  const { usingMainnet } = useSelector((state) => state.network);
 
   const { clockValidated } = useSelector((state) => state.clock);
   const [wallets, setWallets] = useState([]);
@@ -48,22 +49,26 @@ const Home = () => {
       label: t('tabs.tokens'),
       component: <Tokens />,
       loading: assetsLoading,
+      disabled: false,
     },
     {
       label: t('tabs.nfts'),
       component: <NFTs />,
       loading: collectionsLoading,
+      disabled: !usingMainnet,
     },
     {
       label: t('tabs.activity'),
       component: <Activity />,
       loading: transactionsLoading,
+      disabled: !usingMainnet,
     },
     {
       label: t('tabs.apps'),
       component: <Apps />,
+      disabled: !usingMainnet,
     },
-  ], [assetsLoading, collectionsLoading, transactionsLoading]);
+  ], [assetsLoading, collectionsLoading, transactionsLoading, usingMainnet]);
 
   const validateProviderConnection = (state) => {
     extension.tabs.query({ active: true, lastFocusedWindow: true }, (browserTabs) => {
@@ -113,7 +118,6 @@ const Home = () => {
       dispatch(setUseICNS(useICNS));
     });
   }, [walletNumber]);
-
   return (
     <Layout>
       <Actions visible={tabIndex === 0} />
@@ -121,6 +125,7 @@ const Home = () => {
         tabs={tabs}
         selectedTab={tabIndex}
         handleChangeTab={onChangeTab}
+        tabItemTestId="tab-item"
       />
       <ConnectAccountsModal
         wallets={wallets}

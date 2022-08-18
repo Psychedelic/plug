@@ -16,12 +16,12 @@ const LiquidityIcon = ({ token0, token1 }) => {
     >
       <TokenIcon
         className={clsx(classes.image, classes.fromImage)}
-        image={token0?.thumbnail || UnknownIcon}
+        logo={token0?.thumbnail || UnknownIcon}
         alt={token0?.name}
       />
       <TokenIcon
         className={clsx(classes.image, classes.toImage)}
-        image={token1?.thumbnail || UnknownIcon}
+        logo={token1?.thumbnail || UnknownIcon}
         alt={token1?.name}
       />
     </div>

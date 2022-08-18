@@ -21,6 +21,7 @@ const Activity = () => {
 
   useEffect(() => {
     if (icpPrice) {
+      dispatch(setTransactionsLoading(true));
       sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: {} },
         (trxs) => {
           dispatch(setTransactions({ ...trxs, icpPrice, useICNS }));

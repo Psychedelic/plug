@@ -9,6 +9,7 @@ import useStyles from './styles';
 
 const MenuItem = ({
   name,
+  logo,
   image,
   onClick,
   size,
@@ -21,6 +22,8 @@ const MenuItem = ({
   endText,
   symbol,
   className,
+  accountNameTestId,
+  itemNameTestId,
   ...other
 }) => {
   const classes = useStyles();
@@ -29,6 +32,7 @@ const MenuItem = ({
       key={name}
       onClick={onClick}
       disabled={disabled}
+      data-testid={`${itemNameTestId}-${name}`}
       className={clsx(size !== 'small' ? classes.big : classes.small, border && classes.border, className)}
       classes={{
         root: selected ? classes.selected : null,
@@ -39,17 +43,17 @@ const MenuItem = ({
         icon
       }
       {
-        !icon && image && (
+        !icon && logo && (
           <ListItemIcon className={classes.icon}>
             <TokenIcon
-              image={image}
+              logo={logo || image}
               symbol={symbol}
               className={clsx(size === 'large' ? classes.bigImage : classes.smallImage, alignLeft && classes.alignLeft)}
             />
           </ListItemIcon>
         )
       }
-      <Typography variant={size === 'small' ? 'h6' : 'h5'} className={classes.text}>{name}</Typography>
+      <Typography variant={size === 'small' ? 'h6' : 'h5'} className={classes.text} data-testid={`${accountNameTestId}-${name}`}>{name}</Typography>
       {
         endIcon
         && (
@@ -84,12 +88,14 @@ MenuItem.defaultProps = {
   endText: null,
   symbol: '',
   className: '',
-  image: null,
+  logo: null,
+  accountNameTestId: '',
+  itemNameTestId: '',
 };
 
 MenuItem.propTypes = {
   name: PropTypes.string.isRequired,
-  image: PropTypes.string,
+  logo: PropTypes.string,
   onClick: PropTypes.func.isRequired,
   className: PropTypes.string,
   size: PropTypes.oneOf(['small', 'medium', 'large']),
@@ -101,4 +107,6 @@ MenuItem.propTypes = {
   selected: PropTypes.bool,
   endText: PropTypes.string,
   symbol: PropTypes.string,
+  accountNameTestId: PropTypes.string,
+  itemNameTestId: PropTypes.string,
 };

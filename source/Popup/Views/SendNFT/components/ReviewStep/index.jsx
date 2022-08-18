@@ -67,6 +67,7 @@ const ReviewStep = () => {
         fullWidth
         onClick={transferNFT}
         loading={loading}
+        data-testid="confirmation-button"
       />
       {errorMessage?.length > 0 && (
         <div className={classes.errorBox}>

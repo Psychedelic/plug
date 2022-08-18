@@ -19,6 +19,8 @@ const Select = ({
   imageClassName,
   nft,
   className,
+  accountNameTestId,
+  ...other
 }) => {
   const classes = useStyles();
 
@@ -27,12 +29,13 @@ const Select = ({
       <div
         className={clsx(classes.root, readonly && classes.readonly, onClick && classes.selectable)}
         onClick={onClick}
+        {...other}
       >
         {icon}
         {image && (
           <TokenIcon
             alt={name}
-            image={image}
+            logo={image}
             nft={nft}
             className={clsx(
               classes.icon,
@@ -43,7 +46,7 @@ const Select = ({
           />
         )}
         <div className={classes.textContainer}>
-          <Typography variant="h4">{name}</Typography>
+          <Typography variant="h4" data-testid={accountNameTestId}>{name}</Typography>
           {text && (
             <Typography variant="subtitle2" style={{ marginTop: 4 }}>
               {text}
@@ -68,6 +71,7 @@ Select.defaultProps = {
   imageClassName: '',
   nft: false,
   className: '',
+  accountNameTestId: '',
 };
 
 Select.propTypes = {
@@ -81,4 +85,5 @@ Select.propTypes = {
   imageClassName: PropTypes.string,
   nft: PropTypes.oneOf([PropTypes.bool, PropTypes.object]),
   className: PropTypes.string,
+  accountNameTestId: PropTypes.string,
 };

@@ -47,6 +47,7 @@ const NFTs = () => {
                     collection={collection}
                     defaultOpen={index === 0}
                     icns={collection?.name === 'ICNS'}
+                    collectionTestID="nft-collection-dropdown"
                   />
                 ))}
             </div>

@@ -1,9 +1,20 @@
 {
+  "network": {
+    "network": "Network",
+    "name": "Network Name",
+    "namePlaceholder": "My Network",
+    "host": "Host URL",
+    "hostPlaceholder": "http://localhost:8000/",
+    "ledgerCanisterId": "Ledger canister Id",
+    "ledgerCanisterIdPlaceholder": "My Ledger Canister Id",
+    "addNetwork": "Add Network",
+    "addNetworkDescription": "Add a custom network to use Plug on test networks."
+  },
   "connectionStatus": {
     "plugged": "You're plugged into",
     "notPlugged": "You're not plugged in",
     "incomingConnection": "Incoming connection!",
-    "alpha": "Plug Alpha Release - {{version}}"
+    "alpha": "Alpha - {{version}}"
   },
   "copy": {
     "copyText": "Copy to clipboard",
@@ -130,7 +141,9 @@
     "createAccountTitle": "Create Account",
     "helpDescription": "Resources to better understand Plug.",
     "exportIdentity": "Export DFX Identity",
-    "exportIdentityDescription": "Get a pem file to use in DFX."
+    "exportIdentityDescription": "Get a pem file to use in DFX.",
+    "network": "Network",
+    "networkDescription": "Add, edit, and remove custom networks."
   },
   "walletDetails": {
     "title": "Account Details",
@@ -257,7 +270,7 @@
     "passwordTitle": "Create Password for Plug",
     "passwordSubtitle": "Please create a password to access your Plug extension.",
     "passwordMessage": "Make that pw secure frfr",
-    "passwordLabel": "New Password (min. 12 characters)",
+    "passwordLabel": "New Password (min. 8 characters)",
     "passwordConfirmLabel": "Confirm Password",
     "passwordButton": "I made a secure password",
     "passwordWarning": "Don't forget your password, otherwise you'll need to reimport your wallet using your Secret Recovery Phrase.",
@@ -272,7 +285,7 @@
     "seedSubtitle": "Below is the Secret Recovery Phrase for your new wallet, write it down.",
     "seedMessage": "Keep this sh*t safe, forreal.",
     "seedCheckbox": "I wrote down the Secret Recovery Phrase and put it somewhere safe.",
-    "passwordShortError": "The minimum is 12 characters, smh!",
+    "passwordShortError": "The minimum is 8 characters, smh!",
     "passwordMatchError": "The passwords gotta match, smh!"
   },
   "contacts": {
@@ -305,10 +318,13 @@
     "comingSoon": "COMING SOON",
     "dabTitle": "DAB Token List",
     "dabText": "Helping improve discoverability, reputation, and trust in IC tokens.",
-    "tokenError": "Invalid Canister ID. No Token Interface Detected.",
+    "invalidInterfaceTokenError": "Wrong standard. No Token Interface Detected.",
+    "invalidCanisterTokenError": "Invalid Canister ID.",
+    "nftTokenError": "Custom non-fungible tokens are not supported yet.",
     "standard": "Token Standard",
     "searchResults": "Search results",
-    "selectStandard": "Select the token's interface standard"
+    "selectStandard": "Select the token's interface standard",
+    "importTitle": "wants to add a token to your wallet"
   },
   "error": {
     "errorTitle": "Something went wrong",
@@ -379,7 +395,8 @@
     "poweredByDab": "POWERED BY DAB"
   },
   "tokens": {
-    "failedToFetchBalance": "Failed to fetch balance"
+    "failedToFetchBalance": "Failed to fetch balance",
+    "ledgerNotSpecified": "Ledger not specified for network"
   },
   "clock": {
     "title": "Your device clock is set incorrectly",

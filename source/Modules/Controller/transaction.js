@@ -48,6 +48,7 @@ export class TransactionModule extends ControllerModuleBase {
       this.#requestBurnXTC(),
       this.#batchTransactions(),
       this.#requestCall(),
+      this.#requestImportToken(),
     ];
   }
 
@@ -58,6 +59,7 @@ export class TransactionModule extends ControllerModuleBase {
       this.#handleRequestBurnXTC(),
       TransactionModule.#handleBatchTransactions(),
       this.#handleCall(),
+      this.#handleRequestImportToken(),
     ];
   }
 
@@ -134,6 +136,7 @@ export class TransactionModule extends ControllerModuleBase {
               ...transfer,
               amount: parsedAmount,
               canisterId: ICP_CANISTER_ID,
+              standard: 'icp',
             });
 
             if (response.error) {
@@ -543,7 +546,8 @@ export class TransactionModule extends ControllerModuleBase {
 
         try {
           getApp(this.keyring?.currentWalletId.toString(), url, async (app) => {
-            const response = await this.keyring.getAgent({ host: app.host }).readState(canisterId, {
+            const agent = await this.keyring.getAgent({ host: app.host });
+            const response = await agent.readState(canisterId, {
               paths: [paths.map((path) => blobFromBuffer(base64ToBuffer(path)))],
             });
             callback(null, {
@@ -567,9 +571,14 @@ export class TransactionModule extends ControllerModuleBase {
 
         try {
           getApp(this.keyring?.currentWalletId.toString(), url, async (app) => {
-            const response = await this.keyring.getAgent({ host: app.host })
-              .query(canisterId, { methodName, arg: blobFromBuffer(base64ToBuffer(arg)) });
-
+            const agent = await this.keyring.getAgent({ host: app.host });
+            const response = await agent.query(
+              canisterId,
+              {
+                methodName,
+                arg: blobFromBuffer(base64ToBuffer(arg)),
+              },
+            );
             if (response.reply) {
               response.reply.arg = bufferToBase64(blobToUint8Array(response.reply.arg));
             }
@@ -578,6 +587,91 @@ export class TransactionModule extends ControllerModuleBase {
           });
         } catch (e) {
           callback(ERRORS.SERVER_ERROR(e), null);
+        }
+      },
+    };
+  }
+
+  #requestImportToken() {
+    return {
+      methodName: 'requestImportToken',
+      handler: async (opts, metadata, args, transactionId) => {
+        const { message, sender, callback } = opts;
+
+        const { id: callId } = message.data.data;
+        const { id: portId } = sender;
+
+        getApp(this.keyring?.currentWalletId.toString(), metadata.url, async (app = {}) => {
+          if (app.status !== CONNECTION_STATUS.accepted) {
+            callback(ERRORS.CONNECTION_ERROR, false);
+            return;
+          }
+
+          const getTokenInfo = getKeyringHandler(
+            HANDLER_TYPES.GET_TOKEN_INFO,
+            this.keyring,
+          );
+
+          const tokenInfo = await getTokenInfo(args);
+
+          if (tokenInfo?.error) {
+            callback(tokenInfo?.error, false);
+            return;
+          }
+
+          const height = this.keyring?.isUnlocked
+            ? SIZES.detailHeightSmall
+            : SIZES.loginHeight;
+
+          this.displayPopUp({
+            callId,
+            portId,
+            metadataJson: JSON.stringify(metadata),
+            argsJson: JSON.stringify({
+              ...tokenInfo.token,
+              amount: tokenInfo.amount,
+              timeout: app?.timeout,
+              transactionId,
+            }),
+            type: 'importToken',
+            screenArgs: {
+              fixedHeight: height,
+              top: 65,
+              left: metadata.pageWidth - SIZES.width,
+            },
+          }, callback);
+        });
+      },
+    };
+  }
+
+  #handleRequestImportToken() {
+    return {
+      methodName: 'handleRequestImportToken',
+      handler: async (opts, response, callId, portId) => {
+        const { callback } = opts;
+
+        if (response.status !== CONNECTION_STATUS.accepted) {
+          callback(ERRORS.TRANSACTION_REJECTED, false, [{ portId, callId }]);
+          callback(null, true);
+          return;
+        }
+
+        const addCustomToken = getKeyringHandler(
+          HANDLER_TYPES.ADD_CUSTOM_TOKEN,
+          this.keyring,
+        );
+
+        const tokens = await addCustomToken(response.token);
+
+        if (tokens.error) {
+          callback(ERRORS.SERVER_ERROR(tokens.error), false, [
+            { portId, callId },
+          ]);
+          callback(null, true);
+        } else {
+          callback(null, true, [{ portId, callId }]);
+          callback(null, true);
         }
       },
     };

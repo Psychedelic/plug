@@ -14,3 +14,7 @@ extension.runtime.onStartup.addListener(async () => {
   /* eslint-disable-next-line no-console */
   console.log('controller instantiated on startup');
 });
+
+backgroundScript.init().then(() => {
+  backgroundScript.exposeHandlers();
+});

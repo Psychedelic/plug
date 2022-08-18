@@ -1,6 +1,6 @@
 import extension from 'extensionizer';
 import PlugController from '@psychedelic/plug-controller';
-import { BackgroundController } from '@fleekhq/browser-rpc';
+import { BackgroundController } from '@psychedelic/browser-rpc';
 
 import {
   ConnectionModule,
@@ -67,6 +67,8 @@ class BackgroundScript {
   }
 
   #hookListener() {
+    if (this.hooksExposed) return;
+    this.hooksExposed = true;
     extension.runtime.onMessage.addListener((message, _, sendResponse) => {
       // Wait for some one connect to it
       const { params, type } = message;

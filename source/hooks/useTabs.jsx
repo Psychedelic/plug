@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-const useTabs = () => {
-  const [selectedTab, setSelectedTab] = useState(0);
+const useTabs = (defaultTab = 0) => {
+  const [selectedTab, setSelectedTab] = useState(defaultTab);
 
   const handleChangeTab = (value) => setSelectedTab(value);
 

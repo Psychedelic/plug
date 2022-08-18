@@ -16,6 +16,7 @@ const Settings = () => {
     <Layout>
       <Header
         center={t('settings.title')}
+        data-testid="settings-title"
         right={(
           <LinkButton
             value={t('common.close')}

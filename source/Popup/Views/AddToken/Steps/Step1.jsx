@@ -1,14 +1,22 @@
 import React from 'react';
-import { Tabs } from '@ui';
-import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+
+import { Tabs } from '@ui';
 import { useTabs } from '@hooks';
+
 import SearchToken from '../components/SearchToken';
 import CustomToken from '../components/CustomToken';
 
+const SEARCH_TAB_ID = 0;
+const CUSTOM_TOKENS_TAB_ID = 1;
+
 const Step1 = ({ handleChangeSelectedToken }) => {
   const { t } = useTranslation();
-  const { selectedTab, handleChangeTab } = useTabs();
+  const { usingMainnet } = useSelector((state) => state.network);
+  const defaultTab = usingMainnet ? SEARCH_TAB_ID : CUSTOM_TOKENS_TAB_ID;
+  const { selectedTab, handleChangeTab } = useTabs(defaultTab);
 
   const tabs = [
     {
@@ -17,6 +25,7 @@ const Step1 = ({ handleChangeSelectedToken }) => {
         handleChangeSelectedToken={handleChangeSelectedToken}
         handleChangeTab={handleChangeTab}
       />,
+      disabled: !usingMainnet,
     },
     {
       label: t('addToken.custom'),
@@ -27,7 +36,7 @@ const Step1 = ({ handleChangeSelectedToken }) => {
   ];
 
   return (
-    <Tabs tabs={tabs} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
+    <Tabs tabs={tabs} selectedTab={selectedTab} handleChangeTab={handleChangeTab} tabItemTestId="tab-item" />
   );
 };
 

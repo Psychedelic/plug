@@ -132,6 +132,7 @@ const WalletDetails = () => {
           <LinkButton
             value={t('common.done')}
             onClick={() => navigator.navigate('home')}
+            data-testid="done-button"
           />
         )}
       />
@@ -145,27 +146,43 @@ const WalletDetails = () => {
             edit={edit}
           />
           <InputBase
-            classes={{ root: clsx(classes.name, edit && classes.nameEdit) }}
+            classes={{
+              root:
+              clsx(classes.name, edit && !hasActiveResolvedICNS && classes.nameEdit),
+            }}
             value={hasActiveResolvedICNS ? resolved : walletName}
             type="text"
             onChange={handleChange}
             readOnly={!edit || hasActiveResolvedICNS}
             inputRef={textInput}
+            data-testid="account-name-input"
           />
           {edit
             ? (
-              <img
-                className={classes.icon}
-                src={BlueCheck}
+              <button
+                type="button"
+                style={{ all: 'unset', marginTop: '4px' }}
+                data-testid="save-changes-icon-button"
                 onClick={handleEditWalletName}
-              />
+              >
+                <img
+                  className={classes.icon}
+                  src={BlueCheck}
+                />
+              </button>
             )
             : (
-              <img
-                className={classes.icon}
-                src={Pencil}
+              <button
+                type="button"
+                style={{ all: 'unset', marginTop: '4px' }}
+                data-testid="edit-icon-button"
                 onClick={openEditWalletName}
-              />
+              >
+                <img
+                  className={classes.icon}
+                  src={Pencil}
+                />
+              </button>
             )}
         </div>
         {openEmojis && edit && (
@@ -193,6 +210,7 @@ const WalletDetails = () => {
           className={classes.viewMore}
           onClick={toggleExpand}
           variant="subtitle1"
+          data-testid="view-more-button"
         >
           <span>{t('walletDetails.viewMore')}</span>
           <ChevronDown
@@ -207,12 +225,16 @@ const WalletDetails = () => {
               value={principalId}
               setInfoOpen={setOpenPrincipal}
               isOpen={openPrincipal}
+              copyButtonTestId="copy-principalId-button"
+              infoIconButtonTestId="info-principalId-icon-button"
             />
             <DetailItem
               name="accountId"
               value={accountId}
               setInfoOpen={setOpenAccount}
               isOpen={openAccount}
+              copyButtonTestId="copy-accountId-button"
+              infoIconButtonTestId="info-accountId-icon-button"
             />
           </div>
         )}

@@ -22,7 +22,7 @@ const parseTokenBySymbol = (token) => ({
   XTC: {
     ...token?.token,
     amount: cyclesToTC(token.amount),
-    image: XTCIcon,
+    logo: XTCIcon,
     price: cyclesToTC(token.amount) * USD_PER_TC,
   },
   WTC: {
@@ -70,7 +70,7 @@ const Step2 = ({ selectedToken, handleClose }) => {
         <Grid item xs={12}>
           <div className={classes.confirmToken}>
             <TokenIcon
-              image={displayToken.logo}
+              logo={displayToken.logo}
               className={classes.tokenImage}
               symbol={displayToken?.symbol}
             />
@@ -93,6 +93,7 @@ const Step2 = ({ selectedToken, handleClose }) => {
             loading={loading}
             disabled={loading}
             fullWidth
+            data-testid="add-button"
           />
         </Grid>
       </Grid>
@@ -103,6 +104,6 @@ const Step2 = ({ selectedToken, handleClose }) => {
 export default Step2;
 
 Step2.propTypes = {
-  selectedToken: PropTypes.object.isRequired,
+  selectedToken: PropTypes.objectOf(PropTypes.string).isRequired,
   handleClose: PropTypes.func.isRequired,
 };

@@ -18,6 +18,7 @@ import AllowAgent from './components/AllowAgent';
 import BurnXTC from './components/BurnXTC';
 import Sign from './components/Sign';
 import SIZES from './components/Transfer/constants';
+import ImportToken from './components/ImportToken';
 
 const NOTIFICATION_COMPONENTS = {
   batchTransactions: BatchTransactions,
@@ -30,6 +31,7 @@ const NOTIFICATION_COMPONENTS = {
   getICNSInfo: LoginProxy,
   requestBalance: LoginProxy,
   requestConnectionData: LoginProxy,
+  importToken: ImportToken,
 };
 
 const resizeToLogin = () => {

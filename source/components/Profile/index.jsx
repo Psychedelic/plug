@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { Typography } from '@material-ui/core';
+import { IconButton, Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +21,6 @@ import {
   setAssetsLoading,
   setCollections,
   setTransactions,
-  setTransactionsLoading,
 } from '@redux/wallet';
 import BluePencil from '@assets/icons/blue-pencil.svg';
 import VisibleIcon from '@assets/icons/visible.svg';
@@ -131,7 +130,6 @@ const Profile = ({ disableProfile }) => {
           dispatch(setICNSData(newWallet.icnsData));
           dispatch(setAssetsLoading(true));
           dispatch(setTransactions([]));
-          dispatch(setTransactionsLoading(true));
           sendMessage({
             type: HANDLER_TYPES.GET_ICNS_DATA,
             params: { refresh: true },
@@ -140,7 +138,7 @@ const Profile = ({ disableProfile }) => {
           });
           sendMessage({
             type: HANDLER_TYPES.GET_ASSETS,
-            params: {},
+            params: { refresh: true },
           }, (keyringAssets) => {
             dispatch(setAssets({ keyringAssets, icpPrice }));
             dispatch(setAssetsLoading(false));
@@ -202,6 +200,7 @@ const Profile = ({ disableProfile }) => {
             label: classes.label,
           }}
           disabled={disableProfile}
+          data-testid="profile-button"
         >
           <UserIcon />
         </Button>
@@ -262,6 +261,7 @@ const Profile = ({ disableProfile }) => {
               root: classes.drawer,
               paper: classes.paper,
             }}
+            data-testid="drawer"
           >
             <div className={classes.container}>
               <div className={classes.header}>
@@ -272,26 +272,26 @@ const Profile = ({ disableProfile }) => {
                 {
                   accounts.map((account) => {
                     const isHidden = hiddenAccounts.includes(account.walletNumber);
+                    const isExactWalletNumber = account.walletNumber === walletNumber;
                     return (!isHidden || isEditing) && (
                       <MenuItem
                         size="small"
                         key={account.walletNumber}
                         name={account.name}
-                        icon={<UserIcon size="small" icon={account.icon} style={{ marginLeft: -6, marginRight: 12 }} />}
+                        icon={<UserIcon size="small" icon={account.icon ? account.icon : '👽'} style={{ marginLeft: -6, marginRight: 12 }} />}
                         onClick={!isHidden && handleChangeAccount(account.walletNumber)}
-                        selected={account.walletNumber === walletNumber}
+                        selected={isExactWalletNumber}
                         className={clsx(isHidden && classes.hiddenAccount)}
-                        endIcon={account.walletNumber === walletNumber ? (
-                          <img
-                            src={BluePencil}
-                            onClick={handleEditAccount}
-                          />
-                        ) : isEditing && (
-                        <img
-                          src={isHidden ? InvisibleIcon : VisibleIcon}
-                          onClick={toggleAccountVisibility(account.walletNumber)}
-                        />
-                        )}
+                        itemNameTestId="account-name"
+                        endIcon={isExactWalletNumber ? (
+                          <IconButton data-testid={`edit-button-${account.name}`} onClick={handleEditAccount}>
+                            <img src={BluePencil} />
+                          </IconButton>
+                        ) : isEditing ? (
+                          <IconButton data-testid={`visibility-button-${account.name}`} onClick={toggleAccountVisibility(account.walletNumber)}>
+                            <img src={isHidden ? InvisibleIcon : VisibleIcon} />
+                          </IconButton>
+                        ) : null}
                       />
                     );
                   })
@@ -304,7 +304,7 @@ const Profile = ({ disableProfile }) => {
                   key="createAccount"
                   name={t('profile.createAccount')}
                   alignLeft
-                  image={Plus}
+                  logo={Plus}
                   onClick={handleOpenCreateAccount}
                   data-testid="create-account-button"
                 />

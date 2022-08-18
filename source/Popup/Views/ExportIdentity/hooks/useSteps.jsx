@@ -13,12 +13,12 @@ const useSteps = () => {
 
   const handleChangeStep = (index) => setStep(index);
 
-  const rightButton = (text) => <LinkButton value={text} onClick={() => navigator.navigate('home')} />;
+  const rightButton = (text) => <LinkButton value={text} onClick={() => navigator.navigate('home')} spanTestId="close-button" />;
 
   const steps = [
     {
       component: <Step1 handleChangeStep={() => handleChangeStep(1)} />,
-      left: <LinkButton value={t('common.back')} onClick={() => navigator.navigate('settings')} startIcon={BackIcon} />,
+      left: <LinkButton value={t('common.back')} onClick={() => navigator.navigate('settings')} startIcon={BackIcon} spanTestId="back-button" />,
       right: rightButton(t('common.close')),
     },
     {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import qs from 'query-string';
 import { useTranslation, initReactI18next } from 'react-i18next';
-import { PortRPC } from '@fleekhq/browser-rpc';
+import { PortRPC } from '@psychedelic/browser-rpc';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import i18n from 'i18next';
@@ -16,12 +16,13 @@ import store from '@redux/store';
 import { Layout } from '@components';
 import extension from 'extensionizer';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import { reviewPendingTransaction } from '@modules/storageManager';
 import { setAccountInfo } from '@redux/wallet';
+
 import initConfig from '../../../../locales';
 import SIZES from '../Transfer/constants';
 import ErrorScreen from '../NotificationError';
 import useStyles from './styles';
-import { reviewPendingTransaction } from '@modules/storageManager';
 
 i18n.use(initReactI18next).init(initConfig);
 
@@ -135,6 +136,7 @@ const AppConnection = ({ setOnTimeout, transactionId }) => {
 
 AppConnection.propTypes = {
   setOnTimeout: PropTypes.func.isRequired,
+  transactionId: PropTypes.string.isRequired,
 };
 
 export default AppConnection;

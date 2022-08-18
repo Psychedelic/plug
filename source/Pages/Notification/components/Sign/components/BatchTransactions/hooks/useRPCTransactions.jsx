@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { DataDisplay } from '@ui';
 import { useTranslation } from 'react-i18next';
-import { PortRPC } from '@fleekhq/browser-rpc';
+import { PortRPC } from '@psychedelic/browser-rpc';
 import ReactJson from 'react-json-view';
 import { reviewPendingTransaction } from '@modules/storageManager';
 
