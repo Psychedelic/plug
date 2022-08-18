@@ -29,14 +29,14 @@ const AssetDisplay = ({
   }
 
   const formatRequest = async () => {
-    const amount = getAssetAmount(request);
-    let assetData = getAssetData(request?.canisterId);
+    const tokenData = await getDabTokens();
+    let assetData = tokenData.find(
+      (token) => token?.principal_id?.toString() === request?.canisterId,
+    );
     if (!assetData) {
-      const tokenData = await getDabTokens();
-      assetData = tokenData.find(
-        (token) => token?.principal_id?.toString() === request?.canisterId,
-      );
+      assetData = getAssetData(request?.canisterId);
     }
+    const amount = getAssetAmount(request, assetData?.standard);
     const formattedAsset = {
       ...assetData,
       ...formatAssetBySymbol(amount, assetData?.symbol, icpPrice),
