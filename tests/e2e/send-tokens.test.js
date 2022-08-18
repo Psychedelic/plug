@@ -90,7 +90,6 @@ const selectToken = async (page, tokenName) => {
 const waitForAmount = async (page) => {
   await page.waitForTimeout(500);
   await popupPageUtils.refreshWallet(page);
-  await sendViewButtonClick(page);
 
   const amount = await getAvailableAmount(page);
 
@@ -102,6 +101,8 @@ const waitForAmount = async (page) => {
 };
 
 const tokenBalanceCheck = async (page, { previousAmount, name }) => {
+  await popupPageUtils.refreshWallet(page);
+
   const assetAmount = await page.getByTestId(`asset-amount-${name}`, true);
   const assetAmountString = await page.evaluate((element) => element.innerText, assetAmount);
 
@@ -138,7 +139,7 @@ async function sendToken(page) {
   const amountInput = await page.getByTestId('select-token-input', true);
   await amountInput.click();
 
-  await pressKey(page, 'ArrowRight', 6);
+  await pressKey(page, 'ArrowRight', 4);
   await pressKey(page, 'ArrowLeft', 2);
   await page.keyboard.type('1');
 
@@ -150,6 +151,8 @@ async function sendToken(page) {
   const sendButton = await page.getByTestId('send-button', true);
   await sendButton.click();
   await page.waitForTimeout(15000);
+  const tokensTab = await page.getByTestId('tab-item-Tokens', true);
+  await tokensTab.click();
 }
 
 describe('Send View', () => {
@@ -216,7 +219,6 @@ describe('Send View', () => {
     await waitForAmount(page);
 
     for (const name of defaultTokenNames) {
-      console.log('Selecting token ->', name);
       await selectToken(page, name);
       const previousAmount = await getAvailableAmount(page);
 
@@ -325,6 +327,7 @@ describe('Send Custom Tokens', () => {
   });
 
   test('successfully sending custom token', async () => {
+    await sendViewButtonClick(page);
     const previousAmounts = [];
     await waitForAmount(page);
 
