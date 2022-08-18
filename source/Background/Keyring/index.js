@@ -463,9 +463,7 @@ export const deleteContact = (contactName) => new Promise((resolve) => {
   });
 });
 
-export const sendToken = ({
-  to, amount, canisterId, opts, standard, decimals,
-}) => new Promise((resolve, reject) => {
+export const sendToken = ({ to, amount, canisterId, opts, standard, decimals }) =>  new Promise((resolve, reject) => {
   sendMessage({
     type: HANDLER_TYPES.SEND_TOKEN,
     params: {
