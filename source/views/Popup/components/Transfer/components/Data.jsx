@@ -43,5 +43,5 @@ Data.propTypes = {
       component: PropTypes.node.isRequired,
     }),
   ).isRequired,
-  principalId: PropTypes.object.isRequired,
+  principalId: PropTypes.objectOf(PropTypes.string).isRequired,
 };

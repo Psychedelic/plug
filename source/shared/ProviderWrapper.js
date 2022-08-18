@@ -19,9 +19,9 @@ ProviderWrapper.propTypes = {
     PropTypes.node,
   ]).isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  store: PropTypes.object.isRequired,
+  store: PropTypes.objectOf(PropTypes.string).isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  theme: PropTypes.object.isRequired,
+  theme: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 export default ProviderWrapper;

@@ -50,7 +50,7 @@ const ContactItem = ({
 };
 
 ContactItem.propTypes = {
-  contact: PropTypes.object.isRequired,
+  contact: PropTypes.objectOf(PropTypes.string).isRequired,
   handleClick: PropTypes.func,
   handleDelete: PropTypes.func,
   handleCancel: PropTypes.func,
