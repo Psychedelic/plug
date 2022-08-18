@@ -35,19 +35,14 @@ const checkHelpMenuItemLinkMatch = async (browser, page, name, link) => {
   }
 };
 
-describe('Settings: Secret Recovery Phrase', () => {
+describe('Settings: Help', () => {
   let browser;
   let page;
 
-  const docs = 'Documentation';
-  const blog = 'Blog';
-  const followUs = 'Follow us on Twitter';
-  const discord = 'Join our Discord';
-
-  const docsLink = 'https://docs.plugwallet.ooo/';
-  const blogLink = 'https://medium.com/plugwallet';
-  const followUsLink = 'https://twitter.com/plug_wallet';
-  const discordLink = 'https://discord.com/invite/yVEcEzmrgm';
+  const docsData = { item: 'Documentation', url: 'https://docs.plugwallet.ooo/' };
+  const blogData = { item: 'Blog', url: 'https://medium.com/plugwallet' };
+  const followUsData = { item: 'Follow us on Twitter', url: 'https://twitter.com/plug_wallet' };
+  const discordData = { item: 'Join our Discord', url: 'https://discord.com/invite/yVEcEzmrgm' };
 
   beforeAll(async () => {
     browser = await setupChrome();
@@ -82,18 +77,18 @@ describe('Settings: Secret Recovery Phrase', () => {
   });
 
   test('checking that documentation link is match', async () => {
-    await checkHelpMenuItemLinkMatch(browser, page, docs, docsLink);
+    await checkHelpMenuItemLinkMatch(browser, page, docsData.item, docsData.url);
   });
 
   test('checking that blog link is match', async () => {
-    await checkHelpMenuItemLinkMatch(browser, page, blog, blogLink);
+    await checkHelpMenuItemLinkMatch(browser, page, blogData.item, blogData.url);
   });
 
   test('checking that follow us link is match', async () => {
-    await checkHelpMenuItemLinkMatch(browser, page, followUs, followUsLink);
+    await checkHelpMenuItemLinkMatch(browser, page, followUsData.item, followUsData.url);
   });
 
   test('checking that discord us link is match', async () => {
-    await checkHelpMenuItemLinkMatch(browser, page, discord, discordLink);
+    await checkHelpMenuItemLinkMatch(browser, page, discordData.item, discordData.url);
   });
 });

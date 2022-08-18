@@ -154,6 +154,7 @@ export const TOKENS = {
     amount: 0,
     value: 0,
     logo: TOKEN_IMAGES.ICP,
+    standard: 'ROSETTA',
   },
   XTC: {
     symbol: 'XTC',
@@ -163,6 +164,7 @@ export const TOKENS = {
     amount: 0,
     value: 0,
     logo: TOKEN_IMAGES.XTC,
+    standard: 'DIP20',
   },
   WICP: {
     symbol: 'WICP',
@@ -172,5 +174,6 @@ export const TOKENS = {
     amount: 0,
     value: 0,
     logo: TOKEN_IMAGES.WICP,
+    standard: 'DIP20',
   },
 };
