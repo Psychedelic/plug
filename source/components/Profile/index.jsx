@@ -25,7 +25,7 @@ import InvisibleIcon from '@assets/icons/invisible.svg';
 import { getRandomEmoji } from '@shared/constants/emojis';
 import { getTabURL } from '@shared/utils/chrome-tabs';
 import { getWalletsConnectedToUrl, getApp } from '@modules/storageManager';
-import { toggleAccountHidden, useHiddenAccounts } from '@redux/profile';
+import { setEditAccount, toggleAccountHidden, useHiddenAccounts } from '@redux/profile';
 import { setICNSData } from '@redux/icns';
 import { useICPPrice } from '@redux/icp';
 import { useMenuItems, useContacts } from '@hooks';
@@ -37,6 +37,7 @@ import TextInput from '../TextInput';
 import LinkButton from '../LinkButton';
 import { TABS, useRouter } from '../Router';
 import ActionDialog from '../ActionDialog';
+import { AccountItem } from './components';
 import UserIcon from '../UserIcon';
 import useStyles from './styles';
 
@@ -89,9 +90,10 @@ const Profile = ({ disableProfile }) => {
     }
   };
 
-  const handleEditAccount = (e) => {
+  const handleEditAccount = (account) => (e) => {
     e.preventDefault();
     e.stopPropagation();
+    dispatch(setEditAccount(account));
     setOpen(false);
     navigator.navigate('wallet-details');
   };
@@ -271,6 +273,7 @@ const Profile = ({ disableProfile }) => {
               </div>
               <MenuList className={clsx(classes.accountContainer, classes.menu)}>
                 {
+                  /*
                   accounts.map((account) => {
                     const isHidden = hiddenAccounts.includes(account.walletNumber);
                     const isExactWalletNumber = account.walletNumber === walletNumber;
@@ -296,7 +299,20 @@ const Profile = ({ disableProfile }) => {
                       />
                     );
                   })
-                }
+                  */
+                  accounts.map((account) => {
+                    const isCurrentAccount = account.walletNumber === walletNumber;
+
+                    return (
+                      <AccountItem
+                        account={account}
+                        isEditing={isEditing}
+                        isCurrentAccount={isCurrentAccount}
+                        handleChangeAccount={handleChangeAccount}
+                        handleEditAccount={handleEditAccount}
+                      />
+                    )
+                  })}
               </MenuList>
               <MenuList className={clsx(classes.settingContainer, classes.menu)}>
                 <Divider style={{ margin: '6px 0' }} />
