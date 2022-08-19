@@ -47,7 +47,7 @@ ActivityItemDetails.propTypes = {
   secondary: PropTypes.string.isRequired,
   isTransaction: PropTypes.bool.isRequired,
   hovering: PropTypes.bool.isRequired,
-  details: PropTypes.objectOf(PropTypes.any).isRequired,
+  details: PropTypes.objectOf(PropTypes.string).isRequired,
   setOpenDetail: PropTypes.func.isRequired,
 };
 

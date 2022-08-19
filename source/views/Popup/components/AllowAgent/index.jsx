@@ -211,4 +211,5 @@ AllowAgent.propTypes = {
   portId: PropTypes.string.isRequired,
   metadata: PropTypes.objectOf(PropTypes.string).isRequired,
   setOnTimeout: PropTypes.func.isRequired,
+  transactionId: PropTypes.string.isRequired,
 };

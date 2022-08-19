@@ -109,4 +109,5 @@ MenuItem.propTypes = {
   symbol: PropTypes.string,
   accountNameTestId: PropTypes.string,
   itemNameTestId: PropTypes.string,
+  image: PropTypes.string.isRequired,
 };

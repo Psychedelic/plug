@@ -30,6 +30,7 @@ LoginProxy.propTypes = {
   callId: PropTypes.string.isRequired,
   portId: PropTypes.string.isRequired,
   metadata: PropTypes.objectOf(PropTypes.string).isRequired,
+  transactionId: PropTypes.string.isRequired,
 };
 
 export default LoginProxy;

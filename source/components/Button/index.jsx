@@ -72,6 +72,6 @@ Button.propTypes = {
   loading: PropTypes.bool,
   disabled: PropTypes.bool,
   fullWidth: PropTypes.bool,
-  wrapperStyle: PropTypes.object,
+  wrapperStyle: PropTypes.objectOf(PropTypes.string),
   buttonTestId: PropTypes.string,
 };

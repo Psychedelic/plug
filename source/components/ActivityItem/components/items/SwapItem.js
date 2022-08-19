@@ -76,7 +76,7 @@ SwapItem.defaultProps = {
 };
 
 SwapItem.propTypes = {
-  details: PropTypes.objectOf(PropTypes.any),
+  details: PropTypes.objectOf(PropTypes.string), // eslint-disable-line react/forbid-prop-types
   date: PropTypes.oneOfType([
     PropTypes.instanceOf(Date),
     PropTypes.string,
