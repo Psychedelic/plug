@@ -1,6 +1,6 @@
 {
   "name": "plug",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Your plug into the Internet Computer",
   "private": true,
   "repository": "https://github.com/Psychedelic/plug",
@@ -38,7 +38,7 @@
     "@metamask/post-message-stream": "^4.0.0",
     "@psychedelic/browser-rpc": "2.1.0",
     "@psychedelic/dab-js": "1.4.5",
-    "@psychedelic/plug-controller": "0.19.7",
+    "@psychedelic/plug-controller": "0.19.8",
     "@psychedelic/plug-inpage-provider": "^2.3.0",
     "@reduxjs/toolkit": "^1.6.0",
     "advanced-css-reset": "^1.2.2",
