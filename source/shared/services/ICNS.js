@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Actor, HttpAgent } from '@dfinity/agent';
 import crossFetch from 'cross-fetch';
 
@@ -57,7 +58,7 @@ export const resolveName = async (name, isICP) => {
     }
     return Array.isArray(principal) ? principal?.[0]?.toString() : principal?.toString?.();
   } catch (e) {
-    console.log('Error resolving the ICNS', e);
+    console.warn('Error resolving the ICNS', e);
     return null;
   }
 };

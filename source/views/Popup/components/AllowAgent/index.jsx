@@ -58,14 +58,10 @@ const AllowAgent = ({
   const [expand, setExpand] = useState(false);
 
   const handleAllowAgent = async (status) => {
-    const whitelist = canisters.reduce(
-      (accum, canisterInfo) => ({ ...accum, [canisterInfo.id]: canisterInfo }),
-      {},
-    );
     reviewPendingTransaction(transactionId, () => {});
     const success = await portRPC.call('handleAllowAgent', [
       url,
-      { status, whitelist },
+      { status },
       callId,
       portId,
       transactionId,
@@ -211,4 +207,5 @@ AllowAgent.propTypes = {
   portId: PropTypes.string.isRequired,
   metadata: PropTypes.objectOf(PropTypes.string).isRequired,
   setOnTimeout: PropTypes.func.isRequired,
+  transactionId: PropTypes.string.isRequired,
 };

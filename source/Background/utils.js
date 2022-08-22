@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import PlugController from '@psychedelic/plug-controller';
 
 import { validateCanisterId, validatePrincipalId, validateAccountId } from '@shared/utils/ids';
@@ -183,7 +184,7 @@ export const handleCallRequest = async ({
     if (redirected) callback(null, true);
     return true;
   } catch (e) {
-    console.log('Error when executing update transaction', e);
+    console.warn('Error when executing update transaction', e);
     callback(ERRORS.SERVER_ERROR(e), null, [{ portId, callId }]);
     if (redirected) callback(null, false);
     return false;

@@ -30,7 +30,7 @@ const DisplayBox = ({
 DisplayBox.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string.isRequired,
-  img: PropTypes.string | PropTypes.node,
+  img: PropTypes.string || PropTypes.node,
 };
 
 DisplayBox.defaultProps = {

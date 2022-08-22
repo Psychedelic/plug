@@ -62,7 +62,7 @@ LiquidityItem.defaultProps = {
 
 LiquidityItem.propTypes = {
   type: PropTypes.number,
-  details: PropTypes.objectOf(PropTypes.any),
+  details: PropTypes.objectOf(PropTypes.string),
   date: PropTypes.oneOfType([
     PropTypes.instanceOf(Date),
     PropTypes.string,
