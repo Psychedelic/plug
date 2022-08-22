@@ -53,13 +53,13 @@ const ERRORS_INFO = [
 const matchErrors = (err) => {
   for (const errorInfo of ERRORS_INFO) {
     const currentError = errorInfo?.errorNames?.some(
-      (errorKeyword) => err.includes(errorKeyword)
+      (errorKeyword) => err.includes(errorKeyword),
     );
 
     if (currentError) {
       return errorInfo?.errorCode;
     }
-  };
+  }
 
   return 600;
 };
@@ -81,7 +81,9 @@ export const sendToken = createAsyncThunk(
     const { canisterId, standard, decimals } = selectedAsset || {};
 
     try {
-      const res = await callSendToken({ to, amount, canisterId, standard, decimals });
+      const res = await callSendToken({
+        to, amount, canisterId, standard, decimals,
+      });
       return res;
     } catch ({ error }) {
       return rejectWithValue(error);

@@ -336,7 +336,7 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME]: async ({
     name,
-    walletId = keyring.currentWalletId
+    walletId = keyring.currentWalletId,
   }) => {
     try {
       const res = await keyring.setReverseResolvedName({ name, subaccount: walletId });

@@ -125,10 +125,12 @@ export const setUseICNS = (useICNS, walletNumber, cb = () => {}) => {
 
   secureGetWrapper('icns', defaultValue, (state) => {
     cb(state?.icns?.[parseInt(walletNumber, 10)] ?? defaultValue);
-    secureSetWrapper({ icns: {
-      ...state?.icns,
-      [walletNumber]: useICNS,
-    } }, defaultValue, cb);
+    secureSetWrapper({
+      icns: {
+        ...state?.icns,
+        [walletNumber]: useICNS,
+      },
+    }, defaultValue, cb);
   });
 };
 
