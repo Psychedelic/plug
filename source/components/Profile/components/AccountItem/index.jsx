@@ -12,37 +12,6 @@ import VisibleIcon from '@assets/icons/visible.svg';
 import UserIcon from '../../../UserIcon';
 import useStyles from './styles';
 
-/*
-  <MenuItem
-    size="small"
-    key={account.walletNumber}
-    name={account.name}
-    icon={(
-      <UserIcon
-        size="small"
-        icon={account.icon ? account.icon : '👽'}
-        style={{ marginLeft: -6, marginRight: 12 }}
-      />
-    )}
-    onClick={!isHidden && handleChangeAccount(account.walletNumber)}
-    selected={isExactWalletNumber}
-    className={clsx(isHidden && classes.hiddenAccount)}
-    itemNameTestId="account-name"
-    endIcon={isExactWalletNumber ? (
-      <IconButton data-testid={`edit-button-${account.name}`} onClick={handleEditAccount}>
-        <img src={BluePencil} />
-      </IconButton>
-    ) : isEditing ? (
-      <IconButton
-        data-testid={`visibility-button-${account.name}`}
-        onClick={toggleAccountVisibility(account.walletNumber)}
-      >
-        <img src={isHidden ? InvisibleIcon : VisibleIcon} />
-      </IconButton>
-    ) : null}
-  />
-*/
-
 const AccountItem = ({
   account,
   isCurrentAccount,
@@ -68,6 +37,7 @@ const AccountItem = ({
     <div
       className={clsx(classes.accountItemContainer, isHidden && classes.hiddenAccount)}
       itemNameTestId="account-name"
+      onClick={handleEditAccount(account)}
     >
       <div className={classes.leftContainer}>
         <UserIcon
@@ -80,9 +50,6 @@ const AccountItem = ({
         >
           <span className={classes.accountName}>
             {account.name}
-          </span>
-          <span className={classes.accountType}>
-            Placeholder
           </span>
         </div>
       </div>
