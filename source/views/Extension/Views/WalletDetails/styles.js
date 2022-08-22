@@ -43,6 +43,9 @@ export default makeStyles((theme) => ({
     background: '#FFFFFF',
     boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
   },
+  resolvedNameEdit: {
+    width: 231,
+  },
   icon: {
     marginLeft: 3,
     marginRight: 12,

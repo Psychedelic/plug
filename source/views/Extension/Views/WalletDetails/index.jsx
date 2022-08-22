@@ -8,7 +8,7 @@ import { ChevronDown } from 'react-feather';
 import { toast } from 'react-toastify';
 import extensionizer from 'extensionizer';
 
-import { getWalletsConnectedToUrl, getApp } from '@modules/storageManager';
+import { getWalletsConnectedToUrl, getApp, getUseICNS } from '@modules/storageManager';
 import { getTabURL } from '@shared/utils/chrome-tabs';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import {
@@ -35,7 +35,7 @@ import {
   Header,
   LinkButton,
 } from '@components';
-import { setUseICNS } from '@modules/storageManager';
+import { setUseICNS as setStorageUseICNS} from '@modules/storageManager';
 
 import useStyles from './styles';
 import DetailItem from './components/DetailItem';
@@ -45,7 +45,11 @@ const WalletDetails = () => {
   const classes = useStyles();
   const { navigator } = useRouter();
   const { t } = useTranslation();
-  const { resolved, useICNS } = useSelector((state) => state.icns);
+  const {
+    resolved: reduxResolved,
+    useICNS: reduxUseICNS,
+    names: reduxNames,
+  } = useSelector((state) => state.icns);
   const dispatch = useDispatch();
   const { getContacts } = useContacts();
   const icpPrice = useICPPrice();
@@ -55,7 +59,6 @@ const WalletDetails = () => {
 
   const textInput = useRef(null);
   const { name, icon: emoji, accountId, principal: principalId, walletNumber } = editAccount;
-  const hasActiveResolvedICNS = resolved && useICNS;
 
   const [openConnectAccount, setOpenConnectAccount] = useState(false);
   const [connectedWallets, setConnectedWallets] = useState([]);
@@ -70,6 +73,39 @@ const WalletDetails = () => {
   const [expand, setExpand] = useState(false);
   const [openAccount, setOpenAccount] = useState(false);
   const [openPrincipal, setOpenPrincipal] = useState(false);
+
+  // Local ICNS
+  const [useICNS, setUseICNS] = useState(false);
+  const [resolved, setResolved] = useState(null);
+  const [icnsNames, setICNSNames] = useState([]);
+  const [icnsLoading, setICNSLoading] = useState(true);
+
+  const hasActiveResolvedICNS = resolved !== null && useICNS && !icnsLoading;
+
+  useEffect(() => {
+    setICNSLoading(true);
+    // Use standard ICNS data
+    if (walletNumber === activeWalletNumber) {
+      setICNSLoading(false);
+      setUseICNS(reduxUseICNS);
+      setResolved(reduxResolved);
+      setICNSNames(reduxNames);
+    } else {
+      getUseICNS(walletNumber, (storageUseICNS) => {
+        setUseICNS(storageUseICNS);
+      });
+
+      sendMessage({
+        type: HANDLER_TYPES.GET_ICNS_DATA,
+        params: { refresh: true, walletId: walletNumber },
+      }, (icnsData) => {
+        const { names, reverseResolvedName } = icnsData;
+        setICNSNames(names || []);
+        setResolved(reverseResolvedName || null);
+        setICNSLoading(false);
+      });
+    }
+  }, [walletNumber]);
 
   const handleChange = (e) => setWalletName(e.target.value);
 
@@ -117,12 +153,17 @@ const WalletDetails = () => {
 
   const handleToggleICNS = (event) => {
     const { checked } = event.target;
-    dispatch(setReduxUseICNS(checked));
-    setUseICNS(checked, walletNumber);
+
+    setUseICNS(checked);
+    setStorageUseICNS(checked, walletNumber);
+    if (walletNumber === activeWalletNumber) {
+      dispatch(setReduxUseICNS(checked));
+    }
+
     if (!checked) {
       sendMessage({
         type: HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME,
-        params: '',
+        params: { name: '', walletId: walletNumber },
       }, (response) => {
         if (response.error) {
           // eslint-disable-next-line
@@ -130,14 +171,48 @@ const WalletDetails = () => {
         } else {
           sendMessage({
             type: HANDLER_TYPES.GET_ICNS_DATA,
-            params: { refresh: true },
+            params: { refresh: true, walletId: walletNumber },
           }, (icnsData) => {
-            dispatch(setICNSData(icnsData));
+            if (walletNumber === activeWalletNumber) {
+              dispatch(setICNSData(icnsData));
+            }
+
+            const { names, reverseResolvedName } = icnsData;
+            setICNSNames(names || []);
+            setResolved(reverseResolvedName || null);
+            setICNSLoading(false);
           });
         }
       });
     }
   };
+
+  const handleSetReverseResolution = (name, resetModal) => {
+    sendMessage({
+      type: HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME,
+      params: { name, walletId: walletNumber },
+    }, (response) => {
+      if (response.error) {
+        // eslint-disable-next-line
+        console.log('Error when setting your reverse resolved name', response.error); // TODO HANDLE ERROR (shouldnt happen tho)
+      } else {
+        sendMessage({
+          type: HANDLER_TYPES.GET_ICNS_DATA,
+          params: { refresh: true, walletId: walletNumber },
+        }, (icnsData) => {
+          if (walletNumber === activeWalletNumber) {
+            dispatch(setICNSData(icnsData));
+          }
+
+          const { names, reverseResolvedName } = icnsData;
+          setICNSNames(names || []);
+          setResolved(reverseResolvedName || null);
+          setICNSLoading(false);
+          resetModal();
+        });
+      }
+    });
+  }
 
   const handleChangeAccount = () => {
     extensionizer.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
@@ -255,7 +330,7 @@ const WalletDetails = () => {
           <InputBase
             classes={{
               root:
-              clsx(classes.name, edit && !hasActiveResolvedICNS && classes.nameEdit),
+              clsx(classes.name, edit && !hasActiveResolvedICNS && classes.nameEdit, edit && hasActiveResolvedICNS && classes.resolvedNameEdit),
             }}
             value={hasActiveResolvedICNS ? resolved : walletName}
             type="text"
@@ -320,7 +395,15 @@ const WalletDetails = () => {
             }}
           />
         )}
-        <ICNSToggle active={useICNS} handleToggle={handleToggleICNS} />
+        <ICNSToggle
+          active={useICNS}
+          names={icnsNames}
+          resolved={resolved}
+          handleToggle={handleToggleICNS}
+          walletNumber={walletNumber}
+          loading={icnsLoading}
+          handleSetReverseResolution={handleSetReverseResolution}
+        />
         <div
           className={classes.viewMore}
           onClick={toggleExpand}
