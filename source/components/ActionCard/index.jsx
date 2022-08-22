@@ -32,5 +32,5 @@ ActionCard.propTypes = {
   button: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  buttonProps: PropTypes.object,
+  buttonProps: PropTypes.objectOf(PropTypes.string),
 };

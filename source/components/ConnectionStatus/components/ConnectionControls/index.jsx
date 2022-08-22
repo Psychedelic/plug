@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
 import { useContacts } from '@hooks';
-import { useICPPrice, setICPPrice, setICPPriceLoading } from '@redux/icp';
+import { useICPPrice } from '@redux/icp';
 import {
   setAssets,
   setAssetsLoading,

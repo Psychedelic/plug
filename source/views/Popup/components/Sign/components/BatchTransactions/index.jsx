@@ -130,4 +130,5 @@ BatchTransactions.propTypes = {
   portId: PropTypes.string.isRequired,
   metadata: PropTypes.arrayOf(PropTypes.string).isRequired,
   setOnTimeout: PropTypes.func.isRequired,
+  transactionId: PropTypes.string.isRequired,
 };

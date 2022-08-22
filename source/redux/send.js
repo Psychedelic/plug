@@ -93,7 +93,7 @@ export const sendToken = createAsyncThunk(
 
 export const burnXTC = createAsyncThunk(
   'sendToken/burnXTC',
-  async (arg, { getState }) => {
+  async (arg, { getState, rejectWithValue }) => {
     const { send: state } = getState();
     const { addressInfo, address, amount: rawAmount } = state;
 
