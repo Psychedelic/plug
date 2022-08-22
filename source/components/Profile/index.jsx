@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { IconButton, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -19,9 +19,6 @@ import {
   setCollections,
   setTransactions,
 } from '@redux/wallet';
-import BluePencil from '@assets/icons/blue-pencil.svg';
-import VisibleIcon from '@assets/icons/visible.svg';
-import InvisibleIcon from '@assets/icons/invisible.svg';
 import { getRandomEmoji } from '@shared/constants/emojis';
 import { getTabURL } from '@shared/utils/chrome-tabs';
 import { getWalletsConnectedToUrl, getApp } from '@modules/storageManager';
@@ -70,8 +67,6 @@ const Profile = ({ disableProfile }) => {
 
   const menuItems = disableProfile ? [] : useMenuItems(handleToggle);
 
-  const hiddenAccounts = useHiddenAccounts();
-
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
       (state) => {
@@ -114,12 +109,6 @@ const Profile = ({ disableProfile }) => {
 
   const toggleEditAccounts = () => {
     setIsEditing(!isEditing);
-  };
-
-  const toggleAccountVisibility = (account) => (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    dispatch(toggleAccountHidden(account));
   };
 
   const executeAccountSwitch = (wallet) => {
@@ -284,8 +273,9 @@ const Profile = ({ disableProfile }) => {
                         handleChangeAccount={handleChangeAccount}
                         handleEditAccount={handleEditAccount}
                       />
-                    )
-                  })}
+                    );
+                  })
+}
               </MenuList>
               <MenuList className={clsx(classes.settingContainer, classes.menu)}>
                 <Divider style={{ margin: '6px 0' }} />

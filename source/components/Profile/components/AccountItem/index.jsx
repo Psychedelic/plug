@@ -17,7 +17,7 @@ const AccountItem = ({
   isCurrentAccount,
   isEditing,
   handleChangeAccount,
-  handleEditAccount
+  handleEditAccount,
 }) => {
   const classes = useStyles();
   const hiddenAccounts = useHiddenAccounts();
@@ -57,7 +57,7 @@ const AccountItem = ({
         <IconButton
           disabled={isCurrentAccount || isHidden}
           onClick={handleChangeAccount(account.walletNumber)}
-        > 
+        >
           <img
             className={clsx((isCurrentAccount || isHidden) && classes.disabledIcon)}
             src={SwitchAccount}
@@ -66,7 +66,7 @@ const AccountItem = ({
         <IconButton
           disabled={isHidden}
           onClick={handleEditAccount(account)}
-        > 
+        >
           <img
             className={clsx(isHidden && classes.disabledIcon)}
             src={BluePencil}
@@ -75,7 +75,7 @@ const AccountItem = ({
         { isEditing && (
           <IconButton
             onClick={toggleAccountVisibility(account.walletNumber)}
-          > 
+          >
             <img src={isHidden ? InvisibleIcon : VisibleIcon} />
           </IconButton>
         )}

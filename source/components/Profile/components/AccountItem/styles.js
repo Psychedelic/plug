@@ -18,8 +18,8 @@ export default makeStyles(() => ({
 
       '& > div:last-child': {
         opacity: '1 !important',
-      }
-    }
+      },
+    },
   },
   hiddenAccount: {
     color: 'rgba(0, 0, 0, 0.26)',
@@ -53,15 +53,15 @@ export default makeStyles(() => ({
     alignItems: 'center',
     justifyContent: 'center',
     opacity: '0',
-    
+
     transition: 'all 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
     '& > button': {
       padding: '5px',
       '& > span': {
         width: '24px',
         height: '24px',
-      }
-    }
+      },
+    },
   },
   disabledIcon: {
     opacity: 0.3,
