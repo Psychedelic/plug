@@ -22,6 +22,7 @@ const Tokens = () => {
   const icpPrice = useICPPrice();
   const { navigator } = useRouter();
   const { onScroll, fullScroll } = useScroll();
+  const [activateButton, setActivateButton] = useState(false);
 
   const fetchAssets = () => {
     sendMessage({
@@ -75,8 +76,28 @@ const Tokens = () => {
         }
         <div className={classes.emptyAsset} />
       </div>
+      {
+        activateButton && (
+          <>
+            <div
+              onClick={() => setActivateButton(!activateButton)}
+              className={classes.addTokenButton}
+              data-testid="add-custom-token-button"
+            >
+              🪙  Add Token
+            </div>
+            <div
+              onClick={() => setActivateButton(!activateButton)}
+              className={classes.addNftButton}
+              data-testid="add-custom-token-button"
+            >
+              🎉 Add NFT
+            </div>
+          </>
+        )
+      }
       <div
-        onClick={() => navigator.navigate('add-token')}
+        onClick={() => setActivateButton(!activateButton)}
         className={classes.buttonWrapper}
         data-testid="add-custom-token-button"
       >
