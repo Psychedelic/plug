@@ -9,8 +9,10 @@ const ICP_DECIMALS = 8;
 export const getAssetData = (canisterId) => Object.values(TOKENS).find((token) => token.canisterId === canisterId);
 
 const DIP20_AMOUNT_MAP = {
-  transfer: (args) => args?.[0]?.amount / (10 ** CYCLE_DECIMALS),
+  transfer: (args) => args?.[1] / (10 ** CYCLE_DECIMALS),
   transferErc20: (args) => args?.[1] / (10 ** CYCLE_DECIMALS),
+  transferFrom: (args) => args?.[2] / (10 ** CYCLE_DECIMALS),
+
 };
 
 const ICP_AMOUNT_MAP = (args) => args?.[0]?.amount?.e8s / (10 ** ICP_DECIMALS);
