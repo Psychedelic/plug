@@ -17,17 +17,14 @@ const AssetItem = ({
   updateToken, logo, name, amount, value, symbol, loading, failed, assetNameTestId,
 }) => {
   const classes = useStyles();
-  const [fetchLoading, setFetchLoading] = useState(false);
   const { t } = useTranslation();
   const { currentNetwork, usingMainnet } = useSelector((state) => state.network);
 
   const handleFetchAssets = async () => {
     // Avoid calling multiple times
-    if (fetchLoading) return;
+    if (loading) return;
 
-    setFetchLoading(true);
     await updateToken();
-    setFetchLoading(false);
   };
   const ledgerNotSpecified = !usingMainnet && !currentNetwork?.ledgerCanisterId;
   return (
@@ -79,7 +76,6 @@ const AssetItem = ({
             : (<NumberFormat value={value} displayType="text" decimalScale={2} fixedDecimalScale thousandSeparator="," prefix="$" />)}
         </Typography>
         )}
-
     </div>
 
   );
