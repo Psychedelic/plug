@@ -80,14 +80,13 @@ const Tokens = () => {
         activateButton && (
           <>
             <div
-              onClick={() => setActivateButton(!activateButton)}
+              onClick={() => navigator.navigate('add-token')}
               className={classes.addTokenButton}
               data-testid="add-custom-token-button"
-            >
-              🪙  Add Token
+            >🪙  Add Token
             </div>
             <div
-              onClick={() => setActivateButton(!activateButton)}
+              onClick={() => navigator.navigate('add-nft')}
               className={classes.addNftButton}
               data-testid="add-custom-token-button"
             >
