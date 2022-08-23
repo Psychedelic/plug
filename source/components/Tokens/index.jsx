@@ -23,19 +23,31 @@ const Tokens = () => {
   const { navigator } = useRouter();
   const { onScroll, fullScroll } = useScroll();
 
-  const fetchAssets = () => {
+  const fetchAssets = (cb = () => {}) => {
     sendMessage({
       type: HANDLER_TYPES.GET_ASSETS,
       params: {},
     }, (keyringAssets) => {
+      cb(keyringAssets);
       dispatch(setAssets({ keyringAssets, icpPrice }));
       dispatch(setAssetsLoading(false));
       setLoading(false);
     });
   };
 
+  const handleFetchAssets = () => {
+    dispatch(setAssetsLoading(true));
+    setLoading(true);
+
+    return new Promise((resolve) => {
+      fetchAssets(resolve);
+    });
+  };
+
   useEffect(() => {
-    const id = setInterval(fetchAssets, 15000);
+    const id = setInterval(() => {
+      !assetsLoading && fetchAssets();
+    }, 15000);
     fetchAssets();
     return () => clearInterval(id);
   }, [icpPrice]);
@@ -66,7 +78,7 @@ const Tokens = () => {
             <AssetItem
               {...asset}
               key={`${asset.symbol}-${asset.canisterId}-${currentNetwork?.id}`}
-              updateToken={fetchAssets}
+              updateToken={handleFetchAssets}
               loading={loading}
               failed={!!asset?.error}
               assetNameTestId="asset-name"
