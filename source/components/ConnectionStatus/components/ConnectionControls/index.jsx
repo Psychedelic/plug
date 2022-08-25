@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { capitalize } from '@material-ui/core';
 import { getTabURL } from '@shared/utils/chrome-tabs';
@@ -30,7 +30,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
   const icpPrice = useICPPrice();
   const dispatch = useDispatch();
   const { getContacts } = useContacts();
-  const { navigator } = disableNavigation ? {} : useRouter();
+  const { tabIndex } = disableNavigation ? {} : useRouter();
   const {
     principalId,
     walletNumber,
@@ -43,7 +43,20 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
   const [selectorOpen, setSelectorOpen] = useState(false);
   const [connected, setConnected] = useState(false);
 
-  const loading = assetsLoading || transactionsLoading || collectionsLoading;
+  const isTabInfoLoading = useMemo(() => {
+    switch (tabIndex) {
+      case TABS.TOKENS:
+        return assetsLoading;
+      case TABS.NFTS:
+        return collectionsLoading;
+      case TABS.ACTIVITY:
+        return transactionsLoading;
+      default:
+        return assetsLoading || transactionsLoading || collectionsLoading;
+    }
+  }, [tabIndex, assetsLoading, transactionsLoading, collectionsLoading]);
+
+  const refreshButtonInactive = isTabInfoLoading || disableNavigation;
 
   extensionizer.tabs.query({ active: true }, (tabs) => {
     const url = getTabURL(tabs?.[0]);
@@ -54,45 +67,62 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
     });
   });
 
+  const loadAssets = () => {
+    dispatch(setAssetsLoading(true));
+    sendMessage(
+      {
+        type: HANDLER_TYPES.GET_ASSETS,
+        params: { refresh: true },
+      },
+      (keyringAssets) => {
+        dispatch(setAssets({ keyringAssets, icpPrice }));
+        dispatch(setAssetsLoading(false));
+      },
+    );
+  };
+
+  const loadTransactions = () => {
+    dispatch(setTransactionsLoading(true));
+    sendMessage(
+      {
+        type: HANDLER_TYPES.GET_TRANSACTIONS,
+        params: {},
+      },
+      (trxs) => {
+        dispatch(setTransactions({ ...trxs, icpPrice, useICNS }));
+        dispatch(setTransactionsLoading(false));
+      },
+    );
+  };
+
+  const loadCollections = () => {
+    dispatch(setCollectionsLoading(true));
+    sendMessage(
+      {
+        type: HANDLER_TYPES.GET_NFTS,
+        params: { refresh: true },
+      },
+      (nftCollections) => {
+        if (nftCollections?.length) {
+          dispatch(
+            setCollections({ collections: nftCollections, principalId }),
+          );
+        }
+        dispatch(setCollectionsLoading(false));
+      },
+    );
+  };
+
   const refreshWallet = () => {
-    if (disableNavigation || loading) return;
-    navigator?.navigate?.('home', TABS.TOKENS);
+    if (refreshButtonInactive) return;
 
     if (icpPrice) {
       // Contacts
       getContacts(true);
 
-      // NFTS
-      dispatch(setCollectionsLoading(true));
-      sendMessage({
-        type: HANDLER_TYPES.GET_NFTS,
-        params: { refresh: true },
-      }, (nftCollections) => {
-        if (nftCollections?.length) {
-          dispatch(setCollections({ collections: nftCollections, principalId }));
-        }
-        dispatch(setCollectionsLoading(false));
-      });
-
-      // Transactions
-      dispatch(setTransactionsLoading(true));
-      sendMessage({
-        type: HANDLER_TYPES.GET_TRANSACTIONS,
-        params: {},
-      }, (trxs) => {
-        dispatch(setTransactions({ ...trxs, icpPrice, useICNS }));
-        dispatch(setTransactionsLoading(false));
-      });
-
-      // Tokens
-      dispatch(setAssetsLoading(true));
-      sendMessage({
-        type: HANDLER_TYPES.GET_ASSETS,
-        params: { refresh: true },
-      }, (keyringAssets) => {
-        dispatch(setAssets({ keyringAssets, icpPrice }));
-        dispatch(setAssetsLoading(false));
-      });
+      loadAssets();
+      loadCollections();
+      loadTransactions();
     }
   };
 
@@ -104,25 +134,43 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
   return (
     !hidden && (
       <div className={classes.controls}>
-        <div className={classes.networkSelector} onClick={() => setSelectorOpen(true)}>
-          <div className={clsx(classes.controlsInfo, connected && classes.connectedControls)}>
+        <div
+          className={classes.networkSelector}
+          onClick={() => setSelectorOpen(true)}
+        >
+          <div
+            className={clsx(
+              classes.controlsInfo,
+              connected && classes.connectedControls,
+            )}
+          >
             <div className={clsx(classes.statusDot)} />
-            <span className={classes.network}>{capitalize(currentNetwork?.name || 'Mainnet')}</span>
+            <span className={classes.network}>
+              {capitalize(currentNetwork?.name || 'Mainnet')}
+            </span>
           </div>
         </div>
-        <div
+        <button
+          type="button"
           data-testid="refresh-wallet-button"
-          className={clsx(
-            classes.reloadIconContainer,
-            disableNavigation && classes.disabled,
-            // loading && classes.loading, disabled for now, need to check with design
-          )}
+          disabled={refreshButtonInactive}
+          className={classes.reloadIconContainer}
           onClick={refreshWallet}
         >
-          <img src={RefreshAsset} alt="reload" className={classes.reloadIcon} />
-        </div>
+          <img
+            src={RefreshAsset}
+            alt="reload"
+            className={clsx(
+              classes.reloadIcon,
+              isTabInfoLoading && classes.reloadIconLoading,
+            )}
+          />
+        </button>
         {selectorOpen && (
-        <NetworkSelector onClose={() => setSelectorOpen(false)} refreshWallet={refreshWallet} />
+          <NetworkSelector
+            onClose={() => setSelectorOpen(false)}
+            refreshWallet={refreshWallet}
+          />
         )}
       </div>
     )

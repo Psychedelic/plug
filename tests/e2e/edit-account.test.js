@@ -151,9 +151,6 @@ describe('Account Details View', () => {
     const changedName = await waitForWalletName(page, 'Account 12');
     expect(changedName).toBe('Account 12');
 
-    await popupPageUtils.profileButtonClick(page);
-    await editAccountButtonClick(page, 'Account 12');
-
     await editAccountIconButtonClick(page);
     await deleteSymbolsFromInput(page);
     await saveChangesIconButtonClick(page);

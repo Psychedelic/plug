@@ -18,7 +18,8 @@ import { XTC_FEE } from '@shared/constants/addresses';
 import { getKeyringHandler, HANDLER_TYPES } from '@background/Keyring';
 import { blobFromBuffer, blobToUint8Array } from '@dfinity/candid';
 
-import SIZES from '../../Pages/Notification/components/Transfer/constants';
+import SIZES from '../../views/Popup/components/Transfer/constants';
+
 import {
   getBatchTransactions, getProtectedIds, setBatchTransactions, getApp,
 } from '../storageManager';
@@ -136,7 +137,7 @@ export class TransactionModule extends ControllerModuleBase {
               ...transfer,
               amount: parsedAmount,
               canisterId: ICP_CANISTER_ID,
-              standard: 'icp',
+              standard: 'ROSETTA',
             });
 
             if (response.error) {

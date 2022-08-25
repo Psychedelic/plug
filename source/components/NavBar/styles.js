@@ -14,6 +14,10 @@ export default makeStyles({
     background: '#FFFFFF',
     boxShadow: SHADOW_1,
   },
+  logoButton: {
+    height: 68,
+    borderRadius: 0,
+  },
   walletContainer: {
     flex: 3,
     display: 'flex',

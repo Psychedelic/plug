@@ -6,9 +6,9 @@ import {
   ConnectionModule,
   TransactionModule,
   InformationModule,
+  NotificationManager,
 } from '@modules';
 
-import NotificationManager from '../lib/NotificationManager';
 import {
   getKeyringHandler,
   HANDLER_TYPES,

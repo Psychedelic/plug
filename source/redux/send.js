@@ -35,9 +35,38 @@ const DEFAULT_STATE = {
   secondaryValue: DEFAULT_SECONDARY,
 };
 
+const ERRORS_INFO = [
+  {
+    errorNames: ['InsufficientBalance', 'InsufficientFunds'],
+    errorCode: 100,
+  },
+  {
+    errorNames: ['DestinationInvalid'],
+    errorCode: 300,
+  },
+  {
+    errorNames: ['is out of cycles'],
+    errorCode: 301,
+  },
+];
+
+const matchErrors = (err) => {
+  for (const errorInfo of ERRORS_INFO) {
+    const currentError = errorInfo?.errorNames?.some(
+      (errorKeyword) => err.includes(errorKeyword),
+    );
+
+    if (currentError) {
+      return errorInfo?.errorCode;
+    }
+  }
+
+  return 600;
+};
+
 export const sendToken = createAsyncThunk(
   'sendToken/regularSend',
-  async (arg, { getState }) => {
+  async (arg, { getState, rejectWithValue }) => {
     const { send: state } = getState();
     const {
       addressInfo,
@@ -48,26 +77,35 @@ export const sendToken = createAsyncThunk(
 
     const to = addressInfo.resolvedAddress || address;
     const amount = rawAmount.toString();
-    const { canisterId, decimals, standard } = selectedAsset || {};
 
-    const res = await callSendToken({
-      to, amount, canisterId, decimals, standard,
-    });
-    return res;
+    const { canisterId, standard, decimals } = selectedAsset || {};
+
+    try {
+      const res = await callSendToken({
+        to, amount, canisterId, standard, decimals,
+      });
+      return res;
+    } catch ({ error }) {
+      return rejectWithValue(error);
+    }
   },
 );
 
 export const burnXTC = createAsyncThunk(
   'sendToken/burnXTC',
-  async (arg, { getState }) => {
+  async (arg, { getState, rejectWithValue }) => {
     const { send: state } = getState();
     const { addressInfo, address, amount: rawAmount } = state;
 
     const to = addressInfo.resolvedAddress || address;
     const amount = rawAmount.toString();
-    const res = await callBurnXTC({ to, amount });
 
-    return res;
+    try {
+      const res = await callBurnXTC({ to, amount });
+      return res;
+    } catch ({ error }) {
+      return rejectWithValue(error);
+    }
   },
 );
 
@@ -141,10 +179,9 @@ export const sendSlice = createSlice({
         state.fulfilled = true;
         state.pending = false;
       })
-      .addCase(sendToken.rejected, (state) => {
-        // TODO: handle errors
+      .addCase(sendToken.rejected, (state, action) => {
         state.pending = false;
-        state.error = true;
+        state.error = matchErrors(action.payload);
       })
       .addCase(burnXTC.pending, (state) => {
         state.pending = true;

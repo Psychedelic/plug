@@ -9,7 +9,8 @@ import {
   getApp,
   removeApp,
 } from '../storageManager';
-import SIZES from '../../Pages/Notification/components/Transfer/constants';
+import SIZES from '../../views/Popup/components/Transfer/constants';
+
 import { ControllerModuleBase } from './controllerBase';
 
 export class ConnectionModule extends ControllerModuleBase {
@@ -130,6 +131,11 @@ export class ConnectionModule extends ControllerModuleBase {
 
         const date = new Date().toISOString();
 
+        const populatedWhitelist = canistersInfo.reduce(
+          (accum, canisterInfo) => ({ ...accum, [canisterInfo.id]: canisterInfo }),
+          {},
+        );
+
         getApps(this.keyring?.currentWalletId.toString(), (apps = {}) => {
           const newApps = {
             ...apps,
@@ -143,7 +149,7 @@ export class ConnectionModule extends ControllerModuleBase {
               events: [
                 ...apps[domainUrl]?.events || [],
               ],
-              whitelist,
+              whitelist: populatedWhitelist,
               host,
             },
           };
@@ -208,7 +214,7 @@ export class ConnectionModule extends ControllerModuleBase {
             ? CONNECTION_STATUS.accepted
             : response.status;
           const whitelist = response.status === CONNECTION_STATUS.accepted
-            ? response.whitelist
+            ? apps[url]?.whitelist
             : [];
 
           const date = new Date().toISOString();
@@ -219,7 +225,7 @@ export class ConnectionModule extends ControllerModuleBase {
               ...apps[url],
               status: status || CONNECTION_STATUS.rejected,
               date,
-              whitelist,
+              whitelist: { ...apps[url]?.whitelist, ...whitelist },
               events: [
                 ...apps[url]?.events || [],
                 {
