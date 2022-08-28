@@ -107,7 +107,7 @@ const AllowAgent = ({
     setExpand((prevState) => !prevState);
   };
 
-  return !args?.hide ? (
+  return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
@@ -175,8 +175,6 @@ const AllowAgent = ({
         </Layout>
       </ThemeProvider>
     </Provider>
-  ) : (
-    <div style={{ display: 'none' }} />
   );
 };
 
