@@ -270,7 +270,7 @@ export class ConnectionModule extends ControllerModuleBase {
                 const publicKey = await this.keyring?.getPublicKey();
                 callback(null, publicKey);
               } else {
-                // If locked we need to display the unlock modal.
+                // If locked we need to display the unlock modal
                 this.displayPopUp({
                   callId,
                   portId,
