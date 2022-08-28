@@ -263,6 +263,7 @@ export class ConnectionModule extends ControllerModuleBase {
 
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
+        const { url: domainUrl, name, icons } = metadata;
 
         let canistersInfo = [];
 
@@ -336,6 +337,26 @@ export class ConnectionModule extends ControllerModuleBase {
           } else {
             callback(ERRORS.CONNECTION_ERROR, null);
           }
+
+          const populatedWhitelist = canistersInfo.reduce(
+            (accum, canisterInfo) => ({ ...accum, [canisterInfo.id]: canisterInfo }),
+            {},
+          );
+          const newApps = {
+            ...apps,
+            [domainUrl]: {
+              url: domainUrl,
+              name,
+              status: CONNECTION_STATUS.pending,
+              icon: icons[0] || null,
+              date: new Date().toISOString(),
+              events: [
+                ...apps[domainUrl]?.events || [],
+              ],
+              whitelist: populatedWhitelist,
+            },
+          };
+          setApps(this.keyring?.currentWalletId.toString(), newApps);
         });
       },
     };
