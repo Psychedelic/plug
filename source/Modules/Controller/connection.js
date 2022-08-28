@@ -120,47 +120,26 @@ export class ConnectionModule extends ControllerModuleBase {
           opts.callback(ERRORS.CANISTER_ID_ERROR, null);
           return;
         }
-        const { message, sender } = opts;
+        const { message, sender, callback } = opts;
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
-        const { url: domainUrl, name, icons } = metadata;
+        const { url: domainUrl, icons } = metadata;
 
         if (isValidWhitelist) {
           canistersInfo = await fetchCanistersInfo(whitelist);
         }
 
-        const date = new Date().toISOString();
-
+        // Generate a whitelist object from the canister Info
         const populatedWhitelist = canistersInfo.reduce(
           (accum, canisterInfo) => ({ ...accum, [canisterInfo.id]: canisterInfo }),
           {},
         );
 
-        getApps(this.keyring?.currentWalletId.toString(), (apps = {}) => {
-          const newApps = {
-            ...apps,
-            [domainUrl]: {
-              url: domainUrl,
-              name,
-              status: CONNECTION_STATUS.pending,
-              icon: icons[0] || null,
-              timeout,
-              date,
-              events: [
-                ...apps[domainUrl]?.events || [],
-              ],
-              whitelist: populatedWhitelist,
-              host,
-            },
-          };
-          setApps(this.keyring?.currentWalletId.toString(), newApps);
-        });
-
-        // if we receive a whitelist, we create agent
+        // If we receive a whitelist, we open the allow agent modal
         if (isValidWhitelist) {
           const newMetadata = { ...metadata, requestConnect: true };
 
-          const height = this.keyring?.isUnlocked
+          const fixedHeight = this.keyring?.isUnlocked
             ? Math.min(422 + 37 * whitelist.length, 600)
             : SIZES.loginHeight;
 
@@ -169,35 +148,29 @@ export class ConnectionModule extends ControllerModuleBase {
               callId,
               portId,
               argsJson: JSON.stringify({
-                whitelist, canistersInfo, timeout, transactionId,
+                whitelist: populatedWhitelist, canistersInfo, timeout, transactionId,
               }),
               metadataJson: JSON.stringify(newMetadata),
               domainUrl,
               type: 'allowAgent',
               screenArgs: {
-                fixedHeight: height,
+                fixedHeight,
                 top: 65,
                 left: metadata.pageWidth - SIZES.width,
               },
             },
-            opts.callback,
+            callback,
           );
         } else {
-          const height = this.keyring?.isUnlocked
-            ? SIZES.appConnectHeight
-            : SIZES.loginHeight;
-
+          // Else it's a plain connection request one
           this.displayPopUp({
             callId,
             portId,
             icon: icons[0] || null,
             argsJson: JSON.stringify({ timeout, transactionId }),
             type: 'connect',
-            screenArgs: {
-              fixedHeight: height,
-            },
             domainUrl,
-          }, opts.callback);
+          }, callback);
         }
       },
     };
@@ -208,37 +181,34 @@ export class ConnectionModule extends ControllerModuleBase {
       methodName: 'handleAllowAgent',
       handler: async (opts, url, response, callId, portId) => {
         const { callback } = opts;
+        const { status = CONNECTION_STATUS.rejected, whitelist = {} } = response || {};
+        if (status === CONNECTION_STATUS.accepted) {
+          // If connection request was accepted
+          // we update the storage entry then return the public key
 
-        getApps(this.keyring?.currentWalletId.toString(), async (apps = {}) => {
-          const status = response.status === CONNECTION_STATUS.rejectedAgent
-            ? CONNECTION_STATUS.accepted
-            : response.status;
-          const whitelist = response.status === CONNECTION_STATUS.accepted
-            ? apps[url]?.whitelist
-            : [];
-
-          const date = new Date().toISOString();
-
-          const newApps = {
-            ...apps,
-            [url]: {
-              ...apps[url],
-              status: status || CONNECTION_STATUS.rejected,
-              date,
-              whitelist: { ...apps[url]?.whitelist, ...whitelist },
-              events: [
-                ...apps[url]?.events || [],
-                {
-                  status: status || CONNECTION_STATUS.rejected,
-                  date,
-                },
-              ],
-            },
-          };
-          setApps(this.keyring?.currentWalletId.toString(), newApps);
-        });
-
-        if (response?.status === CONNECTION_STATUS.accepted) {
+          // Update the storage with this new app, keep old whitelist records and add new ones
+          getApps(this.keyring?.currentWalletId.toString(), async (apps = {}) => {
+            const date = new Date().toISOString();
+            const app = apps[url] || {};
+            const appWhitelist = app?.status === CONNECTION_STATUS.accepted ? app.whitelist : {};
+            const newApps = {
+              ...apps,
+              [url]: {
+                ...app,
+                status,
+                date,
+                whitelist: { ...appWhitelist, ...whitelist },
+                events: [
+                  ...app?.events?.slice(-20) || [], // Keep only last 20 events
+                  {
+                    status,
+                    date,
+                  },
+                ],
+              },
+            };
+            setApps(this.keyring?.currentWalletId.toString(), newApps);
+          });
           try {
             const publicKey = await this.keyring?.getPublicKey();
             callback(null, publicKey, [{ portId, callId }]);
@@ -248,6 +218,9 @@ export class ConnectionModule extends ControllerModuleBase {
             callback(null, false);
           }
         } else {
+          // If the call was not accepted, then we do nothing to storage
+          // since previously accepted apps are still there and a disconnect
+          // entry would be added in `disconnect` method
           callback(ERRORS.AGENT_REJECTED, null, [{ portId, callId }]);
           callback(null, true); // Return true to close the modal
         }
@@ -263,20 +236,20 @@ export class ConnectionModule extends ControllerModuleBase {
 
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
-        const { url: domainUrl, name, icons } = metadata;
 
         let canistersInfo = [];
 
+        // Validate whiltelist and if valid, get canisters Info
         const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
-
         if (isValidWhitelist) {
           canistersInfo = await fetchCanistersInfo(whitelist);
         }
-        if (!whitelist.every((canisterId) => validatePrincipalId(canisterId))) {
+        if (!whitelist?.every((canisterId) => validatePrincipalId(canisterId))) {
           callback(ERRORS.CANISTER_ID_ERROR, null);
           return;
         }
 
+        // Get saved app and check if all of the entries received are there
         getApps(this.keyring?.currentWalletId.toString(), async (apps = {}) => {
           const app = apps?.[metadata.url] || {};
           if (app?.status === CONNECTION_STATUS.accepted) {
@@ -284,51 +257,54 @@ export class ConnectionModule extends ControllerModuleBase {
               whitelist,
               app?.whitelist ? Object.keys(app?.whitelist) : [],
             );
-            const height = this.keyring?.isUnlocked
+            const fixedHeight = this.keyring?.isUnlocked
               ? SIZES.detailHeightSmall
               : SIZES.loginHeight;
-
+            const populatedWhitelist = canistersInfo.reduce(
+              (accum, canisterInfo) => ({ ...accum, [canisterInfo.id]: canisterInfo }),
+              {},
+            );
             if (allWhitelisted) {
-              if (!this.keyring.isUnlocked) {
+              // If keyring is unlocked then we return the public key
+              if (this.keyring.isUnlocked) {
+                const publicKey = await this.keyring?.getPublicKey();
+                callback(null, publicKey);
+              } else {
+                // If locked we need to display the unlock modal.
                 this.displayPopUp({
                   callId,
                   portId,
                   metadataJson: JSON.stringify(metadata),
                   argsJson: JSON.stringify({
-                    whitelist,
+                    whitelist: populatedWhitelist,
                     canistersInfo,
-                    updateWhitelist: true,
-                    showList: false,
                     timeout: app?.timeout,
                     transactionId,
                   }),
                   domainUrl: metadata.url,
                   type: 'allowAgent',
                   screenArgs: {
-                    fixedHeight: height,
+                    fixedHeight,
                     top: 65,
                     left: metadata.pageWidth - SIZES.width,
                   },
                 }, callback);
               }
-              const publicKey = await this.keyring?.getPublicKey();
-              callback(null, publicKey);
             } else {
+              // If they are not all whitelisted, we need to show the allow agent modal
               this.displayPopUp({
                 callId,
                 portId,
                 metadataJson: JSON.stringify(metadata),
                 domainUrl: metadata.url,
                 argsJson: JSON.stringify({
-                  whitelist,
+                  whitelist: populatedWhitelist,
                   canistersInfo,
-                  updateWhitelist: true,
-                  showList: true,
                   transactionId,
                 }),
                 type: 'allowAgent',
                 screenArgs: {
-                  fixedHeight: height,
+                  fixedHeight,
                   top: 65,
                   left: metadata.pageWidth - SIZES.width,
                 },
@@ -337,26 +313,6 @@ export class ConnectionModule extends ControllerModuleBase {
           } else {
             callback(ERRORS.CONNECTION_ERROR, null);
           }
-
-          const populatedWhitelist = canistersInfo.reduce(
-            (accum, canisterInfo) => ({ ...accum, [canisterInfo.id]: canisterInfo }),
-            {},
-          );
-          const newApps = {
-            ...apps,
-            [domainUrl]: {
-              url: domainUrl,
-              name,
-              status: CONNECTION_STATUS.pending,
-              icon: icons[0] || null,
-              date: new Date().toISOString(),
-              events: [
-                ...apps[domainUrl]?.events || [],
-              ],
-              whitelist: populatedWhitelist,
-            },
-          };
-          setApps(this.keyring?.currentWalletId.toString(), newApps);
         });
       },
     };

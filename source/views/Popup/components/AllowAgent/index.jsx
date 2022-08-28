@@ -61,7 +61,7 @@ const AllowAgent = ({
     reviewPendingTransaction(transactionId, () => {});
     const success = await portRPC.call('handleAllowAgent', [
       url,
-      { status },
+      { status, whitelist: args.whitelist || {} },
       callId,
       portId,
       transactionId,
@@ -171,11 +171,7 @@ const AllowAgent = ({
                   <Button
                     variant="default"
                     value={t('common.decline')}
-                    onClick={() => handleAllowAgent(
-                      args?.updateWhitelist
-                        ? CONNECTION_STATUS.rejectedAgent
-                        : CONNECTION_STATUS.refused,
-                    )}
+                    onClick={() => handleAllowAgent(CONNECTION_STATUS.refused)}
                     style={{ width: '96%' }}
                     fullWidth
                   />

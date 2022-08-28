@@ -56,7 +56,7 @@ const AppConnection = ({ setOnTimeout, transactionId }) => {
       'handleAllowAgent',
       [
         url,
-        { status: status || CONNECTION_STATUS.refused, whitelist: [] },
+        { status: status || CONNECTION_STATUS.refused, whitelist: {} },
         callId,
         portId,
         transactionId,
