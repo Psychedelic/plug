@@ -29,6 +29,7 @@ const NetworkSelector = ({ onClose, refreshWallet }) => {
             value={t('common.add')}
             style={{ height: 27, minWidth: 75 }}
             onClick={() => navigator.navigate('create-network')}
+            data-testid="add-network-button"
           />
         </div>
         <div className={classes.networksContainer}>
@@ -37,6 +38,7 @@ const NetworkSelector = ({ onClose, refreshWallet }) => {
               network={network}
               withDivider={index < networks.length - 1}
               onClick={handleNetworkClick}
+              NetworkCardTestId="network-card"
             />
           ))}
         </div>

@@ -137,6 +137,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
         <div
           className={classes.networkSelector}
           onClick={() => setSelectorOpen(true)}
+          data-testid="network-selector"
         >
           <div
             className={clsx(
@@ -170,6 +171,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
           <NetworkSelector
             onClose={() => setSelectorOpen(false)}
             refreshWallet={refreshWallet}
+            data-testid="network-select-modal"
           />
         )}
       </div>
