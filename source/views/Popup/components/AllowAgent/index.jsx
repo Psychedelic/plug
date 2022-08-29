@@ -85,10 +85,6 @@ const AllowAgent = ({
         dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
       }
     });
-    handleAllowAgent(CONNECTION_STATUS.accepted).then(() => {
-      setHandled(true);
-      window?.close?.();
-    });
   },
   []);
 
