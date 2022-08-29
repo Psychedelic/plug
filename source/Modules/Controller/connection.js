@@ -191,10 +191,14 @@ export class ConnectionModule extends ControllerModuleBase {
             const date = new Date().toISOString();
             const app = apps[url] || {};
             const appWhitelist = app?.status === CONNECTION_STATUS.accepted ? app.whitelist : {};
+            const { name, host, icons } = response?.metadata || {};
             const newApps = {
               ...apps,
               [url]: {
                 ...app,
+                name,
+                host,
+                icon: icons?.[0] || '',
                 status,
                 date,
                 whitelist: { ...appWhitelist, ...whitelist },
