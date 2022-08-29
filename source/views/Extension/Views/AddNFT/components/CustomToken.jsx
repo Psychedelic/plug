@@ -44,12 +44,13 @@ const CustomToken = ({ handleChangeSelectedNFT }) => {
     setLoading(true);
     sendMessage(
       {
-        type: HANDLER_TYPES.GET_TOKEN_INFO,
+        type: HANDLER_TYPES.GET_NFT_INFO,
         params: { canisterId, standard },
       },
-      async (tokenInfo) => {
-        if (tokenInfo?.error) {
-          setTokenError(tokenInfo?.error);
+      async (nftInfo) => {
+        if (nftInfo?.error) {
+          console.log('ocrrio un error al devolver la info', nftInfo);
+          setTokenError(nftInfo?.error);
         } else {
           handleChangeSelectedNFT(tokenInfo)();
         }
@@ -57,6 +58,7 @@ const CustomToken = ({ handleChangeSelectedNFT }) => {
       },
     );
   };
+
   const handleCloseDialog = (value) => {
     setStandard(value?.name ?? standard);
     setDialogOpen(false);

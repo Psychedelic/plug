@@ -87,6 +87,7 @@ export const HANDLER_TYPES = {
   EDIT_PRINCIPAL: 'edit-principal',
   GET_PUBLIC_KEY: 'get-public-key',
   GET_TOKEN_INFO: 'get-token-info',
+  GET_NFT_INFO: 'get-nft-info',
   ADD_CUSTOM_TOKEN: 'add-custom-token',
   CREATE_PRINCIPAL: 'create-principal',
   SET_CURRENT_PRINCIPAL: 'set-current-principal',
@@ -121,6 +122,7 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.EDIT_PRINCIPAL]: 'editing your principal.',
   [HANDLER_TYPES.GET_PUBLIC_KEY]: 'getting your public key.',
   [HANDLER_TYPES.GET_TOKEN_INFO]: 'fetching token info.',
+  [HANDLER_TYPES.GET_NFT_INFO]: 'fetching nft info.',
   [HANDLER_TYPES.ADD_CUSTOM_TOKEN]: 'adding custom token.',
   [HANDLER_TYPES.CREATE_PRINCIPAL]: 'creating your principal.',
   [HANDLER_TYPES.SET_CURRENT_PRINCIPAL]: 'setting your principal.',
@@ -276,6 +278,21 @@ export const getKeyringHandler = (type, keyring) => ({
       } catch (e) {
         // eslint-disable-next-line
         console.log('Error while fetching token info', e);
+        return { error: e.message };
+      }
+    },
+  [HANDLER_TYPES.GET_NFT_INFO]:
+    async ({ canisterId, standard }) => {
+      try {
+        const nftInfo = await keyring.getNFTInfo({
+          canisterId,
+          standard,
+        });
+        console.log(nftInfo);
+        return { nftInfo };
+      } catch (e) {
+        // eslint-disable-next-line
+        console.log('Error while fetching NFT info', e);
         return { error: e.message };
       }
     },
