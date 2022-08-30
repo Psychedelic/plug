@@ -47,9 +47,8 @@ export const setApps = (currentWalletId, apps, cb = () => { }) => {
 
 export const removeApp = (currentWalletId, appUrl, cb = () => { }) => {
   const defaultValue = false;
-
   getApps(currentWalletId, (apps) => {
-    if (apps?.[appUrl]) {
+    if (apps?.[appUrl]?.status === CONNECTION_STATUS.accepted) {
       const newApps = addDisconnectedEntry({ apps, appUrl });
       setApps(currentWalletId, newApps, cb);
     } else {
