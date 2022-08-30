@@ -34,7 +34,7 @@ const portRPC = new PortRPC({
 
 portRPC.start();
 
-const AppConnection = ({ setOnTimeout, transactionId }) => {
+const AppConnection = ({ setOnTimeout, transactionId, metadata }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const [status, setStatus] = useState(null);
@@ -56,7 +56,7 @@ const AppConnection = ({ setOnTimeout, transactionId }) => {
       'handleAllowAgent',
       [
         url,
-        { status: status || CONNECTION_STATUS.refused, whitelist: {} },
+        { status: status || CONNECTION_STATUS.refused, whitelist: {}, metadata },
         callId,
         portId,
         transactionId,
@@ -137,6 +137,11 @@ const AppConnection = ({ setOnTimeout, transactionId }) => {
 AppConnection.propTypes = {
   setOnTimeout: PropTypes.func.isRequired,
   transactionId: PropTypes.string.isRequired,
+  metadata: PropTypes.shape({
+    name: PropTypes.string,
+    domainUrl: PropTypes.string,
+    icons: PropTypes.arrayOf(PropTypes.string),
+  }).isRequired,
 };
 
 export default AppConnection;

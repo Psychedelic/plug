@@ -196,6 +196,7 @@ export class ConnectionModule extends ControllerModuleBase {
               ...apps,
               [url]: {
                 ...app,
+                url,
                 name,
                 host,
                 icon: icons?.[0] || '',
