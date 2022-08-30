@@ -121,14 +121,16 @@ export const parseToBigIntString = (amount, decimalPlaces) => {
 export const parseAssetsAmount = (assets = []) => (
   assets.map((currentAsset) => {
     const { amount, token, error } = currentAsset;
+    const hasError = error || amount === 'Error';
     const { decimals } = token;
-    const parsedAmount = error
+    const parsedAmount = hasError
       ? 0
       : parseToFloatAmount(amount, parseInt(decimals?.toString(), 10));
 
     return {
       ...currentAsset,
       amount: parsedAmount,
+      error: hasError,
     };
   })
 );
