@@ -95,7 +95,7 @@ const AllowAgent = ({
   };
 
   const toggleExpand = () => {
-    const height = 355 + 76 + 65 * Math.min(canistersLength, expand ? 2 : 5);
+    const height = 430 + 65 * Math.min(canistersLength, expand ? 2 : 5);
     extension.windows.update(extension.windows.WINDOW_ID_CURRENT, {
       height,
     });

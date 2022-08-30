@@ -140,7 +140,7 @@ export class ConnectionModule extends ControllerModuleBase {
           const newMetadata = { ...metadata, requestConnect: true };
 
           const fixedHeight = this.keyring?.isUnlocked
-            ? Math.min(422 + 37 * whitelist.length, 600)
+            ? Math.min(422 + 65 * whitelist.length, 550)
             : SIZES.loginHeight;
 
           this.displayPopUp(
