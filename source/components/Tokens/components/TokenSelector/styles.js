@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+import SHADOW_1 from '@shared/styles/shadows';
 
 export default makeStyles(() => ({
   addTokenButton: {
@@ -10,14 +11,13 @@ export default makeStyles(() => ({
     position: 'absolute',
     borderRadius: 42,
     height: 42,
-    paddingLeft: 8,
-    paddingRight: 8,
-    backgroundColor: '#FFFFF',
+    paddingLeft: 12,
+    paddingRight: 12,
+    backgroundColor: '#FFFF',
     cursor: 'pointer',
-    border: 2,
-    borderStyle: 'solid',
-    borderColor: '#A0A3A9',
-    gap: 4,
+    gap: 8,
+    zIndex: 10,
+    boxShadow: SHADOW_1,
   },
   addNftButton: {
     display: 'flex',
@@ -29,12 +29,13 @@ export default makeStyles(() => ({
     borderRadius: 42,
     height: 42,
     padding: 5,
-    backgroundColor: '#FFFFF',
-    border: 2,
-    borderStyle: 'solid',
-    borderColor: '#A0A3A9',
+    backgroundColor: '#FFFF',
     cursor: 'pointer',
-    gap: 4,
+    gap: 8,
+    zIndex: 10,
+    boxShadow: SHADOW_1,
+    paddingLeft: 12,
+    paddingRight: 12,
   },
   background: {
     width: '100%',
@@ -43,30 +44,5 @@ export default makeStyles(() => ({
     position: 'absolute',
     top: 0,
     right: 0,
-  },
-  selectorContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: 250,
-    padding: '20px 20px 0 20px',
-    position: 'absolute',
-    top: 50,
-    right: 10,
-    background: '#FFFFFF',
-    borderRadius: 6,
-    // boxShadow: SHADOW_1,
-    zIndex: 10000,
-  },
-  selectorHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  networksContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    zIndex: 10,
-    maxHeight: 330,
-    overflow: 'auto',
   },
 }));

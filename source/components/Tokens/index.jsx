@@ -5,8 +5,6 @@ import { setAssets, setAssetsLoading } from '@redux/wallet';
 import clsx from 'clsx';
 
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-// import { useRouter } from '@components/Router';
-
 import { useICPPrice } from '@redux/icp';
 import { setICNSData } from '@redux/icns';
 import { useScroll } from '@hooks';
@@ -21,7 +19,6 @@ const Tokens = () => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const icpPrice = useICPPrice();
-  // const { navigator } = useRouter();
   const { onScroll, fullScroll } = useScroll();
   const [activateButton, setActivateButton] = useState(false);
 
