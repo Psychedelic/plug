@@ -19,7 +19,7 @@ import useStyles from '../styles';
 
 const FUNGIBLE_STANDARDS = { DIP721: 'DIP721', EXT: 'EXT', DIP721v2: 'DIP721 v2', };
 
-const CustomToken = ({ handleChangeSelectedNFT }) => {
+const CustomNFT = ({ handleChangeSelectedNFT }) => {
   const { t } = useTranslation();
   const [canisterId, setCanisterId] = useState('');
   const [standard, setStandard] = useState(FUNGIBLE_STANDARDS.DIP721);
@@ -165,8 +165,8 @@ const CustomToken = ({ handleChangeSelectedNFT }) => {
   );
 };
 
-export default CustomToken;
+export default CustomNFT;
 
-CustomToken.propTypes = {
+CustomNFT.propTypes = {
   handleChangeSelectedNFT: PropTypes.func.isRequired,
 };

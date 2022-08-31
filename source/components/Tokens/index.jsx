@@ -5,13 +5,14 @@ import { setAssets, setAssetsLoading } from '@redux/wallet';
 import clsx from 'clsx';
 
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { useRouter } from '@components/Router';
+// import { useRouter } from '@components/Router';
 
 import { useICPPrice } from '@redux/icp';
 import { setICNSData } from '@redux/icns';
 import { useScroll } from '@hooks';
 import AssetItem from '../AssetItem';
 import useStyles from './styles';
+import TokenSelector from './components/TokenSelector';
 
 const Tokens = () => {
   const classes = useStyles();
@@ -20,7 +21,7 @@ const Tokens = () => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const icpPrice = useICPPrice();
-  const { navigator } = useRouter();
+  // const { navigator } = useRouter();
   const { onScroll, fullScroll } = useScroll();
   const [activateButton, setActivateButton] = useState(false);
 
@@ -78,21 +79,7 @@ const Tokens = () => {
       </div>
       {
         activateButton && (
-          <>
-            <div
-              onClick={() => navigator.navigate('add-token')}
-              className={classes.addTokenButton}
-              data-testid="add-custom-token-button"
-            >🪙  Add Token
-            </div>
-            <div
-              onClick={() => navigator.navigate('add-nft')}
-              className={classes.addNftButton}
-              data-testid="add-custom-token-button"
-            >
-              🎉 Add NFT
-            </div>
-          </>
+          <TokenSelector onClose={() => setActivateButton(false)} />
         )
       }
       <div

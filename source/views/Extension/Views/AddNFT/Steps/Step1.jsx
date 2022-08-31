@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
-import CustomToken from '../components/CustomToken';
+import CustomNFT from '../components/CustomNFT';
 
 const Step1 = ({ handleChangeSelectedNFT }) => {
   const { t } = useTranslation();
   return (
-    <CustomToken
+    <CustomNFT
       handleChangeSelectedNFT={handleChangeSelectedNFT}
       />  
   );
