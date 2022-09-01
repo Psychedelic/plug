@@ -77,6 +77,7 @@ const NetworkCreation = () => {
                 onChange={handleFieldChange(field.name)}
                 placeholder={t(`network.${field.name}Placeholder`)}
                 error={errors[field.name]}
+                data-testid={`network-input-${field.name}`}
               />
               {errors[field.name] && <Typography variant="body2" color="error">{errors[field.name]}</Typography>}
             </div>
@@ -88,6 +89,7 @@ const NetworkCreation = () => {
           value={t('network.addNetwork')}
           loading={networksLoading}
           disabled={networksLoading || !validateNetwork(values, networks)}
+          data-testid="add-network-button"
           fullWidth
         />
       </div>

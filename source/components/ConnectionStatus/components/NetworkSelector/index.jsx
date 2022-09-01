@@ -21,7 +21,7 @@ const NetworkSelector = ({ onClose, refreshWallet }) => {
   };
   return (
     <>
-      <div className={classes.selectorContainer}>
+      <div className={classes.selectorContainer} data-testid="network-selection-modal">
         <div className={classes.selectorHeader}>
           <Typography variant="h4">Networks</Typography>
           <Button
