@@ -61,7 +61,7 @@ const AllowAgent = ({
     reviewPendingTransaction(transactionId, () => {});
     const success = await portRPC.call('handleAllowAgent', [
       url,
-      { status },
+      { status, whitelist: args.whitelist || {}, metadata },
       callId,
       portId,
       transactionId,
@@ -85,20 +85,8 @@ const AllowAgent = ({
         dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
       }
     });
-
-    if (!args?.updateWhitelist || args?.showList) {
-      extension.windows.update(extension.windows.WINDOW_ID_CURRENT, {
-        height: 355
-          + (canistersLength > 2 ? 76 : 30)
-          + 65 * (canistersLength > 2 ? 2 : canistersLength),
-      });
-    } else {
-      handleAllowAgent(CONNECTION_STATUS.accepted).then(() => {
-        setHandled(true);
-        window?.close?.();
-      });
-    }
-  }, []);
+  },
+  []);
 
   window.onbeforeunload = () => {
     if (!handled) {
@@ -107,14 +95,7 @@ const AllowAgent = ({
   };
 
   const toggleExpand = () => {
-    let height;
-
-    if (expand) {
-      height = 355 + 76 + 65 * Math.min(canistersLength, 2);
-    } else {
-      height = 355 + 76 + 65 * Math.min(canistersLength, 5);
-    }
-
+    const height = 430 + 65 * Math.min(canistersLength, expand ? 2 : 5);
     extension.windows.update(extension.windows.WINDOW_ID_CURRENT, {
       height,
     });
@@ -122,7 +103,7 @@ const AllowAgent = ({
     setExpand((prevState) => !prevState);
   };
 
-  return !args?.updateWhitelist || args?.showList ? (
+  return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
@@ -171,11 +152,7 @@ const AllowAgent = ({
                   <Button
                     variant="default"
                     value={t('common.decline')}
-                    onClick={() => handleAllowAgent(
-                      args?.updateWhitelist
-                        ? CONNECTION_STATUS.rejectedAgent
-                        : CONNECTION_STATUS.refused,
-                    )}
+                    onClick={() => handleAllowAgent(CONNECTION_STATUS.refused)}
                     style={{ width: '96%' }}
                     fullWidth
                   />
@@ -194,8 +171,6 @@ const AllowAgent = ({
         </Layout>
       </ThemeProvider>
     </Provider>
-  ) : (
-    <div style={{ display: 'none' }} />
   );
 };
 
