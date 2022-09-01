@@ -355,15 +355,17 @@ const WalletDetails = () => {
             )
             : (
               <div className={classes.buttonsContainer}>
-                <button
-                  type="button"
-                  data-testid="edit-icon-button"
-                  onClick={handleChangeAccount}
-                >
-                  <img
-                    src={SwitchAccount}
-                  />
-                </button>
+                { walletNumber !== activeWalletNumber && (
+                  <button
+                    type="button"
+                    data-testid="edit-icon-button"
+                    onClick={handleChangeAccount}
+                  >
+                    <img
+                      src={SwitchAccount}
+                    />
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={openEditWalletName}
