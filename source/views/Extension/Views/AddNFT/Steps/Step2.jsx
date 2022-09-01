@@ -27,20 +27,12 @@ const Step2 = ({ selectedToken, handleClose }) => {
 
   const registerToken = () => {
     setLoading(true);
-    // sendMessage({
-    //   type: HANDLER_TYPES.ADD_CUSTOM_TOKEN,
-    //   params: selectedToken?.token,
-    // }, async () => {
-    //   sendMessage({
-    //     type: HANDLER_TYPES.GET_ASSETS,
-    //     params: { refresh: true },
-    //   }, (keyringAssets) => {
-    //     dispatch(setAssets({ keyringAssets, icpPrice }));
-    //     dispatch(setAssetsLoading(false));
-    //     setLoading(false);
-    //     handleClose();
-    //   });
-    // });
+    console.log('el selected token es ->', selectedToken);
+    sendMessage({
+      type: HANDLER_TYPES.ADD_CUSTOM_NFT,
+      params: selectedToken,
+    });
+    console.log('salio todo correcto')
   };
 
   return (
