@@ -215,7 +215,6 @@ const useSteps = () => {
       }
 
       if (!hasAmount && !hasPrice) {
-        console.log(444)
         dispatch(setSendTokenSelectedAsset({ icpPrice, value: assets[0] }));
       }
     }
