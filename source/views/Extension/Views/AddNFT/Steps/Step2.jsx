@@ -16,49 +16,31 @@ import { useDispatch } from 'react-redux';
 
 import useStyles from '../styles';
 
-const cyclesToTC = cycles => cycles ? cycles / CYCLES_PER_TC : 0; // eslint-disable-line
-
-const parseTokenBySymbol = (token) => ({
-  XTC: {
-    ...token?.token,
-    amount: cyclesToTC(token.amount),
-    logo: XTCIcon,
-    price: cyclesToTC(token.amount) * USD_PER_TC,
-  },
-  WTC: {
-    ...token?.token,
-    amount: cyclesToTC(token.amount),
-    price: cyclesToTC(token.amount) * USD_PER_TC,
-  },
-})[token?.token?.symbol] || {
-  ...token?.token,
-  amount: token?.amount?.value / (10 ** token?.amount?.decimals),
-};
 
 const Step2 = ({ selectedToken, handleClose }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const displayToken = parseTokenBySymbol(selectedToken);
+  // const displayToken = parseTokenBySymbol(selectedToken); // podemos agregar un parser para terminar con el ultimo objeto
   const icpPrice = useICPPrice();
 
   const registerToken = () => {
     setLoading(true);
-    sendMessage({
-      type: HANDLER_TYPES.ADD_CUSTOM_TOKEN,
-      params: selectedToken?.token,
-    }, async () => {
-      sendMessage({
-        type: HANDLER_TYPES.GET_ASSETS,
-        params: { refresh: true },
-      }, (keyringAssets) => {
-        dispatch(setAssets({ keyringAssets, icpPrice }));
-        dispatch(setAssetsLoading(false));
-        setLoading(false);
-        handleClose();
-      });
-    });
+    // sendMessage({
+    //   type: HANDLER_TYPES.ADD_CUSTOM_TOKEN,
+    //   params: selectedToken?.token,
+    // }, async () => {
+    //   sendMessage({
+    //     type: HANDLER_TYPES.GET_ASSETS,
+    //     params: { refresh: true },
+    //   }, (keyringAssets) => {
+    //     dispatch(setAssets({ keyringAssets, icpPrice }));
+    //     dispatch(setAssetsLoading(false));
+    //     setLoading(false);
+    //     handleClose();
+    //   });
+    // });
   };
 
   return (
@@ -70,19 +52,12 @@ const Step2 = ({ selectedToken, handleClose }) => {
         <Grid item xs={12}>
           <div className={classes.confirmToken}>
             <TokenIcon
-              logo={displayToken.logo}
+              logo={selectedToken.logo}
               className={classes.tokenImage}
-              symbol={displayToken?.symbol}
             />
             <div className={classes.leftContainer}>
-              <Typography variant="h4">{displayToken.name}</Typography>
-              <Typography variant="subtitle1"><AssetFormat value={displayToken?.amount} asset={displayToken?.symbol} /></Typography>
+              <Typography variant="h4">{selectedToken.name}</Typography>
             </div>
-            {!!displayToken.price && (
-              <div className={classes.rightContainer}>
-                <Typography variant="h4"><USDFormat value={displayToken?.price} /></Typography>
-              </div>
-            )}
           </div>
         </Grid>
         <Grid item xs={12}>

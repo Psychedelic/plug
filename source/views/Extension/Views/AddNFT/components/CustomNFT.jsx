@@ -17,12 +17,12 @@ import extension from 'extensionizer';
 import { customTokensUrl } from '@shared/constants/urls';
 import useStyles from '../styles';
 
-const FUNGIBLE_STANDARDS = { DIP721: 'DIP721', EXT: 'EXT', DIP721v2: 'DIP721 v2', };
+const FUNGIBLE_STANDARDS = { DIP721v2: 'DIP721v2', };
 
 const CustomNFT = ({ handleChangeSelectedNFT }) => {
   const { t } = useTranslation();
   const [canisterId, setCanisterId] = useState('');
-  const [standard, setStandard] = useState(FUNGIBLE_STANDARDS.DIP721);
+  const [standard, setStandard] = useState(FUNGIBLE_STANDARDS.DIP721v2);
   const [invalidToken, setInvalidToken] = useState(null);
   const [tokenError, setTokenError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -52,7 +52,8 @@ const CustomNFT = ({ handleChangeSelectedNFT }) => {
           console.log('ocrrio un error al devolver la info', nftInfo);
           setTokenError(nftInfo?.error);
         } else {
-          handleChangeSelectedNFT(tokenInfo)();
+          console.log('cheee llega la data', nftInfo);
+          handleChangeSelectedNFT(nftInfo)();
         }
         setLoading(false);
       },

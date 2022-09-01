@@ -288,8 +288,7 @@ export const getKeyringHandler = (type, keyring) => ({
           canisterId,
           standard,
         });
-        console.log(nftInfo);
-        return { nftInfo };
+        return nftInfo;
       } catch (e) {
         // eslint-disable-next-line
         console.log('Error while fetching NFT info', e);

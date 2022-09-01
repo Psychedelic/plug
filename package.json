@@ -38,7 +38,7 @@
     "@metamask/post-message-stream": "^4.0.0",
     "@psychedelic/browser-rpc": "2.1.0",
     "@psychedelic/dab-js": "1.4.5",
-    "@psychedelic/dab-js-test": "1.4.7",
+    "@psychedelic/dab-js-test": "1.4.11",
     "@psychedelic/plug-controller": "/Users/cancu/Dev/plug-controller",
     "@psychedelic/plug-inpage-provider": "^2.3.0",
     "@reduxjs/toolkit": "^1.6.0",
