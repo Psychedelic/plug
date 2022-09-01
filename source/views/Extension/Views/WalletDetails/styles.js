@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 import SHADOW_1 from '@shared/styles/shadows';
+import SMOOTH_TRANSITION from '@shared/styles/transitions'; 
 
 export default makeStyles((theme) => ({
   badge: {
@@ -136,8 +137,9 @@ export default makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     paddingRight: '16px',
+    width: '112px',
 
     '& > button': {
       width: '40px',
@@ -150,10 +152,10 @@ export default makeStyles((theme) => ({
       margin: '0px 4px',
       borderRadius: '6px',
       cursor: 'pointer',
-      transition: 'all 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+      transition: `${SMOOTH_TRANSITION}`,
 
       '& > img': {
-        transition: 'all 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+        transition: `${SMOOTH_TRANSITION}`,
       },
 
       '&:hover': {

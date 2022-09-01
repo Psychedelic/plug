@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+import SMOOTH_TRANSITION from '@shared/styles/transitions'; 
 
 export default makeStyles(() => ({
   accountItemContainer: {
@@ -11,7 +12,7 @@ export default makeStyles(() => ({
     justifyContent: 'space-between',
     cursor: 'pointer',
     color: '#000000',
-    transition: 'all 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+    transition: `${SMOOTH_TRANSITION}`,
 
     '&:hover': {
       background: 'linear-gradient(94.95deg, rgba(255, 231, 1, 0.12) -1.41%, rgba(250, 81, 211, 0.12) 34.12%, rgba(16, 217, 237, 0.12) 70.19%, rgba(82, 255, 83, 0.12) 101.95%)',
@@ -54,7 +55,7 @@ export default makeStyles(() => ({
     justifyContent: 'center',
     opacity: '0',
 
-    transition: 'all 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+    transition: `${SMOOTH_TRANSITION}`,
     '& > button': {
       padding: '5px',
       '& > span': {
