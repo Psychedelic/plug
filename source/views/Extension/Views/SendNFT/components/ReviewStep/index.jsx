@@ -13,7 +13,6 @@ import { removeNFT, setCollections } from '@redux/wallet';
 import { setSelectedNft } from '@redux/nfts';
 import { ADDRESS_TYPES } from '@shared/constants/addresses';
 
-import { getFilteredCollections } from '../../utils';
 import NFTDisplay from '../NFTDisplay';
 
 import useStyles from './styles';
@@ -42,9 +41,8 @@ const ReviewStep = () => {
         if (response.error) {
           setErrorMessage(response.error);
         } else {
-          const filteredCollections = getFilteredCollections(collection, collections, nft);
           dispatch(setCollections({
-            collections: filteredCollections,
+            collections: response,
             principalId,
           }));
           dispatch(removeNFT(nft));
