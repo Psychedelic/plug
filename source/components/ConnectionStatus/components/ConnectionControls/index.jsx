@@ -146,7 +146,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
             )}
           >
             <div className={clsx(classes.statusDot)} />
-            <span className={classes.network}>
+            <span className={classes.network} data-testid="current-network-name">
               {capitalize(currentNetwork?.name || 'Mainnet')}
             </span>
           </div>
