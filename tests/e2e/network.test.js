@@ -70,6 +70,11 @@ describe('Network', () => {
     { testId: networkInputCanisterIDErrorTestID, errorMessage: 'Invalid canister ID' },
   ];
 
+  const inputsErrorsData2 = [
+    { testId: networkInputNameErrorTestID, errorMessage: 'There is already a network with that name' },
+    { testId: networkInputHostErrorTestID, errorMessage: 'There is already a network with that host' },
+  ];
+
   beforeAll(async () => {
     browser = await setupChrome();
 
@@ -84,6 +89,7 @@ describe('Network', () => {
   beforeEach(async () => {
     page = await utils.createNewPage(browser);
     await page.goto(chromeData.popupUrl);
+    await openSelectNetworkModalButtonClick(page, false);
   });
 
   afterEach(async () => {
@@ -95,21 +101,19 @@ describe('Network', () => {
   });
 
   test('checking that clicking on Network Select button opens and close the network modal', async () => {
-    await openSelectNetworkModalButtonClick(page, false);
     await openSelectNetworkModalButtonClick(page, true);
   });
 
   test('checking that the Back and Close button sends a user from the Add Network flow to the Main flow', async () => {
     for (const data of exitButtonData) {
-      await openSelectNetworkModalButtonClick(page, false);
       await addNetworkButtonClick(page);
       await exitButtonClick(page, data);
       await page.waitForTestIdSelector('open-deposit-view-button', { hidden: false });
+      await openSelectNetworkModalButtonClick(page, false);
     }
   });
 
   test('checking inputs validation on Add Network flow', async () => {
-    await openSelectNetworkModalButtonClick(page, false);
     await addNetworkButtonClick(page);
     for (const data of wrongNetworkData) {
       await inputFill(page, data.testId, data.value);
@@ -120,8 +124,7 @@ describe('Network', () => {
     }
   });
 
-  test('adding a new network and switching on it', async () => {
-    await openSelectNetworkModalButtonClick(page, false);
+  test('adding a new network and switching on it/checking that the extension does not allow to add an existing network', async () => {
     await addNetworkButtonClick(page);
     for (const data of correctNetworkData) {
       await inputFill(page, data.testId, data.value);
@@ -133,5 +136,16 @@ describe('Network', () => {
     await page.waitForSelector('[data-testid="tab-item-NFTs"][disabled]');
     await isCurrentNetworkMatch(page, networkName);
     await page.waitForTestIdSelector('asset-name-XTC', { hidden: true });
+
+    // checking that the extension does not allow to add an existing network
+    await openSelectNetworkModalButtonClick(page, false);
+    await addNetworkButtonClick(page);
+    for (const data of correctNetworkData) {
+      await inputFill(page, data.testId, data.value);
+    }
+    await addNetworkButtonClick(page);
+    for (const data of inputsErrorsData2) {
+      await isErrorMatch(page, data.testId, data.errorMessage);
+    }
   });
 });
