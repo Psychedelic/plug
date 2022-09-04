@@ -20,6 +20,10 @@ global.secrets = {
   wrongCanisterId: process.env.WRONG_CANISTER_ID,
   wrongId: process.env.WRONG_ID,
   wrongICNSName: process.env.WRONG_ICNS_NAME,
+  networkName: process.env.NETWORK_NAME,
+  hostName: process.env.HOST_NAME,
+  canisterID: process.env.CANISTER_ID,
+  wrongHostName: process.env.WRONG_HOST_NAME,
 };
 
 const grantRawPermissions = async (context, url, permissions) => {

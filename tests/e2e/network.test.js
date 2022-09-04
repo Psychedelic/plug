@@ -54,14 +54,14 @@ describe('Network', () => {
   const networkInputCanisterIDErrorTestID = 'network-error-ledgerCanisterId';
 
   const wrongNetworkData = [
-    { testId: networkInputHostTestID, value: 'kkk.fff' },
-    { testId: networkInputCanisterIDTestID, value: 'jjj-ijuij-jji-ddd' },
+    { testId: networkInputHostTestID, value: secrets.wrongHostName },
+    { testId: networkInputCanisterIDTestID, value: secrets.wrongCanisterId },
   ];
 
   const correctNetworkData = [
-    { testId: networkInputNameTestID, value: networkName },
-    { testId: networkInputHostTestID, value: 'https://testnet.sonic.ooo:8420/' },
-    { testId: networkInputCanisterIDTestID, value: 'rrkah-fqaaa-aaaaa-aaaaq-cai' },
+    { testId: networkInputNameTestID, value: secrets.networkName },
+    { testId: networkInputHostTestID, value: secrets.hostName },
+    { testId: networkInputCanisterIDTestID, value: secrets.canisterID },
   ];
 
   const inputsErrorsData = [
