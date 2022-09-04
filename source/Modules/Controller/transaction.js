@@ -10,6 +10,7 @@ import {
   bufferToBase64,
   handleCallRequest,
   generateRequestInfo,
+  fetchCanistersInfo,
 } from '@background/utils';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { ICP_CANISTER_ID } from '@shared/constants/canisters';
@@ -370,7 +371,16 @@ export class TransactionModule extends ControllerModuleBase {
               callback(transactionsError, null);
               return;
             }
-            const canistersInfo = app?.whitelist || {};
+            const whitelist = app?.whitelist || {};
+            // Check if all the canisters are whitelisted
+            const transactionCanisterIds = transactions.map(({ canisterId }) => canisterId);
+            let canistersInfo = whitelist || {};
+            if (!transactionCanisterIds.every((id) => Object.keys(whitelist).includes(id))) {
+              const canistersData = await fetchCanistersInfo(transactionCanisterIds);
+              canistersInfo = canistersData.reduce(
+                (acum, canister) => ({ ...acum, [canister.canisterId]: canister }), {},
+              );
+            }
             const transactionsWithInfo = transactions.map((tx) => ({
               ...tx,
               canisterInfo: canistersInfo[tx.canisterId],
