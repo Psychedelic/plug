@@ -49,10 +49,8 @@ const CustomNFT = ({ handleChangeSelectedNFT }) => {
       },
       async (nftInfo) => {
         if (nftInfo?.error) {
-          console.log('ocurrio un error al devolver la info', nftInfo);
           setTokenError(nftInfo?.error);
         } else {
-          console.log('cheee llega la data', nftInfo);
           handleChangeSelectedNFT(nftInfo)();
         }
         setLoading(false);

@@ -3,16 +3,17 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import XTCIcon from '@assets/icons/XTC.svg';
 import {
   Button, Container, USDFormat, AssetFormat,
   TokenIcon,
 } from '@components';
-import { USD_PER_TC, CYCLES_PER_TC } from '@shared/constants/currencies';
-import { useICPPrice } from '@redux/icp';
+
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { setAssets, setAssetsLoading } from '@redux/wallet';
-import { useDispatch } from 'react-redux';
+import {
+  setCollections,
+  setCollectionsLoading,
+} from '@redux/wallet';
+import { useDispatch, useSelector } from 'react-redux';
 
 import useStyles from '../styles';
 
@@ -23,7 +24,8 @@ const Step2 = ({ selectedToken, handleClose }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   // const displayToken = parseTokenBySymbol(selectedToken); // podemos agregar un parser para terminar con el ultimo objeto
-  const icpPrice = useICPPrice();
+
+  const { principalId } = useSelector((state) => state.wallet);
 
   const registerToken = () => {
     setLoading(true);
@@ -31,6 +33,21 @@ const Step2 = ({ selectedToken, handleClose }) => {
     sendMessage({
       type: HANDLER_TYPES.ADD_CUSTOM_NFT,
       params: selectedToken,
+    }, async () => {
+      sendMessage({
+        type: HANDLER_TYPES.GET_NFTS,
+        params: { refresh: true },
+      },
+        (nftCollections) => {
+          console.log('luego del getNFTS me da estas collections', nftCollections);
+          if (nftCollections?.length) {
+            dispatch(setCollections({ collections: nftCollections, principalId }));
+          }
+          dispatch(setCollectionsLoading(false));
+          setLoading(false);
+          handleClose();
+        }
+      );
     });
     console.log('salio todo correcto')
   };

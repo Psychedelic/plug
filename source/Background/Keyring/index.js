@@ -206,10 +206,12 @@ export const getKeyringHandler = (type, keyring) => ({
     return parsed;
   },
   [HANDLER_TYPES.GET_ASSETS]: async ({ refresh }) => {
+    console.log('se activa get assets!');
     try {
       if (!keyring?.isUnlocked) return {};
 
       const { wallets, currentWalletId } = await keyring.getState();
+      console.log('el keyring getState me devuelve', wallets, currentWalletId);
       let assets = Object.values(wallets?.[currentWalletId]?.assets);
       const shouldUpdate = Object.values(assets)?.every((asset) => !Number(asset.amount))
         || Object.values(assets)?.some((asset) => asset.amount === 'Error')
@@ -303,6 +305,7 @@ export const getKeyringHandler = (type, keyring) => ({
         const nfts = await keyring.registerNFT({
           canisterId, standard,
         });
+        console.log('desde plug luego de llamar a registerNFT del keyring ->', nfts);
         return (nfts || []).map((nft) => recursiveParseBigint(nft));
       } catch (e) {
         // eslint-disable-next-line
