@@ -73,6 +73,12 @@ global.setupChrome = async () => {
 
 // General utils
 
+const sonicNetworkData = [
+  { testId: 'network-input-name', value: secrets.networkName },
+  { testId: 'network-input-host', value: secrets.hostName },
+  { testId: 'network-input-ledgerCanisterId', value: secrets.canisterID },
+];
+
 const getXPathElements = async (page, elementType, content, wait = false) => {
   const xPath = `//${elementType}[contains(.,"${content}")]`;
 
@@ -179,6 +185,25 @@ const createSubAccount = async (page, name) => {
   await page.waitForTestIdSelector(`account-name-${name}`);
 };
 
+const inputFill = async (page, testId, value) => {
+  const input = await page.getByTestId(testId, true);
+  await input.click();
+  await input.type(value);
+};
+
+const addNetworkButtonClick = async (page) => {
+  const addNetworkButton = await page.getByTestId('add-network-button', true);
+  await addNetworkButton.click();
+};
+
+const addSonicNetwork = async (page) => {
+  await addNetworkButtonClick(page);
+  for (const data of sonicNetworkData) {
+    await inputFill(page, data.testId, data.value);
+  }
+  await addNetworkButtonClick(page);
+};
+
 const optionsPageUtils = {
   importAccount,
   unlock,
@@ -190,6 +215,9 @@ const popupPageUtils = {
   profileButtonClick,
   fillNameInput,
   createAccountButtonClick,
+  addSonicNetwork,
+  inputFill,
+  addNetworkButtonClick,
 };
 
 global.popupPageUtils = popupPageUtils;

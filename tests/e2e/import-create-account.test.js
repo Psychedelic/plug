@@ -124,7 +124,7 @@ describe('Import/Create', () => {
 
       const value = await page.evaluate((el) => el.textContent, plugBanner);
 
-      expect(value).toMatch('Alpha - 0.5.3');
+      expect(value).toMatch('Alpha - 0.6.0');
     });
   });
 

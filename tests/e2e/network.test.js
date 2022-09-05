@@ -9,20 +9,9 @@ const selectNetworkCardClick = async (page, name) => {
   await selectNetworkButton.click();
 };
 
-const addNetworkButtonClick = async (page) => {
-  const addNetworkButton = await page.getByTestId('add-network-button', true);
-  await addNetworkButton.click();
-};
-
 const exitButtonClick = async (page, button) => {
   const addNetworkButton = await page.getByTestId(button, true);
   await addNetworkButton.click();
-};
-
-const inputFill = async (page, testId, value) => {
-  const input = await page.getByTestId(testId, true);
-  await input.click();
-  await input.type(value);
 };
 
 const isErrorMatch = async (page, testId, error) => {
@@ -106,7 +95,7 @@ describe('Network', () => {
 
   test('checking that the Back and Close button sends a user from the Add Network flow to the Main flow', async () => {
     for (const data of exitButtonData) {
-      await addNetworkButtonClick(page);
+      await popupPageUtils.addNetworkButtonClick(page);
       await exitButtonClick(page, data);
       await page.waitForTestIdSelector('open-deposit-view-button', { hidden: false });
       await openSelectNetworkModalButtonClick(page, false);
@@ -114,22 +103,22 @@ describe('Network', () => {
   });
 
   test('checking inputs validation on Add Network flow', async () => {
-    await addNetworkButtonClick(page);
+    await popupPageUtils.addNetworkButtonClick(page);
     for (const data of wrongNetworkData) {
-      await inputFill(page, data.testId, data.value);
+      await popupPageUtils.inputFill(page, data.testId, data.value);
     }
-    await addNetworkButtonClick(page);
+    await popupPageUtils.addNetworkButtonClick(page);
     for (const data of inputsErrorsData) {
       await isErrorMatch(page, data.testId, data.errorMessage);
     }
   });
 
   test('adding a new network and switching on it/checking that the extension does not allow to add an existing network', async () => {
-    await addNetworkButtonClick(page);
+    await popupPageUtils.addNetworkButtonClick(page);
     for (const data of correctNetworkData) {
-      await inputFill(page, data.testId, data.value);
+      await popupPageUtils.inputFill(page, data.testId, data.value);
     }
-    await addNetworkButtonClick(page);
+    await popupPageUtils.addNetworkButtonClick(page);
     await openSelectNetworkModalButtonClick(page, false);
     await selectNetworkCardClick(page, networkName);
     await page.waitForTestIdSelector('network-selection-modal', { hidden: true });
@@ -139,11 +128,7 @@ describe('Network', () => {
 
     // checking that the extension does not allow to add an existing network
     await openSelectNetworkModalButtonClick(page, false);
-    await addNetworkButtonClick(page);
-    for (const data of correctNetworkData) {
-      await inputFill(page, data.testId, data.value);
-    }
-    await addNetworkButtonClick(page);
+    await popupPageUtils.addSonicNetwork(page);
     for (const data of inputsErrorsData2) {
       await isErrorMatch(page, data.testId, data.errorMessage);
     }
