@@ -80,7 +80,6 @@ describe('Settings: Help', () => {
   });
 
   test('deleting the newly added network/checking that deleted network was deleted, and the current network changed on mainnet ', async () => {
-    await popupPageUtils.addSonicNetwork(page);
     await popupPageUtils.profileButtonClick(page);
     await settingsButtonClick(page);
     await networkButtonClick(page);

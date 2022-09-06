@@ -14,6 +14,8 @@ const getAvailableAmount = async (page, shouldFormat = true) => {
 
   const availableAmountString = await page.evaluate((element) => element.innerText, availableAmountTag);
 
+  console.log('availableAmountString', availableAmountString);
+
   return shouldFormat ? formatTokenAmount(availableAmountString) : availableAmountString;
 };
 
@@ -60,6 +62,17 @@ const continueButtonClick = async (page) => {
   await continueButton.click();
 };
 
+const openSelectNetworkModalButtonClick = async (page, boolean) => {
+  const openSelectNetworkModalButton = await page.getByTestId('network-selector', true);
+  await openSelectNetworkModalButton.click();
+  await page.waitForTestIdSelector('network-selection-modal', { hidden: boolean });
+};
+
+const selectNetworkCardClick = async (page, name) => {
+  const selectNetworkButton = await page.getByTestId(`network-card-${name}`, true);
+  await selectNetworkButton.click();
+};
+
 async function addCustomToken(page, { name, canisterId, standard }) {
   await addCustomTokenButtonClick(page);
   await addCustomTokenTabItemClick(page, 'Custom');
@@ -74,7 +87,8 @@ async function addCustomToken(page, { name, canisterId, standard }) {
   await addButton.click();
 
   const assetTitle = await page.getByTestId(`asset-name-${name}`, true);
-  await page.evaluate((el) => el.textContent, assetTitle);
+  const assetTitleText = await page.evaluate((el) => el.textContent, assetTitle);
+  expect(assetTitleText).toBe(name);
 }
 
 const selectToken = async (page, tokenName) => {
@@ -107,6 +121,7 @@ const tokenBalanceCheck = async (page, { previousAmount, name }) => {
   const assetAmountString = await page.evaluate((element) => element.innerText, assetAmount);
 
   const newAmount = formatTokenAmount(assetAmountString);
+  console.log('newAmount', newAmount);
   const sentAmount = Number((previousAmount - newAmount).toFixed(4));
 
   expect(sentAmount).toBe(AMOUNT_TO_SEND);
@@ -358,5 +373,79 @@ describe('Send Custom Tokens', () => {
 
     const isContinueButtonDisabled = await page.$('[data-testid="continue-button"][disabled]') !== null;
     expect(isContinueButtonDisabled).toBe(true);
+  });
+});
+
+describe('Send Custom Tokens on Sonic Network', () => {
+  let browser;
+  let page;
+
+  const networkName = 'Sonic';
+
+  const customTokenData = [
+    { canisterId: secrets.xtcCanisterId, name: 'Cycles', standard: 'DIP20' },
+    { canisterId: secrets.wicpCanisterId, name: 'Wrapped ICP', standard: 'DIP20' },
+    { canisterId: secrets.testCoinCanisterId, name: 'Test Coin', standard: 'DIP20' },
+  ];
+
+  beforeAll(async () => {
+    browser = await setupChrome();
+
+    // Importing and unlocking the account
+    page = await utils.createNewPage(browser);
+
+    await optionsPageUtils.importAccount(page, secrets.seedphrase, secrets.password);
+    await optionsPageUtils.unlock(page, secrets.password);
+
+    await page.close();
+  });
+
+  beforeEach(async () => {
+    page = await utils.createNewPage(browser);
+    await page.goto(chromeData.popupUrl);
+  });
+
+  afterEach(async () => {
+    await page.close();
+  });
+
+  afterAll(async () => {
+    await browser.close();
+  });
+
+  test('successfully adding custom token', async () => {
+    await openSelectNetworkModalButtonClick(page, false);
+    await popupPageUtils.addSonicNetwork(page);
+    await openSelectNetworkModalButtonClick(page, false);
+    await selectNetworkCardClick(page, networkName);
+
+    for (const data of customTokenData) {
+      await addCustomToken(page, data);
+    }
+  });
+
+  test('successfully sending custom token', async () => {
+    await sendViewButtonClick(page);
+    const previousAmounts = [];
+    await waitForAmount(page);
+
+    for (const data of customTokenData) {
+      await selectToken(page, data.name);
+      const previousAmount = await getAvailableAmount(page);
+      console.log('pam', previousAmount);
+      await recipientPrincipalIdEnter(page);
+      await sendToken(page, data.name);
+      previousAmounts.push(previousAmount);
+      await popupPageUtils.refreshWallet(page);
+      await sendViewButtonClick(page);
+    }
+    await cancelButtonClick(page);
+    await waitForBalanceChange(page);
+
+    for (const [index, data] of customTokenData.entries()) {
+      const previousAmount = previousAmounts[index];
+
+      await tokenBalanceCheck(page, { previousAmount, name: data.name });
+    }
   });
 });
