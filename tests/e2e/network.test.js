@@ -26,6 +26,10 @@ const isCurrentNetworkMatch = async (page, network) => {
   expect(currentNetworkName).toBe(network);
 };
 
+const isTabDisabled = async (page, tab) => {
+  await page.waitForSelector(`[data-testid="tab-item-${tab}"][disabled]`);
+};
+
 describe('Network', () => {
   let browser;
   let page;
@@ -63,6 +67,8 @@ describe('Network', () => {
     { testId: networkInputNameErrorTestID, errorMessage: 'There is already a network with that name' },
     { testId: networkInputHostErrorTestID, errorMessage: 'There is already a network with that host' },
   ];
+
+  const tabs = ['NFTs', 'Activity', 'Apps'];
 
   beforeAll(async () => {
     browser = await setupChrome();
@@ -125,12 +131,18 @@ describe('Network', () => {
     await page.waitForSelector('[data-testid="tab-item-NFTs"][disabled]');
     await isCurrentNetworkMatch(page, networkName);
     await page.waitForTestIdSelector('asset-name-XTC', { hidden: true });
+  });
 
-    // checking that the extension does not allow to add an existing network
-    await openSelectNetworkModalButtonClick(page, false);
+  test('checking that the extension does not allow to add an existing network', async () => {
     await popupPageUtils.addSonicNetwork(page);
     for (const data of inputsErrorsData2) {
       await isErrorMatch(page, data.testId, data.errorMessage);
+    }
+  });
+
+  test('checking that all tabs except the tokens tab are blocked ', async () => {
+    for (const data of tabs) {
+      await isTabDisabled(page, data);
     }
   });
 });

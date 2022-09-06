@@ -14,8 +14,6 @@ const getAvailableAmount = async (page, shouldFormat = true) => {
 
   const availableAmountString = await page.evaluate((element) => element.innerText, availableAmountTag);
 
-  console.log('availableAmountString', availableAmountString);
-
   return shouldFormat ? formatTokenAmount(availableAmountString) : availableAmountString;
 };
 
@@ -121,7 +119,6 @@ const tokenBalanceCheck = async (page, { previousAmount, name }) => {
   const assetAmountString = await page.evaluate((element) => element.innerText, assetAmount);
 
   const newAmount = formatTokenAmount(assetAmountString);
-  console.log('newAmount', newAmount);
   const sentAmount = Number((previousAmount - newAmount).toFixed(4));
 
   expect(sentAmount).toBe(AMOUNT_TO_SEND);
@@ -349,7 +346,6 @@ describe('Send Custom Tokens', () => {
     for (const data of customTokenData) {
       await selectToken(page, data.name);
       const previousAmount = await getAvailableAmount(page);
-      console.log(customTokenData);
       await recipientPrincipalIdEnter(page);
       await sendToken(page, data.name);
       previousAmounts.push(previousAmount);
@@ -432,7 +428,6 @@ describe('Send Custom Tokens on Sonic Network', () => {
     for (const data of customTokenData) {
       await selectToken(page, data.name);
       const previousAmount = await getAvailableAmount(page);
-      console.log('pam', previousAmount);
       await recipientPrincipalIdEnter(page);
       await sendToken(page, data.name);
       previousAmounts.push(previousAmount);
