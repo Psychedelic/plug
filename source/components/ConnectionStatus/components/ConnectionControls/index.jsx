@@ -137,6 +137,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
         <div
           className={classes.networkSelector}
           onClick={() => setSelectorOpen(true)}
+          data-testid="network-selector"
         >
           <div
             className={clsx(
@@ -145,7 +146,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
             )}
           >
             <div className={clsx(classes.statusDot)} />
-            <span className={classes.network}>
+            <span className={classes.network} data-testid="current-network-name">
               {capitalize(currentNetwork?.name || 'Mainnet')}
             </span>
           </div>
@@ -170,6 +171,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
           <NetworkSelector
             onClose={() => setSelectorOpen(false)}
             refreshWallet={refreshWallet}
+            data-testid="network-select-modal"
           />
         )}
       </div>

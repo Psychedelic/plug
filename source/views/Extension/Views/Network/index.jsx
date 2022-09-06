@@ -47,13 +47,14 @@ const Network = () => {
     <Layout>
       <Header
         center={<Typography variant="h2">{t('network.network')}</Typography>}
-        left={<LinkButton value={t('common.back')} onClick={navigator.goBack} startIcon={BackIcon} />}
+        left={<LinkButton value={t('common.back')} onClick={navigator.goBack} startIcon={BackIcon} data-testid="back-button" />}
         right={(
           <Button
             variant="rainbowOutlined"
             value={t('common.add')}
             style={{ height: 27, minWidth: 75 }}
             onClick={navigateTo('create-network')}
+            data-testid='add-network-button'
           />
 )}
       />

@@ -1,3 +1,5 @@
+const MINIMUM_PLUG_VERSION_ALLOWED = 60;
+
 const getErrorMessage = async (page, error) => {
   const passwordErrorLabel = await page.getByTestId('password-error', true);
   const errorMessage = await page.evaluate((el) => el.textContent, passwordErrorLabel);
@@ -123,8 +125,10 @@ describe('Import/Create', () => {
       const plugBanner = await page.getByTestId('banner-text', true);
 
       const value = await page.evaluate((el) => el.textContent, plugBanner);
+      const [, rawVersion] = value.split(' - ');
+      const version = rawVersion.split('.').join('');
 
-      expect(value).toMatch('Alpha - 0.5.3');
+      expect(Number(version)).toBeGreaterThanOrEqual(MINIMUM_PLUG_VERSION_ALLOWED);
     });
   });
 

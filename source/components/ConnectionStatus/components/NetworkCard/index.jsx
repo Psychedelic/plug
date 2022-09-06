@@ -10,7 +10,10 @@ import { setUseICNS } from '@redux/icns';
 
 import useStyles from './styles';
 
-const NetworkCard = ({ network, withDivider, onClick }) => {
+const NetworkCard = ({
+  network,
+  withDivider, onClick, NetworkCardTestId,
+}) => {
   const classes = useStyles();
   const { currentNetwork } = useSelector((state) => state.network);
   const dispatch = useDispatch();
@@ -26,6 +29,7 @@ const NetworkCard = ({ network, withDivider, onClick }) => {
       <div
         className={clsx(classes.network, active && classes.activeNetwork)}
         onClick={selectNetwork(network.id)}
+        data-testid={`${NetworkCardTestId}-${network.name}`}
       >
         <div className={classes.networkId}>
           <div className={clsx(
@@ -44,6 +48,10 @@ const NetworkCard = ({ network, withDivider, onClick }) => {
   );
 };
 
+NetworkCard.defaultProps = {
+  NetworkCardTestId: PropTypes.string,
+};
+
 NetworkCard.propTypes = {
   network: PropTypes.shape({
     id: PropTypes.string.isRequired,
@@ -51,6 +59,7 @@ NetworkCard.propTypes = {
   }).isRequired,
   withDivider: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
+  NetworkCardTestId: PropTypes.string,
 };
 
 export default NetworkCard;
