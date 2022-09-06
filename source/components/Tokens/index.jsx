@@ -47,7 +47,7 @@ const Tokens = () => {
 
   const handleRemoveAsset = (canisterId) => {
     sendMessage({
-      type: HANDLER_TYPES.REMOVE_ASSET,
+      type: HANDLER_TYPES.REMOVE_CUSTOM_TOKEN,
       params: { canisterId },
     }, (newTokens) => {
       fetchAssets();
