@@ -136,6 +136,7 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.REMOVE_NETWORK]: 'removing the network',
   [HANDLER_TYPES.SET_CURRENT_NETWORK]: 'setting the current network',
   [HANDLER_TYPES.GET_CURRENT_NETWORK]: 'getting the current network',
+  [HANDLER_TYPES.REMOVE_ASSET]: 'removing a token',
 }[type]);
 
 export const sendMessage = (args, callback) => {
@@ -434,6 +435,16 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: e.message };
     }
   },
+  [HANDLER_TYPES.REMOVE_ASSET]: async (canisterId) => {
+    try {
+      const newTokens = await keyring.removeToken(canisterId);
+      return Object.values(newTokens);
+    } catch (e) {
+      // eslint-disable-next-line
+      console.log('Error removing the network', e);
+      return { error: e.message };
+    }
+  }
 }[type]);
 
 export const getContacts = () => new Promise((resolve, reject) => {
