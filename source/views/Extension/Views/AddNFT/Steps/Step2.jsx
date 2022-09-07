@@ -23,13 +23,11 @@ const Step2 = ({ selectedToken, handleClose }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  // const displayToken = parseTokenBySymbol(selectedToken); // podemos agregar un parser para terminar con el ultimo objeto
 
   const { principalId } = useSelector((state) => state.wallet);
 
   const registerToken = () => {
     setLoading(true);
-    console.log('el selected token es ->', selectedToken);
     sendMessage({
       type: HANDLER_TYPES.ADD_CUSTOM_NFT,
       params: selectedToken,
@@ -39,7 +37,6 @@ const Step2 = ({ selectedToken, handleClose }) => {
         params: { refresh: true },
       },
         (nftCollections) => {
-          console.log('luego del getNFTS me da estas collections', nftCollections);
           if (nftCollections?.length) {
             dispatch(setCollections({ collections: nftCollections, principalId }));
           }

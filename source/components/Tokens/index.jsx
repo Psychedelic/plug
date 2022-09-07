@@ -20,7 +20,7 @@ const Tokens = () => {
   const dispatch = useDispatch();
   const icpPrice = useICPPrice();
   const { onScroll, fullScroll } = useScroll();
-  const [activateButton, setActivateButton] = useState(false);
+  const [displayCustomToken, setDisplayCustomToken] = useState(false);
 
   const fetchAssets = () => {
     sendMessage({
@@ -75,12 +75,12 @@ const Tokens = () => {
         <div className={classes.emptyAsset} />
       </div>
       {
-        activateButton && (
-          <TokenSelector onClose={() => setActivateButton(false)} />
+        displayCustomToken && (
+          <TokenSelector onClose={() => setDisplayCustomToken(false)} />
         )
       }
       <div
-        onClick={() => setActivateButton(!activateButton)}
+        onClick={() => setDisplayCustomToken(!displayCustomToken)}
         className={classes.buttonWrapper}
         data-testid="add-custom-token-button"
       >
