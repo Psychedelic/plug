@@ -326,6 +326,12 @@
     "selectStandard": "Select the token's interface standard",
     "importTitle": "wants to add a token to your wallet"
   },
+  "removeToken": {
+    "action": "Delete Token",
+    "mainText": "Are you sure you want to delete ",
+    "mainTextContinue": " from your token list?",
+    "disclaimer": "You can always add the token back by adding it as a custom token again."
+  },
   "error": {
     "errorTitle": "Something went wrong",
     "errorBody": "We’re sorry, something weird happened. \nReturn home and retry the action.",

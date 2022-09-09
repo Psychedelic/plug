@@ -8,6 +8,13 @@ export default makeStyles((theme) => ({
     justifyContent: 'flex-start',
     padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
   },
+  '@keyframes swipeLeft': {
+    from: { transform: 'translateX(0px)' },
+    to: { transform: 'translateX(-100%)' },
+  },
+ removeAnimation: {
+    animation: '$swipeLeft 0.6s forwards',
+  },
   image: {
     height: 41,
     width: 41,
@@ -63,4 +70,24 @@ export default makeStyles((theme) => ({
       opacity: 0.9,
     },
   },
+  deleteToken: {
+    opacity: 0,
+    width: 0,
+    transition: '0.6s',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  deleteTokenMoveRight: {
+    marginLeft: 'auto !important',
+  },
+  deleteTokenActive: {
+    opacity: 1,
+    margin: '0 4px 0 21px',
+
+    '& > img': {
+      cursor: 'pointer',
+    }
+  }
 }));

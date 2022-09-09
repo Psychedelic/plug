@@ -4,6 +4,7 @@ import { Plus } from 'react-feather';
 import { setAssets, setAssetsLoading } from '@redux/wallet';
 import clsx from 'clsx';
 
+import { TOKENS } from '@shared/constants/currencies';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { useRouter } from '@components/Router';
 
@@ -23,10 +24,10 @@ const Tokens = () => {
   const { navigator } = useRouter();
   const { onScroll, fullScroll } = useScroll();
 
-  const fetchAssets = (cb = () => {}) => {
+  const fetchAssets = (cb = () => {}, refresh) => {
     sendMessage({
       type: HANDLER_TYPES.GET_ASSETS,
-      params: {},
+      params: { refresh },
     }, (keyringAssets) => {
       cb(keyringAssets);
       dispatch(setAssets({ keyringAssets, icpPrice }));
@@ -41,6 +42,15 @@ const Tokens = () => {
 
     return new Promise((resolve) => {
       fetchAssets(resolve);
+    });
+  };
+
+  const handleRemoveAsset = (canisterId) => {
+    sendMessage({
+      type: HANDLER_TYPES.REMOVE_CUSTOM_TOKEN,
+      params: { canisterId },
+    }, (newTokens) => {
+      fetchAssets();
     });
   };
 
@@ -77,8 +87,10 @@ const Tokens = () => {
           assets?.map((asset) => (
             <AssetItem
               {...asset}
+              removeAsset={() => handleRemoveAsset(asset.canisterId)}
               key={`${asset.symbol}-${asset.canisterId}-${currentNetwork?.id}`}
               updateToken={handleFetchAssets}
+              protectedAsset={!Object.keys(TOKENS).includes(asset.symbol)}
               loading={loading}
               failed={!!asset?.error}
               assetNameTestId="asset-name"
