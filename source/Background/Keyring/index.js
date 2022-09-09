@@ -325,19 +325,22 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: e.message };
     }
   },
-  [HANDLER_TYPES.GET_ICNS_DATA]: async ({ refresh }) => {
-    const { wallets, currentWalletId } = await keyring.getState();
-    let icnsData = wallets?.[currentWalletId]?.icnsData || { names: [] };
+  [HANDLER_TYPES.GET_ICNS_DATA]: async ({ refresh, walletId = keyring.currentWalletId }) => {
+    const { wallets } = await keyring.getState();
+    let icnsData = wallets?.[walletId]?.icnsData || { names: [] };
     if (!icnsData?.names?.length || refresh) {
-      icnsData = await keyring.getICNSData();
+      icnsData = await keyring.getICNSData({ subaccount: walletId });
     } else {
       keyring.getICNSData();
     }
     return icnsData;
   },
-  [HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME]: async (name) => {
+  [HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME]: async ({
+    name,
+    walletId = keyring.currentWalletId,
+  }) => {
     try {
-      const res = await keyring.setReverseResolvedName({ name });
+      const res = await keyring.setReverseResolvedName({ name, subaccount: walletId });
       return res;
     } catch (e) {
       // eslint-disable-next-line
