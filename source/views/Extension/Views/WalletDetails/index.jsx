@@ -83,12 +83,6 @@ const WalletDetails = () => {
   const hasActiveResolvedICNS = resolved !== null && useICNS && !icnsLoading;
 
   useEffect(() => {
-    if (useICNS) {
-      handleEditWalletName();
-    }
-  }, [useICNS]);
-
-  useEffect(() => {
     setICNSLoading(true);
     // Use standard ICNS data
     if (walletNumber === activeWalletNumber) {
@@ -165,7 +159,6 @@ const WalletDetails = () => {
     const { checked } = event.target;
 
     setUseICNS(checked);
-    console.log(useICNS);
 
     setStorageUseICNS(checked, walletNumber);
     if (walletNumber === activeWalletNumber) {
@@ -308,6 +301,12 @@ const WalletDetails = () => {
     setWalletName(editAccount.name);
     setCurrentEmoji(editAccount.icon);
   }, [editAccount]);
+
+  useEffect(() => {
+    if (useICNS) {
+      handleEditWalletName();
+    }
+  }, [useICNS]);
 
   return (
     <Layout>
