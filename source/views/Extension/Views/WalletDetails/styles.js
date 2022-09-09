@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 import SHADOW_1 from '@shared/styles/shadows';
+import SMOOTH_TRANSITION from '@shared/styles/transitions'; 
 
 export default makeStyles((theme) => ({
   badge: {
@@ -29,7 +30,7 @@ export default makeStyles((theme) => ({
     border: '1px solid #F3F4F6',
   },
   name: {
-    width: 231,
+    width: 162,
     height: 41,
     padding: '0 12px',
     borderRadius: 6,
@@ -39,8 +40,12 @@ export default makeStyles((theme) => ({
     marginRight: 10,
   },
   nameEdit: {
+    width: 231,
     background: '#FFFFFF',
     boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
+  },
+  resolvedNameEdit: {
+    width: 231,
   },
   icon: {
     marginLeft: 3,
@@ -127,5 +132,39 @@ export default makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+  },
+  buttonsContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingRight: '16px',
+    width: '112px',
+
+    '& > button': {
+      width: '40px',
+      height: '40px',
+      background: 'rgba(53, 116, 244, 0.08)',
+      border: 'none',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      margin: '0px 4px',
+      borderRadius: '6px',
+      cursor: 'pointer',
+      transition: `${SMOOTH_TRANSITION}`,
+
+      '& > img': {
+        transition: `${SMOOTH_TRANSITION}`,
+      },
+
+      '&:hover': {
+        background: '#3574F4',
+
+        '& > img': {
+          filter: 'brightness(0) saturate(100) invert(1)',
+        },
+      },
+    }
   },
 }));

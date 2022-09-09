@@ -11,6 +11,7 @@ export const profileSlice = createSlice({
   name: 'profile',
   initialState: {
     hiddenAccounts: [],
+    editAccount: {},
   },
   reducers: {
     setHiddenAccounts: (state, action) => {
@@ -25,10 +26,13 @@ export const profileSlice = createSlice({
       }
       setStorageHiddenAccounts(Object.values(state.hiddenAccounts));
     },
+    setEditAccount: (state, action) => {
+      state.editAccount = action.payload;
+    },
   },
 });
 
-export const { setHiddenAccounts, toggleAccountHidden } = profileSlice.actions;
+export const { setHiddenAccounts, toggleAccountHidden, setEditAccount } = profileSlice.actions;
 
 /**
  * @description Hook that fetches hidden accounts from storage and sets them in the state.

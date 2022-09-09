@@ -140,6 +140,7 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.REMOVE_NETWORK]: 'removing the network',
   [HANDLER_TYPES.SET_CURRENT_NETWORK]: 'setting the current network',
   [HANDLER_TYPES.GET_CURRENT_NETWORK]: 'getting the current network',
+  [HANDLER_TYPES.REMOVE_CUSTOM_TOKEN]: 'removing custom token',
 }[type]);
 
 export const sendMessage = (args, callback) => {
@@ -355,19 +356,22 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: e.message };
     }
   },
-  [HANDLER_TYPES.GET_ICNS_DATA]: async ({ refresh }) => {
-    const { wallets, currentWalletId } = await keyring.getState();
-    let icnsData = wallets?.[currentWalletId]?.icnsData || { names: [] };
+  [HANDLER_TYPES.GET_ICNS_DATA]: async ({ refresh, walletId = keyring.currentWalletId }) => {
+    const { wallets } = await keyring.getState();
+    let icnsData = wallets?.[walletId]?.icnsData || { names: [] };
     if (!icnsData?.names?.length || refresh) {
-      icnsData = await keyring.getICNSData();
+      icnsData = await keyring.getICNSData({ subaccount: walletId });
     } else {
       keyring.getICNSData();
     }
     return icnsData;
   },
-  [HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME]: async (name) => {
+  [HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME]: async ({
+    name,
+    walletId = keyring.currentWalletId,
+  }) => {
     try {
-      const res = await keyring.setReverseResolvedName({ name });
+      const res = await keyring.setReverseResolvedName({ name, subaccount: walletId });
       return res;
     } catch (e) {
       // eslint-disable-next-line
@@ -465,6 +469,16 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: e.message };
     }
   },
+  [HANDLER_TYPES.REMOVE_CUSTOM_TOKEN]: async (canisterId) => {
+    try {
+      const newTokens = await keyring.removeToken(canisterId);
+      return Object.values(newTokens);
+    } catch (e) {
+      // eslint-disable-next-line
+      console.log('Error removing the network', e);
+      return { error: e.message };
+    }
+  }
 }[type]);
 
 export const getContacts = () => new Promise((resolve, reject) => {

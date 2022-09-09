@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { useDispatch, useSelector } from 'react-redux';
 import { Typography, CircularProgress } from '@material-ui/core';
 import { ChevronDown } from 'react-feather';
 
@@ -10,12 +9,10 @@ import { InputBase, Dialog } from '@components';
 
 import useStyles from './styles';
 
-const ICNSSelector = () => {
+const ICNSSelector = ({ names, resolved, handleSetReverseResolution, loading }) => {
   const classes = useStyles();
-  const { names, resolved } = useSelector((state) => state.icns);
   const [isOpen, setIsOpen] = useState(false);
   const [nameLoading, setLoading] = useState();
-  const dispatch = useDispatch();
   const openSelectDialog = () => names?.length && setIsOpen(true);
 
   const resetModal = () => {
@@ -30,26 +27,17 @@ const ICNSSelector = () => {
       resetModal();
     }
 
-    sendMessage({
-      type: HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME,
-      params: name,
-    }, (response) => {
-      if (response.error) {
-        // eslint-disable-next-line
-        console.log('Error when setting your reverse resolved name', response.error); // TODO HANDLE ERROR (shouldnt happen tho)
-      } else {
-        sendMessage({
-          type: HANDLER_TYPES.GET_ICNS_DATA,
-          params: { refresh: true },
-        }, (icnsData) => {
-          dispatch(setICNSData(icnsData));
-          resetModal();
-        });
-      }
-    });
+    handleSetReverseResolution(name, resetModal);
   };
 
   const getInputContent = () => {
+    if (loading) {
+      return (
+        <Typography variant="subtitle2">
+          Loading ICNS data...
+        </Typography>
+      );
+    }
     if (names?.length === 0) {
       return (
         <Typography variant="subtitle2">
