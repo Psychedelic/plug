@@ -83,6 +83,12 @@ const WalletDetails = () => {
   const hasActiveResolvedICNS = resolved !== null && useICNS && !icnsLoading;
 
   useEffect(() => {
+    if (useICNS) {
+      handleEditWalletName();
+    }
+  }, [useICNS]);
+
+  useEffect(() => {
     setICNSLoading(true);
     // Use standard ICNS data
     if (walletNumber === activeWalletNumber) {
@@ -127,7 +133,11 @@ const WalletDetails = () => {
     } else {
       setEdit(false);
       setOpenEmojis(false);
-
+      console.log({
+        walletNumber,
+        name: walletName,
+        emoji: currentEmoji,
+      })
       sendMessage(
         {
           type: HANDLER_TYPES.EDIT_PRINCIPAL,
@@ -155,6 +165,8 @@ const WalletDetails = () => {
     const { checked } = event.target;
 
     setUseICNS(checked);
+    console.log(useICNS);
+
     setStorageUseICNS(checked, walletNumber);
     if (walletNumber === activeWalletNumber) {
       dispatch(setReduxUseICNS(checked));
@@ -366,14 +378,16 @@ const WalletDetails = () => {
                     />
                   </button>
                 )}
-                <button
-                  type="button"
-                  onClick={openEditWalletName}
-                >
-                  <img
-                    src={Pencil}
-                  />
-                </button>
+                {
+                  !useICNS && (<button
+                    type="button"
+                    onClick={openEditWalletName}
+                  >
+                    <img
+                      src={Pencil}
+                    />
+                  </button>)
+                }
               </div>
             )}
         </div>

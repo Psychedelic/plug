@@ -49,7 +49,7 @@ const AccountItem = ({
           className={classes.accountDetails}
         >
           <span className={classes.accountName}>
-            {account.name}
+            {account.icnsData.reverseResolvedName ? account.icnsData.reverseResolvedName : account.name }
           </span>
         </div>
       </div>
