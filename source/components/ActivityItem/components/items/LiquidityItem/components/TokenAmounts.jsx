@@ -19,6 +19,7 @@ const TokenAmounts = ({ token0, token1 }) => {
         value={amount0}
         displayType="text"
         thousandSeparator=","
+        // eslint-disable-next-line react/prop-types
         suffix={` ${token0?.token?.details?.symbol}`}
         decimalScale={3}
       />
@@ -27,6 +28,7 @@ const TokenAmounts = ({ token0, token1 }) => {
         value={amount1}
         displayType="text"
         thousandSeparator=","
+        // eslint-disable-next-line react/prop-types
         suffix={` ${token1?.token?.details?.symbol}`}
         decimalScale={3}
       />

@@ -29,6 +29,7 @@ const useSettingsItems = () => {
       logo: AntennaIcon,
       name: t('settings.network'),
       description: t('settings.networkDescription'),
+      'data-testid': 'network',
       onClick: (() => navigator.navigate('network')),
     },
     {

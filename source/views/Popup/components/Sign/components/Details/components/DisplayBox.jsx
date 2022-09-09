@@ -43,7 +43,7 @@ DisplayBox.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string.isRequired,
   shouldWarn: PropTypes.bool.isRequired,
-  img: PropTypes.string | PropTypes.node,
+  img: PropTypes.string || PropTypes.node,
   request: PropTypes.shape({
     canisterDescription: PropTypes.string,
     canisterIcon: PropTypes.string,

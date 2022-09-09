@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { Principal } from '@dfinity/principal';
 import { getContacts, setContacts } from '@modules/storageManager';
 import { addContact } from '@background/Keyring';

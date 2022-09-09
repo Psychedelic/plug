@@ -9,11 +9,10 @@ import {
   AddressTranslation,
 } from '@components';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { removeNFT, setCollections } from '@redux/wallet';
+import { blockNFTFetch, setCollections } from '@redux/wallet';
 import { setSelectedNft } from '@redux/nfts';
 import { ADDRESS_TYPES } from '@shared/constants/addresses';
 
-import { getFilteredCollections } from '../../utils';
 import NFTDisplay from '../NFTDisplay';
 
 import useStyles from './styles';
@@ -42,12 +41,11 @@ const ReviewStep = () => {
         if (response.error) {
           setErrorMessage(response.error);
         } else {
-          const filteredCollections = getFilteredCollections(collection, collections, nft);
           dispatch(setCollections({
-            collections: filteredCollections,
+            collections: response,
             principalId,
           }));
-          dispatch(removeNFT(nft));
+          dispatch(blockNFTFetch());
           dispatch(setSelectedNft(null));
           navigator.navigate('home', TABS.NFTS);
         }

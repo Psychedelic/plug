@@ -9,12 +9,15 @@ import shortAddress from '@shared/utils/short-address';
 import { useTranslation } from 'react-i18next';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import download from '@shared/utils/download-text';
+import { useSelector } from 'react-redux';
 
 const Step2 = () => {
   const { t } = useTranslation();
   const [accounts, setAccounts] = useState([]);
   const [selectedAccountNumber, setSelectedAccountNumber] = useState(null);
   const [openAccounts, setOpenAccounts] = useState(false);
+
+  const { name } = useSelector((state) => state.wallet);
 
   const handleCloseAccounts = (value) => {
     setOpenAccounts(false);
@@ -25,7 +28,7 @@ const Step2 = () => {
     sendMessage({ type: HANDLER_TYPES.GET_PEM_FILE, params: selectedAccountNumber },
       (state) => {
         if (state) {
-          download('identity.pem', state);
+          download(`${name}.pem`, state);
         }
       });
   };

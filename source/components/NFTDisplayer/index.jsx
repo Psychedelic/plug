@@ -30,7 +30,7 @@ const TAG_PROPS = {
 };
 
 const NFTDisplayer = ({
-  url, className, onClick, interactive, defaultTag, nftTestId,
+  url, className, onClick, interactive, defaultTag,
 }) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);

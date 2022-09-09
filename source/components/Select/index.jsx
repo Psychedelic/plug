@@ -83,7 +83,7 @@ Select.propTypes = {
   icon: PropTypes.node,
   readonly: PropTypes.bool,
   imageClassName: PropTypes.string,
-  nft: PropTypes.oneOf([PropTypes.bool, PropTypes.object]),
+  nft: PropTypes.oneOf([PropTypes.bool, PropTypes.objectOf(PropTypes.string)]),
   className: PropTypes.string,
   accountNameTestId: PropTypes.string,
 };
