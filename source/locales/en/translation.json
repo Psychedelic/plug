@@ -346,6 +346,7 @@
     "searchResults": "Search results",
     "selectStandard": "Select the NFT interface standard",
     "importTitle": "wants to add a NFT to your wallet"
+  },
   "removeToken": {
     "action": "Delete Token",
     "mainText": "Are you sure you want to delete ",
