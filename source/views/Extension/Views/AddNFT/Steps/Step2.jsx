@@ -46,7 +46,6 @@ const Step2 = ({ selectedToken, handleClose }) => {
         }
       );
     });
-    console.log('salio todo correcto')
   };
 
   return (
