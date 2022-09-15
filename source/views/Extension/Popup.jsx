@@ -14,6 +14,7 @@ import Deposit from './Views/Deposit';
 import Send from './Views/SendFlow';
 import Contacts from './Views/Contacts';
 import AddToken from './Views/AddToken';
+import AddNFT from './Views/AddNFT';
 import ExportIdentity from './Views/ExportIdentity';
 import Login from './Views/Login';
 import ErrorScreen from './Views/Error';
@@ -40,6 +41,7 @@ const Popup = ({ initialRoute }) => (
     <Route name="error" component={ErrorScreen} />
     <Route name="send-error" component={SendErrorScreen} />
     <Route name="add-token" component={AddToken} />
+    <Route name="add-nft" component={AddNFT} />
     <Route name="export-identity" component={ExportIdentity} />
     <Route name="nft-details" component={NFTDetails} />
     <Route name="send-nft" component={SendNFT} />

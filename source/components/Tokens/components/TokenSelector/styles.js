@@ -1,0 +1,48 @@
+import { makeStyles } from '@material-ui/core/styles';
+import SHADOW_1 from '@shared/styles/shadows';
+
+export default makeStyles(() => ({
+  addTokenButton: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    bottom: 140,
+    right: 24,
+    position: 'absolute',
+    borderRadius: 42,
+    height: 42,
+    paddingLeft: 12,
+    paddingRight: 12,
+    backgroundColor: '#FFFF',
+    cursor: 'pointer',
+    gap: 8,
+    zIndex: 10,
+    boxShadow: SHADOW_1,
+  },
+  addNftButton: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    bottom: 82,
+    right: 24,
+    position: 'absolute',
+    borderRadius: 42,
+    height: 42,
+    padding: 5,
+    backgroundColor: '#FFFF',
+    cursor: 'pointer',
+    gap: 8,
+    zIndex: 10,
+    boxShadow: SHADOW_1,
+    paddingLeft: 12,
+    paddingRight: 12,
+  },
+  background: {
+    width: '100%',
+    height: 595,
+    zIndex: 5,
+    position: 'absolute',
+    top: 0,
+    right: 0,
+  },
+}));

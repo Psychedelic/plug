@@ -6,13 +6,12 @@ import clsx from 'clsx';
 
 import { TOKENS } from '@shared/constants/currencies';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { useRouter } from '@components/Router';
-
 import { useICPPrice } from '@redux/icp';
 import { setICNSData } from '@redux/icns';
 import { useScroll } from '@hooks';
 import AssetItem from '../AssetItem';
 import useStyles from './styles';
+import TokenSelector from './components/TokenSelector';
 
 const Tokens = () => {
   const classes = useStyles();
@@ -21,8 +20,8 @@ const Tokens = () => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const icpPrice = useICPPrice();
-  const { navigator } = useRouter();
   const { onScroll, fullScroll } = useScroll();
+  const [displayCustomToken, setDisplayCustomToken] = useState(false);
 
   const fetchAssets = (cb = () => {}, refresh) => {
     sendMessage({
@@ -99,8 +98,13 @@ const Tokens = () => {
         }
         <div className={classes.emptyAsset} />
       </div>
+      {
+        displayCustomToken && (
+          <TokenSelector onClose={() => setDisplayCustomToken(false)} />
+        )
+      }
       <div
-        onClick={() => navigator.navigate('add-token')}
+        onClick={() => setDisplayCustomToken(!displayCustomToken)}
         className={classes.buttonWrapper}
         data-testid="add-custom-token-button"
       >
