@@ -22,7 +22,7 @@ const useSteps = () => {
   const handleClose = () => navigator.navigate('home');
 
   const leftButton = (onClick) => <LinkButton value={t('common.back')} onClick={onClick} startIcon={BackIcon} />;
-  const rightButton = <LinkButton value={t('common.close')} onClick={() => handleClose()} />;
+  const rightButton = <LinkButton value={t('common.close')} onClick={handleClose} />;
 
   const steps = [
     {
