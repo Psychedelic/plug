@@ -127,11 +127,7 @@ const WalletDetails = () => {
     } else {
       setEdit(false);
       setOpenEmojis(false);
-      console.log({
-        walletNumber,
-        name: walletName,
-        emoji: currentEmoji,
-      })
+
       sendMessage(
         {
           type: HANDLER_TYPES.EDIT_PRINCIPAL,
@@ -159,7 +155,6 @@ const WalletDetails = () => {
     const { checked } = event.target;
 
     setUseICNS(checked);
-
     setStorageUseICNS(checked, walletNumber);
     if (walletNumber === activeWalletNumber) {
       dispatch(setReduxUseICNS(checked));
@@ -302,12 +297,6 @@ const WalletDetails = () => {
     setCurrentEmoji(editAccount.icon);
   }, [editAccount]);
 
-  useEffect(() => {
-    if (useICNS) {
-      handleEditWalletName();
-    }
-  }, [useICNS]);
-
   return (
     <Layout>
       <Header
@@ -377,16 +366,14 @@ const WalletDetails = () => {
                     />
                   </button>
                 )}
-                {
-                  !useICNS && (<button
-                    type="button"
-                    onClick={openEditWalletName}
-                  >
-                    <img
-                      src={Pencil}
-                    />
-                  </button>)
-                }
+                <button
+                  type="button"
+                  onClick={openEditWalletName}
+                >
+                  <img
+                    src={Pencil}
+                  />
+                </button>
               </div>
             )}
         </div>
