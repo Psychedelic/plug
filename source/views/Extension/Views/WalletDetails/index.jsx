@@ -127,11 +127,7 @@ const WalletDetails = () => {
     } else {
       setEdit(false);
       setOpenEmojis(false);
-      console.log({
-        walletNumber,
-        name: walletName,
-        emoji: currentEmoji,
-      })
+
       sendMessage(
         {
           type: HANDLER_TYPES.EDIT_PRINCIPAL,
