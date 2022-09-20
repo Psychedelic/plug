@@ -179,6 +179,10 @@ const Profile = ({ disableProfile }) => {
     setSelectedWallet(null);
   };
 
+  const handleOpenImportWallet = () => {
+    navigator.navigate('import-wallet');
+  };
+
   return (
     <>
       <HoverAnimation
@@ -286,6 +290,15 @@ const Profile = ({ disableProfile }) => {
                   alignLeft
                   logo={Plus}
                   onClick={handleOpenCreateAccount}
+                  data-testid="create-account-button"
+                />
+                <MenuItem
+                  size="small"
+                  key="createAccount"
+                  name={t('profile.importWallet')}
+                  alignLeft
+                  logo={Plus}
+                  onClick={handleOpenImportWallet}
                   data-testid="create-account-button"
                 />
                 <Divider style={{ margin: '6px 0' }} />

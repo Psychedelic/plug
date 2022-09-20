@@ -24,6 +24,7 @@
   "profile": {
     "myAccounts": "My Accounts",
     "createAccount": "Create Account",
+    "importWallet": "Import Wallet",
     "settings": "Settings",
     "subaccountNotConnected": "This account is not connected",
     "wantToConnect": "Do you want to connect your accounts?",

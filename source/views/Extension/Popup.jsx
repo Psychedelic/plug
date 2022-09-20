@@ -24,6 +24,7 @@ import SendNFT from './Views/SendNFT';
 import ClockError from './Views/ClockError';
 import Network from './Views/Network';
 import NetworkCreation from './Views/NetworkCreation';
+import ImportWallet from './Views/ImportWallet';
 
 const Popup = ({ initialRoute }) => (
   <Router initialRouteName={initialRoute}>
@@ -36,6 +37,7 @@ const Popup = ({ initialRoute }) => (
     <Route name="deposit" component={Deposit} />
     {/* <Route name="swap" component={Swap} /> */}
     <Route name="clockError" component={ClockError} />
+    <Route name="import-wallet" component={ImportWallet} />
     <Route name="send" component={Send} />
     <Route name="contacts" component={Contacts} />
     <Route name="error" component={ErrorScreen} />
