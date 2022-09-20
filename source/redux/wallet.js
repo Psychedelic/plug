@@ -25,11 +25,12 @@ export const walletSlice = createSlice({
     emoji: '👽',
     transactions: [],
     assets: Object.values(TOKENS),
-    walletNumber: 0,
+    walletId: '',
     assetsLoading: true,
     collections: [],
     collectionsLoading: false,
     transactionsLoading: false,
+    migratedWalletId: false,
   },
   reducers: {
     updateWalletDetails: (state, action) => {
@@ -41,13 +42,13 @@ export const walletSlice = createSlice({
       if (!action.payload) return;
       // Chrome serializes everything with toJSON
       const {
-        accountId, icon, name, principal, walletNumber,
+        accountId, icon, name, principal, walletId,
       } = action.payload;
       state.accountId = accountId;
       state.emoji = icon;
       state.name = name;
       state.principalId = principal;
-      state.walletNumber = walletNumber;
+      state.walletId = walletId;
     },
     setTransactions: (state, action) => {
       const { transactions, useICNS, icpPrice } = action.payload || {};
@@ -119,6 +120,9 @@ export const walletSlice = createSlice({
     blockNFTFetch: (state) => {
       state.optimisticNFTUpdate = true;
     },
+    setMigratedWalletId: (state, action) => {
+      state.migratedWalletId = action.payload;
+    },
   },
 });
 
@@ -132,6 +136,7 @@ export const {
   setCollections,
   setCollectionsLoading,
   blockNFTFetch,
+  setMigratedWalletId,
 } = walletSlice.actions;
 
 export default walletSlice.reducer;

@@ -180,8 +180,8 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.CREATE_PRINCIPAL]: async (params) => keyring.createPrincipal(params),
   [HANDLER_TYPES.SET_CURRENT_PRINCIPAL]:
-    async (walletNumber) => {
-      await keyring.setCurrentPrincipal(walletNumber);
+    async (walletId) => {
+      await keyring.setCurrentPrincipal(walletId);
       const state = await keyring.getState();
       extension.tabs.query({ active: true }, (tabs) => {
         extension.tabs.sendMessage(tabs[0].id, { action: 'updateConnection' });
@@ -224,9 +224,9 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: e.message };
     }
   },
-  [HANDLER_TYPES.GET_BALANCE]: async (subaccount) => {
+  [HANDLER_TYPES.GET_BALANCE]: async (walletId) => {
     try {
-      const assets = await keyring.getBalances({ subaccount });
+      const assets = await keyring.getBalances({ subaccount: walletId });
       const parsedAssets = parseAssetsAmount(assets);
       const icpPrice = await getICPPrice();
       return formatAssets(parsedAssets, icpPrice);
@@ -260,8 +260,8 @@ export const getKeyringHandler = (type, keyring) => ({
     }
   },
   [HANDLER_TYPES.EDIT_PRINCIPAL]:
-    async ({ walletNumber, name, emoji }) => (
-      keyring.editPrincipal(walletNumber, { name, emoji })
+    async ({ walletId, name, emoji }) => (
+      keyring.editPrincipal(walletId, { name, emoji })
     ),
   [HANDLER_TYPES.GET_PUBLIC_KEY]:
     async () => keyring.getPublicKey(),
@@ -295,7 +295,7 @@ export const getKeyringHandler = (type, keyring) => ({
       }
     },
   [HANDLER_TYPES.GET_PEM_FILE]:
-    async (walletNumber) => keyring.getPemFile(walletNumber),
+    async (walletId) => keyring.getPemFile(walletId),
   [HANDLER_TYPES.BURN_XTC]:
     async ({ to, amount }) => {
       try {

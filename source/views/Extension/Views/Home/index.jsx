@@ -17,16 +17,22 @@ import { setAccountInfo } from '@redux/wallet';
 import { useICPPrice } from '@redux/icp';
 import { setUseICNS } from '@redux/icns';
 import { isClockInSync } from '@shared/utils/time';
-import { getApp, getUseICNS, getWalletsConnectedToUrl } from '@modules/storageManager';
 import { getTabURL } from '@shared/utils/chrome-tabs';
 import extension from 'extensionizer';
+import {
+  getApp,
+  getUseICNS,
+  getWalletsConnectedToUrl,
+  updateWalletId,
+  getWalletIds,
+} from '@modules/storageManager';
 
 const Home = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { navigator, tabIndex } = useRouter();
   const {
-    assetsLoading, collectionsLoading, transactionsLoading, walletNumber,
+    assetsLoading, collectionsLoading, transactionsLoading, walletId, migratedWalletId,
   } = useSelector((state) => state.wallet);
   const { usingMainnet } = useSelector((state) => state.network);
 
@@ -79,7 +85,7 @@ const Home = () => {
       getWalletsConnectedToUrl(url, ids, (_connectedWallets = []) => {
         setConnectedWallets(_connectedWallets);
         if (_connectedWallets.length > 0) {
-          getApp(walletNumber.toString(), url, (currentApp) => {
+          getApp(walletId, url, (currentApp) => {
             setApp(currentApp);
             const isConnected = _connectedWallets.includes(state.currentWalletId);
             if (!isConnected) {
@@ -92,7 +98,7 @@ const Home = () => {
   };
 
   const updateProviderConnection = async () => {
-    const currentWallet = wallets?.[walletNumber] || null;
+    const currentWallet = wallets?.[walletId] || null;
     if (currentWallet) {
       extension.tabs.query({ active: true }, (activeTabs) => {
         extension.tabs.sendMessage(activeTabs[0].id, { action: 'updateConnection' });
@@ -102,22 +108,29 @@ const Home = () => {
 
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
-      if (!state?.wallets?.length) {
+      if (!Object.keys(state?.wallets).length) {
         sendMessage({ type: HANDLER_TYPES.LOCK, params: {} }, () => navigator.navigate('login'));
       } else if (!clockValidated) {
         isClockInSync().then((isInSync) => !isInSync && navigator.navigate('clockError'));
+        validateProviderConnection(state);
+      } else if (!migratedWalletId) {
+        state.wallets.forEach((wallet) => {
+          updateWalletId(wallet.walletNumber, wallet.walletId);
+        }); 
       }
-      setWallets(state?.wallets);
+
+      setWallets(Object.values(state?.wallets));
       dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
       validateProviderConnection(state);
     });
-  }, [clockValidated]);
+  }, [clockValidated, migratedWalletId]);
 
   useEffect(() => {
-    getUseICNS(walletNumber, (useICNS) => {
+    getUseICNS(walletId, (useICNS) => {
       dispatch(setUseICNS(useICNS));
     });
-  }, [walletNumber]);
+  }, [walletId]);
+
   return (
     <Layout>
       <Actions visible={tabIndex === 0} />

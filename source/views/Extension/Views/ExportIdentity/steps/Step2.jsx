@@ -14,18 +14,18 @@ import { useSelector } from 'react-redux';
 const Step2 = () => {
   const { t } = useTranslation();
   const [accounts, setAccounts] = useState([]);
-  const [selectedAccountNumber, setSelectedAccountNumber] = useState(null);
+  const [selectedAccountId, setSelectedAccountId] = useState(null);
   const [openAccounts, setOpenAccounts] = useState(false);
 
   const { name } = useSelector((state) => state.wallet);
 
   const handleCloseAccounts = (value) => {
     setOpenAccounts(false);
-    setSelectedAccountNumber(value.walletNumber);
+    setSelectedAccountId(value.walletNumber);
   };
 
   const handleDownloadPemFile = () => {
-    sendMessage({ type: HANDLER_TYPES.GET_PEM_FILE, params: selectedAccountNumber },
+    sendMessage({ type: HANDLER_TYPES.GET_PEM_FILE, params: selectedAccountId },
       (state) => {
         if (state) {
           download(`${name}.pem`, state);
@@ -38,12 +38,12 @@ const Step2 = () => {
       (state) => {
         if (state?.wallets?.length) {
           setAccounts(state.wallets);
-          setSelectedAccountNumber(state.currentWalletId);
+          setSelectedAccountId(state.currentWalletId);
         }
       });
   }, []);
 
-  const selectedAccount = accounts[selectedAccountNumber];
+  const selectedAccount = accounts[selectedAccountId];
 
   return (
     <Container>
