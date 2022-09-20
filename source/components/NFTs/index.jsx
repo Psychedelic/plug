@@ -41,15 +41,14 @@ const NFTs = () => {
           ? <EmptyState />
           : (
             <div className={classes.root}>
-              {collections.map((collection, index) => !!collection?.tokens?.length
-                && (
-                  <NFTCollection
-                    collection={collection}
-                    defaultOpen={index === 0}
-                    icns={collection?.name === 'ICNS'}
-                    collectionTestID="nft-collection-dropdown"
-                  />
-                ))}
+              {collections.map((collection, index) => (
+                <NFTCollection
+                  collection={collection}
+                  defaultOpen={index === 0}
+                  icns={collection?.name === 'ICNS'}
+                  collectionTestID="nft-collection-dropdown"
+                />
+              ))}
             </div>
           )
       }

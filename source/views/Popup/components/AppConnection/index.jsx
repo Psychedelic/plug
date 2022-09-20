@@ -18,6 +18,7 @@ import extension from 'extensionizer';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { reviewPendingTransaction } from '@modules/storageManager';
 import { setAccountInfo } from '@redux/wallet';
+import { setICNSData } from '@redux/icns';
 
 import initConfig from '../../../../locales';
 import SIZES from '../Transfer/constants';
@@ -42,6 +43,12 @@ const AppConnection = ({ setOnTimeout, transactionId, metadata }) => {
   const dispatch = useDispatch();
 
   const { query } = qs.parseUrl(window.location.href);
+
+  // this needs to be temporal, we should check why wallet info cant access to icns global state -->
+  useEffect(() => {
+    sendMessage({ type: HANDLER_TYPES.GET_ICNS_DATA, params: { refresh: true } },
+      (icnsData) => { dispatch(setICNSData(icnsData)); });
+  }, []);
 
   const {
     url,

@@ -326,6 +326,27 @@
     "selectStandard": "Select the token's interface standard",
     "importTitle": "wants to add a token to your wallet"
   },
+  "addNFT": {
+    "title": "Add NFT",
+    "search": "Search",
+    "custom": "Custom",
+    "searchText": "Add NFT's to your wallet, verified NFT's will appear in the search.",
+    "searchLink": "Learn more about NFT's",
+    "tokenCanisterId": "NFT Canister ID",
+    "confirmText": "NFT Safety Alert: For your security, make sure to do proper research before interacting with any NFT.",
+    "emptyResults": "No search results found",
+    "searchTokens": "Search NFT's",
+    "addCustomToken": "Add Custom NFT",
+    "comingSoon": "COMING SOON",
+    "dabTitle": "DAB Token List",
+    "dabText": "Helping improve discoverability, reputation, and trust in IC tokens.",
+    "invalidInterfaceTokenError": "Wrong standard. No Token Interface Detected.",
+    "invalidCanisterTokenError": "Invalid Canister ID.",
+    "standard": "NFT Standard",
+    "searchResults": "Search results",
+    "selectStandard": "Select the NFT interface standard",
+    "importTitle": "wants to add a NFT to your wallet"
+  },
   "removeToken": {
     "action": "Delete Token",
     "mainText": "Are you sure you want to delete ",

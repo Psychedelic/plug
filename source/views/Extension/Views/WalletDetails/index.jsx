@@ -127,7 +127,11 @@ const WalletDetails = () => {
     } else {
       setEdit(false);
       setOpenEmojis(false);
-
+      console.log({
+        walletNumber,
+        name: walletName,
+        emoji: currentEmoji,
+      })
       sendMessage(
         {
           type: HANDLER_TYPES.EDIT_PRINCIPAL,
@@ -302,6 +306,12 @@ const WalletDetails = () => {
     setCurrentEmoji(editAccount.icon);
   }, [editAccount]);
 
+  useEffect(() => {
+    if (useICNS) {
+      handleEditWalletName();
+    }
+  }, [useICNS]);
+
   return (
     <Layout>
       <Header
@@ -371,14 +381,16 @@ const WalletDetails = () => {
                     />
                   </button>
                 )}
-                <button
-                  type="button"
-                  onClick={openEditWalletName}
-                >
-                  <img
-                    src={Pencil}
-                  />
-                </button>
+                {
+                  !useICNS && (<button
+                    type="button"
+                    onClick={openEditWalletName}
+                  >
+                    <img
+                      src={Pencil}
+                    />
+                  </button>)
+                }
               </div>
             )}
         </div>
