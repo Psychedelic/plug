@@ -7,10 +7,6 @@ export default makeStyles((theme) => ({
     height: '142px',
     width: '370px',
     borderRadius: 6,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
   },
   dragDropIcon: {
     color: '#BBBEC2',
@@ -21,5 +17,27 @@ export default makeStyles((theme) => ({
   },
   dragDropBrowse: {
     color: '#111827',
+  },
+  inputDropContainer: {
+    display: 'none',
+  },
+  labelInputDropContainer: {
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+  },
+  dropItContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 10,
+  },
+  dragFileElement: {
+    position: 'absolute',
+    width: '100vw',
+    height: '100vh',
   }
 }));
