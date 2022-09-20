@@ -1,12 +1,19 @@
 import React from 'react';
-import { Layout } from '@components';
+import { Layout, Header } from '@components';
+import useSteps from './hooks/useSteps';
 
 const ImportWallet = () => {
+  const {
+    component,
+    left,
+    right,
+    center,
+  } = useSteps();
+
   return (
     <Layout>
-        <h2>
-          Import Wallet
-        </h2>
+      <Header left={left} center={center} right={right} />
+      {component}
     </Layout>
   );
 };
