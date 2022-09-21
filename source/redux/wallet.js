@@ -30,7 +30,6 @@ export const walletSlice = createSlice({
     collections: [],
     collectionsLoading: false,
     transactionsLoading: false,
-    migratedWalletId: false,
   },
   reducers: {
     updateWalletDetails: (state, action) => {
@@ -120,9 +119,6 @@ export const walletSlice = createSlice({
     blockNFTFetch: (state) => {
       state.optimisticNFTUpdate = true;
     },
-    setMigratedWalletId: (state, action) => {
-      state.migratedWalletId = action.payload;
-    },
   },
 });
 
@@ -136,7 +132,6 @@ export const {
   setCollections,
   setCollectionsLoading,
   blockNFTFetch,
-  setMigratedWalletId,
 } = walletSlice.actions;
 
 export default walletSlice.reducer;

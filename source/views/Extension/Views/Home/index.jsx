@@ -32,7 +32,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const { navigator, tabIndex } = useRouter();
   const {
-    assetsLoading, collectionsLoading, transactionsLoading, walletId, migratedWalletId,
+    assetsLoading, collectionsLoading, transactionsLoading, walletId,
   } = useSelector((state) => state.wallet);
   const { usingMainnet } = useSelector((state) => state.network);
 
@@ -108,6 +108,7 @@ const Home = () => {
 
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
+      const migratedWalletId = state.walletIds ? true : false;
       if (!Object.keys(state?.wallets).length) {
         sendMessage({ type: HANDLER_TYPES.LOCK, params: {} }, () => navigator.navigate('login'));
       } else if (!clockValidated) {
@@ -123,7 +124,7 @@ const Home = () => {
       dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
       validateProviderConnection(state);
     });
-  }, [clockValidated, migratedWalletId]);
+  }, [clockValidated]);
 
   useEffect(() => {
     getUseICNS(walletId, (useICNS) => {
