@@ -1,15 +1,18 @@
-import { Container, Button } from '@components'
+import { Container, Button, Alert } from '@components'
 import { Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import React, { useRef, useState } from 'react'
 import useStyles from '../styles';
 import { CloudUpload } from '@material-ui/icons';
-import Plug from "../../../../../components/Plug";
+import CloseIcon from '@material-ui/icons/Close';
+import { useEffect } from 'react';
+import GradientFile from '@assets/icons/gradient-file.svg';
 
 const Step1 = () => {
   const [loading, setLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
-  const [isPEMFile, setIsPEMFile] = useState(false);
+  const [fileNotSupported, setFileNotSupported] = useState(false);
+  const [pemFile, setPemFile] = useState(null);
 
   const ACCEPTED_FILE_EXT = 'pem';
 
@@ -21,7 +24,10 @@ const Step1 = () => {
     const fileExt = fileObject[0]?.name.split('.').pop();
     if (fileExt === ACCEPTED_FILE_EXT) {
       console.log('extension correcta', fileExt);
+      console.log('file extension', fileObject[0]);
+      setPemFile(fileObject[0]);
     } else {
+      setFileNotSupported(true);
       console.log('extension incorrecta', fileExt);
     }
   }
@@ -52,40 +58,57 @@ const Step1 = () => {
       checkPemFile(e.target.files);
     }
   }
- 
+
+  useEffect(() => {
+    if (fileNotSupported) {
+      setTimeout(() => {
+        console.log('arranca setTimeOut');
+        setFileNotSupported(false);
+      }, 2000)
+    }
+  }, [fileNotSupported]);
+
   return (
     <Container>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <form
-            onDragEnter={handleDrag} 
-            onDragLeave={handleDrag} 
-            onDragOver={handleDrag} 
-            onDrop={handleDrop} 
-            onSubmit={(e) => e.preventDefault()} 
-            className={classes.dragDropContainer}
-          >
-            <input type="file" ref={inputRef} id="input-file-upload" className={classes.inputDropContainer} multiple={false} onChange={(e) => handleChange(e)} />
-            <label className={classes.labelInputDropContainer} htmlFor="input-file-upload">
+          <div className={classes.dragDropContainer}>
+            <form
+              onDragEnter={handleDrag}
+              onDragLeave={handleDrag}
+              onDragOver={handleDrag}
+              onDrop={handleDrop}
+              onSubmit={(e) => e.preventDefault()}
+              className={classes.insideDragDrop}
+            >
               {
-                dragActive ? (
-                  <div className={classes.dropItContainer}>
-                    <Plug size="small" />
-                    <Typography variant='h3'>
-                    Drop it !
-                    </Typography>
-                  </div>
+                pemFile ? (
+                  <>
+                    <img src={GradientFile} alt="gradientFile" />
+                    <div className={classes.nameXIcon}>
+                      <Typography variant='h5'>
+                        {pemFile.name || ''}
+                      </Typography>
+                      <CloseIcon className={classes.icon} onClick={(e) => console.log(e)} />
+                    </div>
+                  </>
                 ) : (
                   <>
-                    <CloudUpload fontSize='large' styles={{ backgroundColor: '#BBBEC2' }} /><Typography className={classes.dragDropText} variant='h6'>
+                    <CloudUpload fontSize='large' />
+                    <Typography className={classes.dragDropText} variant='h6'>
                       Drag and Drop <br />
                       or <a className={classes.dragDropBrowse} href="">browse</a>
                     </Typography>
                   </>
                 )
               }
-            </label>
-          </form>
+            </form>
+          </div>
+          {
+            fileNotSupported && (
+              <Alert type="danger" title={"File not supported. Try a different file."} startIcon />
+            )
+          }
         </Grid>
         <Grid item xs={12}>
           <Button
@@ -93,7 +116,7 @@ const Step1 = () => {
             value="Continue"
             onClick={() => console.log('Hola como estas')}
             loading={loading}
-            disabled={loading}
+            disabled={!loading}
             fullWidth
             data-testid="add-button"
           />
