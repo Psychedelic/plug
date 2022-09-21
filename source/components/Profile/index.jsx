@@ -12,6 +12,8 @@ import { useTranslation } from 'react-i18next';
 import extensionizer from 'extensionizer';
 
 import Plus from '@assets/icons/plus.svg';
+import LinkEmoji from '@assets/icons/link-emoji.png';
+
 import {
   setAccountInfo,
   setAssets,
@@ -297,7 +299,7 @@ const Profile = ({ disableProfile }) => {
                   key="createAccount"
                   name={t('profile.importWallet')}
                   alignLeft
-                  logo={Plus}
+                  logo={LinkEmoji}
                   onClick={handleOpenImportWallet}
                   data-testid="create-account-button"
                 />
