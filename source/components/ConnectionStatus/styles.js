@@ -20,7 +20,7 @@ export default makeStyles((theme) => ({
   },
   fullWidth,
   bannerText: {
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
   active: {
     background: theme.palette.success.main,
