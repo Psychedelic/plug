@@ -10,6 +10,7 @@ const defaultConfig = {
 const shortAddress = (address, config = defaultConfig) => {
   if (!address) return '';
   if (typeof address !== 'string') return '';
+  if (address.substr(address.length - 4) == '.icp') return address;
 
   let leftSize = config.leftSize || defaultConfig.leftSize;
   let rightSize = config.rightSize || defaultConfig.rightSize;
