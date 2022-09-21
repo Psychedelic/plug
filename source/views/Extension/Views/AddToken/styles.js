@@ -16,6 +16,9 @@ export default makeStyles((theme) => ({
     height: 41,
     width: 41,
     marginRight: theme.spacing(1),
+    '& > img': {
+      borderRadius: '100%',
+    }
   },
   verified: {
     position: 'absolute',
