@@ -51,6 +51,10 @@ const Step1 = () => {
     }
   };
 
+  const handleRemoveFile = () => {
+    setPemFile(null);
+  }
+
   const handleChange = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -72,7 +76,7 @@ const Step1 = () => {
     <Container>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <div className={classes.dragDropContainer}>
+          <div className={fileNotSupported ? classes.dragDropContainerError : classes.dragDropContainer}>
             <form
               onDragEnter={handleDrag}
               onDragLeave={handleDrag}
@@ -89,7 +93,7 @@ const Step1 = () => {
                       <Typography variant='h5'>
                         {pemFile.name || ''}
                       </Typography>
-                      <CloseIcon className={classes.icon} onClick={(e) => console.log(e)} />
+                      <CloseIcon className={classes.icon} onClick={() => handleRemoveFile()} />
                     </div>
                   </>
                 ) : (
@@ -106,7 +110,9 @@ const Step1 = () => {
           </div>
           {
             fileNotSupported && (
-              <Alert type="danger" title={"File not supported. Try a different file."} startIcon />
+              <span className={classes.error}>
+                File not supported. Try a different file.
+              </span>
             )
           }
         </Grid>

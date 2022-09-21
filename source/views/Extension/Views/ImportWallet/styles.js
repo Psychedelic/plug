@@ -67,5 +67,9 @@ export default makeStyles((theme) => ({
     position: 'absolute',
     width: '100vw',
     height: '100vh',
+  },
+  error: {
+    color: '#E53C3C',
+    fontSize: 14
   }
 }));
