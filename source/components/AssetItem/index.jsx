@@ -8,17 +8,48 @@ import clsx from 'clsx';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
+import { TOKENS } from '@shared/constants/currencies';
 import RefreshIcon from '@assets/icons/blue-refresh.png';
+import DeleteIcon from '@assets/icons/delete.svg';
 import TokenIcon from '../TokenIcon';
+import ActionDialog from '../ActionDialog';
 
 import useStyles from './styles';
 
 const AssetItem = ({
-  updateToken, logo, name, amount, value, symbol, loading, failed, assetNameTestId,
+  updateToken,
+  logo,
+  name,
+  amount,
+  value,
+  symbol,
+  loading,
+  failed,
+  assetNameTestId,
+  protectedAsset,
+  removeAsset,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { currentNetwork, usingMainnet } = useSelector((state) => state.network);
+  const [ shouldRemove, setShouldRemove] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+
+  const handleMouseOver = () => {
+    if (!protectedAsset) return;
+    setIsHovering(true);
+  };
+
+  const handleMouseOut = () => {
+    if (!protectedAsset) return;
+    setIsHovering(false);
+  };
+
+  const handleModalClose = () => {
+    setIsHovering(false);
+    setOpenDelete(false);
+  };
 
   const handleFetchAssets = async () => {
     // Avoid calling multiple times
@@ -26,9 +57,39 @@ const AssetItem = ({
 
     await updateToken();
   };
+
+  const handleRemoveAssetDisplay = () => {
+    setShouldRemove(true);
+    handleModalClose();
+  }
+
   const ledgerNotSpecified = !usingMainnet && !currentNetwork?.ledgerCanisterId;
+
   return (
-    <div className={clsx(classes.root, failed && classes.failedContainer)}>
+    <div
+      className={clsx(classes.root, failed && classes.failedContainer, shouldRemove && classes.removeAnimation)}
+      onMouseOver={handleMouseOver}
+      onAnimationEnd={removeAsset}
+      onMouseOut={handleMouseOut}
+    >
+      <ActionDialog
+        open={openDelete}
+        title={t('removeToken.action')}
+        content={(
+          <Typography>
+            {t('removeToken.mainText')}
+            <b>{symbol}</b>
+            {t('removeToken.mainTextContinue')}
+            <br />
+            <br />
+            {t('removeToken.disclaimer')}
+          </Typography>
+        )}
+        confirmText={t('removeToken.action')}
+        buttonVariant="danger"
+        onClick={handleRemoveAssetDisplay}
+        onClose={handleModalClose}
+      />
       <TokenIcon className={classes.image} logo={logo} alt={name} symbol={symbol} />
       <div className={classes.leftContainer}>
         {failed && !loading
@@ -50,7 +111,7 @@ const AssetItem = ({
                     <NumberFormat
                       value={amount}
                       displayType="text"
-                      decimalScale={5}
+                      decimalScale={3}
                       fixedDecimalScale
                       thousandSeparator=","
                       suffix={` ${symbol}`}
@@ -75,9 +136,19 @@ const AssetItem = ({
             ? <Skeleton className={classes.valueSkeleton} />
             : (<NumberFormat value={value} displayType="text" decimalScale={2} fixedDecimalScale thousandSeparator="," prefix="$" />)}
         </Typography>
-        )}
+      )}
+      { !failed && !loading && (
+        <div
+          className={clsx(classes.deleteToken, !value && classes.deleteTokenMoveRight, isHovering && classes.deleteTokenActive)}
+        >
+          <img
+            onClick={() => setOpenDelete(true)}
+            alt="delete-token"
+            src={DeleteIcon}
+          />
+        </div>
+      )}
     </div>
-
   );
 };
 
@@ -98,4 +169,5 @@ AssetItem.propTypes = {
   loading: PropTypes.bool.isRequired,
   failed: PropTypes.bool,
   assetNameTestId: PropTypes.string,
+  removeAsset: PropTypes.func.isRequired,
 };

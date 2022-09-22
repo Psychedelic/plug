@@ -106,18 +106,6 @@ export const walletSlice = createSlice({
     setAssetsLoading: (state, action) => {
       state.assetsLoading = action.payload;
     },
-    addCollection: (state, action) => {
-      const { collection, walletNumber } = action.payload;
-      if (state.walletNumber === walletNumber && collection) {
-        const collectionIndex = state.collections.findIndex(
-          (col) => col.canisterId === collection.canisterId,
-        );
-        state?.collections.splice(
-          collectionIndex, collectionIndex < 0 ? 0 : 1, collection,
-        );
-        state.collections = sortCollections(state?.collections);
-      }
-    },
     setCollections: (state, action) => {
       const { collections, principalId } = action.payload;
       if (state.principalId === principalId && collections) {
@@ -128,14 +116,7 @@ export const walletSlice = createSlice({
     setCollectionsLoading: (state, action) => {
       state.collectionsLoading = action.payload;
     },
-    removeNFT: (state, action) => {
-      const collections = state.collections.map((col) => ({
-        ...col,
-        tokens: action.payload.collection === col.name
-          ? col.tokens.filter((token) => token.index !== action.payload?.index)
-          : col.tokens,
-      }));
-      state.collections = collections.filter((col) => col.tokens.length);
+    blockNFTFetch: (state) => {
       state.optimisticNFTUpdate = true;
     },
   },
@@ -148,10 +129,9 @@ export const {
   setTransactionsLoading,
   setAssets,
   setAssetsLoading,
-  addCollection,
   setCollections,
   setCollectionsLoading,
-  removeNFT,
+  blockNFTFetch,
 } = walletSlice.actions;
 
 export default walletSlice.reducer;

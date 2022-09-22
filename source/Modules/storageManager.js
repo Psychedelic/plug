@@ -121,7 +121,16 @@ export const getProtectedIds = (cb) => {
 
 export const setUseICNS = (useICNS, walletNumber, cb = () => {}) => {
   const defaultValue = true;
-  secureSetWrapper({ icns: { [walletNumber]: useICNS } }, defaultValue, cb);
+
+  secureGetWrapper('icns', defaultValue, (state) => {
+    cb(state?.icns?.[parseInt(walletNumber, 10)] ?? defaultValue);
+    secureSetWrapper({
+      icns: {
+        ...state?.icns,
+        [walletNumber]: useICNS,
+      },
+    }, defaultValue, cb);
+  });
 };
 
 export const getUseICNS = (walletNumber, cb) => {
