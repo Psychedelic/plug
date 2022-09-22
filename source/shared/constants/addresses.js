@@ -14,7 +14,7 @@ export const ADDRESS_TYPES = {
 export const getAssetFee = (selectedAsset) => {
   const { fee, decimals } = selectedAsset;
 
-  const parsedFee = fee / 10 ** decimals;
+  const parsedFee = fee && decimals ? fee / 10 ** decimals : 0;
 
   return parsedFee;
 };
