@@ -1,4 +1,5 @@
 import { validateAccountId } from './ids';
+import isICNSAddress from './icns';
 
 const defaultConfig = {
   leftSize: 5,
@@ -10,7 +11,7 @@ const defaultConfig = {
 const shortAddress = (address, config = defaultConfig) => {
   if (!address) return '';
   if (typeof address !== 'string') return '';
-  if (address.substr(address.length - 4) == '.icp') return address;
+  if (isICNSAddress(address)) return address;
 
   let leftSize = config.leftSize || defaultConfig.leftSize;
   let rightSize = config.rightSize || defaultConfig.rightSize;
