@@ -111,7 +111,7 @@ const AssetItem = ({
                     <NumberFormat
                       value={amount}
                       displayType="text"
-                      decimalScale={5}
+                      decimalScale={3}
                       fixedDecimalScale
                       thousandSeparator=","
                       suffix={` ${symbol}`}
