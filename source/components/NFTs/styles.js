@@ -58,4 +58,10 @@ export default makeStyles((theme) => ({
   emptyTitle: {
     marginTop: 10,
   },
+  container: {
+    padding: 20,
+  },
+  canisterId: {
+    marginBottom: 10,
+  },
 }));
