@@ -257,12 +257,6 @@ const WalletDetails = () => {
           dispatch(setAssetsLoading(true));
           dispatch(setTransactions([]));
           sendMessage({
-            type: HANDLER_TYPES.GET_ICNS_DATA,
-            params: { refresh: true },
-          }, (icnsData) => {
-            dispatch(setICNSData(icnsData));
-          });
-          sendMessage({
             type: HANDLER_TYPES.GET_ASSETS,
             params: { refresh: true },
           }, (keyringAssets) => {
@@ -284,15 +278,6 @@ const WalletDetails = () => {
       if (state?.wallets?.length) {
         setAccounts(state.wallets);
       }
-    });
-  }, []);
-
-  useEffect(() => {
-    sendMessage({
-      type: HANDLER_TYPES.GET_ICNS_DATA,
-      params: { refresh: true },
-    }, (icnsData) => {
-      dispatch(setICNSData(icnsData));
     });
   }, []);
 
