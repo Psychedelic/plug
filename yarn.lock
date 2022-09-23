@@ -1779,10 +1779,10 @@
     cross-fetch "^3.1.4"
     crypto-js "^4.1.1"
 
-"@psychedelic/dab-js@1.4.5":
-  version "1.4.5"
-  resolved "https://npm.pkg.github.com/download/@Psychedelic/dab-js/1.4.5/eccee7c10979dcf0c55ab0bc7f02e863a4a8b54f#eccee7c10979dcf0c55ab0bc7f02e863a4a8b54f"
-  integrity sha512-UQ2SGF+1YOGjZPWp0BeA+hR90PyVBHlRoJMVhERu9w49PcNEYR+Sf+Toa0MwGpZfwAT5rSQYbSkKBqQnWjHzHA==
+"@psychedelic/dab-js@1.4.11":
+  version "1.4.11"
+  resolved "https://npm.pkg.github.com/download/@Psychedelic/dab-js/1.4.11/e6800b2304edc64299407ec32f5749b1f30ec60b#e6800b2304edc64299407ec32f5749b1f30ec60b"
+  integrity sha512-lWNRBSbJCjDKOG+xNwcL809TUguoJM8jGhPlxhIBwoy5u2RZrMcMQ7DmlpKkUsXqi5VGEiP25Ud23pPPjejc+w==
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
