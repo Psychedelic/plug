@@ -10,6 +10,7 @@ import extensionizer from 'extensionizer';
 
 import { getWalletsConnectedToUrl, getApp, getUseICNS } from '@modules/storageManager';
 import { getTabURL } from '@shared/utils/chrome-tabs';
+import { ACCOUNT_ICON } from '@shared/constants/account';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import {
   setAccountInfo,
@@ -283,7 +284,7 @@ const WalletDetails = () => {
 
   useEffect(() => {
     setWalletName(editAccount.name);
-    setCurrentEmoji(editAccount.icon);
+    setCurrentEmoji(editAccount.icon || ACCOUNT_ICON);
   }, [editAccount]);
 
   useEffect(() => {
@@ -362,14 +363,14 @@ const WalletDetails = () => {
                   </button>
                 )}
                 {
-                  !useICNS && (<button
+                  <button
                     type="button"
                     onClick={openEditWalletName}
                   >
                     <img
                       src={Pencil}
                     />
-                  </button>)
+                  </button>
                 }
               </div>
             )}
