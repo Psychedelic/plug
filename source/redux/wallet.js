@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ACTIVITY_STATUS } from '@shared/constants/activity';
+import { ACCOUNT_ICON } from '@shared/constants/account';
 import {
   formatAssetBySymbol,
   formatAssets,
@@ -22,7 +23,7 @@ export const walletSlice = createSlice({
     name: 'Account 1',
     principalId: '',
     accountId: '',
-    emoji: '👽',
+    emoji: ACCOUNT_ICON,
     transactions: [],
     assets: Object.values(TOKENS),
     walletId: '',
