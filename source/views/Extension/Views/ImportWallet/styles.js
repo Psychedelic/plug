@@ -24,6 +24,17 @@ export default makeStyles((theme) => ({
     flexDirection: 'column',
     height: '100%',
   },
+  inputFile: {
+    display: 'none',
+  },
+  inputFileLabel: {
+    textDecorationLine: 'underline',
+    textDecorationColor: '#3574F4',
+    color: '#3574F4',
+    '&:hover': {  
+      cursor: 'pointer',
+    }
+  },
   nameXIcon: {
     display: 'flex',
     justifyContent: 'center',
