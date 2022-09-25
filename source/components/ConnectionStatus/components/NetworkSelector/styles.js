@@ -4,7 +4,7 @@ import SHADOW_1 from '@shared/styles/shadows';
 export default makeStyles(() => ({
   background: {
     width: '100%',
-    height: 595,
+    height: '100vh',
     zIndex: 5,
     position: 'absolute',
     top: 0,
