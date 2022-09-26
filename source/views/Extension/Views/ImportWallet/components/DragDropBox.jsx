@@ -5,6 +5,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { useEffect } from 'react';
 import GradientFile from '@assets/icons/gradient-file.svg';
 import { Typography } from '@material-ui/core';
+import RedWarningIcon from '@assets/icons/red-warning-icon.svg';
 
 const DragDropBox = ({acceptedExtension, setLoading, setDisabled}) => {
   const classes = useStyles();
@@ -27,7 +28,7 @@ const DragDropBox = ({acceptedExtension, setLoading, setDisabled}) => {
     }
   }, [fileNotSupported]);
 
-
+  // could be a good feature for the future accept more than one extension
   const checkDesiredFile = (fileObject) => {
     setLoading(true); 
     setLoading(false);
@@ -109,14 +110,14 @@ const DragDropBox = ({acceptedExtension, setLoading, setDisabled}) => {
             )
           }
         </form>
-      </div>
-      {
+        {
         fileNotSupported && (
           <span className={classes.error}>
-            File not supported. Try a different file.
+            <img src={RedWarningIcon} alt="" /> File not supported. Try a different file.
           </span>
         )
       }
+      </div>
     </>
   )
 }

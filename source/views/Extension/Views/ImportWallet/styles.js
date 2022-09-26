@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+import zIndex from '@material-ui/core/styles/zIndex';
 
 export default makeStyles((theme) => ({
   dragDropContainer: {
@@ -7,7 +8,7 @@ export default makeStyles((theme) => ({
     height: '142px',
     width: '370px',
     borderRadius: 6,
-    marginBottom: 10,
+    marginBottom: 40,
   },
   dragDropContainerError: {
     border: '2px dashed #E53C3C',
@@ -15,7 +16,7 @@ export default makeStyles((theme) => ({
     height: '142px',
     width: '370px',
     borderRadius: 6,
-    marginBottom: 10,
+    marginBottom: 40,
   },
   insideDragDrop: {
     display: 'flex',
@@ -26,6 +27,19 @@ export default makeStyles((theme) => ({
   },
   inputFile: {
     display: 'none',
+  },
+  chooseEmojiContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    width: '100%',
+    gap: 14,
+    marginTop: 10,
+    marginBottom: 25,
+  },
+  label: {
+    width: 'auto',
   },
   inputFileLabel: {
     textDecorationLine: 'underline',
@@ -81,6 +95,9 @@ export default makeStyles((theme) => ({
   },
   error: {
     color: '#E53C3C',
-    fontSize: 14
+    fontSize: 14,
+    display: 'flex',
+    gap: 11,
+    marginTop: 15,
   }
 }));

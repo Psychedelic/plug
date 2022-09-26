@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useRouter } from '@components/Router';
 import BackIcon from '@assets/icons/back.svg';
 import Step1 from '../Steps/Step1';
-
+import Step2 from '../Steps/Step2';
 
 const useSteps = () => {
   const [step, setStep] = useState(0);
@@ -19,19 +19,18 @@ const useSteps = () => {
 
   const steps = [
     {
+      component: <Step2
+        handleClose={handleClose}
+      />,
+      right: rightButton,
+      center: 'Wallet Details',
+    },
+    {
       component: <Step1 />,
       left: leftButton(() => handleClose()),
       right: rightButton,
       center: 'Import PEM file',
     },
-    // {
-    //   component: <Step2
-    //     handleClose={handleClose}
-    //   />,
-    //   left: leftButton(() => handleChangeStep(0)),
-    //   right: rightButton,
-    //   center: 'Import PEM file',
-    // },
   ];
 
   return steps[step];
