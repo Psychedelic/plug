@@ -5,8 +5,11 @@ import React, { useState } from 'react';
 import { useRouter } from '@components/Router';
 import Picker from 'emoji-picker-react';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const Step2 = () => {
+  const { t } = useTranslation();
+
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [openEmojis, setOpenEmojis] = useState(false);
@@ -42,7 +45,7 @@ const Step2 = () => {
             <UserIcon icon={currentEmoji} size='big' />
             <Button
               variant="primary"
-              value={'Edit Wallet Pic'}
+              value={t("importPem.editWalletPic")}
               onClick={() => setOpenEmojiSelector(!openEmojiSelector)}
               style={{
                 minWidth: 115,
@@ -70,7 +73,7 @@ const Step2 = () => {
           </div>
           <FormItem
             smallLabel
-            label={'Name'}
+            label={t('common.name')}
             className={classes.formItem}
             component={(
               <TextInput
@@ -83,7 +86,7 @@ const Step2 = () => {
           />
           <Button
             variant="rainbow"
-            value="Save"
+            value={t('common.save')}
             onClick={() => navigator.navigate('home')}
             loading={loading}
             disabled={!disabled}

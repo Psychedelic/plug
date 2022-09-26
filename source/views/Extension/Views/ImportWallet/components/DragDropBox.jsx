@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next';
 import useStyles from '../styles';
 import { CloudUpload } from '@material-ui/icons';
 import CloseIcon from '@material-ui/icons/Close';
@@ -6,8 +7,10 @@ import { useEffect } from 'react';
 import GradientFile from '@assets/icons/gradient-file.svg';
 import { Typography } from '@material-ui/core';
 import RedWarningIcon from '@assets/icons/red-warning-icon.svg';
+import { Plug } from "@components";
 
-const DragDropBox = ({acceptedExtension, setLoading, setDisabled}) => {
+const DragDropBox = ({ acceptedExtension, setLoading, setDisabled }) => {
+  const { t } = useTranslation();
   const classes = useStyles();
 
   const [dragActive, setDragActive] = useState(false);
@@ -18,7 +21,7 @@ const DragDropBox = ({acceptedExtension, setLoading, setDisabled}) => {
     setFile(null);
     setDisabled(false);
   }
- 
+
   useEffect(() => {
     if (fileNotSupported) {
       setTimeout(() => {
@@ -30,7 +33,7 @@ const DragDropBox = ({acceptedExtension, setLoading, setDisabled}) => {
 
   // could be a good feature for the future accept more than one extension
   const checkDesiredFile = (fileObject) => {
-    setLoading(true); 
+    setLoading(true);
     setLoading(false);
     const fileExt = fileObject[0]?.name.split('.').pop();
     if (fileExt === acceptedExtension) {
@@ -101,22 +104,35 @@ const DragDropBox = ({acceptedExtension, setLoading, setDisabled}) => {
               </>
             ) : (
               <>
-                <CloudUpload style={{ color: '#BBBEC2' }} fontSize='large' />
-                <Typography className={classes.dragDropText} variant='h6'>
-                  Drag and Drop <br />
-                  or <label className={classes.inputFileLabel} id="label-file-upload" htmlFor="input-file-upload">browse</label>
-                </Typography>
+                {
+                  dragActive ? (
+                    <div className={classes.dropItContainer}>
+                      <Plug size="small" /> 
+                      <span className={classes.dropItLabel}>
+                        {t('importPem.dropIt')}
+                      </span>
+                    </div>
+                  ) : (
+                    <>
+                      <CloudUpload style={{ color: '#BBBEC2' }} fontSize='large' />
+                      <Typography className={classes.dragDropText} variant='h6'>
+                        {t('importPem.dragAndDrop')}<br />
+                        {t('importPem.or')} <label className={classes.inputFileLabel} id="label-file-upload" htmlFor="input-file-upload">{t('importPem.browse')}</label>
+                      </Typography>
+                    </>
+                  )
+                }
               </>
             )
           }
         </form>
         {
-        fileNotSupported && (
-          <span className={classes.error}>
-            <img src={RedWarningIcon} alt="" /> File not supported. Try a different file.
-          </span>
-        )
-      }
+          fileNotSupported && (
+            <span className={classes.error}>
+              <img src={RedWarningIcon} alt="" /> {t('importPem.fileNotSupported')}
+            </span>
+          )
+        }
       </div>
     </>
   )

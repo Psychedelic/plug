@@ -22,14 +22,14 @@ const useSteps = () => {
       component: <Step1 handleChangeStep={handleChangeStep} />,
       left: leftButton(() => handleClose()),
       right: rightButton,
-      center: 'Import PEM file',
+      center: `${t("importPem.importPEMfile")}`,
     },
     {
       component: <Step2
         handleClose={handleClose}
       />,
       right: rightButton,
-      center: 'Wallet Details',
+      center: `${t("importPem.walletDetails")}`,
     },
   ];
 

@@ -2,11 +2,16 @@ import { Container, Button } from '@components'
 import Grid from '@material-ui/core/Grid';
 import React, { useState } from 'react'
 import DragDropBox from '../components/DragDropBox';
+import { useTranslation } from 'react-i18next';
 
 const Step1 = ({handleChangeStep}) => {
+  const { t } = useTranslation();
+
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const ACCEPTED_FILE_EXT = 'pem';
+  
+
 
   return (
     <Container>
@@ -21,7 +26,7 @@ const Step1 = ({handleChangeStep}) => {
         <Grid item xs={12}>
           <Button
             variant="rainbow"
-            value="Continue"
+            value={t('common.continue')}
             onClick={() => handleChangeStep(1)}
             loading={loading}
             disabled={!disabled}

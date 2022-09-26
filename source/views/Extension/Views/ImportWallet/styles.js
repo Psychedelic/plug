@@ -91,6 +91,10 @@ export default makeStyles((theme) => ({
     alignItems: 'center',
     gap: 10,
   },
+  dropItLabel: {
+    fontSize: 22,
+    fontStyle: "bold",
+  },
   dragFileElement: {
     position: 'absolute',
     width: '100vw',
