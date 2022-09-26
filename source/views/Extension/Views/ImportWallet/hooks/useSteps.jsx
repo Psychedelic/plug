@@ -19,17 +19,17 @@ const useSteps = () => {
 
   const steps = [
     {
+      component: <Step1 handleChangeStep={handleChangeStep} />,
+      left: leftButton(() => handleClose()),
+      right: rightButton,
+      center: 'Import PEM file',
+    },
+    {
       component: <Step2
         handleClose={handleClose}
       />,
       right: rightButton,
       center: 'Wallet Details',
-    },
-    {
-      component: <Step1 />,
-      left: leftButton(() => handleClose()),
-      right: rightButton,
-      center: 'Import PEM file',
     },
   ];
 

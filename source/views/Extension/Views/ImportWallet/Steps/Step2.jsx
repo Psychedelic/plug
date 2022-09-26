@@ -1,7 +1,8 @@
 import { Container, Button, TextInput, FormItem, UserIcon } from '@components'
 import Grid from '@material-ui/core/Grid';
 import useStyles from '../styles';
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { useRouter } from '@components/Router';
 import Picker from 'emoji-picker-react';
 import { useEffect } from 'react';
 
@@ -12,6 +13,9 @@ const Step2 = () => {
   const [walletName, setWalletName] = useState(''); // add deafault wallet name, for example the next wallet not used number
   const [currentEmoji, setCurrentEmoji] = useState('😎'); // add default emoji, not used in other wallets
   const [openEmojiSelector, setOpenEmojiSelector] = useState(false);
+
+  const { navigator } = useRouter();
+  
 
   const classes = useStyles();
 
@@ -80,7 +84,7 @@ const Step2 = () => {
           <Button
             variant="rainbow"
             value="Save"
-            onClick={() => console.log('Continueee')}
+            onClick={() => navigator.navigate('home')}
             loading={loading}
             disabled={!disabled}
             fullWidth

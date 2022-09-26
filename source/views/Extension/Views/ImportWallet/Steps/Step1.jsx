@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import React, { useState } from 'react'
 import DragDropBox from '../components/DragDropBox';
 
-const Step1 = () => {
+const Step1 = ({handleChangeStep}) => {
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const ACCEPTED_FILE_EXT = 'pem';
@@ -22,7 +22,7 @@ const Step1 = () => {
           <Button
             variant="rainbow"
             value="Continue"
-            onClick={() => console.log('Continueee')}
+            onClick={() => handleChangeStep(1)}
             loading={loading}
             disabled={!disabled}
             fullWidth

@@ -8,7 +8,7 @@ export default makeStyles((theme) => ({
     height: '142px',
     width: '370px',
     borderRadius: 6,
-    marginBottom: 40,
+    marginBottom: 20,
   },
   dragDropContainerError: {
     border: '2px dashed #E53C3C',
