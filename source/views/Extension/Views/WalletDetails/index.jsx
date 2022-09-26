@@ -10,6 +10,7 @@ import extensionizer from 'extensionizer';
 
 import { getWalletsConnectedToUrl, getApp, getUseICNS } from '@modules/storageManager';
 import { getTabURL } from '@shared/utils/chrome-tabs';
+import { ACCOUNT_ICON } from '@shared/constants/account';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import {
   setAccountInfo,
@@ -55,16 +56,16 @@ const WalletDetails = () => {
   const icpPrice = useICPPrice();
 
   const { editAccount } = useSelector((state) => state.profile);
-  const { walletNumber: activeWalletNumber } = useSelector((state => state.wallet));
+  const { walletId: activeWalletId } = useSelector((state => state.wallet));
 
   const textInput = useRef(null);
-  const { name, icon: emoji, accountId, principal: principalId, walletNumber } = editAccount;
+  const { name, icon: emoji, accountId, principal: principalId, walletId } = editAccount;
 
   const [openConnectAccount, setOpenConnectAccount] = useState(false);
   const [connectedWallets, setConnectedWallets] = useState([]);
   const [tab, setTab] = useState(null);
   const [app, setApp] = useState(null);
-  const [accountSwitchId, setAccountSwitchId] = useState(walletNumber);
+  const [accountSwitchId, setAccountSwitchId] = useState(walletId);
   const [accounts, setAccounts] = useState([]);
   const [openEmojis, setOpenEmojis] = useState(false);
   const [walletName, setWalletName] = useState(name);
@@ -85,19 +86,19 @@ const WalletDetails = () => {
   useEffect(() => {
     setICNSLoading(true);
     // Use standard ICNS data
-    if (walletNumber === activeWalletNumber) {
+    if (walletId === activeWalletId) {
       setICNSLoading(false);
       setUseICNS(reduxUseICNS);
       setResolved(reduxResolved);
       setICNSNames(reduxNames);
     } else {
-      getUseICNS(walletNumber, (storageUseICNS) => {
+      getUseICNS(walletId, (storageUseICNS) => {
         setUseICNS(storageUseICNS);
       });
 
       sendMessage({
         type: HANDLER_TYPES.GET_ICNS_DATA,
-        params: { refresh: true, walletId: walletNumber },
+        params: { refresh: true, walletId },
       }, (icnsData) => {
         const { names, reverseResolvedName } = icnsData;
         setICNSNames(names || []);
@@ -105,7 +106,7 @@ const WalletDetails = () => {
         setICNSLoading(false);
       });
     }
-  }, [walletNumber]);
+  }, [walletId]);
 
   const handleChange = (e) => setWalletName(e.target.value);
 
@@ -127,22 +128,17 @@ const WalletDetails = () => {
     } else {
       setEdit(false);
       setOpenEmojis(false);
-      console.log({
-        walletNumber,
-        name: walletName,
-        emoji: currentEmoji,
-      })
       sendMessage(
         {
           type: HANDLER_TYPES.EDIT_PRINCIPAL,
           params: {
-            walletNumber,
+            walletId,
             name: walletName,
             emoji: currentEmoji,
           },
         },
         () => {
-          if (activeWalletNumber === walletNumber) {
+          if (activeWalletId === walletId) {
             dispatch(updateWalletDetails({
               name: walletName,
               emoji: currentEmoji,
@@ -159,16 +155,15 @@ const WalletDetails = () => {
     const { checked } = event.target;
 
     setUseICNS(checked);
-
-    setStorageUseICNS(checked, walletNumber);
-    if (walletNumber === activeWalletNumber) {
+    setStorageUseICNS(checked, walletId);
+    if (walletId === activeWalletId) {
       dispatch(setReduxUseICNS(checked));
     }
 
     if (!checked) {
       sendMessage({
         type: HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME,
-        params: { name: '', walletId: walletNumber },
+        params: { name: '', walletId: walletId },
       }, (response) => {
         if (response.error) {
           // eslint-disable-next-line
@@ -176,9 +171,9 @@ const WalletDetails = () => {
         } else {
           sendMessage({
             type: HANDLER_TYPES.GET_ICNS_DATA,
-            params: { refresh: true, walletId: walletNumber },
+            params: { refresh: true, walletId },
           }, (icnsData) => {
-            if (walletNumber === activeWalletNumber) {
+            if (walletId === activeWalletId) {
               dispatch(setICNSData(icnsData));
             }
 
@@ -195,7 +190,7 @@ const WalletDetails = () => {
   const handleSetReverseResolution = (name, resetModal) => {
     sendMessage({
       type: HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME,
-      params: { name, walletId: walletNumber },
+      params: { name, walletId },
     }, (response) => {
       if (response.error) {
         // eslint-disable-next-line
@@ -203,9 +198,9 @@ const WalletDetails = () => {
       } else {
         sendMessage({
           type: HANDLER_TYPES.GET_ICNS_DATA,
-          params: { refresh: true, walletId: walletNumber },
+          params: { refresh: true, walletId },
         }, (icnsData) => {
-          if (walletNumber === activeWalletNumber) {
+          if (walletId === activeWalletId) {
             dispatch(setICNSData(icnsData));
           }
 
@@ -225,21 +220,26 @@ const WalletDetails = () => {
       const ids = accounts.map((_, idx) => idx);
       setTab(tabs?.[0]);
       // Check if new wallet is connected to the current page
-      setAccountSwitchId(walletNumber);
+      setAccountSwitchId(walletId);
+
+      if (!ids.length) {
+        executeAccountSwitch(walletId);
+        return;
+      }
 
       getWalletsConnectedToUrl(url, ids, async (wallets = []) => {
-        const currentConnected = wallets.includes(activeWalletNumber);
-        const newConnected = wallets.includes(walletNumber);
+        const currentConnected = wallets.includes(activeWalletId);
+        const newConnected = wallets.includes(walletId);
 
         setConnectedWallets(wallets);
 
-        getApp(activeWalletNumber.toString(), url, (currentApp) => {
+        getApp(activeWalletId.toString(), url, (currentApp) => {
           setApp(currentApp);
           // If current was connected but new one isnt, prompt modal
           if (currentConnected && !newConnected) {
             setOpenConnectAccount(true);
           } else {
-            executeAccountSwitch(walletNumber);
+            executeAccountSwitch(walletId);
           }
         });
       });
@@ -250,19 +250,13 @@ const WalletDetails = () => {
     dispatch(setCollections({ collections: [], principalId }));
     sendMessage({ type: HANDLER_TYPES.SET_CURRENT_PRINCIPAL, params: accountSwitchId },
       (state) => {
-        if (state?.wallets?.length) {
+        if (Object.values(state?.wallets).length) {
           const newWallet = state.wallets[state.currentWalletId];
           dispatch(setAccountInfo(newWallet));
           getContacts();
           dispatch(setICNSData(newWallet.icnsData));
           dispatch(setAssetsLoading(true));
           dispatch(setTransactions([]));
-          sendMessage({
-            type: HANDLER_TYPES.GET_ICNS_DATA,
-            params: { refresh: true },
-          }, (icnsData) => {
-            dispatch(setICNSData(icnsData));
-          });
           sendMessage({
             type: HANDLER_TYPES.GET_ASSETS,
             params: { refresh: true },
@@ -276,7 +270,7 @@ const WalletDetails = () => {
   };
 
   const handleDeclineConnect = () => {
-    executeAccountSwitch(activeWalletNumber);
+    executeAccountSwitch(activeWalletId);
     setOpenConnectAccount(false);
   };
 
@@ -289,17 +283,8 @@ const WalletDetails = () => {
   }, []);
 
   useEffect(() => {
-    sendMessage({
-      type: HANDLER_TYPES.GET_ICNS_DATA,
-      params: { refresh: true },
-    }, (icnsData) => {
-      dispatch(setICNSData(icnsData));
-    });
-  }, []);
-
-  useEffect(() => {
     setWalletName(editAccount.name);
-    setCurrentEmoji(editAccount.icon);
+    setCurrentEmoji(editAccount.icon || ACCOUNT_ICON);
   }, [editAccount]);
 
   useEffect(() => {
@@ -323,7 +308,7 @@ const WalletDetails = () => {
       <ConnectAccountsModal
         open={openConnectAccount}
         onClose={handleDeclineConnect}
-        onConfirm={() => executeAccountSwitch(walletNumber)}
+        onConfirm={() => executeAccountSwitch(walletId)}
         wallets={accounts}
         connectedWallets={connectedWallets}
         app={app}
@@ -366,7 +351,7 @@ const WalletDetails = () => {
             )
             : (
               <div className={classes.buttonsContainer}>
-                { walletNumber !== activeWalletNumber && (
+                { walletId !== activeWalletId && (
                   <button
                     type="button"
                     data-testid="edit-icon-button"
@@ -378,14 +363,14 @@ const WalletDetails = () => {
                   </button>
                 )}
                 {
-                  !useICNS && (<button
+                  <button
                     type="button"
                     onClick={openEditWalletName}
                   >
                     <img
                       src={Pencil}
                     />
-                  </button>)
+                  </button>
                 }
               </div>
             )}
@@ -415,7 +400,6 @@ const WalletDetails = () => {
           names={icnsNames}
           resolved={resolved}
           handleToggle={handleToggleICNS}
-          walletNumber={walletNumber}
           loading={icnsLoading}
           handleSetReverseResolution={handleSetReverseResolution}
         />

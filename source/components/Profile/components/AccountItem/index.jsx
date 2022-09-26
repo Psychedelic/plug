@@ -56,7 +56,7 @@ const AccountItem = ({
       <div className={classes.rightContainer}>
         <IconButton
           disabled={isCurrentAccount || isHidden}
-          onClick={handleChangeAccount(account.walletNumber)}
+          onClick={handleChangeAccount(account.walletId)}
         >
           <img
             className={clsx((isCurrentAccount || isHidden) && classes.disabledIcon)}
