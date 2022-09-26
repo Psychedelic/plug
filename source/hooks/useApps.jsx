@@ -8,7 +8,7 @@ const useApps = () => {
   const [apps, setApps] = useState({});
   const [parsedApps, setParsedApps] = useState([]);
   const [historicApps, setHistoricApps] = useState([]);
-  const { walletNumber } = useSelector((state) => state.wallet);
+  const { walletId } = useSelector((state) => state.wallet);
 
   const handleRemoveApp = (appUrl) => {
     const newApps = addDisconnectedEntry({ apps, appUrl });
@@ -16,15 +16,15 @@ const useApps = () => {
   };
 
   useEffect(() => {
-    getApps(walletNumber?.toString(), (appsFromExtensionStorage = {}) => {
+    getApps(walletId, (appsFromExtensionStorage = {}) => {
       if (appsFromExtensionStorage) {
         setApps(appsFromExtensionStorage);
       }
     });
-  }, [walletNumber]);
+  }, [walletId]);
 
   useEffect(() => {
-    setStorageApps(walletNumber, apps);
+    setStorageApps(walletId, apps);
     const parsed = Object.values(apps) || [];
 
     const allEvents = parsed?.flatMap((app) => app?.events?.map((event) => ({
