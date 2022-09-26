@@ -10,7 +10,7 @@ const WalletInfo = () => {
   const classes = useStyles();
   const [copied, setCopied] = useState(false);
 
-  const { name, principalId, walletNumber } = useSelector((state) => state.wallet);
+  const { name, principalId, walletId } = useSelector((state) => state.wallet);
   const { resolved, useICNS } = useSelector((state) => state.icns);
   const { t } = useTranslation();
   const copyText = t('copy.copyText');
@@ -22,7 +22,7 @@ const WalletInfo = () => {
 
   useEffect(() => {
     setRenderedName(useICNS ? resolved ?? name : name);
-  }, [resolved, name, walletNumber, useICNS]);
+  }, [resolved, name, walletId, useICNS]);
 
   const handleWalletClick = () => {
     navigator.clipboard.writeText(principalId);

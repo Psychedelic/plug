@@ -33,7 +33,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
   const { tabIndex } = disableNavigation ? {} : useRouter();
   const {
     principalId,
-    walletNumber,
+    walletId,
     assetsLoading,
     transactionsLoading,
     collectionsLoading,
@@ -61,7 +61,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
   extensionizer.tabs.query({ active: true }, (tabs) => {
     const url = getTabURL(tabs?.[0]);
     // Check if new wallet is connected to the current page
-    getApps(walletNumber.toString(), (apps) => {
+    getApps(walletId, (apps) => {
       const isSiteConnected = !!apps?.[url];
       setConnected(isSiteConnected);
     });
