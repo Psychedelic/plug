@@ -41,6 +41,9 @@ export default makeStyles((theme) => ({
   label: {
     width: 'auto',
   },
+  formItem: {
+    marginBottom: 20,
+  },
   inputFileLabel: {
     textDecorationLine: 'underline',
     textDecorationColor: '#3574F4',
