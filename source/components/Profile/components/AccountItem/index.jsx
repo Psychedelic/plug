@@ -28,7 +28,7 @@ const AccountItem = ({
 
   const isHidden = hiddenAccounts.includes(account.walletNumber);
 
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
 
   const toggleAccountVisibility = (account) => (e) => {
     e.preventDefault();
@@ -43,7 +43,7 @@ const AccountItem = ({
       <div
         className={clsx(classes.accountItemContainer, isHidden && classes.hiddenAccount)}
         itemNameTestId="account-name"
-        onClick={handleEditAccount(account)}
+        // onClick={handleEditAccount(account)}
       >
         <div className={classes.leftContainer}>
           <UserIcon
@@ -85,7 +85,7 @@ const AccountItem = ({
         {
           openModal && (
             <div className={classes.selectorContainer}>
-              <div className={classes.selector}>
+              <div onClick={handleEditAccount(account)} className={classes.selector}>
                 <img
                   src={BluePencil}
                 />
@@ -93,7 +93,7 @@ const AccountItem = ({
                   Edit
                 </Typography>
               </div>
-              <div className={classes.selector}>
+              <div onClick={() => handleEditAccount(account)} className={classes.selector}>
                 <RemoveCircleOutline style={{ color: '#DC2626' }} />
                 <Typography variant="h7" style={{ fontWeight: 500, fontSize: 16 }}>
                   Remove
