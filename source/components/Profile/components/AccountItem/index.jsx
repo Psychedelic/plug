@@ -37,7 +37,7 @@ const AccountItem = ({
     <div
       className={clsx(classes.accountItemContainer, isHidden && classes.hiddenAccount)}
       itemNameTestId="account-name"
-      onClick={handleEditAccount(account)}
+      onClick={(e) => handleEditAccount(e, account)}
     >
       <div className={classes.leftContainer}>
         <UserIcon
@@ -56,7 +56,7 @@ const AccountItem = ({
       <div className={classes.rightContainer}>
         <IconButton
           disabled={isCurrentAccount || isHidden}
-          onClick={handleChangeAccount(account.walletId)}
+          onClick={(e) => handleChangeAccount(e, account.walletId)}
         >
           <img
             className={clsx((isCurrentAccount || isHidden) && classes.disabledIcon)}
@@ -65,7 +65,7 @@ const AccountItem = ({
         </IconButton>
         <IconButton
           disabled={isHidden}
-          onClick={handleEditAccount(account)}
+          onClick={(e) => handleEditAccount(e, account)}
         >
           <img
             className={clsx(isHidden && classes.disabledIcon)}
