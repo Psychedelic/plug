@@ -206,22 +206,12 @@ export const getKeyringHandler = (type, keyring) => ({
     const parsed = parseTransactions(response);
     return parsed;
   },
-  [HANDLER_TYPES.GET_ASSETS]: async ({ refresh }) => {
+  [HANDLER_TYPES.GET_ASSETS]: async () => {
     try {
       if (!keyring?.isUnlocked) return {};
-
-      const { wallets, currentWalletId } = await keyring.getState();
-      let assets = Object.values(wallets?.[currentWalletId]?.assets);
-      const shouldUpdate = Object.values(assets)?.every((asset) => !Number(asset.amount))
-        || Object.values(assets)?.some((asset) => asset.amount === 'Error')
-        || refresh;
-      if (shouldUpdate) {
-        assets = await keyring.getBalances();
-      } else {
-        keyring.getBalances();
-      }
-      assets = parseAssetsAmount(assets);
-      return (assets || []).map((asset) => recursiveParseBigint(asset));
+      const assets = await keyring.getBalances();
+      const parsedAssets = parseAssetsAmount(assets);
+      return (parsedAssets || []).map((asset) => recursiveParseBigint(asset));
     } catch (e) {
       // eslint-disable-next-line
       console.log('Error while fetching the assets', e);
@@ -478,7 +468,7 @@ export const getKeyringHandler = (type, keyring) => ({
       console.log('Error removing the network', e);
       return { error: e.message };
     }
-  }
+  },
 }[type]);
 
 export const getContacts = () => new Promise((resolve, reject) => {
