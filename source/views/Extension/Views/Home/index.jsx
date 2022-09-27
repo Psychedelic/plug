@@ -80,7 +80,7 @@ const Home = () => {
     extension.tabs.query({ active: true, lastFocusedWindow: true }, (browserTabs) => {
       const currentTab = browserTabs?.[0];
       const url = getTabURL(currentTab);
-      const ids = state.wallets.map((_, idx) => idx);
+      const ids = Object.values(state.wallets).map((_, idx) => idx);
       setTab(currentTab);
       getWalletsConnectedToUrl(url, ids, (_connectedWallets = []) => {
         setConnectedWallets(_connectedWallets);

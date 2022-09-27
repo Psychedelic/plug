@@ -329,11 +329,7 @@ export const getKeyringHandler = (type, keyring) => ({
       }
     },
   [HANDLER_TYPES.GET_NFTS]: async ({ refresh = false }) => {
-    const { wallets, currentWalletId } = await keyring.getState();
-    let collections = wallets?.[currentWalletId]?.collections || [];
-    if (!collections.length || refresh) {
-      collections = await keyring.getNFTs({ subaccount: currentWalletId, refresh });
-    }
+    const collections = await keyring.getNFTs({ refresh });
     return (collections || [])?.map((collection) => recursiveParseBigint(collection));
   },
   [HANDLER_TYPES.TRANSFER_NFT]: async ({ to, nft }) => {

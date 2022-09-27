@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Collapsible from 'react-collapsible';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import { Typography } from '@material-ui/core';
 import { ChevronDown } from 'react-feather';
+import useVirtual from 'react-cool-virtual';
 
 import { shortICNSName } from '@shared/services/ICNS';
 import { useRouter } from '@components/Router';
@@ -32,6 +33,21 @@ function NFTCollection({
   const toggleExpanded = () => setExpanded(!expanded);
   const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[collection.canisterId];
 
+  const rows = useMemo(() => {
+    const itemCount = collection?.tokens?.length || 0;
+    const COLUMNS = 3;
+    const rowsCount = Math.ceil(itemCount / COLUMNS);
+    // Generate an array of rows with 3 items each
+    const nftRows = Array.from(
+      Array(rowsCount), (_, i) => collection.tokens.slice(i * COLUMNS, i * COLUMNS + COLUMNS),
+    );
+    return nftRows;
+  }, [collection]);
+
+  const { outerRef, innerRef, items: itemRows } = useVirtual({
+    itemCount: rows?.length || 0, // Provide the total number for the list items
+    itemSize: 150, // The size of each row (img + title)
+  });
   return (
     <Collapsible
       transitionTime={200}
@@ -64,40 +80,52 @@ function NFTCollection({
         </div>
         )}
     >
-      <div className={clsx(classes.grid, expanded && classes.expanded)}>
-        {collection?.tokens?.map((nft) => {
-          const name = nft.name || `#${nft.index}`;
-          return (
-            <div
-              className={classes.nftContainer}
-              onClick={() => handleNftClick(nft)}
-              data-testid={`nft-id-${name}`}
-            >
-              {icns ? (
-                <ICNSDisplay
-                  icns={nft}
-                  className={classes.nft}
-                  onClick={() => handleNftClick(nft)}
-                />
-              ) : (
-                <NFTDisplayer
-                  url={nft.url}
-                  className={classes.nft}
-                  defaultTag={nftDefaultTag}
-                  onClick={() => handleNftClick(nft)}
-                />
-              )}
-              {!icns && (
-              <Typography
-                className={classes.id}
-                variant="subtitle1"
-              >
-                {name.length > 12 ? shortICNSName(name) : name}
-              </Typography>
-              )}
-            </div>
-          );
-        })}
+      <div ref={outerRef} style={{ height: expanded ? `${Math.min(300, 150 * rows.length)}px` : 'auto', overflow: 'auto' }}>
+        {expanded && (
+          <div ref={innerRef}>
+            {itemRows?.map(({ index, size }) => {
+              const rowNfts = rows[index];
+              return (
+                <div key={index} className={classes.grid} style={{ height: size }}>
+                  {rowNfts?.map((nft) => {
+                    const name = nft?.name || `#${nft?.index}`;
+                    return (
+                      <div
+                        className={classes.nftContainer}
+                        onClick={() => handleNftClick(nft)}
+                        data-testid={`nft-id-${name}`}
+                        style={{ height: `${size}px` }}
+                      >
+                        {icns ? (
+                          <ICNSDisplay
+                            icns={nft}
+                            className={classes.nft}
+                            onClick={() => handleNftClick(nft)}
+                          />
+                        ) : (
+                          <NFTDisplayer
+                            url={nft.url}
+                            className={classes.nft}
+                            defaultTag={nftDefaultTag}
+                            onClick={() => handleNftClick(nft)}
+                          />
+                        )}
+                        {!icns && (
+                        <Typography
+                          className={classes.id}
+                          variant="subtitle1"
+                        >
+                          {name.length > 12 ? shortICNSName(name) : name}
+                        </Typography>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </Collapsible>
   );
