@@ -86,8 +86,7 @@ const Profile = ({ disableProfile }) => {
     }
   };
 
-  const handleEditAccount = (account) => (e) => {
-    e.preventDefault();
+  const handleEditAccount = (e, account) => {
     e.stopPropagation();
     dispatch(setEditAccount(account));
     setOpen(false);
@@ -145,7 +144,8 @@ const Profile = ({ disableProfile }) => {
       });
   };
 
-  const handleChangeAccount = (wallet) => () => {
+  const handleChangeAccount = (e, wallet) => {
+    e.stopPropagation();
     setSelectedWallet(wallet);
     extensionizer.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
       const url = getTabURL(tabs?.[0]);
