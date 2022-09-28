@@ -6,7 +6,6 @@ import { useHiddenAccounts, toggleAccountHidden } from '@redux/profile';
 
 import BluePencil from '@assets/icons/blue-pencil.svg';
 import InvisibleIcon from '@assets/icons/invisible.svg';
-import SwitchAccount from '@assets/icons/switch-account.svg';
 import VisibleIcon from '@assets/icons/visible.svg';
 
 import UserIcon from '../../../UserIcon';
@@ -37,7 +36,7 @@ const AccountItem = ({
     <div
       className={clsx(classes.accountItemContainer, isHidden && classes.hiddenAccount)}
       itemNameTestId="account-name"
-      onClick={(e) => handleEditAccount(e, account)}
+      onClick={(e) => handleChangeAccount(e, account.walletId)}
     >
       <div className={classes.leftContainer}>
         <UserIcon
@@ -54,15 +53,6 @@ const AccountItem = ({
         </div>
       </div>
       <div className={classes.rightContainer}>
-        <IconButton
-          disabled={isCurrentAccount || isHidden}
-          onClick={(e) => handleChangeAccount(e, account.walletId)}
-        >
-          <img
-            className={clsx((isCurrentAccount || isHidden) && classes.disabledIcon)}
-            src={SwitchAccount}
-          />
-        </IconButton>
         <IconButton
           disabled={isHidden}
           onClick={(e) => handleEditAccount(e, account)}
