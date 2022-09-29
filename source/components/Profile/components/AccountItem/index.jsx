@@ -21,12 +21,15 @@ const AccountItem = ({
   isEditing,
   handleChangeAccount,
   handleEditAccount,
+  walletNumber,
 }) => {
   const classes = useStyles();
   const hiddenAccounts = useHiddenAccounts();
   const dispatch = useDispatch();
 
   const isHidden = hiddenAccounts.includes(account.walletNumber);
+
+  const isPrincipalAccount = walletNumber === 0;
 
   const [openModal, setOpenModal] = useState(false);
 
@@ -43,7 +46,7 @@ const AccountItem = ({
       <div
         className={clsx(classes.accountItemContainer, isHidden && classes.hiddenAccount)}
         itemNameTestId="account-name"
-        // onClick={handleEditAccount(account)}
+        onClick={handleChangeAccount(account.walletNumber)}
       >
         <div className={classes.leftContainer}>
           <UserIcon
@@ -61,16 +64,14 @@ const AccountItem = ({
         </div>
         <div className={classes.rightContainer}>
           <IconButton
-            disabled={isCurrentAccount || isHidden}
-            onClick={handleChangeAccount(account.walletNumber)}
+            onClick={handleEditAccount(account)}
           >
             <img
-              className={clsx((isCurrentAccount || isHidden) && classes.disabledIcon)}
-              src={SwitchAccount}
+              src={BluePencil}
             />
           </IconButton>
-          <IconButton onClick={() => setOpenModal(!openModal)}>
-            <MoreHoriz style={{ color: '#3574F4' }} />
+          <IconButton disabled={isPrincipalAccount} onClick={() => setOpenModal(!openModal)}>
+            <RemoveCircleOutline style={{ color: '#DC2626' }} />
           </IconButton>
           {isEditing && (
             <IconButton
@@ -80,28 +81,6 @@ const AccountItem = ({
             </IconButton>
           )}
         </div>
-      </div>
-      <div>
-        {
-          openModal && (
-            <div className={classes.selectorContainer}>
-              <div onClick={handleEditAccount(account)} className={classes.selector}>
-                <img
-                  src={BluePencil}
-                />
-                <Typography variant="h7" style={{ fontWeight: 500, fontSize: 16 }}>
-                  Edit
-                </Typography>
-              </div>
-              <div onClick={() => handleEditAccount(account)} className={classes.selector}>
-                <RemoveCircleOutline style={{ color: '#DC2626' }} />
-                <Typography variant="h7" style={{ fontWeight: 500, fontSize: 16 }}>
-                  Remove
-                </Typography>
-              </div>
-            </div>
-          )
-        }
       </div>
     </>
   );

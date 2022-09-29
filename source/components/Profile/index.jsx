@@ -272,6 +272,7 @@ const Profile = ({ disableProfile }) => {
                         isCurrentAccount={isCurrentAccount}
                         handleChangeAccount={handleChangeAccount}
                         handleEditAccount={handleEditAccount}
+                        walletNumber={walletNumber}
                       />
                     );
                   })
