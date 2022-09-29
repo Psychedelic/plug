@@ -1,27 +1,53 @@
 import { Container, Button } from '@components'
-import Grid from '@material-ui/core/Grid';
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import DragDropBox from '../components/DragDropBox';
 import { useTranslation } from 'react-i18next';
+import { useDropzone } from 'react-dropzone';
+import useStyles from '../styles';
+import { CloudUpload } from '@material-ui/icons';
+import { Typography, Grid } from '@material-ui/core';
+import { Plug } from "@components";
 
 const Step1 = ({handleChangeStep}) => {
   const { t } = useTranslation();
+  const classes = useStyles();
 
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  const ACCEPTED_FILE_EXT = 'pem';
   
+  const onDrop = useCallback(acceptedFiles => {
+    console.log(acceptedFiles);
+  }, [])
 
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+  } = useDropzone({ onDrop });
 
   return (
     <Container>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <DragDropBox
-            acceptedExtension={ACCEPTED_FILE_EXT}
-            setLoading={setLoading}
-            setDisabled={setDisabled}
-          />
+          <div className={classes.dragDropContainer} {...getRootProps()}>
+            {
+              isDragActive ? (
+                <div className={classes.dropItContainer}>
+                  <Plug size="small" /> 
+                  <span className={classes.dropItLabel}>
+                    {t('importPem.dropIt')}
+                  </span>
+                </div>
+              ) : (
+                <>
+                <input {...getInputProps()} /><CloudUpload style={{ color: '#BBBEC2' }} fontSize='large' /><Typography className={classes.dragDropText} variant='h6'>
+                    {t('importPem.dragAndDrop')}<br />
+                    {t('importPem.or')} <label className={classes.inputFileLabel} id="label-file-upload" htmlFor="input-file-upload">{t('importPem.browse')}</label>
+                  </Typography>
+                </>
+              )
+            }
+          </div>
         </Grid>
         <Grid item xs={12}>
           <Button

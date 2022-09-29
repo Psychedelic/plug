@@ -9,6 +9,10 @@ export default makeStyles((theme) => ({
     width: '370px',
     borderRadius: 6,
     marginBottom: 20,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
   },
   dragDropContainerError: {
     border: '2px dashed #E53C3C',

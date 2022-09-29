@@ -59,6 +59,7 @@
     "react": "^17.0.1",
     "react-collapsible": "^2.8.4",
     "react-dom": "^17.0.1",
+    "react-dropzone": "^14.2.2",
     "react-feather": "^2.0.9",
     "react-i18next": "^11.8.13",
     "react-json-view": "^1.21.3",
