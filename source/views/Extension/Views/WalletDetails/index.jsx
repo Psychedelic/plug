@@ -354,7 +354,6 @@ const WalletDetails = () => {
                 { walletId !== activeWalletId && (
                   <button
                     type="button"
-                    data-testid="edit-icon-button"
                     onClick={handleChangeAccount}
                   >
                     <img
@@ -364,6 +363,7 @@ const WalletDetails = () => {
                 )}
                 {
                   <button
+                    data-testid="edit-icon-button"
                     type="button"
                     onClick={openEditWalletName}
                   >
