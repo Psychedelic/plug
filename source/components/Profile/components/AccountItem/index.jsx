@@ -35,7 +35,6 @@ const AccountItem = ({
   return (
     <div
       className={clsx(classes.accountItemContainer, isHidden && classes.hiddenAccount)}
-      itemNameTestId="account-name"
       onClick={(e) => handleChangeAccount(e, account.walletId)}
     >
       <div className={classes.leftContainer}>
@@ -47,13 +46,14 @@ const AccountItem = ({
         <div
           className={classes.accountDetails}
         >
-          <span className={classes.accountName}>
+          <span className={classes.accountName} data-testid={`account-name-${account.name}`}>
             {account.icnsData.reverseResolvedName ? account.icnsData.reverseResolvedName : account.name }
           </span>
         </div>
       </div>
       <div className={classes.rightContainer}>
         <IconButton
+          data-testid={`edit-button-${account.name}`}
           disabled={isHidden}
           onClick={(e) => handleEditAccount(e, account)}
         >

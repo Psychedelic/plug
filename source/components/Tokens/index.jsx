@@ -106,7 +106,7 @@ const Tokens = () => {
       <div
         onClick={() => setDisplayCustomToken(!displayCustomToken)}
         className={classes.buttonWrapper}
-        data-testid="add-custom-token-button"
+        data-testid="add-button"
       >
         <Plus size="30" className={classes.icon} strokeWidth={2.5} />
       </div>
