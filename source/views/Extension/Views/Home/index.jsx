@@ -80,7 +80,7 @@ const Home = () => {
     extension.tabs.query({ active: true, lastFocusedWindow: true }, (browserTabs) => {
       const currentTab = browserTabs?.[0];
       const url = getTabURL(currentTab);
-      const ids = state.wallets.map((_, idx) => idx);
+      const ids = Object.values(state.wallets).map((account) => account.walletId);
       setTab(currentTab);
       getWalletsConnectedToUrl(url, ids, (_connectedWallets = []) => {
         setConnectedWallets(_connectedWallets);
@@ -115,7 +115,7 @@ const Home = () => {
         isClockInSync().then((isInSync) => !isInSync && navigator.navigate('clockError'));
         validateProviderConnection(state);
       } else if (!migratedWalletId) {
-        state.wallets.forEach((wallet) => {
+        Object.values(state.wallets).forEach((wallet) => {
           updateWalletId(wallet.walletNumber, wallet.walletId);
         }); 
       }

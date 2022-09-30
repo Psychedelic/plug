@@ -36,8 +36,8 @@ const ConnectAccountsModal = ({
     getReverseResolvedNames();
   }, [wallets]);
 
-  const connectAccountToTab = (wallet) => {
-    getApps(wallet.walletNumber.toString(), (apps) => {
+  const connectAccountToTab = (walletId) => {
+    getApps(walletId.toString(), (apps) => {
       // If any other account is connected, create an entry for the current wallet
       const date = new Date().toISOString();
       const url = getTabURL(tab);
@@ -55,19 +55,30 @@ const ConnectAccountsModal = ({
           ],
         },
       };
-      setApps(wallet.walletNumber.toString(), newApps);
+      setApps(walletId.toString(), newApps);
     });
   };
 
+  const updateProviderConnection = async () => {
+    const currentWallet = wallets?.[walletId] || null;
+    if (currentWallet) {
+      extension.tabs.query({ active: true }, (activeTabs) => {
+        extension.tabs.sendMessage(activeTabs[0].id, { action: 'updateConnection' });
+      });
+    }
+  };
+
   const handleConfirm = () => {
-    Object.keys(walletsToUpdate).forEach((walletId) => connectAccountToTab(wallets[walletId], tab));
+    Object.keys(walletsToUpdate).forEach((walletId) => {
+      walletsToUpdate[walletId] && connectAccountToTab(walletId, tab)
+    });
     onConfirm?.();
     setWalletsToUpdate({});
     setSelectAllWallets(false);
     onClose();
   };
 
-  const onCheckWallet = (walletId) => (event) => {
+  const onCheckWallet = (event, walletId) => {
     setWalletsToUpdate({
       ...walletsToUpdate,
       [walletId]: event.target.checked,
@@ -77,7 +88,7 @@ const ConnectAccountsModal = ({
   const handleSelectAll = (event) => {
     const newWalletsToUpdate = {};
     wallets.forEach((wallet) => {
-      newWalletsToUpdate[wallet.walletNumber] = event.target.checked;
+      newWalletsToUpdate[wallet.walletId] = event.target.checked;
     });
     setSelectAllWallets(event.target.checked);
     setWalletsToUpdate(newWalletsToUpdate);
