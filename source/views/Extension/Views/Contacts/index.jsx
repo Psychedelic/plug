@@ -13,7 +13,7 @@ const Contacts = () => {
   } = useSteps();
   const dispatch = useDispatch();
 
-  useEffect(() => { dispatch(getContacts()) }, []);
+  useEffect(() => { dispatch(getContacts()); }, []);
 
   return (
     <Layout>
