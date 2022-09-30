@@ -36,8 +36,8 @@ const Step2 = () => {
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
       (state) => {
-        if (state?.wallets?.length) {
-          setAccounts(state.wallets);
+        if (Object.values(state?.wallets).length) {
+          setAccounts(Object.values(state.wallets));
           setSelectedAccountId(state.currentWalletId);
         }
       });

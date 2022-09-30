@@ -6,7 +6,6 @@ import extensionizer from 'extensionizer';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
-import { useContacts } from '@hooks';
 import { useICPPrice } from '@redux/icp';
 import {
   setAssets,
@@ -18,6 +17,7 @@ import {
 } from '@redux/wallet';
 import { getApps } from '@modules/storageManager';
 import { getCurrentNetwork, getNetworks } from '@redux/network';
+import { getContacts } from '@redux/contacts';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { TABS, useRouter } from '@components/Router';
 import RefreshAsset from '@assets/icons/refresh.svg';
@@ -29,7 +29,6 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
   const classes = useStyles();
   const icpPrice = useICPPrice();
   const dispatch = useDispatch();
-  const { getContacts } = useContacts();
   const { tabIndex } = disableNavigation ? {} : useRouter();
   const {
     principalId,
@@ -118,7 +117,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
 
     if (icpPrice) {
       // Contacts
-      getContacts(true);
+      dispatch(getContacts({ refresh: true }));
 
       loadAssets();
       loadCollections();

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux'
 import { Layout, Header } from '@components';
-import { useContacts } from '@hooks';
+import { getContacts } from '@redux/contacts';
 import useSteps from './hooks/useSteps';
 
 const Contacts = () => {
@@ -10,9 +11,9 @@ const Contacts = () => {
     right,
     center,
   } = useSteps();
-  const { getContacts } = useContacts();
+  const dispatch = useDispatch();
 
-  useEffect(getContacts, []);
+  useEffect(() => { dispatch(getContacts()) }, []);
 
   return (
     <Layout>

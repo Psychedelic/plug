@@ -381,7 +381,9 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.GET_CONTACTS]: async () => {
     try {
+      console.log('Calling get contacts');
       const res = await keyring.getContacts();
+      console.log('get contacts result in keyring', res);
       return res;
     } catch (e) {
       // eslint-disable-next-line
@@ -485,6 +487,7 @@ export const getContacts = () => new Promise((resolve, reject) => {
   sendMessage({
     type: HANDLER_TYPES.GET_CONTACTS,
   }, (contactList) => {
+    console.log('get contacts in keyring', contactList);
     if (contactList) return resolve(contactList);
     return reject(contactList);
   });

@@ -1,18 +1,21 @@
 import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { getContacts } from '@redux/contacts';
 import { Layout, Header } from '@components';
-import { useContacts } from '@hooks';
 import useSteps from './hooks/useSteps';
 
 const Send = () => {
-  const { getContacts } = useContacts();
   const {
     component,
     left,
     right,
     center,
   } = useSteps();
+  const dispatch = useDispatch();
 
-  useEffect(getContacts, []);
+  useEffect(() => {
+    dispatch(getContacts());
+  }, []);
 
   return (
     <Layout>

@@ -2,9 +2,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { buildContactObject, parseContactFromDab } from '@shared/utils/contacts';
 import {
-  setDabContacts as setLocalDabContacts,
-} from '@modules/storageManager';
-import {
   getContacts as callGetContacts,
   addContact as callAddContact,
   deleteContact as callRemoveContact,
@@ -57,7 +54,9 @@ const groupContacts = (contacts) => (
 const getContacts = createAsyncThunk(
   'contacts/getContacts',
   async () => {
+    callGetContacts().then(console.log);
     const contacts = await callGetContacts();
+    console.log('get contacts async ->', contacts);
     return contacts.map(parseContactFromDab);
   },
 );
@@ -96,8 +95,6 @@ export const contactSlice = createSlice({
         const contact = action.meta.arg;
         const newContactList = [...state.contacts, contact];
 
-        setLocalDabContacts(newContactList);
-
         state.contacts = newContactList;
         state.groupedContacts = groupContacts(newContactList);
       })
@@ -105,40 +102,31 @@ export const contactSlice = createSlice({
         const contact = action.meta.arg;
         const filteredContacts = state.contacts.filter((c) => c.id === contact.id);
 
-        setLocalDabContacts(filteredContacts);
-
         state.contacts = filteredContacts;
         state.groupedContacts = groupContacts(filteredContacts);
       })
       .addCase(getContacts.pending, (state, action) => {
-        state.contactsLoading = true;
         if (action.meta.arg.refresh) {
           state.contacts = [];
           state.groupedContacts = [];
-          setLocalDabContacts([]);
-        } else {
-          state.contacts = action.meta.arg.localContacts;
-          state.groupedContacts = groupContacts(action.meta.arg.localContacts);
         }
+        state.contactsLoading = true;
       })
       .addCase(getContacts.fulfilled, (state, action) => {
         let newContactList = [
           ...state?.contacts,
           ...action?.payload,
-          ...action.meta.arg?.localContacts,
         ];
         newContactList = filterContactsById(newContactList);
-        setLocalDabContacts(newContactList);
 
         state.contacts = newContactList;
         state.groupedContacts = groupContacts(newContactList);
+        console.log('setting false to contacts loading');
         state.contactsLoading = false;
       })
       .addCase(removeContact.pending, (state, action) => {
         const contact = action.meta.arg;
         const filteredContacts = state.contacts.filter((c) => c.name !== contact.name);
-
-        setLocalDabContacts(filteredContacts);
 
         state.contacts = filteredContacts;
         state.groupedContacts = groupContacts(filteredContacts);
@@ -147,8 +135,6 @@ export const contactSlice = createSlice({
         const contact = action.meta.arg;
 
         const newContactList = [...state.contacts, contact];
-
-        setLocalDabContacts(newContactList);
 
         state.contacts = newContactList;
         state.groupedContacts = groupContacts(newContactList);
