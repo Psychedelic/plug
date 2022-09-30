@@ -4,7 +4,6 @@ export const getContacts = () => new Promise((resolve, reject) => {
   sendMessage({
     type: HANDLER_TYPES.GET_CONTACTS,
   }, (contactList) => {
-    console.log('contactList ->', contactList);
     if (contactList) return resolve(contactList);
     return reject(contactList);
   });

@@ -54,9 +54,7 @@ const groupContacts = (contacts) => (
 const getContacts = createAsyncThunk(
   'contacts/getContacts',
   async () => {
-    callGetContacts().then(console.log);
     const contacts = await callGetContacts();
-    console.log('get contacts async ->', contacts);
     return contacts.map(parseContactFromDab);
   },
 );
@@ -87,6 +85,7 @@ export const contactSlice = createSlice({
     contacts: [],
     groupedContacts: [],
     contactsLoading: false,
+    pendingDelete: false,
   },
   reducers: { },
   extraReducers: (builder) => {
@@ -106,36 +105,43 @@ export const contactSlice = createSlice({
         state.groupedContacts = groupContacts(filteredContacts);
       })
       .addCase(getContacts.pending, (state, action) => {
-        if (action.meta.arg.refresh) {
+        if (action.meta.arg?.refresh) {
           state.contacts = [];
           state.groupedContacts = [];
         }
         state.contactsLoading = true;
       })
       .addCase(getContacts.fulfilled, (state, action) => {
-        let newContactList = [
-          ...state?.contacts,
-          ...action?.payload,
-        ];
-        newContactList = filterContactsById(newContactList);
+        // Doesn't update contact list if removeContact is pending
+        if (!state.pendingDelete) {
+          let newContactList = [
+            ...state?.contacts,
+            ...action?.payload,
+          ];
+          newContactList = filterContactsById(newContactList);
 
-        state.contacts = newContactList;
-        state.groupedContacts = groupContacts(newContactList);
-        console.log('setting false to contacts loading');
+          state.contacts = newContactList;
+          state.groupedContacts = groupContacts(newContactList);
+        }
         state.contactsLoading = false;
       })
       .addCase(removeContact.pending, (state, action) => {
         const contact = action.meta.arg;
         const filteredContacts = state.contacts.filter((c) => c.name !== contact.name);
 
+        state.pendingDelete = true;
         state.contacts = filteredContacts;
         state.groupedContacts = groupContacts(filteredContacts);
+      })
+      .addCase(removeContact.fulfilled, (state, action) => {
+        state.pendingDelete = false;
       })
       .addCase(removeContact.rejected, (state, action) => {
         const contact = action.meta.arg;
 
         const newContactList = [...state.contacts, contact];
 
+        state.pendingDelete = false;
         state.contacts = newContactList;
         state.groupedContacts = groupContacts(newContactList);
       });
