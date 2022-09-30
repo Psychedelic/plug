@@ -21,7 +21,7 @@ const Step2 = () => {
 
   const handleCloseAccounts = (value) => {
     setOpenAccounts(false);
-    setSelectedAccountId(value.walletNumber);
+    setSelectedAccountId(value.walletId);
   };
 
   const handleDownloadPemFile = () => {
@@ -37,7 +37,7 @@ const Step2 = () => {
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
       (state) => {
         if (Object.values(state?.wallets).length) {
-          setAccounts(Object.values(state.wallets));
+          setAccounts(state.wallets);
           setSelectedAccountId(state.currentWalletId);
         }
       });
@@ -66,7 +66,7 @@ const Step2 = () => {
           />
           <Dialog
             title={t('exportIdentity.selectAccount')}
-            items={accounts.map((a) => ({
+            items={Object.values(accounts).map((a) => ({
               ...a,
               icon: <UserIcon size="small" icon={a.icon} style={{ marginLeft: -6, marginRight: 12 }} />,
               endText: shortAddress(a.principal),
