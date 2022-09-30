@@ -14,16 +14,25 @@ const Step1 = ({handleChangeStep}) => {
 
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  
-  const onDrop = useCallback(acceptedFiles => {
-    console.log(acceptedFiles);
-  }, [])
+
+  const onDrop = useCallback(acceptedFile => {
+    let fileReader = new FileReader();
+    fileReader.readAsText(acceptedFile[0]);
+    fileReader.onloadend = () => {
+      const content = fileReader.result;
+      console.log(content);
+    };
+  }, []);
 
   const {
     getRootProps,
     getInputProps,
     isDragActive,
-  } = useDropzone({ onDrop });
+  } = useDropzone({ onDrop,
+    maxFiles: 1,
+    accept: {
+    'application/x-pem-file': ['.pem'],
+  } });
 
   return (
     <Container>
