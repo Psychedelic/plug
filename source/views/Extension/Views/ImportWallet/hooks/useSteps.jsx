@@ -11,15 +11,19 @@ const useSteps = () => {
   const { navigator } = useRouter();
   const { t } = useTranslation();
 
+  const [userPemFile, setUserPemFile] = useState(null);
+
   const handleChangeStep = (index) => setStep(index);
   const handleClose = () => navigator.navigate('home');
 
   const leftButton = (onClick) => <LinkButton value={t('common.back')} onClick={onClick} startIcon={BackIcon} />;
   const rightButton = <LinkButton value={t('common.close')} onClick={handleClose} />;
 
+
+
   const steps = [
     {
-      component: <Step1 handleChangeStep={handleChangeStep} />,
+      component: <Step1 handleChangeStep={handleChangeStep} setUserPemFile={setUserPemFile} userPemFile={userPemFile} />,
       left: leftButton(() => handleClose()),
       right: rightButton,
       center: `${t("importPem.importPEMfile")}`,

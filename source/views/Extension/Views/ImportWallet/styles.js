@@ -62,6 +62,7 @@ export default makeStyles((theme) => ({
     alignItems: 'center',
     marginTop: 12,
     gap: 4,
+    zIndex: 100,
   },
   dragDropIcon: {
     color: '#BBBEC2',
