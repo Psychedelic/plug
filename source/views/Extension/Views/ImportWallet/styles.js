@@ -1,5 +1,4 @@
 import { makeStyles } from '@material-ui/core/styles';
-import zIndex from '@material-ui/core/styles/zIndex';
 
 export default makeStyles((theme) => ({
   dragDropContainer: {

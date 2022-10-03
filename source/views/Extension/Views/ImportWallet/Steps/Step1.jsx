@@ -18,11 +18,15 @@ const Step1 = ({ handleChangeStep, setUserPemFile, userPemFile }) => {
   const [disabled, setDisabled] = useState(false);
 
   const handleRemoveFile = () => {
+    setDisabled(false);
     setUserPemFile(null);
   };
 
   const onDrop = useCallback((acceptedFile) => {
+    setLoading(true);
     setUserPemFile(acceptedFile[0]);
+    setDisabled(true);
+    setLoading(false);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
