@@ -3,11 +3,12 @@ import Grid from '@material-ui/core/Grid';
 import useStyles from '../styles';
 import React, { useState } from 'react';
 import { useRouter } from '@components/Router';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import Picker from 'emoji-picker-react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const Step2 = () => {
+const Step2 = ({ userPemFile }) => {
   const { t } = useTranslation();
 
   const [loading, setLoading] = useState(false);
@@ -21,6 +22,14 @@ const Step2 = () => {
   
 
   const classes = useStyles();
+  
+    useEffect(() => {
+      if (walletName && walletName !== "") {
+        setDisabled(true);
+      } else {
+        setDisabled(false);
+      }
+    }, [currentEmoji, walletName]);
 
   const onEmojiClick = (_event, emojiObject) => {
     setCurrentEmoji(emojiObject.emoji);
@@ -28,14 +37,33 @@ const Step2 = () => {
     setOpenEmojiSelector(false);
   };
 
-  useEffect(() => {
-    if (walletName && walletName !== "") {
-      setDisabled(true);
-    } else {
-      setDisabled(false);
-    }
-  }, [currentEmoji, walletName]);
+  const createImportedAccount = (pemContent) => {
+    console.log(pemContent)
+    sendMessage({
+      type: HANDLER_TYPES.IMPORT_PEM_ACCOUNT,
+      params: {icon: currentEmoji, name: walletName, pem: pemContent},
+    },
+    (newWallet) => {
+      if (newWallet) {
+        setAccounts([...accounts, newWallet]);
+      }
+      setAccountName('');
+      setOpenCreateAccount(false);
+    });
+    setLoading(false);
+    navigator.navigate('home');
+  }
 
+  const readPemCreateAccount = () => {
+    setLoading(true);
+    setDisabled(true);
+    let fileReader = new FileReader();
+    fileReader.readAsText(userPemFile);
+    fileReader.onloadend = () => {
+      const content = fileReader.result; // we should check what happens if the user pass an empty pem file
+      createImportedAccount(content);
+    };
+  }
 
   return (
     <Container>
@@ -87,7 +115,7 @@ const Step2 = () => {
           <Button
             variant="rainbow"
             value={t('common.save')}
-            onClick={() => navigator.navigate('home')}
+            onClick={() => readPemCreateAccount()}
             loading={loading}
             disabled={!disabled}
             fullWidth

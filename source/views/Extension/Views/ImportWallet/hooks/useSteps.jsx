@@ -31,6 +31,7 @@ const useSteps = () => {
     {
       component: <Step2
         handleClose={handleClose}
+        userPemFile={userPemFile}
       />,
       right: rightButton,
       center: `${t("importPem.walletDetails")}`,

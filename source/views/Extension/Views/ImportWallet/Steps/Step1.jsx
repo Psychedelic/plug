@@ -1,6 +1,5 @@
 import { Container, Button } from "@components";
 import React, { useState, useCallback, useEffect } from "react";
-import DragDropBox from "../components/DragDropBox";
 import { useTranslation } from "react-i18next";
 import { useDropzone } from "react-dropzone";
 import useStyles from "../styles";
