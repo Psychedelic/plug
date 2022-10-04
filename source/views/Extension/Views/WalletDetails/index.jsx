@@ -21,8 +21,8 @@ import {
   updateWalletDetails,
 } from '@redux/wallet';
 import { useICPPrice } from '@redux/icp';
+import { getContacts } from '@redux/contacts';
 import { setICNSData, setUseICNS as setReduxUseICNS } from '@redux/icns';
-import { useContacts } from '@hooks';
 
 import BlueCheck from '@assets/icons/blue-check.svg';
 import Pencil from '@assets/icons/pencil.svg';
@@ -52,7 +52,6 @@ const WalletDetails = () => {
     names: reduxNames,
   } = useSelector((state) => state.icns);
   const dispatch = useDispatch();
-  const { getContacts } = useContacts();
   const icpPrice = useICPPrice();
 
   const { editAccount } = useSelector((state) => state.profile);
@@ -253,7 +252,7 @@ const WalletDetails = () => {
         if (Object.values(state?.wallets).length) {
           const newWallet = state.wallets[state.currentWalletId];
           dispatch(setAccountInfo(newWallet));
-          getContacts();
+          dipatch(getContacts());
           dispatch(setICNSData(newWallet.icnsData));
           dispatch(setAssetsLoading(true));
           dispatch(setTransactions([]));

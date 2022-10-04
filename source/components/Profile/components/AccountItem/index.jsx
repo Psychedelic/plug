@@ -22,12 +22,12 @@ const AccountItem = ({
   const hiddenAccounts = useHiddenAccounts();
   const dispatch = useDispatch();
 
-  const isHidden = hiddenAccounts.includes(account.walletNumber);
+  const isHidden = hiddenAccounts.includes(account.walletId);
 
-  const toggleAccountVisibility = (account) => (e) => {
+  const toggleAccountVisibility = (e, walletId) => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch(toggleAccountHidden(account));
+    dispatch(toggleAccountHidden(walletId));
   };
 
   if (isHidden && !isEditing) return null;
@@ -64,7 +64,7 @@ const AccountItem = ({
         </IconButton>
         { isEditing && (
           <IconButton
-            onClick={toggleAccountVisibility(account.walletNumber)}
+            onClick={(e) => { toggleAccountVisibility(e, account.walletId) }}
           >
             <img src={isHidden ? InvisibleIcon : VisibleIcon} />
           </IconButton>
