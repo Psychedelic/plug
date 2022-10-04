@@ -216,7 +216,7 @@ const WalletDetails = () => {
   const handleChangeAccount = () => {
     extensionizer.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
       const url = getTabURL(tabs?.[0]);
-      const ids = accounts.map((_, idx) => idx);
+      const ids = accounts.map((account) => account.walletId);
       setTab(tabs?.[0]);
       // Check if new wallet is connected to the current page
       setAccountSwitchId(walletId);
