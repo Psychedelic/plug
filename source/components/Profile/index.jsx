@@ -25,7 +25,8 @@ import { getWalletsConnectedToUrl, getApp } from '@modules/storageManager';
 import { setEditAccount, toggleAccountHidden, useHiddenAccounts } from '@redux/profile';
 import { setICNSData } from '@redux/icns';
 import { useICPPrice } from '@redux/icp';
-import { useMenuItems, useContacts } from '@hooks';
+import { getContacts } from '@redux/contacts';
+import { useMenuItems } from '@hooks';
 import ConnectAccountsModal from '../ConnectAccountsModal';
 import HoverAnimation from '../HoverAnimation';
 import MenuItem from '../MenuItem';
@@ -59,7 +60,6 @@ const Profile = ({ disableProfile }) => {
   const [accountName, setAccountName] = useState('');
   const [error, setError] = useState(null);
   const [connectedWallets, setConnectedWallets] = useState([]);
-  const { getContacts } = useContacts();
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -119,7 +119,7 @@ const Profile = ({ disableProfile }) => {
         if (walletsArray.length) {
           const newWallet = state.wallets[state.currentWalletId];
           dispatch(setAccountInfo(newWallet));
-          getContacts();
+          dispatch(getContacts());
           dispatch(setICNSData(newWallet.icnsData));
           dispatch(setAssetsLoading(true));
           dispatch(setTransactions([]));
@@ -149,7 +149,7 @@ const Profile = ({ disableProfile }) => {
     setSelectedWallet(wallet);
     extensionizer.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
       const url = getTabURL(tabs?.[0]);
-      const ids = accounts.map((_, idx) => idx);
+      const ids = accounts.map((account) => account.walletId);
       setTab(tabs?.[0]);
       // Check if new wallet is connected to the current page
       getWalletsConnectedToUrl(url, ids, async (wallets = []) => {

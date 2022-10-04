@@ -159,12 +159,12 @@ export const getWalletsConnectedToUrl = (url, walletIds, cb) => {
     return;
   }
 
-  walletIds.forEach((id) => {
+  walletIds.forEach((id, index) => {
     getApp(id.toString(), url, (app = {}) => {
       if (app?.status === CONNECTION_STATUS.accepted) {
         wallets.push(id);
       }
-      if (id === walletIds.length - 1) {
+      if (index === walletIds.length - 1) {
         cb(wallets);
       }
     });

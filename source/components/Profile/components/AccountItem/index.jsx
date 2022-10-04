@@ -6,7 +6,6 @@ import { useHiddenAccounts, toggleAccountHidden } from '@redux/profile';
 
 import BluePencil from '@assets/icons/blue-pencil.svg';
 import InvisibleIcon from '@assets/icons/invisible.svg';
-import SwitchAccount from '@assets/icons/switch-account.svg';
 import VisibleIcon from '@assets/icons/visible.svg';
 
 import UserIcon from '../../../UserIcon';
@@ -23,12 +22,12 @@ const AccountItem = ({
   const hiddenAccounts = useHiddenAccounts();
   const dispatch = useDispatch();
 
-  const isHidden = hiddenAccounts.includes(account.walletNumber);
+  const isHidden = hiddenAccounts.includes(account.walletId);
 
-  const toggleAccountVisibility = (account) => (e) => {
+  const toggleAccountVisibility = (e, walletId) => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch(toggleAccountHidden(account));
+    dispatch(toggleAccountHidden(walletId));
   };
 
   if (isHidden && !isEditing) return null;
@@ -36,8 +35,7 @@ const AccountItem = ({
   return (
     <div
       className={clsx(classes.accountItemContainer, isHidden && classes.hiddenAccount)}
-      itemNameTestId="account-name"
-      onClick={(e) => handleEditAccount(e, account)}
+      onClick={(e) => handleChangeAccount(e, account.walletId)}
     >
       <div className={classes.leftContainer}>
         <UserIcon
@@ -48,22 +46,14 @@ const AccountItem = ({
         <div
           className={classes.accountDetails}
         >
-          <span className={classes.accountName}>
+          <span className={classes.accountName} data-testid={`account-name-${account.name}`}>
             {account.icnsData.reverseResolvedName ? account.icnsData.reverseResolvedName : account.name }
           </span>
         </div>
       </div>
       <div className={classes.rightContainer}>
         <IconButton
-          disabled={isCurrentAccount || isHidden}
-          onClick={(e) => handleChangeAccount(e, account.walletId)}
-        >
-          <img
-            className={clsx((isCurrentAccount || isHidden) && classes.disabledIcon)}
-            src={SwitchAccount}
-          />
-        </IconButton>
-        <IconButton
+          data-testid={`edit-button-${account.name}`}
           disabled={isHidden}
           onClick={(e) => handleEditAccount(e, account)}
         >
@@ -74,7 +64,7 @@ const AccountItem = ({
         </IconButton>
         { isEditing && (
           <IconButton
-            onClick={toggleAccountVisibility(account.walletNumber)}
+            onClick={(e) => { toggleAccountVisibility(e, account.walletId) }}
           >
             <img src={isHidden ? InvisibleIcon : VisibleIcon} />
           </IconButton>

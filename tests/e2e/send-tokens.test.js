@@ -21,6 +21,11 @@ const waitForBalanceChange = async (page) => {
   await page.waitForTimeout(40000);
 };
 
+const addButtonClick = async (page) => {
+  const addTokenButton = await page.getByTestId('add-button', true);
+  await addTokenButton.click();
+};
+
 const addCustomTokenButtonClick = async (page) => {
   const addCustomTokenButton = await page.getByTestId('add-custom-token-button', true);
   await addCustomTokenButton.click();
@@ -72,6 +77,7 @@ const selectNetworkCardClick = async (page, name) => {
 };
 
 async function addCustomToken(page, { name, canisterId, standard }) {
+  await addButtonClick(page);
   await addCustomTokenButtonClick(page);
   await addCustomTokenTabItemClick(page, 'Custom');
 
@@ -316,6 +322,7 @@ describe('Send Custom Tokens', () => {
   });
 
   test('entering wrong token standard', async () => {
+    await addButtonClick(page);
     await addCustomTokenButtonClick(page);
 
     for (const { canisterId, standard } of wrongTokenData) {
@@ -362,6 +369,7 @@ describe('Send Custom Tokens', () => {
   });
 
   test('entering wrong custom token canister ID ', async () => {
+    await addButtonClick(page);
     await addCustomTokenButtonClick(page);
     await addCustomTokenTabItemClick(page, 'Custom');
 

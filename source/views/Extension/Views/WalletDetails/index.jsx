@@ -21,8 +21,8 @@ import {
   updateWalletDetails,
 } from '@redux/wallet';
 import { useICPPrice } from '@redux/icp';
+import { getContacts } from '@redux/contacts';
 import { setICNSData, setUseICNS as setReduxUseICNS } from '@redux/icns';
-import { useContacts } from '@hooks';
 
 import BlueCheck from '@assets/icons/blue-check.svg';
 import Pencil from '@assets/icons/pencil.svg';
@@ -52,7 +52,6 @@ const WalletDetails = () => {
     names: reduxNames,
   } = useSelector((state) => state.icns);
   const dispatch = useDispatch();
-  const { getContacts } = useContacts();
   const icpPrice = useICPPrice();
 
   const { editAccount } = useSelector((state) => state.profile);
@@ -217,7 +216,7 @@ const WalletDetails = () => {
   const handleChangeAccount = () => {
     extensionizer.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
       const url = getTabURL(tabs?.[0]);
-      const ids = accounts.map((_, idx) => idx);
+      const ids = accounts.map((account) => account.walletId);
       setTab(tabs?.[0]);
       // Check if new wallet is connected to the current page
       setAccountSwitchId(walletId);
@@ -253,7 +252,7 @@ const WalletDetails = () => {
         if (Object.values(state?.wallets).length) {
           const newWallet = state.wallets[state.currentWalletId];
           dispatch(setAccountInfo(newWallet));
-          getContacts();
+          dipatch(getContacts());
           dispatch(setICNSData(newWallet.icnsData));
           dispatch(setAssetsLoading(true));
           dispatch(setTransactions([]));
@@ -354,7 +353,6 @@ const WalletDetails = () => {
                 { walletId !== activeWalletId && (
                   <button
                     type="button"
-                    data-testid="edit-icon-button"
                     onClick={handleChangeAccount}
                   >
                     <img
@@ -364,6 +362,7 @@ const WalletDetails = () => {
                 )}
                 {
                   <button
+                    data-testid="edit-icon-button"
                     type="button"
                     onClick={openEditWalletName}
                   >
