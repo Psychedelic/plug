@@ -53,7 +53,7 @@ const NFTDetails = () => {
     [collections, populatedNFT]);
 
   const name = `${populatedNFT?.name ?? `#${populatedNFT?.index}`}`;
-  const isICNS = collection === 'ICNS';
+  const isICNS = collection?.name === 'ICNS';
 
   const openNFT = (url) => {
     const parsedUrl = isICNS
