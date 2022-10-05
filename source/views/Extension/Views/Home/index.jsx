@@ -98,7 +98,8 @@ const Home = () => {
   };
 
   const updateProviderConnection = async () => {
-    const currentWallet = wallets?.[walletId] || null;
+    const currentWallet = wallets.find(w => w.walletId === walletId) || null;
+
     if (currentWallet) {
       extension.tabs.query({ active: true }, (activeTabs) => {
         extension.tabs.sendMessage(activeTabs[0].id, { action: 'updateConnection' });
@@ -130,7 +131,18 @@ const Home = () => {
     getUseICNS(walletId, (useICNS) => {
       dispatch(setUseICNS(useICNS));
     });
+    updateProviderConnection();
   }, [walletId]);
+
+  useEffect(() => {
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
+      (state) => {
+        const walletsArray = Object.values(state?.wallets);
+        if (walletsArray?.length) {
+          setWallets(walletsArray);
+        }
+      });
+  }, []);
 
   return (
     <Layout>
