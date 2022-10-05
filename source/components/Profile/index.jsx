@@ -22,7 +22,7 @@ import {
 import { getRandomEmoji } from '@shared/constants/emojis';
 import { getTabURL } from '@shared/utils/chrome-tabs';
 import { getWalletsConnectedToUrl, getApp } from '@modules/storageManager';
-import { setEditAccount, toggleAccountHidden, useHiddenAccounts } from '@redux/profile';
+import { setEditAccount } from '@redux/profile';
 import { setICNSData } from '@redux/icns';
 import { useICPPrice } from '@redux/icp';
 import { getContacts } from '@redux/contacts';
@@ -112,9 +112,9 @@ const Profile = ({ disableProfile }) => {
   };
 
   const executeAccountSwitch = (wallet) => {
-    dispatch(setCollections({ collections: [], principalId }));
     sendMessage({ type: HANDLER_TYPES.SET_CURRENT_PRINCIPAL, params: wallet },
       (state) => {
+        console.log('state on account switch from profile', state);
         const walletsArray = Object.values(state?.wallets);
         if (walletsArray.length) {
           const newWallet = state.wallets[state.currentWalletId];

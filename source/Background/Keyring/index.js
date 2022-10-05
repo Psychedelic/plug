@@ -157,6 +157,15 @@ export const sendMessage = (args, callback) => {
   });
 };
 
+export const asyncSendMessage = (args, callback) => new Promise((resolve) => {
+  sendMessage(args, (response) => {
+    if (callback) {
+      callback(response);
+    }
+    resolve(response);
+  });
+});
+
 export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.LOCK]: async () => keyring.lock(),
   [HANDLER_TYPES.UNLOCK]: async (params) => {
@@ -291,9 +300,10 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.ADD_CUSTOM_NFT]:
     async ({ canisterId, standard }) => {
       try {
-        const nfts = await keyring.registerNFT({
+        await keyring.registerNFT({
           canisterId, standard,
         });
+        const nfts = await keyring.getNFTs({ refresh: true });
         return (nfts || []).map((nft) => recursiveParseBigint(nft));
       } catch (e) {
         // eslint-disable-next-line
@@ -328,14 +338,15 @@ export const getKeyringHandler = (type, keyring) => ({
         return { error: e.message };
       }
     },
-  [HANDLER_TYPES.GET_NFTS]: async ({ refresh = false }) => {
+  [HANDLER_TYPES.GET_NFTS]: async ({ refresh } = { refresh: false }) => {
     const collections = await keyring.getNFTs({ refresh });
     return (collections || [])?.map((collection) => recursiveParseBigint(collection));
   },
   [HANDLER_TYPES.TRANSFER_NFT]: async ({ to, nft }) => {
     try {
-      const response = await keyring.transferNFT({ to, token: nft });
-      return recursiveParseBigint(response);
+      await keyring.transferNFT({ to, token: nft });
+      const nfts = await keyring.getNFTs({ refresh: true });
+      return recursiveParseBigint(nfts);
     } catch (e) {
       // eslint-disable-next-line
       console.log('Error transfering NFT', e);

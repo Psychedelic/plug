@@ -22,30 +22,12 @@ const Step2 = ({ selectedToken, handleClose }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
 
-  const { principalId } = useSelector((state) => state.wallet);
+  const { collectionsLoading } = useSelector((state) => state.nfts);
 
   const registerToken = () => {
-    setLoading(true);
-    sendMessage({
-      type: HANDLER_TYPES.ADD_CUSTOM_NFT,
-      params: selectedToken,
-    }, async () => {
-      sendMessage({
-        type: HANDLER_TYPES.GET_NFTS,
-        params: { refresh: true },
-      },
-        (nftCollections) => {
-          if (nftCollections?.length) {
-            dispatch(setCollections({ collections: nftCollections, principalId }));
-          }
-          dispatch(setCollectionsLoading(false));
-          setLoading(false);
-          handleClose();
-        }
-      );
-    });
+    dispatch(registerNFT(selectedToken));
+    handleClose();
   };
 
   return (
@@ -70,7 +52,7 @@ const Step2 = ({ selectedToken, handleClose }) => {
             variant="rainbow"
             value={t('common.add')}
             onClick={registerToken}
-            loading={loading}
+            loading={collectionsLoading}
             disabled={loading}
             fullWidth
             data-testid="add-button"
