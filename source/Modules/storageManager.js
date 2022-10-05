@@ -27,7 +27,7 @@ export const getApps = (currentWalletId, cb) => {
   const defaultValue = {};
 
   secureGetWrapper(currentWalletId, defaultValue, (state) => (
-    cb(state?.[parseInt(currentWalletId, 10)]?.apps || defaultValue)
+    cb(state?.[currentWalletId]?.apps || defaultValue)
   ));
 };
 
@@ -35,7 +35,7 @@ export const getApp = (currentWalletId, appUrl, cb) => {
   const defaultValue = {};
 
   secureGetWrapper(currentWalletId, defaultValue, (state) => {
-    cb(state?.[parseInt(currentWalletId, 10)]?.apps?.[appUrl] || defaultValue);
+    cb(state?.[currentWalletId]?.apps?.[appUrl] || defaultValue);
   });
 };
 
@@ -123,7 +123,7 @@ export const setUseICNS = (useICNS, walletNumber, cb = () => {}) => {
   const defaultValue = true;
 
   secureGetWrapper('icns', defaultValue, (state) => {
-    cb(state?.icns?.[parseInt(walletNumber, 10)] ?? defaultValue);
+    cb(state?.icns?.[walletNumber] ?? defaultValue);
     secureSetWrapper({
       icns: {
         ...state?.icns,
@@ -136,7 +136,7 @@ export const setUseICNS = (useICNS, walletNumber, cb = () => {}) => {
 export const getUseICNS = (walletNumber, cb) => {
   const defaultValue = true;
   secureGetWrapper('icns', defaultValue, (state) => {
-    cb(state?.icns?.[parseInt(walletNumber, 10)] ?? defaultValue);
+    cb(state?.icns?.[walletNumber] ?? defaultValue);
   });
 };
 
@@ -154,12 +154,17 @@ export const getBatchTransactions = (cb) => {
 
 export const getWalletsConnectedToUrl = (url, walletIds, cb) => {
   const wallets = [];
-  walletIds.forEach((id) => {
+  if (!walletIds.length) {
+    cb([]);
+    return;
+  }
+
+  walletIds.forEach((id, index) => {
     getApp(id.toString(), url, (app = {}) => {
       if (app?.status === CONNECTION_STATUS.accepted) {
         wallets.push(id);
       }
-      if (id === walletIds.length - 1) {
+      if (index === walletIds.length - 1) {
         cb(wallets);
       }
     });
@@ -201,4 +206,13 @@ export const removePendingTransaction = (transactionId, cb) => {
 
 export const resetPendingTransactions = () => {
   secureSetWrapper({ activeTransactions: { } }, {}, () => {});
+};
+
+export const updateWalletId = (previousWalletId, newWalletId) => {
+  getApps(previousWalletId, (apps) => {
+    setApps(newWalletId, apps);
+  });
+  getUseICNS(previousWalletId, (result) => {
+    setUseICNS(newWalletId, result);
+  });
 };

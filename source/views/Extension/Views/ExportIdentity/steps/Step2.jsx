@@ -14,18 +14,18 @@ import { useSelector } from 'react-redux';
 const Step2 = () => {
   const { t } = useTranslation();
   const [accounts, setAccounts] = useState([]);
-  const [selectedAccountNumber, setSelectedAccountNumber] = useState(null);
+  const [selectedAccountId, setSelectedAccountId] = useState(null);
   const [openAccounts, setOpenAccounts] = useState(false);
 
   const { name } = useSelector((state) => state.wallet);
 
   const handleCloseAccounts = (value) => {
     setOpenAccounts(false);
-    setSelectedAccountNumber(value.walletNumber);
+    setSelectedAccountId(value.walletId);
   };
 
   const handleDownloadPemFile = () => {
-    sendMessage({ type: HANDLER_TYPES.GET_PEM_FILE, params: selectedAccountNumber },
+    sendMessage({ type: HANDLER_TYPES.GET_PEM_FILE, params: selectedAccountId },
       (state) => {
         if (state) {
           download(`${name}.pem`, state);
@@ -36,14 +36,14 @@ const Step2 = () => {
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
       (state) => {
-        if (state?.wallets?.length) {
+        if (Object.values(state?.wallets).length) {
           setAccounts(state.wallets);
-          setSelectedAccountNumber(state.currentWalletId);
+          setSelectedAccountId(state.currentWalletId);
         }
       });
   }, []);
 
-  const selectedAccount = accounts[selectedAccountNumber];
+  const selectedAccount = accounts[selectedAccountId];
 
   return (
     <Container>
@@ -66,7 +66,7 @@ const Step2 = () => {
           />
           <Dialog
             title={t('exportIdentity.selectAccount')}
-            items={accounts.map((a) => ({
+            items={Object.values(accounts).map((a) => ({
               ...a,
               icon: <UserIcon size="small" icon={a.icon} style={{ marginLeft: -6, marginRight: 12 }} />,
               endText: shortAddress(a.principal),

@@ -6,7 +6,6 @@ import { useHiddenAccounts, toggleAccountHidden } from '@redux/profile';
 
 import BluePencil from '@assets/icons/blue-pencil.svg';
 import InvisibleIcon from '@assets/icons/invisible.svg';
-import SwitchAccount from '@assets/icons/switch-account.svg';
 import VisibleIcon from '@assets/icons/visible.svg';
 import MoreHoriz from '@material-ui/icons/MoreHoriz';
 import RemoveCircleOutline from '@material-ui/icons/RemoveCircleOutline';
@@ -27,7 +26,7 @@ const AccountItem = ({
   const hiddenAccounts = useHiddenAccounts();
   const dispatch = useDispatch();
 
-  const isHidden = hiddenAccounts.includes(account.walletNumber);
+  const isHidden = hiddenAccounts.includes(account.walletId);
 
   const isPrincipalAccount = walletNumber === 0;
 
@@ -36,7 +35,7 @@ const AccountItem = ({
   const toggleAccountVisibility = (account) => (e) => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch(toggleAccountHidden(account));
+    dispatch(toggleAccountHidden(walletId));
   };
 
   if (isHidden && !isEditing) return null;
