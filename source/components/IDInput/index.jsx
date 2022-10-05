@@ -8,9 +8,8 @@ import { useTranslation } from 'react-i18next';
 
 import { CircularProgress, Grid } from '@material-ui/core';
 import { getRandomEmoji } from '@shared/constants/emojis';
-import { addContact as addContactAction } from '@redux/contacts';
+import { getContacts, addContact as addContactAction } from '@redux/contacts';
 
-import { useContacts } from '@hooks';
 import ActionDialog from '../ActionDialog';
 import ContactItem from '../ContactItem';
 import ContactList from '../ContactList';
@@ -26,7 +25,6 @@ const IDInput = ({
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { getContacts } = useContacts();
 
   const dispatch = useDispatch();
   const [selectedContact, setSelectedContact] = useState(null);
@@ -39,7 +37,7 @@ const IDInput = ({
   const { contactsLoading } = useSelector((state) => state.contacts);
 
   useEffect(() => {
-    getContacts();
+   dispatch(getContacts());
   }, []);
 
   const isUserAddress = useMemo(

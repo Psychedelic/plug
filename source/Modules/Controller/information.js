@@ -28,13 +28,13 @@ export class InformationModule extends ControllerModuleBase {
     ];
   }
 
-  async #internalRequestBalance(accountId, callback) {
+  async #internalRequestBalance(subaccount, callback, portConfig) {
     const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, this.keyring);
-    const icpBalance = await getBalance(accountId);
-    if (icpBalance.error) {
-      callback(ERRORS.SERVER_ERROR(icpBalance.error), null);
+    const balances = await getBalance(subaccount);
+    if (balances?.error) {
+      callback(ERRORS.GET_BALANCE_ERROR, null, portConfig);
     } else {
-      callback(null, icpBalance);
+      callback(null, balances, portConfig);
     }
   }
 
@@ -44,14 +44,10 @@ export class InformationModule extends ControllerModuleBase {
       methodName: 'requestBalance',
       handler: async (opts, metadata, subaccount, transactionId) => {
         const { callback, message, sender } = opts;
-
         getApps(this.keyring?.currentWalletId.toString(), (apps = {}) => {
           const app = apps?.[metadata.url] || {};
-
           if (app?.status === CONNECTION_STATUS.accepted) {
-            if (subaccount && Number.isNaN(parseInt(subaccount, 10))) {
-              callback(ERRORS.CLIENT_ERROR('Invalid account id'), null);
-            } else if (!this.keyring?.isUnlocked) {
+            if (!this.keyring?.isUnlocked) {
               this.displayPopUp({
                 callId: message.data.data.id,
                 portId: sender.id,
@@ -78,22 +74,9 @@ export class InformationModule extends ControllerModuleBase {
         const { subaccount } = args;
         getApps(this.keyring?.currentWalletId.toString(), async (apps = {}) => {
           const app = apps?.[url] || {};
-          callback(null, true);
-
+          callback(null, true); // Close modal
           if (app?.status === CONNECTION_STATUS.accepted) {
-            const getBalance = getKeyringHandler(
-              HANDLER_TYPES.GET_BALANCE,
-              this.keyring,
-            );
-            const icpBalance = await getBalance(subaccount);
-
-            if (icpBalance.error) {
-              callback(ERRORS.SERVER_ERROR(icpBalance.error), null, [
-                { portId, callId },
-              ]);
-            } else {
-              callback(null, icpBalance, [{ portId, callId }]);
-            }
+            this.#internalRequestBalance(subaccount, callback, [{ portId, callId }]);
           } else {
             callback(ERRORS.CONNECTION_ERROR, null, [{ portId, callId }]);
           }

@@ -80,7 +80,7 @@ const Home = () => {
     extension.tabs.query({ active: true, lastFocusedWindow: true }, (browserTabs) => {
       const currentTab = browserTabs?.[0];
       const url = getTabURL(currentTab);
-      const ids = state.wallets.map((_, idx) => idx);
+      const ids = Object.values(state.wallets).map((account) => account.walletId);
       setTab(currentTab);
       getWalletsConnectedToUrl(url, ids, (_connectedWallets = []) => {
         setConnectedWallets(_connectedWallets);
@@ -98,7 +98,8 @@ const Home = () => {
   };
 
   const updateProviderConnection = async () => {
-    const currentWallet = wallets?.[walletId] || null;
+    const currentWallet = wallets.find(w => w.walletId === walletId) || null;
+
     if (currentWallet) {
       extension.tabs.query({ active: true }, (activeTabs) => {
         extension.tabs.sendMessage(activeTabs[0].id, { action: 'updateConnection' });
@@ -115,7 +116,7 @@ const Home = () => {
         isClockInSync().then((isInSync) => !isInSync && navigator.navigate('clockError'));
         validateProviderConnection(state);
       } else if (!migratedWalletId) {
-        state.wallets.forEach((wallet) => {
+        Object.values(state.wallets).forEach((wallet) => {
           updateWalletId(wallet.walletNumber, wallet.walletId);
         }); 
       }
@@ -130,7 +131,18 @@ const Home = () => {
     getUseICNS(walletId, (useICNS) => {
       dispatch(setUseICNS(useICNS));
     });
+    updateProviderConnection();
   }, [walletId]);
+
+  useEffect(() => {
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
+      (state) => {
+        const walletsArray = Object.values(state?.wallets);
+        if (walletsArray?.length) {
+          setWallets(walletsArray);
+        }
+      });
+  }, []);
 
   return (
     <Layout>

@@ -10,9 +10,9 @@ import {
 import { useRouter } from '@components/Router';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { setAccountInfo } from '@redux/wallet';
+import { getContacts } from '@redux/contacts';
 import { isClockInSync } from '@shared/utils/time';
 import { syncContactsToDab } from '@shared/utils/contacts';
-import { useContacts } from '@hooks';
 
 import PropTypes from 'prop-types';
 import useStyles from './styles';
@@ -22,7 +22,6 @@ const Login = ({ redirect }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { navigator } = redirect ? {} : useRouter();
-  const { getContacts } = useContacts();
 
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
@@ -39,7 +38,7 @@ const Login = ({ redirect }) => {
     }, (unlocked) => {
       if (unlocked) {
         // Upload contacts
-        syncContactsToDab().then(getContacts());
+        syncContactsToDab().then(dispatch(getContacts()));
 
         isClockInSync()
           .then((isInRange) => {
@@ -51,7 +50,7 @@ const Login = ({ redirect }) => {
           type: HANDLER_TYPES.GET_STATE,
           params: { },
         }, (state) => {
-          if (state?.wallets?.length) {
+          if (Object.keys(state?.wallets).length) {
             dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
           }
         });
