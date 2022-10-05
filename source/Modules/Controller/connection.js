@@ -124,6 +124,7 @@ export class ConnectionModule extends ControllerModuleBase {
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
         const { url: domainUrl, icons } = metadata;
+        const newMetadata = { ...metadata, host };
 
         if (isValidWhitelist) {
           canistersInfo = await fetchCanistersInfo(whitelist);
@@ -137,8 +138,6 @@ export class ConnectionModule extends ControllerModuleBase {
 
         // If we receive a whitelist, we open the allow agent modal
         if (isValidWhitelist) {
-          const newMetadata = { ...metadata, requestConnect: true };
-
           const fixedHeight = this.keyring?.isUnlocked
             ? Math.min(422 + 65 * whitelist.length, 550)
             : SIZES.loginHeight;
@@ -170,6 +169,7 @@ export class ConnectionModule extends ControllerModuleBase {
             argsJson: JSON.stringify({ timeout, transactionId }),
             type: 'connect',
             domainUrl,
+            metadataJson: JSON.stringify(newMetadata),
           }, callback);
         }
       },
