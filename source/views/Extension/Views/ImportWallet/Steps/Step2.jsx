@@ -42,13 +42,8 @@ const Step2 = ({ userPemFile }) => {
     sendMessage({
       type: HANDLER_TYPES.IMPORT_PEM_ACCOUNT,
       params: {icon: currentEmoji, name: walletName, pem: pemContent},
-    },
-    (newWallet) => {
-      if (newWallet) {
-        setAccounts([...accounts, newWallet]);
-      }
-      setAccountName('');
-      setOpenCreateAccount(false);
+    }, (wallet) => {
+      console.log(wallet);
     });
     setLoading(false);
     navigator.navigate('home');

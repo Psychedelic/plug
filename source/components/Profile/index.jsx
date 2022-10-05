@@ -77,7 +77,7 @@ const Profile = ({ disableProfile }) => {
           setAccounts(walletsArray);
         }
       });
-  }, []);
+  }, [open]);
 
   const handleChangeAccountName = (e) => {
     const name = e.target.value;
