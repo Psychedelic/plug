@@ -59,8 +59,8 @@ const ConnectAccountsModal = ({
     });
   };
 
-  const updateProviderConnection = async () => {
-    const currentWallet = wallets?.[walletId] || null;
+  const updateProviderConnection = async (walletId) => {
+    const currentWallet = wallets.find(w => w.walletId === walletId) || null;
     if (currentWallet) {
       extension.tabs.query({ active: true }, (activeTabs) => {
         extension.tabs.sendMessage(activeTabs[0].id, { action: 'updateConnection' });
@@ -70,7 +70,10 @@ const ConnectAccountsModal = ({
 
   const handleConfirm = () => {
     Object.keys(walletsToUpdate).forEach((walletId) => {
-      walletsToUpdate[walletId] && connectAccountToTab(walletId, tab)
+      if (walletsToUpdate[walletId]) {
+        connectAccountToTab(walletId, tab)
+        updateProviderConnection(walletId);
+      }
     });
     onConfirm?.();
     setWalletsToUpdate({});

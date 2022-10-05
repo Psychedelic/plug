@@ -53,7 +53,7 @@ const NotificationContainer = () => {
   useEffect(() => {
     try {
       sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
-        if (state?.wallets?.length) {
+        if (Object.values(state?.wallets).length) {
           sendMessage({ type: HANDLER_TYPES.GET_LOCKS, params: {} }, (locks) => {
             if (locks?.isUnlocked) {
               setLoggedIn(true);

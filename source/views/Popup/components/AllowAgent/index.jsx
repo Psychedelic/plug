@@ -81,7 +81,7 @@ const AllowAgent = ({
       });
     });
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
-      if (state?.wallets?.length) {
+      if (Object.keys(state?.wallets).length) {
         dispatch(setAccountInfo(state.wallets[state.currentWalletId]));
       }
     });
