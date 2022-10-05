@@ -1,8 +1,10 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Layout,
   Header, Button, Badge, LinkButton, NFTDisplayer, ICNSDisplay,
 } from '@components';
+import { HttpAgent } from '@dfinity/agent';
+import { getNFTActor } from '@psychedelic/dab-js';
 import { useTranslation } from 'react-i18next';
 import BackIcon from '@assets/icons/back.svg';
 import ExpandIcon from '@assets/icons/expand.svg';
@@ -21,11 +23,19 @@ import { NFT_COLLECTION_DEFAULT_TYPES } from '@shared/constants/nft';
 import Section from './components/section';
 import useStyles from './styles';
 
+const getTokenDetails = async ({ index, canister, standard }) => {
+  const agent = new HttpAgent({ host: 'https://ic0.app/' });
+  const NFTActor = getNFTActor({ canisterId: canister, standard, agent });
+  const details = await NFTActor.details(index);
+  return details;
+}
+
 const NFTDetails = () => {
   const { t } = useTranslation();
   const { selectedNft: nft } = useSelector((state) => state.nfts);
   const { collections } = useSelector((state) => state.wallet);
   const { navigator: routerNavigator } = useRouter();
+  const [populatedNFT, setPopulatedNFT] = useState(nft);
   const classes = useStyles();
   const dispatch = useDispatch();
   if (!nft) {
@@ -38,15 +48,15 @@ const NFTDetails = () => {
     routerNavigator.navigate('home', TABS.NFTS);
   };
 
-  const collection = useMemo(() => collections?.find((col) => col.name === nft?.collection),
+  const collection = useMemo(() => collections?.find((col) => col.canisterId === nft?.canister),
     [collections, nft]);
 
   const name = `${nft?.name ?? `#${nft?.index}`}`;
-  const isICNS = nft?.collection === 'ICNS';
+  const isICNS = collection?.name === 'ICNS';
 
   const openNFT = (url) => {
     const parsedUrl = isICNS
-      ? `https://icns.id/domains/${nft?.name.replace('.icp', '')}/detail`
+      ? `https://icns.id/domains/${populatedNFT?.name.replace('.icp', '')}/detail`
       : url;
 
     extension.tabs.create({
@@ -59,10 +69,11 @@ const NFTDetails = () => {
   // eslint-disable-next-line no-confusing-arrow
   const handleButtonClick = (url) => isICNS ? openNFT(url) : copyNFT(url);
 
-  const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[nft.canisterId];
+  const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[populatedNFT.canisterId];
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    getTokenDetails(nft).then((details) => setPopulatedNFT({ ...nft, ...details }));
   }, []);
 
   return (
@@ -75,16 +86,16 @@ const NFTDetails = () => {
             className={classes.expandIcon}
             src={ExpandIcon}
             data-testid="expand-nft"
-            onClick={() => openNFT(nft?.url?.replace('type=thumbnail', ''))}
+            onClick={() => openNFT(populatedNFT?.url?.replace('type=thumbnail', ''))}
             data-testid="expand-nft"
           />
         )}
       />
       <div className={classes.container}>
         {isICNS ? (
-          <ICNSDisplay icns={nft} className={classes.image} large />
+          <ICNSDisplay icns={populatedNFT} className={classes.image} large />
         ) : (
-          <NFTDisplayer url={nft?.url} className={classes.image} defaultTag={nftDefaultTag} interactive />
+          <NFTDisplayer url={populatedNFT?.url} className={classes.image} defaultTag={nftDefaultTag} interactive />
         )}
         <div className={classes.buttonContainer}>
           <Button
@@ -92,7 +103,7 @@ const NFTDetails = () => {
             value={t(`nfts.${isICNS ? 'manage' : 'copyLink'}`)}
             style={{ width: '96%' }}
             fullWidth
-            onClick={() => handleButtonClick(nft?.url?.replace('type=thumbnail', ''))}
+            onClick={() => handleButtonClick(populatedNFT?.url?.replace('type=thumbnail', ''))}
             buttonTestId="copy-link-button"
             endIcon={isICNS && (
               <ArrowUpRight
@@ -112,18 +123,18 @@ const NFTDetails = () => {
           />
         </div>
         <Section icon={CollectionImg} title={t('nfts.collection')}>
-          <Badge value={nft?.collection} icon={collection?.icon} iconClassName={classes.icnsIcon} />
+          <Badge value={collection?.name} icon={collection?.icon} iconClassName={classes.icnsIcon} />
           <Badge value={name} />
         </Section>
-        {!!nft?.desc && (
+        {!!populatedNFT?.desc && (
           <Section icon={DescriptionImg} title={t('nfts.description')}>
-            <Typography variant="subtitle1">{nft?.desc}</Typography>
+            <Typography variant="subtitle1">{populatedNFT?.desc}</Typography>
           </Section>
         )}
-        {nft?.metadata?.properties?.filter((prop) => typeof prop?.value !== 'object')?.length >= 1 && (
+        {populatedNFT?.metadata?.properties?.filter((prop) => typeof prop?.value !== 'object')?.length >= 1 && (
           <Section icon={AttributesImg} title={t('nfts.attributes')}>
             {
-              nft?.metadata?.properties?.map((prop) => ((
+              populatedNFT?.metadata?.properties?.map((prop) => ((
                 <Badge
                   name={prop.name}
                   value={prop?.value}

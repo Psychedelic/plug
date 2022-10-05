@@ -32,7 +32,7 @@ const InputStep = ({ advanceStep }) => {
     || [principalId, accountId].includes(resolvedAddress);
 
   const collection = useMemo(() => collections?.find(
-    (col) => col.name === nft?.collection,
+    (col) => col.canisterId === nft?.canister,
   ) || {},
   [collections, nft]);
 
@@ -64,7 +64,7 @@ const InputStep = ({ advanceStep }) => {
                 name={nft?.name || `${collection?.name ?? ''} #${nft?.index}`}
                 text={`#${nft?.index}`}
                 imageClassName={classes.nftImage}
-                nft={nft}
+                nft={{ ...nft, collection: collection?.name }}
                 readonly
                 shadow
               />
