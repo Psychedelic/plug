@@ -39,13 +39,13 @@ export default makeStyles((theme) => ({
     width: '100%',
     gap: 14,
     marginTop: 10,
-    marginBottom: 25,
+    marginBottom: 30,
   },
   label: {
     width: 'auto',
   },
   formItem: {
-    marginBottom: 20,
+    marginBottom: 35,
   },
   inputFileLabel: {
     textDecorationLine: 'underline',
