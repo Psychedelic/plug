@@ -29,17 +29,12 @@ export class InformationModule extends ControllerModuleBase {
   }
 
   async #internalRequestBalance(subaccount, callback, portConfig) {
-    if (subaccount && Number.isNaN(parseInt(subaccount, 10))) {
-      callback(ERRORS.CLIENT_ERROR('Invalid account id'), null, portConfig);
+    const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, this.keyring);
+    const balances = await getBalance(subaccount);
+    if (balances?.error) {
+      callback(ERRORS.GET_BALANCE_ERROR, null, portConfig);
     } else {
-      const getBalance = getKeyringHandler(HANDLER_TYPES.GET_BALANCE, this.keyring);
-
-      const balances = await getBalance(subaccount);
-      if (balances?.error) {
-        callback(ERRORS.GET_BALANCE_ERROR, null, portConfig);
-      } else {
-        callback(null, balances, portConfig);
-      }
+      callback(null, balances, portConfig);
     }
   }
 
