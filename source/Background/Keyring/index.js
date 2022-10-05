@@ -233,7 +233,8 @@ export const getKeyringHandler = (type, keyring) => ({
       const assets = await keyring.getBalances({ subaccount: walletId });
       const parsedAssets = parseAssetsAmount(assets);
       const icpPrice = await getICPPrice();
-      return formatAssets(parsedAssets, icpPrice);
+      const formattedAssets = formatAssets(parsedAssets, icpPrice);
+      return formattedAssets.map((asset) => recursiveParseBigint(asset));
     } catch (error) {
       // eslint-disable-next-line
       console.log('Error when fetching token balances', error);
@@ -478,7 +479,7 @@ export const getKeyringHandler = (type, keyring) => ({
       console.log('Error removing the network', e);
       return { error: e.message };
     }
-  }
+  },
 }[type]);
 
 export const getContacts = () => new Promise((resolve, reject) => {

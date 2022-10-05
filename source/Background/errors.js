@@ -27,5 +27,6 @@ export default {
     code: 401, message: 'The transaction that was just attempted failed because it was not a valid batch transaction. Please contact the project’s developers.',
   },
   SIZE_ERROR: { code: 400, message: "There isn't enough space to open the popup" },
+  GET_BALANCE_ERROR: { code: 400, message: 'There was an error trying to fetch your balances.' },
   ...SILENT_ERRORS,
 };
