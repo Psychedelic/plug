@@ -80,9 +80,12 @@ const Home = () => {
     extension.tabs.query({ active: true, lastFocusedWindow: true }, (browserTabs) => {
       const currentTab = browserTabs?.[0];
       const url = getTabURL(currentTab);
+      console.log('state.wallets', state.wallets);
       const ids = Object.values(state.wallets).map((account) => account.walletId);
+      console.log('ids', ids);
       setTab(currentTab);
       getWalletsConnectedToUrl(url, ids, (_connectedWallets = []) => {
+        console.log('connectedWallets', _connectedWallets, currentWalletId);
         setConnectedWallets(_connectedWallets);
         if (_connectedWallets.length > 0) {
           getApp(walletId, url, (currentApp) => {
@@ -131,7 +134,6 @@ const Home = () => {
     getUseICNS(walletId, (useICNS) => {
       dispatch(setUseICNS(useICNS));
     });
-    updateProviderConnection();
   }, [walletId]);
 
   useEffect(() => {
