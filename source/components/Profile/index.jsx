@@ -22,7 +22,7 @@ import {
 import { getRandomEmoji } from '@shared/constants/emojis';
 import { getTabURL } from '@shared/utils/chrome-tabs';
 import { getWalletsConnectedToUrl, getApp } from '@modules/storageManager';
-import { setEditAccount, toggleAccountHidden, useHiddenAccounts } from '@redux/profile';
+import { setEditAccount } from '@redux/profile';
 import { setICNSData } from '@redux/icns';
 import { useICPPrice } from '@redux/icp';
 import { getContacts } from '@redux/contacts';

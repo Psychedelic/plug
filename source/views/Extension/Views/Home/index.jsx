@@ -131,7 +131,6 @@ const Home = () => {
     getUseICNS(walletId, (useICNS) => {
       dispatch(setUseICNS(useICNS));
     });
-    updateProviderConnection();
   }, [walletId]);
 
   useEffect(() => {
