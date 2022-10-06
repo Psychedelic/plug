@@ -1820,10 +1820,10 @@
     tweetnacl "^1.0.3"
     uuidv4 "^6.2.13"
 
-"@psychedelic/plug-inpage-provider@^2.3.0":
-  version "2.3.0"
-  resolved "https://npm.pkg.github.com/download/@Psychedelic/plug-inpage-provider/2.3.0/5e5510ab742506cbc20f0e74688e13142ec15b73#5e5510ab742506cbc20f0e74688e13142ec15b73"
-  integrity sha512-JBIR9k7+Jxj2xQ4cHDUkz1WmIe4VVk3kmyt7RaaePAQDUwHUhz0gISV5jpTBNKWqziF70ANDM66BjCkTrFSQEA==
+"@psychedelic/plug-inpage-provider@^2.3.1":
+  version "2.3.1"
+  resolved "https://npm.pkg.github.com/download/@Psychedelic/plug-inpage-provider/2.3.1/1949663fd9e863c1127e36602c56f41a4c0408c4#1949663fd9e863c1127e36602c56f41a4c0408c4"
+  integrity sha512-1e3pd2rgNQ0da6Knxtcgdgeehyv1bS1zqgU7XphYKmy4SuXbR5bIoCCqvmcNgJGMWyeqaQBcfEzNVKRF1pfm9Q==
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
