@@ -11,6 +11,7 @@ global.secrets = {
   mainPrincipalId: process.env.MAIN_PRINCIPAL_ID,
   subAccountId: process.env.SUB_ACCOUNT_ID,
   subPrincipalId: process.env.SUB_PRINCIPAL_ID,
+  sub4PrincipalId: process.env.SUB4_PRINCIPAL_ID,
   icnsName: process.env.ICNS_NAME,
   password: process.env.PASSWORD,
   dustCanisterId: process.env.DUST_CANISTER_ID,
