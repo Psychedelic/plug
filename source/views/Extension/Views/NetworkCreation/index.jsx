@@ -60,8 +60,8 @@ const NetworkCreation = () => {
     <Layout>
       <Header
         center={<Typography variant="h2">{t('network.addNetwork')}</Typography>}
-        left={<LinkButton value={t('common.back')} onClick={navigator.goBack} startIcon={BackIcon} />}
-        right={<LinkButton value={t('common.close')} onClick={() => navigator.navigate('home')} />}
+        left={<LinkButton value={t('common.back')} onClick={navigator.goBack} startIcon={BackIcon} data-testid="back-button" />}
+        right={<LinkButton value={t('common.close')} onClick={() => navigator.navigate('home')} data-testid="close-button"/>}
       />
       <div className={classes.networkCreationContainer}>
         <div className={classes.networksContainer}>
@@ -77,8 +77,9 @@ const NetworkCreation = () => {
                 onChange={handleFieldChange(field.name)}
                 placeholder={t(`network.${field.name}Placeholder`)}
                 error={errors[field.name]}
+                data-testid={`network-input-${field.name}`}
               />
-              {errors[field.name] && <Typography variant="body2" color="error">{errors[field.name]}</Typography>}
+              {errors[field.name] && <Typography variant="body2" data-testid={`network-error-${field.name}`} color="error">{errors[field.name]}</Typography>}
             </div>
           ))}
         </div>
@@ -88,6 +89,7 @@ const NetworkCreation = () => {
           value={t('network.addNetwork')}
           loading={networksLoading}
           disabled={networksLoading || !validateNetwork(values, networks)}
+          data-testid="add-network-button"
           fullWidth
         />
       </div>

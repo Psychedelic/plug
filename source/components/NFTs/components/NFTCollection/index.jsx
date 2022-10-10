@@ -10,6 +10,7 @@ import { shortICNSName } from '@shared/services/ICNS';
 import { useRouter } from '@components/Router';
 import { setSelectedNft } from '@redux/nfts';
 import { NFT_COLLECTION_DEFAULT_TYPES } from '@shared/constants/nft';
+import imageIcon from '@assets/icons/imageIcon.svg';
 import NFTDisplayer from '../../../NFTDisplayer';
 import ICNSDisplay from '../../../ICNSDisplay';
 
@@ -41,7 +42,7 @@ function NFTCollection({
             <div className={classes.iconContainer}>
               <img
                 loading="lazy"
-                src={collection?.icon}
+                src={collection?.icon ? collection?.icon : imageIcon}
                 className={clsx(classes.collectionIcon, icns && classes.icnsIcon)}
               />
             </div>
@@ -51,10 +52,14 @@ function NFTCollection({
             <p className={classes.nftQty}>
               {collection.tokens.length}
             </p>
-            <ChevronDown
-              className={clsx(classes.expandIcon, expanded && classes.rotate)}
-              size={20}
-            />
+            {
+              !!collection?.tokens.length && (
+                <ChevronDown
+                  className={clsx(classes.expandIcon, expanded && classes.rotate)}
+                  size={20}
+                />
+              )
+            }
           </div>
         </div>
         )}

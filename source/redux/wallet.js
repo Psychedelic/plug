@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ACTIVITY_STATUS } from '@shared/constants/activity';
+import { ACCOUNT_ICON } from '@shared/constants/account';
 import {
   formatAssetBySymbol,
   formatAssets,
@@ -22,10 +23,10 @@ export const walletSlice = createSlice({
     name: 'Account 1',
     principalId: '',
     accountId: '',
-    emoji: '👽',
+    emoji: ACCOUNT_ICON,
     transactions: [],
     assets: Object.values(TOKENS),
-    walletNumber: 0,
+    walletId: '',
     assetsLoading: true,
     collections: [],
     collectionsLoading: false,
@@ -41,13 +42,13 @@ export const walletSlice = createSlice({
       if (!action.payload) return;
       // Chrome serializes everything with toJSON
       const {
-        accountId, icon, name, principal, walletNumber,
+        accountId, icon, name, principal, walletId,
       } = action.payload;
       state.accountId = accountId;
       state.emoji = icon;
       state.name = name;
       state.principalId = principal;
-      state.walletNumber = walletNumber;
+      state.walletId = walletId;
     },
     setTransactions: (state, action) => {
       const { transactions, useICNS, icpPrice } = action.payload || {};
@@ -106,18 +107,6 @@ export const walletSlice = createSlice({
     setAssetsLoading: (state, action) => {
       state.assetsLoading = action.payload;
     },
-    addCollection: (state, action) => {
-      const { collection, walletNumber } = action.payload;
-      if (state.walletNumber === walletNumber && collection) {
-        const collectionIndex = state.collections.findIndex(
-          (col) => col.canisterId === collection.canisterId,
-        );
-        state?.collections.splice(
-          collectionIndex, collectionIndex < 0 ? 0 : 1, collection,
-        );
-        state.collections = sortCollections(state?.collections);
-      }
-    },
     setCollections: (state, action) => {
       const { collections, principalId } = action.payload;
       if (state.principalId === principalId && collections) {
@@ -128,14 +117,7 @@ export const walletSlice = createSlice({
     setCollectionsLoading: (state, action) => {
       state.collectionsLoading = action.payload;
     },
-    removeNFT: (state, action) => {
-      const collections = state.collections.map((col) => ({
-        ...col,
-        tokens: action.payload.collection === col.name
-          ? col.tokens.filter((token) => token.index !== action.payload?.index)
-          : col.tokens,
-      }));
-      state.collections = collections.filter((col) => col.tokens.length);
+    blockNFTFetch: (state) => {
       state.optimisticNFTUpdate = true;
     },
   },
@@ -148,10 +130,9 @@ export const {
   setTransactionsLoading,
   setAssets,
   setAssetsLoading,
-  addCollection,
   setCollections,
   setCollectionsLoading,
-  removeNFT,
+  blockNFTFetch,
 } = walletSlice.actions;
 
 export default walletSlice.reducer;

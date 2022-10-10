@@ -6,7 +6,6 @@ import extensionizer from 'extensionizer';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
-import { useContacts } from '@hooks';
 import { useICPPrice } from '@redux/icp';
 import {
   setAssets,
@@ -18,6 +17,7 @@ import {
 } from '@redux/wallet';
 import { getApps } from '@modules/storageManager';
 import { getCurrentNetwork, getNetworks } from '@redux/network';
+import { getContacts } from '@redux/contacts';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { TABS, useRouter } from '@components/Router';
 import RefreshAsset from '@assets/icons/refresh.svg';
@@ -29,11 +29,10 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
   const classes = useStyles();
   const icpPrice = useICPPrice();
   const dispatch = useDispatch();
-  const { getContacts } = useContacts();
   const { tabIndex } = disableNavigation ? {} : useRouter();
   const {
     principalId,
-    walletNumber,
+    walletId,
     assetsLoading,
     transactionsLoading,
     collectionsLoading,
@@ -61,7 +60,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
   extensionizer.tabs.query({ active: true }, (tabs) => {
     const url = getTabURL(tabs?.[0]);
     // Check if new wallet is connected to the current page
-    getApps(walletNumber.toString(), (apps) => {
+    getApps(walletId, (apps) => {
       const isSiteConnected = !!apps?.[url];
       setConnected(isSiteConnected);
     });
@@ -118,7 +117,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
 
     if (icpPrice) {
       // Contacts
-      getContacts(true);
+      dispatch(getContacts({ refresh: true }));
 
       loadAssets();
       loadCollections();
@@ -137,6 +136,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
         <div
           className={classes.networkSelector}
           onClick={() => setSelectorOpen(true)}
+          data-testid="network-selector"
         >
           <div
             className={clsx(
@@ -145,7 +145,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
             )}
           >
             <div className={clsx(classes.statusDot)} />
-            <span className={classes.network}>
+            <span className={classes.network} data-testid="current-network-name">
               {capitalize(currentNetwork?.name || 'Mainnet')}
             </span>
           </div>
@@ -170,6 +170,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
           <NetworkSelector
             onClose={() => setSelectorOpen(false)}
             refreshWallet={refreshWallet}
+            data-testid="network-select-modal"
           />
         )}
       </div>

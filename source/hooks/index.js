@@ -7,4 +7,3 @@ export { default as useActivity } from './useActivity';
 export { default as useDebounce } from './useDebounce';
 export { default as useICNS } from './useICNS';
 export { default as useScroll } from './useScroll';
-export { default as useContacts } from './useContacts';

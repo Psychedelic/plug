@@ -9,11 +9,10 @@ import {
   AddressTranslation,
 } from '@components';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { removeNFT, setCollections } from '@redux/wallet';
-import { setSelectedNft } from '@redux/nfts';
+import { blockNFTFetch, setCollections } from '@redux/wallet';
+import nfts, { setSelectedNft } from '@redux/nfts';
 import { ADDRESS_TYPES } from '@shared/constants/addresses';
 
-import { getFilteredCollections } from '../../utils';
 import NFTDisplay from '../NFTDisplay';
 
 import useStyles from './styles';
@@ -28,8 +27,8 @@ const ReviewStep = () => {
   const { selectedNft: nft, sendAddress, resolvedSendAddress } = useSelector((state) => state.nfts);
 
   const collection = useMemo(() => collections?.find(
-    (col) => col.name === nft?.collection,
-  ) || {},
+      (col) => col.canisterId === nft?.canister,
+    ) || {},
   [collections, nft]);
 
   const transferNFT = () => {
@@ -42,12 +41,11 @@ const ReviewStep = () => {
         if (response.error) {
           setErrorMessage(response.error);
         } else {
-          const filteredCollections = getFilteredCollections(collection, collections, nft);
           dispatch(setCollections({
-            collections: filteredCollections,
+            collections: response,
             principalId,
           }));
-          dispatch(removeNFT(nft));
+          dispatch(blockNFTFetch());
           dispatch(setSelectedNft(null));
           navigator.navigate('home', TABS.NFTS);
         }
@@ -59,7 +57,7 @@ const ReviewStep = () => {
 
   return (
     <div className={classes.reviewStepContainer}>
-      <NFTDisplay nft={nft} />
+      <NFTDisplay nft={{ ...nft, collection: collection?.name }} />
       <AddressTranslation addresses={addresses} loading={loading} />
       <Button
         variant="rainbow"

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { IconButton, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -19,16 +19,14 @@ import {
   setCollections,
   setTransactions,
 } from '@redux/wallet';
-import BluePencil from '@assets/icons/blue-pencil.svg';
-import VisibleIcon from '@assets/icons/visible.svg';
-import InvisibleIcon from '@assets/icons/invisible.svg';
 import { getRandomEmoji } from '@shared/constants/emojis';
 import { getTabURL } from '@shared/utils/chrome-tabs';
 import { getWalletsConnectedToUrl, getApp } from '@modules/storageManager';
-import { toggleAccountHidden, useHiddenAccounts } from '@redux/profile';
+import { setEditAccount } from '@redux/profile';
 import { setICNSData } from '@redux/icns';
 import { useICPPrice } from '@redux/icp';
-import { useMenuItems, useContacts } from '@hooks';
+import { getContacts } from '@redux/contacts';
+import { useMenuItems } from '@hooks';
 import ConnectAccountsModal from '../ConnectAccountsModal';
 import HoverAnimation from '../HoverAnimation';
 import MenuItem from '../MenuItem';
@@ -37,6 +35,7 @@ import TextInput from '../TextInput';
 import LinkButton from '../LinkButton';
 import { TABS, useRouter } from '../Router';
 import ActionDialog from '../ActionDialog';
+import { AccountItem } from './components';
 import UserIcon from '../UserIcon';
 import useStyles from './styles';
 
@@ -47,7 +46,7 @@ const Profile = ({ disableProfile }) => {
   const { navigator } = disableProfile ? {} : useRouter();
   const [isEditing, setIsEditing] = useState(false);
 
-  const { walletNumber, principalId } = useSelector((state) => state.wallet);
+  const { walletId, principalId } = useSelector((state) => state.wallet);
   const icpPrice = useICPPrice();
 
   const [open, setOpen] = useState(false);
@@ -61,7 +60,6 @@ const Profile = ({ disableProfile }) => {
   const [accountName, setAccountName] = useState('');
   const [error, setError] = useState(null);
   const [connectedWallets, setConnectedWallets] = useState([]);
-  const { getContacts } = useContacts();
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -69,13 +67,12 @@ const Profile = ({ disableProfile }) => {
 
   const menuItems = disableProfile ? [] : useMenuItems(handleToggle);
 
-  const hiddenAccounts = useHiddenAccounts();
-
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
       (state) => {
-        if (state?.wallets?.length) {
-          setAccounts(state.wallets);
+        const walletsArray = Object.values(state?.wallets);
+        if (walletsArray?.length) {
+          setAccounts(walletsArray);
         }
       });
   }, []);
@@ -89,9 +86,9 @@ const Profile = ({ disableProfile }) => {
     }
   };
 
-  const handleEditAccount = (e) => {
-    e.preventDefault();
+  const handleEditAccount = (e, account) => {
     e.stopPropagation();
+    dispatch(setEditAccount(account));
     setOpen(false);
     navigator.navigate('wallet-details');
   };
@@ -114,20 +111,15 @@ const Profile = ({ disableProfile }) => {
     setIsEditing(!isEditing);
   };
 
-  const toggleAccountVisibility = (account) => (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    dispatch(toggleAccountHidden(account));
-  };
-
   const executeAccountSwitch = (wallet) => {
     dispatch(setCollections({ collections: [], principalId }));
     sendMessage({ type: HANDLER_TYPES.SET_CURRENT_PRINCIPAL, params: wallet },
       (state) => {
-        if (state?.wallets?.length) {
+        const walletsArray = Object.values(state?.wallets);
+        if (walletsArray.length) {
           const newWallet = state.wallets[state.currentWalletId];
           dispatch(setAccountInfo(newWallet));
-          getContacts();
+          dispatch(getContacts());
           dispatch(setICNSData(newWallet.icnsData));
           dispatch(setAssetsLoading(true));
           dispatch(setTransactions([]));
@@ -152,19 +144,20 @@ const Profile = ({ disableProfile }) => {
       });
   };
 
-  const handleChangeAccount = (wallet) => () => {
+  const handleChangeAccount = (e, wallet) => {
+    e.stopPropagation();
     setSelectedWallet(wallet);
     extensionizer.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
       const url = getTabURL(tabs?.[0]);
-      const ids = accounts.map((_, idx) => idx);
+      const ids = accounts.map((account) => account.walletId);
       setTab(tabs?.[0]);
       // Check if new wallet is connected to the current page
       getWalletsConnectedToUrl(url, ids, async (wallets = []) => {
-        const currentConnected = wallets.includes(walletNumber);
+        const currentConnected = wallets.includes(walletId);
         const newConnected = wallets.includes(wallet);
 
         setConnectedWallets(wallets);
-        getApp(walletNumber.toString(), url, (currentApp) => {
+        getApp(walletId, url, (currentApp) => {
           setApp(currentApp);
           // If current was connected but new one isnt, prompt modal
           if (currentConnected && !newConnected) {
@@ -272,31 +265,19 @@ const Profile = ({ disableProfile }) => {
               <MenuList className={clsx(classes.accountContainer, classes.menu)}>
                 {
                   accounts.map((account) => {
-                    const isHidden = hiddenAccounts.includes(account.walletNumber);
-                    const isExactWalletNumber = account.walletNumber === walletNumber;
-                    return (!isHidden || isEditing) && (
-                      <MenuItem
-                        size="small"
-                        key={account.walletNumber}
-                        name={account.name}
-                        icon={<UserIcon size="small" icon={account.icon ? account.icon : '👽'} style={{ marginLeft: -6, marginRight: 12 }} />}
-                        onClick={!isHidden && handleChangeAccount(account.walletNumber)}
-                        selected={isExactWalletNumber}
-                        className={clsx(isHidden && classes.hiddenAccount)}
-                        itemNameTestId="account-name"
-                        endIcon={isExactWalletNumber ? (
-                          <IconButton data-testid={`edit-button-${account.name}`} onClick={handleEditAccount}>
-                            <img src={BluePencil} />
-                          </IconButton>
-                        ) : isEditing ? (
-                          <IconButton data-testid={`visibility-button-${account.name}`} onClick={toggleAccountVisibility(account.walletNumber)}>
-                            <img src={isHidden ? InvisibleIcon : VisibleIcon} />
-                          </IconButton>
-                        ) : null}
+                    const isCurrentAccount = account.walletId === walletId;
+
+                    return (
+                      <AccountItem
+                        account={account}
+                        isEditing={isEditing}
+                        isCurrentAccount={isCurrentAccount}
+                        handleChangeAccount={handleChangeAccount}
+                        handleEditAccount={handleEditAccount}
                       />
                     );
                   })
-                }
+}
               </MenuList>
               <MenuList className={clsx(classes.settingContainer, classes.menu)}>
                 <Divider style={{ margin: '6px 0' }} />

@@ -13,9 +13,14 @@ const ConnectAccountItem = ({
   connected, wallet, checked, onCheck, name,
 }) => {
   const classes = useStyles();
+
+  const handleCheckboxChange = (event) => {
+    !connected && onCheck(event, wallet.walletId);
+  };
+
   return (
     <div
-      key={wallet.walletNumber}
+      key={wallet.walletId}
       className={clsx(
         classes.flex,
         classes.walletContainer,
@@ -26,7 +31,7 @@ const ConnectAccountItem = ({
         <Checkbox
           className={classes.checkbox}
           checked={checked}
-          handleChange={!connected && onCheck(wallet.walletNumber)}
+          handleChange={handleCheckboxChange}
         />
         <UserIcon size="small" icon={wallet.icon} style={{ marginLeft: -6, marginRight: 12 }} />
         <Typography variant="h6" className={classes.walletName}>{name || ''}</Typography>

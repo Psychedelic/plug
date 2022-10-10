@@ -18,7 +18,7 @@ const NoNetworks = () => {
   return (
     <div className={classes.noNetworksContainer}>
       <img src={AntennaIcon} alt="network" className={classes.networkIcon} />
-      <Typography variant="h3">{t('network.addNetwork')}</Typography>
+      <Typography  variant="h3">{t('network.addNetwork')}</Typography>
       <Typography variant="subtitle2">{t('network.addNetworkDescription')}</Typography>
       <Button variant="rainbow" value={t('network.addNetwork')} onClick={goToCreateNetwork} fullWidth />
     </div>

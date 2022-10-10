@@ -38,7 +38,7 @@ const NetworkCard = ({
 
   const isMainnet = id === 'mainnet';
   return (
-    <div onClick={selectNetwork} className={classes.networkCard}>
+    <div onClick={selectNetwork} className={classes.networkCard} data-testid={`network-card-${name}`}>
       <div className={classes.networkData}>
         <Typography variant="h4">{capitalize(name)}</Typography>
         <Typography variant="subtitle2">{host}</Typography>
@@ -49,6 +49,7 @@ const NetworkCard = ({
           className={classes.removeIcon}
           onClick={handleRemoveNetwork}
           size="18"
+          data-testid={`delete-network-button-${name}`}
         />
       )}
     </div>

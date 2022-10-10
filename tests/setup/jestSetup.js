@@ -11,15 +11,23 @@ global.secrets = {
   mainPrincipalId: process.env.MAIN_PRINCIPAL_ID,
   subAccountId: process.env.SUB_ACCOUNT_ID,
   subPrincipalId: process.env.SUB_PRINCIPAL_ID,
+  sub4PrincipalId: process.env.SUB4_PRINCIPAL_ID,
   icnsName: process.env.ICNS_NAME,
   password: process.env.PASSWORD,
   dustCanisterId: process.env.DUST_CANISTER_ID,
   betaCanisterId: process.env.BETA_CANISTER_ID,
   wtcCanisterId: process.env.WTC_CANISTER_ID,
+  xtcCanisterId: process.env.XTC_CANISTER_ID,
+  wicpCanisterId: process.env.WICP_CANISTER_ID,
+  testCoinCanisterId: process.env.TEST_COIN_CANISTER_ID,
   wrongAccountId: process.env.WRONG_ACCOUNT_ID,
   wrongCanisterId: process.env.WRONG_CANISTER_ID,
   wrongId: process.env.WRONG_ID,
   wrongICNSName: process.env.WRONG_ICNS_NAME,
+  networkName: process.env.NETWORK_NAME,
+  hostName: process.env.HOST_NAME,
+  canisterID: process.env.CANISTER_ID,
+  wrongHostName: process.env.WRONG_HOST_NAME,
 };
 
 const grantRawPermissions = async (context, url, permissions) => {
@@ -68,6 +76,12 @@ global.setupChrome = async () => {
 };
 
 // General utils
+
+const sonicNetworkData = [
+  { testId: 'network-input-name', value: secrets.networkName },
+  { testId: 'network-input-host', value: secrets.hostName },
+  { testId: 'network-input-ledgerCanisterId', value: secrets.canisterID },
+];
 
 const getXPathElements = async (page, elementType, content, wait = false) => {
   const xPath = `//${elementType}[contains(.,"${content}")]`;
@@ -175,6 +189,25 @@ const createSubAccount = async (page, name) => {
   await page.waitForTestIdSelector(`account-name-${name}`);
 };
 
+const inputFill = async (page, testId, value) => {
+  const input = await page.getByTestId(testId, true);
+  await input.click();
+  await input.type(value);
+};
+
+const addNetworkButtonClick = async (page) => {
+  const addNetworkButton = await page.getByTestId('add-network-button', true);
+  await addNetworkButton.click();
+};
+
+const addSonicNetwork = async (page) => {
+  await addNetworkButtonClick(page);
+  for (const data of sonicNetworkData) {
+    await inputFill(page, data.testId, data.value);
+  }
+  await addNetworkButtonClick(page);
+};
+
 const optionsPageUtils = {
   importAccount,
   unlock,
@@ -186,6 +219,9 @@ const popupPageUtils = {
   profileButtonClick,
   fillNameInput,
   createAccountButtonClick,
+  addSonicNetwork,
+  inputFill,
+  addNetworkButtonClick,
 };
 
 global.popupPageUtils = popupPageUtils;

@@ -87,7 +87,9 @@ export const HANDLER_TYPES = {
   EDIT_PRINCIPAL: 'edit-principal',
   GET_PUBLIC_KEY: 'get-public-key',
   GET_TOKEN_INFO: 'get-token-info',
+  GET_NFT_INFO: 'get-nft-info',
   ADD_CUSTOM_TOKEN: 'add-custom-token',
+  ADD_CUSTOM_NFT: 'add-custom-nft',
   CREATE_PRINCIPAL: 'create-principal',
   SET_CURRENT_PRINCIPAL: 'set-current-principal',
   GET_PEM_FILE: 'get-pem-file',
@@ -121,7 +123,9 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.EDIT_PRINCIPAL]: 'editing your principal.',
   [HANDLER_TYPES.GET_PUBLIC_KEY]: 'getting your public key.',
   [HANDLER_TYPES.GET_TOKEN_INFO]: 'fetching token info.',
+  [HANDLER_TYPES.GET_NFT_INFO]: 'fetching nft info.',
   [HANDLER_TYPES.ADD_CUSTOM_TOKEN]: 'adding custom token.',
+  [HANDLER_TYPES.ADD_CUSTOM_NFT]: 'adding custom nft.',
   [HANDLER_TYPES.CREATE_PRINCIPAL]: 'creating your principal.',
   [HANDLER_TYPES.SET_CURRENT_PRINCIPAL]: 'setting your principal.',
   [HANDLER_TYPES.GET_PEM_FILE]: 'getting your PEM file.',
@@ -136,6 +140,7 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.REMOVE_NETWORK]: 'removing the network',
   [HANDLER_TYPES.SET_CURRENT_NETWORK]: 'setting the current network',
   [HANDLER_TYPES.GET_CURRENT_NETWORK]: 'getting the current network',
+  [HANDLER_TYPES.REMOVE_CUSTOM_TOKEN]: 'removing custom token',
 }[type]);
 
 export const sendMessage = (args, callback) => {
@@ -179,8 +184,8 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.CREATE_PRINCIPAL]: async (params) => keyring.createPrincipal(params),
   [HANDLER_TYPES.SET_CURRENT_PRINCIPAL]:
-    async (walletNumber) => {
-      await keyring.setCurrentPrincipal(walletNumber);
+    async (walletId) => {
+      await keyring.setCurrentPrincipal(walletId);
       const state = await keyring.getState();
       extension.tabs.query({ active: true }, (tabs) => {
         extension.tabs.sendMessage(tabs[0].id, { action: 'updateConnection' });
@@ -223,12 +228,13 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: e.message };
     }
   },
-  [HANDLER_TYPES.GET_BALANCE]: async (subaccount) => {
+  [HANDLER_TYPES.GET_BALANCE]: async (walletId) => {
     try {
-      const assets = await keyring.getBalances({ subaccount });
+      const assets = await keyring.getBalances({ subaccount: walletId });
       const parsedAssets = parseAssetsAmount(assets);
       const icpPrice = await getICPPrice();
-      return formatAssets(parsedAssets, icpPrice);
+      const formattedAssets = formatAssets(parsedAssets, icpPrice);
+      return formattedAssets.map((asset) => recursiveParseBigint(asset));
     } catch (error) {
       // eslint-disable-next-line
       console.log('Error when fetching token balances', error);
@@ -259,8 +265,8 @@ export const getKeyringHandler = (type, keyring) => ({
     }
   },
   [HANDLER_TYPES.EDIT_PRINCIPAL]:
-    async ({ walletNumber, name, emoji }) => (
-      keyring.editPrincipal(walletNumber, { name, emoji })
+    async ({ walletId, name, emoji }) => (
+      keyring.editPrincipal(walletId, { name, emoji })
     ),
   [HANDLER_TYPES.GET_PUBLIC_KEY]:
     async () => keyring.getPublicKey(),
@@ -279,6 +285,33 @@ export const getKeyringHandler = (type, keyring) => ({
         return { error: e.message };
       }
     },
+  [HANDLER_TYPES.GET_NFT_INFO]:
+    async ({ canisterId, standard }) => {
+      try {
+        const nftInfo = await keyring.getNFTInfo({
+          canisterId,
+          standard,
+        });
+        return nftInfo;
+      } catch (e) {
+        // eslint-disable-next-line
+        console.log('Error while fetching NFT info', e);
+        return { error: e.message };
+      }
+    },
+  [HANDLER_TYPES.ADD_CUSTOM_NFT]:
+    async ({ canisterId, standard }) => {
+      try {
+        const nfts = await keyring.registerNFT({
+          canisterId, standard,
+        });
+        return (nfts || []).map((nft) => recursiveParseBigint(nft));
+      } catch (e) {
+        // eslint-disable-next-line
+        console.log('Error registering nft', e);
+        return { error: e.message };
+      }
+    },
   [HANDLER_TYPES.ADD_CUSTOM_TOKEN]:
     async ({ canisterId, standard, logo }) => {
       try {
@@ -294,7 +327,7 @@ export const getKeyringHandler = (type, keyring) => ({
       }
     },
   [HANDLER_TYPES.GET_PEM_FILE]:
-    async (walletNumber) => keyring.getPemFile(walletNumber),
+    async (walletId) => keyring.getPemFile(walletId),
   [HANDLER_TYPES.BURN_XTC]:
     async ({ to, amount }) => {
       try {
@@ -324,19 +357,22 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: e.message };
     }
   },
-  [HANDLER_TYPES.GET_ICNS_DATA]: async ({ refresh }) => {
-    const { wallets, currentWalletId } = await keyring.getState();
-    let icnsData = wallets?.[currentWalletId]?.icnsData || { names: [] };
+  [HANDLER_TYPES.GET_ICNS_DATA]: async ({ refresh, walletId = keyring.currentWalletId }) => {
+    const { wallets } = await keyring.getState();
+    let icnsData = wallets?.[walletId]?.icnsData || { names: [] };
     if (!icnsData?.names?.length || refresh) {
-      icnsData = await keyring.getICNSData();
+      icnsData = await keyring.getICNSData({ subaccount: walletId });
     } else {
       keyring.getICNSData();
     }
     return icnsData;
   },
-  [HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME]: async (name) => {
+  [HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME]: async ({
+    name,
+    walletId = keyring.currentWalletId,
+  }) => {
     try {
-      const res = await keyring.setReverseResolvedName({ name });
+      const res = await keyring.setReverseResolvedName({ name, subaccount: walletId });
       return res;
     } catch (e) {
       // eslint-disable-next-line
@@ -431,6 +467,16 @@ export const getKeyringHandler = (type, keyring) => ({
     } catch (e) {
       // eslint-disable-next-line
       console.log('Error getting the current network', e);
+      return { error: e.message };
+    }
+  },
+  [HANDLER_TYPES.REMOVE_CUSTOM_TOKEN]: async (canisterId) => {
+    try {
+      const newTokens = await keyring.removeToken(canisterId);
+      return Object.values(newTokens);
+    } catch (e) {
+      // eslint-disable-next-line
+      console.log('Error removing the network', e);
       return { error: e.message };
     }
   },

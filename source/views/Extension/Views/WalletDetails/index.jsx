@@ -6,21 +6,37 @@ import { useSelector, useDispatch } from 'react-redux';
 import InputBase from '@material-ui/core/InputBase';
 import { ChevronDown } from 'react-feather';
 import { toast } from 'react-toastify';
+import extensionizer from 'extensionizer';
 
+import { getWalletsConnectedToUrl, getApp, getUseICNS } from '@modules/storageManager';
+import { getTabURL } from '@shared/utils/chrome-tabs';
+import { ACCOUNT_ICON } from '@shared/constants/account';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { updateWalletDetails } from '@redux/wallet';
+import {
+  setAccountInfo,
+  setAssets,
+  setAssetsLoading,
+  setCollections,
+  setTransactions,
+  updateWalletDetails,
+} from '@redux/wallet';
+import { useICPPrice } from '@redux/icp';
+import { getContacts } from '@redux/contacts';
+import { setICNSData, setUseICNS as setReduxUseICNS } from '@redux/icns';
+
 import BlueCheck from '@assets/icons/blue-check.svg';
 import Pencil from '@assets/icons/pencil.svg';
-import { useRouter } from '@components/Router';
+import SwitchAccount from '@assets/icons/switch-account.svg';
+import { TABS, useRouter } from '@components/Router';
+
 import {
   Layout,
   UserIcon,
-
+  ConnectAccountsModal,
   Header,
   LinkButton,
 } from '@components';
-import { setUseICNS } from '@modules/storageManager';
-import { setICNSData, setUseICNS as setReduxUseICNS } from '@redux/icns';
+import { setUseICNS as setStorageUseICNS} from '@modules/storageManager';
 
 import useStyles from './styles';
 import DetailItem from './components/DetailItem';
@@ -28,24 +44,68 @@ import ICNSToggle from './components/ICNSToggle';
 
 const WalletDetails = () => {
   const classes = useStyles();
-  const {
-    name, emoji, accountId, principalId, walletNumber,
-  } = useSelector((state) => state.wallet);
-  const { resolved, useICNS } = useSelector((state) => state.icns);
   const { navigator } = useRouter();
   const { t } = useTranslation();
+  const {
+    resolved: reduxResolved,
+    useICNS: reduxUseICNS,
+    names: reduxNames,
+  } = useSelector((state) => state.icns);
+  const dispatch = useDispatch();
+  const icpPrice = useICPPrice();
+
+  const { editAccount } = useSelector((state) => state.profile);
+  const { walletId: activeWalletId } = useSelector((state => state.wallet));
+
+  const textInput = useRef(null);
+  const { name, icon: emoji, accountId, principal: principalId, walletId } = editAccount;
+
+  const [openConnectAccount, setOpenConnectAccount] = useState(false);
+  const [connectedWallets, setConnectedWallets] = useState([]);
+  const [tab, setTab] = useState(null);
+  const [app, setApp] = useState(null);
+  const [accountSwitchId, setAccountSwitchId] = useState(walletId);
+  const [accounts, setAccounts] = useState([]);
   const [openEmojis, setOpenEmojis] = useState(false);
   const [walletName, setWalletName] = useState(name);
   const [currentEmoji, setCurrentEmoji] = useState(emoji);
   const [edit, setEdit] = useState(false);
   const [expand, setExpand] = useState(false);
-
   const [openAccount, setOpenAccount] = useState(false);
   const [openPrincipal, setOpenPrincipal] = useState(false);
 
-  const textInput = useRef(null);
+  // Local ICNS
+  const [useICNS, setUseICNS] = useState(false);
+  const [resolved, setResolved] = useState(null);
+  const [icnsNames, setICNSNames] = useState([]);
+  const [icnsLoading, setICNSLoading] = useState(true);
 
-  const dispatch = useDispatch();
+  const hasActiveResolvedICNS = resolved !== null && useICNS && !icnsLoading;
+
+  useEffect(() => {
+    setICNSLoading(true);
+    // Use standard ICNS data
+    if (walletId === activeWalletId) {
+      setICNSLoading(false);
+      setUseICNS(reduxUseICNS);
+      setResolved(reduxResolved);
+      setICNSNames(reduxNames);
+    } else {
+      getUseICNS(walletId, (storageUseICNS) => {
+        setUseICNS(storageUseICNS);
+      });
+
+      sendMessage({
+        type: HANDLER_TYPES.GET_ICNS_DATA,
+        params: { refresh: true, walletId },
+      }, (icnsData) => {
+        const { names, reverseResolvedName } = icnsData;
+        setICNSNames(names || []);
+        setResolved(reverseResolvedName || null);
+        setICNSLoading(false);
+      });
+    }
+  }, [walletId]);
 
   const handleChange = (e) => setWalletName(e.target.value);
 
@@ -67,21 +127,22 @@ const WalletDetails = () => {
     } else {
       setEdit(false);
       setOpenEmojis(false);
-
       sendMessage(
         {
           type: HANDLER_TYPES.EDIT_PRINCIPAL,
           params: {
-            walletNumber,
+            walletId,
             name: walletName,
             emoji: currentEmoji,
           },
         },
         () => {
-          dispatch(updateWalletDetails({
-            name: walletName,
-            emoji: currentEmoji,
-          }));
+          if (activeWalletId === walletId) {
+            dispatch(updateWalletDetails({
+              name: walletName,
+              emoji: currentEmoji,
+            }));
+          }
           setWalletName(walletName);
           setCurrentEmoji(currentEmoji);
         },
@@ -91,12 +152,17 @@ const WalletDetails = () => {
 
   const handleToggleICNS = (event) => {
     const { checked } = event.target;
-    dispatch(setReduxUseICNS(checked));
-    setUseICNS(checked, walletNumber);
+
+    setUseICNS(checked);
+    setStorageUseICNS(checked, walletId);
+    if (walletId === activeWalletId) {
+      dispatch(setReduxUseICNS(checked));
+    }
+
     if (!checked) {
       sendMessage({
         type: HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME,
-        params: '',
+        params: { name: '', walletId: walletId },
       }, (response) => {
         if (response.error) {
           // eslint-disable-next-line
@@ -104,25 +170,128 @@ const WalletDetails = () => {
         } else {
           sendMessage({
             type: HANDLER_TYPES.GET_ICNS_DATA,
-            params: { refresh: true },
+            params: { refresh: true, walletId },
           }, (icnsData) => {
-            dispatch(setICNSData(icnsData));
+            if (walletId === activeWalletId) {
+              dispatch(setICNSData(icnsData));
+            }
+
+            const { names, reverseResolvedName } = icnsData;
+            setICNSNames(names || []);
+            setResolved(reverseResolvedName || null);
+            setICNSLoading(false);
           });
         }
       });
     }
   };
 
-  useEffect(() => {
+  const handleSetReverseResolution = (name, resetModal) => {
     sendMessage({
-      type: HANDLER_TYPES.GET_ICNS_DATA,
-      params: { refresh: true },
-    }, (icnsData) => {
-      dispatch(setICNSData(icnsData));
+      type: HANDLER_TYPES.SET_REVERSE_RESOLVED_NAME,
+      params: { name, walletId },
+    }, (response) => {
+      if (response.error) {
+        // eslint-disable-next-line
+        console.log('Error when setting your reverse resolved name', response.error); // TODO HANDLE ERROR (shouldnt happen tho)
+      } else {
+        sendMessage({
+          type: HANDLER_TYPES.GET_ICNS_DATA,
+          params: { refresh: true, walletId },
+        }, (icnsData) => {
+          if (walletId === activeWalletId) {
+            dispatch(setICNSData(icnsData));
+          }
+
+          const { names, reverseResolvedName } = icnsData;
+          setICNSNames(names || []);
+          setResolved(reverseResolvedName || null);
+          setICNSLoading(false);
+          resetModal();
+        });
+      }
+    });
+  }
+
+  const handleChangeAccount = () => {
+    extensionizer.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+      const url = getTabURL(tabs?.[0]);
+      const ids = accounts.map((account) => account.walletId);
+      setTab(tabs?.[0]);
+      // Check if new wallet is connected to the current page
+      setAccountSwitchId(walletId);
+
+      if (!ids.length) {
+        executeAccountSwitch(walletId);
+        return;
+      }
+
+      getWalletsConnectedToUrl(url, ids, async (wallets = []) => {
+        const currentConnected = wallets.includes(activeWalletId);
+        const newConnected = wallets.includes(walletId);
+
+        setConnectedWallets(wallets);
+
+        getApp(activeWalletId.toString(), url, (currentApp) => {
+          setApp(currentApp);
+          // If current was connected but new one isnt, prompt modal
+          if (currentConnected && !newConnected) {
+            setOpenConnectAccount(true);
+          } else {
+            executeAccountSwitch(walletId);
+          }
+        });
+      });
+    });
+  };
+
+  const executeAccountSwitch = (wallet) => {
+    dispatch(setCollections({ collections: [], principalId }));
+    sendMessage({ type: HANDLER_TYPES.SET_CURRENT_PRINCIPAL, params: accountSwitchId },
+      (state) => {
+        if (Object.values(state?.wallets).length) {
+          const newWallet = state.wallets[state.currentWalletId];
+          dispatch(setAccountInfo(newWallet));
+          dipatch(getContacts());
+          dispatch(setICNSData(newWallet.icnsData));
+          dispatch(setAssetsLoading(true));
+          dispatch(setTransactions([]));
+          sendMessage({
+            type: HANDLER_TYPES.GET_ASSETS,
+            params: { refresh: true },
+          }, (keyringAssets) => {
+            dispatch(setAssets({ keyringAssets, icpPrice }));
+            dispatch(setAssetsLoading(false));
+          });
+          navigator.navigate('home', TABS.TOKENS);
+        }
+      });
+  };
+
+  const handleDeclineConnect = () => {
+    executeAccountSwitch(activeWalletId);
+    setOpenConnectAccount(false);
+  };
+
+  useEffect(() => {
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
+      if (Object.keys(state?.wallets)?.length) {
+        setAccounts(state.wallets);
+      }
     });
   }, []);
 
-  const hasActiveResolvedICNS = resolved && useICNS;
+  useEffect(() => {
+    setWalletName(editAccount.name);
+    setCurrentEmoji(editAccount.icon || ACCOUNT_ICON);
+  }, [editAccount]);
+
+  useEffect(() => {
+    if (useICNS) {
+      handleEditWalletName();
+    }
+  }, [useICNS]);
+
   return (
     <Layout>
       <Header
@@ -134,6 +303,15 @@ const WalletDetails = () => {
             data-testid="done-button"
           />
         )}
+      />
+      <ConnectAccountsModal
+        open={openConnectAccount}
+        onClose={handleDeclineConnect}
+        onConfirm={() => executeAccountSwitch(walletId)}
+        wallets={accounts}
+        connectedWallets={connectedWallets}
+        app={app}
+        tab={tab}
       />
       <div className={classes.walletDetailsContainer}>
         <div className={clsx(classes.avatarContainer, edit && classes.avatarEdit)}>
@@ -147,7 +325,7 @@ const WalletDetails = () => {
           <InputBase
             classes={{
               root:
-              clsx(classes.name, edit && !hasActiveResolvedICNS && classes.nameEdit),
+              clsx(classes.name, edit && !hasActiveResolvedICNS && classes.nameEdit, edit && hasActiveResolvedICNS && classes.resolvedNameEdit),
             }}
             value={hasActiveResolvedICNS ? resolved : walletName}
             type="text"
@@ -171,17 +349,29 @@ const WalletDetails = () => {
               </button>
             )
             : (
-              <button
-                type="button"
-                style={{ all: 'unset', marginTop: '4px' }}
-                data-testid="edit-icon-button"
-                onClick={openEditWalletName}
-              >
-                <img
-                  className={classes.icon}
-                  src={Pencil}
-                />
-              </button>
+              <div className={classes.buttonsContainer}>
+                { walletId !== activeWalletId && (
+                  <button
+                    type="button"
+                    onClick={handleChangeAccount}
+                  >
+                    <img
+                      src={SwitchAccount}
+                    />
+                  </button>
+                )}
+                {
+                  <button
+                    data-testid="edit-icon-button"
+                    type="button"
+                    onClick={openEditWalletName}
+                  >
+                    <img
+                      src={Pencil}
+                    />
+                  </button>
+                }
+              </div>
             )}
         </div>
         {openEmojis && edit && (
@@ -204,7 +394,14 @@ const WalletDetails = () => {
             }}
           />
         )}
-        <ICNSToggle active={useICNS} handleToggle={handleToggleICNS} />
+        <ICNSToggle
+          active={useICNS}
+          names={icnsNames}
+          resolved={resolved}
+          handleToggle={handleToggleICNS}
+          loading={icnsLoading}
+          handleSetReverseResolution={handleSetReverseResolution}
+        />
         <div
           className={classes.viewMore}
           onClick={toggleExpand}

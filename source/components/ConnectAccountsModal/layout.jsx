@@ -46,14 +46,14 @@ const ConnectAccountsModalLayout = ({
         onScroll={onScroll}
       >
         {wallets.map((wallet) => {
-          const alreadyConnected = connectedWallets.includes(wallet.walletNumber);
+          const alreadyConnected = connectedWallets.includes(wallet.walletId);
           return (
             <ConnectAccountItem
               name={icnsNames[wallet?.principal] || wallet?.name}
               wallet={wallet}
               connected={alreadyConnected}
               checked={
-                  !!walletsToUpdate[wallet.walletNumber]
+                  !!walletsToUpdate[wallet.walletId]
                   || alreadyConnected
                 }
               onCheck={onCheckWallet}
