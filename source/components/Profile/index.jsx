@@ -27,6 +27,7 @@ import { setICNSData } from '@redux/icns';
 import { useICPPrice } from '@redux/icp';
 import { getContacts } from '@redux/contacts';
 import { useMenuItems } from '@hooks';
+import { Dialog } from '@components';
 import ConnectAccountsModal from '../ConnectAccountsModal';
 import HoverAnimation from '../HoverAnimation';
 import MenuItem from '../MenuItem';
@@ -60,6 +61,7 @@ const Profile = ({ disableProfile }) => {
   const [accountName, setAccountName] = useState('');
   const [error, setError] = useState(null);
   const [connectedWallets, setConnectedWallets] = useState([]);
+  const [openRemoveModal, setOpenRemoveModal] = useState();
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -183,6 +185,11 @@ const Profile = ({ disableProfile }) => {
 
   return (
     <>
+      <Dialog
+        title="aa"
+        onClose={() => setOpenRemoveModal(false)}
+        open={openRemoveModal}
+      />
       <HoverAnimation
         disabled={disableProfile}
         style={{ padding: '15px' }}
@@ -274,6 +281,8 @@ const Profile = ({ disableProfile }) => {
                         isCurrentAccount={isCurrentAccount}
                         handleChangeAccount={handleChangeAccount}
                         handleEditAccount={handleEditAccount}
+                        setOpenRemoveModal={setOpenRemoveModal}
+                        openRemoveModal={openRemoveModal}
                       />
                     );
                   })

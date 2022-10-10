@@ -18,14 +18,14 @@ const AccountItem = ({
   isEditing,
   handleChangeAccount,
   handleEditAccount,
+  setOpenRemoveModal,
+  openRemoveModal,
 }) => {
   const classes = useStyles();
   const hiddenAccounts = useHiddenAccounts();
   const dispatch = useDispatch();
 
   const isHidden = hiddenAccounts.includes(account.walletId);
-
-  const [openModal, setOpenModal] = useState(false);
 
   const toggleAccountVisibility = (e, walletId) => {
     e.preventDefault();
@@ -36,57 +36,61 @@ const AccountItem = ({
   if (isHidden && !isEditing) return null;
 
   return (
-    <div
-      className={clsx(
-        classes.accountItemContainer,
-        isHidden && classes.hiddenAccount,
-      )}
-      onClick={(e) => handleChangeAccount(e, account.walletId)}
-    >
-      <div className={classes.leftContainer}>
-        <UserIcon
-          size="small"
-          icon={account.icon ? account.icon : '👽'}
-          style={{ marginLeft: -6, marginRight: 12 }}
-        />
-        <div className={classes.accountDetails}>
-          <span
-            className={classes.accountName}
-            data-testid={`account-name-${account.name}`}
+    <>
+      <div
+        className={clsx(
+          classes.accountItemContainer,
+          isHidden && classes.hiddenAccount,
+        )}
+      >
+        <div
+          onClick={(e) => handleChangeAccount(e, account.walletId)}
+          className={classes.leftContainer}
+        >
+          <UserIcon
+            size="small"
+            icon={account.icon ? account.icon : '👽'}
+            style={{ marginLeft: -6, marginRight: 12 }}
+          />
+          <div className={classes.accountDetails}>
+            <span
+              className={classes.accountName}
+              data-testid={`account-name-${account.name}`}
+            >
+              {account.icnsData.reverseResolvedName
+                ? account.icnsData.reverseResolvedName
+                : account.name}
+            </span>
+          </div>
+        </div>
+        <div className={classes.rightContainer}>
+          <IconButton
+            data-testid={`edit-button-${account.name}`}
+            disabled={isHidden}
+            onClick={(e) => handleEditAccount(e, account)}
           >
-            {account.icnsData.reverseResolvedName
-              ? account.icnsData.reverseResolvedName
-              : account.name}
-          </span>
+            <img
+              className={clsx(isHidden && classes.disabledIcon)}
+              src={BluePencil}
+            />
+          </IconButton>
+          {!(account.orderNumber === 0) && (
+            <IconButton onClick={() => setOpenRemoveModal(!openRemoveModal)}>
+              <RemoveCircleOutline style={{ color: '#DC2626' }} />
+            </IconButton>
+          )}
+          {isEditing && (
+            <IconButton
+              onClick={(e) => {
+                toggleAccountVisibility(e, account.walletId);
+              }}
+            >
+              <img src={isHidden ? InvisibleIcon : VisibleIcon} />
+            </IconButton>
+          )}
         </div>
       </div>
-      <div className={classes.rightContainer}>
-        <IconButton
-          data-testid={`edit-button-${account.name}`}
-          disabled={isHidden}
-          onClick={(e) => handleEditAccount(e, account)}
-        >
-          <img
-            className={clsx(isHidden && classes.disabledIcon)}
-            src={BluePencil}
-          />
-        </IconButton>
-        { !(account.orderNumber === 0) && (
-        <IconButton onClick={() => setOpenModal(!openModal)}>
-          <RemoveCircleOutline style={{ color: '#DC2626' }} />
-        </IconButton>
-        )}
-        {isEditing && (
-          <IconButton
-            onClick={(e) => {
-              toggleAccountVisibility(e, account.walletId);
-            }}
-          >
-            <img src={isHidden ? InvisibleIcon : VisibleIcon} />
-          </IconButton>
-        )}
-      </div>
-    </div>
+    </>
   );
 };
 
