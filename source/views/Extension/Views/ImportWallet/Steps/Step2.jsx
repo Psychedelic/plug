@@ -37,14 +37,14 @@ const Step2 = ({ userPemFile }) => {
   };
 
   const createImportedAccount = (pemContent) => {
-    console.log(pemContent);
+    setLoading(true);
     sendMessage(
       {
         type: HANDLER_TYPES.IMPORT_PEM_ACCOUNT,
         params: { icon: currentEmoji, name: walletName, pem: pemContent },
       },
       (wallet) => {
-        console.log(wallet);
+        console.log(wallet)
       }
     );
     setLoading(false);
@@ -53,7 +53,6 @@ const Step2 = ({ userPemFile }) => {
 
   const readPemCreateAccount = () => {
     setLoading(true);
-    setDisabled(true);
     let fileReader = new FileReader();
     fileReader.readAsText(userPemFile);
     fileReader.onloadend = () => {
@@ -115,7 +114,7 @@ const Step2 = ({ userPemFile }) => {
           <Button
             variant="rainbow"
             value={t("common.save")}
-            onClick={() => readPemCreateAccount()}
+            onClick={readPemCreateAccount()}
             loading={loading}
             disabled={!disabled}
             fullWidth
