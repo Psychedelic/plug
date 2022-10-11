@@ -66,6 +66,7 @@ const Profile = ({ disableProfile }) => {
   const [error, setError] = useState(null);
   const [connectedWallets, setConnectedWallets] = useState([]);
   const [openRemoveModal, setOpenRemoveModal] = useState();
+  const [selectedRemoveAccount, setSelectedRemovedAccount] = useState(null);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -97,6 +98,16 @@ const Profile = ({ disableProfile }) => {
     setOpen(false);
     navigator.navigate('wallet-details');
   };
+
+  const handleRemoveAccountModal = (e, account) => {
+    e.stopPropagation();
+    setOpenRemoveModal(true);
+    setSelectedRemovedAccount(account);
+  };
+
+  // const handleRemoveAccount = (account) => {
+
+  // }
 
   const handleCreateAccount = () => {
     sendMessage(
@@ -208,12 +219,12 @@ const Profile = ({ disableProfile }) => {
         component={(
           <div className={classes.removeAccountDialog}>
             <Typography>
-              Are you sure you want to remove Testing from your account list?
+              Are you sure you want to remove <b>{selectedRemoveAccount?.name}</b> from your account list?
             </Typography>
             <Typography>
               You can always add the wallet back by importing it again.
             </Typography>
-            <CButton variant="danger" value="Delete Account" onClick={() => console.log('aa')} style={{ marginTop: 22 }} />
+            <CButton variant="danger" value="Remove Account" onClick={() => console.log('aa')} style={{ marginTop: 22 }} />
           </div>
         )}
       />
@@ -307,6 +318,7 @@ const Profile = ({ disableProfile }) => {
                     isCurrentAccount={isCurrentAccount}
                     handleChangeAccount={handleChangeAccount}
                     handleEditAccount={handleEditAccount}
+                    handleRemoveAccountModal={handleRemoveAccountModal}
                     setOpenRemoveModal={setOpenRemoveModal}
                     openRemoveModal={openRemoveModal}
                   />

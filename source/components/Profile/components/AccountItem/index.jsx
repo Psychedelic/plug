@@ -18,6 +18,7 @@ const AccountItem = ({
   isEditing,
   handleChangeAccount,
   handleEditAccount,
+  handleRemoveAccountModal,
   setOpenRemoveModal,
   openRemoveModal,
 }) => {
@@ -75,7 +76,7 @@ const AccountItem = ({
             />
           </IconButton>
           {!(account.orderNumber === 0) && (
-            <IconButton onClick={() => setOpenRemoveModal(!openRemoveModal)}>
+            <IconButton onClick={(e) => handleRemoveAccountModal(e, account)}>
               <RemoveCircleOutline style={{ color: '#DC2626' }} />
             </IconButton>
           )}
