@@ -27,7 +27,7 @@ const TokenSelector = ({ onClose }) => {
       <div
         onClick={() => navigator.navigate('add-nft')}
         className={classes.addNftButton}
-        data-testid="add-custom-token-button"
+        data-testid="add-custom-nft-button"
       >
         <img
           src={imageIcon}
