@@ -12,6 +12,8 @@ import { useTranslation } from 'react-i18next';
 import extensionizer from 'extensionizer';
 
 import Plus from '@assets/icons/plus.svg';
+import LinkEmoji from '@assets/icons/link-emoji.png';
+
 import {
   setAccountInfo,
   setAssets,
@@ -75,13 +77,14 @@ const Profile = ({ disableProfile }) => {
   const menuItems = disableProfile ? [] : useMenuItems(handleToggle);
 
   useEffect(() => {
-    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
-      const walletsArray = Object.values(state?.wallets);
-      if (walletsArray?.length) {
-        setAccounts(walletsArray);
-      }
-    });
-  }, []);
+    sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
+      (state) => {
+        const walletsArray = Object.values(state?.wallets);
+        if (walletsArray?.length) {
+          setAccounts(walletsArray);
+        }
+      });
+  }, [open]);
 
   const handleChangeAccountName = (e) => {
     const name = e.target.value;
@@ -208,6 +211,10 @@ const Profile = ({ disableProfile }) => {
     executeAccountSwitch(selectedWallet);
     setOpenConnectAccount(false);
     setSelectedWallet(null);
+  };
+
+  const handleOpenImportWallet = () => {
+    navigator.navigate('import-wallet');
   };
 
   return (

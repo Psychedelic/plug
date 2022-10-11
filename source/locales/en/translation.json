@@ -24,6 +24,7 @@
   "profile": {
     "myAccounts": "My Accounts",
     "createAccount": "Create Account",
+    "importWallet": "Import Wallet",
     "settings": "Settings",
     "subaccountNotConnected": "This account is not connected",
     "wantToConnect": "Do you want to connect your accounts?",
@@ -394,6 +395,16 @@
     "dfxImport": "dfx identity import <identity name> <route to pem>",
     "dfxUse": "dfx identity use <identity name>",
     "selectAccount": "Select Account"
+  },
+  "importPem": {
+    "importPEMfile": "Import PEM file",
+    "editWalletPic": "Edit Wallet Pic",
+    "walletDetails": "Wallet Details",
+    "dragAndDrop": "Drag and Drop",
+    "or": "or",
+    "browse": "browse",
+    "fileNotSupported": "File not supported. Try a different file.",
+    "dropIt": "Drop it!"
   },
   "nfts": {
     "allNfts": "All NFTs",
