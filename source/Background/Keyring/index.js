@@ -90,6 +90,7 @@ export const HANDLER_TYPES = {
   GET_NFT_INFO: 'get-nft-info',
   ADD_CUSTOM_TOKEN: 'add-custom-token',
   ADD_CUSTOM_NFT: 'add-custom-nft',
+  IMPORT_PEM_ACCOUNT: 'import-pem-account',
   CREATE_PRINCIPAL: 'create-principal',
   SET_CURRENT_PRINCIPAL: 'set-current-principal',
   GET_PEM_FILE: 'get-pem-file',
@@ -126,6 +127,7 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.GET_NFT_INFO]: 'fetching nft info.',
   [HANDLER_TYPES.ADD_CUSTOM_TOKEN]: 'adding custom token.',
   [HANDLER_TYPES.ADD_CUSTOM_NFT]: 'adding custom nft.',
+  [HANDLER_TYPES.IMPORT_PEM_ACCOUNT]: 'importing account from pem',
   [HANDLER_TYPES.CREATE_PRINCIPAL]: 'creating your principal.',
   [HANDLER_TYPES.SET_CURRENT_PRINCIPAL]: 'setting your principal.',
   [HANDLER_TYPES.GET_PEM_FILE]: 'getting your PEM file.',
@@ -182,6 +184,7 @@ export const getKeyringHandler = (type, keyring) => ({
       return null;
     }
   },
+  [HANDLER_TYPES.IMPORT_PEM_ACCOUNT]: async (params) => keyring.importAccountFromPem(params),
   [HANDLER_TYPES.CREATE_PRINCIPAL]: async (params) => keyring.createPrincipal(params),
   [HANDLER_TYPES.SET_CURRENT_PRINCIPAL]:
     async (walletId) => {

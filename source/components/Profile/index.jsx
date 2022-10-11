@@ -12,6 +12,8 @@ import { useTranslation } from 'react-i18next';
 import extensionizer from 'extensionizer';
 
 import Plus from '@assets/icons/plus.svg';
+import LinkEmoji from '@assets/icons/link-emoji.png';
+
 import {
   setAccountInfo,
   setAssets,
@@ -75,7 +77,7 @@ const Profile = ({ disableProfile }) => {
           setAccounts(walletsArray);
         }
       });
-  }, []);
+  }, [open]);
 
   const handleChangeAccountName = (e) => {
     const name = e.target.value;
@@ -179,6 +181,10 @@ const Profile = ({ disableProfile }) => {
     executeAccountSwitch(selectedWallet);
     setOpenConnectAccount(false);
     setSelectedWallet(null);
+  };
+
+  const handleOpenImportWallet = () => {
+    navigator.navigate('import-wallet');
   };
 
   return (
@@ -288,6 +294,15 @@ const Profile = ({ disableProfile }) => {
                   alignLeft
                   logo={Plus}
                   onClick={handleOpenCreateAccount}
+                  data-testid="create-account-button"
+                />
+                <MenuItem
+                  size="small"
+                  key="createAccount"
+                  name={t('profile.importWallet')}
+                  alignLeft
+                  logo={LinkEmoji}
+                  onClick={handleOpenImportWallet}
                   data-testid="create-account-button"
                 />
                 <Divider style={{ margin: '6px 0' }} />
