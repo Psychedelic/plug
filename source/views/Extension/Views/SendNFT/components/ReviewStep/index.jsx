@@ -9,9 +9,6 @@ import {
   AddressTranslation,
 } from '@components';
 import { transferNFT } from '@redux/nfts';
-import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { blockNFTFetch, setCollections } from '@redux/wallet';
-import nfts, { setSelectedNft } from '@redux/nfts';
 import { ADDRESS_TYPES } from '@shared/constants/addresses';
 
 import NFTDisplay from '../NFTDisplay';
