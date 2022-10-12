@@ -202,8 +202,8 @@ const Profile = ({ disableProfile }) => {
       params: selectedRemoveAccount.walletId,
     });
     setOpenRemoveModal(false);
-    navigator.navigate('home');
     setOpen(false);
+    navigator.navigate('home');
   };
 
   return (
