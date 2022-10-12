@@ -24,16 +24,11 @@ import {
 import { getRandomEmoji } from '@shared/constants/emojis';
 import { getTabURL } from '@shared/utils/chrome-tabs';
 import { getWalletsConnectedToUrl, getApp } from '@modules/storageManager';
-import {
-  setEditAccount,
-  toggleAccountHidden,
-  useHiddenAccounts,
-} from '@redux/profile';
+import { setEditAccount, toggleAccountHidden, useHiddenAccounts } from '@redux/profile';
 import { setICNSData } from '@redux/icns';
 import { useICPPrice } from '@redux/icp';
 import { getContacts } from '@redux/contacts';
 import { useMenuItems } from '@hooks';
-import { Dialog, Button as CButton } from '@components';
 import ConnectAccountsModal from '../ConnectAccountsModal';
 import HoverAnimation from '../HoverAnimation';
 import MenuItem from '../MenuItem';
@@ -67,8 +62,6 @@ const Profile = ({ disableProfile }) => {
   const [accountName, setAccountName] = useState('');
   const [error, setError] = useState(null);
   const [connectedWallets, setConnectedWallets] = useState([]);
-  const [openRemoveModal, setOpenRemoveModal] = useState();
-  const [selectedRemoveAccount, setSelectedRemovedAccount] = useState(null);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -102,30 +95,18 @@ const Profile = ({ disableProfile }) => {
     navigator.navigate('wallet-details');
   };
 
-  const handleRemoveAccountModal = (e, account) => {
-    e.stopPropagation();
-    setOpenRemoveModal(true);
-    setSelectedRemovedAccount(account);
-  };
-
-  // const handleRemoveAccount = (account) => {
-
-  // }
-
   const handleCreateAccount = () => {
-    sendMessage(
-      {
-        type: HANDLER_TYPES.CREATE_PRINCIPAL,
-        params: { name: accountName, icon: getRandomEmoji() },
-      },
-      (newWallet) => {
-        if (newWallet) {
-          setAccounts([...accounts, newWallet]);
-        }
-        setAccountName('');
-        setOpenCreateAccount(false);
-      },
-    );
+    sendMessage({
+      type: HANDLER_TYPES.CREATE_PRINCIPAL,
+      params: { name: accountName, icon: getRandomEmoji() },
+    },
+    (newWallet) => {
+      if (newWallet) {
+        setAccounts([...accounts, newWallet]);
+      }
+      setAccountName('');
+      setOpenCreateAccount(false);
+    });
   };
 
   const toggleEditAccounts = () => {
@@ -134,8 +115,7 @@ const Profile = ({ disableProfile }) => {
 
   const executeAccountSwitch = (wallet) => {
     dispatch(setCollections({ collections: [], principalId }));
-    sendMessage(
-      { type: HANDLER_TYPES.SET_CURRENT_PRINCIPAL, params: wallet },
+    sendMessage({ type: HANDLER_TYPES.SET_CURRENT_PRINCIPAL, params: wallet },
       (state) => {
         const walletsArray = Object.values(state?.wallets);
         if (walletsArray.length) {
@@ -145,61 +125,51 @@ const Profile = ({ disableProfile }) => {
           dispatch(setICNSData(newWallet.icnsData));
           dispatch(setAssetsLoading(true));
           dispatch(setTransactions([]));
-          sendMessage(
-            {
-              type: HANDLER_TYPES.GET_ICNS_DATA,
-              params: { refresh: true },
-            },
-            (icnsData) => {
-              dispatch(setICNSData(icnsData));
-            },
-          );
-          sendMessage(
-            {
-              type: HANDLER_TYPES.GET_ASSETS,
-              params: { refresh: true },
-            },
-            (keyringAssets) => {
-              dispatch(setAssets({ keyringAssets, icpPrice }));
-              dispatch(setAssetsLoading(false));
-            },
-          );
+          sendMessage({
+            type: HANDLER_TYPES.GET_ICNS_DATA,
+            params: { refresh: true },
+          }, (icnsData) => {
+            dispatch(setICNSData(icnsData));
+          });
+          sendMessage({
+            type: HANDLER_TYPES.GET_ASSETS,
+            params: { refresh: true },
+          }, (keyringAssets) => {
+            dispatch(setAssets({ keyringAssets, icpPrice }));
+            dispatch(setAssetsLoading(false));
+          });
           setOpen(false);
           navigator.navigate('home', TABS.TOKENS);
         }
         // Clear selected wallet for all flows
         setSelectedWallet(null);
-      },
-    );
+      });
   };
 
   const handleChangeAccount = (e, wallet) => {
     e.stopPropagation();
     setSelectedWallet(wallet);
-    extensionizer.tabs.query(
-      { active: true, lastFocusedWindow: true },
-      (tabs) => {
-        const url = getTabURL(tabs?.[0]);
-        const ids = accounts.map((account) => account.walletId);
-        setTab(tabs?.[0]);
-        // Check if new wallet is connected to the current page
-        getWalletsConnectedToUrl(url, ids, async (wallets = []) => {
-          const currentConnected = wallets.includes(walletId);
-          const newConnected = wallets.includes(wallet);
+    extensionizer.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+      const url = getTabURL(tabs?.[0]);
+      const ids = accounts.map((account) => account.walletId);
+      setTab(tabs?.[0]);
+      // Check if new wallet is connected to the current page
+      getWalletsConnectedToUrl(url, ids, async (wallets = []) => {
+        const currentConnected = wallets.includes(walletId);
+        const newConnected = wallets.includes(wallet);
 
-          setConnectedWallets(wallets);
-          getApp(walletId, url, (currentApp) => {
-            setApp(currentApp);
-            // If current was connected but new one isnt, prompt modal
-            if (currentConnected && !newConnected) {
-              setOpenConnectAccount(true);
-            } else {
-              executeAccountSwitch(wallet);
-            }
-          });
+        setConnectedWallets(wallets);
+        getApp(walletId, url, (currentApp) => {
+          setApp(currentApp);
+          // If current was connected but new one isnt, prompt modal
+          if (currentConnected && !newConnected) {
+            setOpenConnectAccount(true);
+          } else {
+            executeAccountSwitch(wallet);
+          }
         });
-      },
-    );
+      });
+    });
   };
 
   const handleOpenCreateAccount = () => {
@@ -219,23 +189,10 @@ const Profile = ({ disableProfile }) => {
 
   return (
     <>
-      <Dialog
-        title="Remove Account"
-        onClose={() => setOpenRemoveModal(false)}
-        open={openRemoveModal}
-        component={(
-          <div className={classes.removeAccountDialog}>
-            <Typography>
-              Are you sure you want to remove <b>{selectedRemoveAccount?.name}</b> from your account list?
-            </Typography>
-            <Typography>
-              You can always add the wallet back by importing it again.
-            </Typography>
-            <CButton variant="danger" value="Remove Account" onClick={() => console.log('aa')} style={{ marginTop: 22 }} />
-          </div>
-        )}
-      />
-      <HoverAnimation disabled={disableProfile} style={{ padding: '15px' }}>
+      <HoverAnimation
+        disabled={disableProfile}
+        style={{ padding: '15px' }}
+      >
         <Button
           onClick={handleToggle}
           className={classes.button}
@@ -293,64 +250,76 @@ const Profile = ({ disableProfile }) => {
         app={app}
         tab={tab}
       />
-      {!disableProfile && (
-        <Drawer
-          anchor="right"
-          open={open}
-          onClose={handleToggle}
-          classes={{
-            root: classes.drawer,
-            paper: classes.paper,
-          }}
-          data-testid="drawer"
-        >
-          <div className={classes.container}>
-            <div className={classes.header}>
-              <Typography variant="h5" className={classes.myAccounts}>
-                {t('profile.myAccounts')}
-              </Typography>
-              <LinkButton
-                value={t(`common.${isEditing ? 'done' : 'edit'}`)}
-                onClick={toggleEditAccounts}
-              />
-            </div>
-            <MenuList className={clsx(classes.accountContainer, classes.menu)}>
-              {accounts.map((account) => {
-                const isCurrentAccount = account.walletId === walletId;
+      {
+        !disableProfile
+        && (
+          <Drawer
+            anchor="right"
+            open={open}
+            onClose={handleToggle}
+            classes={{
+              root: classes.drawer,
+              paper: classes.paper,
+            }}
+            data-testid="drawer"
+          >
+            <div className={classes.container}>
+              <div className={classes.header}>
+                <Typography variant="h5" className={classes.myAccounts}>{t('profile.myAccounts')}</Typography>
+                <LinkButton value={t(`common.${isEditing ? 'done' : 'edit'}`)} onClick={toggleEditAccounts} />
+              </div>
+              <MenuList className={clsx(classes.accountContainer, classes.menu)}>
+                {
+                  accounts.map((account) => {
+                    const isCurrentAccount = account.walletId === walletId;
 
-                return (
-                  <AccountItem
-                    account={account}
-                    isEditing={isEditing}
-                    isCurrentAccount={isCurrentAccount}
-                    handleChangeAccount={handleChangeAccount}
-                    handleEditAccount={handleEditAccount}
-                    handleRemoveAccountModal={handleRemoveAccountModal}
-                    setOpenRemoveModal={setOpenRemoveModal}
-                    openRemoveModal={openRemoveModal}
-                  />
-                );
-              })}
-            </MenuList>
-            <MenuList className={clsx(classes.settingContainer, classes.menu)}>
-              <Divider style={{ margin: '6px 0' }} />
-              <MenuItem
-                size="small"
-                key="createAccount"
-                name={t('profile.createAccount')}
-                alignLeft
-                logo={Plus}
-                onClick={handleOpenCreateAccount}
-                data-testid="create-account-button"
-              />
-              <Divider style={{ margin: '6px 0' }} />
-              {menuItems.map((item) => (
-                <MenuItem size="small" key={item.name} {...item} />
-              ))}
-            </MenuList>
-          </div>
-        </Drawer>
-      )}
+                    return (
+                      <AccountItem
+                        account={account}
+                        isEditing={isEditing}
+                        isCurrentAccount={isCurrentAccount}
+                        handleChangeAccount={handleChangeAccount}
+                        handleEditAccount={handleEditAccount}
+                      />
+                    );
+                  })
+}
+              </MenuList>
+              <MenuList className={clsx(classes.settingContainer, classes.menu)}>
+                <Divider style={{ margin: '6px 0' }} />
+                <MenuItem
+                  size="small"
+                  key="createAccount"
+                  name={t('profile.createAccount')}
+                  alignLeft
+                  logo={Plus}
+                  onClick={handleOpenCreateAccount}
+                  data-testid="create-account-button"
+                />
+                <MenuItem
+                  size="small"
+                  key="createAccount"
+                  name={t('profile.importWallet')}
+                  alignLeft
+                  logo={LinkEmoji}
+                  onClick={handleOpenImportWallet}
+                  data-testid="create-account-button"
+                />
+                <Divider style={{ margin: '6px 0' }} />
+                {
+                  menuItems.map((item) => (
+                    <MenuItem
+                      size="small"
+                      key={item.name}
+                      {...item}
+                    />
+                  ))
+                }
+              </MenuList>
+            </div>
+          </Drawer>
+        )
+      }
     </>
   );
 };

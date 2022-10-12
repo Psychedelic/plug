@@ -114,7 +114,7 @@ const Step2 = ({ userPemFile }) => {
           <Button
             variant="rainbow"
             value={t("common.save")}
-            onClick={readPemCreateAccount()}
+            onClick={() => readPemCreateAccount()}
             loading={loading}
             disabled={!disabled}
             fullWidth
