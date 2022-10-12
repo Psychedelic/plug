@@ -275,7 +275,7 @@ const WalletDetails = () => {
 
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
-      if (state?.wallets?.length) {
+      if (Object.keys(state?.wallets)?.length) {
         setAccounts(state.wallets);
       }
     });

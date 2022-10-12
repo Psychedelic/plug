@@ -5,6 +5,8 @@ import {
   Layout,
   Header, Button, Badge, LinkButton, NFTDisplayer, ICNSDisplay,
 } from '@components';
+import { HttpAgent } from '@dfinity/agent';
+import { getNFTActor } from '@psychedelic/dab-js';
 import { useTranslation } from 'react-i18next';
 import { getNFTActor } from '@psychedelic/dab-js';
 import { Typography } from '@material-ui/core';
@@ -87,8 +89,8 @@ const NFTDetails = () => {
           <img
             className={classes.expandIcon}
             src={ExpandIcon}
-            data-testid="expand-nft"
             onClick={() => openNFT(nft?.url?.replace('type=thumbnail', ''))}
+            data-testid="expand-nft"
           />
         )}
       />

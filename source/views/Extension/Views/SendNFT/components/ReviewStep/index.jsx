@@ -9,6 +9,9 @@ import {
   AddressTranslation,
 } from '@components';
 import { transferNFT } from '@redux/nfts';
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import { blockNFTFetch, setCollections } from '@redux/wallet';
+import nfts, { setSelectedNft } from '@redux/nfts';
 import { ADDRESS_TYPES } from '@shared/constants/addresses';
 
 import NFTDisplay from '../NFTDisplay';
@@ -30,25 +33,14 @@ const ReviewStep = () => {
     collectionsLoading,
     error,
   } = useSelector((state) => state.nfts);
+  const collection = useMemo(() => collections?.find(
+      (col) => col.canisterId === nft?.canister,
+    ) || {},
+  [collections, nft]);
 
   const executeTransferNFT = () => {
     const to = resolvedSendAddress?.address || sendAddress?.address;
     dispatch(transferNFT({ nft, to }));
-    // setLoading(true);
-    // setErrorMessage('');
-    // sendMessage({ type: HANDLER_TYPES.TRANSFER_NFT, params: { nft, to } },
-    //   (response) => {
-    //     setLoading(false);
-    //     if (response.error) {
-    //       setErrorMessage(response.error);
-    //     } else {
-    //       dispatch(setCollections({
-    //         collections: response,
-    //         principalId,
-    //       }));
-    //       dispatch(blockNFTFetch());
-    //     }
-    //   });
   };
 
   useEffect(() => {
@@ -66,11 +58,6 @@ const ReviewStep = () => {
   const addresses = sendAddress?.type === ADDRESS_TYPES.ICNS
     ? [sendAddress, resolvedSendAddress]
     : [sendAddress];
-
-  const collection = useMemo(() => collections?.find(
-      (col) => col.canisterId === nft?.canister,
-    ) || {},
-  [collections, nft]);
 
   console.log('collection', collections, collection);
   return (
