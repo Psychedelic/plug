@@ -5,8 +5,6 @@ import {
   Layout,
   Header, Button, Badge, LinkButton, NFTDisplayer, ICNSDisplay,
 } from '@components';
-import { HttpAgent } from '@dfinity/agent';
-import { getNFTActor } from '@psychedelic/dab-js';
 import { useTranslation } from 'react-i18next';
 import { getNFTActor } from '@psychedelic/dab-js';
 import { Typography } from '@material-ui/core';
