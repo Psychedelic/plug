@@ -24,7 +24,6 @@ const AccountItem = ({
   const classes = useStyles();
   const hiddenAccounts = useHiddenAccounts();
   const dispatch = useDispatch();
-  console.log(account);
 
   const isHidden = hiddenAccounts.includes(account.walletId);
 
@@ -50,7 +49,7 @@ const AccountItem = ({
         >
           <UserIcon
             size="small"
-            icon={account.icon ? account.icon : '👽'}
+            icon={account?.icon ?? '👽'}
             style={{ marginLeft: -6, marginRight: 12 }}
           />
           <div className={classes.accountDetails}>
@@ -58,9 +57,7 @@ const AccountItem = ({
               className={classes.accountName}
               data-testid={`account-name-${account.name}`}
             >
-              {account.icnsData.reverseResolvedName
-                ? account.icnsData.reverseResolvedName
-                : account.name}
+              {account?.icnsData?.reverseResolvedName ?? account?.name}
             </span>
           </div>
         </div>
@@ -75,7 +72,7 @@ const AccountItem = ({
               src={BluePencil}
             />
           </IconButton>
-          {(account.type === 'PEM_256k1') && (
+          {!(account.type === 'MNEMONIC') && (
             <IconButton onClick={(e) => handleRemoveAccountModal(e, account)}>
               <RemoveCircleOutline style={{ color: '#DC2626' }} />
             </IconButton>

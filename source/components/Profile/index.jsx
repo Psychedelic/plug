@@ -221,7 +221,7 @@ const Profile = ({ disableProfile }) => {
             <Typography>
               You can always add the wallet back by importing it again.
             </Typography>
-            <CButton variant="danger" value="Remove Account" onClick={() => handleRemoveAccount()} style={{ marginTop: 22 }} />
+            <CButton variant="danger" value="Remove Account" onClick={handleRemoveAccount} style={{ marginTop: 22 }} />
           </div>
         )}
       />
