@@ -19,12 +19,12 @@ const AccountItem = ({
   handleChangeAccount,
   handleEditAccount,
   handleRemoveAccountModal,
-  setOpenRemoveModal,
-  openRemoveModal,
+  handleRemoveAccount,
 }) => {
   const classes = useStyles();
   const hiddenAccounts = useHiddenAccounts();
   const dispatch = useDispatch();
+  console.log(account);
 
   const isHidden = hiddenAccounts.includes(account.walletId);
 
@@ -75,7 +75,7 @@ const AccountItem = ({
               src={BluePencil}
             />
           </IconButton>
-          {!(account.orderNumber === 0) && (
+          {(account.type === 'PEM_256k1') && (
             <IconButton onClick={(e) => handleRemoveAccountModal(e, account)}>
               <RemoveCircleOutline style={{ color: '#DC2626' }} />
             </IconButton>

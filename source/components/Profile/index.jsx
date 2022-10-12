@@ -29,6 +29,7 @@ import { setICNSData } from '@redux/icns';
 import { useICPPrice } from '@redux/icp';
 import { getContacts } from '@redux/contacts';
 import { useMenuItems } from '@hooks';
+import { Dialog, Button as CButton } from '@components';
 import ConnectAccountsModal from '../ConnectAccountsModal';
 import HoverAnimation from '../HoverAnimation';
 import MenuItem from '../MenuItem';
@@ -62,6 +63,8 @@ const Profile = ({ disableProfile }) => {
   const [accountName, setAccountName] = useState('');
   const [error, setError] = useState(null);
   const [connectedWallets, setConnectedWallets] = useState([]);
+  const [selectedRemoveAccount, setSelectedRemovedAccount] = useState(null);
+  const [openRemoveModal, setOpenRemoveModal] = useState(false);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -187,8 +190,40 @@ const Profile = ({ disableProfile }) => {
     navigator.navigate('import-wallet');
   };
 
+  const handleRemoveAccountModal = (e, account) => {
+    e.stopPropagation();
+    setOpenRemoveModal(true);
+    setSelectedRemovedAccount(account);
+  };
+
+  const handleRemoveAccount = () => {
+    sendMessage({
+      type: HANDLER_TYPES.REMOVE_PEM_ACCOUNT,
+      params: { walletId: selectedRemoveAccount.walletId },
+    }, (a) => {
+      console.log(a);
+    });
+  };
+
   return (
     <>
+      <Dialog
+        title="Remove Account"
+        onClose={() => setOpenRemoveModal(false)}
+        open={openRemoveModal}
+        component={(
+          <div className={classes.removeAccountDialog}>
+            <Typography>
+              Are you sure you want to remove Testing from your account list?
+              Are you sure you want to remove <b>{selectedRemoveAccount?.name}</b> from your account list?
+            </Typography>
+            <Typography>
+              You can always add the wallet back by importing it again.
+            </Typography>
+            <CButton variant="danger" value="Remove Account" onClick={() => handleRemoveAccount()} style={{ marginTop: 22 }} />
+          </div>
+        )}
+      />
       <HoverAnimation
         disabled={disableProfile}
         style={{ padding: '15px' }}
@@ -280,6 +315,7 @@ const Profile = ({ disableProfile }) => {
                         isCurrentAccount={isCurrentAccount}
                         handleChangeAccount={handleChangeAccount}
                         handleEditAccount={handleEditAccount}
+                        handleRemoveAccountModal={handleRemoveAccountModal}
                       />
                     );
                   })

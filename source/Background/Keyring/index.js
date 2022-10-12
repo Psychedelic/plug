@@ -91,6 +91,7 @@ export const HANDLER_TYPES = {
   ADD_CUSTOM_TOKEN: 'add-custom-token',
   ADD_CUSTOM_NFT: 'add-custom-nft',
   IMPORT_PEM_ACCOUNT: 'import-pem-account',
+  REMOVE_PEM_ACCOUNT: 'remove-pem-account',
   CREATE_PRINCIPAL: 'create-principal',
   SET_CURRENT_PRINCIPAL: 'set-current-principal',
   GET_PEM_FILE: 'get-pem-file',
@@ -128,6 +129,7 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.ADD_CUSTOM_TOKEN]: 'adding custom token.',
   [HANDLER_TYPES.ADD_CUSTOM_NFT]: 'adding custom nft.',
   [HANDLER_TYPES.IMPORT_PEM_ACCOUNT]: 'importing account from pem',
+  [HANDLER_TYPES.REMOVE_PEM_ACCOUNT]: 'remove pem account',
   [HANDLER_TYPES.CREATE_PRINCIPAL]: 'creating your principal.',
   [HANDLER_TYPES.SET_CURRENT_PRINCIPAL]: 'setting your principal.',
   [HANDLER_TYPES.GET_PEM_FILE]: 'getting your PEM file.',
@@ -186,6 +188,7 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.IMPORT_PEM_ACCOUNT]: async (params) => keyring.importAccountFromPem(params),
   [HANDLER_TYPES.CREATE_PRINCIPAL]: async (params) => keyring.createPrincipal(params),
+  [HANDLER_TYPES.REMOVE_PEM_ACCOUNT]: async (params) => keyring.deleteImportedAccount(params),
   [HANDLER_TYPES.SET_CURRENT_PRINCIPAL]:
     async (walletId) => {
       await keyring.setCurrentPrincipal(walletId);
