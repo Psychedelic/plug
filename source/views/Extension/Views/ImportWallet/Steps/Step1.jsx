@@ -63,7 +63,7 @@ const Step1 = ({ handleChangeStep, setUserPemFile, userPemFile }) => {
                   </div>
                 ) : (
                   <>
-                    <input {...getInputProps()} />
+                    <input {...getInputProps()} data-testid='input-pem-file' />
                     <CloudUpload
                       style={{ color: "#BBBEC2" }}
                       fontSize="large"
@@ -94,7 +94,7 @@ const Step1 = ({ handleChangeStep, setUserPemFile, userPemFile }) => {
             loading={loading}
             disabled={!disabled}
             fullWidth
-            data-testid="add-button"
+            data-testid="submit-pem-file"
           />
         </Grid>
       </Grid>

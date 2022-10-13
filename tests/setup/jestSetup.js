@@ -3,7 +3,7 @@ require('dotenv').config();
 const PAGE_TITLE = 'Plug';
 const EXTENSION_PATH = require('path').join(__dirname, '..', '..', 'extension', 'chrome');
 
-jest.setTimeout(600000); // in milliseconds
+jest.setTimeout(100000); // in milliseconds
 
 global.secrets = {
   seedphrase: process.env.SEEDPHRASE,

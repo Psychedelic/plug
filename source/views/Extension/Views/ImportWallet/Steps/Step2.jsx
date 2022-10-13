@@ -108,6 +108,7 @@ const Step2 = ({ userPemFile }) => {
                 onChange={(e) => setWalletName(e.target.value)}
                 type="text"
                 // error={}
+                data-testid="input-pem-acc-name"
               />
             }
           />
@@ -118,7 +119,7 @@ const Step2 = ({ userPemFile }) => {
             loading={loading}
             disabled={!disabled}
             fullWidth
-            data-testid="add-button"
+            data-testid="submit-pem-account"
           />
         </Grid>
       </Grid>

@@ -340,7 +340,7 @@ const Profile = ({ disableProfile }) => {
                   alignLeft
                   logo={LinkEmoji}
                   onClick={handleOpenImportWallet}
-                  data-testid="create-account-button"
+                  data-testid="import-account-button"
                 />
                 <Divider style={{ margin: '6px 0' }} />
                 {
