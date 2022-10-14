@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core';
 import randomColor from 'random-color';
@@ -53,24 +53,28 @@ const TokenIcon = ({
 }) => {
   const classes = useStyles();
   const backgroundColor = `rgb(${color.values.rgb.join(',')})`;
-  const [finalLogo, setFinalLogo] = useState(null);
+  const [resolvedLogo, setResolvedLogo] = useState(null);
   const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[nft.canisterId];
 
-  if (isUrl(logo)) {
-    fetch(logo).then(() => {
-      setFinalLogo(logo);
-    }).then(() => {
-      setFinalLogo(QuestionHat);
-    });
-  } else {
-    setFinalLogo(logo);
-  }
+  useEffect(() => {
+    if (isUrl(logo)) {
+      fetch(logo).then((res) => {
+        if (res.status !== 404) {
+          setResolvedLogo(logo);
+        } else {
+          setResolvedLogo(QuestionHat);
+        }
+      });
+    } else {
+      setResolvedLogo(logo);
+    }
+  }, [logo]);
 
   if (logo) {
     return nft ? (
       <NFTDisplayer url={logo} className={className} defaultTag={nftDefaultTag} {...props} />
     ) : (
-      <img src={finalLogo} className={clsx(classes.icon, className)} {...props} />
+      <img src={resolvedLogo} className={clsx(classes.icon, className)} {...props} />
     );
   }
 
