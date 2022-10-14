@@ -1787,11 +1787,10 @@
     cross-fetch "^3.1.4"
     crypto-js "^4.1.1"
 
-
-"@psychedelic/plug-controller@0.22.3":
-  version "0.22.3"
-  resolved "https://npm.pkg.github.com/download/@Psychedelic/plug-controller/0.22.3/0de97b56824db0aab742fbe5a69fe44eb0edee8c#0de97b56824db0aab742fbe5a69fe44eb0edee8c"
-  integrity sha512-1mP7hEnzKBll/3r70vCh8v/v+Yby/G6rx5TFBIbVB4Wkx+H23wQi+pF0LeQk8oBL/Z+3PApfXjiCQ/YSxlZBAQ==
+"@psychedelic/plug-controller@0.22.6":
+  version "0.22.6"
+  resolved "https://npm.pkg.github.com/download/@Psychedelic/plug-controller/0.22.6/8c25286d67f09de822ac3ba5d2871c673b5262a4#8c25286d67f09de822ac3ba5d2871c673b5262a4"
+  integrity sha512-5XoiF34l9k7jh1uwLwNIidjG7EhIAEh4yvQ6TrSR/1X//NdFO+ipkooUj3GSEqbGZAF4nhOOJfwO7PX9EE8agQ==
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
@@ -1821,10 +1820,10 @@
     tweetnacl "^1.0.3"
     uuidv4 "^6.2.13"
 
-"@psychedelic/plug-inpage-provider@^2.3.0":
-  version "2.3.0"
-  resolved "https://npm.pkg.github.com/download/@Psychedelic/plug-inpage-provider/2.3.0/5e5510ab742506cbc20f0e74688e13142ec15b73#5e5510ab742506cbc20f0e74688e13142ec15b73"
-  integrity sha512-JBIR9k7+Jxj2xQ4cHDUkz1WmIe4VVk3kmyt7RaaePAQDUwHUhz0gISV5jpTBNKWqziF70ANDM66BjCkTrFSQEA==
+"@psychedelic/plug-inpage-provider@^2.3.1":
+  version "2.3.1"
+  resolved "https://npm.pkg.github.com/download/@Psychedelic/plug-inpage-provider/2.3.1/1949663fd9e863c1127e36602c56f41a4c0408c4#1949663fd9e863c1127e36602c56f41a4c0408c4"
+  integrity sha512-1e3pd2rgNQ0da6Knxtcgdgeehyv1bS1zqgU7XphYKmy4SuXbR5bIoCCqvmcNgJGMWyeqaQBcfEzNVKRF1pfm9Q==
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"

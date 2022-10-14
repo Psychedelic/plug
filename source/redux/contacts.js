@@ -133,7 +133,7 @@ export const contactSlice = createSlice({
         state.contacts = filteredContacts;
         state.groupedContacts = groupContacts(filteredContacts);
       })
-      .addCase(removeContact.fulfilled, (state, action) => {
+      .addCase(removeContact.fulfilled, (state) => {
         state.pendingDelete = false;
       })
       .addCase(removeContact.rejected, (state, action) => {

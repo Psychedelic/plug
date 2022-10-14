@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Plug",
-  "version": "0.5.2.1",
+  "version": "0.6.0",
   "icons": {
     "16": "assets/icons/favicon-16.png",
     "32": "assets/icons/favicon-32.png",
@@ -18,7 +18,9 @@
     "notifications",
     "https://kyasshu.fleek.co/*",
     "https://www.timeapi.io/api/Time/current/zone?timeZone=Etc/UTC",
-    "https://mainnet.plugwallet.ooo/*"
+    "https://mainnet.plugwallet.ooo/*",
+    "https://mainnet.dfinity.network/*",
+    "https://ic0.app/*"
   ],
   "content_security_policy": "script-src 'self' 'wasm-eval'; object-src 'self'",
   "__chrome|firefox__author": "FleekHQ",

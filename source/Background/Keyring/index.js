@@ -90,8 +90,6 @@ export const HANDLER_TYPES = {
   GET_NFT_INFO: 'get-nft-info',
   ADD_CUSTOM_TOKEN: 'add-custom-token',
   ADD_CUSTOM_NFT: 'add-custom-nft',
-  IMPORT_PEM_ACCOUNT: 'import-pem-account',
-  REMOVE_PEM_ACCOUNT: 'remove-pem-account',
   CREATE_PRINCIPAL: 'create-principal',
   SET_CURRENT_PRINCIPAL: 'set-current-principal',
   GET_PEM_FILE: 'get-pem-file',
@@ -109,6 +107,8 @@ export const HANDLER_TYPES = {
   REMOVE_NETWORK: 'remove-network',
   SET_CURRENT_NETWORK: 'set-current-network',
   GET_CURRENT_NETWORK: 'get-current-network',
+  IMPORT_PEM_ACCOUNT: 'import-pem-account',
+  REMOVE_PEM_ACCOUNT: 'remove-pem-account',
 };
 
 export const getKeyringErrorMessage = (type) => ({
@@ -128,8 +128,6 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.GET_NFT_INFO]: 'fetching nft info.',
   [HANDLER_TYPES.ADD_CUSTOM_TOKEN]: 'adding custom token.',
   [HANDLER_TYPES.ADD_CUSTOM_NFT]: 'adding custom nft.',
-  [HANDLER_TYPES.IMPORT_PEM_ACCOUNT]: 'importing account from pem',
-  [HANDLER_TYPES.REMOVE_PEM_ACCOUNT]: 'remove pem account',
   [HANDLER_TYPES.CREATE_PRINCIPAL]: 'creating your principal.',
   [HANDLER_TYPES.SET_CURRENT_PRINCIPAL]: 'setting your principal.',
   [HANDLER_TYPES.GET_PEM_FILE]: 'getting your PEM file.',
@@ -145,6 +143,8 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.SET_CURRENT_NETWORK]: 'setting the current network',
   [HANDLER_TYPES.GET_CURRENT_NETWORK]: 'getting the current network',
   [HANDLER_TYPES.REMOVE_CUSTOM_TOKEN]: 'removing custom token',
+  [HANDLER_TYPES.IMPORT_PEM_ACCOUNT]: 'importing account from pem',
+  [HANDLER_TYPES.REMOVE_PEM_ACCOUNT]: 'remove pem account',
 }[type]);
 
 export const sendMessage = (args, callback) => {

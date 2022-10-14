@@ -24,7 +24,7 @@ import {
 import { getRandomEmoji } from '@shared/constants/emojis';
 import { getTabURL } from '@shared/utils/chrome-tabs';
 import { getWalletsConnectedToUrl, getApp } from '@modules/storageManager';
-import { setEditAccount, toggleAccountHidden, useHiddenAccounts } from '@redux/profile';
+import { setEditAccount } from '@redux/profile';
 import { setICNSData } from '@redux/icns';
 import { useICPPrice } from '@redux/icp';
 import { getContacts } from '@redux/contacts';
@@ -215,7 +215,6 @@ const Profile = ({ disableProfile }) => {
         component={(
           <div className={classes.removeAccountDialog}>
             <Typography>
-              Are you sure you want to remove Testing from your account list?
               Are you sure you want to remove <b>{selectedRemoveAccount?.name}</b> from your account list?
             </Typography>
             <Typography>
