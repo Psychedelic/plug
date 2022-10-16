@@ -23,8 +23,6 @@ const Tokens = () => {
   const { onScroll, fullScroll } = useScroll();
   const [displayCustomToken, setDisplayCustomToken] = useState(false);
 
-  console.log('assets del state ->', assets);
-
   const fetchAssets = (cb = () => {}, refresh) => {
     sendMessage({
       type: HANDLER_TYPES.GET_ASSETS,
