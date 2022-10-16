@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const isUrl = (urlString) => {
+  console.log(urlString);
   try {
     return Boolean(new URL(urlString));
   } catch (e) {
@@ -59,10 +60,12 @@ const TokenIcon = ({
   useEffect(() => {
     if (isUrl(logo)) {
       fetch(logo).then((res) => {
-        if (res.status !== 404) {
-          setResolvedLogo(logo);
-        } else {
+        console.log('el res status es -->', res.status);
+        if (res.status === 404) {
           setResolvedLogo(QuestionHat);
+        } else {
+          console.log('es un 200');
+          setResolvedLogo(logo);
         }
       });
     } else {
