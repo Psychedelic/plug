@@ -8,6 +8,7 @@ import icnsReducer from './icns';
 import contactsReducer from './contacts';
 import sendReducer from './send';
 import networkReducer from './network';
+import transactionsReducer from './transactions';
 
 const reducer = {
   wallet: walletReducer,
@@ -19,6 +20,7 @@ const reducer = {
   contacts: contactsReducer,
   send: sendReducer,
   network: networkReducer,
+  transactions: transactionsReducer,
 };
 
 const store = configureStore({
