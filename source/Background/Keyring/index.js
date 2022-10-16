@@ -545,3 +545,11 @@ export const burnXTC = ({ to, amount }) => new Promise((resolve, reject) => {
     resolve(res);
   });
 });
+
+export const getTransactions = () => new Promise((resolve) => {
+  sendMessage({
+    type: HANDLER_TYPES.GET_TRANSACTIONS,
+  }, (transactions) => {
+    resolve(transactions);
+  });
+});
