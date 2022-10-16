@@ -10,13 +10,12 @@ import { useICPPrice } from '@redux/icp';
 import {
   setAssets,
   setAssetsLoading,
-  setTransactions,
-  setTransactionsLoading,
   setCollections,
   setCollectionsLoading,
 } from '@redux/wallet';
 import { getApps } from '@modules/storageManager';
 import { getCurrentNetwork, getNetworks } from '@redux/network';
+import { getTransactions } from '@redux/transactions';
 import { getContacts } from '@redux/contacts';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { TABS, useRouter } from '@components/Router';
@@ -34,10 +33,9 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
     principalId,
     walletId,
     assetsLoading,
-    transactionsLoading,
     collectionsLoading,
   } = useSelector((state) => state.wallet);
-  const { useICNS } = useSelector((state) => state.icns);
+  const { loading: transactionsLoading } = useSelector((state) => state.transactions);
   const { currentNetwork } = useSelector((state) => state.network);
   const [selectorOpen, setSelectorOpen] = useState(false);
   const [connected, setConnected] = useState(false);
@@ -80,20 +78,6 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
     );
   };
 
-  const loadTransactions = () => {
-    dispatch(setTransactionsLoading(true));
-    sendMessage(
-      {
-        type: HANDLER_TYPES.GET_TRANSACTIONS,
-        params: {},
-      },
-      (trxs) => {
-        dispatch(setTransactions({ ...trxs, icpPrice, useICNS }));
-        dispatch(setTransactionsLoading(false));
-      },
-    );
-  };
-
   const loadCollections = () => {
     dispatch(setCollectionsLoading(true));
     sendMessage(
@@ -118,10 +102,11 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
     if (icpPrice) {
       // Contacts
       dispatch(getContacts({ refresh: true }));
+      // Transactions
+      dispatch(getTransactions());
 
       loadAssets();
       loadCollections();
-      loadTransactions();
     }
   };
 
