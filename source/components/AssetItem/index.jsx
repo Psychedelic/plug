@@ -124,11 +124,22 @@ const AssetItem = ({
       </div>
       {failed && !loading
         ? !ledgerNotSpecified && (
-        <img
-          className={clsx(classes.value, classes.refresh)}
-          src={RefreshIcon}
-          onClick={handleFetchAssets}
-        />
+        <div>
+          <img
+            className={clsx(classes.value, classes.refresh)}
+            src={RefreshIcon}
+            onClick={handleFetchAssets}
+          />
+          <div
+            className={clsx(classes.deleteToken, !value && classes.deleteTokenMoveRight, isHovering && classes.deleteTokenActive)}
+          >
+            <img
+              onClick={() => setOpenDelete(true)}
+              alt="delete-token"
+              src={DeleteIcon}
+            />
+          </div>
+        </div>
         )
         : !!value && (
         <Typography variant="h5" className={clsx(classes.value, (loading) && classes.pulse)}>
