@@ -32,8 +32,7 @@ const getTokenDetails = async ({ index, canister, standard }) => {
 
 const NFTDetails = () => {
   const { t } = useTranslation();
-  const { selectedNft: nft } = useSelector((state) => state.nfts);
-  const { collections } = useSelector((state) => state.wallet);
+  const { selectedNft: nft, collections } = useSelector((state) => state.nfts);
   const { navigator: routerNavigator } = useRouter();
   const [populatedNFT, setPopulatedNFT] = useState(nft);
   const classes = useStyles();
@@ -54,13 +53,13 @@ const NFTDetails = () => {
   const name = `${nft?.name ?? `#${nft?.index}`}`;
   const isICNS = collection?.name === 'ICNS';
 
-  const openNFT = (url) => {
+  const openNFT = (url) => () => {
     const parsedUrl = isICNS
       ? `https://icns.id/domains/${populatedNFT?.name.replace('.icp', '')}/detail`
       : url;
 
     extension.tabs.create({
-      url: parsedUrl,
+      url: parsedUrl?.replace('type=thumbnail', ''),
     });
   };
 
@@ -69,7 +68,7 @@ const NFTDetails = () => {
   // eslint-disable-next-line no-confusing-arrow
   const handleButtonClick = (url) => isICNS ? openNFT(url) : copyNFT(url);
 
-  const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[populatedNFT.canisterId];
+  const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[populatedNFT.canister];
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -85,8 +84,7 @@ const NFTDetails = () => {
           <img
             className={classes.expandIcon}
             src={ExpandIcon}
-            data-testid="expand-nft"
-            onClick={() => openNFT(populatedNFT?.url?.replace('type=thumbnail', ''))}
+            onClick={openNFT(populatedNFT?.url)}
             data-testid="expand-nft"
           />
         )}

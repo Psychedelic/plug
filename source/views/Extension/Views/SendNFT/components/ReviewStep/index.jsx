@@ -1,16 +1,14 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { TABS } from '@components/Router';
+import { TABS, useRouter } from '@components/Router';
 import {
   Button, Alert,
   AddressTranslation,
 } from '@components';
-import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import { blockNFTFetch, setCollections } from '@redux/wallet';
-import nfts, { setSelectedNft } from '@redux/nfts';
+import { transferNFT } from '@redux/nfts';
 import { ADDRESS_TYPES } from '@shared/constants/addresses';
 
 import NFTDisplay from '../NFTDisplay';
@@ -21,36 +19,39 @@ const ReviewStep = () => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const { collections, principalId } = useSelector((state) => state.wallet);
-  const { selectedNft: nft, sendAddress, resolvedSendAddress } = useSelector((state) => state.nfts);
+  const { navigator } = useRouter();
 
+  const {
+    selectedNft: nft,
+    sendAddress,
+    resolvedSendAddress,
+    collections,
+    collectionsLoading,
+    error,
+  } = useSelector((state) => state.nfts);
   const collection = useMemo(() => collections?.find(
       (col) => col.canisterId === nft?.canister,
     ) || {},
   [collections, nft]);
 
-  const transferNFT = () => {
-    setLoading(true);
-    setErrorMessage('');
+  const executeTransferNFT = () => {
     const to = resolvedSendAddress?.address || sendAddress?.address;
-    sendMessage({ type: HANDLER_TYPES.TRANSFER_NFT, params: { nft, to } },
-      (response) => {
-        setLoading(false);
-        if (response.error) {
-          setErrorMessage(response.error);
-        } else {
-          dispatch(setCollections({
-            collections: response,
-            principalId,
-          }));
-          dispatch(blockNFTFetch());
-          dispatch(setSelectedNft(null));
-          navigator.navigate('home', TABS.NFTS);
-        }
-      });
+    dispatch(transferNFT({ nft, to }));
   };
+
+  useEffect(() => {
+    if (error) {
+      setErrorMessage(error);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (!nft) {
+      navigator.navigate('home', TABS.NFTS);
+    }
+  }, [nft]);
+
   const addresses = sendAddress?.type === ADDRESS_TYPES.ICNS
     ? [sendAddress, resolvedSendAddress]
     : [sendAddress];
@@ -58,22 +59,20 @@ const ReviewStep = () => {
   return (
     <div className={classes.reviewStepContainer}>
       <NFTDisplay nft={{ ...nft, collection: collection?.name }} />
-      <AddressTranslation addresses={addresses} loading={loading} />
+      <AddressTranslation addresses={addresses} loading={collectionsLoading} />
       <Button
         variant="rainbow"
         value={t('common.confirm')}
         fullWidth
-        onClick={transferNFT}
-        loading={loading}
+        onClick={executeTransferNFT}
+        loading={collectionsLoading}
         data-testid="confirmation-button"
       />
       {errorMessage?.length > 0 && (
         <div className={classes.errorBox}>
           <Alert
             type="danger"
-            title={(
-              <span>{errorMessage}</span>
-                )}
+            title={(<span>{errorMessage}</span>)}
           />
         </div>
       )}

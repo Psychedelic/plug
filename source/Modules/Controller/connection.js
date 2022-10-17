@@ -99,8 +99,15 @@ export class ConnectionModule extends ControllerModuleBase {
   #disconnect() {
     return {
       methodName: 'disconnect',
-      handler: async (opts, url) => {
-        removeApp(this.keyring?.currentWalletId?.toString(), url, (removed) => {
+      handler: async (opts, url, principal) => {
+        const state = await this.keyring.getState();
+
+        const walletIdFromPrincipal = Object.values(state.wallets).find((wallet) => (
+          wallet.principal === principal
+        ))?.walletId;
+        const walletIdToRemove = walletIdFromPrincipal ?? this.keyring.currentWalletId;
+
+        removeApp(walletIdToRemove, url, (removed) => {
           if (!removed) {
             opts.callback(ERRORS.CONNECTION_ERROR, null);
           }
