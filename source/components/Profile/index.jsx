@@ -18,7 +18,6 @@ import {
   setAccountInfo,
   setAssets,
   setAssetsLoading,
-  setCollections,
   setTransactions,
 } from '@redux/wallet';
 import { getRandomEmoji } from '@shared/constants/emojis';
@@ -49,7 +48,7 @@ const Profile = ({ disableProfile }) => {
   const { navigator } = disableProfile ? {} : useRouter();
   const [isEditing, setIsEditing] = useState(false);
 
-  const { walletId, principalId } = useSelector((state) => state.wallet);
+  const { walletId } = useSelector((state) => state.wallet);
   const icpPrice = useICPPrice();
 
   const [open, setOpen] = useState(false);
@@ -119,7 +118,6 @@ const Profile = ({ disableProfile }) => {
   const executeAccountSwitch = (wallet) => {
     sendMessage({ type: HANDLER_TYPES.SET_CURRENT_PRINCIPAL, params: wallet },
       (state) => {
-        console.log('state on account switch from profile', state);
         const walletsArray = Object.values(state?.wallets);
         if (walletsArray.length) {
           const newWallet = state.wallets[state.currentWalletId];

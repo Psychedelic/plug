@@ -1,19 +1,12 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import {
-  Button, Container, USDFormat, AssetFormat,
-  TokenIcon,
-} from '@components';
 
-import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import {
-  setCollections,
-  setCollectionsLoading,
-} from '@redux/wallet';
-import { useDispatch, useSelector } from 'react-redux';
+import { Button, Container, TokenIcon } from '@components';
+import { registerNFT } from '@redux/nfts';
 
 import useStyles from '../styles';
 
@@ -53,7 +46,7 @@ const Step2 = ({ selectedToken, handleClose }) => {
             value={t('common.add')}
             onClick={registerToken}
             loading={collectionsLoading}
-            disabled={loading}
+            disabled={collectionsLoading}
             fullWidth
             data-testid="add-button"
           />
