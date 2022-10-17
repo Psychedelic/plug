@@ -56,7 +56,6 @@ const ReviewStep = () => {
     ? [sendAddress, resolvedSendAddress]
     : [sendAddress];
 
-  console.log('collection', collections, collection);
   return (
     <div className={classes.reviewStepContainer}>
       <NFTDisplay nft={{ ...nft, collection: collection?.name }} />

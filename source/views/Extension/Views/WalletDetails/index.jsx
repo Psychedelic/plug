@@ -248,7 +248,6 @@ const WalletDetails = () => {
   const executeAccountSwitch = (wallet) => {
     sendMessage({ type: HANDLER_TYPES.SET_CURRENT_PRINCIPAL, params: accountSwitchId },
       (state) => {
-        console.log('state on account switch from details', state);
         if (Object.values(state?.wallets).length) {
           const newWallet = state.wallets[state.currentWalletId];
           dispatch(setAccountInfo(newWallet));

@@ -10,7 +10,6 @@ const NFTDisplay = ({ nft }) => {
   const classes = useStyles();
 
   const nftDefaultTag = NFT_COLLECTION_DEFAULT_TYPES[nft?.canisterId];
-  console.log('nft to display', nft);
   return (
     <Card className={classes.nftDisplayContainer}>
       <NFTDisplayer url={nft?.url} className={classes.nftImage} defaultTag={nftDefaultTag} />

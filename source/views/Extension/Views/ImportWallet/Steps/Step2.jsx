@@ -43,9 +43,7 @@ const Step2 = ({ userPemFile }) => {
         type: HANDLER_TYPES.IMPORT_PEM_ACCOUNT,
         params: { icon: currentEmoji, name: walletName, pem: pemContent },
       },
-      (wallet) => {
-        console.log(wallet)
-      }
+      () => {},
     );
     setLoading(false);
     navigator.navigate("home");
