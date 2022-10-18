@@ -5,19 +5,21 @@ import clsx from 'clsx';
 import ReactJson from 'react-json-view';
 
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
+import { Dialog } from '@components/Dialog';
 
-import Dialog from '../Dialog';
-import PlugItem from './components/items/PlugItem';
-import SwapItem from './components/items/SwapItem';
-import NFTItem from './components/items/NFTItem';
-import TokenItem from './components/items/TokenItem';
-import LiquidityItem from './components/items/LiquidityItem';
-import useStyles from './styles';
+import {
+  PlugItem,
+  SwapItem,
+  NFTItem,
+  TokenItem,
+  LiquidityItem,
+  JellyItem,
+} from './components/items';
+
 import { getAddress, openICNetworkTx } from './utils';
-import JellyItem from './components/items/JellyItem';
+import useStyles from './styles';
 
 const JELLY_CANISTER_ID = 'getti-aiaaa-aaaah-abkkq-cai';
-
 const ActivityItem = (props) => {
   const {
     type,

@@ -5,10 +5,9 @@ import { useActivity } from '@hooks';
 import { getTransactions } from '@redux/transactions';
 
 import { useICPPrice } from '@redux/icp';
-import LoadingWrapper from '../LoadingWrapper';
-import ActivityItem from '../ActivityItem';
+import LoadingWrapper from '@components/LoadingWrapper';
+import { ActivityItem, EmptyState } from './components';
 import useStyles from './styles';
-import EmptyState from './components/EmptyState';
 
 const Activity = () => {
   const classes = useStyles();

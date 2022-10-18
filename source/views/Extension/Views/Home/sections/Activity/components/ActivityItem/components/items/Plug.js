@@ -1,12 +1,28 @@
 import React from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
-import moment from 'moment';
+import { makeStyles } from '@material-ui/core/styles';
+import SHADOW_1 from '@shared/styles/shadows';
 
-import useStyles from './styles';
 import ActivityItemDisplay from '../ActivityItemDisplay';
+
+const useStyles = makeStyles(() => ({
+  image: {
+    height: 41,
+    width: 41,
+    boxShadow: SHADOW_1,
+    borderRadius: 10,
+  },
+  pluggedTitle: {
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    width: 331,
+  },
+}));
 
 const PlugItem = ({
   name, icon, status, date,

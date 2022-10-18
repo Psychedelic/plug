@@ -2,7 +2,7 @@ import { Typography } from '@material-ui/core';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import ThinkingEmoji from '@assets/icons/thinking-emoji.svg';
-import useStyles from '../styles';
+import useStyles from '../../styles';
 
 const EmptyState = () => {
   const { t } = useTranslation();

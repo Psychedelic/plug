@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   Actions,
   Tokens,
-  Activity,
   Apps,
   Layout,
   useRouter,
@@ -26,6 +25,7 @@ import {
   updateWalletId,
   getWalletIds,
 } from '@modules/storageManager';
+import { Activity } from './sections';
 
 const Home = () => {
   const { t } = useTranslation();

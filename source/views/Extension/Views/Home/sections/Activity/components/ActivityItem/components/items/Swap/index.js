@@ -8,9 +8,9 @@ import NumberFormat from 'react-number-format';
 import { formatAssetBySymbol, parseToFloatAmount, TOKENS } from '@shared/constants/currencies';
 import { useICPPrice } from '@redux/icp';
 
-import SwapIcon from '../SwapIcon';
-import ActivityItemDisplay from '../ActivityItemDisplay';
-import ActivityItemDetails from '../ActivityItemDetails';
+import { SwapIcon } from './components';
+import ActivityItemDisplay from '../../ActivityItemDisplay';
+import ActivityItemDetails from '../../ActivityItemDetails';
 
 const getSwapData = (swap, iconHovered, icpPrice) => {
   const {

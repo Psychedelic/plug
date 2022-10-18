@@ -7,10 +7,10 @@ import NumberFormat from 'react-number-format';
 import JellyIcon from '@assets/icons/jelly-icon.svg';
 import { useICPPrice } from '@redux/icp';
 import { E8S_PER_ICP } from '@shared/constants/currencies';
+import { GenericIcon } from '@components';
 
 import ActivityItemDisplay from '../ActivityItemDisplay';
 import ActivityItemDetails from '../ActivityItemDetails';
-import GenericIcon from '../../../GenericIcon';
 
 const getJellyEventTitle = (type) => ({
   DIRECTBUY: 'Buy NFT',
