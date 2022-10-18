@@ -144,7 +144,7 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.GET_CURRENT_NETWORK]: 'getting the current network',
   [HANDLER_TYPES.REMOVE_CUSTOM_TOKEN]: 'removing custom token',
   [HANDLER_TYPES.IMPORT_PEM_ACCOUNT]: 'importing account from pem',
-  [HANDLER_TYPES.REMOVE_PEM_ACCOUNT]: 'remove pem account',
+  [HANDLER_TYPES.REMOVE_PEM_ACCOUNT]: 'removing pem account',
 }[type]);
 
 export const sendMessage = (args, callback) => {
