@@ -93,7 +93,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
   };
 
   const loadCollections = () => {
-    dispatch(getNFTs());
+    dispatch(getNFTs({ refresh: true }));
   };
 
   const refreshWallet = () => {
