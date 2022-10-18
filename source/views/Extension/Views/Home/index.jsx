@@ -97,16 +97,6 @@ const Home = () => {
     });
   };
 
-  const updateProviderConnection = async () => {
-    const currentWallet = wallets.find(w => w.walletId === walletId) || null;
-
-    if (currentWallet) {
-      extension.tabs.query({ active: true }, (activeTabs) => {
-        extension.tabs.sendMessage(activeTabs[0].id, { action: 'updateConnection' });
-      });
-    }
-  };
-
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
       const migratedWalletId = state.walletIds ? true : false;
@@ -131,7 +121,6 @@ const Home = () => {
     getUseICNS(walletId, (useICNS) => {
       dispatch(setUseICNS(useICNS));
     });
-    updateProviderConnection();
   }, [walletId]);
 
   useEffect(() => {
@@ -157,7 +146,6 @@ const Home = () => {
         wallets={wallets}
         open={isConnectAccountsOpen}
         onClose={() => setConnectAccountsOpen(false)}
-        onConfirm={updateProviderConnection}
         connectedWallets={connectedWallets}
         app={app}
         tab={tab}

@@ -70,10 +70,7 @@ const ConnectAccountsModal = ({
 
   const handleConfirm = () => {
     Object.keys(walletsToUpdate).forEach((walletId) => {
-      if (walletsToUpdate[walletId]) {
-        connectAccountToTab(walletId, tab)
-        updateProviderConnection(walletId);
-      }
+      walletsToUpdate[walletId] && connectAccountToTab(walletId, tab);
     });
     onConfirm?.();
     setWalletsToUpdate({});
@@ -130,12 +127,13 @@ ConnectAccountsModal.propTypes = {
   tab: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onConfirm: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func,
   connectedWallets: PropTypes.arrayOf(PropTypes.number),
 };
 
 ConnectAccountsModal.defaultProps = {
   connectedWallets: [],
+  onConfirm: () => {},
 };
 
 export default ConnectAccountsModal;

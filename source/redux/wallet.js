@@ -6,14 +6,6 @@ import {
   TOKENS,
 } from '@shared/constants/currencies';
 
-const sortCollections = (collections = []) => {
-  const icns = collections.find((col) => col.name === 'ICNS');
-  const sorted = collections
-    .filter((col) => col.name !== 'ICNS')
-    .sort((a, b) => b?.name - a?.name);
-  return [icns, ...sorted].filter((col) => !!col);
-};
-
 /* eslint-disable no-param-reassign */
 export const walletSlice = createSlice({
   name: 'wallet',
@@ -25,8 +17,6 @@ export const walletSlice = createSlice({
     assets: Object.values(TOKENS),
     walletId: '',
     assetsLoading: true,
-    collections: [],
-    collectionsLoading: false,
   },
   reducers: {
     updateWalletDetails: (state, action) => {
@@ -56,16 +46,6 @@ export const walletSlice = createSlice({
     setAssetsLoading: (state, action) => {
       state.assetsLoading = action.payload;
     },
-    setCollections: (state, action) => {
-      const { collections, principalId } = action.payload;
-      if (state.principalId === principalId && collections) {
-        state.collections = sortCollections(collections);
-      }
-      state.optimisticNFTUpdate = false;
-    },
-    setCollectionsLoading: (state, action) => {
-      state.collectionsLoading = action.payload;
-    },
     blockNFTFetch: (state) => {
       state.optimisticNFTUpdate = true;
     },
@@ -77,8 +57,6 @@ export const {
   setAccountInfo,
   setAssets,
   setAssetsLoading,
-  setCollections,
-  setCollectionsLoading,
   blockNFTFetch,
 } = walletSlice.actions;
 

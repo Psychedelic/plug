@@ -246,7 +246,6 @@ const WalletDetails = () => {
   };
 
   const executeAccountSwitch = (wallet) => {
-    dispatch(setCollections({ collections: [], principalId }));
     sendMessage({ type: HANDLER_TYPES.SET_CURRENT_PRINCIPAL, params: accountSwitchId },
       (state) => {
         if (Object.values(state?.wallets).length) {

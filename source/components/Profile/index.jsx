@@ -18,13 +18,12 @@ import {
   setAccountInfo,
   setAssets,
   setAssetsLoading,
-  setCollections,
   setTransactions,
 } from '@redux/wallet';
 import { getRandomEmoji } from '@shared/constants/emojis';
 import { getTabURL } from '@shared/utils/chrome-tabs';
 import { getWalletsConnectedToUrl, getApp } from '@modules/storageManager';
-import { setEditAccount, toggleAccountHidden, useHiddenAccounts } from '@redux/profile';
+import { setEditAccount } from '@redux/profile';
 import { setICNSData } from '@redux/icns';
 import { useICPPrice } from '@redux/icp';
 import { getContacts } from '@redux/contacts';
@@ -49,7 +48,7 @@ const Profile = ({ disableProfile }) => {
   const { navigator } = disableProfile ? {} : useRouter();
   const [isEditing, setIsEditing] = useState(false);
 
-  const { walletId, principalId } = useSelector((state) => state.wallet);
+  const { walletId } = useSelector((state) => state.wallet);
   const icpPrice = useICPPrice();
 
   const [open, setOpen] = useState(false);
@@ -117,7 +116,6 @@ const Profile = ({ disableProfile }) => {
   };
 
   const executeAccountSwitch = (wallet) => {
-    dispatch(setCollections({ collections: [], principalId }));
     sendMessage({ type: HANDLER_TYPES.SET_CURRENT_PRINCIPAL, params: wallet },
       (state) => {
         const walletsArray = Object.values(state?.wallets);

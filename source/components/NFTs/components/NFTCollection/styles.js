@@ -11,7 +11,7 @@ export default makeStyles(() => ({
     display: 'grid',
     justifyContent: 'space-evenly',
     gridTemplateColumns: 'repeat(auto-fill, 112px)',
-    overflow: 'hidden',
+    padding: '0 5px',
   },
   nft: {
     height: 112,
