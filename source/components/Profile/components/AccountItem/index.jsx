@@ -35,59 +35,57 @@ const AccountItem = ({
   if (isHidden && !isEditing) return null;
 
   return (
-    <>
+    <div
+      className={clsx(
+        classes.accountItemContainer,
+        isHidden && classes.hiddenAccount,
+      )}
+    >
       <div
-        className={clsx(
-          classes.accountItemContainer,
-          isHidden && classes.hiddenAccount,
-        )}
+        onClick={(e) => handleChangeAccount(e, account.walletId)}
+        className={classes.leftContainer}
       >
-        <div
-          onClick={(e) => handleChangeAccount(e, account.walletId)}
-          className={classes.leftContainer}
-        >
-          <UserIcon
-            size="small"
-            icon={account?.icon ?? '👽'}
-            style={{ marginLeft: -6, marginRight: 12 }}
-          />
-          <div className={classes.accountDetails}>
-            <span
-              className={classes.accountName}
-              data-testid={`account-name-${account.name}`}
-            >
-              {account?.icnsData?.reverseResolvedName || account?.name}
-            </span>
-          </div>
-        </div>
-        <div className={classes.rightContainer}>
-          <IconButton
-            data-testid={`edit-button-${account.name}`}
-            disabled={isHidden}
-            onClick={(e) => handleEditAccount(e, account)}
+        <UserIcon
+          size="small"
+          icon={account?.icon ?? '👽'}
+          style={{ marginLeft: -6, marginRight: 12 }}
+        />
+        <div className={classes.accountDetails}>
+          <span
+            className={classes.accountName}
+            data-testid={`account-name-${account.name}`}
           >
-            <img
-              className={clsx(isHidden && classes.disabledIcon)}
-              src={BluePencil}
-            />
-          </IconButton>
-          {!(account.type === 'MNEMONIC') && (
-            <IconButton onClick={(e) => handleRemoveAccountModal(e, account)}>
-              <RemoveCircleOutline style={{ color: '#DC2626' }} />
-            </IconButton>
-          )}
-          {isEditing && (
-            <IconButton
-              onClick={(e) => {
-                toggleAccountVisibility(e, account.walletId);
-              }}
-            >
-              <img src={isHidden ? InvisibleIcon : VisibleIcon} />
-            </IconButton>
-          )}
+            {account?.icnsData?.reverseResolvedName || account?.name}
+          </span>
         </div>
       </div>
-    </>
+      <div className={classes.rightContainer}>
+        <IconButton
+          data-testid={`edit-button-${account.name}`}
+          disabled={isHidden}
+          onClick={(e) => handleEditAccount(e, account)}
+        >
+          <img
+            className={clsx(isHidden && classes.disabledIcon)}
+            src={BluePencil}
+          />
+        </IconButton>
+        {!(account.type === 'MNEMONIC') && (
+        <IconButton onClick={(e) => handleRemoveAccountModal(e, account)}>
+          <RemoveCircleOutline style={{ color: '#DC2626' }} />
+        </IconButton>
+        )}
+        {isEditing && (
+        <IconButton
+          onClick={(e) => {
+            toggleAccountVisibility(e, account.walletId);
+          }}
+        >
+          <img src={isHidden ? InvisibleIcon : VisibleIcon} />
+        </IconButton>
+        )}
+      </div>
+    </div>
   );
 };
 

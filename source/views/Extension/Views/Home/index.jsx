@@ -24,7 +24,6 @@ import {
   getUseICNS,
   getWalletsConnectedToUrl,
   updateWalletId,
-  getWalletIds,
 } from '@modules/storageManager';
 
 const Home = () => {

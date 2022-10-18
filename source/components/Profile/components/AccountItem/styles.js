@@ -5,10 +5,11 @@ export default makeStyles(() => ({
   accountItemContainer: {
     width: '100%',
     height: '52px',
-    padding: '8px 10px 8px 27px',
+    padding: '8px 21px 8px 27px',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     cursor: 'pointer',
     color: '#000000',
     transition: `${SMOOTH_TRANSITION}`,
@@ -30,7 +31,6 @@ export default makeStyles(() => ({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    flex: 2,
   },
   accountDetails: {
     display: 'flex',
@@ -50,11 +50,10 @@ export default makeStyles(() => ({
   },
   rightContainer: {
     display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     opacity: '0',
-    flex: 0.5,
-    marginLeft: 10,
 
     transition: `${SMOOTH_TRANSITION}`,
     '& > button': {

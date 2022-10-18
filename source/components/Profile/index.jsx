@@ -213,7 +213,6 @@ const Profile = ({ disableProfile }) => {
         component={(
           <div className={classes.removeAccountDialog}>
             <Typography>
-              Are you sure you want to remove Testing from your account list?
               Are you sure you want to remove <b>{selectedRemoveAccount?.name}</b> from your account list?
             </Typography>
             <Typography>
