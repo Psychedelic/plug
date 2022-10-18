@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
@@ -32,7 +32,7 @@ const AssetItem = ({
   const classes = useStyles();
   const { t } = useTranslation();
   const { currentNetwork, usingMainnet } = useSelector((state) => state.network);
-  const [ shouldRemove, setShouldRemove] = useState(false);
+  const [shouldRemove, setShouldRemove] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
 
@@ -61,7 +61,7 @@ const AssetItem = ({
   const handleRemoveAssetDisplay = () => {
     setShouldRemove(true);
     handleModalClose();
-  }
+  };
 
   const ledgerNotSpecified = !usingMainnet && !currentNetwork?.ledgerCanisterId;
 
@@ -136,7 +136,7 @@ const AssetItem = ({
             ? <Skeleton className={classes.valueSkeleton} />
             : (<NumberFormat value={value} displayType="text" decimalScale={2} fixedDecimalScale thousandSeparator="," prefix="$" />)}
         </Typography>
-      )}
+        )}
       { !failed && !loading && (
         <div
           className={clsx(classes.deleteToken, !value && classes.deleteTokenMoveRight, isHovering && classes.deleteTokenActive)}

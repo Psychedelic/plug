@@ -55,7 +55,7 @@ const AccountItem = ({
             className={classes.accountName}
             data-testid={`account-name-${account.name}`}
           >
-            {account?.icnsData?.reverseResolvedName ?? account?.name}
+            {account?.icnsData?.reverseResolvedName || account?.name}
           </span>
         </div>
       </div>
@@ -100,14 +100,10 @@ AccountItem.propTypes = {
       names: PropTypes.arrayOf(PropTypes.string),
     }),
   }).isRequired,
-  isEditing: PropTypes.bool,
+  isEditing: PropTypes.bool.isRequired,
   handleChangeAccount: PropTypes.func.isRequired,
-  handleEditAccount: PropTypes.func.isRequired,
   handleRemoveAccountModal: PropTypes.func.isRequired,
-};
-
-AccountItem.defaultProps = {
-  isEditing: false,
+  handleEditAccount: PropTypes.func.isRequired,
 };
 
 export default AccountItem;

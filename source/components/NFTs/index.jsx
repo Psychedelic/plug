@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import { getNFTs } from '@redux/nfts';
+
 import LoadingWrapper from '../LoadingWrapper';
-import { setCollections, setCollectionsLoading } from '../../redux/wallet';
 import useStyles from './styles';
 import EmptyState from './components/EmptyState';
 import NFTCollection from './components/NFTCollection';
@@ -12,23 +12,12 @@ const NFTs = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const {
-    collections, collectionsLoading, principalId, optimisticNFTUpdate,
-  } = useSelector((state) => state.wallet);
+  const { principalId } = useSelector((state) => state.wallet);
+  const { collections, collectionsLoading } = useSelector((state) => state.nfts);
 
   useEffect(() => {
-    // Update cache
     if (!collectionsLoading) {
-      dispatch(setCollectionsLoading(true));
-      sendMessage({
-        type: HANDLER_TYPES.GET_NFTS,
-        params: {},
-      }, (nftCollections) => {
-        if (nftCollections?.length && !optimisticNFTUpdate) {
-          dispatch(setCollections({ collections: nftCollections, principalId }));
-        }
-        dispatch(setCollectionsLoading(false));
-      });
+      dispatch(getNFTs());
     }
   }, [principalId]);
 
