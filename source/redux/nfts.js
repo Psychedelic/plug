@@ -3,8 +3,9 @@ import { asyncSendMessage, HANDLER_TYPES } from '@background/Keyring';
 
 export const getNFTs = createAsyncThunk(
   'nfts/getNFTs',
-  async () => asyncSendMessage({
+  async ({ refresh } = { refresh: false }) => asyncSendMessage({
     type: HANDLER_TYPES.GET_NFTS,
+    params: { refresh },
   }),
 );
 
