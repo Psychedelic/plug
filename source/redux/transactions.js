@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getTransactions as callGetTransactions } from '@background/Keyring';
+import { asyncSendMessage, HANDLER_TYPES } from '@background/Keyring';
 import { ACTIVITY_STATUS } from '@shared/constants/activity';
 import {
   formatAssetBySymbol,
@@ -18,7 +18,10 @@ export const getTransactions = createAsyncThunk(
     const { principalId, accountId } = wallet;
 
     try {
-      const transactions = await callGetTransactions();
+      const transactions = await asyncSendMessage({
+        type: HANDLER_TYPES.GET_TRANSACTIONS,
+      });
+
       return {
         useICNS,
         icpPrice,
