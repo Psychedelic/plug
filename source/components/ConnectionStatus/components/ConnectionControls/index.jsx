@@ -28,7 +28,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
   const classes = useStyles();
   const icpPrice = useICPPrice();
   const dispatch = useDispatch();
-  const { tabIndex } = disableNavigation ? {} : useRouter();
+  const { tabIndex, route } = disableNavigation ? {} : useRouter();
   const {
     walletId,
     assetsLoading,
@@ -93,7 +93,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
   };
 
   const loadCollections = () => {
-    dispatch(getNFTs({ refresh: true }));
+    dispatch(getNFTs({ refresh: route === 'home' && tabIndex === TABS.NFTS }));
   };
 
   const refreshWallet = () => {
