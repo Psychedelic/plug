@@ -109,6 +109,7 @@ export const HANDLER_TYPES = {
   GET_CURRENT_NETWORK: 'get-current-network',
   IMPORT_PEM_ACCOUNT: 'import-pem-account',
   REMOVE_PEM_ACCOUNT: 'remove-pem-account',
+  VALIDATE_PEM: 'validate-pem',
 };
 
 export const getKeyringErrorMessage = (type) => ({
@@ -145,6 +146,7 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.REMOVE_CUSTOM_TOKEN]: 'removing custom token',
   [HANDLER_TYPES.IMPORT_PEM_ACCOUNT]: 'importing account from pem',
   [HANDLER_TYPES.REMOVE_PEM_ACCOUNT]: 'removing pem account',
+  [HANDLER_TYPES.VALIDATE_PEM]: 'validate pem',
 }[type]);
 
 export const sendMessage = (args, callback) => {
@@ -198,6 +200,7 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.IMPORT_PEM_ACCOUNT]: async (params) => keyring.importAccountFromPem(params),
   [HANDLER_TYPES.CREATE_PRINCIPAL]: async (params) => keyring.createPrincipal(params),
   [HANDLER_TYPES.REMOVE_PEM_ACCOUNT]: async (params) => keyring.deleteImportedAccount(params),
+  [HANDLER_TYPES.VALIDATE_PEM]: async (params) => keyring.validatePem(params),
   [HANDLER_TYPES.SET_CURRENT_PRINCIPAL]:
     async (walletId) => {
       await keyring.setCurrentPrincipal(walletId);

@@ -1,10 +1,9 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import useStyles from "../styles";
-import { CloudUpload } from "@material-ui/icons";
-import GradientFile from "@assets/icons/gradient-file.svg";
 import { Typography, Grid } from "@material-ui/core";
 import { Container, Button, TextInput, FormItem, UserIcon } from "@components";
+import { HANDLER_TYPES, sendMessage } from "@background/Keyring";
 
 const Step1 = ({ handleChangeStep, setUserPemFile, userPemFile }) => {
   const { t } = useTranslation();
@@ -12,8 +11,33 @@ const Step1 = ({ handleChangeStep, setUserPemFile, userPemFile }) => {
 
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
-
+  const [invalidPem, setInvalidPem] = useState(null);
   const [privateKey, setPrivateKey] = useState(null);
+
+  const handlePrivateKey = (e) => {
+    setLoading(true);
+    setPrivateKey(e.target.value);
+    sendMessage(
+      {
+        type: HANDLER_TYPES.VALIDATE_PEM,
+        params: {
+          pem: e.target.value
+        },
+      },
+      (a) => {
+        if (a) {
+          console.log('es true');
+          setDisabled(true);
+          setInvalidPem(false);
+          setLoading(false);
+        } else {
+          setInvalidPem(true);
+          setLoading(false);
+          setDisabled(false);
+        }
+      },
+    );
+  } 
 
   return (
     <Container>
@@ -26,9 +50,10 @@ const Step1 = ({ handleChangeStep, setUserPemFile, userPemFile }) => {
               <TextInput
                 fullWidth
                 value={privateKey}
-                onChange={(e) => console.log(e.target)}
+                onChange={(e) => handlePrivateKey(e)}
                 type="text"
-                data-testid="create-account-name-input"
+                data-testid="import-private-key-fill"
+                error={invalidPem}
               />
             }
           />
