@@ -24,7 +24,7 @@ const useSteps = () => {
   const steps = [
     {
       component: <Step1 handleChangeStep={handleChangeStep} setUserPemFile={setUserPemFile} userPemFile={userPemFile} />,
-      left: leftButton(() => handleClose()),
+      left: leftButton(() => navigator.navigate('import-wallet')),
       right: rightButton,
       center: `${t("importPem.importPEMfile")}`,
     },
