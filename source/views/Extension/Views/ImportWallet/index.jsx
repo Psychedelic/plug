@@ -4,6 +4,8 @@ import { LinkButton } from '@components';
 import { useTranslation } from 'react-i18next';
 import BackIcon from '@assets/icons/back.svg';
 import { useRouter } from '@components/Router';
+import PaperEmoji from "@assets/paper.svg"
+import NewKey from "@assets/new-key.svg"
 
 const ImportWallet = () => {
   const { t } = useTranslation();
@@ -18,8 +20,8 @@ const ImportWallet = () => {
   return (
     <Layout>
       <Header left={left} center={center} right={right} />
-      <MenuItemDetailed logo={"📄"} name="Import PEM file" description={"Import wallet through a PEM file"} onClick={() => navigator.navigate('import-pem-file')}/>
-      <MenuItemDetailed logo={"🔑"} name="Import Private Key" description={"Import wallet through a Private Key"} onClick={() => navigator.navigate('import-pem-file')}/>
+      <MenuItemDetailed logo={PaperEmoji} name="Import PEM file" description={"Import wallet through a PEM file"} onClick={() => navigator.navigate('import-pem-file')}/>
+      <MenuItemDetailed logo={NewKey} name="Import Private Key" description={"Import wallet through a Private Key"} onClick={() => navigator.navigate('import-private-key')}/>
     </Layout>
   );
 };
