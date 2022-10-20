@@ -8,7 +8,7 @@ import Picker from "emoji-picker-react";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-const Step2 = ({ userPemFile }) => {
+const Step2 = ({ privateKey }) => {
   const { t } = useTranslation();
 
   const [loading, setLoading] = useState(false);
@@ -37,11 +37,12 @@ const Step2 = ({ userPemFile }) => {
   };
 
   const createImportedAccount = () => {
+    console.log(privateKey);
     setLoading(true);
     sendMessage(
       {
         type: HANDLER_TYPES.IMPORT_PEM_ACCOUNT,
-        params: { icon: currentEmoji, name: walletName, pem: userPemFile },
+        params: { icon: currentEmoji, name: walletName, pem: privateKey },
       },
       () => {},
     );
