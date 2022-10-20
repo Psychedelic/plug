@@ -109,6 +109,7 @@ export const HANDLER_TYPES = {
   GET_CURRENT_NETWORK: 'get-current-network',
   IMPORT_PEM_ACCOUNT: 'import-pem-account',
   REMOVE_PEM_ACCOUNT: 'remove-pem-account',
+  REMOVE_CUSTOM_TOKEN: 'remove-custom-token',
 };
 
 export const getKeyringErrorMessage = (type) => ({

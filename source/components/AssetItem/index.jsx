@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
@@ -8,7 +8,6 @@ import clsx from 'clsx';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
-import { TOKENS } from '@shared/constants/currencies';
 import RefreshIcon from '@assets/icons/blue-refresh.png';
 import DeleteIcon from '@assets/icons/delete.svg';
 import TokenIcon from '../TokenIcon';
@@ -67,7 +66,13 @@ const AssetItem = ({
 
   return (
     <div
-      className={clsx(classes.root, failed && classes.failedContainer, shouldRemove && classes.removeAnimation)}
+      className={
+        clsx(
+          classes.root,
+          failed && classes.failedContainer,
+          shouldRemove && classes.removeAnimation,
+        )
+      }
       onMouseOver={handleMouseOver}
       onAnimationEnd={removeAsset}
       onMouseOut={handleMouseOut}
@@ -139,7 +144,13 @@ const AssetItem = ({
         )}
       { !failed && !loading && (
         <div
-          className={clsx(classes.deleteToken, !value && classes.deleteTokenMoveRight, isHovering && classes.deleteTokenActive)}
+          className={
+            clsx(
+              classes.deleteToken,
+              !value && classes.deleteTokenMoveRight,
+              isHovering && classes.deleteTokenActive,
+            )
+          }
         >
           <img
             onClick={() => setOpenDelete(true)}
@@ -170,4 +181,5 @@ AssetItem.propTypes = {
   failed: PropTypes.bool,
   assetNameTestId: PropTypes.string,
   removeAsset: PropTypes.func.isRequired,
+  protectedAsset: PropTypes.bool.isRequired,
 };
