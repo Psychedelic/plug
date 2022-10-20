@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import useStyles from "../styles";
 import React, { useState } from "react";
 import { useRouter } from "@components/Router";
-import { HANDLER_TYPES, sendMessage } from "@background/Keyring";
+import { HANDLER_TYPES, sendMessage, asyncSendMessage } from "@background/Keyring";
 import Picker from "emoji-picker-react";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -17,10 +17,26 @@ const Step2 = ({ userPemFile }) => {
   const [walletName, setWalletName] = useState(""); // add deafault wallet name, for example the next wallet not used number
   const [currentEmoji, setCurrentEmoji] = useState("😎"); // add default emoji, not used in other wallets
   const [openEmojiSelector, setOpenEmojiSelector] = useState(false);
+  const [importedPrincipal, setImportedPrincipal] = useState();
 
   const { navigator } = useRouter();
 
   const classes = useStyles();
+
+  useEffect(() => {
+    let fileReader = new FileReader();
+    fileReader.readAsText(userPemFile);
+    fileReader.onloadend = () => {
+      const content = fileReader.result;
+
+      asyncSendMessage({
+        type: HANDLER_TYPES.GET_PRINCIPAL_FROM_PEM,
+        params: { pem: content },
+      }).then(setImportedPrincipal);
+    };
+  }, [userPemFile]);
+
+  console.log('imported ->', importedPrincipal);
 
   useEffect(() => {
     if (walletName && walletName !== "") {
