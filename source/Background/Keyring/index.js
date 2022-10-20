@@ -110,6 +110,7 @@ export const HANDLER_TYPES = {
   IMPORT_PEM_ACCOUNT: 'import-pem-account',
   REMOVE_PEM_ACCOUNT: 'remove-pem-account',
   REMOVE_CUSTOM_TOKEN: 'remove-custom-token',
+  GET_PRINCIPAL_FROM_PEM: 'get-principal-from-pem',
 };
 
 export const getKeyringErrorMessage = (type) => ({
@@ -484,6 +485,8 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: e.message };
     }
   },
+  [HANDLER_TYPES.GET_PRINCIPAL_FROM_PEM]: async (params) => keyring.getPrincipalFromPem(params),
+
 }[type]);
 
 export const getContacts = () => new Promise((resolve, reject) => {
