@@ -110,8 +110,6 @@ export const {
   setTransactionsLoading,
   setAssets,
   setAssetsLoading,
-  setCollections,
-  setCollectionsLoading,
   blockNFTFetch,
 } = walletSlice.actions;
 

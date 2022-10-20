@@ -110,6 +110,7 @@ export const HANDLER_TYPES = {
   IMPORT_PEM_ACCOUNT: 'import-pem-account',
   REMOVE_PEM_ACCOUNT: 'remove-pem-account',
   VALIDATE_PEM: 'validate-pem',
+  REMOVE_CUSTOM_TOKEN: 'remove-custom-token',
 };
 
 export const getKeyringErrorMessage = (type) => ({
