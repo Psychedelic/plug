@@ -55,6 +55,7 @@ const Step1 = ({ handleChangeStep, setPrivateKey, privateKey }) => {
               />
             }
           />
+          {invalidPem && <Typography variant="body2" color="error">Invalid String. Please, try again.</Typography>}
         </Grid>
         <Grid item xs={12}>
           <Button

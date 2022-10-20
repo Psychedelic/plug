@@ -37,7 +37,6 @@ const Step2 = ({ privateKey }) => {
   };
 
   const createImportedAccount = () => {
-    console.log(privateKey);
     setLoading(true);
     sendMessage(
       {
