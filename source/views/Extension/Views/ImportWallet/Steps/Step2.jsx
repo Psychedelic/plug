@@ -1,12 +1,19 @@
-import { Container, Button, TextInput, FormItem, UserIcon } from "@components";
+import React, { useEffect, useState } from "react";
 import Grid from "@material-ui/core/Grid";
-import useStyles from "../styles";
-import React, { useState } from "react";
-import { useRouter } from "@components/Router";
-import { HANDLER_TYPES, sendMessage, asyncSendMessage } from "@background/Keyring";
 import Picker from "emoji-picker-react";
-import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { HANDLER_TYPES, sendMessage, asyncSendMessage } from "@background/Keyring";
+import {
+  Container,
+  Button,
+  TextInput,
+  FormItem,
+  UserIcon,
+  WalletDetailItem,
+} from "@components";
+import { useRouter } from "@components/Router";
+
+import useStyles from "../styles";
 
 const Step2 = ({ userPemFile }) => {
   const { t } = useTranslation();
@@ -18,6 +25,7 @@ const Step2 = ({ userPemFile }) => {
   const [currentEmoji, setCurrentEmoji] = useState("😎"); // add default emoji, not used in other wallets
   const [openEmojiSelector, setOpenEmojiSelector] = useState(false);
   const [importedPrincipal, setImportedPrincipal] = useState();
+  const [detailsModal, setDetailsModal] = useState(false);
 
   const { navigator } = useRouter();
 
@@ -35,8 +43,6 @@ const Step2 = ({ userPemFile }) => {
       }).then(setImportedPrincipal);
     };
   }, [userPemFile]);
-
-  console.log('imported ->', importedPrincipal);
 
   useEffect(() => {
     if (walletName && walletName !== "") {
@@ -73,6 +79,10 @@ const Step2 = ({ userPemFile }) => {
       const content = fileReader.result; // we should check what happens if the user pass an empty pem file
       createImportedAccount(content);
     };
+  };
+
+  const openDetailsModal = () => {
+    setDetailsModal(!detailsModal);
   };
 
   return (
@@ -124,6 +134,15 @@ const Step2 = ({ userPemFile }) => {
                 // error={}
               />
             }
+          />
+          <WalletDetailItem
+            name="principalId"
+            value={importedPrincipal}
+            className={classes.principalDetails}
+            setInfoOpen={setDetailsModal}
+            isOpen={detailsModal}
+            copyButtonTestId="copy-principalId-button"
+            infoIconButtonTestId="info-principalId-icon-button"
           />
           <Button
             variant="rainbow"
