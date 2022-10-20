@@ -26,7 +26,7 @@ const useSteps = () => {
       component: <Step1 handleChangeStep={handleChangeStep} setUserPemFile={setUserPemFile} userPemFile={userPemFile} />,
       left: leftButton(() => navigator.navigate('import-wallet')),
       right: rightButton,
-      center: `${t("importPem.importPEMfile")}`,
+      center: `${t("importWallet.importWallet")}`,
     },
     {
       component: <Step2
@@ -34,7 +34,7 @@ const useSteps = () => {
         userPemFile={userPemFile}
       />,
       right: rightButton,
-      center: `${t("importPem.walletDetails")}`,
+      center: `${t("importWallet.importWallet")}`,
     },
   ];
 

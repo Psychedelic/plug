@@ -26,7 +26,7 @@ const useSteps = () => {
       component: <Step1 handleChangeStep={handleChangeStep} setPrivateKey={setPrivateKey} privateKey={privateKey} />,
       left: leftButton(() => navigator.navigate('import-wallet')),
       right: rightButton,
-      center: `${t("importPem.importPEMfile")}`,
+      center: `${t("importWallet.importWallet")}`,
     },
     {
       component: <Step2
@@ -34,7 +34,7 @@ const useSteps = () => {
         privateKey={privateKey}
       />,
       right: rightButton,
-      center: `${t("importPem.walletDetails")}`,
+      center: `${t("importWallet.importWallet")}`,
     },
   ];
 

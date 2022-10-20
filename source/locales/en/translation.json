@@ -396,8 +396,12 @@
     "dfxUse": "dfx identity use <identity name>",
     "selectAccount": "Select Account"
   },
+  "importWallet": {
+    "importWallet": "Import Wallet"
+  },
   "importPem": {
     "importPEMfile": "Import PEM file",
+    "description": "Import wallet through a PEM file",
     "editWalletPic": "Edit Wallet Pic",
     "walletDetails": "Wallet Details",
     "dragAndDrop": "Drag and Drop",
@@ -405,6 +409,12 @@
     "browse": "browse",
     "fileNotSupported": "File not supported. Try a different file.",
     "dropIt": "Drop it!"
+  },
+  "importPrivateKey": {
+    "importPrivateKey": "Import Private Key",
+    "description": "Import wallet through a Private Key",
+    "privateKey": "Private Key",
+    "invalidString": "Invalid String. Please, try again."
   },
   "nfts": {
     "allNfts": "All NFTs",
