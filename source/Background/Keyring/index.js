@@ -486,7 +486,6 @@ export const getKeyringHandler = (type, keyring) => ({
     }
   },
   [HANDLER_TYPES.GET_PRINCIPAL_FROM_PEM]: async (params) => keyring.getPrincipalFromPem(params),
-
 }[type]);
 
 export const getContacts = () => new Promise((resolve, reject) => {
