@@ -36,12 +36,12 @@ const Step2 = ({ userPemFile }) => {
     setOpenEmojiSelector(false);
   };
 
-  const createImportedAccount = (pemContent) => {
+  const createImportedAccount = () => {
     setLoading(true);
     sendMessage(
       {
         type: HANDLER_TYPES.IMPORT_PEM_ACCOUNT,
-        params: { icon: currentEmoji, name: walletName, pem: pemContent },
+        params: { icon: currentEmoji, name: walletName, pem: userPemFile },
       },
       () => {},
     );
@@ -49,15 +49,6 @@ const Step2 = ({ userPemFile }) => {
     navigator.navigate("home");
   };
 
-  const readPemCreateAccount = () => {
-    setLoading(true);
-    let fileReader = new FileReader();
-    fileReader.readAsText(userPemFile);
-    fileReader.onloadend = () => {
-      const content = fileReader.result; // we should check what happens if the user pass an empty pem file
-      createImportedAccount(content);
-    };
-  };
 
   return (
     <Container>
@@ -112,7 +103,7 @@ const Step2 = ({ userPemFile }) => {
           <Button
             variant="rainbow"
             value={t("common.save")}
-            onClick={readPemCreateAccount}
+            onClick={createImportedAccount}
             loading={loading}
             disabled={!disabled}
             fullWidth

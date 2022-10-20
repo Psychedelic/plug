@@ -5,14 +5,13 @@ import { Typography, Grid } from "@material-ui/core";
 import { Container, Button, TextInput, FormItem, UserIcon } from "@components";
 import { HANDLER_TYPES, sendMessage } from "@background/Keyring";
 
-const Step1 = ({ handleChangeStep, setUserPemFile, userPemFile }) => {
+const Step1 = ({ handleChangeStep, setPrivateKey, privateKey }) => {
   const { t } = useTranslation();
   const classes = useStyles();
 
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [invalidPem, setInvalidPem] = useState(null);
-  const [privateKey, setPrivateKey] = useState(null);
 
   const handlePrivateKey = (e) => {
     setLoading(true);
@@ -26,7 +25,6 @@ const Step1 = ({ handleChangeStep, setUserPemFile, userPemFile }) => {
       },
       (a) => {
         if (a) {
-          console.log('es true');
           setDisabled(true);
           setInvalidPem(false);
           setLoading(false);
