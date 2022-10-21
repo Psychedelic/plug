@@ -107,6 +107,7 @@ export const HANDLER_TYPES = {
   REMOVE_NETWORK: 'remove-network',
   SET_CURRENT_NETWORK: 'set-current-network',
   GET_CURRENT_NETWORK: 'get-current-network',
+  IMPORT_LEDGER_ACCOUNT: 'import-ledger-account',
 };
 
 export const getKeyringErrorMessage = (type) => ({
@@ -211,7 +212,7 @@ export const getKeyringHandler = (type, keyring) => ({
       if (!keyring?.isUnlocked) return {};
 
       const { wallets, currentWalletId } = await keyring.getState();
-      let assets = Object.values(wallets?.[currentWalletId]?.assets);
+      let assets = Object.values(wallets?.[currentWalletId]?.assets || {});
       const shouldUpdate = Object.values(assets)?.every((asset) => !Number(asset.amount))
         || Object.values(assets)?.some((asset) => asset.amount === 'Error')
         || refresh;
@@ -477,6 +478,18 @@ export const getKeyringHandler = (type, keyring) => ({
     } catch (e) {
       // eslint-disable-next-line
       console.log('Error removing the network', e);
+      return { error: e.message };
+    }
+  },
+  [HANDLER_TYPES.IMPORT_LEDGER_ACCOUNT]: async ({ icon, name, path }) => {
+    try {
+      console.log('importing ledger account', icon, name, path);
+      const principal = await keyring.importLedgerAccount({ icon, name, path });
+      console.log('LEDGER PRINCIPAL', principal);
+      return true;
+    } catch (e) {
+      // eslint-disable-next-line
+      console.log('Error importing ledger', e);
       return { error: e.message };
     }
   },

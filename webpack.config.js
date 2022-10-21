@@ -30,7 +30,7 @@ const extensionReloaderPlugin = nodeEnv === 'development'
       // TODO: reload manifest on update
       contentScript: 'contentScript',
       background: 'background',
-      extensionPage: ['popup', 'options'],
+      extensionPage: ['popup', 'options', 'hardwareWallet'],
     },
   })
   : () => {
@@ -69,6 +69,7 @@ module.exports = {
     options: path.join(sourcePath, 'views', 'Options', 'index.jsx'),
     inpage: path.join(sourcePath, 'scripts', 'Inpage', 'index.js'),
     notification: path.join(sourcePath, 'views', 'Popup', 'index.jsx'),
+    hardwareWallet: path.join(sourcePath, 'views', 'HardwareWallet', 'index.jsx'),
   },
   node: {
     fs: 'empty',
@@ -88,6 +89,7 @@ module.exports = {
       '@redux': path.join(path.resolve(__dirname, './source/redux')),
       '@background': path.join(path.resolve(__dirname, './source/background')),
       '@modules': path.join(path.resolve(__dirname, './source/Modules')),
+      '@ledgerhq/devices': '@ledgerhq/devices/lib-es',
     },
   },
 
@@ -192,6 +194,13 @@ module.exports = {
       chunks: ['options'],
       hash: true,
       filename: 'options.html',
+    }),
+    new HtmlWebpackPlugin({
+      template: path.join(viewsPath, 'hardware-wallet.html'),
+      inject: 'body',
+      chunks: ['hardwareWallet'],
+      hash: true,
+      filename: 'hardware-wallet.html',
     }),
     new HtmlWebpackPlugin({
       template: path.join(viewsPath, 'notification.html'),

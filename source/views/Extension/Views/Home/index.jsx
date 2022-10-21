@@ -109,6 +109,7 @@ const Home = () => {
 
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
+      console.log(state);
       const migratedWalletId = state.walletIds ? true : false;
       if (!Object.keys(state?.wallets).length) {
         sendMessage({ type: HANDLER_TYPES.LOCK, params: {} }, () => navigator.navigate('login'));

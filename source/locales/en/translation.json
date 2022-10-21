@@ -452,5 +452,9 @@
     "title": "Your device clock is set incorrectly",
     "description": "Your device's clock is incorrect and this affects how Plug can communicate with the IC due to its security measures. Set your clock's time to automatic and restart your browser.",
     "descriptionLink": "Learn more here"
+  },
+  "ledger": {
+    "connect": "Connet to Ledger Wallet",
+    "connectText": "Open the IC app on your Ledger device and connect to your computer."
   }
 }
