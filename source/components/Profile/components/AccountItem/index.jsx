@@ -40,11 +40,9 @@ const AccountItem = ({
         classes.accountItemContainer,
         isHidden && classes.hiddenAccount,
       )}
+      onClick={(e) => handleChangeAccount(e, account.walletId)}
     >
-      <div
-        onClick={(e) => handleChangeAccount(e, account.walletId)}
-        className={classes.leftContainer}
-      >
+      <div className={classes.leftContainer}>
         <UserIcon
           size="small"
           icon={account?.icon ?? '👽'}
