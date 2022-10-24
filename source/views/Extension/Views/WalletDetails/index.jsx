@@ -64,7 +64,6 @@ const WalletDetails = () => {
   const [connectedWallets, setConnectedWallets] = useState([]);
   const [tab, setTab] = useState(null);
   const [app, setApp] = useState(null);
-  const [accountSwitchId, setAccountSwitchId] = useState(walletId);
   const [accounts, setAccounts] = useState([]);
   const [openEmojis, setOpenEmojis] = useState(false);
   const [walletName, setWalletName] = useState(name);
@@ -218,9 +217,6 @@ const WalletDetails = () => {
       const url = getTabURL(tabs?.[0]);
       const ids = accounts.map((account) => account.walletId);
       setTab(tabs?.[0]);
-      // Check if new wallet is connected to the current page
-      setAccountSwitchId(walletId);
-
       if (!ids.length) {
         executeAccountSwitch(walletId);
         return;
@@ -246,12 +242,12 @@ const WalletDetails = () => {
   };
 
   const executeAccountSwitch = (wallet) => {
-    sendMessage({ type: HANDLER_TYPES.SET_CURRENT_PRINCIPAL, params: accountSwitchId },
+    sendMessage({ type: HANDLER_TYPES.SET_CURRENT_PRINCIPAL, params: wallet },
       (state) => {
         if (Object.values(state?.wallets).length) {
           const newWallet = state.wallets[state.currentWalletId];
           dispatch(setAccountInfo(newWallet));
-          dipatch(getContacts());
+          dispatch(getContacts());
           dispatch(setICNSData(newWallet.icnsData));
           dispatch(setAssetsLoading(true));
           dispatch(setTransactions([]));
@@ -275,7 +271,7 @@ const WalletDetails = () => {
   useEffect(() => {
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
       if (Object.keys(state?.wallets)?.length) {
-        setAccounts(state.wallets);
+        setAccounts(Object.values(state.wallets));
       }
     });
   }, []);
