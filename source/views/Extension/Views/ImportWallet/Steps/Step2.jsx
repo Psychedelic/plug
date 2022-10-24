@@ -25,7 +25,7 @@ const Step2 = ({ userPemFile }) => {
   const [currentEmoji, setCurrentEmoji] = useState("😎"); // add default emoji, not used in other wallets
   const [openEmojiSelector, setOpenEmojiSelector] = useState(false);
   const [importedPrincipal, setImportedPrincipal] = useState();
-  const [detailsModal, setDetailsModal] = useState(false);
+  const [detailsModalOpen, setDetailsModal] = useState(false);
 
   const { navigator } = useRouter();
 
@@ -82,7 +82,7 @@ const Step2 = ({ userPemFile }) => {
   };
 
   const openDetailsModal = () => {
-    setDetailsModal(!detailsModal);
+    setDetailsModal(!detailsModalOpen);
   };
 
   return (
@@ -140,7 +140,7 @@ const Step2 = ({ userPemFile }) => {
             value={importedPrincipal}
             className={classes.principalDetails}
             setInfoOpen={setDetailsModal}
-            isOpen={detailsModal}
+            isOpen={detailsModalOpen}
             copyButtonTestId="copy-principalId-button"
             infoIconButtonTestId="info-principalId-icon-button"
           />
