@@ -199,10 +199,9 @@ const Profile = ({ disableProfile }) => {
     sendMessage({
       type: HANDLER_TYPES.REMOVE_PEM_ACCOUNT,
       params: selectedRemoveAccount.walletId,
-    });
+    }, () => executeAccountSwitch(accounts[0].walletId));
     setOpenRemoveModal(false);
     setOpen(false);
-    navigator.navigate('home');
   };
 
   return (
