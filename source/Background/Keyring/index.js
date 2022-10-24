@@ -111,6 +111,7 @@ export const HANDLER_TYPES = {
   REMOVE_PEM_ACCOUNT: 'remove-pem-account',
   REMOVE_CUSTOM_TOKEN: 'remove-custom-token',
   GET_PRINCIPAL_FROM_PEM: 'get-principal-from-pem',
+  VALIDATE_PEM: 'validate-pem',
 };
 
 export const getKeyringErrorMessage = (type) => ({
@@ -197,7 +198,7 @@ export const getKeyringHandler = (type, keyring) => ({
       return null;
     }
   },
-  [HANDLER_TYPES.IMPORT_PEM_ACCOUNT]: async (params) => keyring.importAccountFromPem(params),
+  [HANDLER_TYPES.IMPORT_PEM_ACCOUNT]: keyring.importAccountFromPem,
   [HANDLER_TYPES.CREATE_PRINCIPAL]: async (params) => keyring.createPrincipal(params),
   [HANDLER_TYPES.REMOVE_PEM_ACCOUNT]: async (params) => keyring.deleteImportedAccount(params),
   [HANDLER_TYPES.SET_CURRENT_PRINCIPAL]:
@@ -485,7 +486,8 @@ export const getKeyringHandler = (type, keyring) => ({
       return { error: e.message };
     }
   },
-  [HANDLER_TYPES.GET_PRINCIPAL_FROM_PEM]: async (params) => keyring.getPrincipalFromPem(params),
+  [HANDLER_TYPES.GET_PRINCIPAL_FROM_PEM]: keyring.getPrincipalFromPem,
+  [HANDLER_TYPES.VALIDATE_PEM]: keyring.validatePem,
 }[type]);
 
 export const getContacts = () => new Promise((resolve, reject) => {
