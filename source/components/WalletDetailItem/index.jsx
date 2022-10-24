@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Typography } from '@material-ui/core';
 import { Info } from 'react-feather';
 import { useTranslation } from 'react-i18next';
-import clsx from 'clsx';
 
 import CopyButton from '../CopyButton';
 import FormItem from '../FormItem';
@@ -17,7 +16,7 @@ const WalletDetailItem = ({
   const classes = useStyles();
   const { t } = useTranslation();
   return (
-    <div className={clsx(className?.length && className)}>
+    <div className={className}>
       <FormItem
         label={t(`common.${name}`)}
         smallLabel
