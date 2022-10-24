@@ -1,31 +1,32 @@
-import { Container, Button } from "@components";
 import React, { useState, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDropzone } from "react-dropzone";
-import useStyles from "../styles";
 import { CloudUpload } from "@material-ui/icons";
-import GradientFile from "@assets/icons/gradient-file.svg";
-import { Typography, Grid } from "@material-ui/core";
-import { Plug } from "@components";
 import CloseIcon from "@material-ui/icons/Close";
+import { Typography, Grid } from "@material-ui/core";
 
-const Step1 = ({ handleChangeStep, setUserPemFile, userPemFile }) => {
+import { Container, Button, Plug } from "@components";
+import GradientFile from "@assets/icons/gradient-file.svg";
+
+import useStyles from "../styles";
+
+const Step1 = ({
+  handleChangeStep,
+  setUserPemFile,
+  userPemFile,
+  loadingValidate,
+  isPemValid,
+  importDisabled,
+}) => {
   const { t } = useTranslation();
   const classes = useStyles();
 
-  const [loading, setLoading] = useState(false);
-  const [disabled, setDisabled] = useState(false);
-
   const handleRemoveFile = () => {
-    setDisabled(false);
     setUserPemFile(null);
   };
 
   const onDrop = useCallback((acceptedFile) => {
-    setLoading(true);
     setUserPemFile(acceptedFile[0]);
-    setDisabled(true);
-    setLoading(false);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -91,8 +92,8 @@ const Step1 = ({ handleChangeStep, setUserPemFile, userPemFile }) => {
             variant="rainbow"
             value={t("common.continue")}
             onClick={() => handleChangeStep(1)}
-            loading={loading}
-            disabled={!disabled}
+            loading={loadingValidate}
+            disabled={importDisabled}
             fullWidth
             data-testid="add-button"
           />

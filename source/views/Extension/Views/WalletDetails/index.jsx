@@ -35,11 +35,11 @@ import {
   ConnectAccountsModal,
   Header,
   LinkButton,
+  WalletDetailItem,
 } from '@components';
 import { setUseICNS as setStorageUseICNS} from '@modules/storageManager';
 
 import useStyles from './styles';
-import DetailItem from './components/DetailItem';
 import ICNSToggle from './components/ICNSToggle';
 
 const WalletDetails = () => {
@@ -415,7 +415,7 @@ const WalletDetails = () => {
         </div>
         {expand && (
           <div className={classes.detailsContainer}>
-            <DetailItem
+            <WalletDetailItem
               name="principalId"
               value={principalId}
               setInfoOpen={setOpenPrincipal}
@@ -423,7 +423,7 @@ const WalletDetails = () => {
               copyButtonTestId="copy-principalId-button"
               infoIconButtonTestId="info-principalId-icon-button"
             />
-            <DetailItem
+            <WalletDetailItem
               name="accountId"
               value={accountId}
               setInfoOpen={setOpenAccount}
