@@ -11,14 +11,13 @@ const ICNSDisplay = ({
 }) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
-
   return (
     <div className={`${className} ${classes.wrapper} ${loading ? classes.loadingWrapper : ''}`}>
       <img
         className={classes.icnsBackground}
         onClick={onClick}
         onLoad={() => setLoading(false)}
-        src={icns.url}
+        src="https://icns.id/Rectangle.jpg"
       />
       <span className={`${classes.icnsName} ${large ? classes.large : ''}`}>
         {icns.name?.length > 12 ? shortICNSName(icns?.name) : icns?.name}
