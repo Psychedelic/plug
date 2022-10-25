@@ -38,12 +38,14 @@ const useSteps = () => {
       sendMessage({
         type: HANDLER_TYPES.VALIDATE_PEM,
         params: { pem: content },
-      }, (validPem) => {
-        if (!validPem) {
-          toast('Invalid PEM file', { type: 'error' });
+      }, (response) => {
+        const { isValid, errorType } = response;
+        if (!isValid) {
+          toast(t(`importPEM.${errorType}`), { type: 'error' });
+          setUserPemFile(null);
         }
         setValidateLoading(false);
-        setImportDisabled(!validPem);
+        setImportDisabled(!isValid);
       });
     };
   }, [userPemFile]);
