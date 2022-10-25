@@ -69,5 +69,7 @@ export { default as Badge } from './Badge';
 export { default as Title } from './Title';
 export { default as NFTDisplayer } from './NFTDisplayer';
 export { default as ICNSDisplay } from './ICNSDisplay';
+export { default as WalletDetailItem } from './WalletDetailItem';
+export { default as InfoModal } from './InfoModal';
 
 export * from './Router';
