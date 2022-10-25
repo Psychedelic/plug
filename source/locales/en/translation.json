@@ -21,6 +21,10 @@
     "copyTextAddress": "Copy address to clipboard",
     "copiedText": "Copied!"
   },
+  "importPEM": {
+    "added-account": "Account already added",
+    "invalid-key": "Invalid PEM file"
+  },
   "profile": {
     "myAccounts": "My Accounts",
     "createAccount": "Create Account",
