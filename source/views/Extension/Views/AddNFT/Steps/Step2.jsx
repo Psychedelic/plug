@@ -1,19 +1,12 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import {
-  Button, Container, USDFormat, AssetFormat,
-  TokenIcon,
-} from '@components';
 
-import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
-import {
-  setCollections,
-  setCollectionsLoading,
-} from '@redux/wallet';
-import { useDispatch, useSelector } from 'react-redux';
+import { Button, Container, TokenIcon } from '@components';
+import { registerNFT } from '@redux/nfts';
 
 import useStyles from '../styles';
 
@@ -22,30 +15,12 @@ const Step2 = ({ selectedToken, handleClose }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
 
-  const { principalId } = useSelector((state) => state.wallet);
+  const { collectionsLoading } = useSelector((state) => state.nfts);
 
   const registerToken = () => {
-    setLoading(true);
-    sendMessage({
-      type: HANDLER_TYPES.ADD_CUSTOM_NFT,
-      params: selectedToken,
-    }, async () => {
-      sendMessage({
-        type: HANDLER_TYPES.GET_NFTS,
-        params: { refresh: true },
-      },
-        (nftCollections) => {
-          if (nftCollections?.length) {
-            dispatch(setCollections({ collections: nftCollections, principalId }));
-          }
-          dispatch(setCollectionsLoading(false));
-          setLoading(false);
-          handleClose();
-        }
-      );
-    });
+    dispatch(registerNFT(selectedToken));
+    handleClose();
   };
 
   return (
@@ -70,8 +45,8 @@ const Step2 = ({ selectedToken, handleClose }) => {
             variant="rainbow"
             value={t('common.add')}
             onClick={registerToken}
-            loading={loading}
-            disabled={loading}
+            loading={collectionsLoading}
+            disabled={collectionsLoading}
             fullWidth
             data-testid="add-button"
           />

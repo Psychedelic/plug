@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import MenuList from '@material-ui/core/MenuList';
 import Button from '@material-ui/core/Button';
@@ -12,11 +13,12 @@ import { useTranslation } from 'react-i18next';
 import extensionizer from 'extensionizer';
 
 import Plus from '@assets/icons/plus.svg';
+import LinkEmoji from '@assets/icons/link-emoji.png';
+
 import {
   setAccountInfo,
   setAssets,
   setAssetsLoading,
-  setCollections,
   setTransactions,
 } from '@redux/wallet';
 import { getRandomEmoji } from '@shared/constants/emojis';
@@ -27,6 +29,7 @@ import { setICNSData } from '@redux/icns';
 import { useICPPrice } from '@redux/icp';
 import { getContacts } from '@redux/contacts';
 import { useMenuItems } from '@hooks';
+import { Dialog, Button as CButton } from '@components';
 import ConnectAccountsModal from '../ConnectAccountsModal';
 import HoverAnimation from '../HoverAnimation';
 import MenuItem from '../MenuItem';
@@ -39,6 +42,8 @@ import { AccountItem } from './components';
 import UserIcon from '../UserIcon';
 import useStyles from './styles';
 
+const IMPORT_WALLET_ENABLED = process.env.TARGET_BROWSER !== 'firefox';
+
 const Profile = ({ disableProfile }) => {
   const classes = useStyles();
   const { t } = useTranslation();
@@ -46,7 +51,7 @@ const Profile = ({ disableProfile }) => {
   const { navigator } = disableProfile ? {} : useRouter();
   const [isEditing, setIsEditing] = useState(false);
 
-  const { walletId, principalId } = useSelector((state) => state.wallet);
+  const { walletId } = useSelector((state) => state.wallet);
   const icpPrice = useICPPrice();
 
   const [open, setOpen] = useState(false);
@@ -60,6 +65,8 @@ const Profile = ({ disableProfile }) => {
   const [accountName, setAccountName] = useState('');
   const [error, setError] = useState(null);
   const [connectedWallets, setConnectedWallets] = useState([]);
+  const [selectedRemoveAccount, setSelectedRemovedAccount] = useState(null);
+  const [openRemoveModal, setOpenRemoveModal] = useState(false);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -75,7 +82,7 @@ const Profile = ({ disableProfile }) => {
           setAccounts(walletsArray);
         }
       });
-  }, []);
+  }, [open]);
 
   const handleChangeAccountName = (e) => {
     const name = e.target.value;
@@ -112,7 +119,6 @@ const Profile = ({ disableProfile }) => {
   };
 
   const executeAccountSwitch = (wallet) => {
-    dispatch(setCollections({ collections: [], principalId }));
     sendMessage({ type: HANDLER_TYPES.SET_CURRENT_PRINCIPAL, params: wallet },
       (state) => {
         const walletsArray = Object.values(state?.wallets);
@@ -181,8 +187,44 @@ const Profile = ({ disableProfile }) => {
     setSelectedWallet(null);
   };
 
+  const handleOpenImportWallet = () => {
+    navigator.navigate('import-wallet');
+  };
+
+  const handleRemoveAccountModal = (e, account) => {
+    e.stopPropagation();
+    setOpenRemoveModal(true);
+    setSelectedRemovedAccount(account);
+  };
+
+  const handleRemoveAccount = () => {
+    sendMessage({
+      type: HANDLER_TYPES.REMOVE_PEM_ACCOUNT,
+      params: selectedRemoveAccount.walletId,
+    }, () => executeAccountSwitch(accounts[0].walletId));
+    setOpenRemoveModal(false);
+    setOpen(false);
+  };
+
+
   return (
     <>
+      <Dialog
+        title="Remove Account"
+        onClose={() => setOpenRemoveModal(false)}
+        open={openRemoveModal}
+        component={(
+          <div className={classes.removeAccountDialog}>
+            <Typography>
+              Are you sure you want to remove <b>{selectedRemoveAccount?.name}</b> from your account list?
+            </Typography>
+            <Typography>
+              You can always add the wallet back by importing it again.
+            </Typography>
+            <CButton variant="danger" value="Remove Account" onClick={handleRemoveAccount} style={{ marginTop: 22 }} />
+          </div>
+        )}
+      />
       <HoverAnimation
         disabled={disableProfile}
         style={{ padding: '15px' }}
@@ -274,6 +316,7 @@ const Profile = ({ disableProfile }) => {
                         isCurrentAccount={isCurrentAccount}
                         handleChangeAccount={handleChangeAccount}
                         handleEditAccount={handleEditAccount}
+                        handleRemoveAccountModal={handleRemoveAccountModal}
                       />
                     );
                   })
@@ -290,6 +333,17 @@ const Profile = ({ disableProfile }) => {
                   onClick={handleOpenCreateAccount}
                   data-testid="create-account-button"
                 />
+                { IMPORT_WALLET_ENABLED && (
+                  <MenuItem
+                    size="small"
+                    key="createAccount"
+                    name={t('profile.importWallet')}
+                    alignLeft
+                    logo={LinkEmoji}
+                    onClick={handleOpenImportWallet}
+                    data-testid="create-account-button"
+                  />
+                )}
                 <Divider style={{ margin: '6px 0' }} />
                 {
                   menuItems.map((item) => (

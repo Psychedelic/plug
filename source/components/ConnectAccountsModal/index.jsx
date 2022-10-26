@@ -61,7 +61,9 @@ const ConnectAccountsModal = ({
 
   const handleConfirm = () => {
     Object.keys(walletsToUpdate).forEach((walletId) => {
-      walletsToUpdate[walletId] && connectAccountToTab(walletId, tab);
+      if (walletsToUpdate[walletId]) {
+        connectAccountToTab(walletId, tab);
+      }
     });
     onConfirm?.();
     setWalletsToUpdate({});

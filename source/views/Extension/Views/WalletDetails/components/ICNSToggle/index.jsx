@@ -6,11 +6,10 @@ import { useTranslation } from 'react-i18next';
 import extension from 'extensionizer';
 
 import ICNS_IMG from '@assets/icons/icns.svg';
-import { Switch, Button } from '@components';
+import { Switch, Button, InfoModal } from '@components';
 
 import useStyles from './styles';
 import ICNSSelector from '../ICNSSelector';
-import InfoModal from '../InfoModal';
 
 const ICNSToggle = ({
   active,

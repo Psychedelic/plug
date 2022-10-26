@@ -12,12 +12,11 @@ import {
   setAssetsLoading,
   setTransactions,
   setTransactionsLoading,
-  setCollections,
-  setCollectionsLoading,
 } from '@redux/wallet';
 import { getApps } from '@modules/storageManager';
 import { getCurrentNetwork, getNetworks } from '@redux/network';
 import { getContacts } from '@redux/contacts';
+import { getNFTs } from '@redux/nfts';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { TABS, useRouter } from '@components/Router';
 import RefreshAsset from '@assets/icons/refresh.svg';
@@ -29,14 +28,13 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
   const classes = useStyles();
   const icpPrice = useICPPrice();
   const dispatch = useDispatch();
-  const { tabIndex } = disableNavigation ? {} : useRouter();
+  const { tabIndex, route } = disableNavigation ? {} : useRouter();
   const {
-    principalId,
     walletId,
     assetsLoading,
     transactionsLoading,
-    collectionsLoading,
   } = useSelector((state) => state.wallet);
+  const { collectionsLoading } = useSelector((state) => state.nfts);
   const { useICNS } = useSelector((state) => state.icns);
   const { currentNetwork } = useSelector((state) => state.network);
   const [selectorOpen, setSelectorOpen] = useState(false);
@@ -95,21 +93,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
   };
 
   const loadCollections = () => {
-    dispatch(setCollectionsLoading(true));
-    sendMessage(
-      {
-        type: HANDLER_TYPES.GET_NFTS,
-        params: { refresh: true },
-      },
-      (nftCollections) => {
-        if (nftCollections?.length) {
-          dispatch(
-            setCollections({ collections: nftCollections, principalId }),
-          );
-        }
-        dispatch(setCollectionsLoading(false));
-      },
-    );
+    dispatch(getNFTs({ refresh: route === 'home' && tabIndex === TABS.NFTS }));
   };
 
   const refreshWallet = () => {

@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import SMOOTH_TRANSITION from '@shared/styles/transitions'; 
+import SMOOTH_TRANSITION from '@shared/styles/transitions';
 
 export default makeStyles(() => ({
   accountItemContainer: {

@@ -28,6 +28,12 @@ export default makeStyles((theme) => ({
     minWidth: 37,
     minHeight: 37,
   },
+  removeAccountDialog: {
+    padding: '0px 20px 10px 20px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 5,
+  },
   label: {
     width: 'auto',
   },
