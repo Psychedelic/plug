@@ -17,6 +17,8 @@ const ActionsStep = ({ handleChangeBranch }) => {
     console.log(transport);
     sendMessage({ type: HANDLER_TYPES.IMPORT_LEDGER_ACCOUNT, params: { name: 'LEDGER', icon: getRandomEmoji() } }, (response) => {
       console.log(response);
+      transport.close();
+      console.log('transport closed');
     });
     console.log('identity');
   };
