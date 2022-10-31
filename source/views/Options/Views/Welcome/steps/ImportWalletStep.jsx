@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { useTranslation } from 'react-i18next';
 import { Button, FormItem, TextInput } from '@components';
+import MnemonicInput from '../components/MnemonicInput';
 import * as bip39 from 'bip39';
 
 const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
@@ -40,16 +41,7 @@ const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
         <FormItem
           label={t('welcome.importLabel')}
           component={(
-            <TextInput
-              fullWidth
-              value={text}
-              onChange={handleChangeText}
-              type="text"
-              multiline
-              rows={4}
-              error={invalidMnemonic}
-              data-testid="seedphrase-input"
-            />
+            <MnemonicInput onChange={setText} />
           )}
         />
       </Grid>
