@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
-import MadeBy from '../MadeBy';
+import MadeBy from '../../views/Options/Views/Welcome/components/MadeByFleek';
 import useStyles from './styles';
 
 const FullscreenContainer = ({ children, maxWidth }) => {

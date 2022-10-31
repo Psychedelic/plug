@@ -2,6 +2,7 @@ import { TextField, Typography } from '@material-ui/core';
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as bip39 from 'bip39';
+import useStyles from './styles';
 
 const MNEMONIC_LENGTH = 12;
 
@@ -12,22 +13,19 @@ export function clearClipboard() {
 const isValidMnemonic = (mnemonic) => bip39.validateMnemonic(mnemonic);
 export const parseMnemonic = (mnemonic) => (mnemonic || '').trim().toLowerCase().match(/\w+/gu)?.join(' ') || '';
 
+const createArray = (length, fillValue) => new Array(length).fill(fillValue);
+
 const MnemonicInput = ({ onChange }) => {
+  const classes = useStyles();
+  const { t } = useTranslation();
   const [mnemonicError, setMnemonicError] = useState('');
   const [pasteFailed, setPasteFailed] = useState(false);
-  const [draftMnemonic, setDraftMnemonic] = useState(
-    new Array(MNEMONIC_LENGTH).fill(''),
-  );
-  const [showMnemonic, setShowMnemonic] = useState(
-    new Array(MNEMONIC_LENGTH).fill(false),
-  );
-  const [numberOfWords, setNumberOfWords] = useState(MNEMONIC_LENGTH);
-  const { t } = useTranslation();
+  const [draftMnemonic, setDraftMnemonic] = useState(createArray(MNEMONIC_LENGTH, ''));
+  const [showMnemonic, setShowMnemonic] = useState(createArray(MNEMONIC_LENGTH, false));
   const onMnemonicChange = useCallback(
     (newDraftMnemonic) => {
       let newMnemonicError = '';
       const joinedDraftMnemonic = newDraftMnemonic.join(' ').trim().toLowerCase();
-
       if (newDraftMnemonic.some((word) => word !== '')) {
         if (newDraftMnemonic.some((word) => word === '')) {
           newMnemonicError = t('seedPhraseReq');
@@ -58,66 +56,42 @@ const MnemonicInput = ({ onChange }) => {
 
   const onMnemonicWordChange = useCallback(
     (index, newWord) => {
-      if (pasteFailed) {
-        setPasteFailed(false);
-      }
+      setPasteFailed(false);
       const newMnemonic = draftMnemonic.slice();
       newMnemonic[index] = newWord.trim();
       onMnemonicChange(newMnemonic);
     },
-    [draftMnemonic, onMnemonicChange, pasteFailed],
+    [draftMnemonic, onMnemonicChange],
   );
 
   const onMnemonicPaste = useCallback(
     (rawMnemonic) => {
       const parsedMnemonic = parseMnemonic(rawMnemonic);
       let newDraftMnemonic = parsedMnemonic.split(' ');
-
-      if (newDraftMnemonic.length > 24) {
+      if (newDraftMnemonic.length > MNEMONIC_LENGTH) {
         setPasteFailed(true);
         return;
       }
-      if (pasteFailed) {
-        setPasteFailed(false);
-      }
+      setPasteFailed(false);
 
-      let newNumberOfWords = numberOfWords;
-      if (newDraftMnemonic.length !== numberOfWords) {
-        if (newDraftMnemonic.length < 12) {
-          newNumberOfWords = 12;
-        } else if (newDraftMnemonic.length % 3 === 0) {
-          newNumberOfWords = newDraftMnemonic.length;
-        } else {
-          newNumberOfWords = newDraftMnemonic.length + (3 - (newDraftMnemonic.length % 3));
-        }
-        setNumberOfWords(newNumberOfWords);
-      }
-
-      if (newDraftMnemonic.length < newNumberOfWords) {
+      // If paste content is shorter than 12 words, fill the rest with empty strings
+      if (newDraftMnemonic.length < MNEMONIC_LENGTH) {
         newDraftMnemonic = newDraftMnemonic.concat(
-          new Array(newNumberOfWords - newDraftMnemonic.length).fill(''),
+          createArray(MNEMONIC_LENGTH - newDraftMnemonic.length, ''),
         );
       }
-      setShowMnemonic(new Array(newNumberOfWords).fill(false));
+      setShowMnemonic(createArray(MNEMONIC_LENGTH, false));
       onMnemonicChange(newDraftMnemonic);
       clearClipboard();
     },
-    [numberOfWords, onMnemonicChange, pasteFailed, setPasteFailed],
+    [onMnemonicChange, pasteFailed, setPasteFailed],
   );
-
-  const numberOfWordsOptions = [];
-  for (let i = 12; i <= 24; i += 3) {
-    numberOfWordsOptions.push({
-      name: t('MnemonicInputNumberOfWords', [`${i}`]),
-      value: `${i}`,
-    });
-  }
 
   return [...Array(MNEMONIC_LENGTH).keys()].map((index) => {
     const id = `mnemonic-word-${index}`;
     return (
-      <div key={index} className="import-Mnemonic__Mnemonic-word">
-        <label htmlFor={id} className="import-Mnemonic__Mnemonic-word-label">
+      <div key={index} className={classes.mnemonicWordInput}>
+        <label htmlFor={id} className={classes.mnemonicWordLabel}>
           <Typography>{`${index + 1}.`}</Typography>
         </label>
         <TextField
