@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   ActionsStep,
   CreatePasswordStep,
-  ImportWalletStep,
+  ImportMnemonicStep,
   MemeStep,
   SeedPhraseStep,
 } from '../steps';
@@ -41,7 +41,7 @@ const useSteps = () => {
         title: t('welcome.importWallet'),
         subtitle: t('welcome.importSubtitle'),
         message: t('welcome.importMessage'),
-        component: <ImportWalletStep
+        component: <ImportMnemonicStep
           handleNextStep={handleNextStep}
           handleSetMnemonic={handleSetMnemonic}
         />,

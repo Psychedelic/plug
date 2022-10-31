@@ -17,19 +17,26 @@ export default makeStyles((theme) => ({
   },
   headerContainer: {
     height: 188,
+    maxWidth: 500,
+    width: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'column',
     marginBottom: theme.spacing(1),
   },
+  stepContainer: {
+    width: '100%',
+    maxWidth: 950,
+    padding: theme.spacing(1),
+    display: 'flex',
+    justifyContent: 'center',
+  },
   subtitle: {
     width: '102%',
   },
   goBack: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
+    alignSelf: 'flex-start',
   },
   blur: {
     height: 'calc(100% - 24px)',

@@ -12,8 +12,7 @@ export default makeStyles((theme) => ({
     background: 'rgba(255, 255, 255, 0.4)',
     borderRadius: 15,
     maxWidth: 420,
-    marginRight: theme.spacing(2),
-    marginBottom: theme.spacing(2),
+    margin: theme.spacing(1),
   },
   image: {
     marginBottom: theme.spacing(1),

@@ -33,7 +33,9 @@ const Welcome = () => {
         <Typography variant="h2">{step.title}</Typography>
         <Typography variant="subtitle1" className={classes.subtitle}>{step.subtitle}</Typography>
       </div>
-      {step.component}
+      <div className={classes.stepContainer}>
+        {step.component}
+      </div>
     </div>
   );
 };
