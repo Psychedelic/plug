@@ -1,9 +1,16 @@
 import { makeStyles } from '@material-ui/core/styles';
 
+import RAINBOW_GRADIENT from '@shared/styles/gradients';
+
 export default makeStyles((theme) => ({
   mnemonicContainer: {
     width: '100%',
     maxWidth: 702,
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   mnemonicWordsContainer: {
     display: 'flex',
@@ -49,5 +56,15 @@ export default makeStyles((theme) => ({
   },
   passwordInput: {
     maxWidth: 290,
+  },
+  pasteMessage: {
+    color: theme.palette.common.blue,
+    backgroundColor: 'rgba(0, 0, 0, 0.16)',
+    padding: '10px 15px',
+    borderRadius: 5,
+    border: 'double 1px transparent',
+    backgroundImage: RAINBOW_GRADIENT,
+    backgroundOrigin: 'border-box',
+    backgroundClip: 'padding-box, border-box',
   },
 }));

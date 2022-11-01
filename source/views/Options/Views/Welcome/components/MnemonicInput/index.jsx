@@ -71,40 +71,45 @@ const MnemonicInput = ({ onChange, draftMnemonic }) => {
   );
 
   return (
-    <div className={classes.mnemonicWordsContainer}>
-      {[...Array(MNEMONIC_LENGTH).keys()].map((index) => {
-        const id = `mnemonic-word-${index}`;
-        return (
-          <div key={index} className={classes.mnemonicWordInputContainer}>
-            <Typography className={classes.mnemonicWordLabel}>{`${index + 1}.`}</Typography>
-            <TextInput
-              id={id}
-              className={classes.mnemonicWordInput}
-              data-testid={`seedphrase-input-${index + 1}`}
-              type={showMnemonic[index] ? 'text' : 'password'}
-              onChange={(e) => {
-                e.preventDefault();
-                onMnemonicWordChange(index, e.target.value);
-              }}
-              value={draftMnemonic[index]}
-              autoComplete="off"
-              onPaste={(event) => {
-                const newMnemonic = event.clipboardData.getData('text');
-                if (newMnemonic.trim().match(/\s/u)) {
-                  event.preventDefault();
-                  onMnemonicPaste(newMnemonic);
-                }
-              }}
-            />
-            <ShowHideToggle
-              name={`${id}-checkbox`}
-              show={showMnemonic[index]}
-              onChange={() => toggleShowMnemonic(index)}
-              label={t('MnemonicToggleShow')}
-            />
-          </div>
-        );
-      })}
+    <div className={classes.container}>
+      <div className={classes.pasteMessage}>
+        {t('welcome.pasteMnemonic')}
+      </div>
+      <div className={classes.mnemonicWordsContainer}>
+        {[...Array(MNEMONIC_LENGTH).keys()].map((index) => {
+          const id = `mnemonic-word-${index}`;
+          return (
+            <div key={index} className={classes.mnemonicWordInputContainer}>
+              <Typography className={classes.mnemonicWordLabel}>{`${index + 1}.`}</Typography>
+              <TextInput
+                id={id}
+                className={classes.mnemonicWordInput}
+                data-testid={`seedphrase-input-${index + 1}`}
+                type={showMnemonic[index] ? 'text' : 'password'}
+                onChange={(e) => {
+                  e.preventDefault();
+                  onMnemonicWordChange(index, e.target.value);
+                }}
+                value={draftMnemonic[index]}
+                autoComplete="off"
+                onPaste={(event) => {
+                  const newMnemonic = event.clipboardData.getData('text');
+                  if (newMnemonic.trim().match(/\s/u)) {
+                    event.preventDefault();
+                    onMnemonicPaste(newMnemonic);
+                  }
+                }}
+              />
+              <ShowHideToggle
+                name={`${id}-checkbox`}
+                show={showMnemonic[index]}
+                onChange={() => toggleShowMnemonic(index)}
+                label={t('MnemonicToggleShow')}
+              />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

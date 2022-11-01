@@ -291,7 +291,8 @@
     "seedMessage": "Keep this sh*t safe, forreal.",
     "seedCheckbox": "I wrote down the Secret Recovery Phrase and put it somewhere safe.",
     "passwordShortError": "The minimum is 8 characters, smh!",
-    "passwordMatchError": "The passwords gotta match, smh!"
+    "passwordMatchError": "The passwords gotta match, smh!",
+    "pasteMnemonic": "You can paste your mnemonic into any input"
   },
   "contacts": {
     "title": "Contacts",
