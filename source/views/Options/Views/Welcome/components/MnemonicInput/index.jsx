@@ -1,8 +1,12 @@
-import { TextField, Typography } from '@material-ui/core';
 import React, { useCallback, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import * as bip39 from 'bip39';
+import { Typography } from '@material-ui/core';
+
+import { TextInput } from '@components';
+
 import useStyles from './styles';
+import ShowHideToggle from '../ShowHideToggle';
 
 const MNEMONIC_LENGTH = 12;
 
@@ -10,36 +14,15 @@ export function clearClipboard() {
   window.navigator.clipboard.writeText('');
 }
 
-const isValidMnemonic = (mnemonic) => bip39.validateMnemonic(mnemonic);
 export const parseMnemonic = (mnemonic) => (mnemonic || '').trim().toLowerCase().match(/\w+/gu)?.join(' ') || '';
 
 const createArray = (length, fillValue) => new Array(length).fill(fillValue);
 
-const MnemonicInput = ({ onChange }) => {
-  const classes = useStyles();
+const MnemonicInput = ({ onChange, draftMnemonic }) => {
   const { t } = useTranslation();
-  const [mnemonicError, setMnemonicError] = useState('');
+  const classes = useStyles();
   const [pasteFailed, setPasteFailed] = useState(false);
-  const [draftMnemonic, setDraftMnemonic] = useState(createArray(MNEMONIC_LENGTH, ''));
   const [showMnemonic, setShowMnemonic] = useState(createArray(MNEMONIC_LENGTH, false));
-  const onMnemonicChange = useCallback(
-    (newDraftMnemonic) => {
-      let newMnemonicError = '';
-      const joinedDraftMnemonic = newDraftMnemonic.join(' ').trim().toLowerCase();
-      if (newDraftMnemonic.some((word) => word !== '')) {
-        if (newDraftMnemonic.some((word) => word === '')) {
-          newMnemonicError = t('seedPhraseReq');
-        } else if (!isValidMnemonic(joinedDraftMnemonic)) {
-          newMnemonicError = t('invalidSeedPhrase');
-        }
-      }
-
-      setDraftMnemonic(newDraftMnemonic);
-      setMnemonicError(newMnemonicError);
-      onChange(newMnemonicError ? '' : joinedDraftMnemonic);
-    },
-    [setDraftMnemonic, setMnemonicError, t],
-  );
 
   const toggleShowMnemonic = useCallback((index) => {
     setShowMnemonic((currentShowMnemonic) => {
@@ -59,9 +42,9 @@ const MnemonicInput = ({ onChange }) => {
       setPasteFailed(false);
       const newMnemonic = draftMnemonic.slice();
       newMnemonic[index] = newWord.trim();
-      onMnemonicChange(newMnemonic);
+      onChange(newMnemonic);
     },
-    [draftMnemonic, onMnemonicChange],
+    [draftMnemonic, onChange],
   );
 
   const onMnemonicPaste = useCallback(
@@ -81,49 +64,54 @@ const MnemonicInput = ({ onChange }) => {
         );
       }
       setShowMnemonic(createArray(MNEMONIC_LENGTH, false));
-      onMnemonicChange(newDraftMnemonic);
+      onChange(newDraftMnemonic);
       clearClipboard();
     },
-    [onMnemonicChange, pasteFailed, setPasteFailed],
+    [onChange, pasteFailed, setPasteFailed],
   );
 
-  return [...Array(MNEMONIC_LENGTH).keys()].map((index) => {
-    const id = `mnemonic-word-${index}`;
-    return (
-      <div key={index} className={classes.mnemonicWordInput}>
-        <label htmlFor={id} className={classes.mnemonicWordLabel}>
-          <Typography>{`${index + 1}.`}</Typography>
-        </label>
-        <TextField
-          id={id}
-          data-testid={`seedphrase-input-${index + 1}`}
-          type={showMnemonic[index] ? 'text' : 'password'}
-          onChange={(e) => {
-            e.preventDefault();
-            onMnemonicWordChange(index, e.target.value);
-          }}
-          value={draftMnemonic[index]}
-          autoComplete="off"
-          onPaste={(event) => {
-            const newMnemonic = event.clipboardData.getData('text');
-            if (newMnemonic.trim().match(/\s/u)) {
-              event.preventDefault();
-              onMnemonicPaste(newMnemonic);
-            }
-          }}
-        />
-        {/* <ShowHideToggle
-          id={`${id}-checkbox`}
-          ariaLabelHidden={t('MnemonicWordHidden')}
-          ariaLabelShown={t('MnemonicWordShown')}
-          shown={showMnemonic[index]}
-          data-testid={`${id}-checkbox`}
-          onChange={() => toggleShowMnemonic(index)}
-          title={t('MnemonicToggleShow')}
-        /> */}
-      </div>
-    );
-  });
+  return (
+    <div className={classes.mnemonicWordsContainer}>
+      {[...Array(MNEMONIC_LENGTH).keys()].map((index) => {
+        const id = `mnemonic-word-${index}`;
+        return (
+          <div key={index} className={classes.mnemonicWordInputContainer}>
+            <Typography className={classes.mnemonicWordLabel}>{`${index + 1}.`}</Typography>
+            <TextInput
+              id={id}
+              className={classes.mnemonicWordInput}
+              data-testid={`seedphrase-input-${index + 1}`}
+              type={showMnemonic[index] ? 'text' : 'password'}
+              onChange={(e) => {
+                e.preventDefault();
+                onMnemonicWordChange(index, e.target.value);
+              }}
+              value={draftMnemonic[index]}
+              autoComplete="off"
+              onPaste={(event) => {
+                const newMnemonic = event.clipboardData.getData('text');
+                if (newMnemonic.trim().match(/\s/u)) {
+                  event.preventDefault();
+                  onMnemonicPaste(newMnemonic);
+                }
+              }}
+            />
+            <ShowHideToggle
+              name={`${id}-checkbox`}
+              show={showMnemonic[index]}
+              onChange={() => toggleShowMnemonic(index)}
+              label={t('MnemonicToggleShow')}
+            />
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+MnemonicInput.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  draftMnemonic: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default MnemonicInput;
