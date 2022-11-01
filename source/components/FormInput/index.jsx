@@ -6,11 +6,13 @@ import PropTypes from 'prop-types';
 import TextInput from '../TextInput';
 import useStyles from './styles';
 
-const FormInput = forwardRef(({ id, label, ...props }, ref) => {
+const FormInput = forwardRef(({
+  id, label, fullWidth, containerClassName, ...props
+}, ref) => {
   const classes = useStyles();
 
   return (
-    <FormControl fullWidth>
+    <FormControl fullWidth={fullWidth} className={containerClassName}>
       <InputLabel shrink htmlFor={id} className={classes.formLabel}>
         <Typography variant="h6">{label}</Typography>
       </InputLabel>
@@ -19,8 +21,6 @@ const FormInput = forwardRef(({ id, label, ...props }, ref) => {
   );
 });
 
-export default FormInput;
-
 FormInput.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
@@ -28,4 +28,13 @@ FormInput.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   error: PropTypes.bool.isRequired,
+  fullWidth: PropTypes.bool,
+  containerClassName: PropTypes.string,
 };
+
+FormInput.defaultProps = {
+  fullWidth: true,
+  containerClassName: '',
+};
+
+export default FormInput;

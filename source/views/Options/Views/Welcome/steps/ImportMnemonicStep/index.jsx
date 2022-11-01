@@ -1,11 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { TextField, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import * as bip39 from 'bip39';
 
-import { Button } from '@components';
+import { Button, FormInput } from '@components';
 import useStyles from './styles';
+import ShowHideToggle from '../../components/ShowHideToggle';
+import TextInput from '../../../../../../components/TextInput';
 
 const MNEMONIC_LENGTH = 12;
 
@@ -25,6 +27,10 @@ const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
   const [pasteFailed, setPasteFailed] = useState(false);
   const [draftMnemonic, setDraftMnemonic] = useState(createArray(MNEMONIC_LENGTH, ''));
   const [showMnemonic, setShowMnemonic] = useState(createArray(MNEMONIC_LENGTH, false));
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const [text, setText] = useState('');
   const [invalidMnemonic, setInvalidMnemonic] = useState(false);
@@ -106,53 +112,114 @@ const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
     [onMnemonicChange, pasteFailed, setPasteFailed],
   );
 
+  const onPasswordChange = useCallback(
+    (event) => {
+      const newPassword = event.target.value;
+      let newConfirmPasswordError = '';
+      let newPasswordError = '';
+
+      if (newPassword && newPassword.length < 8) {
+        newPasswordError = t('passwordNotLongEnough');
+      }
+
+      if (confirmPassword && newPassword !== confirmPassword) {
+        newConfirmPasswordError = t('passwordsDontMatch');
+      }
+
+      setPassword(newPassword);
+      setPasswordError(newPasswordError);
+      setConfirmPasswordError(newConfirmPasswordError);
+    },
+    [confirmPassword, t],
+  );
+
+  const onConfirmPasswordChange = useCallback(
+    (event) => {
+      const newConfirmPassword = event.target.value;
+      let newConfirmPasswordError = '';
+
+      if (password !== newConfirmPassword) {
+        newConfirmPasswordError = t('passwordsDontMatch');
+      }
+
+      setConfirmPassword(newConfirmPassword);
+      setConfirmPasswordError(newConfirmPasswordError);
+    },
+    [password, t],
+  );
+
   return (
     <div className={classes.mnemonicContainer}>
-      {[...Array(MNEMONIC_LENGTH).keys()].map((index) => {
-        const id = `mnemonic-word-${index}`;
-        return (
-          <div key={index} className={classes.mnemonicWordInput}>
-            <label htmlFor={id} className={classes.mnemonicWordLabel}>
-              <Typography>{`${index + 1}.`}</Typography>
-            </label>
-            <TextField
-              id={id}
-              data-testid={`seedphrase-input-${index + 1}`}
-              type={showMnemonic[index] ? 'text' : 'password'}
-              onChange={(e) => {
-                e.preventDefault();
-                onMnemonicWordChange(index, e.target.value);
-              }}
-              value={draftMnemonic[index]}
-              autoComplete="off"
-              onPaste={(event) => {
-                const newMnemonic = event.clipboardData.getData('text');
-                if (newMnemonic.trim().match(/\s/u)) {
-                  event.preventDefault();
-                  onMnemonicPaste(newMnemonic);
-                }
-              }}
-            />
-            {/* <ShowHideToggle
-              id={`${id}-checkbox`}
-              ariaLabelHidden={t('MnemonicWordHidden')}
-              ariaLabelShown={t('MnemonicWordShown')}
-              shown={showMnemonic[index]}
-              data-testid={`${id}-checkbox`}
-              onChange={() => toggleShowMnemonic(index)}
-              title={t('MnemonicToggleShow')}
-            /> */}
-          </div>
-        );
-      })}
-      <Button
-        variant="rainbow"
-        value={t('welcome.importButton')}
-        onClick={handleImportMnemonic}
-        fullWidth
-        disabled={invalidMnemonic}
-        data-testid="confirm-seedphrase-button"
-      />
+      <div className={classes.mnemonicWordsContainer}>
+        {[...Array(MNEMONIC_LENGTH).keys()].map((index) => {
+          const id = `mnemonic-word-${index}`;
+          return (
+            <div key={index} className={classes.mnemonicWordInputContainer}>
+              <Typography className={classes.mnemonicWordLabel}>{`${index + 1}.`}</Typography>
+              <TextInput
+                id={id}
+                className={classes.mnemonicWordInput}
+                data-testid={`seedphrase-input-${index + 1}`}
+                type={showMnemonic[index] ? 'text' : 'password'}
+                onChange={(e) => {
+                  e.preventDefault();
+                  onMnemonicWordChange(index, e.target.value);
+                }}
+                value={draftMnemonic[index]}
+                autoComplete="off"
+                onPaste={(event) => {
+                  const newMnemonic = event.clipboardData.getData('text');
+                  if (newMnemonic.trim().match(/\s/u)) {
+                    event.preventDefault();
+                    onMnemonicPaste(newMnemonic);
+                  }
+                }}
+              />
+              <ShowHideToggle
+                name={`${id}-checkbox`}
+                show={showMnemonic[index]}
+                onChange={() => toggleShowMnemonic(index)}
+                label={t('MnemonicToggleShow')}
+              />
+            </div>
+          );
+        })}
+      </div>
+      <div className={classes.divider} />
+      <div className={classes.footerContainer}>
+        <div className={classes.passwordInputContainer}>
+          <FormInput
+            containerClassName={classes.passwordInput}
+            label={t('welcome.passwordLabel')}
+            value={password}
+            onChange={onPasswordChange}
+            type="password"
+            id="password"
+            error={passwordError}
+            autoFocus
+            data-testid="enter-password-input"
+          />
+          <FormInput
+            containerClassName={classes.passwordInput}
+            label={t('welcome.passwordConfirmLabel')}
+            value={confirmPassword}
+            onChange={onConfirmPasswordChange}
+            type="password"
+            id="password"
+            error={confirmPasswordError}
+            autoFocus
+            data-testid="enter-password-input"
+          />
+        </div>
+        <Button
+          variant="rainbow"
+          value={t('welcome.importButton')}
+          onClick={handleImportMnemonic}
+          fullWidth
+          disabled={invalidMnemonic}
+          data-testid="confirm-seedphrase-button"
+        />
+      </div>
     </div>
   );
 };
