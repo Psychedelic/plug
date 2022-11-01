@@ -47,15 +47,6 @@ const useSteps = () => {
         />,
       },
       {
-        title: t('welcome.passwordTitle'),
-        subtitle: t('welcome.passwordSubtitle'),
-        message: t('welcome.passwordMessage'),
-        component: <CreatePasswordStep
-          handleNextStep={handleNextStep}
-          mnemonic={mnemonic}
-        />,
-      },
-      {
         title: t('welcome.memeTitle'),
         subtitle: t('welcome.memeSubtitle'),
         message: t('welcome.memeMessage'),

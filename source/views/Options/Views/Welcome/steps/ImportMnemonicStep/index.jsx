@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
 import * as bip39 from 'bip39';
 
+import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
+import { clearStorage } from '@modules/storageManager';
+import { getRandomEmoji } from '@shared/constants/emojis';
 import { Button, FormInput } from '@components';
 import useStyles from './styles';
 import ShowHideToggle from '../../components/ShowHideToggle';
@@ -32,19 +35,16 @@ const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  const [text, setText] = useState('');
   const [invalidMnemonic, setInvalidMnemonic] = useState(false);
 
-  const handleImportMnemonic = () => {
-    const trimmedText = text.trim();
-
-    const isValid = bip39.validateMnemonic(trimmedText);
-    if (isValid) {
-      handleSetMnemonic(trimmedText);
-      handleNextStep();
-    } else {
-      setInvalidMnemonic(true);
-    }
+  const handleCreateAccount = async () => {
+    // clean the storage before initiating keyring
+    clearStorage();
+    const params = { password, mnemonic: draftMnemonic.join(' '), icon: getRandomEmoji() };
+    sendMessage({ type: HANDLER_TYPES.IMPORT, params }, (response) => {
+      handleSetMnemonic(response?.mnemonic);
+    });
+    handleNextStep();
   };
 
   const onMnemonicChange = useCallback(
@@ -55,13 +55,13 @@ const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
         if (newDraftMnemonic.some((word) => word === '')) {
           newMnemonicError = t('seedPhraseReq');
         } else if (!isValidMnemonic(joinedDraftMnemonic)) {
+          setInvalidMnemonic(true);
           newMnemonicError = t('invalidSeedPhrase');
         }
       }
 
       setDraftMnemonic(newDraftMnemonic);
       setMnemonicError(newMnemonicError);
-      setText(newMnemonicError ? '' : joinedDraftMnemonic);
     },
     [setDraftMnemonic, setMnemonicError, t],
   );
@@ -214,7 +214,7 @@ const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
         <Button
           variant="rainbow"
           value={t('welcome.importButton')}
-          onClick={handleImportMnemonic}
+          onClick={handleCreateAccount}
           fullWidth
           disabled={invalidMnemonic}
           data-testid="confirm-seedphrase-button"

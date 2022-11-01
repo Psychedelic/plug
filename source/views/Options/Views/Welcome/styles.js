@@ -67,6 +67,7 @@ export default makeStyles((theme) => ({
   },
   memeContainer: {
     width: '100%',
+    maxWidth: 400,
     background: 'white',
     borderRadius: 5,
     display: 'flex',
