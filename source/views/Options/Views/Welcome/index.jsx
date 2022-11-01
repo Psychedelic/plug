@@ -1,11 +1,13 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import { FullscreenContainer, LinkButton } from '@components';
-import BackIcon from '@assets/icons/back.svg';
 import { useTranslation } from 'react-i18next';
-import Header from './components/Header';
-import useSteps from './hooks/useSteps';
+import { Typography } from '@material-ui/core';
+
+import BackIcon from '@assets/icons/back.svg';
+import { LinkButton, Plug } from '@components';
+
 import useStyles from './styles';
+import MadeByFleek from './components/MadeByFleek';
+import useSteps from './hooks/useSteps';
 
 const Welcome = () => {
   const { t } = useTranslation();
@@ -17,26 +19,24 @@ const Welcome = () => {
   } = useSteps();
 
   const step = steps[currentStep];
-
+  const isMiddleStep = currentStep > 0 && currentStep < steps.length - 1;
   return (
-    <FullscreenContainer maxWidth={currentStep === 0 ? 'md' : 'sm'}>
-      <Grid container spacing={2} style={{ position: 'relative' }}>
-        {
-          (currentStep > 0 && currentStep < steps.length - 1)
-          && (
+    <div className={classes.welcomeContainer}>
+      <MadeByFleek />
+      <div className={classes.headerContainer}>
+        {isMiddleStep && (
           <div className={classes.goBack}>
             <LinkButton value={t('welcome.goBack')} onClick={handlePreviousStep} startIcon={BackIcon} />
           </div>
-          )
-        }
-        <Grid item xs={12}>
-          <Header title={step.title} subtitle={step.subtitle} message={step.message} />
-        </Grid>
-        {
-          step.component
-        }
-      </Grid>
-    </FullscreenContainer>
+        )}
+        <Plug size="big" message={step.message} style={{ marginBottom: 6 }} />
+        <Typography variant="h2">{step.title}</Typography>
+        <Typography variant="subtitle1" className={classes.subtitle}>{step.subtitle}</Typography>
+      </div>
+      <div className={classes.stepContainer}>
+        {step.component}
+      </div>
+    </div>
   );
 };
 
