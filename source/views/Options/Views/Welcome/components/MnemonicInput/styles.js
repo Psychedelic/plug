@@ -1,7 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-import RAINBOW_GRADIENT from '@shared/styles/gradients';
-
 export default makeStyles((theme) => ({
   mnemonicContainer: {
     width: '100%',
@@ -62,6 +60,7 @@ export default makeStyles((theme) => ({
     alignItems: 'center',
     color: '#767676',
     opacity: 0.9,
+    marginBottom: 10,
   },
   infoIcon: {
     marginRight: 5,

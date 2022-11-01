@@ -5,19 +5,13 @@ import { Typography } from '@material-ui/core';
 import Info from '@assets/icons/info.svg';
 
 import { TextInput } from '@components';
+import { createArray } from '@shared/utils/array';
 
 import useStyles from './styles';
 import ShowHideToggle from '../ShowHideToggle';
+import { clearClipboard, parseMnemonic } from './utils';
 
 const MNEMONIC_LENGTH = 12;
-
-export function clearClipboard() {
-  window.navigator.clipboard.writeText('');
-}
-
-export const parseMnemonic = (mnemonic) => (mnemonic || '').trim().toLowerCase().match(/\w+/gu)?.join(' ') || '';
-
-const createArray = (length, fillValue) => new Array(length).fill(fillValue);
 
 const MnemonicInput = ({ onChange, draftMnemonic }) => {
   const { t } = useTranslation();

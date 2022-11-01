@@ -6,7 +6,9 @@ import * as bip39 from 'bip39';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { clearStorage } from '@modules/storageManager';
 import { getRandomEmoji } from '@shared/constants/emojis';
+import { createArray } from '@shared/utils/array';
 import { Button, FormInput } from '@components';
+
 import useStyles from './styles';
 import MnemonicInput from '../../components/MnemonicInput';
 
@@ -17,9 +19,6 @@ export function clearClipboard() {
 }
 
 const isValidMnemonic = (mnemonic) => bip39.validateMnemonic(mnemonic);
-export const parseMnemonic = (mnemonic) => (mnemonic || '').trim().toLowerCase().match(/\w+/gu)?.join(' ') || '';
-
-const createArray = (length, fillValue) => new Array(length).fill(fillValue);
 
 const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
   const { t } = useTranslation();
