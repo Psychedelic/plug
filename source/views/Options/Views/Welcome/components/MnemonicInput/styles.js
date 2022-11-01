@@ -58,13 +58,15 @@ export default makeStyles((theme) => ({
     maxWidth: 290,
   },
   pasteMessage: {
-    color: theme.palette.common.blue,
-    backgroundColor: 'rgba(0, 0, 0, 0.16)',
-    padding: '10px 15px',
-    borderRadius: 5,
-    border: 'double 1px transparent',
-    backgroundImage: RAINBOW_GRADIENT,
-    backgroundOrigin: 'border-box',
-    backgroundClip: 'padding-box, border-box',
+    display: 'flex',
+    alignItems: 'center',
+    color: '#767676',
+    opacity: 0.9,
+  },
+  infoIcon: {
+    marginRight: 5,
+    height: 16,
+    width: 16,
+    opacity: 0.5,
   },
 }));

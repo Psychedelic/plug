@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
+import Info from '@assets/icons/info.svg';
 
 import { TextInput } from '@components';
 
@@ -73,6 +74,7 @@ const MnemonicInput = ({ onChange, draftMnemonic }) => {
   return (
     <div className={classes.container}>
       <div className={classes.pasteMessage}>
+        <img src={Info} alt="info" className={classes.infoIcon} />
         {t('welcome.pasteMnemonic')}
       </div>
       <div className={classes.mnemonicWordsContainer}>
