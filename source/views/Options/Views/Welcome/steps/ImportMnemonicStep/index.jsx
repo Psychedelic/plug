@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import * as bip39 from 'bip39';
@@ -7,7 +7,8 @@ import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { clearStorage } from '@modules/storageManager';
 import { getRandomEmoji } from '@shared/constants/emojis';
 import { createArray } from '@shared/utils/array';
-import { Button, FormInput } from '@components';
+import { Alert, Button, FormInput } from '@components';
+import facepalmEmoji from '@assets/icons/facepalm.svg';
 
 import useStyles from './styles';
 import MnemonicInput from '../../components/MnemonicInput';
@@ -70,11 +71,11 @@ const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
       let newPasswordError = '';
 
       if (newPassword && newPassword.length < 8) {
-        newPasswordError = t('passwordNotLongEnough');
+        newPasswordError = t('welcome.passwordShortError');
       }
 
       if (confirmPassword && newPassword !== confirmPassword) {
-        newConfirmPasswordError = t('passwordsDontMatch');
+        newConfirmPasswordError = t('welcome.passwordMatchError');
       }
 
       setPassword(newPassword);
@@ -90,7 +91,7 @@ const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
       let newConfirmPasswordError = '';
 
       if (password !== newConfirmPassword) {
-        newConfirmPasswordError = t('passwordsDontMatch');
+        newConfirmPasswordError = t('welcome.passwordMatchError');
       }
 
       setConfirmPassword(newConfirmPassword);
@@ -103,6 +104,8 @@ const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
     || !confirmPassword
     || passwordError
     || confirmPasswordError;
+
+  useEffect(() => setDraftMnemonic(createArray(MNEMONIC_LENGTH, '')), []);
   return (
     <div className={classes.mnemonicContainer}>
       <MnemonicInput onChange={onMnemonicChange} draftMnemonic={draftMnemonic} />
@@ -125,9 +128,9 @@ const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
             value={confirmPassword}
             onChange={onConfirmPasswordChange}
             type="password"
-            id="password"
+            id="confirm-password"
             error={confirmPasswordError}
-            data-testid="enter-password-input"
+            data-testid="confirm-password-input"
           />
         </div>
         <Button
@@ -138,6 +141,13 @@ const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
           disabled={isDisabled}
           data-testid="confirm-seedphrase-button"
         />
+        <Alert type="warning" title={t('welcome.passwordWarning')} startIcon />
+        {(passwordError || confirmPasswordError) && (
+          <div className={classes.passwordError}>
+            <img alt="facepalm-emoji" src={facepalmEmoji} />
+            <p data-testid="password-error">{passwordError || confirmPasswordError}</p>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -71,7 +71,7 @@ const CreatePasswordStep = ({ handleNextStep, handleSetMnemonic, mnemonic }) => 
               value={password}
               onChange={handleChangePassword}
               type="password"
-              data-testid="new-password-input"
+              data-testid="enter-password-input"
             />
           )}
         />

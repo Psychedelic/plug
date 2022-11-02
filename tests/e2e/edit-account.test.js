@@ -89,7 +89,7 @@ const learnMoreButtonClick = async (browser, page) => {
 
   const newPage = await newPagePromise;
   const url = await newPage.evaluate(() => document.location.href);
-  expect(url).toBe('https://medium.com/@plug_wallet/669b192a2ace');
+  expect(url).toContain('https://medium.com/plugwallet/internet-computer-ids-101-669b192a2ace');
 };
 
 const waitForWalletName = async (page, walletName, timeout = 1000) => {
