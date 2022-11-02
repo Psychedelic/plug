@@ -12,7 +12,7 @@ const Step2 = ({ privateKey }) => {
   const { t } = useTranslation();
 
   const [loading, setLoading] = useState(false);
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, setDisabled] = useState(true);
   const [openEmojis, setOpenEmojis] = useState(false);
   const [walletName, setWalletName] = useState(""); // add deafault wallet name, for example the next wallet not used number
   const [currentEmoji, setCurrentEmoji] = useState("😎"); // add default emoji, not used in other wallets
@@ -24,9 +24,9 @@ const Step2 = ({ privateKey }) => {
 
   useEffect(() => {
     if (walletName && walletName !== "") {
-      setDisabled(true);
-    } else {
       setDisabled(false);
+    } else {
+      setDisabled(true);
     }
   }, [currentEmoji, walletName]);
 
@@ -94,7 +94,7 @@ const Step2 = ({ privateKey }) => {
             component={
               <TextInput
                 fullWidth
-                onChange={(e) => setWalletName(e.target.value)}
+                onChange={(e) => setWalletName(e.target.value.trim())}
                 type="text"
                 // error={}
               />
@@ -105,7 +105,7 @@ const Step2 = ({ privateKey }) => {
             value={t("common.save")}
             onClick={createImportedAccount}
             loading={loading}
-            disabled={!disabled}
+            disabled={disabled}
             fullWidth
             data-testid="add-button"
           />
