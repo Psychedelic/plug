@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ActionsStep,
@@ -24,8 +24,8 @@ const useSteps = () => {
     setCurrentBranch(branch);
     handleNextStep();
   };
-
   const handleSetMnemonic = (value) => setMnemonic(value);
+  useEffect(() => setMnemonic(null), [currentBranch]);
 
   const branches = {
     import: [

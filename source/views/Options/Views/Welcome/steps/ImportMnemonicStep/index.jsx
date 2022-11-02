@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import * as bip39 from 'bip39';
@@ -71,11 +71,11 @@ const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
       let newPasswordError = '';
 
       if (newPassword && newPassword.length < 8) {
-        newPasswordError = t('passwordNotLongEnough');
+        newPasswordError = t('welcome.passwordShortError');
       }
 
       if (confirmPassword && newPassword !== confirmPassword) {
-        newConfirmPasswordError = t('passwordsDontMatch');
+        newConfirmPasswordError = t('welcome.passwordMatchError');
       }
 
       setPassword(newPassword);
@@ -91,7 +91,7 @@ const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
       let newConfirmPasswordError = '';
 
       if (password !== newConfirmPassword) {
-        newConfirmPasswordError = t('passwordsDontMatch');
+        newConfirmPasswordError = t('welcome.passwordMatchError');
       }
 
       setConfirmPassword(newConfirmPassword);
@@ -104,6 +104,8 @@ const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
     || !confirmPassword
     || passwordError
     || confirmPasswordError;
+
+  useEffect(() => setDraftMnemonic(createArray(MNEMONIC_LENGTH, '')), []);
   return (
     <div className={classes.mnemonicContainer}>
       <MnemonicInput onChange={onMnemonicChange} draftMnemonic={draftMnemonic} />
