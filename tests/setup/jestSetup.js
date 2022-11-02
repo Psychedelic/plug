@@ -1,3 +1,5 @@
+const { fillSeedPhraseInput } = require('../utils/seed');
+
 require('dotenv').config();
 
 const PAGE_TITLE = 'Plug';
@@ -122,23 +124,18 @@ const importAccount = async (page, seedphrase, password) => {
   const importButton = await getByTestId(page, 'import-wallet-button');
   await importButton.click();
 
-  const seedphraseTextArea = await getByTestId(page, 'seedphrase-input');
-  await seedphraseTextArea.click();
-  await seedphraseTextArea.type(seedphrase);
+  await fillSeedPhraseInput(page, seedphrase);
 
-  const confirmSeedphraseButton = await getByTestId(page, 'confirm-seedphrase-button');
-  await confirmSeedphraseButton.click();
-
-  const newPasswordInput = await getByTestId(page, 'new-password-input');
-  const confirmPasswordInput = await getByTestId(page, 'confirm-password-input');
+  const newPasswordInput = await getByTestId(page, 'enter-password-input');
+  const confirmPasswordInput = await getByTestId(page, 'confirm-password-input', true);
 
   await newPasswordInput.click();
   await newPasswordInput.type(password);
   await confirmPasswordInput.click();
   await confirmPasswordInput.type(password);
 
-  const submitPasswordButton = await getByTestId(page, 'password-confirmation-button');
-  await submitPasswordButton.click();
+  const confirmSeedphraseButton = await getByTestId(page, 'confirm-seedphrase-button');
+  await confirmSeedphraseButton.click();
 };
 
 const unlock = async (page, password) => {
