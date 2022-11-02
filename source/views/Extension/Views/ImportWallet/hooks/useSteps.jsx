@@ -42,7 +42,7 @@ const useSteps = () => {
     try {
       fileReader.readAsText(userPemFile);
     } catch (e) {
-      toast(t("importPEM.fileNotSupported"), { type: "error" });
+      toast(t("importPem.fileNotSupported"), { type: "error" });
       setUserPemFile(null);
 
       return;
@@ -58,7 +58,7 @@ const useSteps = () => {
         (response) => {
           const { isValid, errorType } = response;
           if (!isValid) {
-            toast(t(`importPEM.${errorType}`), { type: "error" });
+            toast(t(`importPem.${errorType}`), { type: "error" });
             setUserPemFile(null);
           }
           setValidateLoading(false);
