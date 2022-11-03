@@ -50,9 +50,9 @@ const SeedPhrase = ({
       open={showTooltip || copied}
       placement="top"
     >
-      <div>
+      <div className={classes.root}>
         <div
-          className={clsx(classes.root, className)}
+          className={clsx(classes.seedContainer, className)}
           onClick={() => handleClick()}
           data-testid={seedPhraseBoxTestId}
           onMouseOver={() => setShowTooltip(true)}

@@ -6,12 +6,16 @@ const RAINBOW_GRADIENT_BG = 'linear-gradient(96.51deg, rgba(255, 231, 1, 0.8) 8.
 
 export default makeStyles((theme) => ({
   root: {
+    position: 'relative',
+  },
+  seedContainer: {
     background: theme.palette.common.white,
     boxShadow: SHADOW_1,
     borderRadius: 10,
     padding: 2,
     cursor: 'pointer',
-    width: 550,
+    maxWidth: 550,
+    width: '100%',
     height: 185,
     display: 'flex',
     flexDirection: 'row',
