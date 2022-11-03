@@ -52,19 +52,6 @@ export default makeStyles((theme) => ({
       background: 'white',
     },
   },
-  marginBottom: {
-    marginBottom: theme.spacing(2),
-  },
-  passwordError: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-
-    '& > img': {
-      marginRight: '1rem',
-    },
-  },
   memeContainer: {
     width: '100%',
     maxWidth: 400,

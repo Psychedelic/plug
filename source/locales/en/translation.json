@@ -21,10 +21,6 @@
     "copyTextAddress": "Copy address to clipboard",
     "copiedText": "Copied!"
   },
-  "importPEM": {
-    "added-account": "Account already added",
-    "invalid-key": "Invalid PEM file"
-  },
   "profile": {
     "myAccounts": "My Accounts",
     "createAccount": "Create Account",
@@ -409,7 +405,9 @@
     "or": "or",
     "browse": "browse",
     "fileNotSupported": "File not supported. Try a different file.",
-    "dropIt": "Drop it!"
+    "dropIt": "Drop it!",
+    "added-account": "Account already added",
+    "invalid-key": "Invalid PEM file"
   },
   "nfts": {
     "allNfts": "All NFTs",

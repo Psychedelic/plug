@@ -141,7 +141,7 @@ const ImportWalletStep = ({ handleNextStep, handleSetMnemonic }) => {
           disabled={isDisabled}
           data-testid="confirm-seedphrase-button"
         />
-        <Alert type="warning" title={t('welcome.passwordWarning')} startIcon />
+        <Alert type="warning" title={t('welcome.passwordWarning')} className={classes.pwdAlert} startIcon />
         {(passwordError || confirmPasswordError) && (
           <div className={classes.passwordError}>
             <img alt="facepalm-emoji" src={facepalmEmoji} />
