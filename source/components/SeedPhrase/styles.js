@@ -10,7 +10,6 @@ export default makeStyles((theme) => ({
     boxShadow: SHADOW_1,
     borderRadius: 10,
     padding: 2,
-    position: 'relative',
     cursor: 'pointer',
     width: 550,
     height: 185,

@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import Tooltip from '@material-ui/core/Tooltip';
+import clsx from 'clsx';
 
 import ListItem from '../ListItem';
 import RevealSeedPhrase from './components/RevealSeedPhrase';
 import useStyles from './styles';
 
-const SeedPhrase = ({ words, seedPhraseBoxTestId }) => {
+const SeedPhrase = ({
+  words, seedPhraseBoxTestId, onReveal, className,
+}) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -19,7 +22,6 @@ const SeedPhrase = ({ words, seedPhraseBoxTestId }) => {
 
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipText, setTooltipText] = useState(copyText);
-  const revealPhrase = () => setRevealed(true);
 
   const handleClick = () => {
     navigator.clipboard.writeText(words.join(' '));
@@ -35,6 +37,11 @@ const SeedPhrase = ({ words, seedPhraseBoxTestId }) => {
     }, 3000);
   };
 
+  const handleReveal = () => {
+    setRevealed(true);
+    onReveal();
+  };
+  console.log('show tooltip', showTooltip);
   return (
     <Tooltip
       classes={{ tooltipPlacementTop: classes.tooltip }}
@@ -43,9 +50,9 @@ const SeedPhrase = ({ words, seedPhraseBoxTestId }) => {
       open={showTooltip || copied}
       placement="top"
     >
-      <>
+      <div>
         <div
-          className={classes.root}
+          className={clsx(classes.root, className)}
           onClick={() => handleClick()}
           data-testid={seedPhraseBoxTestId}
           onMouseOver={() => setShowTooltip(true)}
@@ -59,17 +66,17 @@ const SeedPhrase = ({ words, seedPhraseBoxTestId }) => {
           {showTooltip && <div className={classes.layer} />}
         </div>
         {!revealed && (
-        <>
-          <RevealSeedPhrase onClick={revealPhrase} />
-          <div className={classes.blurContainer}>
-            <div className={classes.blur} />
-          </div>
-          <div className={classes.blurContainer}>
-            <div className={classes.rainbowBg} />
-          </div>
-        </>
+          <>
+            <RevealSeedPhrase onClick={handleReveal} />
+            <div className={classes.blurContainer}>
+              <div className={classes.blur} />
+            </div>
+            <div className={classes.blurContainer}>
+              <div className={classes.rainbowBg} />
+            </div>
+          </>
         )}
-      </>
+      </div>
     </Tooltip>
   );
 };
@@ -78,9 +85,12 @@ export default SeedPhrase;
 
 SeedPhrase.defaultProps = {
   seedPhraseBoxTestId: 'seed-phrase-box',
+  className: '',
 };
 
 SeedPhrase.propTypes = {
+  onReveal: PropTypes.func.isRequired,
   words: PropTypes.arrayOf(PropTypes.string).isRequired,
   seedPhraseBoxTestId: PropTypes.string,
+  className: PropTypes.string,
 };

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Grid from '@material-ui/core/Grid';
 import { useTranslation } from 'react-i18next';
 import {
   Button, Checkbox, SeedPhrase,
@@ -19,27 +18,24 @@ const SeedPhraseStep = ({ handleNextStep, mnemonic }) => {
     return (
       <div className={classes.seedphraseStepContainer}>
         <div className={classes.seedPhraseContainer}>
-          <SeedPhrase words={mnemonic.split(' ')} />
+          <SeedPhrase words={mnemonic.split(' ')} onReveal={() => setReveal(true)} />
         </div>
-        <Grid item xs={12}>
-          <Checkbox
-            style={{ margin: 0, marginRight: 10 }}
-            checked={checked}
-            handleChange={handleChangeCheckbox}
-            label={t('welcome.seedCheckbox')}
-            data-testid="seedphrase-confirmation-checkbox"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Button
-            variant="rainbow"
-            value={t('common.continue')}
-            onClick={handleNextStep}
-            fullWidth
-            disabled={!checked || !reveal}
-            data-testid="reveal-seedphrase-continue-button"
-          />
-        </Grid>
+        <Checkbox
+          style={{ marginRight: 10 }}
+          checked={checked}
+          handleChange={handleChangeCheckbox}
+          label={t('welcome.seedCheckbox')}
+          className={classes.checkbox}
+          data-testid="seedphrase-confirmation-checkbox"
+        />
+        <Button
+          variant="rainbow"
+          value={t('common.continue')}
+          onClick={handleNextStep}
+          disabled={!checked || !reveal}
+          data-testid="reveal-seedphrase-continue-button"
+          fullWidth
+        />
       </div>
     );
   }
