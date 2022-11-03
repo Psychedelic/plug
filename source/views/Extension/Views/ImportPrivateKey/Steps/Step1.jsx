@@ -10,7 +10,7 @@ const Step1 = ({ handleChangeStep, setPrivateKey, privateKey }) => {
   const classes = useStyles();
 
   const [loading, setLoading] = useState(false);
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, setDisabled] = useState(true);
   const [invalidPem, setInvalidPem] = useState(null);
 
   const handlePrivateKey = (e) => {
@@ -25,13 +25,13 @@ const Step1 = ({ handleChangeStep, setPrivateKey, privateKey }) => {
       },
       (a) => {
         if (a) {
-          setDisabled(true);
+          setDisabled(false);
           setInvalidPem(false);
           setLoading(false);
         } else {
           setInvalidPem(true);
           setLoading(false);
-          setDisabled(false);
+          setDisabled(true);
         }
       },
     );
@@ -63,7 +63,7 @@ const Step1 = ({ handleChangeStep, setPrivateKey, privateKey }) => {
             value={t("common.continue")}
             onClick={() => handleChangeStep(1)}
             loading={loading}
-            disabled={!disabled}
+            disabled={disabled}
             fullWidth
             data-testid="add-button"
           />
