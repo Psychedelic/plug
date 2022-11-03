@@ -31,7 +31,7 @@ const Welcome = () => {
         )}
         <Plug size="big" message={step.message} style={{ marginBottom: 6 }} />
         <Typography variant="h2">{step.title}</Typography>
-        <Typography variant="subtitle1" className={classes.subtitle}>{step.subtitle}</Typography>
+        <Typography variant="subtitle1">{step.subtitle}</Typography>
       </div>
       <div className={classes.stepContainer}>
         {step.component}

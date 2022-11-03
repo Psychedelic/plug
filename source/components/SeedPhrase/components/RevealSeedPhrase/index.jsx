@@ -14,11 +14,8 @@ const RevealSeedPhrase = ({ onClick, ...other }) => {
       data-testid="reveal-seedphrase-button"
       {...other}
     >
-      <div className={classes.blur} />
-      <div className={classes.center}>
-        <img src={WhiteKeyImage} />
-        <span className={classes.text}>{t('seedPhrase.reveal')}</span>
-      </div>
+      <img src={WhiteKeyImage} />
+      <span className={classes.text}>{t('seedPhrase.reveal')}</span>
     </div>
   );
 };

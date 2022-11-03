@@ -16,14 +16,14 @@ export default makeStyles((theme) => ({
       'linear-gradient(122.45deg, rgba(255, 231, 1, 0.2) 15.68%, rgba(250, 81, 211, 0.2) 39.58%, rgba(16, 217, 237, 0.2) 63.84%, rgba(82, 255, 83, 0.2) 85.21%)',
   },
   headerContainer: {
-    height: 188,
-    maxWidth: 500,
+    height: 190,
+    maxWidth: 540,
     width: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'column',
-    marginBottom: theme.spacing(1),
+    marginBottom: theme.spacing(2),
   },
   stepContainer: {
     width: '100%',
@@ -31,9 +31,6 @@ export default makeStyles((theme) => ({
     padding: theme.spacing(1),
     display: 'flex',
     justifyContent: 'center',
-  },
-  subtitle: {
-    width: '102%',
   },
   goBack: {
     alignSelf: 'flex-start',
@@ -50,19 +47,6 @@ export default makeStyles((theme) => ({
 
     '@supports ( -moz-appearance:none )': {
       background: 'white',
-    },
-  },
-  marginBottom: {
-    marginBottom: theme.spacing(2),
-  },
-  passwordError: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-
-    '& > img': {
-      marginRight: '1rem',
     },
   },
   memeContainer: {
