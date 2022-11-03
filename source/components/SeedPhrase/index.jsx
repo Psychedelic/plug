@@ -41,7 +41,6 @@ const SeedPhrase = ({
     setRevealed(true);
     onReveal();
   };
-  console.log('show tooltip', showTooltip);
   return (
     <Tooltip
       classes={{ tooltipPlacementTop: classes.tooltip }}
