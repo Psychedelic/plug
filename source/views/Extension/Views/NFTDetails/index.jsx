@@ -129,7 +129,7 @@ const NFTDetails = () => {
             <Typography variant="subtitle1">{populatedNFT?.desc}</Typography>
           </Section>
         )}
-        {populatedNFT?.metadata?.properties?.filter((prop) => typeof prop?.value !== 'object')?.length >= 1 && (
+        {!isICNS && populatedNFT?.metadata?.properties?.filter((prop) => typeof prop?.value !== 'object')?.length >= 1 && (
           <Section icon={AttributesImg} title={t('nfts.attributes')}>
             {
               populatedNFT?.metadata?.properties?.map((prop) => ((
