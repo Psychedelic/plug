@@ -25,6 +25,8 @@ import ClockError from './Views/ClockError';
 import Network from './Views/Network';
 import NetworkCreation from './Views/NetworkCreation';
 import ImportWallet from './Views/ImportWallet';
+import ImportPemFile from './Views/ImportPemFile';
+import ImportPrivateKey from './Views/ImportPrivateKey';
 
 const Popup = ({ initialRoute }) => (
   <Router initialRouteName={initialRoute}>
@@ -38,6 +40,8 @@ const Popup = ({ initialRoute }) => (
     {/* <Route name="swap" component={Swap} /> */}
     <Route name="clockError" component={ClockError} />
     <Route name="import-wallet" component={ImportWallet} />
+    <Route name="import-pem-file" component={ImportPemFile} />
+    <Route name="import-private-key" component={ImportPrivateKey} />
     <Route name="send" component={Send} />
     <Route name="contacts" component={Contacts} />
     <Route name="error" component={ErrorScreen} />

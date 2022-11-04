@@ -11,7 +11,7 @@ const useSteps = () => {
   const { navigator } = useRouter();
   const { t } = useTranslation();
 
-  const [userPemFile, setUserPemFile] = useState(null);
+  const [privateKey, setPrivateKey] = useState(null);
 
   const handleChangeStep = (index) => setStep(index);
   const handleClose = () => navigator.navigate('home');
@@ -23,18 +23,18 @@ const useSteps = () => {
 
   const steps = [
     {
-      component: <Step1 handleChangeStep={handleChangeStep} setUserPemFile={setUserPemFile} userPemFile={userPemFile} />,
-      left: leftButton(() => handleClose()),
+      component: <Step1 handleChangeStep={handleChangeStep} setPrivateKey={setPrivateKey} privateKey={privateKey} />,
+      left: leftButton(() => navigator.navigate('import-wallet')),
       right: rightButton,
-      center: `${t("importPem.importPEMfile")}`,
+      center: `${t("importWallet.importWallet")}`,
     },
     {
       component: <Step2
         handleClose={handleClose}
-        userPemFile={userPemFile}
+        privateKey={privateKey}
       />,
       right: rightButton,
-      center: `${t("importPem.walletDetails")}`,
+      center: `${t("importWallet.importWallet")}`,
     },
   ];
 
