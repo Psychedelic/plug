@@ -11,6 +11,7 @@ import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import extensionizer from 'extensionizer';
+import GoogleIcon from '@assets/icons/login-google.svg';
 
 import Plus from '@assets/icons/plus.svg';
 import LinkEmoji from '@assets/icons/link-emoji.png';
@@ -41,6 +42,7 @@ import ActionDialog from '../ActionDialog';
 import { AccountItem } from './components';
 import UserIcon from '../UserIcon';
 import useStyles from './styles';
+import { initWeb3Auth, web3AuthGoogleConnect } from './web3auth';
 
 const IMPORT_WALLET_ENABLED = process.env.TARGET_BROWSER !== 'firefox';
 
@@ -206,6 +208,13 @@ const Profile = ({ disableProfile }) => {
     setOpen(false);
   };
 
+  const handleOpenWeb3Auth = async () => {
+    console.log('Calling w3a');
+    const w3a = await initWeb3Auth();
+    console.log('w3a initialized', w3a);
+    const response = await web3AuthGoogleConnect();
+    console.log('response?', response);
+  };
 
   return (
     <>
@@ -331,6 +340,15 @@ const Profile = ({ disableProfile }) => {
                   alignLeft
                   logo={Plus}
                   onClick={handleOpenCreateAccount}
+                  data-testid="create-account-button"
+                />
+                <MenuItem
+                  size="small"
+                  key="createW3AAccount"
+                  name={t('profile.createW3AAccount')}
+                  alignLeft
+                  logo={GoogleIcon}
+                  onClick={handleOpenWeb3Auth}
                   data-testid="create-account-button"
                 />
                 { IMPORT_WALLET_ENABLED && (
