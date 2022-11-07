@@ -112,6 +112,7 @@ export const HANDLER_TYPES = {
   REMOVE_CUSTOM_TOKEN: 'remove-custom-token',
   GET_PRINCIPAL_FROM_PEM: 'get-principal-from-pem',
   VALIDATE_PEM: 'validate-pem',
+  IMPORT_PRIVATE_KEY: 'import-private-key',
 };
 
 export const getKeyringErrorMessage = (type) => ({
@@ -148,9 +149,11 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.REMOVE_CUSTOM_TOKEN]: 'removing custom token',
   [HANDLER_TYPES.IMPORT_PEM_ACCOUNT]: 'importing account from pem',
   [HANDLER_TYPES.REMOVE_PEM_ACCOUNT]: 'removing pem account',
+  [HANDLER_TYPES.IMPORT_PRIVATE_KEY]: 'importing the private key',
 }[type]);
 
 export const sendMessage = (args, callback) => {
+  console.log('executing sendMessage', args);
   extension.runtime.sendMessage(args, (response) => {
     let parsedResponse = response;
     if (typeof response === 'string') {
@@ -488,6 +491,10 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.GET_PRINCIPAL_FROM_PEM]: keyring.getPrincipalFromPem,
   [HANDLER_TYPES.VALIDATE_PEM]: keyring.validatePem,
+  [HANDLER_TYPES.IMPORT_PRIVATE_KEY]: async (params) => {
+    const resp = await keyring.importAccountFromPrivateKey(params);
+    return resp;
+  },
 }[type]);
 
 export const getContacts = () => new Promise((resolve, reject) => {

@@ -11,7 +11,7 @@ import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import extensionizer from 'extensionizer';
-import GoogleIcon from '@assets/icons/login-google.svg';
+import Web3AuthIcon from '@assets/icons/web3auth-logo.jpeg';
 
 import Plus from '@assets/icons/plus.svg';
 import LinkEmoji from '@assets/icons/link-emoji.png';
@@ -42,7 +42,9 @@ import ActionDialog from '../ActionDialog';
 import { AccountItem } from './components';
 import UserIcon from '../UserIcon';
 import useStyles from './styles';
-import { getPrivate, initWeb3Auth, web3auth, web3AuthGoogleConnect } from './web3auth';
+import {
+  getPrivate, initWeb3Auth, web3auth, web3AuthGoogleConnect,
+} from './web3auth';
 
 const IMPORT_WALLET_ENABLED = process.env.TARGET_BROWSER !== 'firefox';
 
@@ -219,6 +221,22 @@ const Profile = ({ disableProfile }) => {
     }
     const privateKey = await getPrivate();
     console.log('private?', privateKey);
+    // sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} },
+    //   (state) => {
+    //     console.log('back from sendMessage', state);
+    //   });
+    const params = {
+      type: 'import-private-key',
+      params: {
+        secretKey: privateKey,
+        name: 'Web3Auth',
+        icon: getRandomEmoji(),
+      },
+    };
+    console.log('calling sendmessage', params);
+    sendMessage(params, (krResponse) => {
+      console.log('krResponse', krResponse);
+    });
   };
 
   return (
@@ -352,7 +370,7 @@ const Profile = ({ disableProfile }) => {
                   key="createW3AAccount"
                   name={t('profile.createW3AAccount')}
                   alignLeft
-                  logo={GoogleIcon}
+                  logo={Web3AuthIcon}
                   onClick={handleOpenWeb3Auth}
                   data-testid="create-account-button"
                 />

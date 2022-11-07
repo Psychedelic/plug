@@ -2,15 +2,15 @@ import { Web3AuthCore } from '@web3auth/core';
 import { CHAIN_NAMESPACES } from '@web3auth/base';
 import { OpenloginAdapter } from '@web3auth/openlogin-adapter';
 
-const clientId = 'BNOSU75qEPmaZEc6jVCXO5a-uPAGm-H82rN6dGgU8xAM37vEX3y3o8JAakSFw7ZCGGBHjItujFQpGNPtSRQQP2w';
+const clientId = 'BCqXwJES36UmBnWzYhc4M69W35m2YMr2XVRhEX9bus5_GpeH0BTQrSxs5oBNvP5iAZxju7vJnufzeXs86iAM_bw';
 
 export const web3auth = new Web3AuthCore({
   clientId,
   chainConfig: {
     chainNamespace: CHAIN_NAMESPACES.OTHER,
-    displayName: 'Tezos',
-    ticker: 'XTZ',
-    tickerName: 'tezos',
+    displayName: 'Internet Computer',
+    ticker: 'ICP',
+    tickerName: 'icp',
   }, // 5 is the chainId for Goerli,
   enableLogging: false,
 });

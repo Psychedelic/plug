@@ -31,7 +31,8 @@
     "help": "Help",
     "lock": "Lock",
     "refreshWallet": "Refresh Wallet",
-    "accountNameTooLong": "Account name must be less than 24 characters long"
+    "accountNameTooLong": "Account name must be less than 24 characters long",
+    "createW3AAccount": "Create a W3A account"
   },
   "tabs": {
     "tokens": "Tokens",

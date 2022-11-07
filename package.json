@@ -38,7 +38,7 @@
     "@metamask/post-message-stream": "^4.0.0",
     "@psychedelic/browser-rpc": "2.1.0",
     "@psychedelic/dab-js": "1.5.0-beta.4",
-    "@psychedelic/plug-controller": "0.24.7",
+    "@psychedelic/plug-controller": "0.24.10",
     "@psychedelic/plug-inpage-provider": "^2.3.1",
     "@reduxjs/toolkit": "^1.6.0",
     "@web3auth/base": "^3.0.0",
