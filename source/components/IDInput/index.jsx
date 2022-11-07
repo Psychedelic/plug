@@ -45,7 +45,9 @@ const IDInput = ({
     () => [principalId, accountId].includes(value), [principalId, accountId, value],
   );
 
-  const inContacts = useMemo(() => contacts.includes(value), [contacts, value]);
+  const inContacts = useMemo(() => !!contacts.find(
+    (contact) => (contact.id === value),
+  ), [contacts, value]);
 
   const shouldDisplayAddToContacts = value !== null && value !== ''
     && !loading && isValid && !inContacts && !isUserAddress;
