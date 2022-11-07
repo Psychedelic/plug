@@ -130,6 +130,17 @@ const tokenBalanceCheck = async (page, { previousAmount, name }) => {
   expect(sentAmount).toBe(AMOUNT_TO_SEND);
 };
 
+const tokenZeroBalanceCheck = async (page, { name }) => {
+  await popupPageUtils.refreshWallet(page);
+
+  const assetAmount = await page.getByTestId(`asset-amount-${name}`, true);
+  const assetAmountString = await page.evaluate((element) => element.innerText, assetAmount);
+
+  const newAmount = formatTokenAmount(assetAmountString);
+
+  expect(newAmount).toBe(0.000);
+};
+
 const recipientPrincipalIdEnter = async (page) => {
   const addressInput = await page.getByTestId('send-to-principalID-input', true);
   await addressInput.click();
@@ -160,6 +171,28 @@ async function sendToken(page) {
   await pressKey(page, 'ArrowRight', 4);
   await pressKey(page, 'ArrowLeft', 2);
   await page.keyboard.type('1');
+
+  await page.waitForSelector('[data-testid="continue-button"][disabled]', { hidden: true });
+
+  const continueButton = await page.getByTestId('continue-button', true);
+  await continueButton.click();
+
+  const sendButton = await page.getByTestId('send-button', true);
+  await sendButton.click();
+  await page.waitForTimeout(15000);
+  const tokensTab = await page.getByTestId('tab-item-Tokens', true);
+  await tokensTab.click();
+}
+
+async function sendMaxToken(page) {
+  const amount = await waitForAmount(page);
+  expect(amount).toBeGreaterThan(0);
+  const maxButton = await page.waitForTestIdSelector('max-button');
+  await maxButton.click();
+  const inputValue = await getUniversalInputValue(page);
+  const availableAmount = await getAvailableAmount(page, false);
+
+  expect(inputValue).toBe(availableAmount);
 
   await page.waitForSelector('[data-testid="continue-button"][disabled]', { hidden: true });
 
@@ -216,17 +249,6 @@ describe('Send View', () => {
     expect(icpValue).toBe('0.00000 ICP');
   });
 
-  test('successfully selecting max value', async () => {
-    const amount = await waitForAmount(page);
-    expect(amount).toBeGreaterThan(0);
-    const maxButton = await page.waitForTestIdSelector('max-button');
-    await maxButton.click();
-    const inputValue = await getUniversalInputValue(page);
-    const availableAmount = await getAvailableAmount(page, false);
-
-    expect(inputValue).toBe(availableAmount);
-  });
-
   test('cancelling the send operation', async () => {
     await cancelButtonClick(page);
     await sendViewButtonClick(page);
@@ -280,6 +302,60 @@ describe('Send View', () => {
     await popupPageUtils.refreshWallet(page);
     await waitForBalanceChange(page);
     await tokenBalanceCheck(page, { previousAmount, name: defaultTokenNames[0] });
+  });
+
+  test('successfully sending max amount of tokens', async () => {
+    const previousAmounts = [];
+    await waitForAmount(page);
+
+    for (const name of defaultTokenNames) {
+      await selectToken(page, name);
+      const previousAmount = await getAvailableAmount(page);
+
+      await recipientPrincipalIdEnter(page);
+      await sendMaxToken(page);
+      previousAmounts.push(previousAmount);
+      await popupPageUtils.refreshWallet(page);
+      await sendViewButtonClick(page);
+    }
+
+    await cancelButtonClick(page);
+    await waitForBalanceChange(page);
+
+    for (const [index, name] of defaultTokenNames.entries()) {
+      const previousAmount = previousAmounts[index];
+      await tokenZeroBalanceCheck(page, { previousAmount, name });
+    }
+  });
+  test('sending tokens back to the main account', async () => {
+    await popupPageUtils.profileButtonClick(page);
+    await popupPageUtils.createSubAccount(page, 'Sub');
+    const addContactButton = await page.getByTestId('account-name-Sub', true);
+    await addContactButton.click();
+
+    await sendViewButtonClick(page);
+
+    const previousAmounts = [];
+    await waitForAmount(page);
+
+    for (const name of defaultTokenNames) {
+      await selectToken(page, name);
+      const previousAmount = await getAvailableAmount(page);
+
+      await recipientPrincipalIdEnter(page);
+      await sendMaxToken(page);
+      previousAmounts.push(previousAmount);
+      await popupPageUtils.refreshWallet(page);
+      await sendViewButtonClick(page);
+    }
+
+    await cancelButtonClick(page);
+    await waitForBalanceChange(page);
+
+    for (const [index, name] of defaultTokenNames.entries()) {
+      const previousAmount = previousAmounts[index];
+      await tokenZeroBalanceCheck(page, { previousAmount, name });
+    }
   });
 });
 
