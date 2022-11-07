@@ -90,7 +90,7 @@ export default makeStyles((theme) => ({
     animationName: '$appear',
     animationDuration: '0.5s',
   },
-  errorMessage: {
+  danger: {
     marginTop: 5,
     color: theme.palette.danger.main,
   },

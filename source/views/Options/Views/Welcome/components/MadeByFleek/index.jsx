@@ -3,7 +3,7 @@ import { fleekUrl } from '@shared/constants/urls';
 import ThunderImg from '@assets/icons/options/thunder.svg';
 import useStyles from './styles';
 
-const MadeBy = () => {
+const MadeByFleek = () => {
   const classes = useStyles();
 
   return (
@@ -13,4 +13,4 @@ const MadeBy = () => {
   );
 };
 
-export default MadeBy;
+export default MadeByFleek;

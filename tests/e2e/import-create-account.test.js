@@ -1,3 +1,5 @@
+const { fillSeedPhraseInput } = require('../utils/seed');
+
 const MINIMUM_PLUG_VERSION_ALLOWED = 60;
 
 const getErrorMessage = async (page, error) => {
@@ -36,10 +38,7 @@ describe('Import/Create', () => {
     });
 
     test('failing on incorrect seedphrase', async () => {
-      const seedphraseTextarea = await page.getByTestId('seedphrase-input');
-      await seedphraseTextarea.click();
-      await seedphraseTextarea.type(badSeedphrase);
-
+      await fillSeedPhraseInput(page, badSeedphrase);
       const submitImportButton = await page.getByTestId('confirm-seedphrase-button');
       await submitImportButton.click();
 
@@ -52,14 +51,12 @@ describe('Import/Create', () => {
     });
 
     test('failing on missmatched passwords', async () => {
-      const seedphraseTextarea = await page.getByTestId('seedphrase-input');
-      await seedphraseTextarea.click();
-      await seedphraseTextarea.type(secrets.seedphrase);
+      await fillSeedPhraseInput(page, secrets.seedphrase);
 
       const submitImportButton = await page.getByTestId('confirm-seedphrase-button');
       await submitImportButton.click();
 
-      const newPasswordInput = await page.getByTestId('new-password-input');
+      const newPasswordInput = await page.getByTestId('enter-password-input');
       const confirmPasswordInput = await page.getByTestId('confirm-password-input');
 
       await newPasswordInput.click();
@@ -67,21 +64,19 @@ describe('Import/Create', () => {
       await confirmPasswordInput.click();
       await confirmPasswordInput.type('MissMatchedPassword');
 
-      const submitPasswordButton = await page.getByTestId('password-confirmation-button');
+      const submitPasswordButton = await page.getByTestId('confirm-seedphrase-button');
       await submitPasswordButton.click();
 
       await getErrorMessage(page, 'The passwords gotta match, smh!');
     });
 
     test('failing on password shorter than 12 characters', async () => {
-      const seedphraseTextarea = await page.getByTestId('seedphrase-input');
-      await seedphraseTextarea.click();
-      await seedphraseTextarea.type(secrets.seedphrase);
+      await fillSeedPhraseInput(page, secrets.seedphrase);
 
       const submitImportButton = await page.getByTestId('confirm-seedphrase-button');
       await submitImportButton.click();
 
-      const newPasswordInput = await page.getByTestId('new-password-input');
+      const newPasswordInput = await page.getByTestId('enter-password-input');
       const confirmPasswordInput = await page.getByTestId('confirm-password-input');
 
       await newPasswordInput.click();
@@ -89,21 +84,19 @@ describe('Import/Create', () => {
       await confirmPasswordInput.click();
       await confirmPasswordInput.type('123');
 
-      const submitPasswordButton = await page.getByTestId('password-confirmation-button');
+      const submitPasswordButton = await page.getByTestId('confirm-seedphrase-button');
       await submitPasswordButton.click();
 
       await getErrorMessage(page, 'The minimum is 8 characters, smh!');
     });
 
     test('importing wallet correctly', async () => {
-      const seedphraseTextarea = await page.getByTestId('seedphrase-input');
-      await seedphraseTextarea.click();
-      await seedphraseTextarea.type(secrets.seedphrase);
+      await fillSeedPhraseInput(page, secrets.seedphrase);
 
       const submitImportButton = await page.getByTestId('confirm-seedphrase-button');
       await submitImportButton.click();
 
-      const newPasswordInput = await page.getByTestId('new-password-input');
+      const newPasswordInput = await page.getByTestId('enter-password-input');
       const confirmPasswordInput = await page.getByTestId('confirm-password-input');
 
       await newPasswordInput.click();
@@ -111,7 +104,7 @@ describe('Import/Create', () => {
       await confirmPasswordInput.click();
       await confirmPasswordInput.type(secrets.password);
 
-      const submitPasswordButton = await page.getByTestId('password-confirmation-button');
+      const submitPasswordButton = await page.getByTestId('confirm-seedphrase-button');
       await submitPasswordButton.click();
 
       await page.goto(chromeData.popupUrl);
@@ -139,7 +132,7 @@ describe('Import/Create', () => {
     });
 
     test('fails on missmatched passwords', async () => {
-      const newPasswordInput = await page.getByTestId('new-password-input');
+      const newPasswordInput = await page.getByTestId('enter-password-input');
       await newPasswordInput.click();
       await newPasswordInput.type('TestPassword123');
 
@@ -154,7 +147,7 @@ describe('Import/Create', () => {
     });
 
     test('fails on password shorter than 12 characters', async () => {
-      const newPasswordInput = await page.getByTestId('new-password-input');
+      const newPasswordInput = await page.getByTestId('enter-password-input');
       await newPasswordInput.click();
       await newPasswordInput.type('123');
 
@@ -169,7 +162,7 @@ describe('Import/Create', () => {
     });
 
     test('correctly creates', async () => {
-      const newPasswordInput = await page.getByTestId('new-password-input');
+      const newPasswordInput = await page.getByTestId('enter-password-input');
       await newPasswordInput.click();
       await newPasswordInput.type(secrets.password);
 

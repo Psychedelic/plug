@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ActionsStep,
   CreatePasswordStep,
-  ImportWalletStep,
+  ImportMnemonicStep,
   MemeStep,
   SeedPhraseStep,
 } from '../steps';
@@ -24,8 +24,8 @@ const useSteps = () => {
     setCurrentBranch(branch);
     handleNextStep();
   };
-
   const handleSetMnemonic = (value) => setMnemonic(value);
+  useEffect(() => setMnemonic(null), [currentBranch]);
 
   const branches = {
     import: [
@@ -41,18 +41,9 @@ const useSteps = () => {
         title: t('welcome.importWallet'),
         subtitle: t('welcome.importSubtitle'),
         message: t('welcome.importMessage'),
-        component: <ImportWalletStep
+        component: <ImportMnemonicStep
           handleNextStep={handleNextStep}
           handleSetMnemonic={handleSetMnemonic}
-        />,
-      },
-      {
-        title: t('welcome.passwordTitle'),
-        subtitle: t('welcome.passwordSubtitle'),
-        message: t('welcome.passwordMessage'),
-        component: <CreatePasswordStep
-          handleNextStep={handleNextStep}
-          mnemonic={mnemonic}
         />,
       },
       {

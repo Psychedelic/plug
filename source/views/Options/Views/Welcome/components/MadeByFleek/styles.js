@@ -8,6 +8,9 @@ export default makeStyles((theme) => ({
     fontSize: 12,
     fontWeight: 700,
     alignItems: 'center',
+    position: 'absolute',
+    top: 30,
+    right: 30,
   },
   image: {
     marginLeft: 3,

@@ -53,9 +53,9 @@ const NFTDetails = () => {
   const name = `${nft?.name ?? `#${nft?.index}`}`;
   const isICNS = collection?.name === 'ICNS';
 
-  const openNFT = (url) => () => {
+  const openNFT = (url) => {
     const parsedUrl = isICNS
-      ? `https://icns.id/domains/${populatedNFT?.name.replace('.icp', '')}/detail`
+      ? `https://icns.id/domains/${nft?.name.replace('.icp', '')}/detail`
       : url;
 
     extension.tabs.create({
@@ -84,7 +84,7 @@ const NFTDetails = () => {
           <img
             className={classes.expandIcon}
             src={ExpandIcon}
-            onClick={openNFT(populatedNFT?.url)}
+            onClick={() => openNFT(nft?.url)}
             data-testid="expand-nft"
           />
         )}
@@ -129,7 +129,7 @@ const NFTDetails = () => {
             <Typography variant="subtitle1">{populatedNFT?.desc}</Typography>
           </Section>
         )}
-        {populatedNFT?.metadata?.properties?.filter((prop) => typeof prop?.value !== 'object')?.length >= 1 && (
+        {!isICNS && populatedNFT?.metadata?.properties?.filter((prop) => typeof prop?.value !== 'object')?.length >= 1 && (
           <Section icon={AttributesImg} title={t('nfts.attributes')}>
             {
               populatedNFT?.metadata?.properties?.map((prop) => ((

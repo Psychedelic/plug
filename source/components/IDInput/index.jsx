@@ -6,7 +6,7 @@ import BookIcon from '@assets/icons/notebook.svg';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
-import { CircularProgress, Grid } from '@material-ui/core';
+import { CircularProgress, Grid, Typography } from '@material-ui/core';
 import { getRandomEmoji } from '@shared/constants/emojis';
 import { getContacts, addContact as addContactAction } from '@redux/contacts';
 
@@ -31,23 +31,23 @@ const IDInput = ({
   const [isContactsOpened, setIsContactsOpened] = useState(false);
   const [contactName, setContactName] = useState('');
   const [openContacts, setOpenContacts] = useState(false);
+  const [contactsError, setContactsError] = useState(null);
 
   const { principalId, accountId } = useSelector((state) => state.wallet);
-  const { groupedContacts: contacts } = useSelector((state) => state.contacts);
+  const { contacts } = useSelector((state) => state.contacts);
   const { contactsLoading } = useSelector((state) => state.contacts);
 
   useEffect(() => {
-   dispatch(getContacts());
+    dispatch(getContacts());
   }, []);
 
   const isUserAddress = useMemo(
     () => [principalId, accountId].includes(value), [principalId, accountId, value],
   );
 
-  const inContacts = useMemo(() => contacts
-    .flatMap((c) => c.contacts)
-    .map((c) => c.id)
-    .includes(value), [contacts, value]);
+  const inContacts = useMemo(() => !!contacts.find(
+    (contact) => (contact.id === value),
+  ), [contacts, value]);
 
   const shouldDisplayAddToContacts = value !== null && value !== ''
     && !loading && isValid && !inContacts && !isUserAddress;
@@ -85,14 +85,17 @@ const IDInput = ({
   };
 
   const handleChangeContactName = (e) => {
-    setContactName(e.target.value);
+    const name = e.target.value;
+    const existingContact = contacts.find((contact) => contact.name === name);
+    const error = existingContact ? t('contacts.errorExists').replace('{name}', existingContact.name) : null;
+    setContactsError(error);
+    setContactName(name);
   };
 
   const searchContactFromId = (e) => {
     const id = e.target.value;
     onChange(id);
-    const allContacts = contacts.flatMap((contact) => contact.contacts);
-    setSelectedContact(allContacts.find((contact) => contact.id === id));
+    setSelectedContact(contacts.find((contact) => contact.id === id));
   };
 
   return (
@@ -178,20 +181,24 @@ const IDInput = ({
                     label={t('contacts.name')}
                     smallLabel
                     component={(
-                      <TextInput
-                        fullWidth
-                        value={contactName}
-                        onChange={handleChangeContactName}
-                        type="text"
-                        data-testid="contact-name-input"
-                      />
+                      <>
+                        <TextInput
+                          fullWidth
+                          value={contactName}
+                          onChange={handleChangeContactName}
+                          type="text"
+                          data-testid="contact-name-input"
+                          error={!!contactsError}
+                        />
+                        <Typography variant="subtitle1" className={classes.danger} data-testid="error">{contactsError}</Typography>
+                      </>
                     )}
                   />
                 )}
                 confirmText={t('common.add')}
                 buttonVariant="rainbow"
                 onClick={addContact}
-                submitButtonProps={{ 'data-testid': 'confirm-adding-contact-button' }}
+                submitButtonProps={{ 'data-testid': 'confirm-adding-contact-button', disabled: !contactName || !!contactsError }}
                 onClose={() => setIsContactsOpened(false)}
               />
             )}

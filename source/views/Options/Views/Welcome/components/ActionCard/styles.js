@@ -11,6 +11,8 @@ export default makeStyles((theme) => ({
     width: '100%',
     background: 'rgba(255, 255, 255, 0.4)',
     borderRadius: 15,
+    maxWidth: 420,
+    margin: theme.spacing(1),
   },
   image: {
     marginBottom: theme.spacing(1),
