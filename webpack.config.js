@@ -117,7 +117,7 @@ module.exports = {
         loader: 'babel-loader',
         // exclude: /node_modules/,
         options: {
-          plugins: ['@babel/plugin-proposal-export-namespace-from', '@babel/plugin-proposal-class-properties', '@babel/plugin-proposal-optional-chaining'],
+          plugins: ['@babel/plugin-proposal-export-namespace-from', '@babel/plugin-proposal-class-properties', '@babel/plugin-proposal-optional-chaining', '@babel/plugin-proposal-nullish-coalescing-operator'],
         },
       },
       {

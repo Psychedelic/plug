@@ -42,7 +42,7 @@ import ActionDialog from '../ActionDialog';
 import { AccountItem } from './components';
 import UserIcon from '../UserIcon';
 import useStyles from './styles';
-import { initWeb3Auth, web3AuthGoogleConnect } from './web3auth';
+import { getPrivate, initWeb3Auth, web3auth, web3AuthGoogleConnect } from './web3auth';
 
 const IMPORT_WALLET_ENABLED = process.env.TARGET_BROWSER !== 'firefox';
 
@@ -212,8 +212,13 @@ const Profile = ({ disableProfile }) => {
     console.log('Calling w3a');
     const w3a = await initWeb3Auth();
     console.log('w3a initialized', w3a);
-    const response = await web3AuthGoogleConnect();
-    console.log('response?', response);
+    console.log('Calling w3a connect', web3auth.status);
+    if (web3auth.status !== 'connected') {
+      const response = await web3AuthGoogleConnect();
+      console.log('response?', response);
+    }
+    const privateKey = await getPrivate();
+    console.log('private?', privateKey);
   };
 
   return (
