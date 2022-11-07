@@ -35,20 +35,6 @@ export default makeStyles((theme) => ({
   goBack: {
     alignSelf: 'flex-start',
   },
-  blur: {
-    height: 'calc(100% - 24px)',
-    width: 'calc(100% - 24px)',
-    position: 'absolute',
-    margin: 12,
-    inset: 0,
-    zIndex: 2,
-    backdropFilter: 'blur(7px)',
-    borderRadius: 10,
-
-    '@supports ( -moz-appearance:none )': {
-      background: 'white',
-    },
-  },
   memeContainer: {
     width: '100%',
     maxWidth: 400,
