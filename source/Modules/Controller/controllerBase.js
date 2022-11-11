@@ -88,8 +88,7 @@ export class ControllerModuleBase {
       height,
       top,
       left,
-    }, (res, err) => {
-      console.log('create window res', res, err);
+    }, (res) => {
       if (!res) {
         callback(ERRORS.SIZE_ERROR, null);
       }
