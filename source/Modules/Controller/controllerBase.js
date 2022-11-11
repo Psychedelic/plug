@@ -5,6 +5,8 @@ import { checkPendingTransaction, createPendingTransaction, removePendingTransac
 import ERRORS from '@background/errors';
 import SIZES from '../../views/Popup/components/Transfer/constants';
 
+const EXTENSION_URL = 'chrome-extension://cfbfdhimifdmdehjmkdobpcjfefblkjm';
+
 export class ControllerModuleBase {
   constructor(backgroundController, secureController, keyring) {
     this.keyring = keyring;
@@ -34,9 +36,12 @@ export class ControllerModuleBase {
   }
 
   secureExecutor({ args: methodArgs = [], handlerObject }) {
+    if (methodArgs[0].sender.port.sender.origin !== EXTENSION_URL) {
+      throw new Error(ERRORS.UNAUTHORIZED_EXECUTION.message);
+    }
     const transactionId = methodArgs.pop(methodArgs.length - 1);
     checkPendingTransaction(transactionId, (status) => {
-      if (status !== 'reviewed') throw new Error('Unauthorized call to provider executor');
+      if (status !== 'reviewed') throw new Error(ERRORS.UNAUTHORIZED_EXECUTION.message);
       return this.secureController(
         methodArgs[0].callback,
         async () => {
