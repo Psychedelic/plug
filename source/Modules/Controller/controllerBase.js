@@ -5,7 +5,13 @@ import { checkPendingTransaction, createPendingTransaction, removePendingTransac
 import ERRORS from '@background/errors';
 import SIZES from '../../views/Popup/components/Transfer/constants';
 
-const EXTENSION_URL = 'chrome-extension://cfbfdhimifdmdehjmkdobpcjfefblkjm';
+const getExtensionURL = () => new URL(extension.runtime.getURL('')).origin;
+const validateMessageOrigin = (sender) => {
+  const extensionURL = getExtensionURL();
+  const url = new URL(sender?.url);
+  const { origin } = url;
+  return origin === extensionURL;
+};
 
 export class ControllerModuleBase {
   constructor(backgroundController, secureController, keyring) {
@@ -36,7 +42,8 @@ export class ControllerModuleBase {
   }
 
   secureExecutor({ args: methodArgs = [], handlerObject }) {
-    if (methodArgs[0].sender.port.sender.origin !== EXTENSION_URL) {
+    const { sender } = methodArgs[0].sender.port;
+    if (!validateMessageOrigin(sender)) {
       throw new Error(ERRORS.UNAUTHORIZED_EXECUTION.message);
     }
     const transactionId = methodArgs.pop(methodArgs.length - 1);
