@@ -26,7 +26,7 @@ const BurnXTC = ({
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { url, icons } = metadata;
+  const { url, icon } = metadata;
   const { selectedTab, handleChangeTab } = useTabs();
 
   const {
@@ -60,7 +60,7 @@ const BurnXTC = ({
       label: t('transfer.details'),
       component: <Details
         url={url}
-        image={icons[0] || null}
+        image={icon || null}
         amount={(requests?.[currentRequest] || args)?.amount}
         canisterId={args.to}
         requestCount={requestCount}

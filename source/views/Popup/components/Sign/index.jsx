@@ -24,7 +24,7 @@ const AssetsWarning = ({
   args, callId, portId, metadata, setOnTimeout, transactionId,
 }) => {
   const { t } = useTranslation();
-  const { url, icons } = metadata;
+  const { url, icon } = metadata;
   const { selectedTab, handleChangeTab } = useTabs();
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -58,7 +58,7 @@ const AssetsWarning = ({
       label: t('assetsWarning.details.title'),
       component: <Details
         url={url}
-        icon={icons?.[0] || null}
+        icon={icon || null}
         toggleModal={toggleModal}
         shouldWarn={shouldWarn}
         requests={[request]}

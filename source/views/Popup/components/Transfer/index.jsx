@@ -25,7 +25,7 @@ const Transfer = ({
   const { t } = useTranslation();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { url, icons } = metadata;
+  const { url, icon } = metadata;
   const { selectedTab, handleChangeTab } = useTabs();
 
   const {
@@ -58,7 +58,7 @@ const Transfer = ({
       component: (
         <Details
           url={url}
-          image={icons[0] || null}
+          image={icon || null}
           amount={(requests?.[currentRequest] || args)?.amount}
           requestCount={requestCount}
           token={(requests?.[currentRequest] || args)?.token}

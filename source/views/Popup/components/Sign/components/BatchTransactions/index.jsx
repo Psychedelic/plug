@@ -29,7 +29,7 @@ const BatchTransactions = ({
   args, callId, portId, metadata, setOnTimeout, transactionId,
 }) => {
   const { transactions } = args || {};
-  const { url, icons } = metadata;
+  const { url, icon } = metadata;
 
   const { t } = useTranslation();
   const classes = useStyles();
@@ -73,7 +73,7 @@ const BatchTransactions = ({
       label: t('assetsWarning.details.title'),
       component: <Details
         url={url}
-        icon={icons?.[0] || null}
+        icon={icon || null}
         requests={_transactions}
       />,
     },

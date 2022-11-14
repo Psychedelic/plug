@@ -37,7 +37,7 @@ const ImportToken = ({
   const [loading, setLoading] = useState('');
   const [handled, setHandled] = useState(false);
 
-  const { url, icons } = metadata || {};
+  const { url, icon } = metadata || {};
   const {
     canisterId, symbol, standard, logo,
   } = args || {};
@@ -82,7 +82,7 @@ const ImportToken = ({
     <Layout disableProfile disableNavigation incStatus>
       <div className={classes.padTop}>
         <Container className={classes.container}>
-          <IncomingAction url={url} image={icons[0] || null} action={t('addToken.importTitle')} />
+          <IncomingAction url={url} image={icon || null} action={t('addToken.importTitle')} />
 
           <DisplayBox
             title={symbol}
