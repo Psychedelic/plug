@@ -2,8 +2,40 @@ const { formatTokenAmount } = require('../utils/string');
 
 const AMOUNT_TO_SEND = 0.0001;
 
-// Utilities
+const CONTINUE_BUTTON_DISABLED_TEST_ID = '[data-testid="continue-button"][disabled]';
 
+// Clicks
+
+const clickFoundElement = async (page, testId) => {
+  const element = await page.getByTestId(testId, true);
+  await element.click();
+
+  return element;
+};
+const addButtonClick = (page) => clickFoundElement(page, 'add-button');
+const addCustomTokenButtonClick = (page) => clickFoundElement(page, 'add-custom-token-button');
+const mainPageTabClick = (page, tabName) => clickFoundElement(page, `tab-item-${tabName}`);
+const cancelButtonClick = (page) => clickFoundElement(page, 'cancel-button');
+const continueButtonClick = (page) => clickFoundElement(page, 'continue-button');
+const sendViewButtonClick = (page) => clickFoundElement(page, 'open-send-view-button');
+const canisterIdInputClick = (page) => clickFoundElement(page, 'token-canister-id-input');
+const selectTokenButtonClick = (page) => clickFoundElement(page, 'select-token-button');
+const selectTokenButtonElementClick = (page, tokenName) => clickFoundElement(page, `select-token-button-${tokenName}`);
+const sendTokenButtonClick = (page) => clickFoundElement(page, 'send-button');
+const selectNetworkButtonClick = (page) => clickFoundElement(page, 'network-selector');
+const tokenStandardSelect = (page) => clickFoundElement(page, 'token-standard-select');
+
+// Timeouts
+const waitForBalanceChange = (page) => page.waitForTimeout(40000);
+
+// Input typings
+
+const fillCanisterIdInput = async (page, canisterId) => {
+  const canisterIdInput = await canisterIdInputClick(page);
+  await canisterIdInput.type(canisterId);
+};
+
+// Other Utilities
 const getUniversalInputValue = async (page) => {
   const universalInput = await page.waitForTestIdSelector('select-token-input');
   return page.evaluate((input) => input.value, universalInput);
@@ -17,57 +49,15 @@ const getAvailableAmount = async (page, shouldFormat = true) => {
   return shouldFormat ? formatTokenAmount(availableAmountString) : availableAmountString;
 };
 
-const waitForBalanceChange = async (page) => {
-  await page.waitForTimeout(40000);
-};
-
-const addButtonClick = async (page) => {
-  const addTokenButton = await page.getByTestId('add-button', true);
-  await addTokenButton.click();
-};
-
-const addCustomTokenButtonClick = async (page) => {
-  const addCustomTokenButton = await page.getByTestId('add-custom-token-button', true);
-  await addCustomTokenButton.click();
-};
-
-const addCustomTokenTabItemClick = async (page, tabName) => {
-  const customTokenTab = await page.getByTestId(`tab-item-${tabName}`, true);
-  await customTokenTab.click();
-};
-
-const fillCanisterIdInput = async (page, canisterId) => {
-  const canisterIdInput = await page.getByTestId('token-canister-id-input', true);
-  await canisterIdInput.click();
-  await canisterIdInput.type(canisterId);
-};
-
 const tokenStandardItemSelection = async (page, standard) => {
-  const tokenStandardSelect = await page.getByTestId('token-standard-select', true);
-  await tokenStandardSelect.click();
+  await tokenStandardSelect(page);
 
   const standardItem = await page.getByTestId(`standard-item-${standard}`, true);
   await standardItem.click();
 };
 
-const cancelButtonClick = async (page) => {
-  const cancelButton = await page.waitForTestIdSelector('cancel-button');
-  await cancelButton.click();
-};
-
-const sendViewButtonClick = async (page) => {
-  const sendViewButton = await page.getByTestId('open-send-view-button', true);
-  await sendViewButton.click();
-};
-
-const continueButtonClick = async (page) => {
-  const continueButton = await page.waitForTestIdSelector('continue-button');
-  await continueButton.click();
-};
-
 const openSelectNetworkModalButtonClick = async (page, boolean) => {
-  const openSelectNetworkModalButton = await page.getByTestId('network-selector', true);
-  await openSelectNetworkModalButton.click();
+  await selectNetworkButtonClick(page);
   await page.waitForTestIdSelector('network-selection-modal', { hidden: boolean });
 };
 
@@ -79,7 +69,7 @@ const selectNetworkCardClick = async (page, name) => {
 async function addCustomToken(page, { name, canisterId, standard }) {
   await addButtonClick(page);
   await addCustomTokenButtonClick(page);
-  await addCustomTokenTabItemClick(page, 'Custom');
+  await mainPageTabClick(page, 'Custom');
 
   await fillCanisterIdInput(page, canisterId);
 
@@ -96,11 +86,8 @@ async function addCustomToken(page, { name, canisterId, standard }) {
 }
 
 const selectToken = async (page, tokenName) => {
-  const selectTokenButton = await page.getByTestId('select-token-button', true);
-  await selectTokenButton.click();
-
-  const menuItem = await page.getByTestId(`select-token-button-${tokenName}`, true);
-  await menuItem.click();
+  await selectTokenButtonClick(page);
+  await selectTokenButtonElementClick(page, tokenName);
 
   await page.waitForTestIdSelector('select-asset-dialog', { hidden: true });
 };
@@ -130,10 +117,21 @@ const tokenBalanceCheck = async (page, { previousAmount, name }) => {
   expect(sentAmount).toBe(AMOUNT_TO_SEND);
 };
 
-const recipientPrincipalIdEnter = async (page) => {
+const tokenZeroBalanceCheck = async (page, { name }) => {
+  await popupPageUtils.refreshWallet(page);
+
+  const assetAmount = await page.getByTestId(`asset-amount-${name}`, true);
+  const assetAmountString = await page.evaluate((element) => element.innerText, assetAmount);
+
+  const newAmount = formatTokenAmount(assetAmountString);
+
+  expect(newAmount).toBe(0.000);
+};
+
+const recipientPrincipalIdEnter = async (page, principalID) => {
   const addressInput = await page.getByTestId('send-to-principalID-input', true);
   await addressInput.click();
-  await addressInput.type(secrets.subPrincipalId);
+  await addressInput.type(principalID);
 };
 
 const contactSelect = async (page) => {
@@ -154,23 +152,45 @@ async function pressKey(page, key, numberOfPresses = 4) {
 }
 
 async function sendToken(page) {
-  const amountInput = await page.getByTestId('select-token-input', true);
-  await amountInput.click();
+  const selectTokenInput = await page.getByTestId('select-token-input', true);
+  await selectTokenInput.click();
 
   await pressKey(page, 'ArrowRight', 4);
   await pressKey(page, 'ArrowLeft', 2);
   await page.keyboard.type('1');
 
-  await page.waitForSelector('[data-testid="continue-button"][disabled]', { hidden: true });
+  await page.waitForSelector(CONTINUE_BUTTON_DISABLED_TEST_ID, { hidden: true });
 
-  const continueButton = await page.getByTestId('continue-button', true);
-  await continueButton.click();
+  await continueButtonClick(page);
 
-  const sendButton = await page.getByTestId('send-button', true);
-  await sendButton.click();
+  await sendTokenButtonClick(page);
+
   await page.waitForTimeout(15000);
-  const tokensTab = await page.getByTestId('tab-item-Tokens', true);
-  await tokensTab.click();
+
+  await mainPageTabClick(page, 'Tokens');
+}
+
+async function sendMaxToken(page) {
+  const amount = await waitForAmount(page);
+  expect(amount).toBeGreaterThan(0);
+
+  const maxButton = await page.waitForTestIdSelector('max-button');
+  await maxButton.click();
+
+  const inputValue = await getUniversalInputValue(page);
+  const availableAmount = await getAvailableAmount(page, false);
+
+  expect(inputValue).toBe(availableAmount);
+
+  await page.waitForSelector(CONTINUE_BUTTON_DISABLED_TEST_ID, { hidden: true });
+
+  await continueButtonClick(page);
+
+  await sendTokenButtonClick(page);
+
+  await page.waitForTimeout(15000);
+
+  await mainPageTabClick(page, 'Tokens');
 }
 
 describe('Send View', () => {
@@ -216,17 +236,6 @@ describe('Send View', () => {
     expect(icpValue).toBe('0.00000 ICP');
   });
 
-  test('successfully selecting max value', async () => {
-    const amount = await waitForAmount(page);
-    expect(amount).toBeGreaterThan(0);
-    const maxButton = await page.waitForTestIdSelector('max-button');
-    await maxButton.click();
-    const inputValue = await getUniversalInputValue(page);
-    const availableAmount = await getAvailableAmount(page, false);
-
-    expect(inputValue).toBe(availableAmount);
-  });
-
   test('cancelling the send operation', async () => {
     await cancelButtonClick(page);
     await sendViewButtonClick(page);
@@ -240,7 +249,7 @@ describe('Send View', () => {
       await selectToken(page, name);
       const previousAmount = await getAvailableAmount(page);
 
-      await recipientPrincipalIdEnter(page);
+      await recipientPrincipalIdEnter(page, secrets.subPrincipalId);
       await sendToken(page);
       previousAmounts.push(previousAmount);
       await popupPageUtils.refreshWallet(page);
@@ -257,7 +266,7 @@ describe('Send View', () => {
   });
 
   test('adding contact to address book', async () => {
-    await recipientPrincipalIdEnter(page);
+    await recipientPrincipalIdEnter(page, secrets.subPrincipalId);
     const addContactButton = await page.getByTestId('add-contact-button', true);
     await addContactButton.click();
 
@@ -280,6 +289,60 @@ describe('Send View', () => {
     await popupPageUtils.refreshWallet(page);
     await waitForBalanceChange(page);
     await tokenBalanceCheck(page, { previousAmount, name: defaultTokenNames[0] });
+  });
+
+  test('successfully sending max amount of tokens', async () => {
+    const previousAmounts = [];
+    await waitForAmount(page);
+
+    for (const name of defaultTokenNames) {
+      await selectToken(page, name);
+      const previousAmount = await getAvailableAmount(page);
+
+      await recipientPrincipalIdEnter(page, secrets.subPrincipalId);
+      await sendMaxToken(page);
+      previousAmounts.push(previousAmount);
+      await popupPageUtils.refreshWallet(page);
+      await sendViewButtonClick(page);
+    }
+
+    await cancelButtonClick(page);
+    await waitForBalanceChange(page);
+
+    for (const [index, name] of defaultTokenNames.entries()) {
+      const previousAmount = previousAmounts[index];
+      await tokenZeroBalanceCheck(page, { previousAmount, name });
+    }
+  });
+  test('sending tokens back to the main account', async () => {
+    await popupPageUtils.profileButtonClick(page);
+    await popupPageUtils.createSubAccount(page, 'Sub');
+    const addContactButton = await page.getByTestId('account-name-Sub', true);
+    await addContactButton.click();
+
+    await sendViewButtonClick(page);
+
+    const previousAmounts = [];
+    await waitForAmount(page);
+
+    for (const name of defaultTokenNames) {
+      await selectToken(page, name);
+      const previousAmount = await getAvailableAmount(page);
+
+      await recipientPrincipalIdEnter(page, secrets.mainPrincipalId);
+      await sendMaxToken(page);
+      previousAmounts.push(previousAmount);
+      await popupPageUtils.refreshWallet(page);
+      await sendViewButtonClick(page);
+    }
+
+    await cancelButtonClick(page);
+    await waitForBalanceChange(page);
+
+    for (const [index, name] of defaultTokenNames.entries()) {
+      const previousAmount = previousAmounts[index];
+      await tokenZeroBalanceCheck(page, { previousAmount, name });
+    }
   });
 });
 
@@ -326,7 +389,7 @@ describe('Send Custom Tokens', () => {
     await addCustomTokenButtonClick(page);
 
     for (const { canisterId, standard } of wrongTokenData) {
-      await addCustomTokenTabItemClick(page, 'Custom');
+      await mainPageTabClick(page, 'Custom');
       await fillCanisterIdInput(page, canisterId);
       await tokenStandardItemSelection(page, standard);
       await continueButtonClick(page);
@@ -335,7 +398,7 @@ describe('Send Custom Tokens', () => {
 
       expect(tokenIdErrorText).toBe('Wrong standard. No Token Interface Detected.');
 
-      await addCustomTokenTabItemClick(page, 'Search');
+      await mainPageTabClick(page, 'Search');
     }
   });
 
@@ -353,7 +416,7 @@ describe('Send Custom Tokens', () => {
     for (const data of customTokenData) {
       await selectToken(page, data.name);
       const previousAmount = await getAvailableAmount(page);
-      await recipientPrincipalIdEnter(page);
+      await recipientPrincipalIdEnter(page, secrets.subPrincipalId);
       await sendToken(page, data.name);
       previousAmounts.push(previousAmount);
       await popupPageUtils.refreshWallet(page);
@@ -371,11 +434,11 @@ describe('Send Custom Tokens', () => {
   test('entering wrong custom token canister ID ', async () => {
     await addButtonClick(page);
     await addCustomTokenButtonClick(page);
-    await addCustomTokenTabItemClick(page, 'Custom');
+    await mainPageTabClick(page, 'Custom');
 
     await fillCanisterIdInput(page, secrets.wrongCanisterId);
 
-    const isContinueButtonDisabled = await page.$('[data-testid="continue-button"][disabled]') !== null;
+    const isContinueButtonDisabled = await page.$(CONTINUE_BUTTON_DISABLED_TEST_ID) !== null;
     expect(isContinueButtonDisabled).toBe(true);
   });
 });
@@ -436,7 +499,7 @@ describe('Send Custom Tokens on Sonic Network', () => {
     for (const data of customTokenData) {
       await selectToken(page, data.name);
       const previousAmount = await getAvailableAmount(page);
-      await recipientPrincipalIdEnter(page);
+      await recipientPrincipalIdEnter(page, secrets.subPrincipalId);
       await sendToken(page, data.name);
       previousAmounts.push(previousAmount);
       await popupPageUtils.refreshWallet(page);
