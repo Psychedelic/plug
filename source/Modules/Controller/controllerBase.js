@@ -34,10 +34,12 @@ export class ControllerModuleBase {
 
   // Create non-accepted transaction ID in storage and pass it as first arg
   secureHandler({ handlerObject, args }) {
-    // console.log('call args', args[0]);
-    const { favIconUrl, url, width } = args[0].sender.port.sender.tab;
+    const [callData, callArgs] = args;
+    // Save tab metadata
+    const { favIconUrl, url, width } = callData.sender.port.sender.tab;
     const metadata = { icon: favIconUrl, url: beautifyUrl(url), pageWidth: width };
-    const newArgs = [args[0], metadata, ...args.slice(1)];
+
+    const newArgs = [callData, metadata, ...callArgs];
     return this.secureController(
       args[0].callback,
       async () => {
