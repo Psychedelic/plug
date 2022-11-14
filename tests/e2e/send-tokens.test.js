@@ -23,6 +23,7 @@ const selectTokenButtonClick = (page) => clickFoundElement(page, 'select-token-b
 const selectTokenButtonElementClick = (page, tokenName) => clickFoundElement(page, `select-token-button-${tokenName}`);
 const sendTokenButtonClick = (page) => clickFoundElement(page, 'send-button');
 const selectNetworkButtonClick = (page) => clickFoundElement(page, 'network-selector');
+const tokenStandardSelect = (page) => clickFoundElement(page, 'token-standard-select');
 
 // Timeouts
 const waitForBalanceChange = (page) => page.waitForTimeout(40000);
@@ -49,8 +50,7 @@ const getAvailableAmount = async (page, shouldFormat = true) => {
 };
 
 const tokenStandardItemSelection = async (page, standard) => {
-  const tokenStandardSelect = await page.getByTestId('token-standard-select', true);
-  await tokenStandardSelect.click();
+  await tokenStandardSelect(page);
 
   const standardItem = await page.getByTestId(`standard-item-${standard}`, true);
   await standardItem.click();
