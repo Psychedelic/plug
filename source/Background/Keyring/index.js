@@ -4,58 +4,11 @@ import {
   formatAssets,
   parseAssetsAmount,
   parseToBigIntString,
-  parseToFloatAmount,
-  TOKENS,
 } from '@shared/constants/currencies';
 import { setRouter } from '@modules/storageManager';
 
 export const NANOS_PER_SECOND = 1_000_000;
 export const BALANCE_ERROR = 'You have tried to spend more than the balance of your account';
-
-const parseTransactionObject = (transactionObject) => {
-  const {
-    amount, currency, token, sonicData,
-  } = transactionObject;
-
-  const { decimals } = { ...currency, ...token, ...(sonicData?.token ?? {}) };
-  // TODO: Decimals are currently not in DAB. Remove once they are added.
-  // eslint-disable-next-line max-len
-  const parsedAmount = parseToFloatAmount(amount, decimals || TOKENS[sonicData?.token?.details?.symbol]?.decimals);
-
-  return {
-    ...transactionObject,
-    amount: parsedAmount,
-  };
-};
-
-const parseTransaction = (transaction) => {
-  const { details } = transaction;
-  const { fee } = details;
-
-  const parsedDetails = parseTransactionObject(details);
-  let parsedFee = fee;
-
-  if (fee instanceof Object && ('token' in fee || 'currency' in fee)) {
-    parsedFee = parseTransactionObject(fee);
-  }
-
-  return {
-    ...transaction,
-    details: {
-      ...parsedDetails,
-      fee: parsedFee,
-    },
-  };
-};
-
-const parseTransactions = (transactionsObject) => {
-  const { transactions = [] } = transactionsObject;
-
-  return {
-    ...transactionsObject,
-    transactions: transactions.map(parseTransaction),
-  };
-};
 
 export const recursiveParseBigint = (obj) => {
   if (Array.isArray(obj)) {
@@ -222,10 +175,9 @@ export const getKeyringHandler = (type, keyring) => ({
     const response = await keyring.getState();
     return recursiveParseBigint(response);
   },
-  [HANDLER_TYPES.GET_TRANSACTIONS]: async () => {
-    const response = await keyring.getTransactions();
-    const parsed = parseTransactions(response);
-    return parsed;
+  [HANDLER_TYPES.GET_TRANSACTIONS]: async ({ icpPrice }) => {
+    const { transactions } = await keyring.getTransactions({ icpPrice });
+    return transactions;
   },
   [HANDLER_TYPES.GET_ASSETS]: async () => {
     try {

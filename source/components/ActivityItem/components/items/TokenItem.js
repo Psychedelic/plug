@@ -7,11 +7,24 @@ import { capitalize } from '@material-ui/core';
 
 import UnknownIcon from '@assets/icons/unknown-icon.svg';
 
+import { TOKENS } from '@shared/constants/currencies';
 import GenericIcon from '../../../GenericIcon';
 import ActivityItemDisplay from '../ActivityItemDisplay';
 import ActivityItemDetails from '../ActivityItemDetails';
-
 import { getSubtitle } from '../../utils';
+
+const getNativeTokensLogo = (tokenSymbol) => {
+  switch (tokenSymbol) {
+    case TOKENS.ICP.symbol:
+      return TOKENS.ICP.logo;
+    case TOKENS.WICP.symbol:
+      return TOKENS.WICP.logo;
+    case TOKENS.XTC.symbol:
+      return TOKENS.XTC.logo;
+    default:
+      return UnknownIcon;
+  }
+};
 
 const TokenItem = (props) => {
   const {
@@ -39,7 +52,7 @@ const TokenItem = (props) => {
       <ActivityItemDisplay
         image={(
           <GenericIcon
-            image={logo || UnknownIcon}
+            image={logo || getNativeTokensLogo(symbol)}
             type={type}
           />
           )}
