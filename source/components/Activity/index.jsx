@@ -13,7 +13,6 @@ import EmptyState from './components/EmptyState';
 const Activity = () => {
   const classes = useStyles();
   const { transactions, transactionsLoading } = useSelector((state) => state.wallet);
-  // const { useICNS } = useSelector((state) => state.icns);
   const dispatch = useDispatch();
   const activity = useActivity(transactions);
 
