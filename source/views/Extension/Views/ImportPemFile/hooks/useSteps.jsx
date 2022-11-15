@@ -70,7 +70,15 @@ const useSteps = () => {
 
   const steps = [
     {
-      component: <Step1 handleChangeStep={handleChangeStep} setUserPemFile={setUserPemFile} userPemFile={userPemFile} />,
+      component: (
+        <Step1
+          handleChangeStep={handleChangeStep}
+          setUserPemFile={setUserPemFile}
+          validateLoading={validateLoading}
+          importDisabled={importDisabled}
+          userPemFile={userPemFile}
+        />
+      ),
       left: leftButton(() => navigator.navigate('import-wallet')),
       right: rightButton,
       center: `${t("importWallet.importWallet")}`,

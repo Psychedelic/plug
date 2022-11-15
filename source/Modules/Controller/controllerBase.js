@@ -5,6 +5,14 @@ import { checkPendingTransaction, createPendingTransaction, removePendingTransac
 import ERRORS from '@background/errors';
 import SIZES from '../../views/Popup/components/Transfer/constants';
 
+const getExtensionURL = () => new URL(extension.runtime.getURL('')).origin;
+const validateMessageOrigin = (sender) => {
+  const extensionURL = getExtensionURL();
+  const url = new URL(sender?.url);
+  const { origin } = url;
+  return origin === extensionURL;
+};
+
 export class ControllerModuleBase {
   constructor(backgroundController, secureController, keyring) {
     this.keyring = keyring;
@@ -34,9 +42,13 @@ export class ControllerModuleBase {
   }
 
   secureExecutor({ args: methodArgs = [], handlerObject }) {
+    const { sender } = methodArgs[0].sender.port;
+    if (!validateMessageOrigin(sender)) {
+      throw new Error(ERRORS.UNAUTHORIZED_EXECUTION.message);
+    }
     const transactionId = methodArgs.pop(methodArgs.length - 1);
     checkPendingTransaction(transactionId, (status) => {
-      if (status !== 'reviewed') throw new Error('Unauthorized call to provider executor');
+      if (status !== 'reviewed') throw new Error(ERRORS.UNAUTHORIZED_EXECUTION.message);
       return this.secureController(
         methodArgs[0].callback,
         async () => {
