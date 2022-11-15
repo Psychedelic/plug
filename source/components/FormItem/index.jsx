@@ -5,12 +5,12 @@ import clsx from 'clsx';
 import useStyles from './styles';
 
 const FormItem = ({
-  label, component, subtitle, smallLabel, endIcon, ...other
+  label, component, subtitle, smallLabel, endIcon, className, ...other
 }) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root} {...other}>
+    <div className={clsx(classes.root, className)} {...other}>
 
       <div className={classes.titleContainer}>
         <Typography
@@ -47,6 +47,7 @@ FormItem.defaultProps = {
   subtitle: null,
   smallLabel: false,
   endIcon: null,
+  className: '',
 };
 
 FormItem.propTypes = {
@@ -55,4 +56,5 @@ FormItem.propTypes = {
   subtitle: PropTypes.node,
   smallLabel: PropTypes.bool,
   endIcon: PropTypes.node,
+  className: PropTypes.string,
 };

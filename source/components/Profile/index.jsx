@@ -42,6 +42,8 @@ import { AccountItem } from './components';
 import UserIcon from '../UserIcon';
 import useStyles from './styles';
 
+const IMPORT_WALLET_ENABLED = process.env.TARGET_BROWSER !== 'firefox';
+
 const Profile = ({ disableProfile }) => {
   const classes = useStyles();
   const { t } = useTranslation();
@@ -199,11 +201,11 @@ const Profile = ({ disableProfile }) => {
     sendMessage({
       type: HANDLER_TYPES.REMOVE_PEM_ACCOUNT,
       params: selectedRemoveAccount.walletId,
-    });
+    }, () => executeAccountSwitch(accounts[0].walletId));
     setOpenRemoveModal(false);
     setOpen(false);
-    navigator.navigate('home');
   };
+
 
   return (
     <>
@@ -331,15 +333,17 @@ const Profile = ({ disableProfile }) => {
                   onClick={handleOpenCreateAccount}
                   data-testid="create-account-button"
                 />
-                <MenuItem
-                  size="small"
-                  key="createAccount"
-                  name={t('profile.importWallet')}
-                  alignLeft
-                  logo={LinkEmoji}
-                  onClick={handleOpenImportWallet}
-                  data-testid="create-account-button"
-                />
+                { IMPORT_WALLET_ENABLED && (
+                  <MenuItem
+                    size="small"
+                    key="createAccount"
+                    name={t('profile.importWallet')}
+                    alignLeft
+                    logo={LinkEmoji}
+                    onClick={handleOpenImportWallet}
+                    data-testid="create-account-button"
+                  />
+                )}
                 <Divider style={{ margin: '6px 0' }} />
                 {
                   menuItems.map((item) => (

@@ -11,18 +11,19 @@ import {
   Dialog,
   Select,
 } from '@components';
+import { standards } from '@psychedelic/dab-js';
 import { validateCanisterId } from '@shared/utils/ids';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import extension from 'extensionizer';
 import { customTokensUrl } from '@shared/constants/urls';
 import useStyles from '../styles';
 
-const FUNGIBLE_STANDARDS = { DIP721v2: 'DIP721v2', };
+const FUNGIBLE_STANDARDS = { DIP721: standards.NFT.dip721, };
 
 const CustomNFT = ({ handleChangeSelectedNFT }) => {
   const { t } = useTranslation();
   const [canisterId, setCanisterId] = useState('');
-  const [standard, setStandard] = useState(FUNGIBLE_STANDARDS.DIP721v2);
+  const [standard, setStandard] = useState(FUNGIBLE_STANDARDS.DIP721);
   const [invalidToken, setInvalidToken] = useState(null);
   const [tokenError, setTokenError] = useState('');
   const [loading, setLoading] = useState(false);

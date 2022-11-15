@@ -287,7 +287,8 @@
     "seedMessage": "Keep this sh*t safe, forreal.",
     "seedCheckbox": "I wrote down the Secret Recovery Phrase and put it somewhere safe.",
     "passwordShortError": "The minimum is 8 characters, smh!",
-    "passwordMatchError": "The passwords gotta match, smh!"
+    "passwordMatchError": "The passwords gotta match, smh!",
+    "pasteMnemonic": "You can paste the totality of your secret phrase into any input"
   },
   "contacts": {
     "title": "Contacts",
@@ -408,7 +409,9 @@
     "or": "or",
     "browse": "browse",
     "fileNotSupported": "File not supported. Try a different file.",
-    "dropIt": "Drop it!"
+    "dropIt": "Drop it!",
+    "added-account": "Account already added",
+    "invalid-key": "Invalid PEM file"
   },
   "importPrivateKey": {
     "importPrivateKey": "Import Private Key",

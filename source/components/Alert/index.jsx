@@ -11,6 +11,7 @@ const Alert = ({
   startIcon,
   endIcon,
   url,
+  className,
 }) => {
   const classes = useStyles();
 
@@ -32,7 +33,7 @@ const Alert = ({
   };
 
   return (
-    <div className={clsx(classes.root, classes[type])}>
+    <div className={clsx(classes.root, classes[type], className)}>
       {startIcon && icon(type)}
       {
         subtitle
@@ -56,6 +57,7 @@ Alert.defaultProps = {
   endIcon: false,
   url: null,
   subtitle: null,
+  className: '',
 };
 
 Alert.propTypes = {
@@ -65,4 +67,5 @@ Alert.propTypes = {
   startIcon: PropTypes.bool,
   endIcon: PropTypes.bool,
   url: PropTypes.string,
+  className: PropTypes.string,
 };

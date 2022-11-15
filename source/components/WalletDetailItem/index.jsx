@@ -4,18 +4,19 @@ import { Typography } from '@material-ui/core';
 import { Info } from 'react-feather';
 import { useTranslation } from 'react-i18next';
 
-import { CopyButton, FormItem } from '@components';
-
-import useStyles from './styles';
+import CopyButton from '../CopyButton';
+import FormItem from '../FormItem';
 import InfoModal from '../InfoModal';
 
-const DetailItem = ({
-  value, name, setInfoOpen, isOpen, copyButtonTestId, infoIconButtonTestId,
+import useStyles from './styles';
+
+const WalletDetailItem = ({
+  value, name, setInfoOpen, isOpen, copyButtonTestId, infoIconButtonTestId, className
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   return (
-    <>
+    <div className={className}>
       <FormItem
         label={t(`common.${name}`)}
         smallLabel
@@ -41,22 +42,24 @@ const DetailItem = ({
         understandButtonTestId={`understand-${name}-button`}
         learnMoreButtonTestId="learn-more-button"
       />
-    </>
+    </div>
   );
 };
 
-DetailItem.propTypes = {
+WalletDetailItem.propTypes = {
   value: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   setInfoOpen: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
   copyButtonTestId: PropTypes.string,
   infoIconButtonTestId: PropTypes.string,
+  className: PropTypes.string,
 };
 
-DetailItem.defaultProps = {
+WalletDetailItem.defaultProps = {
   copyButtonTestId: '',
   infoIconButtonTestId: '',
+  className: '',
 };
 
-export default DetailItem;
+export default WalletDetailItem;
