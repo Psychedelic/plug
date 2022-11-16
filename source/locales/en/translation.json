@@ -466,5 +466,9 @@
     "title": "Your device clock is set incorrectly",
     "description": "Your device's clock is incorrect and this affects how Plug can communicate with the IC due to its security measures. Set your clock's time to automatic and restart your browser.",
     "descriptionLink": "Learn more here"
+  },
+  "signMessage": {
+    "title": "Sign Message",
+    "importTitle": "wants to sign a message"
   }
 }

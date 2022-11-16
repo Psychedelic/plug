@@ -19,6 +19,7 @@ import BurnXTC from './components/BurnXTC';
 import Sign from './components/Sign';
 import SIZES from './components/Transfer/constants';
 import ImportToken from './components/ImportToken';
+import SignMessage from './components/SignMessage';
 
 const NOTIFICATION_COMPONENTS = {
   batchTransactions: BatchTransactions,
@@ -32,6 +33,7 @@ const NOTIFICATION_COMPONENTS = {
   requestBalance: LoginProxy,
   requestConnectionData: LoginProxy,
   importToken: ImportToken,
+  signMessage: SignMessage,
 };
 
 const resizeToLogin = () => {
