@@ -1820,8 +1820,10 @@
     tweetnacl "^1.0.3"
     uuidv4 "^6.2.13"
 
-"@psychedelic/plug-inpage-provider@../plug-inpage-provider":
+"@psychedelic/plug-inpage-provider@2.5.0":
   version "2.5.0"
+  resolved "https://npm.pkg.github.com/download/@Psychedelic/plug-inpage-provider/2.5.0/01f0f35cdc2d2a4b1e8ee7f4029f09fdcc66e9f3#01f0f35cdc2d2a4b1e8ee7f4029f09fdcc66e9f3"
+  integrity sha512-wGTsizp2Agub1AZQY5pUKl6FrHwtkC+RFd3DOnfEN1f6K0ymwJhyu6/haybJNxtzLfMST+q4pQr5dzgwH++t3w==
   dependencies:
     "@dfinity/agent" "0.9.3"
     "@dfinity/candid" "0.9.3"
@@ -1834,20 +1836,6 @@
     crypto-js "^4.1.1"
     json-bigint "^1.0.0"
     text-encoding-shim "^1.0.5"
-
-"@psychedelic/plug-inpage-provider@^2.3.1":
-  version "2.3.1"
-  resolved "https://npm.pkg.github.com/download/@Psychedelic/plug-inpage-provider/2.3.1/1949663fd9e863c1127e36602c56f41a4c0408c4#1949663fd9e863c1127e36602c56f41a4c0408c4"
-  integrity sha512-1e3pd2rgNQ0da6Knxtcgdgeehyv1bS1zqgU7XphYKmy4SuXbR5bIoCCqvmcNgJGMWyeqaQBcfEzNVKRF1pfm9Q==
-  dependencies:
-    "@dfinity/agent" "0.9.3"
-    "@dfinity/candid" "0.9.3"
-    "@dfinity/principal" "0.9.3"
-    "@psychedelic/browser-rpc" "2.1.0"
-    "@types/chrome" "^0.0.180"
-    buffer-crc32 "^0.2.13"
-    crypto-js "^4.1.1"
-    json-bigint "^1.0.0"
 
 "@reduxjs/toolkit@^1.6.0":
   version "1.8.5"
