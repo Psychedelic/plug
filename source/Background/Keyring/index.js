@@ -4,58 +4,11 @@ import {
   formatAssets,
   parseAssetsAmount,
   parseToBigIntString,
-  parseToFloatAmount,
-  TOKENS,
 } from '@shared/constants/currencies';
 import { setRouter } from '@modules/storageManager';
 
 export const NANOS_PER_SECOND = 1_000_000;
 export const BALANCE_ERROR = 'You have tried to spend more than the balance of your account';
-
-const parseTransactionObject = (transactionObject) => {
-  const {
-    amount, currency, token, sonicData,
-  } = transactionObject;
-
-  const { decimals } = { ...currency, ...token, ...(sonicData?.token ?? {}) };
-  // TODO: Decimals are currently not in DAB. Remove once they are added.
-  // eslint-disable-next-line max-len
-  const parsedAmount = parseToFloatAmount(amount, decimals || TOKENS[sonicData?.token?.details?.symbol]?.decimals);
-
-  return {
-    ...transactionObject,
-    amount: parsedAmount,
-  };
-};
-
-const parseTransaction = (transaction) => {
-  const { details } = transaction;
-  const { fee } = details;
-
-  const parsedDetails = parseTransactionObject(details);
-  let parsedFee = fee;
-
-  if (fee instanceof Object && ('token' in fee || 'currency' in fee)) {
-    parsedFee = parseTransactionObject(fee);
-  }
-
-  return {
-    ...transaction,
-    details: {
-      ...parsedDetails,
-      fee: parsedFee,
-    },
-  };
-};
-
-const parseTransactions = (transactionsObject) => {
-  const { transactions = [] } = transactionsObject;
-
-  return {
-    ...transactionsObject,
-    transactions: transactions.map(parseTransaction),
-  };
-};
 
 export const recursiveParseBigint = (obj) => {
   if (Array.isArray(obj)) {
@@ -109,6 +62,7 @@ export const HANDLER_TYPES = {
   GET_CURRENT_NETWORK: 'get-current-network',
   IMPORT_PEM_ACCOUNT: 'import-pem-account',
   REMOVE_PEM_ACCOUNT: 'remove-pem-account',
+  VALIDATE_PEM: 'validate-pem',
   REMOVE_CUSTOM_TOKEN: 'remove-custom-token',
   GET_PRINCIPAL_FROM_PEM: 'get-principal-from-pem',
   VALIDATE_PEM: 'validate-pem',
@@ -149,6 +103,7 @@ export const getKeyringErrorMessage = (type) => ({
   [HANDLER_TYPES.REMOVE_CUSTOM_TOKEN]: 'removing custom token',
   [HANDLER_TYPES.IMPORT_PEM_ACCOUNT]: 'importing account from pem',
   [HANDLER_TYPES.REMOVE_PEM_ACCOUNT]: 'removing pem account',
+  [HANDLER_TYPES.VALIDATE_PEM]: 'validate pem',
 }[type]);
 
 export const sendMessage = (args, callback) => {
@@ -202,6 +157,7 @@ export const getKeyringHandler = (type, keyring) => ({
   [HANDLER_TYPES.IMPORT_PEM_ACCOUNT]: keyring.importAccountFromPem,
   [HANDLER_TYPES.CREATE_PRINCIPAL]: async (params) => keyring.createPrincipal(params),
   [HANDLER_TYPES.REMOVE_PEM_ACCOUNT]: async (params) => keyring.deleteImportedAccount(params),
+  [HANDLER_TYPES.VALIDATE_PEM]: async (params) => keyring.validatePem(params),
   [HANDLER_TYPES.SET_CURRENT_PRINCIPAL]:
     async (walletId) => {
       await keyring.setCurrentPrincipal(walletId);
@@ -220,10 +176,9 @@ export const getKeyringHandler = (type, keyring) => ({
     const response = await keyring.getState();
     return recursiveParseBigint(response);
   },
-  [HANDLER_TYPES.GET_TRANSACTIONS]: async () => {
-    const response = await keyring.getTransactions();
-    const parsed = parseTransactions(response);
-    return parsed;
+  [HANDLER_TYPES.GET_TRANSACTIONS]: async ({ icpPrice }) => {
+    const { transactions } = await keyring.getTransactions({ icpPrice });
+    return transactions;
   },
   [HANDLER_TYPES.GET_ASSETS]: async () => {
     try {

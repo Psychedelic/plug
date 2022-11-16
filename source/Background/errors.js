@@ -2,6 +2,7 @@ export const SILENT_ERRORS = {
   AGENT_REJECTED: { code: 401, message: 'The agent creation was rejected.' },
   SIGN_REJECTED: { code: 401, message: 'The signature was rejected.' },
   TRANSACTION_REJECTED: { code: 401, message: 'The transaction was rejected.' },
+  UNAUTHORIZED_EXECUTION: { code: 401, message: 'Unauthorized call to provider executor' },
 };
 
 export default {

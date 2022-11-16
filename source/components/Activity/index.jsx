@@ -13,7 +13,6 @@ import EmptyState from './components/EmptyState';
 const Activity = () => {
   const classes = useStyles();
   const { transactions, transactionsLoading } = useSelector((state) => state.wallet);
-  const { useICNS } = useSelector((state) => state.icns);
   const dispatch = useDispatch();
   const activity = useActivity(transactions);
 
@@ -22,9 +21,9 @@ const Activity = () => {
   useEffect(() => {
     if (icpPrice) {
       dispatch(setTransactionsLoading(true));
-      sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: {} },
+      sendMessage({ type: HANDLER_TYPES.GET_TRANSACTIONS, params: { icpPrice } },
         (trxs) => {
-          dispatch(setTransactions({ ...trxs, icpPrice, useICNS }));
+          dispatch(setTransactions(trxs));
           dispatch(setTransactionsLoading(false));
         });
     }

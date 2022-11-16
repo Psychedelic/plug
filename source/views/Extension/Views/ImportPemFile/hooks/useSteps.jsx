@@ -79,14 +79,14 @@ const useSteps = () => {
           userPemFile={userPemFile}
         />
       ),
-      left: leftButton(() => handleClose()),
+      left: leftButton(() => navigator.navigate('import-wallet')),
       right: rightButton,
-      center: `${t("importPem.importPEMfile")}`,
+      center: `${t("importWallet.importWallet")}`,
     },
     {
       component: <Step2 handleClose={handleClose} userPemFile={userPemFile} />,
       right: rightButton,
-      center: `${t("importPem.walletDetails")}`,
+      center: `${t("importWallet.importWallet")}`,
     },
   ];
 
