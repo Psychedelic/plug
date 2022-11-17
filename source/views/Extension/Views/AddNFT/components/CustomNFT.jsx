@@ -83,7 +83,7 @@ const CustomNFT = ({ handleChangeSelectedNFT }) => {
                 onChange={handleChangeId}
                 type="text"
                 error={invalidToken}
-                data-testid="token-canister-id-input"
+                data-testid="nft-canister-id-input"
               />
             )}
           />
@@ -99,7 +99,7 @@ const CustomNFT = ({ handleChangeSelectedNFT }) => {
                 onClick={() => setDialogOpen(true)}
                 shadow
                 className={classes.select}
-                data-testid="token-standard-select"
+                data-testid="nft-standard-select"
               />
             )}
           />
@@ -121,7 +121,7 @@ const CustomNFT = ({ handleChangeSelectedNFT }) => {
                 type="danger"
                 title={(
                   <div>
-                    <span data-testid="token-error">
+                    <span data-testid="nft-canister-error">
                       {isInvalidCanisterError
                         ? t('addNFT.invalidCanisterTokenError')
                         : isNFTNotSupportedError

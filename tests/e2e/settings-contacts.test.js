@@ -88,13 +88,13 @@ describe('Contacts', () => {
   const errorText = 'Incorrect ID format.';
 
   const correctData = [
-    { handle: secrets.sub4PrincipalId, name: 'Subaccount PrincipalID' },
+    { handle: secrets.sub5PrincipalId, name: 'Subaccount PrincipalID' },
     { handle: secrets.subAccountId, name: 'Subaccount AccountID' },
     { handle: secrets.icnsName, name: 'Subaccount ICNS' },
   ];
 
   const wrongData = [
-    { handle: secrets.sub4PrincipalId, errorMessage: 'This contact already exists under "Subaccount PrincipalID".' },
+    { handle: secrets.sub5PrincipalId, errorMessage: 'This contact already exists under "Subaccount PrincipalID".' },
     { handle: secrets.wrongId, errorMessage: errorText },
     { handle: secrets.wrongAccountId, errorMessage: errorText },
     { handle: secrets.wrongICNSName, errorMessage: errorText },

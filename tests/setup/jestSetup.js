@@ -14,6 +14,7 @@ global.secrets = {
   subAccountId: process.env.SUB_ACCOUNT_ID,
   subPrincipalId: process.env.SUB_PRINCIPAL_ID,
   sub4PrincipalId: process.env.SUB4_PRINCIPAL_ID,
+  sub5PrincipalId: process.env.SUB5_PRINCIPAL_ID,
   icnsName: process.env.ICNS_NAME,
   password: process.env.PASSWORD,
   dustCanisterId: process.env.DUST_CANISTER_ID,
@@ -30,6 +31,8 @@ global.secrets = {
   hostName: process.env.HOST_NAME,
   canisterID: process.env.CANISTER_ID,
   wrongHostName: process.env.WRONG_HOST_NAME,
+  nftCanisterID: process.env.NFT_CANISTER_ID,
+  wrongNFTCanisterID: process.env.NFT_WRONG_CANISTER_ID,
 };
 
 const grantRawPermissions = async (context, url, permissions) => {
