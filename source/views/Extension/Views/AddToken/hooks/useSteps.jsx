@@ -21,8 +21,8 @@ const useSteps = () => {
   const handleChangeStep = (index) => setStep(index);
   const handleClose = () => navigator.navigate('home');
 
-  const leftButton = (onClick) => <LinkButton value={t('common.back')} onClick={onClick} startIcon={BackIcon} />;
-  const rightButton = <LinkButton value={t('common.close')} onClick={() => handleClose()} />;
+  const leftButton = (onClick) => <LinkButton value={t('common.back')} onClick={onClick} startIcon={BackIcon} data-testid='back-button' />;
+  const rightButton = <LinkButton value={t('common.close')} data-testid='close-button' onClick={() => handleClose()} />;
 
   const steps = [
     {
