@@ -60,6 +60,7 @@ const SearchToken = ({ handleChangeSelectedToken, handleChangeTab }) => {
           <TextInput
             type="text"
             value={search}
+            data-testid="token-search-input"
             startIcon={(
               <InputAdornment position="start">
                 <SearchIcon />
@@ -94,7 +95,7 @@ const SearchToken = ({ handleChangeSelectedToken, handleChangeTab }) => {
                             && <img src={VerifiedImg} className={classes.verified} />
                           }
                         </div>
-                        <Typography variant="h4">{ft.name} ({ft.symbol})</Typography>
+                        <Typography variant="h4" data-testid={`custom-token-${ft.name}`}>{ft.name} ({ft.symbol})</Typography>
                       </div>
                     ))}
                     <div className={classes.poweredByDab}>
@@ -112,6 +113,7 @@ const SearchToken = ({ handleChangeSelectedToken, handleChangeTab }) => {
                       style={{ marginTop: 6 }}
                       value={t('addToken.addCustomToken')}
                       onClick={() => handleChangeTab(1)}
+                      data-testid="add-custom-token-button"
                     />
                     <div className={classes.poweredByDab}>
                       <PoweredByDab />

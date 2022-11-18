@@ -94,6 +94,8 @@ const AssetItem = ({
         buttonVariant="danger"
         onClick={handleRemoveAssetDisplay}
         onClose={handleModalClose}
+        cancelButtonProps={{ 'data-testid': 'cancel-button' }}
+        submitButtonProps={{ 'data-testid': 'delete-token-button' }}
       />
       <TokenIcon className={classes.image} logo={logo} alt={name} symbol={symbol} />
       <div className={classes.leftContainer}>
@@ -155,6 +157,7 @@ const AssetItem = ({
           <img
             onClick={() => setOpenDelete(true)}
             alt="delete-token"
+            data-testid="delete-token-button"
             src={DeleteIcon}
           />
         </div>
