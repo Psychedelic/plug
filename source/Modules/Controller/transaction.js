@@ -732,11 +732,10 @@ export class TransactionModule extends ControllerModuleBase {
       methodName: 'handleRequestSignMessage',
       handler: async (opts, transferRequests, callId, portId) => {
         const { callback } = opts;
-        console
         const transfer = transferRequests;
         
         if (transfer?.status === 'refused') {
-          window.close();
+          callback(null, true);
           callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
         } else {
          
