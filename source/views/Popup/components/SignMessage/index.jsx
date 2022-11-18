@@ -14,6 +14,8 @@ import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { setAccountInfo } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { reviewPendingTransaction } from '@modules/storageManager';
+
+import { TransactionBox, WarningMessage } from './components';
 import initConfig from '../../../../locales';
 import useStyles from './styles';
 
@@ -84,7 +86,11 @@ const SignMessage = ({
       <div className={classes.padTop}>
         <Container className={classes.container}>
           <IncomingAction url={url} image={icons[0] || null} action={t('signMessage.importTitle')} />
-
+          <TransactionBox
+            transactionMessage={messageToSign}
+            dappImage={icons[0]}
+          />
+          <WarningMessage />
           <div className={classes.buttonContainer}>
             <Button
               variant="default"
