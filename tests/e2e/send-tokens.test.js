@@ -1,3 +1,4 @@
+const fetch = require('node-fetch');
 const { formatTokenAmount } = require('../utils/string');
 
 const AMOUNT_TO_SEND = 0.0001;
@@ -215,6 +216,27 @@ async function fillSendingInfoAndSend(page, name, recipient, previousAmounts) {
   await sendViewButtonClick(page);
 }
 
+async function addSonicUser() {
+
+  try {
+    const body = {
+      principal: secrets.mainPrincipalId,
+    }
+    
+    const res = await fetch('https://testnet.sonic.ooo/service-http/add-user', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    if (res.ok) {
+      console.log('💻 Successfully created added the principal ID to the Sonic testnet.')
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 describe('Send View', () => {
   let browser;
   let page;
@@ -222,6 +244,8 @@ describe('Send View', () => {
 
   beforeAll(async () => {
     browser = await setupChrome();
+
+    await addSonicUser();
 
     // Importing and unlocking the account
     page = await utils.createNewPage(browser);

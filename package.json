@@ -52,6 +52,7 @@
     "from-exponential": "^1.1.1",
     "i18next": "^20.2.1",
     "moment": "^2.29.1",
+    "node-fetch": "^2.6.1",
     "puppeteer": "^13.6.0",
     "qrcode": "^1.4.4",
     "query-string": "^7.0.0",
