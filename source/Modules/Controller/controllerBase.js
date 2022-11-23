@@ -12,6 +12,9 @@ const validateMessageOrigin = (sender) => {
   const { origin } = url;
   return origin === extensionURL;
 };
+const beautifyUrl = (url) => (
+  url.replace(/^(?:https?:\/\/)?(?:www\.)?/i, '').split('/')[0]
+);
 
 export class ControllerModuleBase {
   constructor(backgroundController, secureController, keyring) {
@@ -31,11 +34,17 @@ export class ControllerModuleBase {
 
   // Create non-accepted transaction ID in storage and pass it as first arg
   secureHandler({ handlerObject, args }) {
+    const [callData, callArgs] = args;
+    // Save tab metadata
+    const { favIconUrl, url, width } = callData.sender.port.sender.tab;
+    const metadata = { icon: favIconUrl, url: beautifyUrl(url), pageWidth: width };
+
+    const newArgs = [callData, metadata, ...callArgs];
     return this.secureController(
       args[0].callback,
       async () => {
         createPendingTransaction((transactionId) => {
-          handlerObject.handler(...args, transactionId);
+          handlerObject.handler(...newArgs, transactionId);
         });
       },
     );
