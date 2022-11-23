@@ -18,3 +18,6 @@ export const getAssetFee = (selectedAsset) => {
 
   return parsedFee;
 };
+
+export const XTC_FEE = 0.002;
+export const DEFAULT_ICP_FEE = 0.0001;
