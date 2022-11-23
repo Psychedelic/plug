@@ -1,11 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ACTIVITY_STATUS } from '@shared/constants/activity';
 import { ACCOUNT_ICON } from '@shared/constants/account';
 import {
-  formatAssetBySymbol,
   formatAssets,
   TOKENS,
-  TOKEN_IMAGES,
 } from '@shared/constants/currencies';
 
 /* eslint-disable no-param-reassign */
