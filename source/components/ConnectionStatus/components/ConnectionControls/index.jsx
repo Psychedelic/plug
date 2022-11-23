@@ -35,7 +35,6 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
     transactionsLoading,
   } = useSelector((state) => state.wallet);
   const { collectionsLoading } = useSelector((state) => state.nfts);
-  const { useICNS } = useSelector((state) => state.icns);
   const { currentNetwork } = useSelector((state) => state.network);
   const [selectorOpen, setSelectorOpen] = useState(false);
   const [connected, setConnected] = useState(false);
@@ -86,7 +85,7 @@ const ConnectionControls = ({ disableNavigation, hidden }) => {
         params: {},
       },
       (trxs) => {
-        dispatch(setTransactions({ ...trxs, icpPrice, useICNS }));
+        dispatch(setTransactions(trxs));
         dispatch(setTransactionsLoading(false));
       },
     );
