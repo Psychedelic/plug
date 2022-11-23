@@ -119,7 +119,7 @@ export class ConnectionModule extends ControllerModuleBase {
   #requestConnect() {
     return {
       methodName: 'requestConnect',
-      handler: async (opts, metadata, whitelist, timeout, host, transactionId) => {
+      handler: async (opts, metadata, whitelist = [], timeout, host, transactionId) => {
         let canistersInfo = [];
         initializeProtectedIds();
         const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;

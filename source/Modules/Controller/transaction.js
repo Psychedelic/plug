@@ -67,12 +67,6 @@ export class TransactionModule extends ControllerModuleBase {
     ];
   }
 
-  async #signData(payload, callback) {
-    const parsedPayload = new Uint8Array(Object.values(payload));
-    const signed = await this.keyring?.sign(parsedPayload.buffer);
-    callback(null, [...new Uint8Array(signed)]);
-  }
-
   // Methods
   #requestTransfer() {
     return {
@@ -698,11 +692,9 @@ export class TransactionModule extends ControllerModuleBase {
 
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
-        metadata.messageToSign = messageToSign;
 
         getApp(this.keyring?.currentWalletId.toString(), metadata.url, (app) => {
           if (app?.status === CONNECTION_STATUS.accepted) {
-
             const height = this.keyring?.isUnlocked
               ? SIZES.detailHeightSmall
               : SIZES.loginHeight;
@@ -710,7 +702,7 @@ export class TransactionModule extends ControllerModuleBase {
             this.displayPopUp({
               callId,
               portId,
-              metadataJson: JSON.stringify(metadata),
+              metadataJson: JSON.stringify({ ...metadata, messageToSign }),
               argsJson: JSON.stringify({ timeout: app?.timeout, transactionId }),
               type: 'signMessage',
               screenArgs: {
@@ -732,15 +724,13 @@ export class TransactionModule extends ControllerModuleBase {
       methodName: 'handleRequestSignMessage',
       handler: async (opts, transferRequests, callId, portId) => {
         const { callback } = opts;
-        console
         const transfer = transferRequests;
-        
+
         if (transfer?.status === 'refused') {
           window.close();
           callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
         } else {
-         
-          const parsedMessage = blobFromBuffer(base64ToBuffer(transfer.messageToSign))
+          const parsedMessage = blobFromBuffer(base64ToBuffer(transfer.messageToSign));
           const signMessage = getKeyringHandler(
             HANDLER_TYPES.SIGN_MESSAGE,
             this.keyring,
@@ -749,7 +739,6 @@ export class TransactionModule extends ControllerModuleBase {
 
           callback(null, true);
           callback(null, signed, [{ portId, callId }]);
-         
         }
       },
     };
