@@ -479,6 +479,7 @@
   },
   "signMessage": {
     "title": "Sign Message",
-    "importTitle": "wants to sign a message"
+    "importTitle": "wants to sign a message",
+    "warningText": "There’s a chance of this being a malicious request. Do not confirm if you’re not sure you can trust DApp. Signing this request could give complete control of your account and assets to DApp."
   }
 }
