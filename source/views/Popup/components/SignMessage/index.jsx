@@ -7,13 +7,15 @@ import {
   Button,
   Container,
   IncomingAction,
-  Layout, TokenIcon, DisplayBox,
+  Layout,
 } from '@components';
 import PropTypes from 'prop-types';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
 import { setAccountInfo } from '@redux/wallet';
 import { HANDLER_TYPES, sendMessage } from '@background/Keyring';
 import { reviewPendingTransaction } from '@modules/storageManager';
+
+import { TransactionBox, WarningMessage } from './components';
 import initConfig from '../../../../locales';
 import useStyles from './styles';
 
@@ -27,7 +29,7 @@ const portRPC = new PortRPC({
 
 portRPC.start();
 
-const ImportToken = ({
+const SignMessage = ({
   args, metadata, callId, portId, setOnTimeout, transactionId,
 }) => {
   const classes = useStyles();
@@ -37,16 +39,16 @@ const ImportToken = ({
   const [loading, setLoading] = useState('');
   const [handled, setHandled] = useState(false);
 
-  const { url, icon } = metadata || {};
+  const { url, icon, messageToSign } = metadata || {};
   const {
-    canisterId, symbol, standard, logo,
+    canisterId, standard, logo,
   } = args || {};
 
-  const handleImportToken = async (status) => {
+  const handleSignMessage = async (status) => {
     setLoading(status);
     reviewPendingTransaction(transactionId, () => { });
-    const success = await portRPC.call('handleRequestImportToken', [
-      { status, token: { canisterId, standard, logo } },
+    const success = await portRPC.call('handleRequestSignMessage', [
+      { status, token: { canisterId, standard, logo }, messageToSign },
       callId,
       portId,
       transactionId,
@@ -55,12 +57,13 @@ const ImportToken = ({
     if (success) {
       window.close();
     }
+
     setLoading('');
   };
 
   useEffect(() => {
     setOnTimeout(() => () => {
-      handleImportToken(CONNECTION_STATUS.refused);
+      handleSignMessage(CONNECTION_STATUS.refused);
     });
     sendMessage({ type: HANDLER_TYPES.GET_STATE, params: {} }, (state) => {
       if (Object.keys(state?.wallets).length) {
@@ -71,7 +74,7 @@ const ImportToken = ({
 
   window.onbeforeunload = () => {
     if (!handled) {
-      handleImportToken(CONNECTION_STATUS.refused);
+      handleSignMessage(CONNECTION_STATUS.refused);
     }
   };
 
@@ -82,25 +85,17 @@ const ImportToken = ({
     <Layout disableProfile disableNavigation incStatus>
       <div className={classes.padTop}>
         <Container className={classes.container}>
-          <IncomingAction url={url} image={icon || null} action={t('addToken.importTitle')} />
-
-          <DisplayBox
-            title={symbol}
-            subtitle={canisterId}
-            img={(
-              <TokenIcon
-                image={logo}
-                className={classes.tokenImage}
-                symbol={symbol}
-              />
-)}
+          <IncomingAction url={url} image={icon || null} action={t('signMessage.importTitle')} />
+          <TransactionBox
+            transactionMessage={messageToSign}
+            dappImage={icon}
           />
-
+          <WarningMessage />
           <div className={classes.buttonContainer}>
             <Button
               variant="default"
               value={t('common.decline')}
-              onClick={() => handleImportToken(CONNECTION_STATUS.refused)}
+              onClick={() => handleSignMessage(CONNECTION_STATUS.refused)}
               style={{ width: '96%' }}
               loading={isRefusing}
               disabled={isAccepting}
@@ -109,7 +104,7 @@ const ImportToken = ({
             <Button
               variant="rainbow"
               value={t('common.allow')}
-              onClick={() => handleImportToken(CONNECTION_STATUS.accepted)}
+              onClick={() => handleSignMessage(CONNECTION_STATUS.accepted)}
               fullWidth
               style={{ width: '96%' }}
               loading={isAccepting}
@@ -123,9 +118,9 @@ const ImportToken = ({
   );
 };
 
-export default ImportToken;
+export default SignMessage;
 
-ImportToken.propTypes = {
+SignMessage.propTypes = {
   args: PropTypes.string.isRequired,
   callId: PropTypes.string.isRequired,
   portId: PropTypes.string.isRequired,

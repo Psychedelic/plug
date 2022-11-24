@@ -46,7 +46,7 @@ const AllowAgent = ({
   const [error, setError] = useState(false);
   const [handled, setHandled] = useState(false);
 
-  const { url, icons } = metadata || {};
+  const { url, icon } = metadata || {};
 
   const canisters = args?.canistersInfo || [];
   const canistersLength = canisters.length;
@@ -115,7 +115,7 @@ const AllowAgent = ({
               <Container>
                 <IncomingAction
                   url={url}
-                  image={icons[0] || null}
+                  image={icon || null}
                   action={t('whitelist.title')}
                 />
 

@@ -119,7 +119,7 @@ export class ConnectionModule extends ControllerModuleBase {
   #requestConnect() {
     return {
       methodName: 'requestConnect',
-      handler: async (opts, metadata, whitelist, timeout, host, transactionId) => {
+      handler: async (opts, metadata, whitelist = [], timeout, host, transactionId) => {
         let canistersInfo = [];
         initializeProtectedIds();
         const isValidWhitelist = Array.isArray(whitelist) && whitelist.length;
@@ -130,7 +130,7 @@ export class ConnectionModule extends ControllerModuleBase {
         const { message, sender, callback } = opts;
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
-        const { url: domainUrl, icons } = metadata;
+        const { url: domainUrl, icon } = metadata;
         const newMetadata = { ...metadata, host };
 
         if (isValidWhitelist) {
@@ -172,7 +172,7 @@ export class ConnectionModule extends ControllerModuleBase {
           this.displayPopUp({
             callId,
             portId,
-            icon: icons[0] || null,
+            icon: icon || null,
             argsJson: JSON.stringify({ timeout, transactionId }),
             type: 'connect',
             domainUrl,
@@ -198,7 +198,7 @@ export class ConnectionModule extends ControllerModuleBase {
             const date = new Date().toISOString();
             const app = apps[url] || {};
             const appWhitelist = app?.status === CONNECTION_STATUS.accepted ? app.whitelist : {};
-            const { name, host, icons } = response?.metadata || {};
+            const { name, host, icon } = response?.metadata || {};
             const newApps = {
               ...apps,
               [url]: {
@@ -206,7 +206,7 @@ export class ConnectionModule extends ControllerModuleBase {
                 url,
                 name,
                 host,
-                icon: icons?.[0] || '',
+                icon: icon || '',
                 status,
                 date,
                 whitelist: { ...appWhitelist, ...whitelist },

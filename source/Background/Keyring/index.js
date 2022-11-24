@@ -66,6 +66,7 @@ export const HANDLER_TYPES = {
   REMOVE_CUSTOM_TOKEN: 'remove-custom-token',
   GET_PRINCIPAL_FROM_PEM: 'get-principal-from-pem',
   VALIDATE_PEM: 'validate-pem',
+  SIGN_MESSAGE: 'sign-message',
 };
 
 export const getKeyringErrorMessage = (type) => ({
@@ -443,6 +444,17 @@ export const getKeyringHandler = (type, keyring) => ({
   },
   [HANDLER_TYPES.GET_PRINCIPAL_FROM_PEM]: keyring.getPrincipalFromPem,
   [HANDLER_TYPES.VALIDATE_PEM]: keyring.validatePem,
+  [HANDLER_TYPES.SIGN_MESSAGE]: async (message) => {
+    try {
+      const signedMessage = await keyring.sign({ payload: message });
+
+      return signedMessage;
+    } catch (error) {
+      // eslint-disable-next-line
+      console.log('Error signing the message', error);
+      return { error: error.message };
+    }
+  },
 }[type]);
 
 export const getContacts = () => new Promise((resolve, reject) => {

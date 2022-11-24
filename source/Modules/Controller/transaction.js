@@ -51,6 +51,7 @@ export class TransactionModule extends ControllerModuleBase {
       this.#batchTransactions(),
       this.#requestCall(),
       this.#requestImportToken(),
+      this.#requestSignMessage(),
     ];
   }
 
@@ -62,13 +63,8 @@ export class TransactionModule extends ControllerModuleBase {
       TransactionModule.#handleBatchTransactions(),
       this.#handleCall(),
       this.#handleRequestImportToken(),
+      this.#handleRequestSignMessage(),
     ];
-  }
-
-  async #signData(payload, callback) {
-    const parsedPayload = new Uint8Array(Object.values(payload));
-    const signed = await this.keyring?.sign(parsedPayload.buffer);
-    callback(null, [...new Uint8Array(signed)]);
   }
 
   // Methods
@@ -683,6 +679,66 @@ export class TransactionModule extends ControllerModuleBase {
         } else {
           callback(null, true, [{ portId, callId }]);
           callback(null, true);
+        }
+      },
+    };
+  }
+
+  #requestSignMessage() {
+    return {
+      methodName: 'requestSignMessage',
+      handler: async (opts, metadata, messageToSign, transactionId) => {
+        const { message, sender, callback } = opts;
+
+        const { id: callId } = message.data.data;
+        const { id: portId } = sender;
+
+        getApp(this.keyring?.currentWalletId.toString(), metadata.url, (app) => {
+          if (app?.status === CONNECTION_STATUS.accepted) {
+            const height = this.keyring?.isUnlocked
+              ? SIZES.detailsHeightBig
+              : SIZES.loginHeight;
+
+            this.displayPopUp({
+              callId,
+              portId,
+              metadataJson: JSON.stringify({ ...metadata, messageToSign }),
+              argsJson: JSON.stringify({ timeout: app?.timeout, transactionId }),
+              type: 'signMessage',
+              screenArgs: {
+                fixedHeight: height,
+                top: 65,
+                left: metadata.pageWidth - SIZES.width,
+              },
+            }, callback);
+          } else {
+            callback(ERRORS.CONNECTION_ERROR, null);
+          }
+        });
+      },
+    };
+  }
+
+  #handleRequestSignMessage() {
+    return {
+      methodName: 'handleRequestSignMessage',
+      handler: async (opts, transferRequests, callId, portId) => {
+        const { callback } = opts;
+        const transfer = transferRequests;
+
+        if (transfer?.status === 'refused') {
+          callback(null, true);
+          callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
+        } else {
+          const parsedMessage = blobFromBuffer(base64ToBuffer(transfer.messageToSign));
+          const signMessage = getKeyringHandler(
+            HANDLER_TYPES.SIGN_MESSAGE,
+            this.keyring,
+          );
+          const signed = await signMessage(parsedMessage);
+
+          callback(null, true);
+          callback(null, signed, [{ portId, callId }]);
         }
       },
     };
