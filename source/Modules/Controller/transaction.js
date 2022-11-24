@@ -727,7 +727,7 @@ export class TransactionModule extends ControllerModuleBase {
         const transfer = transferRequests;
 
         if (transfer?.status === 'refused') {
-          window.close();
+          callback(null, true);
           callback(ERRORS.TRANSACTION_REJECTED, null, [{ portId, callId }]);
         } else {
           const parsedMessage = blobFromBuffer(base64ToBuffer(transfer.messageToSign));
