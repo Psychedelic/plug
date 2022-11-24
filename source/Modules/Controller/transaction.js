@@ -696,7 +696,7 @@ export class TransactionModule extends ControllerModuleBase {
         getApp(this.keyring?.currentWalletId.toString(), metadata.url, (app) => {
           if (app?.status === CONNECTION_STATUS.accepted) {
             const height = this.keyring?.isUnlocked
-              ? SIZES.detailHeightSmall
+              ? SIZES.detailsHeightBig
               : SIZES.loginHeight;
 
             this.displayPopUp({

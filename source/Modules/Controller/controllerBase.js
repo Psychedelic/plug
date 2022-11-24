@@ -34,7 +34,7 @@ export class ControllerModuleBase {
 
   // Create non-accepted transaction ID in storage and pass it as first arg
   secureHandler({ handlerObject, args }) {
-    const [callData, callArgs] = args;
+    const [callData, ...callArgs] = args;
     // Save tab metadata
     const { favIconUrl, url, width } = callData.sender.port.sender.tab;
     const metadata = { icon: favIconUrl, url: beautifyUrl(url), pageWidth: width };

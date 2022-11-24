@@ -7,7 +7,7 @@ import {
   Button,
   Container,
   IncomingAction,
-  Layout, TokenIcon, DisplayBox,
+  Layout,
 } from '@components';
 import PropTypes from 'prop-types';
 import { CONNECTION_STATUS } from '@shared/constants/connectionStatus';
@@ -39,9 +39,9 @@ const SignMessage = ({
   const [loading, setLoading] = useState('');
   const [handled, setHandled] = useState(false);
 
-  const { url, icons, messageToSign } = metadata || {};
+  const { url, icon, messageToSign } = metadata || {};
   const {
-    canisterId, symbol, standard, logo,
+    canisterId, standard, logo,
   } = args || {};
 
   const handleSignMessage = async (status) => {
@@ -85,10 +85,10 @@ const SignMessage = ({
     <Layout disableProfile disableNavigation incStatus>
       <div className={classes.padTop}>
         <Container className={classes.container}>
-          <IncomingAction url={url} image={icons[0] || null} action={t('signMessage.importTitle')} />
+          <IncomingAction url={url} image={icon || null} action={t('signMessage.importTitle')} />
           <TransactionBox
             transactionMessage={messageToSign}
-            dappImage={icons[0]}
+            dappImage={icon}
           />
           <WarningMessage />
           <div className={classes.buttonContainer}>
