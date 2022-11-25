@@ -194,9 +194,14 @@ export const checkPendingTransaction = (transactionId, cb) => {
 };
 
 export const reviewPendingTransaction = async (transactionId) => {
+  const getTxStatus = () => new Promise((resolve) => {
+    checkPendingTransaction(transactionId, resolve);
+  });
   const setData = () => new Promise((resolve) => {
     secureSetWrapper({ activeTransactions: { [transactionId]: 'reviewed' } }, {}, resolve);
   });
+  const txStatus = await getTxStatus();
+  if (txStatus !== 'pending') throw new Error('Unauthorized review');
   const result = await setData();
   return result;
 };
