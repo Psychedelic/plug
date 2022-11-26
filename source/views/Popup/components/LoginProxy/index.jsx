@@ -16,7 +16,7 @@ const LoginProxy = ({
 }) => {
   useEffect(async () => {
     if (metadata && callId && portId) {
-      reviewPendingTransaction(transactionId, async () => {});
+      await reviewPendingTransaction(transactionId, async () => {});
       await portRPC.call(handler, [metadata.url, args || {}, callId, portId, transactionId]);
       window.close();
     }

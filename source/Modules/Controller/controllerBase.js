@@ -16,6 +16,15 @@ const beautifyUrl = (url) => (
   url.replace(/^(?:https?:\/\/)?(?:www\.)?/i, '').split('/')[0]
 );
 
+const injectMetadataInArgs = (args) => {
+  const [callData, ...callArgs] = args;
+  // Save tab metadata
+  const { favIconUrl, url, width } = callData.sender.port.sender.tab;
+  const metadata = { icon: favIconUrl, url: beautifyUrl(url), pageWidth: width };
+
+  return [callData, metadata, ...callArgs];
+};
+
 export class ControllerModuleBase {
   constructor(backgroundController, secureController, keyring) {
     this.keyring = keyring;
@@ -24,22 +33,18 @@ export class ControllerModuleBase {
   }
 
   secureWrapper({ args, handlerObject }) {
+    const newArgs = injectMetadataInArgs(args);
     return this.secureController(
       args[0].callback,
       async () => {
-        handlerObject.handler(...args);
+        handlerObject.handler(...newArgs);
       },
     );
   }
 
   // Create non-accepted transaction ID in storage and pass it as first arg
   secureHandler({ handlerObject, args }) {
-    const [callData, ...callArgs] = args;
-    // Save tab metadata
-    const { favIconUrl, url, width } = callData.sender.port.sender.tab;
-    const metadata = { icon: favIconUrl, url: beautifyUrl(url), pageWidth: width };
-
-    const newArgs = [callData, metadata, ...callArgs];
+    const newArgs = injectMetadataInArgs(args);
     return this.secureController(
       args[0].callback,
       async () => {

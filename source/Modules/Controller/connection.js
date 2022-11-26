@@ -40,20 +40,20 @@ export class ConnectionModule extends ControllerModuleBase {
   #getConnectionData() {
     return {
       methodName: 'getConnectionData',
-      handler: async (opts, url, transactionId) => {
+      handler: async (opts, metadata, transactionId) => {
         const { message, sender, callback } = opts;
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
         initializeProtectedIds();
         const walletId = this.keyring?.currentWalletId;
-        getApp(walletId.toString(), url, async (app = {}) => {
+        getApp(walletId.toString(), metadata.url, async (app = {}) => {
           if (app?.status === CONNECTION_STATUS.accepted) {
             if (!this.keyring?.isUnlocked) {
               this.displayPopUp({
                 callId,
                 portId,
                 argsJson: JSON.stringify({ transactionId }),
-                metadataJson: JSON.stringify({ url }),
+                metadataJson: JSON.stringify(metadata),
                 type: 'requestConnectionData',
                 screenArgs: { fixedHeight: SIZES.loginHeight },
               }, callback);
@@ -78,7 +78,6 @@ export class ConnectionModule extends ControllerModuleBase {
       handler: async (opts, url, _, callId, portId) => {
         const { callback } = opts;
         const walletId = this.keyring?.currentWalletId;
-
         getApp(walletId.toString(), url, async (app = {}) => {
           callback(null, true);
           if (app?.status === CONNECTION_STATUS.accepted) {
@@ -99,15 +98,14 @@ export class ConnectionModule extends ControllerModuleBase {
   #disconnect() {
     return {
       methodName: 'disconnect',
-      handler: async (opts, url, principal) => {
+      handler: async (opts, metadata, principal) => {
         const state = await this.keyring.getState();
 
         const walletIdFromPrincipal = Object.values(state.wallets).find((wallet) => (
           wallet.principal === principal
         ))?.walletId;
         const walletIdToRemove = walletIdFromPrincipal ?? this.keyring.currentWalletId;
-
-        removeApp(walletIdToRemove, url, (removed) => {
+        removeApp(walletIdToRemove, metadata.url, (removed) => {
           if (!removed) {
             opts.callback(ERRORS.CONNECTION_ERROR, null);
           }
@@ -199,25 +197,26 @@ export class ConnectionModule extends ControllerModuleBase {
             const app = apps[url] || {};
             const appWhitelist = app?.status === CONNECTION_STATUS.accepted ? app.whitelist : {};
             const { name, host, icon } = response?.metadata || {};
+            const newApp = {
+              ...app,
+              url,
+              name: name || url,
+              host,
+              icon: icon || '',
+              status,
+              date,
+              whitelist: { ...appWhitelist, ...whitelist },
+              events: [
+                ...app?.events?.slice(-20) || [], // Keep only last 20 events
+                {
+                  status,
+                  date,
+                },
+              ],
+            };
             const newApps = {
               ...apps,
-              [url]: {
-                ...app,
-                url,
-                name,
-                host,
-                icon: icon || '',
-                status,
-                date,
-                whitelist: { ...appWhitelist, ...whitelist },
-                events: [
-                  ...app?.events?.slice(-20) || [], // Keep only last 20 events
-                  {
-                    status,
-                    date,
-                  },
-                ],
-              },
+              [url]: newApp,
             };
             setApps(this.keyring?.currentWalletId.toString(), newApps);
           });

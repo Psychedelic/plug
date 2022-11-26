@@ -548,11 +548,10 @@ export class TransactionModule extends ControllerModuleBase {
   #requestReadState() {
     return {
       methodName: 'requestReadState',
-      handler: async (opts, { canisterId, paths, url }) => {
+      handler: async (opts, metadata, { canisterId, paths }) => {
         const { callback } = opts;
-
         try {
-          getApp(this.keyring?.currentWalletId.toString(), url, async (app) => {
+          getApp(this.keyring?.currentWalletId.toString(), metadata.url, async (app) => {
             const agent = await this.keyring.getAgent({ host: app.host });
             const response = await agent.readState(canisterId, {
               paths: [paths.map((path) => blobFromBuffer(base64ToBuffer(path)))],
@@ -571,13 +570,12 @@ export class TransactionModule extends ControllerModuleBase {
   #requestQuery() {
     return {
       methodName: 'requestQuery',
-      handler: async (opts, {
-        canisterId, methodName, arg, url,
+      handler: async (opts, metadata, {
+        canisterId, methodName, arg,
       }) => {
         const { callback } = opts;
-
         try {
-          getApp(this.keyring?.currentWalletId.toString(), url, async (app) => {
+          getApp(this.keyring?.currentWalletId.toString(), metadata.url, async (app) => {
             const agent = await this.keyring.getAgent({ host: app.host });
             const response = await agent.query(
               canisterId,
