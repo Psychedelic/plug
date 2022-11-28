@@ -1,16 +1,12 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import useStyles from "../styles";
 import { Typography, Grid } from "@material-ui/core";
-import { Container, Button, TextInput, FormItem, UserIcon } from "@components";
+import { Container, Button, TextInput, FormItem } from "@components";
 import { HANDLER_TYPES, sendMessage } from "@background/Keyring";
 
 const Step1 = ({ handleChangeStep, setPrivateKey, privateKey }) => {
   const { t } = useTranslation();
-  const classes = useStyles();
-
   const [loading, setLoading] = useState(false);
-  const [disabled, setDisabled] = useState(true);
   const [invalidPem, setInvalidPem] = useState(null);
 
   const handlePrivateKey = (e) => {
@@ -23,16 +19,10 @@ const Step1 = ({ handleChangeStep, setPrivateKey, privateKey }) => {
           pem: e.target.value
         },
       },
-      (a) => {
-        if (a) {
-          setDisabled(false);
-          setInvalidPem(false);
-          setLoading(false);
-        } else {
-          setInvalidPem(true);
-          setLoading(false);
-          setDisabled(true);
-        }
+      (response) => {
+        const { isValid, errorType } = response || {};
+        setInvalidPem(!isValid ? errorType : null);
+        setLoading(false);
       },
     );
   } 
@@ -48,14 +38,14 @@ const Step1 = ({ handleChangeStep, setPrivateKey, privateKey }) => {
               <TextInput
                 fullWidth
                 value={privateKey}
-                onChange={(e) => handlePrivateKey(e)}
-                type="text"
+                onChange={handlePrivateKey}
                 data-testid="import-private-key-fill"
                 error={invalidPem}
+                type="password"
               />
             }
           />
-          {invalidPem && <Typography variant="body2" color="error">{`${t("importPrivateKey.invalidString")}`}</Typography>}
+          {invalidPem && <Typography variant="body2" color="error">{t(`importPrivateKey.${invalidPem}`)}</Typography>}
         </Grid>
         <Grid item xs={12}>
           <Button
@@ -63,7 +53,7 @@ const Step1 = ({ handleChangeStep, setPrivateKey, privateKey }) => {
             value={t("common.continue")}
             onClick={() => handleChangeStep(1)}
             loading={loading}
-            disabled={disabled}
+            disabled={!privateKey?.length || loading || invalidPem}
             fullWidth
             data-testid="add-button"
           />

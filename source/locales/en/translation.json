@@ -417,7 +417,8 @@
     "importPrivateKey": "Import Private Key",
     "description": "Import wallet through a Private Key",
     "privateKey": "Private Key",
-    "invalidString": "Invalid String. Please, try again."
+    "added-account": "Account already added",
+    "invalid-key": "Invalid string. Please, try again"
   },
   "nfts": {
     "allNfts": "All NFTs",
