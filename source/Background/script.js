@@ -94,7 +94,7 @@ class BackgroundScript {
   #exposeStandaloneMethods() {
     this.backgroundController.exposeController(
       'handleError',
-      async (opts, metadata, errorMessage) => {
+      async (opts, errorMessage) => {
         const { message, sender, callback } = opts;
         const { id: callId } = message.data.data;
         const { id: portId } = sender;
@@ -114,7 +114,7 @@ class BackgroundScript {
 
     this.backgroundController.exposeController(
       'handleTimeout',
-      async (opts, metadata, errorMessage) => {
+      async (opts, errorMessage) => {
         const { message, sender, callback } = opts;
         const { id: callId } = message.data.data;
         const { id: portId } = sender;

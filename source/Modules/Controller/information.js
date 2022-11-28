@@ -103,11 +103,11 @@ export class InformationModule extends ControllerModuleBase {
   #getPrincipal() {
     return {
       methodName: 'getPrincipal',
-      handler: async (opts, pageUrl, transactionId) => {
+      handler: async (opts, metadata, transactionId) => {
         const { callback, message, sender } = opts;
 
         getApps(this.keyring?.currentWalletId.toString(), async (apps = {}) => {
-          const app = apps?.[pageUrl] || {};
+          const app = apps?.[metadata.url] || {};
 
           if (app?.status === CONNECTION_STATUS.accepted) {
             if (!this.keyring?.isUnlocked) {
@@ -116,7 +116,7 @@ export class InformationModule extends ControllerModuleBase {
                 callId: message.data.data.id,
                 portId: sender.id,
                 type: 'principal',
-                metadataJson: JSON.stringify({ url: pageUrl }),
+                metadataJson: JSON.stringify(metadata),
                 argsJson: JSON.stringify({ transactionId }),
               }, callback);
             } else {
