@@ -39,9 +39,9 @@ const Step1 = ({ handleChangeStep, setPrivateKey, privateKey }) => {
                 fullWidth
                 value={privateKey}
                 onChange={handlePrivateKey}
-                type="text"
                 data-testid="import-private-key-fill"
                 error={invalidPem}
+                type="password"
               />
             }
           />
