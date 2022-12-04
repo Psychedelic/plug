@@ -44,7 +44,7 @@ const ImportToken = ({
 
   const handleImportToken = async (status) => {
     setLoading(status);
-    reviewPendingTransaction(transactionId, () => { });
+    await reviewPendingTransaction(transactionId);
     const success = await portRPC.call('handleRequestImportToken', [
       { status, token: { canisterId, standard, logo } },
       callId,

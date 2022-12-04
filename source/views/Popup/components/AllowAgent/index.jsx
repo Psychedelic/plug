@@ -58,7 +58,7 @@ const AllowAgent = ({
   const [expand, setExpand] = useState(false);
 
   const handleAllowAgent = async (status) => {
-    reviewPendingTransaction(transactionId, () => {});
+    await reviewPendingTransaction(transactionId);
     const success = await portRPC.call('handleAllowAgent', [
       url,
       { status, whitelist: args.whitelist || {}, metadata },

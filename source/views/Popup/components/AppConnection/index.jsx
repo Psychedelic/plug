@@ -58,7 +58,7 @@ const AppConnection = ({ setOnTimeout, transactionId, metadata }) => {
   } = query;
 
   const handleResponse = async () => {
-    reviewPendingTransaction(transactionId, async () => {});
+    await reviewPendingTransaction(transactionId);
     const success = await portRPC.call(
       'handleAllowAgent',
       [
