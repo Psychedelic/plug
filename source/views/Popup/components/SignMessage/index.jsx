@@ -46,7 +46,7 @@ const SignMessage = ({
 
   const handleSignMessage = async (status) => {
     setLoading(status);
-    reviewPendingTransaction(transactionId, () => { });
+    await reviewPendingTransaction(transactionId);
     const success = await portRPC.call('handleRequestSignMessage', [
       { status, token: { canisterId, standard, logo }, messageToSign },
       callId,

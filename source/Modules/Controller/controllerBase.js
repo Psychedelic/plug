@@ -1,7 +1,12 @@
 import qs from 'query-string';
 import extension from 'extensionizer';
 
-import { checkPendingTransaction, createPendingTransaction, removePendingTransaction } from '@modules/storageManager';
+import {
+  checkPendingTransaction,
+  createPendingTransaction,
+  removePendingTransaction,
+  resetPendingTransactions,
+} from '@modules/storageManager';
 import ERRORS from '@background/errors';
 import SIZES from '../../views/Popup/components/Transfer/constants';
 
@@ -30,6 +35,7 @@ export class ControllerModuleBase {
     this.keyring = keyring;
     this.secureController = secureController;
     this.backgroundController = backgroundController;
+    resetPendingTransactions();
   }
 
   secureWrapper({ args, handlerObject }) {
@@ -48,9 +54,8 @@ export class ControllerModuleBase {
     return this.secureController(
       args[0].callback,
       async () => {
-        createPendingTransaction((transactionId) => {
-          handlerObject.handler(...newArgs, transactionId);
-        });
+        const transactionId = await createPendingTransaction();
+        await handlerObject.handler(...newArgs, transactionId);
       },
     );
   }
@@ -66,9 +71,8 @@ export class ControllerModuleBase {
       return this.secureController(
         methodArgs[0].callback,
         async () => {
-          handlerObject.handler(...methodArgs);
-          removePendingTransaction(transactionId, () => {
-          });
+          await handlerObject.handler(...methodArgs);
+          await removePendingTransaction(transactionId);
         },
       );
     });
